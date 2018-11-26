@@ -2,6 +2,8 @@ package com.massoftware;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.vaadin.patrik.demo.DemoUI;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -43,7 +45,10 @@ public class MasSoftware extends UI {
 
 		// ----------------------------------------
 
-		this.setContent(new SuperMenu());
+//		this.setContent(new SuperMenu());
+		this.setContent(new FondosMenu());
+//		this.setContent(new DemoUI());
+		
 
 		// ----------------------------------------
 

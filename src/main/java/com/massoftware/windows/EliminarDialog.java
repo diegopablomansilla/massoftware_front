@@ -35,7 +35,7 @@ public class EliminarDialog extends Window implements Button.ClickListener {
 
 		UtilUI.confWinList(this, "Eliminar item");
 		setModal(true);
-		VerticalLayout content = UtilUI.buildWinContentList();
+		VerticalLayout content = UtilUI.buildWinContentVertical();
 
 		HorizontalLayout hl = new HorizontalLayout();
 

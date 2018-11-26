@@ -1,27 +1,33 @@
 package com.massoftware.windows;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.vaadin.inputmask.InputMask;
 
-
-
-
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -67,7 +73,7 @@ public class UtilUI {
 		if (pixelWidth > -1) {
 			column.setWidth(pixelWidth);
 		} else {
-			// column.setWidth(pixelWidth);
+
 		}
 
 		column.setSortable(sortable);
@@ -75,9 +81,19 @@ public class UtilUI {
 		return column;
 	}
 
-	public static VerticalLayout buildWinContentList() {
+	public static VerticalLayout buildWinContentVertical() {
 
 		VerticalLayout content = new VerticalLayout();
+		content.setMargin(true);
+		content.setSpacing(true);
+		content.setWidth("100%");
+
+		return content;
+	}
+
+	public static HorizontalLayout buildWinContentHorizontal() {
+
+		HorizontalLayout content = new HorizontalLayout();
 		content.setMargin(true);
 		content.setSpacing(true);
 		content.setWidth("100%");
@@ -143,6 +159,21 @@ public class UtilUI {
 		return agregarBTN;
 	}
 
+	public static Button buildButton(String label, String description) {
+
+		Button btn = new Button();
+		btn.addStyleName(ValoTheme.BUTTON_TINY);
+		btn.setCaption(label);
+		if (description != null) {
+			btn.setDescription(description);
+		}
+		// modificarBTN.addClickListener(e -> {
+		// // modificarBTNClick();
+		// });
+
+		return btn;
+	}
+
 	public static Button buildButtonModificar() {
 
 		Button modificarBTN = new Button();
@@ -173,12 +204,29 @@ public class UtilUI {
 		return eliminarBTN;
 	}
 
+	public static Button buildButtonSeleccionar() {
+
+		Button seleccionarBTN = new Button();
+		seleccionarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		seleccionarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		seleccionarBTN.setIcon(FontAwesome.CHECK_SQUARE_O);
+		seleccionarBTN.setCaption("Seleccionar");
+
+		// eliminarBTN.addClickListener(e -> {
+		// // eliminarBTNClick();
+		// });
+
+		return seleccionarBTN;
+	}
+
 	public static Window confWinList(Window window, String label) {
 
 		window.setCaption(label);
 		window.setImmediate(true);
-		window.setWidth("-1px");
-		window.setHeight("-1px");
+		// window.setWidth("-1px");
+		// window.setHeight("-1px");
+		window.setWidthUndefined();
+		window.setHeightUndefined();
 		window.setClosable(true);
 		window.setResizable(false);
 		window.setModal(false);
@@ -187,11 +235,14 @@ public class UtilUI {
 		return window;
 	}
 
-	public static Window confWinForm(Window window) {
+	public static Window confWinForm(Window window, String label) {
 
+		window.setCaption(label);
 		window.setImmediate(true);
-		window.setWidth("-1px");
-		window.setHeight("-1px");
+		// window.setWidth("-1px");
+		// window.setHeight("-1px");
+		window.setWidthUndefined();
+		window.setHeightUndefined();
 		window.setClosable(true);
 		window.setResizable(false);
 		window.setModal(true);
@@ -232,8 +283,10 @@ public class UtilUI {
 	public static HorizontalLayout buildHL() {
 		HorizontalLayout hl = new HorizontalLayout();
 
-		hl.setWidth("-1px");
-		hl.setHeight("-1px");
+		// hl.setWidth("-1px");
+		// hl.setHeight("-1px");
+		hl.setWidthUndefined();
+		hl.setHeightUndefined();
 		hl.setMargin(true);
 		hl.setSpacing(true);
 
@@ -242,8 +295,8 @@ public class UtilUI {
 
 	public static VerticalLayout buildVL() {
 		VerticalLayout vl = new VerticalLayout();
-		vl.setWidth("-1px");
-		vl.setHeight("-1px");
+		vl.setWidthUndefined();
+		vl.setHeightUndefined();
 		vl.setMargin(true);
 		vl.setSpacing(true);
 
@@ -255,8 +308,10 @@ public class UtilUI {
 		TextField txt = new TextField();
 
 		txt.addStyleName(ValoTheme.TEXTFIELD_TINY);
-		txt.setWidth("-1px");
-		txt.setHeight("-1px");
+		// txt.setWidth("-1px");
+		// txt.setHeight("-1px");
+		txt.setWidthUndefined();
+		txt.setHeightUndefined();
 		txt.setValidationVisible(true);
 		txt.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
 		txt.setNullRepresentation("");
@@ -282,6 +337,7 @@ public class UtilUI {
 				autoUnmask);
 
 		txt.setInputPrompt(buildWinFilterTXTInputPromptList(inputPrompt));
+		txt.setDescription(txt.getInputPrompt());
 
 		txtHL.addComponent(txt);
 
@@ -321,6 +377,7 @@ public class UtilUI {
 				mask, autoUnmask, minValue, maxValue);
 
 		txt.setInputPrompt(buildWinFilterTXTInputPromptList(inputPrompt));
+		txt.setDescription(txt.getInputPrompt());
 
 		txtHL.addComponent(txt);
 
@@ -392,7 +449,9 @@ public class UtilUI {
 		txt.setRequiredError("El campo '" + label
 				+ "' es requerido. Es decir no debe estar vacio.");
 		txt.setColumns(columns);
-		txt.setMaxLength(maxLength);
+		if (maxLength > -1) {
+			txt.setMaxLength(maxLength);
+		}
 		txt.setRequired(required);
 
 		if (minLength > 0) {
@@ -457,20 +516,20 @@ public class UtilUI {
 
 	public static TextArea buildTXA() {
 
-		TextArea txt = new TextArea();
+		TextArea txa = new TextArea();
 
-		txt.addStyleName(ValoTheme.TEXTFIELD_TINY);
-		txt.setWidth("-1px");
-		txt.setHeight("-1px");
-		txt.setValidationVisible(true);
-		txt.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
-		txt.setNullRepresentation("");
-		txt.setVisible(true);
-		txt.setEnabled(true);
-		txt.setReadOnly(false);
-		txt.setImmediate(true);
+		txa.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		txa.setWidthUndefined();
+		txa.setHeightUndefined();
+		txa.setValidationVisible(true);
+		txa.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		txa.setNullRepresentation("");
+		txa.setVisible(true);
+		txa.setEnabled(true);
+		txa.setReadOnly(false);
+		txa.setImmediate(true);
 
-		return txt;
+		return txa;
 	}
 
 	public static TextArea buildTXA(String label, boolean readOnly,
@@ -581,13 +640,125 @@ public class UtilUI {
 
 	}
 
+	@SuppressWarnings("rawtypes")
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
+			String attNameCode, String attName, String label, String label2,
+			boolean required) throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		return buildSearchBox(dtoBI, attNameCode, attName, label, label2,
+				required, label, false);
+
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
+			String attNameCode, String attName, String label, String label2,
+			boolean required, String label3, boolean onlyBtn)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		// HorizontalLayout hl = buildHL();
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.setWidthUndefined();
+		hl.setMargin(false);
+		hl.setSpacing(false);
+		// hl.setCaption(label);
+
+		Button btn = new Button();
+		btn.addStyleName("borderless tiny");
+		btn.setIcon(FontAwesome.FOLDER_OPEN);
+		btn.setDescription("Buscar " + label3);
+
+		// TextField txtSearch = ControlFactory.buildTXT();
+		TextField txtSearch = new TextField();
+		txtSearch.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		txtSearch.setNullRepresentation("");
+		txtSearch.setCaption(label);
+		txtSearch.setColumns(6);
+		String searchFor = label2;
+		if (searchFor != null) {
+			searchFor = searchFor.toLowerCase();
+			txtSearch.setDescription("Buscar por " + searchFor);
+		} else {
+			searchFor = "";
+			txtSearch.setDescription("Buscar por " + label.toLowerCase());
+		}
+		txtSearch.setInputPrompt(searchFor);
+
+		Field field = getField(dtoBI.getBean().getClass(), attNameCode);
+
+		if (field.getType() == Integer.class) {
+
+			txtSearch
+					.setConverter(new StringToIntegerConverterUnspecifiedLocale());
+
+			String msg = "El campo "
+					+ txtSearch.getCaption()
+					+ " es inválido, se permiten sólo valores numéricos sin decimales.";
+
+			txtSearch.addStyleName("align-right");
+
+			txtSearch.setConversionError(msg);
+
+		}
+
+		TextField txtValue = new TextField();
+		txtValue.setValidationVisible(true);
+		txtValue.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		txtValue.setNullRepresentation("");
+		txtValue.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		txtValue.setCaption("");
+		txtValue.setEnabled(false);
+		txtValue.setRequired(required);
+		txtValue.setInputPrompt(label3);
+		txtValue.setDescription(label3);
+
+		if (onlyBtn) {
+			hl.addComponent(btn);
+			hl.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
+			txtSearch.setVisible(false);
+			txtValue.setCaption(label);
+		}
+
+		hl.addComponent(txtSearch);
+		hl.setComponentAlignment(txtSearch, Alignment.MIDDLE_LEFT);
+
+		hl.addComponent(txtValue);
+		hl.setComponentAlignment(txtValue, Alignment.MIDDLE_LEFT);
+
+		// ----------------------------------------------
+
+		Button removeFilterBTN = new Button();
+		removeFilterBTN.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		removeFilterBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		removeFilterBTN.setIcon(FontAwesome.TIMES);
+		removeFilterBTN.setDescription("Borrar valor");
+
+		removeFilterBTN.addClickListener(e -> {
+			txtSearch.setValue(null);
+			// dtoBI.getItemProperty(attName).setValue(null);
+				txtValue.setValue(null);
+				txtValue.setValue(null);
+			});
+
+		hl.addComponent(removeFilterBTN);
+		hl.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+
+		txtSearch.setPropertyDataSource(dtoBI.getItemProperty(attNameCode));
+		txtValue.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		return hl;
+
+	}
+
 	public static ComboBox buildCB() {
 
 		ComboBox cb = new ComboBox();
 		cb.addStyleName(ValoTheme.COMBOBOX_TINY);
 
 		cb.setWidth("100%");
-		cb.setHeight("-1px");
+		cb.setHeightUndefined();
 		cb.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
 		cb.setValidationVisible(true);
 		cb.setVisible(true);
@@ -704,6 +875,244 @@ public class UtilUI {
 		cb.setReadOnly(readOnly);
 
 		return cb;
+	}
+
+	public static OptionGroup buildOG() {
+		OptionGroup og = new OptionGroup();
+		og.addStyleName(ValoTheme.OPTIONGROUP_SMALL);
+
+		return og;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
+			String label, boolean readOnly, boolean required, String labelAll,
+			String labelTrue, String labelFalse, boolean horizontal, int value)
+			throws Exception {
+
+		OptionGroup og = buildOG();
+
+		og.setCaption(label);
+
+		og.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+		og.setRequired(required);
+
+		og.addItem(0);
+		og.addItem(1);
+		og.addItem(2);
+
+		og.setItemCaption(0, labelAll);
+		og.setItemCaption(1, labelTrue);
+		og.setItemCaption(2, labelFalse);
+
+		if (horizontal) {
+			og.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		}
+
+		og.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		og.setValue(value);
+
+		og.setReadOnly(readOnly);
+
+		return og;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
+			String label, boolean readOnly, boolean required, String[] labels,
+			Integer[] values, boolean horizontal, int value) throws Exception {
+
+		OptionGroup og = buildOG();
+
+		og.setCaption(label);
+
+		og.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+		og.setRequired(required);
+
+		for (Integer item : values) {
+			og.addItem(item);
+		}
+
+		for (int i = 0; i < values.length; i++) {
+			og.setItemCaption(values[i], labels[i]);
+		}
+
+		if (horizontal) {
+			og.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
+		}
+
+		og.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		og.setValue(value);
+
+		og.setReadOnly(readOnly);
+
+		return og;
+	}
+
+	public static CheckBox buildCHK() {
+
+		CheckBox chk = new CheckBox();
+
+		chk.addStyleName(ValoTheme.CHECKBOX_SMALL);
+		chk.setWidthUndefined();
+		chk.setHeightUndefined();
+		chk.setVisible(true);
+		chk.setEnabled(true);
+		chk.setReadOnly(false);
+		chk.setImmediate(true);
+
+		return chk;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName,
+			String label, boolean readOnly) throws SecurityException,
+			ClassNotFoundException, NoSuchFieldException {
+
+		CheckBox chk = buildCHK();
+
+		chk.setCaption(label);
+		chk.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		chk.setReadOnly(readOnly);
+
+		return chk;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static HorizontalLayout buildDFHL(BeanItem dtoBI, String attName,
+			String label, boolean readOnly, boolean required)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		HorizontalLayout txtHL = new HorizontalLayout();
+		txtHL.setSpacing(false);
+
+		DateField df = buildFieldDF(dtoBI, attName, label, readOnly, required);
+
+		txtHL.addComponent(df);
+
+		// ----------------------------------------------
+
+		Button btn = new Button();
+		btn.addStyleName("borderless tiny");
+		btn.setIcon(FontAwesome.TIMES);
+		btn.setDescription("Quitar filtro " + label + ".");
+
+		btn.addClickListener(e -> {
+			try {
+				df.setValue(null);
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+
+		txtHL.addComponent(btn);
+		txtHL.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
+
+		return txtHL;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static DateField buildFieldDF(BeanItem dtoBI, String attName,
+			String label, boolean readOnly, boolean required)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		DateField df = buildDF(false);
+
+		df.setCaption(label);
+
+		df.setRequired(required);
+		df.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+
+		// df.setConverter(Timestamp.class);
+
+		// .setConverter(new StringToTimestampConverterUnspecifiedLocale());
+
+		df.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		df.setReadOnly(readOnly);
+
+		return df;
+
+	}
+
+	public static DateField buildDF(boolean timestamp) {
+
+		DateField df = null;
+
+		if (timestamp) {
+			df = new DateField();
+			df.setConversionError("Se espera un valor dd/MM/yyyy HH:mm:ss ej. 12/11/1979 22:36:54");
+		} else {
+
+			df = new DateField() {
+
+				private static final long serialVersionUID = -1814526872789903256L;
+
+				@Override
+				protected Date handleUnparsableDateString(String dateString)
+						throws Converter.ConversionException {
+
+					return UtilDate.parseDate(dateString);
+					// return new Timestamp(System.currentTimeMillis());
+				}
+
+				public void changeVariables(Object source,
+						Map<String, Object> variables) {
+
+					if (variables.containsKey("dateString") == false) {
+						variables.put(
+								"dateString",
+								variables.get("day") + "/"
+										+ variables.get("month") + "/"
+										+ variables.get("year"));
+					}
+
+					variables.put("day", -1);
+					variables.put("year", -1);
+					variables.put("month", -1);
+					// variables.put("sec", -1);
+					// variables.put("min", -1);
+					// variables.put("hour", -1);
+					super.changeVariables(source, variables);
+				}
+
+			};
+		}
+
+		df.addStyleName(ValoTheme.DATEFIELD_TINY);
+		df.setLocale(new Locale("es", "AR"));
+		if (timestamp) {
+			df.setDateFormat("dd/MM/yyyy HH:mm:ss");
+			df.setResolution(Resolution.SECOND);
+			// df.setResolution(DateResolution.DAY);
+			df.setShowISOWeekNumbers(true);
+		} else {
+			df.setDateFormat("dd/MM/yyyy");
+			df.setWidth("105px");
+		}
+		df.setLenient(true);
+		// df.setReadOnly(false);
+		df.setImmediate(true);
+
+		return df;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static Field getField(Class clazz, String attNamne)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		return Class.forName(clazz.getCanonicalName()).getDeclaredField(
+				attNamne);
+
 	}
 
 }

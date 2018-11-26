@@ -14,8 +14,8 @@
 	</prerequisites>
 
 	<properties>
-		<vaadin.version>7.7.8</vaadin.version>
-		<vaadin.plugin.version>7.7.8</vaadin.plugin.version>
+		<vaadin.version>7.7.13</vaadin.version>
+		<vaadin.plugin.version>7.7.13</vaadin.plugin.version>
 		<jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -86,6 +86,12 @@
 			<version>1.2.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.vaadin.patrik</groupId>
+			<artifactId>GridFastNavigation</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
 		<!-- <dependency> -->
 		<!-- <groupId>org.vaadin.addon</groupId> -->
 		<!-- <artifactId>confirmdialog</artifactId> -->
@@ -146,11 +152,11 @@
 			<version>6.1.6.jre8-preview</version>
 		</dependency>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.vaadin.addons</groupId> -->
-<!-- 			<artifactId>pagedtable</artifactId> -->
-<!-- 			<version>0.7.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.vaadin.addons</groupId> -->
+		<!-- <artifactId>pagedtable</artifactId> -->
+		<!-- <version>0.7.0</version> -->
+		<!-- </dependency> -->
 
 
 
