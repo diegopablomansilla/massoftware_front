@@ -77,45 +77,85 @@ public class DemoUI extends VerticalLayout {
 		// addComponent(messageTable);
 		setSizeFull();
 
-		this.addShortcutListener(new ShortcutListener("ENTER",
-				KeyCode.ARROW_DOWN, new int[] {}) {
+		this.addShortcutListener(new ShortcutListener("X", KeyCode.ARROW_DOWN,
+				new int[] {}) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void handleAction(Object sender, Object target) {
 				if (target.equals(grid) && grid.getSelectedRow() != null
-						&& grid.getSelectedRow() instanceof Integer && ((Integer)grid.getSelectedRow()) > 9) {
+						&& grid.getSelectedRow() instanceof Integer
+						&& ((Integer) grid.getSelectedRow()) > 9) {
 					System.err.println(grid.getSelectedRow().getClass());
-					
-					LogAndNotification.printSuccessOk("Traer nueva pagina, y luego posicionarse en el row 0,0");
-//					grid.deselectAll();
-//					grid.deselect(grid.getSelectedRow());
-//					grid.select(grid.getContainerDataSource().getIdByIndex(0));
-					
-					
-					int c = grid.getContainerDataSource().size() ;
+
+					LogAndNotification
+							.printSuccessOk("Traer nueva pagina, y luego posicionarse en el row 0,0");
+					// grid.deselectAll();
+					// grid.deselect(grid.getSelectedRow());
+					// grid.select(grid.getContainerDataSource().getIdByIndex(0));
+
+					int c = grid.getContainerDataSource().size();
 					int z = c + 10;
 					Random rand = new Random();
-					for (int i = c; i <  z; ++i) {
+					for (int i = c; i < z; ++i) {
 						grid.addRow(true, "string 1 " + i, "string 2 " + i,
 								rand.nextInt(i + 10), rand.nextInt(i + 10),
 								rand.nextInt(i + 10), rand.nextInt(i + 10),
-								rand.nextInt(i + 10), new Date(), false, "Medium");
+								rand.nextInt(i + 10), new Date(), false,
+								"Medium");
 					}
-					
-//					grid.refreshAllRows();
-					
+
+					// grid.refreshAllRows();
+
 				}
-				
-			
-				
-				
 
 			}
 		});
-		
-		
+
+		this.addShortcutListener(new ShortcutListener("XX", KeyCode.INSERT,
+				new int[] {}) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+
+				System.err.println("XX grid.getSelectedRow(): "
+						+ grid.getSelectedRow()
+						+ " -- "
+						+ (target.equals(grid) && grid.getSelectedRow() != null
+								&& grid.getSelectedRow() instanceof Integer && ((Integer) grid
+								.getSelectedRow()) > 9));
+
+				// if (target.equals(grid) && grid.getSelectedRow() != null
+				// && grid.getSelectedRow() instanceof Integer &&
+				// ((Integer)grid.getSelectedRow()) > 9) {
+
+				System.err.println(grid.getSelectedRow().getClass());
+
+				LogAndNotification
+						.printSuccessOk("Traer nueva pagina, y luego posicionarse en el row 0,0");
+				// grid.deselectAll();
+				// grid.deselect(grid.getSelectedRow());
+				// grid.select(grid.getContainerDataSource().getIdByIndex(0));
+
+				int c = grid.getContainerDataSource().size();
+				int z = c + 5;
+				Random rand = new Random();
+				for (int i = c; i < z; ++i) {
+					grid.addRow(true, "string 1 " + i, "string 2 " + i,
+							rand.nextInt(i + 10), rand.nextInt(i + 10),
+							rand.nextInt(i + 10), rand.nextInt(i + 10),
+							rand.nextInt(i + 10), new Date(), false, "Medium");
+				}
+
+				// grid.refreshAllRows();
+
+				// }
+
+			}
+		});
 
 		addComponent(grid);
 	}
@@ -285,7 +325,7 @@ public class DemoUI extends VerticalLayout {
 		grid.setSelectionMode(SelectionMode.SINGLE);
 		grid.select(grid.getContainerDataSource().getIdByIndex(0));
 		grid.setSizeFull();
-		
+
 	}
 
 	private void printChangedRow(int rowIndex, Indexed ds, Object itemId) {

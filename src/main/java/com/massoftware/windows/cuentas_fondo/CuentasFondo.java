@@ -68,10 +68,13 @@ public class CuentasFondo {
 		this.bloqueado = UtilModel.format(bloqueado);
 	}
 
+
 	@Override
 	public String toString() {
 		return "(" + numeroRubro + "-" + numeroGrupo + "-" + numero + ") "
 				+ numero;
 	}
+	
+	
 
 }

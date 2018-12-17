@@ -8,7 +8,21 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.vaadin.inputmask.InputMask;
+import org.vaadin.patrik.FastNavigation;
+import org.vaadin.patrik.FastNavigation.CellFocusListener;
+import org.vaadin.patrik.FastNavigation.ClickOutListener;
+import org.vaadin.patrik.FastNavigation.EditorCloseListener;
+import org.vaadin.patrik.FastNavigation.EditorOpenListener;
+import org.vaadin.patrik.FastNavigation.RowEditListener;
+import org.vaadin.patrik.FastNavigation.RowFocusListener;
+import org.vaadin.patrik.events.CellFocusEvent;
+import org.vaadin.patrik.events.ClickOutEvent;
+import org.vaadin.patrik.events.EditorCloseEvent;
+import org.vaadin.patrik.events.EditorOpenEvent;
+import org.vaadin.patrik.events.RowEditEvent;
+import org.vaadin.patrik.events.RowFocusEvent;
 
+import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
@@ -47,6 +61,7 @@ public class UtilUI {
 
 	public static Grid buildGrid() {
 		Grid grd = new Grid();
+		// initNavigation(grd);
 		grd.addStyleName("small");
 		grd.addStyleName("compact");
 		grd.setWidth("100%");
@@ -54,6 +69,96 @@ public class UtilUI {
 		grd.setImmediate(true);
 
 		return grd;
+	}
+
+	public static FastNavigation initNavigation(final Grid grid) {
+		FastNavigation nav = new FastNavigation(grid, true, false);
+		nav.setChangeColumnAfterLastRow(false);
+		nav.setOpenEditorWithSingleClick(false);
+		nav.setAllowArrowToChangeRow(true);
+
+		// nav.addRowEditListener(new RowEditListener() {
+		// @Override
+		// public void onEvent(RowEditEvent event) {
+		// int rowIndex = event.getRowIndex();
+		// if (rowIndex >= 0) {
+		// Indexed ds = grid.getContainerDataSource();
+		// Object itemId = event.getItemId();
+		// // printChangedRow(rowIndex, ds, itemId);
+		//
+		// // System.out.println("eeeeeeeeeeeeeeeee");
+		//
+		// }
+		// }
+		// });
+
+		// Open with F2
+		nav.addEditorOpenShortcut(KeyCode.F2);
+		// writeOutput("Editor can also be opened with F2");
+
+		// Close with F3
+		nav.addEditorCloseShortcut(KeyCode.F3);
+		// writeOutput("Editor can also be closed with F3");
+
+		// Row focus change
+		nav.addRowFocusListener(new RowFocusListener() {
+			@Override
+			public void onEvent(RowFocusEvent event) {
+				int row = event.getRow();
+				// writeOutput("Focus moved to row " + event.getRow());
+				grid.select(event.getItemId());
+
+			}
+		});
+		// writeOutput("Added row focus change listener");
+
+		// Cell focus change
+		// nav.addCellFocusListener(new CellFocusListener() {
+		// @Override
+		// public void onEvent(CellFocusEvent event) {
+		// int row = event.getRow();
+		// int col = event.getColumn();
+		// // writeOutput("Focus moved to cell [" + row + ", " + col + " ]");
+		// }
+		// });
+		// writeOutput("Added cell focus change listener");
+
+		// Listening to opening of editor
+		// nav.addEditorOpenListener(new EditorOpenListener() {
+		// @Override
+		// public void onEvent(EditorOpenEvent event) {
+		// int row = event.getRow();
+		// // writeOutput("Editor opened on row " + row + " at column "
+		// // + event.getColumn());
+		// }
+		// });
+		// writeOutput("Added editor open listener");
+
+		// Listening to closing of editor
+		// nav.addEditorCloseListener(new EditorCloseListener() {
+		// @Override
+		// public void onEvent(EditorCloseEvent event) {
+		// // writeOutput("Editor closed on row "
+		// // + event.getRow()
+		// // + ", column "
+		// // + event.getColumn()
+		// // + ", "
+		// // + (event.wasCancelled() ? "user cancelled change"
+		// // : "user saved change"));
+		// }
+		// });
+		// writeOutput("Added editor close listener");
+
+		// nav.addClickOutListener(new ClickOutListener() {
+		// @Override
+		// public void onEvent(ClickOutEvent event) {
+		// // writeOutput("User click outside Grid: "
+		// // + event.getSource().toString());
+		// }
+		// });
+
+		return nav;
+
 	}
 
 	public static Column confColumn(Column column, String label,
@@ -709,7 +814,7 @@ public class UtilUI {
 		txtValue.setNullRepresentation("");
 		txtValue.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		txtValue.setCaption("");
-		txtValue.setEnabled(false);
+		// txtValue.setEnabled(false);
 		txtValue.setRequired(required);
 		txtValue.setInputPrompt(label3);
 		txtValue.setDescription(label3);
@@ -738,7 +843,7 @@ public class UtilUI {
 		removeFilterBTN.addClickListener(e -> {
 			txtSearch.setValue(null);
 			// dtoBI.getItemProperty(attName).setValue(null);
-				txtValue.setValue(null);
+
 				txtValue.setValue(null);
 			});
 
@@ -746,6 +851,73 @@ public class UtilUI {
 		hl.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
 
 		txtSearch.setPropertyDataSource(dtoBI.getItemProperty(attNameCode));
+		txtValue.setPropertyDataSource(dtoBI.getItemProperty(attName));
+
+		return hl;
+
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
+			String attName, String label, boolean required, String label2)
+			throws SecurityException, ClassNotFoundException,
+			NoSuchFieldException {
+
+		// HorizontalLayout hl = buildHL();
+		HorizontalLayout hl = new HorizontalLayout();
+		hl.setWidthUndefined();
+		hl.setMargin(false);
+		hl.setSpacing(false);
+		// hl.setCaption(label);
+
+		Button btn = new Button();
+		btn.addStyleName("borderless tiny");
+		btn.setIcon(FontAwesome.FOLDER_OPEN);
+		btn.setDescription("Buscar " + label);
+
+		TextField txtValue = new TextField();
+		txtValue.setValidationVisible(true);
+		txtValue.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		txtValue.setNullRepresentation("");
+		txtValue.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		txtValue.setCaption(label);
+		// txtValue.setEnabled(false);
+		txtValue.setRequired(required);
+		txtValue.setInputPrompt(label2);
+		txtValue.setDescription(label2);
+
+		String searchFor = label;
+		if (searchFor != null) {
+			searchFor = searchFor.toLowerCase();
+			txtValue.setDescription("Buscar por " + searchFor);
+		} else {
+			searchFor = "";
+			txtValue.setDescription("Buscar por " + label.toLowerCase());
+		}
+		txtValue.setInputPrompt(searchFor);
+		
+		hl.addComponent(btn);
+		hl.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
+		txtValue.setCaption(label);
+
+		hl.addComponent(txtValue);
+		hl.setComponentAlignment(txtValue, Alignment.MIDDLE_LEFT);
+
+		// ----------------------------------------------
+
+		Button removeFilterBTN = new Button();
+		removeFilterBTN.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+		removeFilterBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		removeFilterBTN.setIcon(FontAwesome.TIMES);
+		removeFilterBTN.setDescription("Borrar valor");
+
+		removeFilterBTN.addClickListener(e -> {
+			txtValue.setValue(null);
+		});
+
+		hl.addComponent(removeFilterBTN);
+		hl.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+
 		txtValue.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
 		return hl;

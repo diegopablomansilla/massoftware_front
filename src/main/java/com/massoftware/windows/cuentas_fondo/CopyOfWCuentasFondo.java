@@ -1,4 +1,4 @@
-package com.massoftware.windows.bancos;
+package com.massoftware.windows.cuentas_fondo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,13 +8,17 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.vaadin.data.Property.ValueChangeListener;
+import com.massoftware.windows.bancos.Bancos;
+import com.massoftware.windows.bancos.WBancos;
 import com.vaadin.data.Validatable;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
+import com.vaadin.event.Action;
+import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -28,23 +32,25 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WBancos extends Window {
+public class CopyOfWCuentasFondo extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<BancosFiltro> filterBI;
-	private BeanItemContainer<Bancos> itemsBIC;
+	private BeanItem<CuentasFondoFiltro> filterBI;
+	private BeanItemContainer<CuentasFondo> itemsBIC;
 
 	// -------------------------------------------------------------
 
-	protected int limit = 10;
+	protected int limit = 15;
 	protected int offset = 0;
 
 	// -------------------------------------------------------------
@@ -58,34 +64,40 @@ public class WBancos extends Window {
 
 	// -------------------------------------------------------------
 
+	private OptionGroup activoOG;
 	private HorizontalLayout numeroTXTHL;
 	private HorizontalLayout nombreTXTHL;
-	private HorizontalLayout nombreOficialTXTHL;
-	private OptionGroup bloqueadoOG;
+	private HorizontalLayout numeroBancoCBXHL;
+
+	private TextField numeroBancoTXT;
+
+	private Panel panel;
+	private Tree tree;
+
+	private String itemTodas = "Todas las cuentas";
 
 	// -------------------------------------------------------------
 
-	public WBancos() {
+	public CopyOfWCuentasFondo() {
 		super();
-		init(null, null);
+		init(null);
 	}
 
-	public WBancos(Integer numero, String nombre) {
+	public CopyOfWCuentasFondo(Integer numero) {
 		super();
-		init(numero, nombre);
+		init(numero);
 	}
 
 	@SuppressWarnings({ "serial", "unchecked" })
-	public void init(Integer numero, String nombre) {
+	public void init(Integer numero) {
 
 		try {
 
 			buildContainersItems();
 
 			filterBI.getItemProperty("numero").setValue(numero);
-			filterBI.getItemProperty("nombre").setValue(nombre);
 
-			UtilUI.confWinList(this, "Bancos");
+			UtilUI.confWinList(this, "Cuentas de fondo");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -98,9 +110,34 @@ public class WBancos extends Window {
 
 			// -----------
 
+			numeroBancoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroBanco",
+					"nombreBanco", "Banco", "numero", false);
+
+			numeroBancoTXT = (TextField) numeroBancoCBXHL.getComponent(0);
+
+			numeroBancoTXT.addTextChangeListener(new TextChangeListener() {
+				public void textChange(TextChangeEvent event) {
+					try {
+						numeroBancoTXT.setValue(event.getText());
+						selectBancoTXTShortcutEnter();
+					} catch (Exception e) {
+						LogAndNotification.print(e);
+					}
+				}
+
+			});
+
+			Button numeroBancoBTN = (Button) numeroBancoCBXHL.getComponent(2);
+
+			numeroBancoBTN.addClickListener(e -> {
+				this.loadDataResetPaged();
+			});
+
+			// -----------
+
 			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Numero", false, 10, 0, -1, false, false, null, false,
-					UtilUI.EQUALS, 0, Short.MAX_VALUE);
+					"Cuenta", false, 5, -1, 3, false, false, null, false,
+					UtilUI.EQUALS, 0, 255);
 
 			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
 
@@ -125,7 +162,7 @@ public class WBancos extends Window {
 			// -----------
 
 			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
-					false, 20, -1, 40, false, false, null, false,
+					false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
 			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
@@ -150,56 +187,10 @@ public class WBancos extends Window {
 
 			// -----------
 
-			Button buscarBTN = UtilUI.buildButtonBuscar();
-			buscarBTN.addClickListener(e -> {
-				loadData();
-			});
+			activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null,
+					false, false, "Todas", "Activas", "No activas", false, 0);
 
-			filaFiltroHL.addComponents(numeroTXTHL, nombreTXTHL, buscarBTN);
-
-			filaFiltroHL.setComponentAlignment(buscarBTN,
-					Alignment.MIDDLE_RIGHT);
-
-			// -----------
-
-			HorizontalLayout filaFiltro2HL = new HorizontalLayout();
-			filaFiltro2HL.setSpacing(true);
-
-			// -----------
-
-			nombreOficialTXTHL = UtilUI.buildTXTHL(filterBI, "nombreOficial",
-					"Nombre oficial", false, 20, -1, 40, false, false, null,
-					false, UtilUI.CONTAINS_WORDS_AND);
-
-			TextField nombreOficialTXT = (TextField) nombreOficialTXTHL
-					.getComponent(0);
-
-			nombreOficialTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						nombreOficialTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-
-			});
-
-			Button nombreOficialBTN = (Button) nombreOficialTXTHL
-					.getComponent(1);
-
-			nombreOficialBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado",
-					"Situación", false, false, "Todos", "Bloquado",
-					"No bloqueado", true, 0);
-
-			bloqueadoOG.addValueChangeListener(new ValueChangeListener() {
+			activoOG.addValueChangeListener(new ValueChangeListener() {
 
 				@Override
 				public void valueChange(
@@ -214,26 +205,59 @@ public class WBancos extends Window {
 
 			// -----------
 
-			filaFiltro2HL.addComponents(nombreOficialTXTHL, bloqueadoOG);
+			Button buscarBTN = UtilUI.buildButtonBuscar();
+			buscarBTN.addClickListener(e -> {
+				loadData();
+			});
+
+			filaFiltroHL.addComponents(numeroBancoCBXHL, numeroTXTHL,
+					nombreTXTHL, activoOG, buscarBTN);
+
+			filaFiltroHL.setComponentAlignment(buscarBTN,
+					Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
+
+			HorizontalLayout grillas = new HorizontalLayout();
+			grillas.setSpacing(true);
+
+			VerticalLayout columna2VL = new VerticalLayout();
+			columna2VL.setSpacing(true);
+
+			// -------------------------------------------------------
+			// ARBOL
+
+			panel = new Panel("Estructura");
+			panel.setHeight("100%");
+			panel.setWidth(20f, Unit.EM);
+			panel.setHeight(25f, Unit.EM);
+			panel.setContent(buildTree());
+
+			// -------------------------------------------------------
+
+			grillas.addComponents(panel, columna2VL);
+
 			// -------------------------------------------------------
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			// itemsGRD.setWidth(33f, Unit.EM);
+			// itemsGRD.setWidth(22f, Unit.EM);
 			itemsGRD.setWidth("100%");
-			itemsGRD.setHeight(20.5f, Unit.EM);
 
-			itemsGRD.setColumns(new Object[] { "numero", "nombre",
-					"nombreOficial", "bloqueado" });
+			itemsGRD.setColumns(new Object[] { "numeroRubro", "numeroGrupo",
+					"numeroBanco", "numero", "nombre", "tipo", "bloqueado" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroRubro"), "Rubro", true,
+					true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroGrupo"), "Grupo", true,
+					true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true,
+					true, false, true, 100);
+			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Cuenta", true, 50);
 			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreOficial"),
-					"Nombre oficial", true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("tipo"), "Tipo", true, -1);
 			UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado",
-					true, -1);
+					true, true, false, true, 30);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -258,6 +282,8 @@ public class WBancos extends Window {
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
+			order.add(new SortOrder("numeroRubro", SortDirection.ASCENDING));
+			order.add(new SortOrder("numeroGrupo", SortDirection.ASCENDING));
 			order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
@@ -310,12 +336,15 @@ public class WBancos extends Window {
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, filaFiltro2HL, itemsGRD,
-					filaBotoneraPagedHL, filaBotoneraHL, filaBotonera2HL);
+			columna2VL.addComponents(itemsGRD, filaBotoneraPagedHL);
+
+			columna2VL.setComponentAlignment(filaBotoneraPagedHL,
+					Alignment.MIDDLE_RIGHT);
+
+			content.addComponents(filaFiltroHL, grillas, filaBotoneraHL,
+					filaBotonera2HL);
 
 			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 			content.setComponentAlignment(filaBotonera2HL,
 					Alignment.MIDDLE_RIGHT);
@@ -335,6 +364,9 @@ public class WBancos extends Window {
 				public void handleAction(Object sender, Object target) {
 					if (target.equals(itemsGRD)) {
 						modificarBTNClick();
+					} else if (target.equals(numeroBancoTXT)) {
+						// selectBancoTXTShortcutEnter(); No va x q ya esta el
+						// evt change text
 					}
 
 				}
@@ -388,7 +420,164 @@ public class WBancos extends Window {
 			// =======================================================
 			// -------------------------------------------------------
 
+			// buildTree();
+
 			loadData();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	private Tree buildTree() {
+		try {
+
+			Handler actionHandler = new Handler() {
+
+				private final Action ACTION_ONE = new Action("Agregar");
+				private final Action ACTION_TWO = new Action("Modificar");
+				private final Action ACTION_THREE = new Action("Eliminar");
+				private final Action[] ACTIONS = new Action[] { ACTION_ONE,
+						ACTION_TWO, ACTION_THREE };
+
+				@Override
+				public void handleAction(Action action, Object sender,
+						Object target) {
+
+					if (action.getCaption().equals("Agregar")) {
+						agregarBTNClick();
+					} else if (action.getCaption().equals("Modificar")) {
+						modificarBTNClick();
+					} else if (action.getCaption().equals("Eliminar")) {
+						eliminarItemTreeClick(target);
+					}
+
+				}
+
+				@Override
+				public Action[] getActions(Object target, Object sender) {
+					return ACTIONS;
+				}
+			};
+
+			tree = new Tree("Estructura");
+
+			loadDataTree();
+
+			tree.addValueChangeListener(event -> {
+				if (event.getProperty() != null
+						&& event.getProperty().getValue() != null) {
+
+					treeValueChangeListener(event.getProperty().getValue());
+
+				}
+			});
+
+			tree.addActionHandler(actionHandler);
+
+			return tree;
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void treeValueChangeListener(Object item) {
+		try {
+			if (item instanceof RubrosFiltro) {
+				filterBI.getItemProperty("numeroRubro").setValue(
+						((RubrosFiltro) item).getNumero());
+				this.loadDataResetPaged();
+			} else if (item instanceof GruposFiltro) {
+				filterBI.getItemProperty("numeroRubro").setValue(
+						((GruposFiltro) item).getNumeroRubro());
+
+				filterBI.getItemProperty("numeroGrupo").setValue(
+						((GruposFiltro) item).getNumero());
+				this.loadDataResetPaged();
+			} else {
+				filterBI.getItemProperty("numeroRubro").setValue(null);
+				filterBI.getItemProperty("numeroGrupo").setValue(null);
+				this.loadDataResetPaged();
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	private void loadDataTree() throws Exception {
+
+		tree.removeAllItems();
+		tree.addItem(itemTodas);
+		tree.select(itemTodas);
+		addCuentasContablesTree();
+		tree.expandItem(itemTodas);
+	}
+
+	private void addCuentasContablesTree() throws Exception {
+
+		List<RubrosFiltro> rubros = queryDataRubrosFiltro();
+
+		for (RubrosFiltro rubro : rubros) {
+
+			tree.addItem(rubro);
+			tree.setParent(rubro, itemTodas);
+			// tree.setChildrenAllowed(cuentaContable, false);
+
+			List<GruposFiltro> grupos = queryDataGruposFiltro();
+
+			for (GruposFiltro grupo : grupos) {
+
+				grupo.setNumeroRubro(rubro.getNumero());
+
+				tree.addItem(grupo);
+				tree.setParent(grupo, rubro);
+				tree.setChildrenAllowed(grupo, false);
+				// tree.expandItem(grupo);
+
+			}
+
+			// tree.expandItem(rubro);
+
+		}
+	}
+
+	private void eliminarItemTreeClick(Object item) {
+		try {
+
+			getUI().addWindow(
+					new EliminarDialog(item.toString(),
+							new EliminarDialog.Callback() {
+								public void onDialogResult(boolean yes) {
+
+									try {
+										if (yes) {
+
+											if (item instanceof RubrosFiltro) {
+												deleteItem((RubrosFiltro) item);
+											} else if (item instanceof GruposFiltro) {
+												deleteItem((GruposFiltro) item);
+											} else {
+											}
+
+											LogAndNotification
+													.printSuccessOk("Se eliminó con éxito el ítem "
+															+ item);
+
+											loadDataTree();
+											loadDataResetPaged();
+
+										}
+									} catch (Exception e) {
+										LogAndNotification.print(e);
+									}
+
+								}
+							}));
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -399,9 +588,9 @@ public class WBancos extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
-		itemsBIC = new BeanItemContainer<Bancos>(Bancos.class,
-				new ArrayList<Bancos>());
+		filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
+		itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class,
+				new ArrayList<CuentasFondo>());
 	}
 
 	// =================================================================================
@@ -452,7 +641,7 @@ public class WBancos extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													Bancos item = (Bancos) itemsGRD
+													CuentasFondo item = (CuentasFondo) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -498,7 +687,7 @@ public class WBancos extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
+				CuentasFondo item = (CuentasFondo) itemsGRD.getSelectedRow();
 				item.getNumero();
 
 				Window window = new Window("Modificar ítem " + item);
@@ -514,6 +703,84 @@ public class WBancos extends Window {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	protected void selectBancoTXTShortcutEnter() {
+		try {
+
+			if (this.filterBI.getBean().getNumeroBanco() != null) {
+
+				WBancos window = new WBancos(this.filterBI.getBean()
+						.getNumeroBanco());
+				window.setModal(true);
+				window.center();
+
+				window.addCloseListener(new CloseListener() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void windowClose(CloseEvent event) {
+						setNumeroBancoOnFilter(window);
+					}
+				});
+
+				// -------------------------------------------------------
+				// BOTONERA SELECCION
+
+				HorizontalLayout filaBotoneraHL = new HorizontalLayout();
+				filaBotoneraHL.setSpacing(true);
+
+				Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
+				seleccionarBTN.addClickListener(e -> {
+					eliminarBTNClick();
+				});
+
+				seleccionarBTN.addClickListener(e -> {
+					setNumeroBancoOnFilter(window);
+				});
+
+				filaBotoneraHL.addComponents(seleccionarBTN);
+
+				((VerticalLayout) window.getContent())
+						.addComponent(filaBotoneraHL);
+
+				((VerticalLayout) window.getContent()).setComponentAlignment(
+						filaBotoneraHL, Alignment.MIDDLE_CENTER);
+
+				getUI().addWindow(window);
+
+			} else {
+				this.filterBI.getItemProperty("nombreBanco").setValue(null);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setNumeroBancoOnFilter(WBancos window) {
+		try {
+			if (window.itemsGRD.getSelectedRow() != null) {
+
+				Bancos item = (Bancos) window.itemsGRD.getSelectedRow();
+
+				this.filterBI.getItemProperty("numeroBanco").setValue(
+						item.getNumero());
+				this.filterBI.getItemProperty("nombreBanco").setValue(
+						item.getNombre());
+
+				window.close();
+
+				loadDataResetPaged();
+			} else {
+				this.filterBI.getItemProperty("numeroBanco").setValue(null);
+				this.filterBI.getItemProperty("nombreBanco").setValue(null);
+			}
+		} catch (Exception ex) {
+			LogAndNotification.print(ex);
+		}
+	}
+
 	// =================================================================================
 
 	private void loadDataResetPaged() {
@@ -526,13 +793,13 @@ public class WBancos extends Window {
 
 			((Validatable) numeroTXTHL.getComponent(0)).validate();
 			((Validatable) nombreTXTHL.getComponent(0)).validate();
-			((Validatable) nombreOficialTXTHL.getComponent(0)).validate();
+			((Validatable) numeroBancoCBXHL.getComponent(0)).validate();
 
-			List<Bancos> items = queryData();
+			List<CuentasFondo> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (Bancos item : items) {
+			for (CuentasFondo item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -557,8 +824,33 @@ public class WBancos extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
+	private List<RubrosFiltro> queryDataRubrosFiltro() {
+		try {
+
+			return mockDataRubrosFiltro();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<RubrosFiltro>();
+	}
+
+	private List<GruposFiltro> queryDataGruposFiltro() {
+		try {
+
+			return mockDataGruposFiltro();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<GruposFiltro>();
+	}
+
 	// metodo que realiza la consulta a la base de datos
-	private List<Bancos> queryData() {
+	private List<CuentasFondo> queryData() {
+
 		try {
 
 			System.out.println("Los filtros son "
@@ -576,7 +868,7 @@ public class WBancos extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<Bancos> items = mockData(limit, offset,
+			List<CuentasFondo> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -585,11 +877,11 @@ public class WBancos extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Bancos>();
+		return new ArrayList<CuentasFondo>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Bancos item) {
+	private void deleteItem(CuentasFondo item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
@@ -604,31 +896,66 @@ public class WBancos extends Window {
 		}
 	}
 
+	// metodo que realiza el delete en la base de datos
+	private void deleteItem(RubrosFiltro item) {
+		try {
+
+			tree.removeItem(item);
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	// metodo que realiza el delete en la base de datos
+	private void deleteItem(GruposFiltro item) {
+		try {
+
+			tree.removeItem(item);
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<Bancos> itemsMock = new ArrayList<Bancos>();
+	List<CuentasFondo> itemsMock = new ArrayList<CuentasFondo>();
 
-	private List<Bancos> mockData(int limit, int offset, BancosFiltro filtro) {
+	private List<CuentasFondo> mockData(int limit, int offset,
+			CuentasFondoFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				Bancos item = new Bancos();
+				CuentasFondo item = new CuentasFondo();
 
+				item.setNumeroRubro(i);
+				item.setNumeroGrupo(i);
 				item.setNumero(i);
 				item.setNombre("Nombre " + i);
-				item.setNombreOficial("Nombre Oficial " + i);
+				item.setTipo("Tipo " + i);
+				item.setNumeroBanco(i);
 				item.setBloqueado(i % 2 == 0);
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<Bancos> arrayList = new ArrayList<Bancos>();
+		ArrayList<CuentasFondo> arrayList = new ArrayList<CuentasFondo>();
 
-		for (Bancos item : itemsMock) {
+		for (CuentasFondo item : itemsMock) {
+
+			boolean passesFilterNumeroRubro = (filtro.getNumeroRubro() == null || item
+					.getNumeroRubro().equals(filtro.getNumeroRubro()));
+
+			boolean passesFilterNumeroGrupo = (filtro.getNumeroGrupo() == null || item
+					.getNumeroGrupo().equals(filtro.getNumeroGrupo()));
+
+			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null || item
+					.getNumeroBanco().equals(filtro.getNumeroBanco()));
 
 			boolean passesFilterNumero = (filtro.getNumero() == null || item
 					.getNumero().equals(filtro.getNumero()));
@@ -637,18 +964,15 @@ public class WBancos extends Window {
 					.getNombre().toLowerCase()
 					.contains(filtro.getNombre().toLowerCase()));
 
-			boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null || item
-					.getNombreOficial().toLowerCase()
-					.contains(filtro.getNombreOficial().toLowerCase()));
-
 			boolean passesFilterBloqueado = (filtro.getBloqueado() == null
 					|| filtro.getBloqueado() == 0
 					|| (item.getBloqueado().equals(true) && filtro
 							.getBloqueado().equals(1)) || (item.getBloqueado()
 					.equals(false) && filtro.getBloqueado().equals(2)));
 
-			if (passesFilterNumero && passesFilterNombre
-					&& passesFilterNombreOficial && passesFilterBloqueado) {
+			if (passesFilterNumeroRubro && passesFilterNumeroGrupo
+					&& passesFilterNumeroBanco && passesFilterNumero
+					&& passesFilterNombre && passesFilterBloqueado) {
 				arrayList.add(item);
 			}
 		}
@@ -659,6 +983,46 @@ public class WBancos extends Window {
 		}
 
 		return arrayList.subList(offset, end);
+	}
+
+	private List<RubrosFiltro> mockDataRubrosFiltro() {
+
+		List<RubrosFiltro> itemsMock = new ArrayList<RubrosFiltro>();
+
+		if (itemsMock.size() == 0) {
+
+			for (int i = 0; i < 20; i++) {
+
+				RubrosFiltro item = new RubrosFiltro();
+
+				item.setNumero(i);
+				item.setNombre("Rubro " + i);
+
+				itemsMock.add(item);
+			}
+		}
+
+		return itemsMock;
+	}
+
+	private List<GruposFiltro> mockDataGruposFiltro() {
+
+		List<GruposFiltro> itemsMock = new ArrayList<GruposFiltro>();
+
+		if (itemsMock.size() == 0) {
+
+			for (int i = 0; i < 20; i++) {
+
+				GruposFiltro item = new GruposFiltro();
+
+				item.setNumero(i);
+				item.setNombre("Grupo " + i);
+
+				itemsMock.add(item);
+			}
+		}
+
+		return itemsMock;
 	}
 
 	// =================================================================================
