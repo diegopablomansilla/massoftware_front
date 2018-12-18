@@ -710,7 +710,7 @@ public class CopyOfWCuentasFondo extends Window {
 			if (this.filterBI.getBean().getNumeroBanco() != null) {
 
 				WBancos window = new WBancos(this.filterBI.getBean()
-						.getNumeroBanco());
+						.getNumeroBanco(), null);
 				window.setModal(true);
 				window.center();
 

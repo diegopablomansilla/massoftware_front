@@ -32,54 +32,56 @@ public class CuentasFondoBO {
 		return itemsMock;
 	}
 
-	public List<CuentasFondo> find(int limit, int offset,
-			Map<String, Boolean> orderBy, CuentasFondoFiltro filtro) {
+	public List<CuentasFondo> find(int limit, int offset, Map<String, Boolean> orderBy, CuentasFondoFiltro filtro) {
 
-		System.out.println("Los filtros son " + filtro.toString());
+		// System.out.println("El orden es " + orderBy);
 
-		System.out.println("El orden es " + orderBy);
-		
 		ArrayList<CuentasFondo> arrayList = new ArrayList<CuentasFondo>();
 
 		for (CuentasFondo item : itemsMock) {
 
-			boolean passesFilterNumeroRubro = (filtro.getNumeroRubro() == null || item
-					.getNumeroRubro().equals(filtro.getNumeroRubro()));
+			boolean passesFilterNumeroRubro = (filtro.getNumeroRubro() == null
+					|| item.getNumeroRubro().equals(filtro.getNumeroRubro()));
 
-			boolean passesFilterNumeroGrupo = (filtro.getNumeroGrupo() == null || item
-					.getNumeroGrupo().equals(filtro.getNumeroGrupo()));
+			boolean passesFilterNumeroGrupo = (filtro.getNumeroGrupo() == null
+					|| item.getNumeroGrupo().equals(filtro.getNumeroGrupo()));
 
-			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null || item
-					.getNumeroBanco().equals(filtro.getNumeroBanco()));
+			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null
+					|| item.getNumeroBanco().equals(filtro.getNumeroBanco()));
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+			boolean passesFilterNumero = (filtro.getNumero() == null || item.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterNombre = (filtro.getNombre() == null
+					|| item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
 
-			boolean passesFilterBloqueado = (filtro.getBloqueado() == null
-					|| filtro.getBloqueado() == 0
-					|| (item.getBloqueado().equals(true) && filtro
-							.getBloqueado().equals(1)) || (item.getBloqueado()
-					.equals(false) && filtro.getBloqueado().equals(2)));
+			boolean passesFilterBloqueado = (filtro.getBloqueado() == null || filtro.getBloqueado() == 0
+					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
+					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
 
-			if (passesFilterNumeroRubro && passesFilterNumeroGrupo
-					&& passesFilterNumeroBanco && passesFilterNumero
+			if (passesFilterNumeroRubro && passesFilterNumeroGrupo && passesFilterNumeroBanco && passesFilterNumero
 					&& passesFilterNombre && passesFilterBloqueado) {
+
 				arrayList.add(item);
 			}
 		}
-		
-		if(offset == -1 && limit == -1){
+
+		if (offset == -1 && limit == -1) {
 			return arrayList;
 		}
 
 		int end = offset + limit;
 		if (end > arrayList.size()) {
+			String msg = "* LIMIT = " + limit + ", OFFSET = " + offset + ", END = " + end + "\nFILTROS = " + filtro;
+			System.out.println("================================================================");
+			System.out.println(msg);
+			System.out.println("================================================================");
 			return arrayList.subList(0, arrayList.size());
 		}
+		
+		String msg = "+ LIMIT = " + limit + ", OFFSET = " + offset + ", END = " + end + "\nFILTROS = " + filtro;
+		System.out.println("================================================================");
+		System.out.println(msg);
+		System.out.println("================================================================");
 
 		return arrayList.subList(offset, end);
 	}

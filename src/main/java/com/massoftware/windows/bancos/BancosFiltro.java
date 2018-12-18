@@ -22,8 +22,7 @@ public class BancosFiltro {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);
-		this.nombre = nombre;
+		this.nombre = UtilModel.format(nombre);		
 	}
 
 	public String getNombreOficial() {

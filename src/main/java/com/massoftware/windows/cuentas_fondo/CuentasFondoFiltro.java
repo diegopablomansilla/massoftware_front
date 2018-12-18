@@ -56,8 +56,8 @@ public class CuentasFondoFiltro {
 		return nombreBanco;
 	}
 
-	public void setNombreBanco(String nombreBanco) {
-		this.nombreBanco = nombreBanco;
+	public void setNombreBanco(String nombreBanco) {		
+		this.nombreBanco = UtilModel.format(nombreBanco);
 	}
 
 	public Integer getBloqueado() {

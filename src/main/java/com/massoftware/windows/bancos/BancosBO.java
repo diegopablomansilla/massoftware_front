@@ -31,32 +31,25 @@ public class BancosBO {
 		return find(-1, -1, null, filtro);
 	}
 
-	public List<Bancos> find(int limit, int offset,
-			Map<String, Boolean> orderBy, BancosFiltro filtro) {
+	public List<Bancos> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro) {
 
 		ArrayList<Bancos> arrayList = new ArrayList<Bancos>();
 
 		for (Bancos item : itemsMock) {
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+			boolean passesFilterNumero = (filtro.getNumero() == null || item.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterNombre = (filtro.getNombre() == null
+					|| item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
 
-			boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null || item
-					.getNombreOficial().toLowerCase()
-					.contains(filtro.getNombreOficial().toLowerCase()));
+			boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null
+					|| item.getNombreOficial().toLowerCase().contains(filtro.getNombreOficial().toLowerCase()));
 
-			boolean passesFilterBloqueado = (filtro.getBloqueado() == null
-					|| filtro.getBloqueado() == 0
-					|| (item.getBloqueado().equals(true) && filtro
-							.getBloqueado().equals(1)) || (item.getBloqueado()
-					.equals(false) && filtro.getBloqueado().equals(2)));
+			boolean passesFilterBloqueado = (filtro.getBloqueado() == null || filtro.getBloqueado() == 0
+					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
+					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
 
-			if (passesFilterNumero && passesFilterNombre
-					&& passesFilterNombreOficial && passesFilterBloqueado) {
+			if (passesFilterNumero && passesFilterNombre && passesFilterNombreOficial && passesFilterBloqueado) {
 				arrayList.add(item);
 			}
 		}

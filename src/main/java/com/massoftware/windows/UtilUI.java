@@ -508,7 +508,7 @@ public class UtilUI {
 
 	}
 
-	private static String buildWinFilterTXTInputPromptList(String inputPrompt) {
+	public static String buildWinFilterTXTInputPromptList(String inputPrompt) {
 
 		if (S_N.equals(inputPrompt)) {
 
