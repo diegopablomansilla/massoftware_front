@@ -14,10 +14,12 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.bancos.Bancos;
+import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
 import com.massoftware.windows.cuentas_fondo.CuentasFondo;
+import com.massoftware.windows.cuentas_fondo.CuentasFondoFiltro;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -109,12 +111,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroChequeTXTHL = UtilUI.buildTXTHLInteger(filterBI,
-					"numeroCheque", "Cheque", false, 5, -1, 3, false, false,
-					null, false, UtilUI.EQUALS, 0, 255);
+			numeroChequeTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numeroCheque", "Cheque", false, 5, -1, 3, false,
+					false, null, false, UtilUI.EQUALS, 0, 255);
 
-			TextField numeroChequeTXT = (TextField) numeroChequeTXTHL
-					.getComponent(0);
+			TextField numeroChequeTXT = (TextField) numeroChequeTXTHL.getComponent(0);
 
 			numeroChequeTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
@@ -128,8 +128,7 @@ public class WValoresTerceros extends Window {
 
 			});
 
-			Button numeroChequeBTN = (Button) numeroChequeTXTHL
-					.getComponent(1);
+			Button numeroChequeBTN = (Button) numeroChequeTXTHL.getComponent(1);
 
 			numeroChequeBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -137,12 +136,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroInternoTXTHL = UtilUI.buildTXTHLInteger(filterBI,
-					"numeroInterno", "Nro int", false, 5, -1, 3, false, false,
-					null, false, UtilUI.EQUALS, 0, 255);
+			numeroInternoTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numeroInterno", "Nro int", false, 5, -1, 3, false,
+					false, null, false, UtilUI.EQUALS, 0, 255);
 
-			TextField numeroInternoTXT = (TextField) numeroInternoTXTHL
-					.getComponent(0);
+			TextField numeroInternoTXT = (TextField) numeroInternoTXTHL.getComponent(0);
 
 			numeroInternoTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
@@ -156,8 +153,7 @@ public class WValoresTerceros extends Window {
 
 			});
 
-			Button numeroInternoBTN = (Button) numeroInternoTXTHL
-					.getComponent(1);
+			Button numeroInternoBTN = (Button) numeroInternoTXTHL.getComponent(1);
 
 			numeroInternoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -165,12 +161,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroCuentaFondoCBXHL = UtilUI.buildSearchBox(filterBI,
-					"numeroCuentaFondo", "nombreCuentaFondo", "Cta fondo",
-					"numero", false, "Cuenta de fondo", true);
+			numeroCuentaFondoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroCuentaFondo", "nombreCuentaFondo",
+					"Cta fondo", "numero", false, "Cuenta de fondo", true);
 
-			Button numeroCuentaFondoBTNOpen = (Button) numeroCuentaFondoCBXHL
-					.getComponent(0);
+			Button numeroCuentaFondoBTNOpen = (Button) numeroCuentaFondoCBXHL.getComponent(0);
 
 			numeroCuentaFondoBTNOpen.addClickListener(e -> {
 				try {
@@ -180,8 +174,7 @@ public class WValoresTerceros extends Window {
 				}
 			});
 
-			Button numeroCuentaFondoBTN = (Button) numeroCuentaFondoCBXHL
-					.getComponent(3);
+			Button numeroCuentaFondoBTN = (Button) numeroCuentaFondoCBXHL.getComponent(3);
 
 			numeroCuentaFondoBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -189,11 +182,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroBancoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroBanco",
-					"nombreBanco", "Banco", "numero", false, "Banco", true);
+			numeroBancoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroBanco", "nombreBanco", "Banco", "numero", false,
+					"Banco", true);
 
-			Button numeroBancoBTNOpen = (Button) numeroBancoCBXHL
-					.getComponent(0);
+			Button numeroBancoBTNOpen = (Button) numeroBancoCBXHL.getComponent(0);
 
 			numeroBancoBTNOpen.addClickListener(e -> {
 				try {
@@ -211,12 +203,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroClienteCBXHL = UtilUI.buildSearchBox(filterBI,
-					"numeroCliente", "nombreCliente", "Cliente", "numero",
+			numeroClienteCBXHL = UtilUI.buildSearchBox(filterBI, "numeroCliente", "nombreCliente", "Cliente", "numero",
 					false, "Cliente", true);
 
-			Button numeroClienteBTNOpen = (Button) numeroClienteCBXHL
-					.getComponent(0);
+			Button numeroClienteBTNOpen = (Button) numeroClienteCBXHL.getComponent(0);
 
 			numeroClienteBTNOpen.addClickListener(e -> {
 				try {
@@ -226,8 +216,7 @@ public class WValoresTerceros extends Window {
 				}
 			});
 
-			Button numeroClienteBTN = (Button) numeroClienteCBXHL
-					.getComponent(3);
+			Button numeroClienteBTN = (Button) numeroClienteCBXHL.getComponent(3);
 
 			numeroClienteBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -235,12 +224,10 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroProveedorCBXHL = UtilUI.buildSearchBox(filterBI,
-					"numeroProveedor", "nombreProveedor", "Proveedor",
+			numeroProveedorCBXHL = UtilUI.buildSearchBox(filterBI, "numeroProveedor", "nombreProveedor", "Proveedor",
 					"numero", false, "Proveedor", true);
 
-			Button numeroProveedorBTNOpen = (Button) numeroProveedorCBXHL
-					.getComponent(0);
+			Button numeroProveedorBTNOpen = (Button) numeroProveedorCBXHL.getComponent(0);
 
 			numeroProveedorBTNOpen.addClickListener(e -> {
 				try {
@@ -250,8 +237,7 @@ public class WValoresTerceros extends Window {
 				}
 			});
 
-			Button numeroProveedorBTN = (Button) numeroProveedorCBXHL
-					.getComponent(3);
+			Button numeroProveedorBTN = (Button) numeroProveedorCBXHL.getComponent(3);
 
 			numeroProveedorBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
@@ -259,11 +245,9 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			emisionDesdeDFHL = UtilUI.buildDFHL(filterBI, "emisionDesde",
-					"Emisión desde", false, false);
+			emisionDesdeDFHL = UtilUI.buildDFHL(filterBI, "emisionDesde", "Emisión desde", false, false);
 
-			DateField emisionDesdeDF = (DateField) emisionDesdeDFHL
-					.getComponent(0);
+			DateField emisionDesdeDF = (DateField) emisionDesdeDFHL.getComponent(0);
 
 			emisionDesdeDF.addValueChangeListener(new ValueChangeListener() {
 
@@ -275,11 +259,9 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			emisionHastaDFHL = UtilUI.buildDFHL(filterBI, "emisionHasta",
-					"Emisión hasta", false, false);
+			emisionHastaDFHL = UtilUI.buildDFHL(filterBI, "emisionHasta", "Emisión hasta", false, false);
 
-			DateField emisionHastaDF = (DateField) emisionHastaDFHL
-					.getComponent(0);
+			DateField emisionHastaDF = (DateField) emisionHastaDFHL.getComponent(0);
 
 			emisionHastaDF.addValueChangeListener(new ValueChangeListener() {
 
@@ -291,8 +273,7 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			cobroDesdeDFHL = UtilUI.buildDFHL(filterBI, "cobroDesde",
-					"Cobro desde", false, false);
+			cobroDesdeDFHL = UtilUI.buildDFHL(filterBI, "cobroDesde", "Cobro desde", false, false);
 
 			DateField cobroDesdeDF = (DateField) cobroDesdeDFHL.getComponent(0);
 
@@ -306,8 +287,7 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			cobroHastaDFHL = UtilUI.buildDFHL(filterBI, "cobroHasta",
-					"Cobro hasta", false, false);
+			cobroHastaDFHL = UtilUI.buildDFHL(filterBI, "cobroHasta", "Cobro hasta", false, false);
 
 			DateField cobroHastaDF = (DateField) cobroHastaDFHL.getComponent(0);
 
@@ -321,16 +301,14 @@ public class WValoresTerceros extends Window {
 
 			// -----------
 
-			numeroEstadoOG = UtilUI.buildBooleanOG(filterBI, "numeroEstado",
-					"Estado", false, false, new String[] { "Cartera",
-							"Rechazados", "Aplicado", "Todos" }, new Integer[] {
-							0, 1, 2, 3 }, true, 0);
+			numeroEstadoOG = UtilUI.buildBooleanOG(filterBI, "numeroEstado", "Estado", false, false,
+					new String[] { "Cartera", "Rechazados", "Aplicado", "Todos" }, new Integer[] { 0, 1, 2, 3 }, true,
+					0);
 
 			numeroEstadoOG.addValueChangeListener(new ValueChangeListener() {
 
 				@Override
-				public void valueChange(
-						com.vaadin.data.Property.ValueChangeEvent event) {
+				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 					try {
 						loadDataResetPaged();
 					} catch (Exception e) {
@@ -346,15 +324,13 @@ public class WValoresTerceros extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(numeroChequeTXTHL, numeroInternoTXTHL, emisionDesdeDFHL,
-					emisionHastaDFHL, cobroDesdeDFHL, cobroHastaDFHL,
-					numeroEstadoOG, buscarBTN);
+			filaFiltroHL.addComponents(numeroChequeTXTHL, numeroInternoTXTHL, emisionDesdeDFHL, emisionHastaDFHL,
+					cobroDesdeDFHL, cobroHastaDFHL, numeroEstadoOG, buscarBTN);
 
-			filaFiltro2HL.addComponents(numeroCuentaFondoCBXHL,
-					numeroBancoCBXHL, numeroClienteCBXHL, numeroProveedorCBXHL);
+			filaFiltro2HL.addComponents(numeroCuentaFondoCBXHL, numeroBancoCBXHL, numeroClienteCBXHL,
+					numeroProveedorCBXHL);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN,
-					Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 			// filaFiltroHL.setComponentAlignment(numeroEstadoOG,
 			// Alignment.MIDDLE_CENTER);
@@ -368,59 +344,43 @@ public class WValoresTerceros extends Window {
 			itemsGRD.setWidth("100%");
 			itemsGRD.setHeight(20.5f, Unit.EM);
 
-			itemsGRD.setColumns(new Object[] { "numeroCheque", "numeroInterno",
-					"numeroCliente", "nombreCliente", "emision", "numeroBanco",
-					"nombreBanco", "cobro", "numeroCuentaFondo",
-					"nombreCuentaFondo", "numeroProveedor", "nombreProveedor",
-					"numeroEstado", "nombreEstado", "importe" });
+			itemsGRD.setColumns(new Object[] { "numeroCheque", "numeroInterno", "numeroCliente", "nombreCliente",
+					"emision", "numeroBanco", "nombreBanco", "cobro", "numeroCuentaFondo", "nombreCuentaFondo",
+					"numeroProveedor", "nombreProveedor", "numeroEstado", "nombreEstado", "importe" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroCliente"), "Cliente",
-					true, true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreCliente"), "Cliente",
-					true, true, false, true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroEstado"), "Estado",
-					true, true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroCuentaFondo"),
-					"Cuenta fondo", true, true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true,
-					true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroProveedor"),
-					"Proveedor", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroCliente"), "Cliente", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("nombreCliente"), "Cliente", true, true, false, true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroEstado"), "Estado", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroCuentaFondo"), "Cuenta fondo", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroProveedor"), "Proveedor", true, true, false, true, 50);
 			// UtilUI.confColumn(itemsGRD.getColumn("nombreEstado"), "Estado",
 			// true, true, false, true, 50);
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroInterno"),
-					"Nro. interno", true, 80);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroCheque"),
-					"Nro. cheque", true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroInterno"), "Nro. interno", true, 80);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroCheque"), "Nro. cheque", true, 80);
 			// UtilUI.confColumn(itemsGRD.getColumn("numeroCliente"), "Cliente",
 			// true, 70);
 			// UtilUI.confColumn(itemsGRD.getColumn("nombreCliente"),
 			// "Cliente",
 			// true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("emision"), "Emisión", true,
-					90);
+			UtilUI.confColumn(itemsGRD.getColumn("emision"), "Emisión", true, 90);
 			UtilUI.confColumn(itemsGRD.getColumn("cobro"), "Cobro", true, 90);
 			// UtilUI.confColumn(itemsGRD.getColumn("numeroCuentaFondo"),
 			// "Cta. fondo", true, 70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreCuentaFondo"),
-					"Cta. fondo", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("nombreCuentaFondo"), "Cta. fondo", true, 150);
 			// UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco",
 			// true,
 			// 70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreBanco"), "Banco", true,
-					150);
+			UtilUI.confColumn(itemsGRD.getColumn("nombreBanco"), "Banco", true, 150);
 			// UtilUI.confColumn(itemsGRD.getColumn("numeroProveedor"),
 			// "Proveedor", true,
 			// 70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreProveedor"),
-					"Proveedor", true, 150);
+			UtilUI.confColumn(itemsGRD.getColumn("nombreProveedor"), "Proveedor", true, 150);
 			// UtilUI.confColumn(itemsGRD.getColumn("numeroEstado"), "Estado",
 			// true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreEstado"), "Estado",
-					true, 70);
-			UtilUI.confColumn(itemsGRD.getColumn("importe"), "Importe", true,
-					-1);
+			UtilUI.confColumn(itemsGRD.getColumn("nombreEstado"), "Estado", true, 70);
+			UtilUI.confColumn(itemsGRD.getColumn("importe"), "Importe", true, -1);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -433,56 +393,45 @@ public class WValoresTerceros extends Window {
 			// .getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-			itemsGRD.getColumn("emision").setRenderer(
-					new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
-			itemsGRD.getColumn("cobro").setRenderer(
-					new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+			itemsGRD.getColumn("emision").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+			itemsGRD.getColumn("cobro").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 
 			// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
 			// new DateRenderer(
 			// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
-			itemsGRD.getColumn("nombreEstado").setRenderer(new HtmlRenderer(),
-					new Converter<String, String>() {
-						@Override
-						public String convertToModel(String value,
-								Class<? extends String> targetType,
-								Locale locale)
-								throws Converter.ConversionException {
-							return "not implemented";
-						}
+			itemsGRD.getColumn("nombreEstado").setRenderer(new HtmlRenderer(), new Converter<String, String>() {
+				@Override
+				public String convertToModel(String value, Class<? extends String> targetType, Locale locale)
+						throws Converter.ConversionException {
+					return "not implemented";
+				}
 
-						@Override
-						public String convertToPresentation(String value,
-								Class<? extends String> targetType,
-								Locale locale)
-								throws Converter.ConversionException {
+				@Override
+				public String convertToPresentation(String value, Class<? extends String> targetType, Locale locale)
+						throws Converter.ConversionException {
 
-							if (value != null
-									&& value.trim().equalsIgnoreCase("Cartera")) {
-								return "<font color='blue'>" + value
-										+ "</font>";
-							} else if (value != null
-									&& value.trim().equalsIgnoreCase(
-											"Rechazado")) {
-								return "<font color='red'>" + value + "</font>";
-							} else {
-								return value;
-							}
+					if (value != null && value.trim().equalsIgnoreCase("Cartera")) {
+						return "<font color='blue'>" + value + "</font>";
+					} else if (value != null && value.trim().equalsIgnoreCase("Rechazado")) {
+						return "<font color='red'>" + value + "</font>";
+					} else {
+						return value;
+					}
 
-						}
+				}
 
-						@Override
-						public Class<String> getModelType() {
-							return String.class;
-						}
+				@Override
+				public Class<String> getModelType() {
+					return String.class;
+				}
 
-						@Override
-						public Class<String> getPresentationType() {
-							return String.class;
-						}
-					});
+				@Override
+				public Class<String> getPresentationType() {
+					return String.class;
+				}
+			});
 
 			// .......
 
@@ -519,31 +468,26 @@ public class WValoresTerceros extends Window {
 				modificarBTNClick();
 			});
 
-			Button seguimientoBTN = UtilUI.buildButton("Seguimiento",
-					"Seguimiento");
+			Button seguimientoBTN = UtilUI.buildButton("Seguimiento", "Seguimiento");
 			seguimientoBTN.setIcon(FontAwesome.PRINT);
 			seguimientoBTN.addClickListener(e -> {
 				// seguimientoBTNClick();
-				});
+			});
 
-			Button masFiltrosBTN = UtilUI.buildButton("Búsqueda avanzada",
-					"Búsqueda avanzada");
+			Button masFiltrosBTN = UtilUI.buildButton("Búsqueda avanzada", "Búsqueda avanzada");
 			masFiltrosBTN.setIcon(FontAwesome.SEARCH);
 			masFiltrosBTN.addClickListener(e -> {
 				// seguimientoBTNClick();
-				});
+			});
 
-			filaBotoneraHL.addComponents(modificarBTN, seguimientoBTN,
-					masFiltrosBTN);
+			filaBotoneraHL.addComponents(modificarBTN, seguimientoBTN, masFiltrosBTN);
 
 			// -------------------------------------------------------
 
-			content.addComponents(filaFiltroHL, filaFiltro2HL, itemsGRD,
-					filaBotoneraPagedHL, filaBotoneraHL);
+			content.addComponents(filaFiltroHL, filaFiltro2HL, itemsGRD, filaBotoneraPagedHL, filaBotoneraHL);
 
 			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 
 			this.setContent(content);
@@ -552,8 +496,7 @@ public class WValoresTerceros extends Window {
 			// -------------------------------------------------------
 			// KEY EVENTs
 
-			this.addShortcutListener(new ShortcutListener("ENTER",
-					KeyCode.ENTER, new int[] {}) {
+			this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -568,8 +511,7 @@ public class WValoresTerceros extends Window {
 
 			// --------------------------------------------------
 
-			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M,
-					new int[] { ModifierKey.CTRL }) {
+			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M, new int[] { ModifierKey.CTRL }) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -581,8 +523,7 @@ public class WValoresTerceros extends Window {
 
 			// --------------------------------------------------
 
-			this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B,
-					new int[] { ModifierKey.CTRL }) {
+			this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B, new int[] { ModifierKey.CTRL }) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -613,10 +554,8 @@ public class WValoresTerceros extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<ValoresTercerosFiltro>(
-				new ValoresTercerosFiltro());
-		itemsBIC = new BeanItemContainer<ValoresTerceros>(
-				ValoresTerceros.class, new ArrayList<ValoresTerceros>());
+		filterBI = new BeanItem<ValoresTercerosFiltro>(new ValoresTercerosFiltro());
+		itemsBIC = new BeanItemContainer<ValoresTerceros>(ValoresTerceros.class, new ArrayList<ValoresTerceros>());
 	}
 
 	// =================================================================================
@@ -657,8 +596,7 @@ public class WValoresTerceros extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				ValoresTerceros item = (ValoresTerceros) itemsGRD
-						.getSelectedRow();
+				ValoresTerceros item = (ValoresTerceros) itemsGRD.getSelectedRow();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);
@@ -678,11 +616,13 @@ public class WValoresTerceros extends Window {
 
 			// if (this.filterBI.getBean().getNumeroCuentaFondo() != null) {
 
-			WCuentasFondo window = new WCuentasFondo(this.filterBI.getBean()
-					.getNumeroCuentaFondo());
+			CuentasFondoFiltro cuentasFondoFiltro = new CuentasFondoFiltro();
+			cuentasFondoFiltro.setNumero(this.filterBI.getBean().getNumeroCuentaFondo());
+
+			WCuentasFondo window = new WCuentasFondo(cuentasFondoFiltro);
 			window.setModal(true);
 			window.center();
-
+	
 			window.addCloseListener(new CloseListener() {
 				private static final long serialVersionUID = 1L;
 
@@ -707,8 +647,7 @@ public class WValoresTerceros extends Window {
 
 			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
 
-			((VerticalLayout) window.getContent()).setComponentAlignment(
-					filaBotoneraHL, Alignment.MIDDLE_CENTER);
+			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
 
 			getUI().addWindow(window);
 
@@ -726,22 +665,17 @@ public class WValoresTerceros extends Window {
 		try {
 			if (window.itemsGRD.getSelectedRow() != null) {
 
-				CuentasFondo item = (CuentasFondo) window.itemsGRD
-						.getSelectedRow();
+				CuentasFondo item = (CuentasFondo) window.itemsGRD.getSelectedRow();
 
-				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreCuentaFondo").setValue(
-						item.getNombre());
+				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(item.getNumero());
+				this.filterBI.getItemProperty("nombreCuentaFondo").setValue(item.getNombre());
 
 				window.close();
 
 				loadDataResetPaged();
 			} else {
-				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(
-						null);
-				this.filterBI.getItemProperty("nombreCuentaFondo").setValue(
-						null);
+				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(null);
+				this.filterBI.getItemProperty("nombreCuentaFondo").setValue(null);
 			}
 		} catch (Exception ex) {
 			LogAndNotification.print(ex);
@@ -752,9 +686,11 @@ public class WValoresTerceros extends Window {
 		try {
 
 			// if (this.filterBI.getBean().getNumeroBanco() != null) {
+			
+			BancosFiltro bancosFiltro = new BancosFiltro();
+			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
 
-			WBancos window = new WBancos(this.filterBI.getBean()
-					.getNumeroBanco(), null);
+			WBancos window = new WBancos(bancosFiltro);			
 			window.setModal(true);
 			window.center();
 
@@ -782,8 +718,7 @@ public class WValoresTerceros extends Window {
 
 			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
 
-			((VerticalLayout) window.getContent()).setComponentAlignment(
-					filaBotoneraHL, Alignment.MIDDLE_CENTER);
+			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
 
 			getUI().addWindow(window);
 
@@ -803,10 +738,8 @@ public class WValoresTerceros extends Window {
 
 				Bancos item = (Bancos) window.itemsGRD.getSelectedRow();
 
-				this.filterBI.getItemProperty("numeroBanco").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreBanco").setValue(
-						item.getNombre());
+				this.filterBI.getItemProperty("numeroBanco").setValue(item.getNumero());
+				this.filterBI.getItemProperty("nombreBanco").setValue(item.getNombre());
 
 				window.close();
 
@@ -853,8 +786,7 @@ public class WValoresTerceros extends Window {
 
 			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
 
-			((VerticalLayout) window.getContent()).setComponentAlignment(
-					filaBotoneraHL, Alignment.MIDDLE_CENTER);
+			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
 
 			getUI().addWindow(window);
 
@@ -874,10 +806,8 @@ public class WValoresTerceros extends Window {
 
 				Chequeras item = (Chequeras) window.itemsGRD.getSelectedRow();
 
-				this.filterBI.getItemProperty("numeroChequera").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreChequera").setValue(
-						item.toString());
+				this.filterBI.getItemProperty("numeroChequera").setValue(item.getNumero());
+				this.filterBI.getItemProperty("nombreChequera").setValue(item.toString());
 
 				window.close();
 
@@ -926,8 +856,7 @@ public class WValoresTerceros extends Window {
 			itemsGRD.setEnabled(enabled);
 			modificarBTN.setEnabled(enabled);
 
-			nextPageBTN.setEnabled(itemsBIC.size() > 0
-					&& itemsBIC.size() >= limit);
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -945,8 +874,7 @@ public class WValoresTerceros extends Window {
 	private List<ValoresTerceros> queryData() {
 		try {
 
-			System.out.println("Los filtros son "
-					+ this.filterBI.getBean().toString());
+			System.out.println("Los filtros son " + this.filterBI.getBean().toString());
 
 			// Notification.show("Los filtros son "
 			// + this.filterBI.getBean().toString());
@@ -954,14 +882,12 @@ public class WValoresTerceros extends Window {
 			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
 
 			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				orderBy.put(sortOrder.getPropertyId().toString(), sortOrder
-						.getDirection().toString().equals("ASCENDING"));
-				System.err.println(sortOrder.getPropertyId() + " "
-						+ sortOrder.getDirection());
+				orderBy.put(sortOrder.getPropertyId().toString(),
+						sortOrder.getDirection().toString().equals("ASCENDING"));
+				System.err.println(sortOrder.getPropertyId() + " " + sortOrder.getDirection());
 			}
 
-			List<ValoresTerceros> items = mockData(limit, offset,
-					this.filterBI.getBean());
+			List<ValoresTerceros> items = mockData(limit, offset, this.filterBI.getBean());
 
 			return items;
 
@@ -977,8 +903,7 @@ public class WValoresTerceros extends Window {
 
 	List<ValoresTerceros> itemsMock = new ArrayList<ValoresTerceros>();
 
-	private List<ValoresTerceros> mockData(int limit, int offset,
-			ValoresTercerosFiltro filtro) {
+	private List<ValoresTerceros> mockData(int limit, int offset, ValoresTercerosFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
@@ -1016,46 +941,39 @@ public class WValoresTerceros extends Window {
 
 		for (ValoresTerceros item : itemsMock) {
 
-			boolean passesFilterNumeroCheque = (filtro.getNumeroCheque() == null || item
-					.getNumeroCheque().equals(filtro.getNumeroCheque()));
-			
-			boolean passesFilterNumeroInterno = (filtro.getNumeroInterno() == null || item
-					.getNumeroInterno().equals(filtro.getNumeroInterno()));
+			boolean passesFilterNumeroCheque = (filtro.getNumeroCheque() == null
+					|| item.getNumeroCheque().equals(filtro.getNumeroCheque()));
 
-			boolean passesFilterNumeroCuentaFondo = (filtro
-					.getNumeroCuentaFondo() == null || item
-					.getNumeroCuentaFondo().equals(
-							filtro.getNumeroCuentaFondo()));
+			boolean passesFilterNumeroInterno = (filtro.getNumeroInterno() == null
+					|| item.getNumeroInterno().equals(filtro.getNumeroInterno()));
 
-			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null || item
-					.getNumeroBanco().equals(filtro.getNumeroBanco()));
+			boolean passesFilterNumeroCuentaFondo = (filtro.getNumeroCuentaFondo() == null
+					|| item.getNumeroCuentaFondo().equals(filtro.getNumeroCuentaFondo()));
 
-			boolean passesFilterNumeroCliente = (filtro.getNumeroCliente() == null || item
-					.getNumeroCliente().equals(filtro.getNumeroCliente()));
+			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null
+					|| item.getNumeroBanco().equals(filtro.getNumeroBanco()));
 
-			boolean passesFilterEmisionDesde = (filtro.getEmisionDesde() == null || item
-					.getEmision().after(filtro.getEmisionDesde()));
+			boolean passesFilterNumeroCliente = (filtro.getNumeroCliente() == null
+					|| item.getNumeroCliente().equals(filtro.getNumeroCliente()));
 
-			boolean passesFilterEmisionHasta = (filtro.getEmisionHasta() == null || item
-					.getEmision().before(
-							UtilModel.sumarDiasAFecha(filtro.getEmisionHasta(),
-									1)));
+			boolean passesFilterEmisionDesde = (filtro.getEmisionDesde() == null
+					|| item.getEmision().after(filtro.getEmisionDesde()));
 
-			boolean passesFilterCobroDesde = (filtro.getCobroDesde() == null || item
-					.getCobro().after(filtro.getCobroDesde()));
+			boolean passesFilterEmisionHasta = (filtro.getEmisionHasta() == null
+					|| item.getEmision().before(UtilModel.sumarDiasAFecha(filtro.getEmisionHasta(), 1)));
 
-			boolean passesFilterCobroHasta = (filtro.getCobroHasta() == null || item
-					.getCobro()
-					.before(UtilModel.sumarDiasAFecha(filtro.getCobroHasta(), 1)));
+			boolean passesFilterCobroDesde = (filtro.getCobroDesde() == null
+					|| item.getCobro().after(filtro.getCobroDesde()));
 
-			boolean passesFilterNumeroEstado = (filtro.getNumeroEstado() == null
-					|| filtro.getNumeroEstado() == 3 || item.getNumeroEstado()
-					.equals(filtro.getNumeroEstado()));
+			boolean passesFilterCobroHasta = (filtro.getCobroHasta() == null
+					|| item.getCobro().before(UtilModel.sumarDiasAFecha(filtro.getCobroHasta(), 1)));
+
+			boolean passesFilterNumeroEstado = (filtro.getNumeroEstado() == null || filtro.getNumeroEstado() == 3
+					|| item.getNumeroEstado().equals(filtro.getNumeroEstado()));
 
 			if (passesFilterNumeroCheque && passesFilterNumeroInterno && passesFilterNumeroCuentaFondo
-					&& passesFilterNumeroBanco && passesFilterNumeroCliente
-					&& passesFilterEmisionDesde && passesFilterEmisionHasta
-					&& passesFilterCobroDesde && passesFilterCobroHasta
+					&& passesFilterNumeroBanco && passesFilterNumeroCliente && passesFilterEmisionDesde
+					&& passesFilterEmisionHasta && passesFilterCobroDesde && passesFilterCobroHasta
 					&& passesFilterNumeroEstado) {
 				arrayList.add(item);
 			}

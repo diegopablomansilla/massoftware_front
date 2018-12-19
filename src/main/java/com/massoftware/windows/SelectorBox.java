@@ -5,6 +5,8 @@ import java.util.Collection;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.event.ShortcutListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -92,6 +94,18 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
 
 		valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
+		
+		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				if (target.equals(valueTXT)) {
+					valueTXT.setValue(null);
+				}
+			}
+		});
 
 	}
 

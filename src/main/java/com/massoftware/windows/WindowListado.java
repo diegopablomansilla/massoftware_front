@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.massoftware.windows.cuentas_fondo.CuentasFondo;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 public abstract class WindowListado extends Window {
 
@@ -79,6 +82,9 @@ public abstract class WindowListado extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
+			
+		} catch (InvalidValueException e) {
+			LogAndNotification.print(e);			
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
@@ -93,11 +99,11 @@ public abstract class WindowListado extends Window {
 		HorizontalLayout filaBotoneraHL = new HorizontalLayout();
 		filaBotoneraHL.setSpacing(true);
 
-		agregarBTN = UtilUI.buildButtonAgregar();
+		agregarBTN = buildButtonAgregar();
 		agregarBTN.addClickListener(e -> {
 			agregarBTNClick();
 		});
-		modificarBTN = UtilUI.buildButtonModificar();
+		modificarBTN = buildButtonModificar();
 		modificarBTN.addClickListener(e -> {
 			modificarBTNClick();
 		});
@@ -112,7 +118,7 @@ public abstract class WindowListado extends Window {
 		HorizontalLayout filaBotonera2HL = new HorizontalLayout();
 		filaBotonera2HL.setSpacing(true);
 
-		eliminarBTN = UtilUI.buildButtonEliminar();
+		eliminarBTN = buildButtonEliminar();
 		eliminarBTN.addClickListener(e -> {
 			eliminarBTNClick();
 		});
@@ -244,6 +250,87 @@ public abstract class WindowListado extends Window {
 				eliminarBTNClick();
 			}
 		});
+	}
+
+	protected Button buildButtonBuscar() {
+
+		Button buscarBTN = new Button();
+		// buscarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		buscarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		buscarBTN.setIcon(FontAwesome.SEARCH);
+		// buscarBTN.setWidth("5px");
+		// agregarBTN.setCaption("Agregar");
+		buscarBTN.setDescription("Buscar" + " (Ctrl+B)");
+		// agregarBTN.addClickListener(e -> {
+		// // agregarBTNClick();
+		// });
+		
+		buscarBTN.addClickListener(e -> {
+			loadDataResetPaged();
+		});
+
+		return buscarBTN;
+	}
+	
+	private Button buildButtonAgregar() {
+
+		Button agregarBTN = new Button();
+		agregarBTN.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+		agregarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		agregarBTN.setIcon(FontAwesome.PLUS);
+		agregarBTN.setCaption("Agregar");
+		agregarBTN.setDescription(agregarBTN.getCaption() + " (Ctrl+A)");
+		// agregarBTN.addClickListener(e -> {
+		// // agregarBTNClick();
+		// });
+
+		return agregarBTN;
+	}
+	
+	private Button buildButtonModificar() {
+
+		Button modificarBTN = new Button();
+		modificarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		modificarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		modificarBTN.setIcon(FontAwesome.PENCIL);
+		modificarBTN.setCaption("Modificar");
+		modificarBTN.setDescription(modificarBTN.getCaption() + " (Ctrl+M)");
+		// modificarBTN.addClickListener(e -> {
+		// // modificarBTNClick();
+		// });
+
+		return modificarBTN;
+	}
+	
+	private Button buildButtonEliminar() {
+
+		Button eliminarBTN = new Button();
+		eliminarBTN.addStyleName(ValoTheme.BUTTON_DANGER);
+		eliminarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		eliminarBTN.setIcon(FontAwesome.TRASH);
+		eliminarBTN.setCaption("Eliminar");
+
+		// eliminarBTN.addClickListener(e -> {
+		// // eliminarBTNClick();
+		// });
+
+		return eliminarBTN;
+	}
+	
+	protected Window confWinList(Window window, String label) {
+
+		window.setCaption(label);
+		window.setImmediate(true);
+		// window.setWidth("-1px");
+		// window.setHeight("-1px");
+		window.setWidthUndefined();
+		window.setHeightUndefined();
+		window.setClosable(true);
+		window.setResizable(false);
+		window.setModal(false);
+		window.center();
+
+		return window;
 	}
 
 }

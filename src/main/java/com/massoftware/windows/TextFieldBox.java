@@ -22,9 +22,9 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public TextFieldBox(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns, int minLength,
-			int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
-			String inputPrompt) {
+	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
+			boolean autoUnmask, String inputPrompt) {
 
 		this.setSpacing(false);
 
@@ -43,16 +43,50 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN.setIcon(FontAwesome.TIMES);
 		removeFilterBTN.setDescription("Quitar filtro " + label + ".");
 
+		this.addComponent(removeFilterBTN);
+		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+
 		removeFilterBTN.addClickListener(e -> {
 			try {
 				valueTXT.setValue(null);
+				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
 			}
 		});
 
-		this.addComponent(removeFilterBTN);
-		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+//		valueTXT.addTextChangeListener(e -> {
+//			try {
+//				valueTXT.setValue(e.getText());
+//				window.loadDataResetPaged();
+//			} catch (Exception ex) {
+//				LogAndNotification.print(ex);
+//			}
+//		});	
+		
+		valueTXT.addBlurListener(e -> {
+			try {				
+				window.loadDataResetPaged();
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+		
+//		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void handleAction(Object sender, Object target) {
+//				System.out.println("cccccccccccccc " + ((TextField)target).getCaption());
+//				
+//				if (target instanceof TextField && ((TextField)target).getCaption().equals(label)) {
+//					valueTXT.setValue(null);
+//				}
+//			}
+//		});
+		
+		
 
 	}
 

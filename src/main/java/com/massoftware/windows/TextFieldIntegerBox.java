@@ -22,7 +22,7 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public TextFieldIntegerBox(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
 			String inputPrompt, int minValue, int maxValue) {
 
@@ -43,16 +43,46 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 		removeFilterBTN.setIcon(FontAwesome.TIMES);
 		removeFilterBTN.setDescription("Quitar filtro " + label + ".");
 
+		this.addComponent(removeFilterBTN);
+		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+
 		removeFilterBTN.addClickListener(e -> {
 			try {
 				valueTXT.setValue(null);
+				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
 			}
 		});
 
-		this.addComponent(removeFilterBTN);
-		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+//		valueTXT.addTextChangeListener(e -> {
+//			try {
+//				valueTXT.setValue(e.getText());
+//				window.loadDataResetPaged();
+//			} catch (Exception ex) {
+//				LogAndNotification.print(ex);
+//			}
+//		});
+		
+		valueTXT.addBlurListener(e -> {
+			try {				
+				window.loadDataResetPaged();
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+		
+//		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void handleAction(Object sender, Object target) {
+//				if (target.equals(valueTXT)) {
+//					valueTXT.setValue(null);
+//				}
+//			}
+//		});
 
 	}
 

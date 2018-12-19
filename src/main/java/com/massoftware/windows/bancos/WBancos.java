@@ -5,22 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.windows.EliminarDialog;
+import org.vaadin.patrik.FastNavigation;
+
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.TextFieldBox;
+import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.Validatable;
-import com.vaadin.data.Validator.InvalidValueException;
+import com.massoftware.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutAction.ModifierKey;
-import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.SortEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
@@ -28,39 +23,29 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WBancos extends Window {
+public class WBancos extends WindowListado {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<BancosFiltro> filterBI;
-	private BeanItemContainer<Bancos> itemsBIC;
+	private BancosBO bancosBO = new BancosBO();
 
 	// -------------------------------------------------------------
 
-	protected int limit = 10;
-	protected int offset = 0;
+	BeanItem<BancosFiltro> filterBI;
+	protected BeanItemContainer<Bancos> itemsBIC;
 
 	// -------------------------------------------------------------
 
-	public Grid itemsGRD;
-	private Button agregarBTN;
-	private Button modificarBTN;
-	private Button eliminarBTN;
-
-	// -------------------------------------------------------------
-
-	private HorizontalLayout numeroTXTHL;
-	private HorizontalLayout nombreTXTHL;
-	private HorizontalLayout nombreOficialTXTHL;
+	private TextFieldIntegerBox numeroIB;
+	private TextFieldBox nombreTB;
+	private TextFieldBox nombreOficialTB;
 	private OptionGroup bloqueadoOG;
-
+	
 	public Button seleccionarBTN;
 
 	// -------------------------------------------------------------
@@ -70,299 +55,182 @@ public class WBancos extends Window {
 		init(null);
 	}
 
-	public WBancos(Integer numero, String nombre) {
+	public WBancos(BancosFiltro filtro) {
 		super();
-		// init(numero, nombre);
+		init(filtro);
 		buildSelectorSection();
 		this.setModal(true);
 	}
 
-	public WBancos(BancosFiltro bancosFiltro) {
-		super();
-		init(bancosFiltro);
-		buildSelectorSection();
-		this.setModal(true);
-	}
-
-	@SuppressWarnings("serial")
-	public void init(BancosFiltro bancosFiltro) {
+	public void init(BancosFiltro filtro) {
 
 		try {
 
-			buildContainersItems(bancosFiltro);
+			// =======================================================
+			// LAYOUT CONTROLs
 
-			UtilUI.confWinList(this, "Bancos");
-
-			VerticalLayout content = UtilUI.buildWinContentVertical();
+			if (filtro != null) {
+				filterBI = new BeanItem<BancosFiltro>(filtro);
+			} else {
+				filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
+			}
 
 			// =======================================================
-			// -------------------------------------------------------
-			// FILTROS
+			// LAYOUT CONTROLs
 
-			HorizontalLayout filaFiltroHL = new HorizontalLayout();
-			filaFiltroHL.setSpacing(true);
-
-			// -----------
-
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero", "Numero", false, 10, 0, -1, false, false, null,
-					false, UtilUI.EQUALS, 0, Short.MAX_VALUE);
-
-			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
-
-			numeroTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						numeroTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-
-			});
-
-			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
-
-			numeroBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
-					UtilUI.CONTAINS_WORDS_AND);
-
-			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
-
-			nombreTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						nombreTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-
-			});
-
-			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
-
-			nombreBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			Button buscarBTN = UtilUI.buildButtonBuscar();
-			buscarBTN.addClickListener(e -> {
-				loadData();
-			});
-
-			filaFiltroHL.addComponents(numeroTXTHL, nombreTXTHL, buscarBTN);
-
-			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
-
-			// -----------
-
-			HorizontalLayout filaFiltro2HL = new HorizontalLayout();
-			filaFiltro2HL.setSpacing(true);
-
-			// -----------
-
-			nombreOficialTXTHL = UtilUI.buildTXTHL(filterBI, "nombreOficial", "Nombre oficial", false, 20, -1, 40,
-					false, false, null, false, UtilUI.CONTAINS_WORDS_AND);
-
-			TextField nombreOficialTXT = (TextField) nombreOficialTXTHL.getComponent(0);
-
-			nombreOficialTXT.addTextChangeListener(new TextChangeListener() {
-				public void textChange(TextChangeEvent event) {
-					try {
-						nombreOficialTXT.setValue(event.getText());
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-
-			});
-
-			Button nombreOficialBTN = (Button) nombreOficialTXTHL.getComponent(1);
-
-			nombreOficialBTN.addClickListener(e -> {
-				this.loadDataResetPaged();
-			});
-
-			// -----------
-
-			bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", "Situación", false, false, "Todos", "Bloquado",
-					"No bloqueado", true, 0);
-
-			bloqueadoOG.addValueChangeListener(new ValueChangeListener() {
-
-				@Override
-				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
-					try {
-						loadDataResetPaged();
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
-				}
-			});
-
-			// -----------
-
-			filaFiltro2HL.addComponents(nombreOficialTXTHL, bloqueadoOG);
+			buildContent();
 
 			// =======================================================
-			// -------------------------------------------------------
-			// GRILLA
-
-			itemsGRD = UtilUI.buildGrid();
-			// itemsGRD.setWidth(33f, Unit.EM);
-			itemsGRD.setWidth("100%");
-			itemsGRD.setHeight(20.5f, Unit.EM);
-
-			itemsGRD.setColumns(new Object[] { "numero", "nombre", "nombreOficial", "bloqueado" });
-
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
-			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreOficial"), "Nombre oficial", true, 200);
-			UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, -1);
-
-			itemsGRD.setContainerDataSource(itemsBIC);
-
-			// .......
-
-			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-			itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-					new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
-
-			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-			// itemsGRD.getColumn("attName").setRenderer(
-			// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
-
-			// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-			// itemsGRD.getColumn("attName").setRenderer(
-			// new DateRenderer(
-			// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-
-			// .......
-
-			List<SortOrder> order = new ArrayList<SortOrder>();
-
-			order.add(new SortOrder("numero", SortDirection.ASCENDING));
-
-			itemsGRD.setSortOrder(order);
-
-			// =======================================================
-			// -------------------------------------------------------
-			// BOTONERA 1
-
-			HorizontalLayout filaBotoneraHL = new HorizontalLayout();
-			filaBotoneraHL.setSpacing(true);
-
-			agregarBTN = UtilUI.buildButtonAgregar();
-			agregarBTN.addClickListener(e -> {
-				agregarBTNClick();
-			});
-			modificarBTN = UtilUI.buildButtonModificar();
-			modificarBTN.addClickListener(e -> {
-				modificarBTNClick();
-			});
-
-			filaBotoneraHL.addComponents(agregarBTN, modificarBTN);
-
-			// -------------------------------------------------------
-			// BOTONERA 2
-
-			HorizontalLayout filaBotonera2HL = new HorizontalLayout();
-			filaBotonera2HL.setSpacing(true);
-
-			eliminarBTN = UtilUI.buildButtonEliminar();
-			eliminarBTN.addClickListener(e -> {
-				eliminarBTNClick();
-			});
-
-			filaBotonera2HL.addComponents(eliminarBTN);
-
-			// -------------------------------------------------------
-
-			content.addComponents(filaFiltroHL, filaFiltro2HL, itemsGRD, filaBotoneraHL, filaBotonera2HL);
-
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
-
-			this.setContent(content);
-
-			// =======================================================
-			// -------------------------------------------------------
 			// KEY EVENTs
 
-			this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void handleAction(Object sender, Object target) {
-					if (target.equals(itemsGRD)) {
-						modificarBTNClick();
-					}
-
-				}
-			});
-
-			// --------------------------------------------------
-
-			this.addShortcutListener(new ShortcutListener("CTRL+A", KeyCode.A, new int[] { ModifierKey.CTRL }) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void handleAction(Object sender, Object target) {
-					agregarBTNClick();
-				}
-			});
-			// --------------------------------------------------
-
-			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M, new int[] { ModifierKey.CTRL }) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void handleAction(Object sender, Object target) {
-					modificarBTNClick();
-				}
-			});
-
-			// --------------------------------------------------
-
-			this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B, new int[] { ModifierKey.CTRL }) {
-
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void handleAction(Object sender, Object target) {
-					loadData();
-				}
-			});
+			addKeyEvents();
 
 			// =======================================================
-			// -------------------------------------------------------
-
-			itemsGRD.addSortListener(e -> {
-				sort(e);
-			});
-
-			// =======================================================
-			// -------------------------------------------------------
+			// CARGA DE DATOS
 
 			loadData();
+
+			// =======================================================
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
+	}
+
+	private void buildContent() throws Exception {
+
+		confWinList(this, "Bancos");
+
+		// =======================================================
+		// FILTROS
+
+		VerticalLayout filtrosLayout = buildFiltros();
+
+		// =======================================================
+		// CUERPO
+		// solo cuando por ejemplo tenemos un arbol y una grilla, o cosas asi mas
+		// complejas q solo la grilla
+
+		// =======================================================
+		// BOTONERAS
+
+		HorizontalLayout filaBotoneraHL = buildBotonera1();
+		HorizontalLayout filaBotonera2HL = buildBotonera2();
+
+		// =======================================================
+		// CONTENT
+
+		VerticalLayout content = UtilUI.buildWinContentVertical();
+
+		content.addComponents(filtrosLayout, buildItemsGRD(), filaBotoneraHL, filaBotonera2HL);
+
+		content.setComponentAlignment(filtrosLayout, Alignment.MIDDLE_CENTER);
+		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
+		content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
+
+		this.setContent(content);
+	}
+
+	private VerticalLayout buildFiltros() throws Exception {
+
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Numero", false, 10, 0, -1, false, false, null,
+				false, UtilUI.EQUALS, 0, Short.MAX_VALUE);
+
+		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
+				UtilUI.CONTAINS_WORDS_AND);
+
+		nombreOficialTB = new TextFieldBox(this, filterBI, "nombreOficial", "Nombre oficial", false, 20, -1, 40, false,
+				false, null, false, UtilUI.CONTAINS_WORDS_AND);
+
+		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", "Situación", false, false, "Todos", "Bloquado",
+				"No bloqueado", true, 0);
+
+		bloqueadoOG.addValueChangeListener(e -> {
+			loadDataResetPaged();
+		});
+
+		// --------------------------------------------------------
+
+		Button buscarBTN = buildButtonBuscar();
+
+		HorizontalLayout filaFiltroHL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
+
+		HorizontalLayout filaFiltro2HL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
+
+		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
+		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
+
+		filaFiltro2HL.addComponents(nombreOficialTB, bloqueadoOG);
+
+		VerticalLayout filasFiltroVL = new VerticalLayout();
+		filasFiltroVL.setWidth("100%");
+		filasFiltroVL.addComponents(filaFiltroHL, filaFiltro2HL);
+
+		return filasFiltroVL;
+	}
+
+	private Grid buildItemsGRD() {
+
+		itemsGRD = UtilUI.buildGrid();
+		FastNavigation nav = UtilUI.initNavigation(itemsGRD);
+
+		// ------------------------------------------------------------------
+
+//		itemsGRD.setWidth("100%");
+		itemsGRD.setWidth(35f, Unit.EM);
+		itemsGRD.setHeight(20.5f, Unit.EM);
+
+		itemsGRD.setColumns(new Object[] { "numero", "nombre", "nombreOficial", "bloqueado" });
+
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
+		UtilUI.confColumn(itemsGRD.getColumn("nombreOficial"), "Nombre oficial", true, 200);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, -1);
+
+		itemsGRD.setContainerDataSource(getItemsBIC());
+
+		// .......
+
+		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
+		itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+
+		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(
+		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+
+		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(
+		// new DateRenderer(
+		// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+
+		// .......
+
+		List<SortOrder> order = new ArrayList<SortOrder>();
+
+		order.add(new SortOrder("numero", SortDirection.ASCENDING));
+
+		itemsGRD.setSortOrder(order);
+
+		// ------------------------------------------------------------------
+
+		nav.addRowFocusListener(e -> {
+			try {
+				int row = e.getRow();
+
+				if (row == offset + limit - 1) {
+					nextPageBTNClick();
+				}
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+
+		// ------------------------------------------------------------------
+
+		return itemsGRD;
 	}
 
 	private void buildSelectorSection() {
@@ -382,156 +250,26 @@ public class WBancos extends Window {
 
 	// =================================================================================
 
-	private void buildContainersItems(BancosFiltro bancosFiltro) throws Exception {
-
-		if (bancosFiltro != null) {
-			filterBI = new BeanItem<BancosFiltro>(bancosFiltro);
-		} else {
-			filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
+	protected BeanItemContainer<Bancos> getItemsBIC() {
+		if (itemsBIC == null) {
+			itemsBIC = new BeanItemContainer<Bancos>(Bancos.class, new ArrayList<Bancos>());
 		}
-		itemsBIC = new BeanItemContainer<Bancos>(Bancos.class, new ArrayList<Bancos>());
+		return itemsBIC;
 	}
 
-	// =================================================================================
-
-	private void nextPageBTNClick() {
-		offset = offset + limit;
-		loadData(false);
+	protected void validateFilterSection() {
+		numeroIB.validate();
+		nombreTB.validate();
+		nombreOficialTB.validate();
+		bloqueadoOG.validate();
 	}
 
-	protected void sort(SortEvent sortEvent) {
-		try {
+	protected void addBeansToitemsBIC() {
 
-			if (itemsGRD.getSortOrder().size() == 1) {
-				loadDataResetPaged();
-			}
+		List<Bancos> items = queryData();
 
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-	}
-
-	private void eliminarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-
-				getUI().addWindow(
-						new EliminarDialog(itemsGRD.getSelectedRow().toString(), new EliminarDialog.Callback() {
-							public void onDialogResult(boolean yes) {
-
-								try {
-									if (yes) {
-										if (itemsGRD.getSelectedRow() != null) {
-
-											Bancos item = (Bancos) itemsGRD.getSelectedRow();
-
-											deleteItem(item);
-
-											LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
-
-											loadData();
-										}
-									}
-								} catch (Exception e) {
-									LogAndNotification.print(e);
-								}
-
-							}
-						}));
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	protected void agregarBTNClick() {
-		try {
-
-			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem ");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
-			getUI().addWindow(window);
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	private void modificarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
-				item.getNumero();
-
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
-				getUI().addWindow(window);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	// =================================================================================
-
-	private void loadDataResetPaged() {
-		this.offset = 0;
-		loadData();
-	}
-
-	private void loadData() {
-		loadData(true);
-	}
-	
-	private void loadData(boolean removeAllItems) {
-		try {
-
-			((Validatable) numeroTXTHL.getComponent(0)).validate();
-			((Validatable) nombreTXTHL.getComponent(0)).validate();
-			((Validatable) nombreOficialTXTHL.getComponent(0)).validate();
-
-			List<Bancos> items = queryData();
-
-			if (removeAllItems) {
-				itemsBIC.removeAllItems();
-			}
-
-			for (Bancos item : items) {
-				itemsBIC.addBean(item);
-			}
-			
-			List<SortOrder> order = new ArrayList<SortOrder>();
-
-			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				order.add(new SortOrder(sortOrder.getPropertyId().toString(), sortOrder.getDirection()));
-			}
-
-			itemsGRD.setSortOrder(order);
-
-			itemsGRD.refreshAllRows();
-
-			boolean enabled = itemsBIC.size() > 0;
-
-			itemsGRD.setEnabled(enabled);
-			modificarBTN.setEnabled(enabled);
-			eliminarBTN.setEnabled(enabled);
-
-		} catch (InvalidValueException e) {
-			LogAndNotification.print(e);
-		} catch (Exception e) {
-			LogAndNotification.print(e);
+		for (Bancos item : items) {
+			getItemsBIC().addBean(item);
 		}
 	}
 
@@ -540,24 +278,17 @@ public class WBancos extends Window {
 
 	// metodo que realiza la consulta a la base de datos
 	private List<Bancos> queryData() {
+
 		try {
-
-			System.out.println("Los filtros son " + this.filterBI.getBean().toString());
-
-			// Notification.show("Los filtros son "
-			// + this.filterBI.getBean().toString());
 
 			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
 
 			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
 				orderBy.put(sortOrder.getPropertyId().toString(),
 						sortOrder.getDirection().toString().equals("ASCENDING"));
-				System.err.println(sortOrder.getPropertyId() + " " + sortOrder.getDirection());
 			}
 
-			List<Bancos> items = mockData(limit, offset, this.filterBI.getBean());
-
-			return items;
+			return bancosBO.find(limit, offset, orderBy, this.filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -567,70 +298,14 @@ public class WBancos extends Window {
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(Bancos item) {
+	protected void deleteItem(Object item) {
 		try {
 
-			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
-					itemsMock.remove(i);
-					return;
-				}
-			}
+			// bancosBO.deleteItem((Bancos) item);
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
-	}
-
-	// =================================================================================
-	// SECCION SOLO PARA FINES DE MOCKUP
-
-	List<Bancos> itemsMock = new ArrayList<Bancos>();
-
-	private List<Bancos> mockData(int limit, int offset, BancosFiltro filtro) {
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 500; i++) {
-
-				Bancos item = new Bancos();
-
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
-				item.setNombreOficial("Nombre Oficial " + i);
-				item.setBloqueado(i % 2 == 0);
-
-				itemsMock.add(item);
-			}
-		}
-
-		ArrayList<Bancos> arrayList = new ArrayList<Bancos>();
-
-		for (Bancos item : itemsMock) {
-
-			boolean passesFilterNumero = (filtro.getNumero() == null || item.getNumero().equals(filtro.getNumero()));
-
-			boolean passesFilterNombre = (filtro.getNombre() == null
-					|| item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
-
-			boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null
-					|| item.getNombreOficial().toLowerCase().contains(filtro.getNombreOficial().toLowerCase()));
-
-			boolean passesFilterBloqueado = (filtro.getBloqueado() == null || filtro.getBloqueado() == 0
-					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
-					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
-
-			if (passesFilterNumero && passesFilterNombre && passesFilterNombreOficial && passesFilterBloqueado) {
-				arrayList.add(item);
-			}
-		}
-
-		int end = offset + limit;
-		if (end > arrayList.size()) {
-			return arrayList.subList(0, arrayList.size());
-		}
-
-		return arrayList.subList(offset, end);
 	}
 
 	// =================================================================================

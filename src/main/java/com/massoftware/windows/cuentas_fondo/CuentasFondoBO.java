@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.massoftware.windows.LogAndNotification;
 
-public class CuentasFondoBO {
+class CuentasFondoBO {
 
 	List<CuentasFondo> itemsMock = mockData();
 
@@ -33,8 +33,6 @@ public class CuentasFondoBO {
 	}
 
 	public List<CuentasFondo> find(int limit, int offset, Map<String, Boolean> orderBy, CuentasFondoFiltro filtro) {
-
-		// System.out.println("El orden es " + orderBy);
 
 		ArrayList<CuentasFondo> arrayList = new ArrayList<CuentasFondo>();
 

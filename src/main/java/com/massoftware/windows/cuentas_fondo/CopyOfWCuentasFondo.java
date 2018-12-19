@@ -9,9 +9,10 @@ import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.bancos.Bancos;
+import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
-import com.vaadin.data.Validatable;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
@@ -110,8 +111,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// -----------
 
-			numeroBancoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroBanco",
-					"nombreBanco", "Banco", "numero", false);
+			numeroBancoCBXHL = UtilUI.buildSearchBox(filterBI, "numeroBanco", "nombreBanco", "Banco", "numero", false);
 
 			numeroBancoTXT = (TextField) numeroBancoCBXHL.getComponent(0);
 
@@ -135,9 +135,8 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// -----------
 
-			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
-					"Cuenta", false, 5, -1, 3, false, false, null, false,
-					UtilUI.EQUALS, 0, 255);
+			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero", "Cuenta", false, 5, -1, 3, false, false, null,
+					false, UtilUI.EQUALS, 0, 255);
 
 			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
 
@@ -161,8 +160,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// -----------
 
-			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
-					false, 20, -1, 25, false, false, null, false,
+			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre", false, 20, -1, 25, false, false, null, false,
 					UtilUI.CONTAINS_WORDS_AND);
 
 			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
@@ -187,14 +185,13 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// -----------
 
-			activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null,
-					false, false, "Todas", "Activas", "No activas", false, 0);
+			activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Activas",
+					"No activas", false, 0);
 
 			activoOG.addValueChangeListener(new ValueChangeListener() {
 
 				@Override
-				public void valueChange(
-						com.vaadin.data.Property.ValueChangeEvent event) {
+				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 					try {
 						loadDataResetPaged();
 					} catch (Exception e) {
@@ -210,11 +207,9 @@ public class CopyOfWCuentasFondo extends Window {
 				loadData();
 			});
 
-			filaFiltroHL.addComponents(numeroBancoCBXHL, numeroTXTHL,
-					nombreTXTHL, activoOG, buscarBTN);
+			filaFiltroHL.addComponents(numeroBancoCBXHL, numeroTXTHL, nombreTXTHL, activoOG, buscarBTN);
 
-			filaFiltroHL.setComponentAlignment(buscarBTN,
-					Alignment.MIDDLE_RIGHT);
+			filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 			// =======================================================
 
@@ -244,30 +239,24 @@ public class CopyOfWCuentasFondo extends Window {
 			// itemsGRD.setWidth(22f, Unit.EM);
 			itemsGRD.setWidth("100%");
 
-			itemsGRD.setColumns(new Object[] { "numeroRubro", "numeroGrupo",
-					"numeroBanco", "numero", "nombre", "tipo", "bloqueado" });
+			itemsGRD.setColumns(new Object[] { "numeroRubro", "numeroGrupo", "numeroBanco", "numero", "nombre", "tipo",
+					"bloqueado" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroRubro"), "Rubro", true,
-					true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroGrupo"), "Grupo", true,
-					true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true,
-					true, false, true, 100);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroRubro"), "Rubro", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroGrupo"), "Grupo", true, true, false, true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true, true, false, true, 100);
 			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Cuenta", true, 50);
 			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
 			UtilUI.confColumn(itemsGRD.getColumn("tipo"), "Tipo", true, -1);
-			UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado",
-					true, true, false, true, 30);
+			UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, true, false, true, 30);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
 			// .......
 
 			// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-			itemsGRD.getColumn("bloqueado").setRenderer(
-					new HtmlRenderer(),
-					new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O
-							.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+			itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+					new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 			// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 			// itemsGRD.getColumn("attName").setRenderer(
@@ -338,16 +327,13 @@ public class CopyOfWCuentasFondo extends Window {
 
 			columna2VL.addComponents(itemsGRD, filaBotoneraPagedHL);
 
-			columna2VL.setComponentAlignment(filaBotoneraPagedHL,
-					Alignment.MIDDLE_RIGHT);
+			columna2VL.setComponentAlignment(filaBotoneraPagedHL, Alignment.MIDDLE_RIGHT);
 
-			content.addComponents(filaFiltroHL, grillas, filaBotoneraHL,
-					filaBotonera2HL);
+			content.addComponents(filaFiltroHL, grillas, filaBotoneraHL, filaBotonera2HL);
 
 			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
 			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL,
-					Alignment.MIDDLE_RIGHT);
+			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 			this.setContent(content);
 
@@ -355,8 +341,7 @@ public class CopyOfWCuentasFondo extends Window {
 			// -------------------------------------------------------
 			// KEY EVENTs
 
-			this.addShortcutListener(new ShortcutListener("ENTER",
-					KeyCode.ENTER, new int[] {}) {
+			this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -374,8 +359,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// --------------------------------------------------
 
-			this.addShortcutListener(new ShortcutListener("CTRL+A", KeyCode.A,
-					new int[] { ModifierKey.CTRL }) {
+			this.addShortcutListener(new ShortcutListener("CTRL+A", KeyCode.A, new int[] { ModifierKey.CTRL }) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -386,8 +370,7 @@ public class CopyOfWCuentasFondo extends Window {
 			});
 			// --------------------------------------------------
 
-			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M,
-					new int[] { ModifierKey.CTRL }) {
+			this.addShortcutListener(new ShortcutListener("CTRL+M", KeyCode.M, new int[] { ModifierKey.CTRL }) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -399,8 +382,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 			// --------------------------------------------------
 
-			this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B,
-					new int[] { ModifierKey.CTRL }) {
+			this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B, new int[] { ModifierKey.CTRL }) {
 
 				private static final long serialVersionUID = 1L;
 
@@ -438,12 +420,10 @@ public class CopyOfWCuentasFondo extends Window {
 				private final Action ACTION_ONE = new Action("Agregar");
 				private final Action ACTION_TWO = new Action("Modificar");
 				private final Action ACTION_THREE = new Action("Eliminar");
-				private final Action[] ACTIONS = new Action[] { ACTION_ONE,
-						ACTION_TWO, ACTION_THREE };
+				private final Action[] ACTIONS = new Action[] { ACTION_ONE, ACTION_TWO, ACTION_THREE };
 
 				@Override
-				public void handleAction(Action action, Object sender,
-						Object target) {
+				public void handleAction(Action action, Object sender, Object target) {
 
 					if (action.getCaption().equals("Agregar")) {
 						agregarBTNClick();
@@ -466,8 +446,7 @@ public class CopyOfWCuentasFondo extends Window {
 			loadDataTree();
 
 			tree.addValueChangeListener(event -> {
-				if (event.getProperty() != null
-						&& event.getProperty().getValue() != null) {
+				if (event.getProperty() != null && event.getProperty().getValue() != null) {
 
 					treeValueChangeListener(event.getProperty().getValue());
 
@@ -488,15 +467,12 @@ public class CopyOfWCuentasFondo extends Window {
 	private void treeValueChangeListener(Object item) {
 		try {
 			if (item instanceof RubrosFiltro) {
-				filterBI.getItemProperty("numeroRubro").setValue(
-						((RubrosFiltro) item).getNumero());
+				filterBI.getItemProperty("numeroRubro").setValue(((RubrosFiltro) item).getNumero());
 				this.loadDataResetPaged();
 			} else if (item instanceof GruposFiltro) {
-				filterBI.getItemProperty("numeroRubro").setValue(
-						((GruposFiltro) item).getNumeroRubro());
+				filterBI.getItemProperty("numeroRubro").setValue(((GruposFiltro) item).getNumeroRubro());
 
-				filterBI.getItemProperty("numeroGrupo").setValue(
-						((GruposFiltro) item).getNumero());
+				filterBI.getItemProperty("numeroGrupo").setValue(((GruposFiltro) item).getNumero());
 				this.loadDataResetPaged();
 			} else {
 				filterBI.getItemProperty("numeroRubro").setValue(null);
@@ -549,35 +525,31 @@ public class CopyOfWCuentasFondo extends Window {
 	private void eliminarItemTreeClick(Object item) {
 		try {
 
-			getUI().addWindow(
-					new EliminarDialog(item.toString(),
-							new EliminarDialog.Callback() {
-								public void onDialogResult(boolean yes) {
+			getUI().addWindow(new EliminarDialog(item.toString(), new EliminarDialog.Callback() {
+				public void onDialogResult(boolean yes) {
 
-									try {
-										if (yes) {
+					try {
+						if (yes) {
 
-											if (item instanceof RubrosFiltro) {
-												deleteItem((RubrosFiltro) item);
-											} else if (item instanceof GruposFiltro) {
-												deleteItem((GruposFiltro) item);
-											} else {
-											}
+							if (item instanceof RubrosFiltro) {
+								deleteItem((RubrosFiltro) item);
+							} else if (item instanceof GruposFiltro) {
+								deleteItem((GruposFiltro) item);
+							} else {
+							}
 
-											LogAndNotification
-													.printSuccessOk("Se eliminó con éxito el ítem "
-															+ item);
+							LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-											loadDataTree();
-											loadDataResetPaged();
+							loadDataTree();
+							loadDataResetPaged();
 
-										}
-									} catch (Exception e) {
-										LogAndNotification.print(e);
-									}
+						}
+					} catch (Exception e) {
+						LogAndNotification.print(e);
+					}
 
-								}
-							}));
+				}
+			}));
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -589,8 +561,7 @@ public class CopyOfWCuentasFondo extends Window {
 	private void buildContainersItems() throws Exception {
 
 		filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
-		itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class,
-				new ArrayList<CuentasFondo>());
+		itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class, new ArrayList<CuentasFondo>());
 	}
 
 	// =================================================================================
@@ -632,33 +603,28 @@ public class CopyOfWCuentasFondo extends Window {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				getUI().addWindow(
-						new EliminarDialog(
-								itemsGRD.getSelectedRow().toString(),
-								new EliminarDialog.Callback() {
-									public void onDialogResult(boolean yes) {
+						new EliminarDialog(itemsGRD.getSelectedRow().toString(), new EliminarDialog.Callback() {
+							public void onDialogResult(boolean yes) {
 
-										try {
-											if (yes) {
-												if (itemsGRD.getSelectedRow() != null) {
+								try {
+									if (yes) {
+										if (itemsGRD.getSelectedRow() != null) {
 
-													CuentasFondo item = (CuentasFondo) itemsGRD
-															.getSelectedRow();
+											CuentasFondo item = (CuentasFondo) itemsGRD.getSelectedRow();
 
-													deleteItem(item);
+											deleteItem(item);
 
-													LogAndNotification
-															.printSuccessOk("Se eliminó con éxito el ítem "
-																	+ item);
+											LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-													loadData();
-												}
-											}
-										} catch (Exception e) {
-											LogAndNotification.print(e);
+											loadData();
 										}
-
 									}
-								}));
+								} catch (Exception e) {
+									LogAndNotification.print(e);
+								}
+
+							}
+						}));
 			}
 
 		} catch (Exception e) {
@@ -709,8 +675,10 @@ public class CopyOfWCuentasFondo extends Window {
 
 			if (this.filterBI.getBean().getNumeroBanco() != null) {
 
-				WBancos window = new WBancos(this.filterBI.getBean()
-						.getNumeroBanco(), null);
+				BancosFiltro bancosFiltro = new BancosFiltro();
+				bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
+
+				WBancos window = new WBancos(bancosFiltro);
 				window.setModal(true);
 				window.center();
 
@@ -740,11 +708,9 @@ public class CopyOfWCuentasFondo extends Window {
 
 				filaBotoneraHL.addComponents(seleccionarBTN);
 
-				((VerticalLayout) window.getContent())
-						.addComponent(filaBotoneraHL);
+				((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
 
-				((VerticalLayout) window.getContent()).setComponentAlignment(
-						filaBotoneraHL, Alignment.MIDDLE_CENTER);
+				((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
 
 				getUI().addWindow(window);
 
@@ -764,10 +730,8 @@ public class CopyOfWCuentasFondo extends Window {
 
 				Bancos item = (Bancos) window.itemsGRD.getSelectedRow();
 
-				this.filterBI.getItemProperty("numeroBanco").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreBanco").setValue(
-						item.getNombre());
+				this.filterBI.getItemProperty("numeroBanco").setValue(item.getNumero());
+				this.filterBI.getItemProperty("nombreBanco").setValue(item.getNombre());
 
 				window.close();
 
@@ -809,8 +773,7 @@ public class CopyOfWCuentasFondo extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN.setEnabled(itemsBIC.size() > 0
-					&& itemsBIC.size() >= limit);
+			nextPageBTN.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -853,8 +816,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 		try {
 
-			System.out.println("Los filtros son "
-					+ this.filterBI.getBean().toString());
+			System.out.println("Los filtros son " + this.filterBI.getBean().toString());
 
 			// Notification.show("Los filtros son "
 			// + this.filterBI.getBean().toString());
@@ -862,14 +824,12 @@ public class CopyOfWCuentasFondo extends Window {
 			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
 
 			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				orderBy.put(sortOrder.getPropertyId().toString(), sortOrder
-						.getDirection().toString().equals("ASCENDING"));
-				System.err.println(sortOrder.getPropertyId() + " "
-						+ sortOrder.getDirection());
+				orderBy.put(sortOrder.getPropertyId().toString(),
+						sortOrder.getDirection().toString().equals("ASCENDING"));
+				System.err.println(sortOrder.getPropertyId() + " " + sortOrder.getDirection());
 			}
 
-			List<CuentasFondo> items = mockData(limit, offset,
-					this.filterBI.getBean());
+			List<CuentasFondo> items = mockData(limit, offset, this.filterBI.getBean());
 
 			return items;
 
@@ -923,8 +883,7 @@ public class CopyOfWCuentasFondo extends Window {
 
 	List<CuentasFondo> itemsMock = new ArrayList<CuentasFondo>();
 
-	private List<CuentasFondo> mockData(int limit, int offset,
-			CuentasFondoFiltro filtro) {
+	private List<CuentasFondo> mockData(int limit, int offset, CuentasFondoFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
@@ -948,30 +907,25 @@ public class CopyOfWCuentasFondo extends Window {
 
 		for (CuentasFondo item : itemsMock) {
 
-			boolean passesFilterNumeroRubro = (filtro.getNumeroRubro() == null || item
-					.getNumeroRubro().equals(filtro.getNumeroRubro()));
+			boolean passesFilterNumeroRubro = (filtro.getNumeroRubro() == null
+					|| item.getNumeroRubro().equals(filtro.getNumeroRubro()));
 
-			boolean passesFilterNumeroGrupo = (filtro.getNumeroGrupo() == null || item
-					.getNumeroGrupo().equals(filtro.getNumeroGrupo()));
+			boolean passesFilterNumeroGrupo = (filtro.getNumeroGrupo() == null
+					|| item.getNumeroGrupo().equals(filtro.getNumeroGrupo()));
 
-			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null || item
-					.getNumeroBanco().equals(filtro.getNumeroBanco()));
+			boolean passesFilterNumeroBanco = (filtro.getNumeroBanco() == null
+					|| item.getNumeroBanco().equals(filtro.getNumeroBanco()));
 
-			boolean passesFilterNumero = (filtro.getNumero() == null || item
-					.getNumero().equals(filtro.getNumero()));
+			boolean passesFilterNumero = (filtro.getNumero() == null || item.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNombre = (filtro.getNombre() == null || item
-					.getNombre().toLowerCase()
-					.contains(filtro.getNombre().toLowerCase()));
+			boolean passesFilterNombre = (filtro.getNombre() == null
+					|| item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
 
-			boolean passesFilterBloqueado = (filtro.getBloqueado() == null
-					|| filtro.getBloqueado() == 0
-					|| (item.getBloqueado().equals(true) && filtro
-							.getBloqueado().equals(1)) || (item.getBloqueado()
-					.equals(false) && filtro.getBloqueado().equals(2)));
+			boolean passesFilterBloqueado = (filtro.getBloqueado() == null || filtro.getBloqueado() == 0
+					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
+					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
 
-			if (passesFilterNumeroRubro && passesFilterNumeroGrupo
-					&& passesFilterNumeroBanco && passesFilterNumero
+			if (passesFilterNumeroRubro && passesFilterNumeroGrupo && passesFilterNumeroBanco && passesFilterNumero
 					&& passesFilterNombre && passesFilterBloqueado) {
 				arrayList.add(item);
 			}

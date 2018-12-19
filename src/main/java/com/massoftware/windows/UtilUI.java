@@ -9,20 +9,9 @@ import java.util.Map;
 
 import org.vaadin.inputmask.InputMask;
 import org.vaadin.patrik.FastNavigation;
-import org.vaadin.patrik.FastNavigation.CellFocusListener;
-import org.vaadin.patrik.FastNavigation.ClickOutListener;
-import org.vaadin.patrik.FastNavigation.EditorCloseListener;
-import org.vaadin.patrik.FastNavigation.EditorOpenListener;
-import org.vaadin.patrik.FastNavigation.RowEditListener;
 import org.vaadin.patrik.FastNavigation.RowFocusListener;
-import org.vaadin.patrik.events.CellFocusEvent;
-import org.vaadin.patrik.events.ClickOutEvent;
-import org.vaadin.patrik.events.EditorCloseEvent;
-import org.vaadin.patrik.events.EditorOpenEvent;
-import org.vaadin.patrik.events.RowEditEvent;
 import org.vaadin.patrik.events.RowFocusEvent;
 
-import com.vaadin.data.Container.Indexed;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
@@ -102,9 +91,14 @@ public class UtilUI {
 
 		// Row focus change
 		nav.addRowFocusListener(new RowFocusListener() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 6975464630317608789L;
+
 			@Override
 			public void onEvent(RowFocusEvent event) {
-				int row = event.getRow();
+//				int row = event.getRow();
 				// writeOutput("Focus moved to row " + event.getRow());
 				grid.select(event.getItemId());
 
@@ -161,14 +155,11 @@ public class UtilUI {
 
 	}
 
-	public static Column confColumn(Column column, String label,
-			boolean sortable, double pixelWidth) {
-		return confColumn(column, label, true, false, false, sortable,
-				pixelWidth);
+	public static Column confColumn(Column column, String label, boolean sortable, double pixelWidth) {
+		return confColumn(column, label, true, false, false, sortable, pixelWidth);
 	}
 
-	public static Column confColumn(Column column, String label,
-			boolean hidable, boolean hidden, boolean editable,
+	public static Column confColumn(Column column, String label, boolean hidable, boolean hidden, boolean editable,
 			boolean sortable, double pixelWidth) {
 
 		column.setHeaderCaption(label);
@@ -206,6 +197,7 @@ public class UtilUI {
 		return content;
 	}
 
+	@Deprecated
 	public static Button buildButtonPrev(int limit, int offset) {
 
 		Button prevPageBTN = new Button();
@@ -215,11 +207,12 @@ public class UtilUI {
 		prevPageBTN.setDescription(limit + " registros anteriores.");
 		prevPageBTN.addClickListener(e -> {
 			// prevPageBTNClick();
-			});
+		});
 
 		return prevPageBTN;
 	}
 
+	@Deprecated
 	public static Button buildButtonNext(int limit, int offset) {
 
 		Button nextPageBTN = new Button();
@@ -228,11 +221,12 @@ public class UtilUI {
 		nextPageBTN.setDescription("Siguientes " + limit + " registros.");
 		nextPageBTN.addClickListener(e -> {
 			// nextPageBTNClick();
-			});
+		});
 
 		return nextPageBTN;
 	}
 
+	@Deprecated
 	public static Button buildButtonBuscar() {
 
 		Button buscarBTN = new Button();
@@ -249,6 +243,7 @@ public class UtilUI {
 		return buscarBTN;
 	}
 
+	@Deprecated
 	public static Button buildButtonAgregar() {
 
 		Button agregarBTN = new Button();
@@ -279,6 +274,7 @@ public class UtilUI {
 		return btn;
 	}
 
+	@Deprecated
 	public static Button buildButtonModificar() {
 
 		Button modificarBTN = new Button();
@@ -294,6 +290,7 @@ public class UtilUI {
 		return modificarBTN;
 	}
 
+	@Deprecated
 	public static Button buildButtonEliminar() {
 
 		Button eliminarBTN = new Button();
@@ -324,6 +321,7 @@ public class UtilUI {
 		return seleccionarBTN;
 	}
 
+	@Deprecated
 	public static Window confWinList(Window window, String label) {
 
 		window.setCaption(label);
@@ -360,15 +358,13 @@ public class UtilUI {
 
 	public static Window confWinDeleteTextfieldsValue(Window window) {
 
-		window.addShortcutListener(new ShortcutListener("DELETE",
-				KeyCode.DELETE, new int[] {}) {
+		window.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void handleAction(Object sender, Object target) {
-				if (target instanceof TextField
-						&& ((TextField) target).isEnabled()
+				if (target instanceof TextField && ((TextField) target).isEnabled()
 						&& ((TextField) target).isReadOnly() == false) {
 					((TextField) target).setValue(null);
 				}
@@ -429,17 +425,16 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static HorizontalLayout buildTXTHL(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, int columns, int minLength,
-			int maxLength, boolean required, boolean allowInputUnmask,
-			String mask, boolean autoUnmask, String inputPrompt) {
+	@Deprecated
+	public static HorizontalLayout buildTXTHL(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
+			boolean autoUnmask, String inputPrompt) {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
 
-		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns,
-				minLength, maxLength, required, allowInputUnmask, mask,
-				autoUnmask);
+		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
+				allowInputUnmask, mask, autoUnmask);
 
 		txt.setInputPrompt(buildWinFilterTXTInputPromptList(inputPrompt));
 		txt.setDescription(txt.getInputPrompt());
@@ -468,18 +463,16 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static HorizontalLayout buildTXTHLInteger(BeanItem dtoBI,
-			String attName, String label, boolean readOnly, int columns,
-			int minLength, int maxLength, boolean required,
-			boolean allowInputUnmask, String mask, boolean autoUnmask,
-			String inputPrompt, int minValue, int maxValue) {
+	@Deprecated
+	public static HorizontalLayout buildTXTHLInteger(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
+			boolean autoUnmask, String inputPrompt, int minValue, int maxValue) {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
 
-		TextField txt = buildTXTInteger(dtoBI, attName, label, readOnly,
-				columns, minLength, maxLength, required, allowInputUnmask,
-				mask, autoUnmask, minValue, maxValue);
+		TextField txt = buildTXTInteger(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
+				allowInputUnmask, mask, autoUnmask, minValue, maxValue);
 
 		txt.setInputPrompt(buildWinFilterTXTInputPromptList(inputPrompt));
 		txt.setDescription(txt.getInputPrompt());
@@ -542,17 +535,14 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXT(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, int columns, int minLength,
-			int maxLength, boolean required, boolean allowInputUnmask,
-			String mask, boolean autoUnmask) {
+	public static TextField buildTXT(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask) {
 
 		TextField txt = buildTXT();
 
 		txt.setCaption(label);
 
-		txt.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		txt.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		txt.setColumns(columns);
 		if (maxLength > -1) {
 			txt.setMaxLength(maxLength);
@@ -594,20 +584,17 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXTInteger(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, int columns, int minLength,
-			int maxLength, boolean required, boolean allowInputUnmask,
-			String mask, boolean autoUnmask, int minValue, int maxValue) {
+	public static TextField buildTXTInteger(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
+			int minValue, int maxValue) {
 
-		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns,
-				minLength, maxLength, required, allowInputUnmask, mask,
-				autoUnmask);
+		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
+				allowInputUnmask, mask, autoUnmask);
 
 		txt.setConverter(new StringToIntegerConverterUnspecifiedLocale());
-		String msg = "El campo "
-				+ txt.getCaption()
-				+ " es inválido, se permiten sólo valores numéricos sin decimales, desde "
-				+ minValue + " hasta " + maxValue + ".";
+		String msg = "El campo " + txt.getCaption()
+				+ " es inválido, se permiten sólo valores numéricos sin decimales, desde " + minValue + " hasta "
+				+ maxValue + ".";
 
 		txt.addValidator(new IntegerRangeValidator(msg, minValue, maxValue));
 
@@ -637,16 +624,14 @@ public class UtilUI {
 		return txa;
 	}
 
-	public static TextArea buildTXA(String label, boolean readOnly,
-			int columns, int rows, int minLength, int maxLength,
+	public static TextArea buildTXA(String label, boolean readOnly, int columns, int rows, int minLength, int maxLength,
 			boolean required) {
 
 		TextArea txt = buildTXA();
 
 		txt.setCaption(label);
 		txt.setReadOnly(readOnly);
-		txt.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		txt.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		if (columns > 0) {
 			txt.setColumns(columns);
 		} else {
@@ -681,9 +666,8 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
-			String attName, String label, String label2, boolean readOnly,
-			boolean required) {
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attName, String label, String label2,
+			boolean readOnly, boolean required) {
 
 		// HorizontalLayout hl = buildHL();
 		HorizontalLayout hl = new HorizontalLayout();
@@ -746,22 +730,17 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
-			String attNameCode, String attName, String label, String label2,
-			boolean required) throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attNameCode, String attName, String label,
+			String label2, boolean required) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
-		return buildSearchBox(dtoBI, attNameCode, attName, label, label2,
-				required, label, false);
+		return buildSearchBox(dtoBI, attNameCode, attName, label, label2, required, label, false);
 
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
-			String attNameCode, String attName, String label, String label2,
-			boolean required, String label3, boolean onlyBtn)
-			throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attNameCode, String attName, String label,
+			String label2, boolean required, String label3, boolean onlyBtn)
+			throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		// HorizontalLayout hl = buildHL();
 		HorizontalLayout hl = new HorizontalLayout();
@@ -795,11 +774,9 @@ public class UtilUI {
 
 		if (field.getType() == Integer.class) {
 
-			txtSearch
-					.setConverter(new StringToIntegerConverterUnspecifiedLocale());
+			txtSearch.setConverter(new StringToIntegerConverterUnspecifiedLocale());
 
-			String msg = "El campo "
-					+ txtSearch.getCaption()
+			String msg = "El campo " + txtSearch.getCaption()
 					+ " es inválido, se permiten sólo valores numéricos sin decimales.";
 
 			txtSearch.addStyleName("align-right");
@@ -844,8 +821,8 @@ public class UtilUI {
 			txtSearch.setValue(null);
 			// dtoBI.getItemProperty(attName).setValue(null);
 
-				txtValue.setValue(null);
-			});
+			txtValue.setValue(null);
+		});
 
 		hl.addComponent(removeFilterBTN);
 		hl.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
@@ -858,10 +835,8 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public static HorizontalLayout buildSearchBox(BeanItem dtoBI,
-			String attName, String label, boolean required, String label2)
-			throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attName, String label, boolean required,
+			String label2) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		// HorizontalLayout hl = buildHL();
 		HorizontalLayout hl = new HorizontalLayout();
@@ -895,7 +870,7 @@ public class UtilUI {
 			txtValue.setDescription("Buscar por " + label.toLowerCase());
 		}
 		txtValue.setInputPrompt(searchFor);
-		
+
 		hl.addComponent(btn);
 		hl.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
 		txtValue.setCaption(label);
@@ -965,15 +940,13 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static HorizontalLayout buildCBHL(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required, Class clazz,
-			List options) throws Exception {
+	public static HorizontalLayout buildCBHL(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required, Class clazz, List options) throws Exception {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
 
-		ComboBox cb = buildFieldCB(dtoBI, attName, label, readOnly, required,
-				clazz, options);
+		ComboBox cb = buildFieldCB(dtoBI, attName, label, readOnly, required, clazz, options);
 
 		txtHL.addComponent(cb);
 
@@ -1004,20 +977,20 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required, Class clazz,
-			List options) throws Exception {
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required, Class clazz, List options) throws Exception {
 
 		ComboBox cb = buildCB();
 
 		cb.setCaption(label);
 
-		cb.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		cb.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		cb.setRequired(required);
 		if (cb.isRequired()) {
 			cb.setNullSelectionAllowed(false);
 		}
+		// cb.setItemCaptionPropertyId(propertyId);
+		// cb.setWidth(width);
 		// cb.setTextInputAllowed(textInputAllowed);
 
 		// ----------------
@@ -1026,19 +999,20 @@ public class UtilUI {
 		// BeanItemContainer<clazz>(
 		// clazz, new ArrayList<clazz>());
 
-		BeanItemContainer optionsBIC = new BeanItemContainer(clazz,
-				new ArrayList());
+		BeanItemContainer optionsBIC = new BeanItemContainer(clazz, new ArrayList());
 		// optionsBIC.removeAllItems();
 		for (Object option : options) {
 			optionsBIC.addBean(option);
 		}
 		cb.setContainerDataSource(optionsBIC);
 
-		cb.setPropertyDataSource(dtoBI.getItemProperty(attName));
+		// cb.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
 		if (cb.isRequired() && optionsBIC.size() > 0) {
 			cb.setValue(optionsBIC.getIdByIndex(0));
 		}
+
+		cb.setValue(optionsBIC.getIdByIndex(0));
 
 		// ----------------
 
@@ -1047,6 +1021,7 @@ public class UtilUI {
 		cb.setReadOnly(readOnly);
 
 		return cb;
+
 	}
 
 	public static OptionGroup buildOG() {
@@ -1057,17 +1032,15 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required, String labelAll,
-			String labelTrue, String labelFalse, boolean horizontal, int value)
+	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required, String labelAll, String labelTrue, String labelFalse, boolean horizontal, int value)
 			throws Exception {
 
 		OptionGroup og = buildOG();
 
 		og.setCaption(label);
 
-		og.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		og.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		og.setRequired(required);
 
 		og.addItem(0);
@@ -1092,16 +1065,14 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required, String[] labels,
-			Integer[] values, boolean horizontal, int value) throws Exception {
+	public static OptionGroup buildBooleanOG(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required, String[] labels, Integer[] values, boolean horizontal, int value) throws Exception {
 
 		OptionGroup og = buildOG();
 
 		og.setCaption(label);
 
-		og.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		og.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		og.setRequired(required);
 
 		for (Integer item : values) {
@@ -1141,9 +1112,8 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName,
-			String label, boolean readOnly) throws SecurityException,
-			ClassNotFoundException, NoSuchFieldException {
+	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName, String label, boolean readOnly)
+			throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		CheckBox chk = buildCHK();
 
@@ -1156,10 +1126,8 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static HorizontalLayout buildDFHL(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required)
-			throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+	public static HorizontalLayout buildDFHL(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
@@ -1190,18 +1158,15 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static DateField buildFieldDF(BeanItem dtoBI, String attName,
-			String label, boolean readOnly, boolean required)
-			throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+	public static DateField buildFieldDF(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			boolean required) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		DateField df = buildDF(false);
 
 		df.setCaption(label);
 
 		df.setRequired(required);
-		df.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
+		df.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 
 		// df.setConverter(Timestamp.class);
 
@@ -1229,22 +1194,17 @@ public class UtilUI {
 				private static final long serialVersionUID = -1814526872789903256L;
 
 				@Override
-				protected Date handleUnparsableDateString(String dateString)
-						throws Converter.ConversionException {
+				protected Date handleUnparsableDateString(String dateString) throws Converter.ConversionException {
 
 					return UtilDate.parseDate(dateString);
 					// return new Timestamp(System.currentTimeMillis());
 				}
 
-				public void changeVariables(Object source,
-						Map<String, Object> variables) {
+				public void changeVariables(Object source, Map<String, Object> variables) {
 
 					if (variables.containsKey("dateString") == false) {
-						variables.put(
-								"dateString",
-								variables.get("day") + "/"
-										+ variables.get("month") + "/"
-										+ variables.get("year"));
+						variables.put("dateString",
+								variables.get("day") + "/" + variables.get("month") + "/" + variables.get("year"));
 					}
 
 					variables.put("day", -1);
@@ -1279,11 +1239,9 @@ public class UtilUI {
 
 	@SuppressWarnings("rawtypes")
 	private static Field getField(Class clazz, String attNamne)
-			throws SecurityException, ClassNotFoundException,
-			NoSuchFieldException {
+			throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
-		return Class.forName(clazz.getCanonicalName()).getDeclaredField(
-				attNamne);
+		return Class.forName(clazz.getCanonicalName()).getDeclaredField(attNamne);
 
 	}
 

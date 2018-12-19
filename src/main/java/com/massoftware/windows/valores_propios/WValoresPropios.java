@@ -12,10 +12,12 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.bancos.Bancos;
+import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
 import com.massoftware.windows.cuentas_fondo.CuentasFondo;
+import com.massoftware.windows.cuentas_fondo.CuentasFondoFiltro;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -599,9 +601,12 @@ public class WValoresPropios extends Window {
 		try {
 
 			// if (this.filterBI.getBean().getNumeroCuentaFondo() != null) {
-
-			WCuentasFondo window = new WCuentasFondo(this.filterBI.getBean()
+			
+			CuentasFondoFiltro cuentasFondoFiltro = new CuentasFondoFiltro();
+			cuentasFondoFiltro.setNumero(this.filterBI.getBean()
 					.getNumeroCuentaFondo());
+
+			WCuentasFondo window = new WCuentasFondo(cuentasFondoFiltro);
 			window.setModal(true);
 			window.center();
 
@@ -675,8 +680,10 @@ public class WValoresPropios extends Window {
 
 			// if (this.filterBI.getBean().getNumeroBanco() != null) {
 
-			WBancos window = new WBancos(this.filterBI.getBean()
-					.getNumeroBanco(), null);
+			BancosFiltro bancosFiltro = new BancosFiltro();
+			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
+
+			WBancos window = new WBancos(bancosFiltro);
 			window.setModal(true);
 			window.center();
 

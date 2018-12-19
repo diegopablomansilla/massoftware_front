@@ -33,7 +33,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WBancos2 extends Window {
+class WBancos2 extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 

@@ -1,7 +1,5 @@
 package com.massoftware.windows.cuentas_fondo;
 
-import com.massoftware.windows.UtilModel;
-
 public class CuentasFondoFiltro {
 
 	private Integer numeroRubro;
@@ -41,7 +39,7 @@ public class CuentasFondoFiltro {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);
+		this.nombre = nombre;
 	}
 
 	public Integer getNumeroBanco() {
@@ -57,7 +55,7 @@ public class CuentasFondoFiltro {
 	}
 
 	public void setNombreBanco(String nombreBanco) {		
-		this.nombreBanco = UtilModel.format(nombreBanco);
+		this.nombreBanco = nombreBanco;
 	}
 
 	public Integer getBloqueado() {

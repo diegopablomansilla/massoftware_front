@@ -11,6 +11,7 @@ import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.TextFieldBox;
+import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
@@ -47,11 +48,9 @@ public class WCuentasFondo extends WindowListado {
 	// -------------------------------------------------------------
 
 	private OptionGroup activoOG;
-	private NumeroIB numeroIB;
+	private TextFieldIntegerBox numeroIB;
 	private TextFieldBox nombreTB;
 	private SelectorBox bancoSB;
-
-//	private Panel seccionIzquierda;
 	private Tree tree;
 
 	private String itemTodas = "Todas las cuentas";
@@ -63,57 +62,28 @@ public class WCuentasFondo extends WindowListado {
 		init(null);
 	}
 
-	public WCuentasFondo(Integer numero) {
+	public WCuentasFondo(CuentasFondoFiltro filtro) {
 		super();
-		init(numero);
+		init(filtro);
 	}
 
-	protected BeanItemContainer<CuentasFondo> getItemsBIC() {
-		return itemsBIC;
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	public void init(Integer numero) {
+	public void init(CuentasFondoFiltro filtro) {
 
 		try {
 
-			buildContainersItems();
+			// =======================================================
+			// FILTRO
 
-			filterBI.getItemProperty("numero").setValue(numero);
-
-			UtilUI.confWinList(this, "Cuentas de fondo");
+			if (filtro != null) {
+				filterBI = new BeanItem<CuentasFondoFiltro>(filtro);
+			} else {
+				filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
+			}
 
 			// =======================================================
-			// FILTROS
+			// LAYOUT CONTROLs
 
-			HorizontalLayout filaFiltroHL = buildFiltros();
-
-			// =======================================================
-			// CUERPO
-
-			HorizontalLayout cuerpo = new HorizontalLayout();
-			cuerpo.setSpacing(true);
-
-			cuerpo.addComponents(buildPanelTree(), buildItemsGRD());
-
-			// =======================================================
-			// BOTONERAS
-
-			HorizontalLayout filaBotoneraHL = buildBotonera1();
-			HorizontalLayout filaBotonera2HL = buildBotonera2();
-
-			// =======================================================
-			// CONTENT
-
-			VerticalLayout content = UtilUI.buildWinContentVertical();
-
-			content.addComponents(filaFiltroHL, cuerpo, filaBotoneraHL, filaBotonera2HL);
-
-			content.setComponentAlignment(filaFiltroHL, Alignment.MIDDLE_CENTER);
-			content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-			content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
-
-			this.setContent(content);
+			buildContent();
 
 			// =======================================================
 			// KEY EVENTs
@@ -125,18 +95,59 @@ public class WCuentasFondo extends WindowListado {
 
 			loadData();
 
+			// =======================================================
+
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
+	}
+
+	private void buildContent() throws Exception {
+
+		confWinList(this, "Cuentas de fondo");
+
+		// =======================================================
+		// FILTROS
+
+		HorizontalLayout filtrosLayout = buildFiltros();
+
+		// =======================================================
+		// CUERPO
+
+		HorizontalLayout cuerpo = new HorizontalLayout();
+		cuerpo.setSpacing(true);
+
+		cuerpo.addComponents(buildPanelTree(), buildItemsGRD());
+
+		// =======================================================
+		// BOTONERAS
+
+		HorizontalLayout filaBotoneraHL = buildBotonera1();
+		HorizontalLayout filaBotonera2HL = buildBotonera2();
+
+		// =======================================================
+		// CONTENT
+
+		VerticalLayout content = UtilUI.buildWinContentVertical();
+
+		content.addComponents(filtrosLayout, cuerpo, filaBotoneraHL, filaBotonera2HL);
+
+		content.setComponentAlignment(filtrosLayout, Alignment.MIDDLE_CENTER);
+		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
+		content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
+
+		this.setContent(content);
 	}
 
 	private HorizontalLayout buildFiltros() throws Exception {
 
 		bancoSB = new BancoSB(this);
 
-		numeroIB = new NumeroIB(this);
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Cuenta", false, 5, -1, 3, false, false, null,
+				false, UtilUI.EQUALS, 0, 255);
 
-		nombreTB = new NombreTB(this);
+		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 25, false, false, null, false,
+				UtilUI.CONTAINS_WORDS_AND);
 
 		activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Activas", "No activas",
 				true, 0);
@@ -145,10 +156,7 @@ public class WCuentasFondo extends WindowListado {
 			loadDataResetPaged();
 		});
 
-		Button buscarBTN = UtilUI.buildButtonBuscar();
-		buscarBTN.addClickListener(e -> {
-			loadDataResetPaged();
-		});
+		Button buscarBTN = buildButtonBuscar();
 
 		HorizontalLayout filaFiltroHL = new HorizontalLayout();
 		filaFiltroHL.setSpacing(true);
@@ -165,8 +173,11 @@ public class WCuentasFondo extends WindowListado {
 		itemsGRD = UtilUI.buildGrid();
 		FastNavigation nav = UtilUI.initNavigation(itemsGRD);
 
+		// ------------------------------------------------------------------
+
 		// itemsGRD.setWidth(22f, Unit.EM);
 		itemsGRD.setWidth("100%");
+		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(
 				new Object[] { "numeroRubro", "numeroGrupo", "numeroBanco", "numero", "nombre", "tipo", "bloqueado" });
@@ -179,7 +190,7 @@ public class WCuentasFondo extends WindowListado {
 		UtilUI.confColumn(itemsGRD.getColumn("tipo"), "Tipo", true, -1);
 		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, true, false, true, 30);
 
-		itemsGRD.setContainerDataSource(itemsBIC);
+		itemsGRD.setContainerDataSource(getItemsBIC());
 
 		// .......
 
@@ -206,6 +217,8 @@ public class WCuentasFondo extends WindowListado {
 
 		itemsGRD.setSortOrder(order);
 
+		// ------------------------------------------------------------------
+
 		nav.addRowFocusListener(e -> {
 			try {
 				int row = e.getRow();
@@ -217,6 +230,8 @@ public class WCuentasFondo extends WindowListado {
 				LogAndNotification.print(ex);
 			}
 		});
+
+		// ------------------------------------------------------------------
 
 		return itemsGRD;
 	}
@@ -381,13 +396,12 @@ public class WCuentasFondo extends WindowListado {
 
 	// =================================================================================
 
-	private void buildContainersItems() throws Exception {
-
-		filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
-		itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class, new ArrayList<CuentasFondo>());
+	protected BeanItemContainer<CuentasFondo> getItemsBIC() {
+		if (itemsBIC == null) {
+			itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class, new ArrayList<CuentasFondo>());
+		}
+		return itemsBIC;
 	}
-
-	// =================================================================================
 
 	protected void validateFilterSection() {
 		bancoSB.validate();
@@ -400,36 +414,12 @@ public class WCuentasFondo extends WindowListado {
 		List<CuentasFondo> items = queryData();
 
 		for (CuentasFondo item : items) {
-			itemsBIC.addBean(item);
+			getItemsBIC().addBean(item);
 		}
 	}
 
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
-
-	private List<RubrosFiltro> queryDataRubrosFiltro() {
-		try {
-
-			return mockDataRubrosFiltro();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<RubrosFiltro>();
-	}
-
-	private List<GruposFiltro> queryDataGruposFiltro() {
-		try {
-
-			return mockDataGruposFiltro();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<GruposFiltro>();
-	}
 
 	// metodo que realiza la consulta a la base de datos
 	private List<CuentasFondo> queryData() {
@@ -461,6 +451,32 @@ public class WCuentasFondo extends WindowListado {
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
+	}
+
+	// ------------------------------------------------------------------------------
+
+	private List<RubrosFiltro> queryDataRubrosFiltro() {
+		try {
+
+			return mockDataRubrosFiltro();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<RubrosFiltro>();
+	}
+
+	private List<GruposFiltro> queryDataGruposFiltro() {
+		try {
+
+			return mockDataGruposFiltro();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return new ArrayList<GruposFiltro>();
 	}
 
 	// metodo que realiza el delete en la base de datos

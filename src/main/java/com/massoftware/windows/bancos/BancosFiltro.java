@@ -1,7 +1,5 @@
 package com.massoftware.windows.bancos;
 
-import com.massoftware.windows.UtilModel;
-
 public class BancosFiltro {
 
 	private Integer numero;
@@ -22,7 +20,7 @@ public class BancosFiltro {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);		
+		this.nombre = nombre;		
 	}
 
 	public String getNombreOficial() {
@@ -30,7 +28,7 @@ public class BancosFiltro {
 	}
 
 	public void setNombreOficial(String nombreOficial) {
-		this.nombreOficial = UtilModel.format(nombreOficial);
+		this.nombreOficial = nombreOficial;
 	}
 
 	public Integer getBloqueado() {

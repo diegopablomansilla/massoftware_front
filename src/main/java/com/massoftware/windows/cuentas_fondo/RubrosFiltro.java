@@ -2,7 +2,7 @@ package com.massoftware.windows.cuentas_fondo;
 
 import com.massoftware.windows.UtilModel;
 
-public class RubrosFiltro {
+class RubrosFiltro {
 
 	private Integer numero;
 	private String nombre;
