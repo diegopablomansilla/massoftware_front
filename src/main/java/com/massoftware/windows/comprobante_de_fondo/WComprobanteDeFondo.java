@@ -3,8 +3,8 @@ package com.massoftware.windows.comprobante_de_fondo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cendra.jdbc.ex.crud.InsertDuplicateException;
-import org.cendra.jdbc.ex.crud.UniqueException;
+import org.cendra.ex.crud.InsertDuplicateException;
+import org.cendra.ex.crud.UniqueException;
 
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;

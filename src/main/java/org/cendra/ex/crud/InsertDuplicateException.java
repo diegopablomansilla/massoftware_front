@@ -1,4 +1,4 @@
-package org.cendra.jdbc.ex.crud;
+package org.cendra.ex.crud;
 
 public class InsertDuplicateException extends IllegalArgumentException {
 

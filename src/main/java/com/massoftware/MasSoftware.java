@@ -2,8 +2,6 @@ package com.massoftware;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.patrik.demo.DemoUI;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -36,6 +34,10 @@ public class MasSoftware extends UI {
 		 * 
 		 */
 		private static final long serialVersionUID = 3384068185250400739L;
+		
+		public MasSoftwareServlet(){
+			BackendContext.get();
+		}
 	}
 
 	// ===================================================================================================

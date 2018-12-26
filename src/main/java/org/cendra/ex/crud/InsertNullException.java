@@ -1,4 +1,4 @@
-package org.cendra.jdbc.ex.crud;
+package org.cendra.ex.crud;
 
 public class InsertNullException extends IllegalArgumentException {
 
@@ -9,6 +9,10 @@ public class InsertNullException extends IllegalArgumentException {
 
 	public InsertNullException() {
 		super("Se intento insertar un objeto nulo.");
+	}
+	
+	public InsertNullException(String label) {
+		super("Se intento insertar un objeto " + label + "nulo.");
 	}
 
 }

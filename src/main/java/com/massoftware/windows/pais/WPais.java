@@ -1,7 +1,7 @@
 package com.massoftware.windows.pais;
 
-import org.cendra.jdbc.ex.crud.InsertDuplicateException;
-import org.cendra.jdbc.ex.crud.UniqueException;
+import org.cendra.ex.crud.InsertDuplicateException;
+import org.cendra.ex.crud.UniqueException;
 
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;

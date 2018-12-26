@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.vaadin.patrik.FastNavigation;
 
+import com.massoftware.Context;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -46,6 +47,11 @@ public class WCuentasFondo extends WindowListado {
 	protected BeanItemContainer<CuentasFondo> itemsBIC;
 
 	// -------------------------------------------------------------
+
+	protected Button agregarTreeBTN;
+	protected Button modificarTreeBTN;
+	// protected Button copiarTreeBTN;
+	protected Button eliminarTreeBTN;
 
 	private OptionGroup activoOG;
 	private TextFieldIntegerBox numeroIB;
@@ -114,34 +120,48 @@ public class WCuentasFondo extends WindowListado {
 		// =======================================================
 		// CUERPO
 
-		HorizontalLayout cuerpo = new HorizontalLayout();
-		cuerpo.setSpacing(true);
+		VerticalLayout izquierda = UtilUI.buildVL();
+		izquierda.addComponent(buildPanelTree());
+		HorizontalLayout filaBotoneraTreeHL = buildBotonera1Tree();
+		HorizontalLayout filaBotoneraTree2HL = buildBotonera2Tree();
+		izquierda.addComponents(filaBotoneraTreeHL, filaBotoneraTree2HL);
+		izquierda.setComponentAlignment(filaBotoneraTreeHL, Alignment.MIDDLE_LEFT);
+		izquierda.setComponentAlignment(filaBotoneraTree2HL, Alignment.MIDDLE_RIGHT);
 
-		cuerpo.addComponents(buildPanelTree(), buildItemsGRD());
+		// ------------------------------------------------------
 
-		// =======================================================
-		// BOTONERAS
-
+		VerticalLayout derecha = UtilUI.buildVL();
+		derecha.setWidth("100%");
+		derecha.addComponent(buildItemsGRD());
 		HorizontalLayout filaBotoneraHL = buildBotonera1();
 		HorizontalLayout filaBotonera2HL = buildBotonera2();
+		derecha.addComponents(filaBotoneraHL, filaBotonera2HL);
+		derecha.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
+		derecha.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
+
+		// ------------------------------------------------------
+
+		HorizontalLayout cuerpo = new HorizontalLayout();
+		cuerpo.setSpacing(false);
+		cuerpo.setMargin(false);
+
+		cuerpo.addComponents(izquierda, derecha);
 
 		// =======================================================
 		// CONTENT
 
 		VerticalLayout content = UtilUI.buildWinContentVertical();
 
-		content.addComponents(filtrosLayout, cuerpo, filaBotoneraHL, filaBotonera2HL);
+		content.addComponents(filtrosLayout, cuerpo);
 
 		content.setComponentAlignment(filtrosLayout, Alignment.MIDDLE_CENTER);
-		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
-		content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 		this.setContent(content);
 	}
 
 	private HorizontalLayout buildFiltros() throws Exception {
 
-		bancoSB = new BancoSB(this);
+		bancoSB = new WCBancoSB(this);
 
 		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Cuenta", false, 5, -1, 3, false, false, null,
 				false, UtilUI.EQUALS, 0, 255);
@@ -238,12 +258,49 @@ public class WCuentasFondo extends WindowListado {
 
 	// =================================================================================
 
+	protected HorizontalLayout buildBotonera1Tree() {
+
+		HorizontalLayout filaBotoneraHL = new HorizontalLayout();
+		filaBotoneraHL.setSpacing(true);
+
+		agregarTreeBTN = UtilUI.buildButtonAgregar();
+		agregarTreeBTN.addClickListener(e -> {
+			agregarTreeBTNClick();
+		});
+		modificarTreeBTN = UtilUI.buildButtonModificar();
+		modificarTreeBTN.addClickListener(e -> {
+			modificarTreeBTNClick();
+		});
+		// copiarTreeBTN = UtilUI.buildButtonCopiar();
+		// copiarTreeBTN.addClickListener(e -> {
+		// // copiarBTNClick();
+		// });
+
+		filaBotoneraHL.addComponents(agregarTreeBTN, modificarTreeBTN/* , copiarTreeBTN */);
+
+		return filaBotoneraHL;
+	}
+
+	protected HorizontalLayout buildBotonera2Tree() {
+
+		HorizontalLayout filaBotonera2HL = new HorizontalLayout();
+		filaBotonera2HL.setSpacing(true);
+
+		eliminarTreeBTN = UtilUI.buildButtonEliminar();
+		eliminarTreeBTN.addClickListener(e -> {
+			eliminarTreeBTNClick();
+		});
+
+		filaBotonera2HL.addComponents(eliminarTreeBTN);
+
+		return filaBotonera2HL;
+	}
+
 	private Panel buildPanelTree() {
 
 		Panel seccionIzquierda = new Panel("Estructura");
-		seccionIzquierda.setHeight("100%");
 		seccionIzquierda.setWidth(20f, Unit.EM);
-		seccionIzquierda.setHeight(25f, Unit.EM);
+		seccionIzquierda.setHeight(20.5f, Unit.EM);
 		seccionIzquierda.setContent(buildTree());
 
 		return seccionIzquierda;
@@ -264,11 +321,11 @@ public class WCuentasFondo extends WindowListado {
 				public void handleAction(Action action, Object sender, Object target) {
 
 					if (action.getCaption().equals("Agregar")) {
-						agregarBTNClick();
+						agregarTreeBTNClick();
 					} else if (action.getCaption().equals("Modificar")) {
-						modificarBTNClick();
+						modificarTreeBTNClick();
 					} else if (action.getCaption().equals("Eliminar")) {
-						eliminarItemTreeClick(target);
+						eliminarTreeBTNClick();
 					}
 
 				}
@@ -281,7 +338,7 @@ public class WCuentasFondo extends WindowListado {
 
 			tree = new Tree("Estructura");
 
-			loadDataTree();
+			loadDataResetPagedTree();
 
 			tree.addValueChangeListener(event -> {
 				if (event.getProperty() != null && event.getProperty().getValue() != null) {
@@ -304,13 +361,13 @@ public class WCuentasFondo extends WindowListado {
 	@SuppressWarnings("unchecked")
 	private void treeValueChangeListener(Object item) {
 		try {
-			if (item instanceof RubrosFiltro) {
-				filterBI.getItemProperty("numeroRubro").setValue(((RubrosFiltro) item).getNumero());
+			if (item instanceof Rubros) {
+				filterBI.getItemProperty("numeroRubro").setValue(((Rubros) item).getNumero());
 				this.loadDataResetPaged();
-			} else if (item instanceof GruposFiltro) {
-				filterBI.getItemProperty("numeroRubro").setValue(((GruposFiltro) item).getNumeroRubro());
+			} else if (item instanceof Grupos) {
+				filterBI.getItemProperty("numeroRubro").setValue(((Grupos) item).getNumeroRubro());
 
-				filterBI.getItemProperty("numeroGrupo").setValue(((GruposFiltro) item).getNumero());
+				filterBI.getItemProperty("numeroGrupo").setValue(((Grupos) item).getNumero());
 				this.loadDataResetPaged();
 			} else {
 				filterBI.getItemProperty("numeroRubro").setValue(null);
@@ -323,28 +380,40 @@ public class WCuentasFondo extends WindowListado {
 		}
 	}
 
-	private void loadDataTree() throws Exception {
+	public void loadDataResetPagedTree() throws Exception {
+		loadDataResetPagedTree(null, null);
+	}
+
+	public void loadDataResetPagedTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
 
 		tree.removeAllItems();
 		tree.addItem(itemTodas);
 		tree.select(itemTodas);
-		addCuentasContablesTree();
+		addCuentasContablesTree(numeroRubro, numeroGrupo);
 		tree.expandItem(itemTodas);
 	}
 
-	private void addCuentasContablesTree() throws Exception {
+	private void addCuentasContablesTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
 
-		List<RubrosFiltro> rubros = queryDataRubrosFiltro();
+		List<Rubros> rubros = queryDataRubrosFiltro();
 
-		for (RubrosFiltro rubro : rubros) {
+		for (Rubros rubro : rubros) {
 
 			tree.addItem(rubro);
 			tree.setParent(rubro, itemTodas);
 			// tree.setChildrenAllowed(cuentaContable, false);
 
-			List<GruposFiltro> grupos = queryDataGruposFiltro();
+			GruposFiltro filtro = new GruposFiltro();
+			filtro.setNumeroRubro(rubro.getNumero());
 
-			for (GruposFiltro grupo : grupos) {
+			List<Grupos> grupos = queryDataGruposFiltro(filtro);
+
+			if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)) {
+				tree.select(rubro);
+				tree.expandItem(rubro);
+			}
+
+			for (Grupos grupo : grupos) {
 
 				grupo.setNumeroRubro(rubro.getNumero());
 
@@ -353,6 +422,12 @@ public class WCuentasFondo extends WindowListado {
 				tree.setChildrenAllowed(grupo, false);
 				// tree.expandItem(grupo);
 
+				if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)
+						&& numeroGrupo != null && grupo.getNumero() != null && grupo.getNumero().equals(numeroGrupo)) {
+					tree.select(grupo);
+					tree.expandItem(grupo);
+				}
+
 			}
 
 			// tree.expandItem(rubro);
@@ -360,34 +435,101 @@ public class WCuentasFondo extends WindowListado {
 		}
 	}
 
-	private void eliminarItemTreeClick(Object item) {
+	protected void eliminarTreeBTNClick() {
 		try {
 
-			getUI().addWindow(new EliminarDialog(item.toString(), new EliminarDialog.Callback() {
-				public void onDialogResult(boolean yes) {
+			if (tree.getValue() != null && tree.getValue() instanceof Rubros || tree.getValue() instanceof Grupos) {
 
-					try {
-						if (yes) {
+				getUI().addWindow(new EliminarDialog(tree.getValue().toString(), new EliminarDialog.Callback() {
+					public void onDialogResult(boolean yes) {
 
-							if (item instanceof RubrosFiltro) {
-								deleteItem((RubrosFiltro) item);
-							} else if (item instanceof GruposFiltro) {
-								deleteItem((GruposFiltro) item);
-							} else {
+						try {
+							if (yes) {
+								if (tree.getValue() != null) {
+
+									Object item = tree.getValue();
+
+									deleteItemTree(item);
+
+									LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
+
+									if (item instanceof Grupos) {
+										loadDataResetPagedTree(((Grupos) item).getNumeroRubro(), null);
+									} else {
+										loadDataResetPagedTree();
+									}
+
+									loadData();
+
+								}
 							}
-
-							LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
-
-							loadDataTree();
-							loadDataResetPaged();
-
+						} catch (Exception e) {
+							LogAndNotification.print(e);
 						}
-					} catch (Exception e) {
-						LogAndNotification.print(e);
-					}
 
-				}
-			}));
+					}
+				}));
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void agregarTreeBTNClick() {
+		try {
+
+			if (tree.getValue() != null && tree.getValue() instanceof String || tree.getValue().equals(itemTodas)) {
+
+				WRubro window = new WRubro();
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+
+			} else if (tree.getValue() != null && tree.getValue() instanceof Rubros) {
+
+				WGrupo window = new WGrupo(((Rubros) tree.getValue()).getNumero());
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void modificarTreeBTNClick() {
+		try {
+
+			if (tree.getValue() != null && tree.getValue() instanceof Rubros) {
+
+				Rubros item = (Rubros) tree.getValue();
+				RubroFiltro filtro = new RubroFiltro();
+				filtro.setNumero(item.getNumero());
+
+				WRubro window = new WRubro(WRubro.UPDATE_MODE, filtro);
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+
+			} else if (tree.getValue() != null && tree.getValue() instanceof Grupos) {
+
+				Grupos item = (Grupos) tree.getValue();
+				GrupoFiltro filtro = new GrupoFiltro();
+				filtro.setNumero(item.getNumero());
+				filtro.setNumeroRubro(item.getNumeroRubro());
+
+				WGrupo window = new WGrupo(WGrupo.UPDATE_MODE, filtro);
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+			}
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -455,93 +597,43 @@ public class WCuentasFondo extends WindowListado {
 
 	// ------------------------------------------------------------------------------
 
-	private List<RubrosFiltro> queryDataRubrosFiltro() {
+	private List<Rubros> queryDataRubrosFiltro() {
 		try {
 
-			return mockDataRubrosFiltro();
+			return Context.getRubrosBO().find();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<RubrosFiltro>();
+		return new ArrayList<Rubros>();
 	}
 
-	private List<GruposFiltro> queryDataGruposFiltro() {
+	private List<Grupos> queryDataGruposFiltro(GruposFiltro filtro) {
 		try {
 
-			return mockDataGruposFiltro();
+			return Context.getGruposBO().find(filtro);
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<GruposFiltro>();
+		return new ArrayList<Grupos>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(RubrosFiltro item) {
+	private void deleteItemTree(Object item) {
 		try {
 
-			tree.removeItem(item);
+			if (item instanceof Rubros) {
+				Context.getRubrosBO().deleteItem((Rubros) item);
+			} else if (item instanceof Grupos) {
+				Context.getGruposBO().deleteItem((Grupos) item);
+			}
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
-	}
-
-	// metodo que realiza el delete en la base de datos
-	private void deleteItem(GruposFiltro item) {
-		try {
-
-			tree.removeItem(item);
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	// =================================================================================
-	// SECCION SOLO PARA FINES DE MOCKUP
-
-	private List<RubrosFiltro> mockDataRubrosFiltro() {
-
-		List<RubrosFiltro> itemsMock = new ArrayList<RubrosFiltro>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 20; i++) {
-
-				RubrosFiltro item = new RubrosFiltro();
-
-				item.setNumero(i);
-				item.setNombre("Rubro " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
-	}
-
-	private List<GruposFiltro> mockDataGruposFiltro() {
-
-		List<GruposFiltro> itemsMock = new ArrayList<GruposFiltro>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 20; i++) {
-
-				GruposFiltro item = new GruposFiltro();
-
-				item.setNumero(i);
-				item.setNombre("Grupo " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
 	}
 
 	// =================================================================================

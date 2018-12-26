@@ -16,9 +16,11 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.data.validator.LongRangeValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
@@ -98,7 +100,7 @@ public class UtilUI {
 
 			@Override
 			public void onEvent(RowFocusEvent event) {
-//				int row = event.getRow();
+				// int row = event.getRow();
 				// writeOutput("Focus moved to row " + event.getRow());
 				grid.select(event.getItemId());
 
@@ -243,7 +245,6 @@ public class UtilUI {
 		return buscarBTN;
 	}
 
-	@Deprecated
 	public static Button buildButtonAgregar() {
 
 		Button agregarBTN = new Button();
@@ -273,8 +274,7 @@ public class UtilUI {
 
 		return btn;
 	}
-
-	@Deprecated
+	
 	public static Button buildButtonModificar() {
 
 		Button modificarBTN = new Button();
@@ -290,7 +290,21 @@ public class UtilUI {
 		return modificarBTN;
 	}
 
-	@Deprecated
+	public static Button buildButtonCopiar() {
+
+		Button modificarBTN = new Button();
+//		modificarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		modificarBTN.addStyleName(ValoTheme.BUTTON_TINY);
+		modificarBTN.setIcon(FontAwesome.COPY);
+		modificarBTN.setCaption("Copiar");
+		modificarBTN.setDescription(modificarBTN.getCaption() + " (Ctrl+C)");
+		// modificarBTN.addClickListener(e -> {
+		// // modificarBTNClick();
+		// });
+
+		return modificarBTN;
+	}
+
 	public static Button buildButtonEliminar() {
 
 		Button eliminarBTN = new Button();
@@ -584,6 +598,48 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTShortPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int minLength, boolean required) {
+
+		int length = (Short.MAX_VALUE + "").length();
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
+				1, Short.MAX_VALUE);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int minLength, boolean required) {
+
+		int length = (Integer.MAX_VALUE + "").length();
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
+				1, Integer.MAX_VALUE);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTTinyintPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int minLength, boolean required) {
+
+		int length = 3;
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		return buildTXTInteger(dtoBI, attName, label, readOnly, 6, minLength, length, required, false, null, false,
+				1, 255);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTInteger(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
 			int minValue, int maxValue) {
@@ -598,9 +654,32 @@ public class UtilUI {
 
 		txt.addValidator(new IntegerRangeValidator(msg, minValue, maxValue));
 
+		txt.setConversionError(msg);
+
 		txt.addStyleName("align-right");
 
+		return txt;
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTLong(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
+			long minValue, long maxValue) {
+
+		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
+				allowInputUnmask, mask, autoUnmask);
+
+		txt.setConverter(new StringToIntegerConverterUnspecifiedLocale());
+		String msg = "El campo " + txt.getCaption()
+				+ " es inválido, se permiten sólo valores numéricos sin decimales, desde " + minValue + " hasta "
+				+ maxValue + ".";
+
+		txt.addValidator(new LongRangeValidator(msg, minValue, maxValue));
+
 		txt.setConversionError(msg);
+
+		txt.addStyleName("align-right");
 
 		return txt;
 
@@ -940,6 +1019,7 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	public static HorizontalLayout buildCBHL(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			boolean required, Class clazz, List options) throws Exception {
 
@@ -1023,6 +1103,72 @@ public class UtilUI {
 		return cb;
 
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, 
+			String label, String attName1, String caption, float widthEM, boolean readOnly, boolean required, boolean textInputAllowed, 
+			Class clazz, List options) throws Exception {
+
+		ComboBox cb = buildCB();
+
+		cb.setCaption(label);
+
+		cb.setRequiredError("El campo '" + label
+				+ "' es requerido. Es decir no debe estar vacio.");
+		
+
+		
+		cb.setRequired(required);
+		if (cb.isRequired()) {
+			
+			cb.setNullSelectionAllowed(false);
+			
+		}
+		 cb.setTextInputAllowed(textInputAllowed);
+
+		// ----------------
+
+		// BeanItemContainer<clazz> paisesBIC = new
+		// BeanItemContainer<clazz>(
+		// clazz, new ArrayList<clazz>());
+
+		BeanItemContainer optionsBIC = new BeanItemContainer(clazz,
+				new ArrayList());
+		// optionsBIC.removeAllItems();
+		for (Object option : options) {
+			optionsBIC.addBean(option);
+		}
+		
+		if(widthEM> 0) {
+			cb.setWidth(widthEM, Unit.EM);
+		}
+		
+		cb.setContainerDataSource(optionsBIC);
+		
+
+		
+		if(!caption.isEmpty()) {
+			cb.setItemCaptionPropertyId(caption);
+		}
+		
+	
+
+		if (cb.isRequired() && optionsBIC.size() > 0) {
+			cb.setValue(optionsBIC.getIdByIndex(0));
+
+		}
+		
+		cb.setPropertyDataSource(dtoBI.getItemProperty(attName1));
+		
+		// ----------------
+
+
+		
+		cb.setReadOnly(readOnly);
+
+		return cb;
+	}
+
 
 	public static OptionGroup buildOG() {
 		OptionGroup og = new OptionGroup();
@@ -1113,7 +1259,7 @@ public class UtilUI {
 
 	@SuppressWarnings("rawtypes")
 	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName, String label, boolean readOnly)
-			throws SecurityException, ClassNotFoundException, NoSuchFieldException {
+			throws Exception {
 
 		CheckBox chk = buildCHK();
 

@@ -4,133 +4,217 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.windows.LogAndNotification;
+import org.cendra.ex.crud.DeleteForeingObjectConflictException;
+import org.cendra.ex.crud.InsertNullException;
+import org.cendra.ex.crud.NullFieldException;
 
-public class BancosBO {
+import com.massoftware.BackendContext;
 
-	List<Bancos> itemsMock = mockData();
+class BancosBO {
 
-	private List<Bancos> mockData() {
+	public List<Bancos> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro)
+			throws Exception {
 
-		List<Bancos> itemsMock = new ArrayList<Bancos>();
+		// ==================================================================
+		// MS SQL SERVER
 
-		for (int i = 0; i < 10000; i++) {
+		String attNumero = "CAST(A.BANCO AS INTEGER)";
+		String attNombre = "LTRIM(RTRIM(CAST(A.NOMBRE AS VARCHAR)))";
+		String attNombreOficial = "LTRIM(RTRIM(CAST(A.NOMBRECOMPLETO AS VARCHAR)))";
+		String attBloqueado = "CAST(A.BLOQUEADO AS BIT)";
 
+		String tableSQL = "Bancos A";
+		String attsSQL = attNumero + ", " + attNombre + ", " + attNombreOficial + ", " + attBloqueado;
+		String orderBySQL = attNumero;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		if (filtro.getNumero() != null) {
+			filtros.add(filtro.getNumero());
+			whereSQL += attNumero + " = ? AND ";
+		}
+		if (filtro.getNombre() != null) {
+			String[] palabras = filtro.getNombre().split(" ");
+			for (String palabra : palabras) {
+				filtros.add(palabra.trim());
+				whereSQL += "LOWER(dbo.Translate(" + attNombre + ", null, null))"
+						+ " LIKE LOWER(dbo.Translate('%' + ? + '%', null, null)) AND ";
+			}
+		}
+		if (filtro.getNombreOficial() != null) {
+			String[] palabras = filtro.getNombreOficial().split(" ");
+			for (String palabra : palabras) {
+				filtros.add(palabra.trim());
+				whereSQL += "LOWER(dbo.Translate(" + attNombre + ", null, null))"
+						+ " LIKE LOWER(dbo.Translate('%' + ? + '%', null, null)) AND ";
+			}
+
+		}
+		if (filtro.getBloqueado() != null) {
+			filtros.add(filtro.getBloqueado());
+			whereSQL += attBloqueado + " = ? AND ";
+		}
+
+		// ==================================================================
+
+		whereSQL = whereSQL.trim();
+		if (whereSQL.length() > 0) {
+			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
+		} else {
+			whereSQL = null;
+		}
+
+		ArrayList<Bancos> lista = new ArrayList<Bancos>();
+
+		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, limit, offset,
+				filtros.toArray());
+
+		for (int i = 0; i < table.length; i++) {
 			Bancos item = new Bancos();
+			item.setNumero((Integer) table[i][0]);
+			item.setNombre((String) table[i][1]);
+			item.setNombreOficial((String) table[i][2]);
+			item.setBloqueado((Boolean) table[i][3]);
 
-			item.setNumero(i);
-			item.setNombre("Nombre " + i);
-			item.setNombreOficial("Nombre Oficial " + i);
-			item.setBloqueado(i % 2 == 0);
-
-			itemsMock.add(item);
+			lista.add(item);
 		}
 
-		return itemsMock;
+		return lista;
 	}
 
-	public List<Bancos> find(BancosFiltro filtro) {
-		return find(-1, -1, null, filtro);
+	public void deleteItem(Bancos item) throws Exception {
+
+		// CuentasDeFondos
+		// Personal
+		// Proveedores
+		// ValoresDeTerceros
+		// ValoresPropios
+
+		// ==================================================================
+		// CHECKs NULLs
+
+		if (item == null) {
+			throw new InsertNullException("Banco");
+		}
+		if (item.getNumero() == null) {
+			throw new NullFieldException("Numero");
+		}
+
+		// ==================================================================
+		// CHECKs FKs
+
+		Integer c = ifExistsCuentasDeFondos(item.getNumero());
+
+		if (c > 0) {
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Cuenta de Fondo");
+		}
+
+		c = ifExistsPersonal(item.getNumero());
+
+		if (c > 0) {
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Personal");
+		}
+
+		c = ifExistsProveedores(item.getNumero());
+
+		if (c > 0) {
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Proveedor");
+		}
+
+		c = ifExistsValoresDeTerceros(item.getNumero());
+
+		if (c > 0) {
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Valor de Tercero");
+		}
+
+		c = ifExistsValoresPropios(item.getNumero());
+
+		if (c > 0) {
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Valor Propio");
+		}
+
+		// ==================================================================
+
+		String attNumero = "CAST(BANCO AS INTEGER)";
+
+		String tableSQL = "Bancos";
+		String whereSQL = "";
+
+		ArrayList<Object> args = new ArrayList<Object>();
+
+		args.add(item.getNumero());
+		whereSQL += attNumero + " = ?";
+
+		BackendContext.get().delete(tableSQL, whereSQL, args.toArray());
+
 	}
 
-	public List<Bancos> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro) {
+	private Integer ifExistsCuentasDeFondos(Integer numero) throws Exception {
+		String tableSQL = "CuentasDeFondos";
 
-		ArrayList<Bancos> arrayList = new ArrayList<Bancos>();
-
-		for (Bancos item : itemsMock) {
-
-			boolean passesFilterNumero = (filtro.getNumero() == null || item.getNumero().equals(filtro.getNumero()));
-
-			boolean passesFilterNombre = false;
-
-			if (filtro.getNombre() != null) {
-
-				String[] palabras = filtro.getNombre().split(" ");
-
-				boolean passesFilter = false;
-
-				for (String palabra : palabras) {
-					passesFilter = item.getNombre().toLowerCase().contains(palabra.trim().toLowerCase());
-					if (passesFilter == false) {
-						break;
-					}
-				}
-
-				passesFilterNombre = passesFilter;
-			} else {
-				passesFilterNombre = true;
-			}
-
-			// boolean passesFilterNombre = (filtro.getNombre() == null
-			// ||
-			// item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
-			
-			boolean passesFilterNombreOficial = false;
-
-			if (filtro.getNombreOficial() != null) {
-
-				String[] palabras = filtro.getNombreOficial().split(" ");
-
-				boolean passesFilter = false;
-
-				for (String palabra : palabras) {
-					passesFilter = item.getNombreOficial().toLowerCase().contains(palabra.trim().toLowerCase());
-					if (passesFilter == false) {
-						break;
-					}
-				}
-
-				passesFilterNombreOficial = passesFilter;
-			} else {
-				passesFilterNombreOficial = true;
-			}
-
-//			boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null
-//					|| item.getNombreOficial().toLowerCase().contains(filtro.getNombreOficial().toLowerCase()));
-
-			boolean passesFilterBloqueado = (filtro.getBloqueado() == null || filtro.getBloqueado() == 0
-					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
-					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
-
-			if (passesFilterNumero && passesFilterNombre && passesFilterNombreOficial && passesFilterBloqueado) {
-				arrayList.add(item);
-			}
-		}
-
-		if (offset == -1 && limit == -1) {
-			return arrayList;
-		}
-
-		int end = offset + limit;
-		if (end > arrayList.size()) {
-			String msg = "* LIMIT = " + limit + ", OFFSET = " + offset + ", END = " + end + "\nFILTROS = " + filtro;
-			System.out.println("================================================================");
-			System.out.println(msg);
-			System.out.println("================================================================");
-			return arrayList.subList(0, arrayList.size());
-		}
-
-		String msg = "+ LIMIT = " + limit + ", OFFSET = " + offset + ", END = " + end + "\nFILTROS = " + filtro;
-		System.out.println("================================================================");
-		System.out.println(msg);
-		System.out.println("================================================================");
-
-		return arrayList.subList(offset, end);
+		return ifExists(tableSQL, numero);
 	}
 
-	public void deleteItem(Bancos item) {
-		try {
+	private Integer ifExistsPersonal(Integer numero) throws Exception {
+		String tableSQL = "Personal";
 
-			for (int i = 0; i < itemsMock.size(); i++) {
-				if (itemsMock.get(i).getNumero().equals(item.getNumero())) {
-					itemsMock.remove(i);
-					return;
-				}
-			}
+		return ifExists(tableSQL, numero);
+	}
 
-		} catch (Exception e) {
-			LogAndNotification.print(e);
+	private Integer ifExistsProveedores(Integer numero) throws Exception {
+		String tableSQL = "Proveedores";
+
+		return ifExists(tableSQL, numero);
+	}
+
+	private Integer ifExistsValoresDeTerceros(Integer numero) throws Exception {
+		String tableSQL = "ValoresDeTerceros";
+
+		return ifExists(tableSQL, numero);
+	}
+
+	private Integer ifExistsValoresPropios(Integer numero) throws Exception {
+		String tableSQL = "ValoresPropios";
+
+		return ifExists(tableSQL, numero);
+	}
+
+	private Integer ifExists(String tableSQL, Integer numero) throws Exception {
+		// ==================================================================
+		// MS SQL SERVER
+
+		
+		String attNumero = "CAST(BANCO AS INTEGER)";
+		if("Proveedores".equals(tableSQL)) {
+			attNumero = "CAST(BANCOTRANSF AS INTEGER)";
 		}
+
+		String attsSQL = "COUNT(" + attNumero + ") ";
+		String orderBySQL = null;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		if (attNumero != null) {
+			filtros.add(numero);
+			whereSQL += attNumero + " = ? AND ";
+		}
+
+		// ==================================================================
+
+		whereSQL = whereSQL.trim();
+		if (whereSQL.length() > 0) {
+			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
+		} else {
+			whereSQL = null;
+		}
+
+		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+				filtros.toArray());
+
+		return (Integer) table[0][0];
+
 	}
 
 }

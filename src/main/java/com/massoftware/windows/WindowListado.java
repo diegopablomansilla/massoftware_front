@@ -12,8 +12,10 @@ import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -30,6 +32,7 @@ public abstract class WindowListado extends Window {
 	public Grid itemsGRD;
 	protected Button agregarBTN;
 	protected Button modificarBTN;
+	protected Button copiarBTN;
 	protected Button eliminarBTN;
 
 	@SuppressWarnings("rawtypes")
@@ -81,10 +84,10 @@ public abstract class WindowListado extends Window {
 			itemsGRD.setEnabled(enabled);
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
+			copiarBTN.setEnabled(enabled);
 
-			
 		} catch (InvalidValueException e) {
-			LogAndNotification.print(e);			
+			LogAndNotification.print(e);
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
@@ -99,16 +102,20 @@ public abstract class WindowListado extends Window {
 		HorizontalLayout filaBotoneraHL = new HorizontalLayout();
 		filaBotoneraHL.setSpacing(true);
 
-		agregarBTN = buildButtonAgregar();
+		agregarBTN = UtilUI.buildButtonAgregar();
 		agregarBTN.addClickListener(e -> {
 			agregarBTNClick();
 		});
-		modificarBTN = buildButtonModificar();
+		modificarBTN = UtilUI.buildButtonModificar();
 		modificarBTN.addClickListener(e -> {
 			modificarBTNClick();
 		});
+		copiarBTN = UtilUI.buildButtonCopiar();
+		copiarBTN.addClickListener(e -> {
+			copiarBTNClick();
+		});
 
-		filaBotoneraHL.addComponents(agregarBTN, modificarBTN);
+		filaBotoneraHL.addComponents(agregarBTN, modificarBTN, copiarBTN);
 
 		return filaBotoneraHL;
 	}
@@ -118,7 +125,7 @@ public abstract class WindowListado extends Window {
 		HorizontalLayout filaBotonera2HL = new HorizontalLayout();
 		filaBotonera2HL.setSpacing(true);
 
-		eliminarBTN = buildButtonEliminar();
+		eliminarBTN = UtilUI.buildButtonEliminar();
 		eliminarBTN.addClickListener(e -> {
 			eliminarBTNClick();
 		});
@@ -141,7 +148,7 @@ public abstract class WindowListado extends Window {
 									if (yes) {
 										if (itemsGRD.getSelectedRow() != null) {
 
-											CuentasFondo item = (CuentasFondo) itemsGRD.getSelectedRow();
+											Object item = itemsGRD.getSelectedRow();
 
 											deleteItem(item);
 
@@ -163,7 +170,7 @@ public abstract class WindowListado extends Window {
 		}
 	}
 
-	abstract protected void deleteItem(Object item);
+	abstract protected void deleteItem(Object item) throws Exception;
 
 	protected void agregarBTNClick() {
 		try {
@@ -190,6 +197,24 @@ public abstract class WindowListado extends Window {
 				item.getNumero();
 
 				Window window = new Window("Modificar ítem " + item);
+				window.setModal(true);
+				window.center();
+				window.setWidth("400px");
+				window.setHeight("300px");
+				getUI().addWindow(window);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void copiarBTNClick() {
+		try {
+
+			if (itemsGRD.getSelectedRow() != null) {
+				itemsGRD.select(null);
+				Window window = new Window("Agregar ítem ");
 				window.setModal(true);
 				window.center();
 				window.setWidth("400px");
@@ -241,6 +266,18 @@ public abstract class WindowListado extends Window {
 
 		// --------------------------------------------------
 
+		this.addShortcutListener(new ShortcutListener("CTRL+C", KeyCode.C, new int[] { ModifierKey.CTRL }) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				copiarBTNClick();
+			}
+		});
+
+		// --------------------------------------------------
+
 		this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B, new int[] { ModifierKey.CTRL }) {
 
 			private static final long serialVersionUID = 1L;
@@ -248,6 +285,24 @@ public abstract class WindowListado extends Window {
 			@Override
 			public void handleAction(Object sender, Object target) {
 				eliminarBTNClick();
+			}
+		});
+
+		// --------------------------------------------------
+
+		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				if (target instanceof TextField && ((TextField) target).isEnabled()
+						&& ((TextField) target).isReadOnly() == false) {
+					((TextField) target).setValue(null);
+				} else if (target instanceof DateField && ((DateField) target).isEnabled()
+						&& ((DateField) target).isReadOnly() == false) {
+					((DateField) target).setValue(null);
+				}
 			}
 		});
 	}
@@ -264,59 +319,14 @@ public abstract class WindowListado extends Window {
 		// agregarBTN.addClickListener(e -> {
 		// // agregarBTNClick();
 		// });
-		
+
 		buscarBTN.addClickListener(e -> {
 			loadDataResetPaged();
 		});
 
 		return buscarBTN;
 	}
-	
-	private Button buildButtonAgregar() {
 
-		Button agregarBTN = new Button();
-		agregarBTN.addStyleName(ValoTheme.BUTTON_FRIENDLY);
-		agregarBTN.addStyleName(ValoTheme.BUTTON_TINY);
-		agregarBTN.setIcon(FontAwesome.PLUS);
-		agregarBTN.setCaption("Agregar");
-		agregarBTN.setDescription(agregarBTN.getCaption() + " (Ctrl+A)");
-		// agregarBTN.addClickListener(e -> {
-		// // agregarBTNClick();
-		// });
-
-		return agregarBTN;
-	}
-	
-	private Button buildButtonModificar() {
-
-		Button modificarBTN = new Button();
-		modificarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		modificarBTN.addStyleName(ValoTheme.BUTTON_TINY);
-		modificarBTN.setIcon(FontAwesome.PENCIL);
-		modificarBTN.setCaption("Modificar");
-		modificarBTN.setDescription(modificarBTN.getCaption() + " (Ctrl+M)");
-		// modificarBTN.addClickListener(e -> {
-		// // modificarBTNClick();
-		// });
-
-		return modificarBTN;
-	}
-	
-	private Button buildButtonEliminar() {
-
-		Button eliminarBTN = new Button();
-		eliminarBTN.addStyleName(ValoTheme.BUTTON_DANGER);
-		eliminarBTN.addStyleName(ValoTheme.BUTTON_TINY);
-		eliminarBTN.setIcon(FontAwesome.TRASH);
-		eliminarBTN.setCaption("Eliminar");
-
-		// eliminarBTN.addClickListener(e -> {
-		// // eliminarBTNClick();
-		// });
-
-		return eliminarBTN;
-	}
-	
 	protected Window confWinList(Window window, String label) {
 
 		window.setCaption(label);

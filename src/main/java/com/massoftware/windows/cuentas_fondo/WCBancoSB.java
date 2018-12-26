@@ -2,25 +2,23 @@ package com.massoftware.windows.cuentas_fondo;
 
 import java.util.List;
 
+import com.massoftware.Context;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.bancos.Bancos;
-import com.massoftware.windows.bancos.BancosBO;
 import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 
-class BancoSB extends SelectorBox {
+class WCBancoSB extends SelectorBox {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7587377265502188967L;
 
-	private BancosBO bancosBO = new BancosBO();
-
 	private WCuentasFondo window;
 
-	public BancoSB(WCuentasFondo window) throws Exception {
+	public WCBancoSB(WCuentasFondo window) throws Exception {
 		super(window.filterBI, "nombreBanco", "Banco", false);
 
 		this.window = window;
@@ -39,7 +37,8 @@ class BancoSB extends SelectorBox {
 	protected void blur() {
 		try {
 			window.filterBI.getBean().setNumeroBanco(null);
-			if (window.filterBI.getBean().getNombreBanco() != null && window.filterBI.getBean().getNombreBanco().length() > 0) {
+			if (window.filterBI.getBean().getNombreBanco() != null
+					&& window.filterBI.getBean().getNombreBanco().length() > 0) {
 				BancosFiltro bancosFiltro = new BancosFiltro();
 				Integer n = null;
 				try {
@@ -56,7 +55,7 @@ class BancoSB extends SelectorBox {
 					window.filterBI.getBean().setNumeroBanco(null);
 					bancosFiltro.setNombre(window.filterBI.getBean().getNombre());
 				}
-				List<Bancos> bancos = bancosBO.find(bancosFiltro);
+				List<Bancos> bancos = Context.getBancosBO().find(bancosFiltro);
 				if (bancos.size() == 1) {
 					window.filterBI.getBean().setNumeroBanco(bancos.get(0).getNumero());
 					window.filterBI.getBean().setNombreBanco(bancos.get(0).toString());

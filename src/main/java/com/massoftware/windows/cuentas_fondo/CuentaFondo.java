@@ -2,30 +2,30 @@ package com.massoftware.windows.cuentas_fondo;
 
 import com.massoftware.windows.UtilModel;
 
-public class CuentasFondo implements Comparable<CuentasFondo> {
+public class CuentaFondo implements Comparable<CuentaFondo> {
 
-	private Integer numeroRubro;
-	private Integer numeroGrupo;
+	private Rubro rubro;
+	private Grupo grupo;
 	private Integer numero;
 	private String nombre;
-	private String tipo;
+	private Tipo tipo;
 	private Integer numeroBanco;
 	private Boolean bloqueado;
 
-	public Integer getNumeroRubro() {
-		return numeroRubro;
+	public Rubro getRubro() {
+		return rubro;
 	}
 
-	public void setNumeroRubro(Integer numeroRubro) {
-		this.numeroRubro = numeroRubro;
+	public void setRubro(Rubro rubro) {
+		this.rubro = rubro;
 	}
 
-	public Integer getNumeroGrupo() {
-		return numeroGrupo;
+	public Grupo getGrupo() {
+		return grupo;
 	}
 
-	public void setNumeroGrupo(Integer numeroGrupo) {
-		this.numeroGrupo = numeroGrupo;
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
 	public Integer getNumero() {
@@ -44,12 +44,12 @@ public class CuentasFondo implements Comparable<CuentasFondo> {
 		this.nombre = UtilModel.format(nombre);
 	}
 
-	public String getTipo() {
+	public Tipo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = UtilModel.format(tipo);
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
 	}
 
 	public Integer getNumeroBanco() {
@@ -68,20 +68,22 @@ public class CuentasFondo implements Comparable<CuentasFondo> {
 		this.bloqueado = UtilModel.format(bloqueado);
 	}
 
-
 	@Override
 	public String toString() {
-		return "(" + numeroRubro + "-" + numeroGrupo + "-" + numero + ") "
-				+ numero;
+		return "(" + grupo.getRubro().getNumero() + "-" + grupo.getNumero() + "-" + numero + ") " + nombre;
 	}
-	
+
 	@Override
-	public CuentasFondo clone() throws CloneNotSupportedException {
-		
-		CuentasFondo o = new CuentasFondo();
-		
-		o.setNumeroRubro(this.getNumeroRubro());
-		o.setNumeroGrupo(this.getNumeroGrupo());
+	public CuentaFondo clone() throws CloneNotSupportedException {
+
+		CuentaFondo o = new CuentaFondo();
+
+		if (this.getRubro() != null) {
+			o.setRubro(this.getRubro().clone());
+		}
+		if (this.getGrupo() != null) {
+			o.setGrupo(this.getGrupo().clone());
+		}
 		o.setNumero(this.getNumero());
 		o.setNombre(this.getNombre());
 		o.setTipo(this.getTipo());
@@ -92,32 +94,30 @@ public class CuentasFondo implements Comparable<CuentasFondo> {
 	}
 
 	@Override
-	public int compareTo(CuentasFondo cuentasFondo) {
+	public int compareTo(CuentaFondo cuentasFondo) {
 
 		return this.getNumero().compareTo(cuentasFondo.getNumero());
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
-		if(obj == this) {
+		if (obj == this) {
 			return true;
 		}
-		if(obj instanceof CuentasFondo) {
-			CuentasFondo dto = (CuentasFondo) obj;
-			
-			if(this.getNumero() != null && dto.getNumero() != null) {
+		if (obj instanceof CuentaFondo) {
+			CuentaFondo dto = (CuentaFondo) obj;
+
+			if (this.getNumero() != null && dto.getNumero() != null) {
 				return this.getNumero().equals(dto.getNumero());
 			}
-			
+
 			return false;
 		}
-		
+
 		return false;
 	}
-	
-	
 
 }

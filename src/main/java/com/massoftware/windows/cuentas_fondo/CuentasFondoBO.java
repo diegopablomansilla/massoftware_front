@@ -9,6 +9,7 @@ import com.massoftware.windows.LogAndNotification;
 class CuentasFondoBO {
 
 	List<CuentasFondo> itemsMock = mockData();
+	List<Rubros> itemsRubroMock = mockDataRubro();
 
 	private List<CuentasFondo> mockData() {
 
@@ -25,6 +26,23 @@ class CuentasFondoBO {
 			item.setTipo("Tipo " + i);
 			item.setNumeroBanco(i);
 			item.setBloqueado(i % 2 == 0);
+
+			itemsMock.add(item);
+		}
+
+		return itemsMock;
+	}
+
+	private List<Rubros> mockDataRubro() {
+
+		List<Rubros> itemsMock = new ArrayList<Rubros>();
+
+		for (int i = 0; i < Short.MAX_VALUE; i++) {
+
+			Rubros item = new Rubros();
+
+			item.setNumero(i);
+			item.setNombre("Nombre " + i);
 
 			itemsMock.add(item);
 		}
@@ -75,7 +93,7 @@ class CuentasFondoBO {
 			System.out.println("================================================================");
 			return arrayList.subList(0, arrayList.size());
 		}
-		
+
 		String msg = "+ LIMIT = " + limit + ", OFFSET = " + offset + ", END = " + end + "\nFILTROS = " + filtro;
 		System.out.println("================================================================");
 		System.out.println(msg);

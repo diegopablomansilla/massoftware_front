@@ -12,6 +12,8 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
+import com.massoftware.windows.banco.BancoFiltro;
+import com.massoftware.windows.banco.WBanco;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -32,7 +34,7 @@ public class WBancos extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	private BancosBO bancosBO = new BancosBO();
+	private BancosBO bo;
 
 	// -------------------------------------------------------------
 
@@ -45,7 +47,7 @@ public class WBancos extends WindowListado {
 	private TextFieldBox nombreTB;
 	private TextFieldBox nombreOficialTB;
 	private OptionGroup bloqueadoOG;
-	
+
 	public Button seleccionarBTN;
 
 	// -------------------------------------------------------------
@@ -65,6 +67,8 @@ public class WBancos extends WindowListado {
 	public void init(BancosFiltro filtro) {
 
 		try {
+
+			bo = new BancosBO();
 
 			// =======================================================
 			// LAYOUT CONTROLs
@@ -139,6 +143,21 @@ public class WBancos extends WindowListado {
 		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
 				UtilUI.CONTAINS_WORDS_AND);
 
+		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
+		// int[] {}) {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// @Override
+		// public void handleAction(Object sender, Object target) {
+		//
+		// if (target instanceof TextField && ((TextField)
+		// target).getCaption().equals(nombreTB.getCaption())) {
+		// loadDataResetPaged();
+		// }
+		// }
+		// });
+
 		nombreOficialTB = new TextFieldBox(this, filterBI, "nombreOficial", "Nombre oficial", false, 20, -1, 40, false,
 				false, null, false, UtilUI.CONTAINS_WORDS_AND);
 
@@ -178,7 +197,7 @@ public class WBancos extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-//		itemsGRD.setWidth("100%");
+		// itemsGRD.setWidth("100%");
 		itemsGRD.setWidth(35f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
@@ -273,6 +292,63 @@ public class WBancos extends WindowListado {
 		}
 	}
 
+	protected void agregarBTNClick() {
+		try {
+
+			itemsGRD.select(null);
+			WBanco window = new WBanco();
+			window.setModal(true);
+			window.center();
+			window.setWindowListado(this);
+			getUI().addWindow(window);
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void modificarBTNClick() {
+		try {
+
+			if (itemsGRD.getSelectedRow() != null) {
+
+				Bancos item = (Bancos) itemsGRD.getSelectedRow();
+				BancoFiltro filtro = new BancoFiltro();
+				filtro.setNumero(item.getNumero());
+
+				WBanco window = new WBanco(WBanco.UPDATE_MODE, filtro);
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void copiarBTNClick() {
+		try {
+
+			if (itemsGRD.getSelectedRow() != null) {
+
+				Bancos item = (Bancos) itemsGRD.getSelectedRow();
+				BancoFiltro filtro = new BancoFiltro();
+				filtro.setNumero(item.getNumero());
+
+				WBanco window = new WBanco(WBanco.COPY_MODE, filtro);
+				window.setModal(true);
+				window.center();
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
@@ -288,7 +364,9 @@ public class WBancos extends WindowListado {
 						sortOrder.getDirection().toString().equals("ASCENDING"));
 			}
 
-			return bancosBO.find(limit, offset, orderBy, this.filterBI.getBean());
+			// return Context.getBancosBO().find(limit, offset, orderBy,
+			// this.filterBI.getBean());
+			return bo.find(limit, offset, orderBy, this.filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -298,14 +376,10 @@ public class WBancos extends WindowListado {
 	}
 
 	// metodo que realiza el delete en la base de datos
-	protected void deleteItem(Object item) {
-		try {
+	protected void deleteItem(Object item) throws Exception {
 
-			// bancosBO.deleteItem((Bancos) item);
+		bo.deleteItem((Bancos) item);
 
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
 	}
 
 	// =================================================================================

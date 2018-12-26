@@ -1,10 +1,9 @@
 package com.massoftware.windows.cuentas_fondo;
 
-class GruposFiltro {
+class GrupoFiltro {
 
 	private Integer numeroRubro;
 	private Integer numero;
-	private String nombre;
 
 	public Integer getNumeroRubro() {
 		return numeroRubro;
@@ -22,17 +21,9 @@ class GruposFiltro {
 		this.numero = numero;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	@Override
 	public String toString() {
-		return "GruposFiltro [numeroRubro=" + numeroRubro + ", numero=" + numero + ", nombre=" + nombre + "]";
+		return "GrupoFiltro [numeroRubro=" + numeroRubro + ", numero=" + numero + "]";
 	}
 
 }
