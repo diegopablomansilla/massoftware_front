@@ -173,5 +173,23 @@ public abstract class WindowForm extends Window {
 	abstract protected Object insert() throws Exception;
 
 	abstract protected Object update() throws Exception;
+	
+	protected Window confWinForm(String label) {
+
+		this.setCaption(label);
+		this.setImmediate(true);
+		// window.setWidth("-1px");
+		// window.setHeight("-1px");
+		this.setWidthUndefined();
+		this.setHeightUndefined();
+		this.setClosable(true);
+		this.setResizable(false);
+		this.setModal(true);
+		this.center();
+		// window.setContent((Component) this);
+		// getUI().addWindow(window);
+
+		return this;
+	}
 
 }

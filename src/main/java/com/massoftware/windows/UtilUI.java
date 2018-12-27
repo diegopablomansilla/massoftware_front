@@ -32,6 +32,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
@@ -274,7 +275,7 @@ public class UtilUI {
 
 		return btn;
 	}
-	
+
 	public static Button buildButtonModificar() {
 
 		Button modificarBTN = new Button();
@@ -293,7 +294,7 @@ public class UtilUI {
 	public static Button buildButtonCopiar() {
 
 		Button modificarBTN = new Button();
-//		modificarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		// modificarBTN.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		modificarBTN.addStyleName(ValoTheme.BUTTON_TINY);
 		modificarBTN.setIcon(FontAwesome.COPY);
 		modificarBTN.setCaption("Copiar");
@@ -352,6 +353,7 @@ public class UtilUI {
 		return window;
 	}
 
+	@Deprecated
 	public static Window confWinForm(Window window, String label) {
 
 		window.setCaption(label);
@@ -610,7 +612,7 @@ public class UtilUI {
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
 				1, Short.MAX_VALUE);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int minLength, boolean required) {
@@ -624,7 +626,7 @@ public class UtilUI {
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
 				1, Integer.MAX_VALUE);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTTinyintPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int minLength, boolean required) {
@@ -635,8 +637,8 @@ public class UtilUI {
 			minLength = 1;
 		}
 
-		return buildTXTInteger(dtoBI, attName, label, readOnly, 6, minLength, length, required, false, null, false,
-				1, 255);
+		return buildTXTInteger(dtoBI, attName, label, readOnly, 6, minLength, length, required, false, null, false, 1,
+				255);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -745,6 +747,7 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Deprecated
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attName, String label, String label2,
 			boolean readOnly, boolean required) {
 
@@ -809,6 +812,7 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
+	@Deprecated
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attNameCode, String attName, String label,
 			String label2, boolean required) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
@@ -817,6 +821,7 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
+	@Deprecated
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attNameCode, String attName, String label,
 			String label2, boolean required, String label3, boolean onlyBtn)
 			throws SecurityException, ClassNotFoundException, NoSuchFieldException {
@@ -914,6 +919,7 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
+	@Deprecated
 	public static HorizontalLayout buildSearchBox(BeanItem dtoBI, String attName, String label, boolean required,
 			String label2) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
@@ -1103,28 +1109,25 @@ public class UtilUI {
 		return cb;
 
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, 
-			String label, String attName1, String caption, float widthEM, boolean readOnly, boolean required, boolean textInputAllowed, 
-			Class clazz, List options) throws Exception {
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, String label, String attName1, String caption,
+			float widthEM, boolean readOnly, boolean required, boolean textInputAllowed, Class clazz, List options)
+			throws Exception {
 
 		ComboBox cb = buildCB();
 
 		cb.setCaption(label);
 
-		cb.setRequiredError("El campo '" + label
-				+ "' es requerido. Es decir no debe estar vacio.");
-		
+		cb.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 
-		
 		cb.setRequired(required);
 		if (cb.isRequired()) {
-			
+
 			cb.setNullSelectionAllowed(false);
-			
+
 		}
-		 cb.setTextInputAllowed(textInputAllowed);
+		cb.setTextInputAllowed(textInputAllowed);
 
 		// ----------------
 
@@ -1132,43 +1135,35 @@ public class UtilUI {
 		// BeanItemContainer<clazz>(
 		// clazz, new ArrayList<clazz>());
 
-		BeanItemContainer optionsBIC = new BeanItemContainer(clazz,
-				new ArrayList());
+		BeanItemContainer optionsBIC = new BeanItemContainer(clazz, new ArrayList());
 		// optionsBIC.removeAllItems();
 		for (Object option : options) {
 			optionsBIC.addBean(option);
 		}
-		
-		if(widthEM> 0) {
+
+		if (widthEM > 0) {
 			cb.setWidth(widthEM, Unit.EM);
 		}
-		
-		cb.setContainerDataSource(optionsBIC);
-		
 
-		
-		if(!caption.isEmpty()) {
+		cb.setContainerDataSource(optionsBIC);
+
+		if (!caption.isEmpty()) {
 			cb.setItemCaptionPropertyId(caption);
 		}
-		
-	
 
 		if (cb.isRequired() && optionsBIC.size() > 0) {
 			cb.setValue(optionsBIC.getIdByIndex(0));
 
 		}
-		
+
 		cb.setPropertyDataSource(dtoBI.getItemProperty(attName1));
-		
+
 		// ----------------
 
-
-		
 		cb.setReadOnly(readOnly);
 
 		return cb;
 	}
-
 
 	public static OptionGroup buildOG() {
 		OptionGroup og = new OptionGroup();
@@ -1381,6 +1376,19 @@ public class UtilUI {
 		df.setImmediate(true);
 
 		return df;
+	}
+
+	public static Label buildLbl(String label, float widthEM) {
+		Label lbl = new Label();
+
+		lbl.setCaption(label);
+
+		if (widthEM > 0) {
+			lbl.setWidth(widthEM, Unit.EM);
+		}
+
+		return lbl;
+
 	}
 
 	@SuppressWarnings("rawtypes")

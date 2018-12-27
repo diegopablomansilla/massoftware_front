@@ -55,7 +55,7 @@ class WCBancoSB extends SelectorBox {
 					window.filterBI.getBean().setNumeroBanco(null);
 					bancosFiltro.setNombre(window.filterBI.getBean().getNombre());
 				}
-				List<Bancos> bancos = Context.getBancosBO().find(bancosFiltro);
+				List<Bancos> bancos = null;//Context.getBancosBO().find(bancosFiltro);777
 				if (bancos.size() == 1) {
 					window.filterBI.getBean().setNumeroBanco(bancos.get(0).getNumero());
 					window.filterBI.getBean().setNombreBanco(bancos.get(0).toString());

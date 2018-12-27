@@ -31,9 +31,20 @@ public class EliminarDialog extends Window implements Button.ClickListener {
 		no.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		no.addStyleName(ValoTheme.BUTTON_TINY);
 		
-		no.focus();
-
-		UtilUI.confWinList(this, "Eliminar item");
+		no.focus();		
+		
+		this.setCaption("Eliminar item");
+		this.setImmediate(true);
+		// window.setWidth("-1px");
+		// window.setHeight("-1px");
+		this.setWidthUndefined();
+		this.setHeightUndefined();
+		this.setClosable(true);
+		this.setResizable(false);
+		this.setModal(false);
+		this.center();
+		
+		
 		setModal(true);
 		VerticalLayout content = UtilUI.buildWinContentVertical();
 

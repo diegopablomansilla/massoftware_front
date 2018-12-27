@@ -117,7 +117,7 @@ public class WBanco extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		UtilUI.confWinForm(this, "Banco");
+		confWinForm("Banco");
 		this.setWidth(31f, Unit.EM);
 
 		// =======================================================

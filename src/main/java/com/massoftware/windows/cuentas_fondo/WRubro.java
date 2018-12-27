@@ -96,7 +96,7 @@ public class WRubro extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		UtilUI.confWinForm(this, "Rubro");
+		confWinForm("Rubro");
 		// this.setWidth(31f, Unit.EM);
 
 		// =======================================================

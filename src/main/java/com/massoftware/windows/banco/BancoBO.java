@@ -9,9 +9,10 @@ import org.cendra.ex.crud.UniqueException;
 
 import com.massoftware.BackendContext;
 
-class BancoBO {
+public class BancoBO {
 
 	public Banco find(BancoFiltro filtro) throws Exception {
+		
 		// ==================================================================
 		// MS SQL SERVER
 
@@ -53,7 +54,9 @@ class BancoBO {
 				filtros.toArray());
 
 		if (table.length == 1) {
+			
 			Banco item = new Banco();
+			
 			item.setNumero((Integer) table[0][0]);
 			item.setNombre((String) table[0][1]);
 			item.setNombreOficial((String) table[0][2]);

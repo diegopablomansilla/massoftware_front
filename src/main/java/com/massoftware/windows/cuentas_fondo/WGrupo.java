@@ -123,7 +123,7 @@ class WGrupo extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		UtilUI.confWinForm(this, "Grupo");
+		confWinForm("Grupo");
 		// this.setWidth(31f, Unit.EM);
 
 		// =======================================================
