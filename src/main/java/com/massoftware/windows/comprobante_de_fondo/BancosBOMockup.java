@@ -1,8 +1,11 @@
-package com.massoftware.windows.bancos;
+package com.massoftware.windows.comprobante_de_fondo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.massoftware.windows.bancos.Bancos;
+import com.massoftware.windows.bancos.BancosFiltro;
 
 class BancosBOMockup implements IBancosBO {
 
