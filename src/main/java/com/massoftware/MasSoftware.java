@@ -2,6 +2,7 @@ package com.massoftware;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.massoftware.backend.BackendContext;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;

@@ -1,8 +1,8 @@
-package com.massoftware.windows.cuentas_fondo;
+package com.massoftware.windows.cuentas_fondo.rubros;
 
 import com.massoftware.windows.UtilModel;
 
-class Rubros implements Comparable<Rubros> {
+public class Rubros implements Comparable<Rubros> {
 
 	private Integer numero;
 	private String nombre;

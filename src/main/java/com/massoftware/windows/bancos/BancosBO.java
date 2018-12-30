@@ -8,7 +8,7 @@ import org.cendra.ex.crud.DeleteForeingObjectConflictException;
 import org.cendra.ex.crud.InsertNullException;
 import org.cendra.ex.crud.NullFieldException;
 
-import com.massoftware.BackendContext;
+import com.massoftware.backend.BackendContext;
 
 class BancosBO {
 
@@ -18,13 +18,13 @@ class BancosBO {
 		// ==================================================================
 		// MS SQL SERVER
 
-		String attNumero = "CAST(A.BANCO AS INTEGER)";
-		String attNombre = "LTRIM(RTRIM(CAST(A.NOMBRE AS VARCHAR)))";
-		String attNombreOficial = "LTRIM(RTRIM(CAST(A.NOMBRECOMPLETO AS VARCHAR)))";
-		String attBloqueado = "CAST(A.BLOQUEADO AS BIT)";
+		String attId = "id";
+		String attNumero = "numero";
+		String attNombre = "nombre";
+		String attBloqueado = "bloqueado";
 
-		String tableSQL = "Bancos A";
-		String attsSQL = attNumero + ", " + attNombre + ", " + attNombreOficial + ", " + attBloqueado;
+		String tableSQL = "Banco";
+		String attsSQL = attId + ", " + attNumero + ", " +attNombre + ", " + attBloqueado;
 		String orderBySQL = attNumero;
 		String whereSQL = "";
 
@@ -37,24 +37,22 @@ class BancosBO {
 		if (filtro.getNombre() != null) {
 			String[] palabras = filtro.getNombre().split(" ");
 			for (String palabra : palabras) {
-				filtros.add(palabra.trim());
-				whereSQL += "LOWER(dbo.Translate(" + attNombre + ", null, null))"
-						+ " LIKE LOWER(dbo.Translate('%' + ? + '%', null, null)) AND ";
+				filtros.add(palabra.trim());								
+				whereSQL += "TRIM(massoftware.TRASLATE(" + attNombre + ")))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRASLATE(?))) || '%')::VARCHAR AND ";
 			}
 		}
 		if (filtro.getNombreOficial() != null) {
 			String[] palabras = filtro.getNombreOficial().split(" ");
 			for (String palabra : palabras) {
-				filtros.add(palabra.trim());
-				whereSQL += "LOWER(dbo.Translate(" + attNombre + ", null, null))"
-						+ " LIKE LOWER(dbo.Translate('%' + ? + '%', null, null)) AND ";
+				filtros.add(palabra.trim());				
+				whereSQL += "TRIM(massoftware.TRASLATE(" + attNombre + ")))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRASLATE(?))) || '%')::VARCHAR AND ";
 			}
 
 		}
-		if (filtro.getBloqueado() != null) {
-			filtros.add(filtro.getBloqueado());
-			whereSQL += attBloqueado + " = ? AND ";
-		}
+//		if (filtro.getBloqueado() != null) {
+//			filtros.add(filtro.getBloqueado());
+//			whereSQL += attBloqueado + " = ? AND ";
+//		}
 
 		// ==================================================================
 
@@ -72,9 +70,9 @@ class BancosBO {
 
 		for (int i = 0; i < table.length; i++) {
 			Bancos item = new Bancos();
-			item.setNumero((Integer) table[i][0]);
-			item.setNombre((String) table[i][1]);
-			item.setNombreOficial((String) table[i][2]);
+			item.setId((String) table[i][0]);
+			item.setNumero((Integer) table[i][1]);
+			item.setNombre((String) table[i][2]);			
 			item.setBloqueado((Boolean) table[i][3]);
 
 			lista.add(item);
@@ -184,9 +182,8 @@ class BancosBO {
 		// ==================================================================
 		// MS SQL SERVER
 
-		
 		String attNumero = "CAST(BANCO AS INTEGER)";
-		if("Proveedores".equals(tableSQL)) {
+		if ("Proveedores".equals(tableSQL)) {
 			attNumero = "CAST(BANCOTRANSF AS INTEGER)";
 		}
 

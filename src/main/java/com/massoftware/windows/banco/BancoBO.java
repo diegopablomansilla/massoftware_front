@@ -7,7 +7,7 @@ import org.cendra.ex.crud.InsertNullException;
 import org.cendra.ex.crud.NullFieldException;
 import org.cendra.ex.crud.UniqueException;
 
-import com.massoftware.BackendContext;
+import com.massoftware.backend.BackendContext;
 
 public class BancoBO {
 

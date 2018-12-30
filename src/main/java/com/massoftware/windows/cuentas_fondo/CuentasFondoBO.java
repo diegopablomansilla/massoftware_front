@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.cuentas_fondo.rubros.Rubros;
 
 class CuentasFondoBO {
 

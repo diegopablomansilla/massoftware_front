@@ -3,7 +3,9 @@ package com.massoftware.windows.cuentas_fondo;
 import java.util.List;
 import java.util.Map;
 
-public interface RubrosBO {
+import com.massoftware.windows.cuentas_fondo.rubros.Rubros;
+
+public interface IRubrosBO {
 
 	public Rubro find(RubroFiltro filtro) throws Exception;
 

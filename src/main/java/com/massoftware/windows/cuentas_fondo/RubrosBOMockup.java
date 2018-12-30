@@ -9,7 +9,9 @@ import org.cendra.ex.crud.InsertNullException;
 import org.cendra.ex.crud.NullFieldException;
 import org.cendra.ex.crud.UniqueException;
 
-public class RubrosBOMockup implements RubrosBO {
+import com.massoftware.windows.cuentas_fondo.rubros.Rubros;
+
+public class RubrosBOMockup implements IRubrosBO {
 
 	private List<Rubros> itemsMock;
 	private List<Rubro> items2Mock;

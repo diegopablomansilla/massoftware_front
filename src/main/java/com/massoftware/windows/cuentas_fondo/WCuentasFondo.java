@@ -15,6 +15,7 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
+import com.massoftware.windows.cuentas_fondo.rubros.Rubros;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;

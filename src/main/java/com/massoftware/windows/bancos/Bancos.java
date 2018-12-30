@@ -4,10 +4,18 @@ import com.massoftware.windows.UtilModel;
 
 public class Bancos implements Comparable<Bancos> {
 
+	private String id;
 	private Integer numero;
 	private String nombre;
-	private String nombreOficial;
 	private Boolean bloqueado;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public Integer getNumero() {
 		return numero;
@@ -23,14 +31,6 @@ public class Bancos implements Comparable<Bancos> {
 
 	public void setNombre(String nombre) {
 		this.nombre = UtilModel.format(nombre);
-	}
-
-	public String getNombreOficial() {
-		return nombreOficial;
-	}
-
-	public void setNombreOficial(String nombreOficial) {
-		this.nombreOficial = UtilModel.format(nombreOficial);
 	}
 
 	public Boolean getBloqueado() {
@@ -49,9 +49,9 @@ public class Bancos implements Comparable<Bancos> {
 	@Override
 	public Bancos clone() throws CloneNotSupportedException {
 		Bancos o = new Bancos();
+		o.setId(this.getId());
 		o.setNumero(this.getNumero());
 		o.setNombre(this.getNombre());
-		o.setNombreOficial(this.getNombreOficial());
 		o.setBloqueado(this.getBloqueado());
 
 		return o;

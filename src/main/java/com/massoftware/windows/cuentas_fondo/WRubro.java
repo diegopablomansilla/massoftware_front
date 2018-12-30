@@ -74,7 +74,7 @@ public class WRubro extends WindowForm {
 			// =======================================================
 			// CARGA DE DATOS
 
-			loadData(filterBI.getBean());
+//			loadData(filterBI.getBean());//777
 
 			// =======================================================
 			// ACTUALIZAR TITULO

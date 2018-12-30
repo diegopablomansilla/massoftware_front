@@ -26,8 +26,7 @@ class BancosBOMockup implements IBancosBO {
 			Bancos item = new Bancos();
 
 			item.setNumero(i);
-			item.setNombre("Nombre " + i);
-			item.setNombreOficial("Nombre Oficial " + i);
+			item.setNombre("Nombre " + i);			
 			item.setBloqueado(i % 2 == 0);
 
 			itemsMock.add(item);
@@ -113,25 +112,9 @@ class BancosBOMockup implements IBancosBO {
 			// ||
 			// item.getNombre().toLowerCase().contains(filtro.getNombre().toLowerCase()));
 
-			boolean passesFilterNombreOficial = false;
+			
 
-			if (filtro.getNombreOficial() != null) {
-
-				String[] palabras = filtro.getNombreOficial().split(" ");
-
-				boolean passesFilter = false;
-
-				for (String palabra : palabras) {
-					passesFilter = item.getNombreOficial().toLowerCase().contains(palabra.trim().toLowerCase());
-					if (passesFilter == false) {
-						break;
-					}
-				}
-
-				passesFilterNombreOficial = passesFilter;
-			} else {
-				passesFilterNombreOficial = true;
-			}
+			
 
 			// boolean passesFilterNombreOficial = (filtro.getNombreOficial() == null
 			// ||
@@ -141,7 +124,7 @@ class BancosBOMockup implements IBancosBO {
 					|| (item.getBloqueado().equals(true) && filtro.getBloqueado().equals(1))
 					|| (item.getBloqueado().equals(false) && filtro.getBloqueado().equals(2)));
 
-			if (passesFilterNumero && passesFilterNombre && passesFilterNombreOficial && passesFilterBloqueado) {
+			if (passesFilterNumero && passesFilterNombre && passesFilterBloqueado) {
 				arrayList.add(item);
 			}
 		}

@@ -17,6 +17,10 @@ public abstract class WindowForm extends Window {
 	private static final long serialVersionUID = -9181246374126971713L;
 
 	// -------------------------------------------------------------
+	
+	protected String id;
+	
+	// -------------------------------------------------------------
 
 	public final static String INSERT_MODE = "INSERT_MODE";
 	public final static String UPDATE_MODE = "UPDATE_MODE";
@@ -98,7 +102,7 @@ public abstract class WindowForm extends Window {
 
 	// -------------------------------------------------------------
 
-	protected void loadData(Object filtro) {
+	protected void loadData(String id) {
 		
 		
 		
@@ -117,7 +121,7 @@ public abstract class WindowForm extends Window {
 					}
 				} else {
 					LogAndNotification.printError("No se encontro el item",
-							"Se intento buscar un item en base a los siguientes parámetros de búsqueda, " + filtro);
+							"Se intento buscar un item en base a los siguientes parámetros de búsqueda, " + id);
 				}
 				
 
