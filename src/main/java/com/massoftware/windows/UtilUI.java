@@ -594,7 +594,7 @@ public class UtilUI {
 
 		txt.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
-		txt.setReadOnly(readOnly);
+		txt.setReadOnly(readOnly);				
 
 		return txt;
 	}

@@ -1,6 +1,7 @@
 package com.massoftware.windows.cuentas_fondo;
 
 import com.massoftware.Context;
+import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -231,19 +232,19 @@ public class WRubro extends WindowForm {
 	}
 
 	// metodo que realiza la consulta a la base de datos
-	protected Rubro queryData() {
-		try {
-
-			Rubro item = Context.getRubrosBO().find(this.filterBI.getBean());
-
-			return item;
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new Rubro();
-	}
+//	protected Rubro queryData() {
+//		try {
+//
+//			Rubro item = Context.getRubrosBO().find(this.filterBI.getBean());
+//
+//			return item;
+//
+//		} catch (Exception e) {
+//			LogAndNotification.print(e);
+//		}
+//
+//		return new Rubro();
+//	}
 
 	protected Object insert() throws Exception {
 
@@ -278,6 +279,24 @@ public class WRubro extends WindowForm {
 			LogAndNotification.print(e);
 			return null;
 		}
+	}
+
+	@Override
+	protected void setBean(EntityId obj) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected EntityId getBean() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected EntityId queryData() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	// =================================================================================

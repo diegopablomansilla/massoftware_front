@@ -156,10 +156,10 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 	public String insert() throws Exception {
 
-		if(this.getId() == null || this.getId().trim().length() == 0) {
-			this.setId(UUID.randomUUID().toString());			
+		if (this.getId() == null || this.getId().trim().length() == 0) {
+			this.setId(UUID.randomUUID().toString());
 		}
-		
+
 		Field[] fields = getClass().getDeclaredFields();
 
 		String[] nameAtts = new String[fields.length];
@@ -186,7 +186,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 					args[i] = String.class;
 				}
 			}
-		}		
+		}
 
 		BackendContext.get().insert(getClass().getSimpleName(), nameAtts, args);
 
@@ -231,6 +231,10 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	}
 
 	public void checkUnique(String attName, String label, boolean ignoreOriginal) throws Exception {
+		checkUnique(null, attName, label, ignoreOriginal);
+	}
+
+	public void checkUnique(Object value, String attName, String label, boolean ignoreOriginal) throws Exception {
 
 		Object valueOriginal = null;
 
@@ -244,11 +248,15 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 		}
 
-		Field field = this.getClass().getDeclaredField(attName);
+		if (value == null) {
+			
+			Field field = this.getClass().getDeclaredField(attName);
 
-		Method methodGet = this.getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+			Method methodGet = this.getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
 
-		Object value = methodGet.invoke(this);
+			value = methodGet.invoke(this);
+
+		}
 
 		if (value != null) {
 			BackendContext.get().checkUnique(this, attName, label, valueOriginal, value);
@@ -267,6 +275,12 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		if (value == null) {
 			throw new NullFieldException(attName);
 		}
+	}
+
+	public Object maxValue(String attName) throws Exception {
+
+		return BackendContext.get().maxValueInteger(attName, this.getClass().getSimpleName());
+
 	}
 
 }

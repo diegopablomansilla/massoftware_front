@@ -136,5 +136,41 @@ public class Banco extends EntityId {
 				+ ", fecha=" + fecha + ", descripcion=" + descripcion + ", referencia1=" + referencia1 + ", importe="
 				+ importe + ", referencia2=" + referencia2 + ", saldo=" + saldo + "]";
 	}
+	
+//	private boolean check(Banco itemOriginal, Banco item) throws Exception {
+//
+//		// ==================================================================
+//		// CHECKs NULLs
+//
+//		
+//		if (item.getNumero() == null) {
+//			throw new NullFieldException("Numero");
+//		}
+//		if (item.getNombre() == null) {
+//			throw new NullFieldException("Nombre");
+//		}		
+//		if (item.getCuit() == null) {
+//			throw new NullFieldException("CUIT");
+//		}
+//
+//		// ==================================================================
+//		// CHECKs UNIQUE
+//
+////		if (itemOriginal != null) {
+////			checkUniqueNumero("Numero", itemOriginal.getNumero(), item.getNumero());
+////			checkUniqueNombre("Nombre", itemOriginal.getNombre(), item.getNombre());
+////			checkUniqueNombreOficial("Nombre oficial", itemOriginal.getNombreOficial(), item.getNombreOficial());
+////			checkUniqueCuit("CUIT", itemOriginal.getCuit(), item.getCuit());
+////		} else {
+////			checkUniqueNumero("Numero", null, item.getNumero());
+////			checkUniqueNombre("Nombre", null, item.getNombre());
+////			checkUniqueNombreOficial("Nombre oficial", null, item.getNombreOficial());
+////			checkUniqueCuit("CUIT", null, item.getCuit());
+////		}
+//
+//		// ==================================================================
+//
+//		return true;
+//	}
 
 }

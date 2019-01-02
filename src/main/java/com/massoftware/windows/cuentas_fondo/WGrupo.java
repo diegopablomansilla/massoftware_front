@@ -3,6 +3,7 @@ package com.massoftware.windows.cuentas_fondo;
 import java.util.List;
 
 import com.massoftware.Context;
+import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -270,19 +271,19 @@ class WGrupo extends WindowForm {
 	}
 
 	// metodo que realiza la consulta a la base de datos
-	protected Grupo queryData() {
-		try {
-
-			Grupo item = Context.getGruposBO().find(this.filterBI.getBean());
-
-			return item;
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new Grupo();
-	}
+//	protected Grupo queryData() {
+//		try {
+//
+//			Grupo item = Context.getGruposBO().find(this.filterBI.getBean());
+//
+//			return item;
+//
+//		} catch (Exception e) {
+//			LogAndNotification.print(e);
+//		}
+//
+//		return new Grupo();
+//	}
 
 	protected Object insert() throws Exception {
 
@@ -318,6 +319,24 @@ class WGrupo extends WindowForm {
 			LogAndNotification.print(e);
 			return null;
 		}
+	}
+
+	@Override
+	protected EntityId queryData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void setBean(EntityId obj) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected EntityId getBean() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	// =================================================================================

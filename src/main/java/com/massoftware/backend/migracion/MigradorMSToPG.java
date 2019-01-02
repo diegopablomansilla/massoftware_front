@@ -1,8 +1,8 @@
-package com.massoftware.backend;
+package com.massoftware.backend.migracion;
 
+import com.massoftware.backend.BackendContextMS;
 import com.massoftware.model.Banco;
 import com.massoftware.model.Grupo;
-import com.massoftware.model.Localidad;
 import com.massoftware.model.Rubro;
 
 public class MigradorMSToPG {

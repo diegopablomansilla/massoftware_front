@@ -286,7 +286,7 @@ public class BackendContext extends AbstractContext {
 
 	public synchronized Integer maxValueInteger(String attName, String tableName) throws Exception {
 
-		String sql = "SELECT MAX(" + attName + ") + 1 FROM " + tableName;
+		String sql = "SELECT MAX(" + attName + ") + 1 FROM massoftware." + tableName;
 
 		ConnectionWrapper connectionWrapper = dataSourceWrapper.getConnectionWrapper();
 

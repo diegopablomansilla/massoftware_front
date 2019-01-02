@@ -12,8 +12,7 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.banco.BancoFiltro;
-import com.massoftware.windows.banco2.WBanco;
+import com.massoftware.windows.banco.WBanco;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -204,7 +203,7 @@ public class WBancos extends WindowListado {
 		itemsGRD.setColumns(new Object[] { "numero", "nombre", "bloqueado" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);		
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
 		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, -1);
 
 		itemsGRD.setContainerDataSource(getItemsBIC());
@@ -312,8 +311,6 @@ public class WBancos extends WindowListado {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				Bancos item = (Bancos) itemsGRD.getSelectedRow();
-				BancoFiltro filtro = new BancoFiltro();
-				filtro.setNumero(item.getNumero());
 
 				WBanco window = new WBanco(WBanco.UPDATE_MODE, item.getId());
 				window.setModal(true);
@@ -333,8 +330,6 @@ public class WBancos extends WindowListado {
 			if (itemsGRD.getSelectedRow() != null) {
 
 				Bancos item = (Bancos) itemsGRD.getSelectedRow();
-				BancoFiltro filtro = new BancoFiltro();
-				filtro.setNumero(item.getNumero());
 
 				WBanco window = new WBanco(WBanco.COPY_MODE, item.getId());
 				window.setModal(true);

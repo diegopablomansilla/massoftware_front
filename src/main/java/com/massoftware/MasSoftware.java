@@ -37,7 +37,7 @@ public class MasSoftware extends UI {
 		private static final long serialVersionUID = 3384068185250400739L;
 		
 		public MasSoftwareServlet(){
-			BackendContext.get();
+//			BackendContext.get();
 		}
 	}
 

@@ -1,12 +1,12 @@
 package com.massoftware.windows.banco;
 
-import java.math.BigDecimal;
-
+import com.massoftware.model.Banco;
+import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.UniqueValidator;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
@@ -20,19 +20,12 @@ public class WBanco extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BancoBO bo;
-
-	// -------------------------------------------------------------
-
-	private BeanItem<BancoFiltro> filterBI;
-	private BeanItem<Banco> itemBIOriginal;
 	private BeanItem<Banco> itemBI;
 
 	// -------------------------------------------------------------
 
 	private TextField numeroTXT;
 	private TextField nombreTXT;
-	private TextField nombreOficialTXT;
 	private TextField cuitTXT;
 	private CheckBox bloqueadoCHX;
 	private TextField hojaTXT;
@@ -55,31 +48,20 @@ public class WBanco extends WindowForm {
 		init(mode, null);
 	}
 
-	public WBanco(String mode, BancoFiltro filtro) {
-		init(mode, filtro);
+	public WBanco(String mode, String id) {
+		init(mode, id);
 	}
 
-	private void init(String mode, BancoFiltro filtro) {
+	private void init(String mode, String id) {
 
 		try {
 
-			bo = new BancoBO();
-
+			this.id = id;
 			this.mode = mode;
-
-			// =======================================================
-			// FILTRO
-
-			if (filtro != null) {
-				filterBI = new BeanItem<BancoFiltro>(filtro);
-			} else {
-				filterBI = new BeanItem<BancoFiltro>(new BancoFiltro());
-			}
 
 			// =======================================================
 			// BEAN
 
-			itemBIOriginal = new BeanItem<Banco>(new Banco());
 			itemBI = new BeanItem<Banco>(new Banco());
 
 			// =======================================================
@@ -95,7 +77,7 @@ public class WBanco extends WindowForm {
 			// =======================================================
 			// CARGA DE DATOS
 
-//			loadData(filterBI.getBean());//777
+			loadData(this.id);
 
 			// =======================================================
 			// ACTUALIZAR TITULO
@@ -117,7 +99,7 @@ public class WBanco extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		confWinForm("Banco");
+		confWinForm("BancoX");
 		this.setWidth(31f, Unit.EM);
 
 		// =======================================================
@@ -142,151 +124,17 @@ public class WBanco extends WindowForm {
 		this.setContent(content);
 	}
 
-	@SuppressWarnings({ "serial", "rawtypes" })
 	private TabSheet buildCouerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
 		numeroTXT = UtilUI.buildTXTShortPlus(itemBI, "numero", "Número", false, 1, true);
-
-		numeroTXT.addValidator(new AbstractValidator("") {
-
-			@Override
-			protected boolean isValidValue(Object value) {
-
-				try {
-
-					Integer original = itemBIOriginal.getBean().getNumero();
-
-					if (COPY_MODE.equals(mode)) {
-						original = null;
-					}
-
-					bo.checkUniqueNumero(numeroTXT.getCaption(), original, (Integer) value);
-
-					return true;
-
-				} catch (Exception e) {
-					LogAndNotification.print(e);
-					this.setErrorMessage(e.getMessage());
-					return false;
-				}
-
-			}
-
-			@Override
-			public Class getType() {
-
-				return Integer.class;
-			}
-
-		});
+		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
 		nombreTXT = UtilUI.buildTXT(itemBI, "nombre", "Nombre", false, 40, 1, 40, true, false, null, false);
-		nombreTXT.addValidator(new AbstractValidator("") {
-
-			@Override
-			protected boolean isValidValue(Object value) {
-
-				try {
-
-					String original = itemBIOriginal.getBean().getNombre();
-
-					if (COPY_MODE.equals(mode)) {
-						original = null;
-					}
-
-					bo.checkUniqueNombre(nombreTXT.getCaption(), original, (String) value);
-
-					return true;
-
-				} catch (Exception e) {
-					LogAndNotification.print(e);
-					this.setErrorMessage(e.getMessage());
-					return false;
-				}
-
-			}
-
-			@Override
-			public Class getType() {
-
-				return String.class;
-			}
-
-		});
+		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", "Nombre", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		nombreOficialTXT = UtilUI.buildTXT(itemBI, "nombreOficial", "Nombre oficial", false, 40, 1, 40, true, false,
-				null, false);
-		nombreOficialTXT.addValidator(new AbstractValidator("") {
-
-			@Override
-			protected boolean isValidValue(Object value) {
-
-				try {
-
-					String original = itemBIOriginal.getBean().getNombreOficial();
-
-					if (COPY_MODE.equals(mode)) {
-						original = null;
-					}
-
-					bo.checkUniqueNombreOficial(nombreOficialTXT.getCaption(), original, (String) value);
-
-					return true;
-
-				} catch (Exception e) {
-					LogAndNotification.print(e);
-					this.setErrorMessage(e.getMessage());
-					return false;
-				}
-
-			}
-
-			@Override
-			public Class getType() {
-
-				return String.class;
-			}
-
-		});
-		// ---------------------------------------------------------------------------------------------------------
-		cuitTXT = UtilUI.buildTXT(itemBI, "cuit", "CUIT", false, "99999999999".length(), 1, "999999999999".length(),
-				true, true, "99-999999999-9", true);
-		cuitTXT.addValidator(new AbstractValidator("") {
-
-			@Override
-			protected boolean isValidValue(Object value) {
-
-				try {
-
-					BigDecimal original = itemBIOriginal.getBean().getCuit();
-
-					if (COPY_MODE.equals(mode)) {
-						original = null;
-					}
-
-					bo.checkUniqueCuit(cuitTXT.getCaption(), original, (BigDecimal) value);
-
-					return true;
-
-				} catch (Exception e) {
-
-					e.printStackTrace();
-
-					LogAndNotification.print(e);
-					this.setErrorMessage(e.getMessage());
-					return false;
-				}
-
-			}
-
-			@Override
-			public Class getType() {
-
-				return BigDecimal.class;
-			}
-
-		});
+		cuitTXT = UtilUI.buildTXT(itemBI, "cuit", "CUIT", false, 11, 1, 11, true, true, "99-99999999-9", true);
+		cuitTXT.addValidator(new UniqueValidator(Long.class, mode, "cuit", "CUIT", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
 		bloqueadoCHX = UtilUI.buildFieldCHK(itemBI, "bloqueado", "Bloqueado", false);
 		// ---------------------------------------------------------------------------------------------------------
@@ -329,7 +177,7 @@ public class WBanco extends WindowForm {
 				formatoExtractoRow4HL);
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(numeroTXT, nombreTXT, nombreOficialTXT, cuitTXT, bloqueadoCHX);
+		generalVL.addComponents(numeroTXT, nombreTXT, cuitTXT, bloqueadoCHX);
 
 		TabSheet tabSheet = UtilUI.buildTS();
 
@@ -342,14 +190,17 @@ public class WBanco extends WindowForm {
 	// =================================================================================
 
 	protected void setMaxValues() throws Exception {
-		itemBI.getBean().setNumero(maxNumero());
+		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue("numero"));
 	}
 
-	protected void setBean(Object obj) throws Exception {
-		Banco item = (Banco) obj;
+	protected void setBean(EntityId obj) throws Exception {
 
-		itemBIOriginal.setBean(item.clone());
-		itemBI.setBean(item);
+		itemBI.setBean( (Banco) obj);
+	}
+
+	protected EntityId getBean() throws Exception {
+
+		return itemBI.getBean();
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -357,7 +208,6 @@ public class WBanco extends WindowForm {
 	protected void validateForm() {
 		numeroTXT.validate();
 		nombreTXT.validate();
-		nombreOficialTXT.validate();
 		cuitTXT.validate();
 		bloqueadoCHX.validate();
 		hojaTXT.validate();
@@ -374,15 +224,15 @@ public class WBanco extends WindowForm {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	public Integer maxNumero() throws Exception {
-		return bo.maxNumero();
-	}
-
 	// metodo que realiza la consulta a la base de datos
 	protected Banco queryData() {
 		try {
 
-			Banco item = bo.find(this.filterBI.getBean());
+			Banco item = new Banco();
+			item.loadById(id);
+			if (COPY_MODE.equals(mode)) {
+				item.setId(null);
+			}
 
 			return item;
 
@@ -393,37 +243,7 @@ public class WBanco extends WindowForm {
 		return new Banco();
 	}
 
-	protected Object insert() throws Exception {
-
-		try {
-			bo.insert(this.itemBI.getBean());
-			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
-			}
-
-			return itemBI.getBean();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-			return null;
-		}
-	}
-
-	protected Object update() throws Exception {
-
-		try {
-			bo.update(this.itemBIOriginal.getBean(), this.itemBI.getBean());
-			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
-			}
-
-			return itemBI.getBean();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-			return null;
-		}
-	}
+	
 
 	// =================================================================================
 

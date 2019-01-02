@@ -1,5 +1,6 @@
 package com.massoftware.windows;
 
+import com.massoftware.model.EntityId;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
@@ -17,9 +18,9 @@ public abstract class WindowForm extends Window {
 	private static final long serialVersionUID = -9181246374126971713L;
 
 	// -------------------------------------------------------------
-	
+
 	protected String id;
-	
+
 	// -------------------------------------------------------------
 
 	public final static String INSERT_MODE = "INSERT_MODE";
@@ -103,17 +104,15 @@ public abstract class WindowForm extends Window {
 	// -------------------------------------------------------------
 
 	protected void loadData(String id) {
-		
-		
-		
+
 		try {
-			
-//			validateForm();
+
+			// validateForm();
 
 			if (INSERT_MODE.equals(mode)) {
 				setMaxValues();
 			} else {
-				Object item = queryData();
+				EntityId item = queryData();
 				if (item != null) {
 					setBean(item);
 					if (COPY_MODE.equals(mode)) {
@@ -123,9 +122,7 @@ public abstract class WindowForm extends Window {
 					LogAndNotification.printError("No se encontro el item",
 							"Se intento buscar un item en base a los siguientes parámetros de búsqueda, " + id);
 				}
-				
 
-				
 			}
 
 		} catch (Exception e) {
@@ -133,11 +130,13 @@ public abstract class WindowForm extends Window {
 		}
 	}
 
-	abstract protected Object queryData();
+	abstract protected EntityId queryData();
 
 	abstract protected void setMaxValues() throws Exception;
 
-	abstract protected void setBean(Object obj) throws Exception;
+	abstract protected void setBean(EntityId obj) throws Exception;
+
+	abstract protected EntityId getBean() throws Exception;
 
 	protected void save() {
 
@@ -174,10 +173,38 @@ public abstract class WindowForm extends Window {
 
 	abstract protected void validateForm();
 
-	abstract protected Object insert() throws Exception;
+	protected Object insert() throws Exception {
 
-	abstract protected Object update() throws Exception;
-	
+		try {
+			this.getBean().insert();
+			if (windowListado != null) {
+				windowListado.loadDataResetPaged();
+			}
+
+			return this.getBean();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+			return null;
+		}
+	}
+
+	protected Object update() throws Exception {
+
+		try {
+			this.getBean().update();
+			if (windowListado != null) {
+				windowListado.loadDataResetPaged();
+			}
+
+			return this.getBean();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+			return null;
+		}
+	}
+
 	protected Window confWinForm(String label) {
 
 		this.setCaption(label);
