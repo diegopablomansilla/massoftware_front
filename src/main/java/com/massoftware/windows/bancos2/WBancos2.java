@@ -1,4 +1,4 @@
-package com.massoftware.windows.bancos;
+package com.massoftware.windows.bancos2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.vaadin.patrik.FastNavigation;
 
+import com.massoftware.model.Banco;
+import com.massoftware.model.BancosFiltro2;
+import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
@@ -27,55 +30,48 @@ import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WBancos extends WindowListado {
+public class WBancos2 extends WindowListado {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BancosBO bo;
-
-	// -------------------------------------------------------------
-
-	BeanItem<BancosFiltro> filterBI;
-	protected BeanItemContainer<Bancos> itemsBIC;
+	BeanItem<BancosFiltro2> filterBI;
+	protected BeanItemContainer<Banco> itemsBIC;
 
 	// -------------------------------------------------------------
 
 	private TextFieldIntegerBox numeroIB;
 	private TextFieldBox nombreTB;
-	private TextFieldBox nombreOficialTB;
 	private OptionGroup bloqueadoOG;
 
 	public Button seleccionarBTN;
 
 	// -------------------------------------------------------------
 
-	public WBancos() {
+	public WBancos2() {
 		super();
 		init(null);
 	}
 
-	public WBancos(BancosFiltro filtro) {
+	public WBancos2(BancosFiltro2 filtro) {
 		super();
 		init(filtro);
 		buildSelectorSection();
 		this.setModal(true);
 	}
 
-	public void init(BancosFiltro filtro) {
+	public void init(BancosFiltro2 filtro) {
 
 		try {
-
-			bo = new BancosBO();
 
 			// =======================================================
 			// LAYOUT CONTROLs
 
 			if (filtro != null) {
-				filterBI = new BeanItem<BancosFiltro>(filtro);
+				filterBI = new BeanItem<BancosFiltro2>(filtro);
 			} else {
-				filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
+				filterBI = new BeanItem<BancosFiltro2>(new BancosFiltro2());
 			}
 
 			// =======================================================
@@ -136,8 +132,10 @@ public class WBancos extends WindowListado {
 
 	private VerticalLayout buildFiltros() throws Exception {
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Numero", false, 10, 0, -1, false, false, null,
-				false, UtilUI.EQUALS, 0, Short.MAX_VALUE);
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Numero", false, 2, false, false, null, false,
+				UtilUI.EQUALS);
+
+		// --------------------------------------------------------
 
 		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
 				UtilUI.CONTAINS_WORDS_AND);
@@ -157,11 +155,10 @@ public class WBancos extends WindowListado {
 		// }
 		// });
 
-		nombreOficialTB = new TextFieldBox(this, filterBI, "nombreOficial", "Nombre oficial", false, 20, -1, 40, false,
-				false, null, false, UtilUI.CONTAINS_WORDS_AND);
+		// --------------------------------------------------------
 
-		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", "Situación", false, false, "Todos", "Bloquado",
-				"No bloqueado", true, 0);
+		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todos", "Obsoletos",
+				"Activos", true, 2);
 
 		bloqueadoOG.addValueChangeListener(e -> {
 			loadDataResetPaged();
@@ -180,7 +177,7 @@ public class WBancos extends WindowListado {
 		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
-		filaFiltro2HL.addComponents(nombreOficialTB, bloqueadoOG);
+		filaFiltro2HL.addComponents(bloqueadoOG);
 
 		VerticalLayout filasFiltroVL = new VerticalLayout();
 		filasFiltroVL.setWidth("100%");
@@ -267,9 +264,9 @@ public class WBancos extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Bancos> getItemsBIC() {
+	protected BeanItemContainer<Banco> getItemsBIC() {
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<Bancos>(Bancos.class, new ArrayList<Bancos>());
+			itemsBIC = new BeanItemContainer<Banco>(Banco.class, new ArrayList<Banco>());
 		}
 		return itemsBIC;
 	}
@@ -277,15 +274,14 @@ public class WBancos extends WindowListado {
 	protected void validateFilterSection() {
 		numeroIB.validate();
 		nombreTB.validate();
-		nombreOficialTB.validate();
 		bloqueadoOG.validate();
 	}
 
 	protected void addBeansToItemsBIC() {
 
-		List<Bancos> items = queryData();
+		List<Banco> items = queryData();
 
-		for (Bancos item : items) {
+		for (Banco item : items) {
 			getItemsBIC().addBean(item);
 		}
 	}
@@ -310,7 +306,7 @@ public class WBancos extends WindowListado {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
+				Banco item = (Banco) itemsGRD.getSelectedRow();
 
 				WBanco window = new WBanco(WBanco.UPDATE_MODE, item.getId());
 				window.setModal(true);
@@ -329,7 +325,7 @@ public class WBancos extends WindowListado {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
+				Banco item = (Banco) itemsGRD.getSelectedRow();
 
 				WBanco window = new WBanco(WBanco.COPY_MODE, item.getId());
 				window.setModal(true);
@@ -347,7 +343,7 @@ public class WBancos extends WindowListado {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	private List<Bancos> queryData() {
+	private List<Banco> queryData() {
 
 		try {
 
@@ -358,21 +354,19 @@ public class WBancos extends WindowListado {
 						sortOrder.getDirection().toString().equals("ASCENDING"));
 			}
 
-			// return Context.getBancosBO().find(limit, offset, orderBy,
-			// this.filterBI.getBean());
-			return bo.find(limit, offset, orderBy, this.filterBI.getBean());
+			return new Banco().find(limit, offset, orderBy, filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Bancos>();
+		return new ArrayList<Banco>();
 	}
 
 	// metodo que realiza el delete en la base de datos
 	protected void deleteItem(Object item) throws Exception {
 
-		bo.deleteItem((Bancos) item);
+		((EntityId) item).delete();
 
 	}
 

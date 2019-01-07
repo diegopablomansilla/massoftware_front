@@ -96,5 +96,9 @@ public class DataSourceMetaData {
 
 		return json;
 	}
+	
+	public boolean isDatabasePostgreSql() {
+		return getDatabaseProductName().equals("PostgreSQL");
+	}
 
 }

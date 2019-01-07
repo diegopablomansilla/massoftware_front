@@ -59,8 +59,7 @@ public class ConnectionWrapper {
 
 	// ========================================================================================
 
-	public ConnectionWrapper(Connection connection,
-			DataSourceMetaData dataSourceMetaData,
+	public ConnectionWrapper(Connection connection, DataSourceMetaData dataSourceMetaData,
 			DataSourceProperties dataSourceProperties/* , LogPrinter logPrinter */) {
 
 		this.connection = connection;
@@ -129,14 +128,12 @@ public class ConnectionWrapper {
 		begin(this);
 	}
 
-	public void begin(ConnectionWrapper connectionWrapper) throws SQLException,
-			Exception {
+	public void begin(ConnectionWrapper connectionWrapper) throws SQLException, Exception {
 		try {
 			connectionWrapper.getConnection().setAutoCommit(false);
 			connectionWrapper.addSqlStatement("begin();");
 		} catch (SQLException e) {
-			throw this.buildSQLExceptionWrapper(e,
-					OPERATION_TYPE_BEGIN_TRANSACTION, TITLE_BEGIN_TRANSACTION,
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_BEGIN_TRANSACTION, TITLE_BEGIN_TRANSACTION,
 					SUBJECT_BEGIN_TRANSACTION);
 		}
 	}
@@ -145,16 +142,14 @@ public class ConnectionWrapper {
 		commit(this);
 	}
 
-	public void commit(ConnectionWrapper connectionWrapper)
-			throws SQLException, Exception {
+	public void commit(ConnectionWrapper connectionWrapper) throws SQLException, Exception {
 		try {
 			connectionWrapper.getConnection().commit();
 			connectionWrapper.addSqlStatement("commit();");
 			close(connectionWrapper);
 		} catch (SQLException e) {
-			throw this.buildSQLExceptionWrapper(e,
-					OPERATION_TYPE_COMMIT_TRANSACTION,
-					TITLE_COMMIT_TRANSACTION, SUBJECT_COMMIT_TRANSACTION);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_COMMIT_TRANSACTION, TITLE_COMMIT_TRANSACTION,
+					SUBJECT_COMMIT_TRANSACTION);
 		}
 	}
 
@@ -162,16 +157,14 @@ public class ConnectionWrapper {
 		rollBack(this);
 	}
 
-	public void rollBack(ConnectionWrapper connectionWrapper)
-			throws SQLException, Exception {
+	public void rollBack(ConnectionWrapper connectionWrapper) throws SQLException, Exception {
 		try {
 			connectionWrapper.getConnection().rollback();
 			connectionWrapper.addSqlStatement("rollback();");
 			close(connectionWrapper);
 		} catch (SQLException e) {
-			throw this.buildSQLExceptionWrapper(e,
-					OPERATION_TYPE_ROLLBACK_TRANSACTION,
-					TITLE_ROLLBACK_TRANSACTION, SUBJECT_ROLLBACK_TRANSACTION);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_ROLLBACK_TRANSACTION, TITLE_ROLLBACK_TRANSACTION,
+					SUBJECT_ROLLBACK_TRANSACTION);
 		}
 	}
 
@@ -179,18 +172,15 @@ public class ConnectionWrapper {
 		close(this);
 	}
 
-	public void close(ConnectionWrapper connectionWrapper) throws SQLException,
-			Exception {
+	public void close(ConnectionWrapper connectionWrapper) throws SQLException, Exception {
 		try {
-			if (connectionWrapper != null
-					&& connectionWrapper.getConnection() != null
+			if (connectionWrapper != null && connectionWrapper.getConnection() != null
 					& connectionWrapper.getConnection().isClosed() == false) {
 				connectionWrapper.getConnection().close();
 				connectionWrapper.addSqlStatement("close();");
 			}
 		} catch (SQLException e) {
-			throw this.buildSQLExceptionWrapper(e,
-					OPERATION_TYPE_CLOSE_CONNECTION, TITLE_CLOSE_CONNECTION,
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_CLOSE_CONNECTION, TITLE_CLOSE_CONNECTION,
 					SUBJECT_CLOSE_CONNECTION);
 		}
 	}
@@ -199,19 +189,16 @@ public class ConnectionWrapper {
 	// ===================================================================================================
 
 	@SuppressWarnings("rawtypes")
-	public List findToListByCendraConvention(String sql)
-			throws SQLExceptionWrapper, Exception {
+	public List findToListByCendraConvention(String sql) throws SQLExceptionWrapper, Exception {
 		return findToListByCendraConvention(sql, new Object[0]);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public List findToListByCendraConvention(String sql, Object... args)
-			throws SQLExceptionWrapper {
+	public List findToListByCendraConvention(String sql, Object... args) throws SQLExceptionWrapper {
 
 		try {
 
-			PreparedStatement preparedStatement = getConnection()
-					.prepareStatement(sql);
+			PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 
 			printSQLWarning(preparedStatement.getWarnings());
 
@@ -229,15 +216,13 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
-					TITLE_SELECT, SUBJECT_SELECT);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT, TITLE_SELECT, SUBJECT_SELECT);
 		}
 
 	}
 
 	@SuppressWarnings("rawtypes")
-	private List executeQueryToListByCendraConvention(
-			PreparedStatement preparedStatement, String sql)
+	private List executeQueryToListByCendraConvention(PreparedStatement preparedStatement, String sql)
 			throws SQLException {
 
 		String msg = buildPrintSQLStart(sql);
@@ -280,18 +265,15 @@ public class ConnectionWrapper {
 		return list;
 	}
 
-	public Object[][] findToTable(String sql) throws SQLExceptionWrapper,
-			Exception {
+	public Object[][] findToTable(String sql) throws SQLExceptionWrapper, Exception {
 		return findToTable(sql, new Object[0]);
 	}
 
-	public Object[][] findToTable(String sql, Object... args)
-			throws SQLExceptionWrapper {
+	public Object[][] findToTable(String sql, Object... args) throws SQLExceptionWrapper {
 
 		try {
 
-			PreparedStatement preparedStatement = getConnection()
-					.prepareStatement(sql);
+			PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 
 			printSQLWarning(preparedStatement.getWarnings());
 
@@ -309,14 +291,12 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
-					TITLE_SELECT, SUBJECT_SELECT);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT, TITLE_SELECT, SUBJECT_SELECT);
 		}
 
 	}
 
-	private Object[][] executeQueryToTable(PreparedStatement preparedStatement,
-			String sql) throws SQLException {
+	private Object[][] executeQueryToTable(PreparedStatement preparedStatement, String sql) throws SQLException {
 
 		List<Object[]> listT = new ArrayList<Object[]>();
 
@@ -365,13 +345,11 @@ public class ConnectionWrapper {
 		return table;
 	}
 
-	public ResultSet findToResultSet(String sql, Object... args)
-			throws SQLExceptionWrapper, SQLException {
+	public ResultSet findToResultSet(String sql, Object... args) throws SQLExceptionWrapper, SQLException {
 
 		try {
 
-			PreparedStatement preparedStatement = getConnection()
-					.prepareStatement(sql);
+			PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 
 			printSQLWarning(preparedStatement.getWarnings());
 
@@ -389,15 +367,12 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT,
-					TITLE_SELECT, SUBJECT_SELECT);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_SELECT, TITLE_SELECT, SUBJECT_SELECT);
 		}
 
 	}
 
-	private ResultSet executeQueryToResultSet(
-			PreparedStatement preparedStatement, String sql)
-			throws SQLException {
+	private ResultSet executeQueryToResultSet(PreparedStatement preparedStatement, String sql) throws SQLException {
 
 		String msg = buildPrintSQLStart(sql);
 
@@ -423,13 +398,11 @@ public class ConnectionWrapper {
 		return resultSet;
 	}
 
-	public int genericExecute(String sql) throws SQLExceptionWrapper,
-			SQLException {
+	public int genericExecute(String sql) throws SQLExceptionWrapper, SQLException {
 		return genericExecute(sql, new Object[0]);
 	}
 
-	public int genericExecute(String sql, Object... args)
-			throws SQLExceptionWrapper, SQLException {
+	public int genericExecute(String sql, Object... args) throws SQLExceptionWrapper, SQLException {
 
 		try {
 
@@ -453,8 +426,7 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_EXECUTE,
-					TITLE_EXECUTE, SUBJECT_EXECUTE);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_EXECUTE, TITLE_EXECUTE, SUBJECT_EXECUTE);
 		}
 	}
 
@@ -462,8 +434,7 @@ public class ConnectionWrapper {
 		return insert(sql, new Object[0]);
 	}
 
-	public int insert(String sql, Object... args) throws SQLExceptionWrapper,
-			SQLException {
+	public int insert(String sql, Object... args) throws SQLExceptionWrapper, SQLException {
 
 		try {
 
@@ -486,9 +457,8 @@ public class ConnectionWrapper {
 			return execute(sql, args);
 
 		} catch (SQLException e) {
-			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_INSERT,
-					TITLE_INSERT, SUBJECT_INSERT);
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);					
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_INSERT, TITLE_INSERT, SUBJECT_INSERT);
 		}
 	}
 
@@ -496,8 +466,7 @@ public class ConnectionWrapper {
 		return update(sql, new Object[0]);
 	}
 
-	public int update(String sql, Object... args) throws SQLExceptionWrapper,
-			SQLException {
+	public int update(String sql, Object... args) throws SQLExceptionWrapper, SQLException {
 
 		try {
 
@@ -521,8 +490,7 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_UPDATE,
-					TITLE_UPDATE, SUBJECT_UPDATE);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_UPDATE, TITLE_UPDATE, SUBJECT_UPDATE);
 		}
 	}
 
@@ -530,8 +498,7 @@ public class ConnectionWrapper {
 		return delete(sql, new Object[0]);
 	}
 
-	public int delete(String sql, Object... args) throws SQLExceptionWrapper,
-			SQLException {
+	public int delete(String sql, Object... args) throws SQLExceptionWrapper, SQLException {
 
 		try {
 
@@ -539,15 +506,13 @@ public class ConnectionWrapper {
 
 		} catch (SQLException e) {
 			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
-			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_DELETE,
-					TITLE_DELETE, SUBJECT_DELETE);
+			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_DELETE, TITLE_DELETE, SUBJECT_DELETE);
 		}
 	}
 
 	private int execute(String sql, Object... args) throws SQLException {
 
-		PreparedStatement preparedStatement = this.getConnection()
-				.prepareStatement(sql);
+		PreparedStatement preparedStatement = this.getConnection().prepareStatement(sql);
 
 		printSQLWarning(preparedStatement.getWarnings());
 
@@ -557,7 +522,11 @@ public class ConnectionWrapper {
 			}
 		}
 
-		sql = this.formatSQL(preparedStatement, args, sql);
+		if (this.dataSourceMetaData.isDatabasePostgreSql()) {
+			sql = preparedStatement.toString();
+		} else {
+			sql = this.formatSQL(preparedStatement, args, sql);
+		}
 
 		this.addSqlStatement(sql);
 
@@ -565,8 +534,7 @@ public class ConnectionWrapper {
 
 	}
 
-	private int executeUpdateByExample(PreparedStatement preparedStatement,
-			String sql) throws SQLException {
+	private int executeUpdateByExample(PreparedStatement preparedStatement, String sql) throws SQLException {
 
 		String msg = buildPrintSQLStart(sql);
 
@@ -594,13 +562,12 @@ public class ConnectionWrapper {
 	// ===================================================================================================
 
 	private String buildPrintSQLStart(String sql) {
-		
+
 		String sep = "\n\n================================= SQL START =======================================\n\n";
 
 		if (isVerbose()) {
 
-			String msgSql = sep + "\n\n[..] Ejecutando SQL "
-					+ ZonedDateTime.now() + "\n[" + dataSourceMetaData + "]\n["
+			String msgSql = sep + "\n\n[..] Ejecutando SQL " + ZonedDateTime.now() + "\n[" + dataSourceMetaData + "]\n["
 					+ dataSourceProperties.getUrl() + "]\n\n" + sql;
 
 			System.out.println(msgSql);
@@ -614,7 +581,7 @@ public class ConnectionWrapper {
 	private String printSQLEnd(String msgSql, Duration duration, boolean ok) {
 
 		String sep = "\n\n================================= SQL END =========================================\n\n";
-		
+
 		if (isVerbose()) {
 
 			String s = "";
@@ -625,12 +592,10 @@ public class ConnectionWrapper {
 			}
 
 			if (duration != null) {
-				msgSql = "\n\n" + s + " SQL ejecutando (Total query runtime: "
-						+ duration.toMillis() + " Millis ) "
+				msgSql = "\n\n" + s + " SQL ejecutando (Total query runtime: " + duration.toMillis() + " Millis ) "
 						+ ZonedDateTime.now() + "\n\n" + sep;
 			} else {
-				msgSql = "\n\n" + s + " SQL ejecutando " + ZonedDateTime.now()
-						+ "\n\n" + sep;
+				msgSql = "\n\n" + s + " SQL ejecutando " + ZonedDateTime.now() + "\n\n" + sep;
 			}
 
 			if (ok) {
@@ -653,8 +618,7 @@ public class ConnectionWrapper {
 
 		while (sqlWarning != null) {
 
-			msg2 += "Warning : " + sqlWarning.getErrorCode() + " Message : "
-					+ sqlWarning.getMessage() + " SQL state "
+			msg2 += "Warning : " + sqlWarning.getErrorCode() + " Message : " + sqlWarning.getMessage() + " SQL state "
 					+ sqlWarning.getSQLState() + "\n";
 
 			sqlWarning = sqlWarning.getNextWarning();
@@ -672,8 +636,7 @@ public class ConnectionWrapper {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void set(PreparedStatement preparedStatement, Object value,
-			Integer i) throws SQLException {
+	private void set(PreparedStatement preparedStatement, Object value, Integer i) throws SQLException {
 
 		if (value != null) {
 
@@ -756,26 +719,23 @@ public class ConnectionWrapper {
 				} else if (c.equals(Time.class)) {
 					preparedStatement.setNull(i, Types.TIME);
 				} else {
-					throw new IllegalArgumentException(MSG_1.replace(
-							"${value}", value.toString()));
+					throw new IllegalArgumentException(MSG_1.replace("${value}", value.toString()).replace("${class}",
+							value.getClass().getSimpleName()));
 				}
 
 			} else {
-				throw new IllegalArgumentException(MSG_1.replace("${value}",
-						value.toString()).replace("${class}",
+				throw new IllegalArgumentException(MSG_1.replace("${value}", value.toString()).replace("${class}",
 						value.getClass().getCanonicalName()));
 			}
 		}
 	}
 
-	private SQLExceptionWrapper buildSQLExceptionWrapper(
-			SQLException sQLException, String operationType, String title,
+	private SQLExceptionWrapper buildSQLExceptionWrapper(SQLException sQLException, String operationType, String title,
 			String subject) {
 
-		 sQLException.printStackTrace(); //666
+		sQLException.printStackTrace(); // 666
 
-		SQLExceptionWrapper sqlExceptionWrapper = new SQLExceptionWrapper(
-				sQLException);
+		SQLExceptionWrapper sqlExceptionWrapper = new SQLExceptionWrapper(sQLException);
 
 		sqlExceptionWrapper.setTitle(title);
 		sqlExceptionWrapper.setSubject(subject);
@@ -783,30 +743,20 @@ public class ConnectionWrapper {
 		sqlExceptionWrapper.setOperationType(operationType);
 
 		if (this.dataSourceProperties != null) {
-			sqlExceptionWrapper.setDriverClassName(dataSourceProperties
-					.getDriverClassName());
-			sqlExceptionWrapper.setInitialSize(dataSourceProperties
-					.getInitialSize());
-			sqlExceptionWrapper.setMaxActive(dataSourceProperties
-					.getMaxActive());
+			sqlExceptionWrapper.setDriverClassName(dataSourceProperties.getDriverClassName());
+			sqlExceptionWrapper.setInitialSize(dataSourceProperties.getInitialSize());
+			sqlExceptionWrapper.setMaxActive(dataSourceProperties.getMaxActive());
 			sqlExceptionWrapper.setMaxIdle(dataSourceProperties.getMaxIdle());
-			sqlExceptionWrapper.setValidationQuery(dataSourceProperties
-					.getValidationQuery());
+			sqlExceptionWrapper.setValidationQuery(dataSourceProperties.getValidationQuery());
 		}
 
 		if (dataSourceMetaData != null) {
-			sqlExceptionWrapper.setDatabaseProductName(dataSourceMetaData
-					.getDatabaseProductName());
-			sqlExceptionWrapper.setDatabaseProductVersion(dataSourceMetaData
-					.getDatabaseProductVersion());
-			sqlExceptionWrapper.setDriverName(dataSourceMetaData
-					.getDriverName());
-			sqlExceptionWrapper.setDriverVersion(dataSourceMetaData
-					.getDriverVersion());
-			sqlExceptionWrapper.setjDBCMajorVersion(dataSourceMetaData
-					.getjDBCMajorVersion());
-			sqlExceptionWrapper.setjDBCMinorVersion(dataSourceMetaData
-					.getjDBCMinorVersion());
+			sqlExceptionWrapper.setDatabaseProductName(dataSourceMetaData.getDatabaseProductName());
+			sqlExceptionWrapper.setDatabaseProductVersion(dataSourceMetaData.getDatabaseProductVersion());
+			sqlExceptionWrapper.setDriverName(dataSourceMetaData.getDriverName());
+			sqlExceptionWrapper.setDriverVersion(dataSourceMetaData.getDriverVersion());
+			sqlExceptionWrapper.setjDBCMajorVersion(dataSourceMetaData.getjDBCMajorVersion());
+			sqlExceptionWrapper.setjDBCMinorVersion(dataSourceMetaData.getjDBCMinorVersion());
 			sqlExceptionWrapper.setUrl(dataSourceMetaData.getUrl());
 			sqlExceptionWrapper.setUserName(dataSourceMetaData.getUserName());
 
@@ -821,11 +771,9 @@ public class ConnectionWrapper {
 
 	}
 
-	private String formatSQL(PreparedStatement preparedStatement,
-			Object[] args, String sql) throws SQLException {
+	private String formatSQL(PreparedStatement preparedStatement, Object[] args, String sql) throws SQLException {
 
-		if (preparedStatement.getConnection().getMetaData()
-				.getDatabaseProductName().equalsIgnoreCase("PostgreSQL")) {
+		if (preparedStatement.getConnection().getMetaData().getDatabaseProductName().equalsIgnoreCase("PostgreSQL")) {
 
 			sql = preparedStatement.toString();
 			if (sql.trim().endsWith(";") == false) {

@@ -7,6 +7,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import com.massoftware.backend.annotation.FieldLabelAnont;
+
 public class Entity implements Cloneable {
 
 	@Override
@@ -20,7 +22,7 @@ public class Entity implements Cloneable {
 		Object other;
 
 		try {
-			
+
 			other = clazz.newInstance();
 
 			Object o = clone(this, clazz, other);
@@ -61,7 +63,7 @@ public class Entity implements Cloneable {
 					Boolean value = (Boolean) methodGet.invoke(originalIsntance);
 					methodSet.invoke(other, value);
 
-				} else if (field.getType() == String.class) {										
+				} else if (field.getType() == String.class) {
 
 					String value = (String) methodGet.invoke(originalIsntance);
 					methodSet.invoke(other, value);
@@ -172,7 +174,7 @@ public class Entity implements Cloneable {
 
 		return s;
 	}
-	
+
 	protected String toCamelCaseVar(String s) {
 		if (s == null) {
 			return s;
@@ -200,7 +202,7 @@ public class Entity implements Cloneable {
 	public String toString() {
 		return "Entity [toString()=" + super.toString() + "]";
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	protected boolean isScalar(Class c) {
 
@@ -231,6 +233,76 @@ public class Entity implements Cloneable {
 		} else {
 			return false;
 		}
+	}
+
+	public void setterNull() throws Exception {
+
+		Field[] fields = getClass().getDeclaredFields();
+
+		for (int i = 0; i < fields.length; i++) {
+
+			Field field = fields[i];
+
+			@SuppressWarnings("rawtypes")
+			Class[] argTypes = new Class[] { field.getType() };
+
+			Method methodSet = this.getClass().getDeclaredMethod("set" + toCamelCase(field.getName()), argTypes);
+
+			methodSet.invoke(this, new Object[] { null });
+
+		}
+	}
+
+	public void setterTrim() throws Exception {
+
+		Field[] fields = getClass().getDeclaredFields();
+
+		for (int i = 0; i < fields.length; i++) {
+
+			Field field = fields[i];
+
+			if (field.getType() == String.class) {
+
+				@SuppressWarnings("rawtypes")
+				Class[] argTypes = new Class[] { field.getType() };
+
+				Method methodSet = this.getClass().getDeclaredMethod("set" + toCamelCase(field.getName()), argTypes);
+
+				Method methodGet = getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+
+				Object value = methodGet.invoke(this);
+
+				if (value != null) {
+					if (value.toString().trim().length() == 0) {
+						methodSet.invoke(this, new Object[] { null });
+					} else {
+						methodSet.invoke(this, new Object[] { value.toString().trim() });
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	public String label(String attNamne) throws Exception {
+		return label(field(attNamne));
+	}
+
+	private Field field(String attNamne) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
+
+		return Class.forName(this.getClass().getCanonicalName()).getDeclaredField(attNamne);
+
+	}
+
+	private String label(Field field) {
+		FieldLabelAnont[] a = field.getAnnotationsByType(FieldLabelAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].value();
+		}
+
+		return null;
 	}
 
 }

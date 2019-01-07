@@ -1,9 +1,11 @@
 package com.massoftware.model;
 
-public class Grupo extends EntityId {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CuentaFondoRubro extends EntityId {
 
 	private String id;
-	private Rubro rubro;
 	private Integer numero;
 	private String nombre;
 
@@ -13,21 +15,6 @@ public class Grupo extends EntityId {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public Rubro getRubro() {
-		return rubro;
-	}
-
-	public Rubro loadRubro() throws Exception {
-		if (rubro != null) {
-			rubro.loadById();
-		}
-		return rubro;
-	}
-
-	public void setRubro(Rubro rubro) {
-		this.rubro = rubro;
 	}
 
 	public Integer getNumero() {
@@ -49,6 +36,19 @@ public class Grupo extends EntityId {
 	@Override
 	public String toString() {
 		return "(" + numero + ") " + nombre;
+	}
+
+	public List<CuentaFondoRubro> find() throws Exception {
+
+		List<CuentaFondoRubro> listado = new ArrayList<CuentaFondoRubro>();
+
+		List<EntityId> items = findUtil("numero", null, -1, -1, null, 1);
+
+		for (EntityId item : items) {
+			listado.add((CuentaFondoRubro) item);
+		}
+
+		return listado;
 	}
 
 }

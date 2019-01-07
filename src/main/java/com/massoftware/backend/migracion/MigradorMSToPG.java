@@ -2,8 +2,9 @@ package com.massoftware.backend.migracion;
 
 import com.massoftware.backend.BackendContextMS;
 import com.massoftware.model.Banco;
-import com.massoftware.model.Grupo;
-import com.massoftware.model.Rubro;
+import com.massoftware.model.CuentaFondo;
+import com.massoftware.model.CuentaFondoGrupo;
+import com.massoftware.model.CuentaFondoRubro;
 
 public class MigradorMSToPG {
 
@@ -24,9 +25,11 @@ public class MigradorMSToPG {
 
 		banco();
 
-		// rubro();
+		rubro();
 
-		// grupo();
+		grupo();
+
+		cuentaFondo();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -39,18 +42,18 @@ public class MigradorMSToPG {
 
 		String attId = "CAST(A.BANCO AS VARCHAR)";
 		String attNumero = "CAST(A.BANCO AS INTEGER)";
-		String attNombre = "LTRIM(RTRIM(CAST(A.NOMBRE AS VARCHAR)))";
+		String attNombre = "A.NOMBRE";
 		String attCuit = "CAST(A.CUIT AS BIGINT)";
 		String attBloqueado = "CAST(A.BLOQUEADO AS BIT)";
 		String attHoja = "CAST(A.HOJA AS INTEGER)";
 		String attPrimeraFila = "CAST(A.PRIMERAFILA AS INTEGER)";
 		String attUltimaFila = "CAST(A.ULTIMAFILA AS INTEGER)";
-		String attFecha = "LTRIM(RTRIM(CAST(A.COLUMNAFECHA AS VARCHAR)))";
-		String attDescripcion = "LTRIM(RTRIM(CAST(A.COLUMNADESCRIPCION AS VARCHAR)))";
-		String attReferencia1 = "LTRIM(RTRIM(CAST(A.COLUMNAREFERENCIA1 AS VARCHAR)))";
-		String attReferencia2 = "LTRIM(RTRIM(CAST(A.COLUMNAREFERENCIA2 AS VARCHAR)))";
-		String attImporte = "LTRIM(RTRIM(CAST(A.COLUMNAIMPORTE AS VARCHAR)))";
-		String attSaldo = "LTRIM(RTRIM(CAST(A.COLUMNASALDO AS VARCHAR)))";
+		String attFecha = "A.COLUMNAFECHA";
+		String attDescripcion = "A.COLUMNADESCRIPCION";
+		String attReferencia1 = "A.COLUMNAREFERENCIA1";
+		String attReferencia2 = "A.COLUMNAREFERENCIA2";
+		String attImporte = "A.COLUMNAIMPORTE";
+		String attSaldo = "A.COLUMNASALDO";
 
 		String tableSQL = "Bancos A";
 
@@ -67,19 +70,8 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Banco item = new Banco();
-			item.setter(table[i]);
+			item.setter(table[i], 0);
 			item.insert();
-
-			item.loadById();
-
-			System.out.println(item);
-
-			item.setBloqueado(true);
-			item.update();
-
-			item.loadById();
-
-			System.out.println(item);
 
 		}
 
@@ -108,9 +100,9 @@ public class MigradorMSToPG {
 
 		for (int i = 0; i < table.length; i++) {
 
-			Rubro item = new Rubro();
-			// item.setter(table[i]);
-			// item.insert();
+			CuentaFondoRubro item = new CuentaFondoRubro();
+			item.setter(table[i], 0);
+			item.insert();
 
 		}
 
@@ -121,10 +113,10 @@ public class MigradorMSToPG {
 		// ==================================================================
 		// MS SQL SERVER
 
-		String attId = " CONCAT ( CAST(A.RUBRO AS VARCHAR), '-', CAST(A.GRUPO AS VARCHAR) )";
-		String attNumeroRubro = "CAST(A.RUBRO AS INTEGER)";
-		String attNumero = "CAST(A.GRUPO AS INTEGER)";
-		String attNombre = "LTRIM(RTRIM(CAST(A.NOMBRE AS VARCHAR)))";
+		String attId = " CONCAT (RUBRO, '-', GRUPO )";
+		String attNumeroRubro = "CASE WHEN RUBRO = 0 THEN null ELSE RUBRO END";
+		String attNumero = "CAST(GRUPO AS INTEGER)";
+		String attNombre = "NOMBRE";
 
 		String tableSQL = "CuentasDeFondosGrupo A";
 
@@ -140,15 +132,48 @@ public class MigradorMSToPG {
 
 		for (int i = 0; i < table.length; i++) {
 
-			Grupo item = new Grupo();
-			// item.setter(table[i]);
-			// item.insert();
-			//
-			// item.loadById();
-			//
-			// item.update();
-			//
-			// System.out.println(item.getRubro());
+			CuentaFondoGrupo item = new CuentaFondoGrupo();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
+
+	}
+
+	public static void cuentaFondo() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String id = "CUENTA";
+		String cuentaFondoGrupo = "CONCAT(CASE WHEN RUBRO = 0 THEN null ELSE RUBRO END, '-', CASE WHEN GRUPO = 0 THEN null ELSE GRUPO END)";
+		String numero = "CAST(CUENTA AS INTEGER)";
+		String nombre = "NOMBRE";
+		String cuentaFondoTipo = "TIPO";
+		String banco = " CASE WHEN BANCO = 0 THEN null ELSE BANCO END";
+		String bloqueado = "CAST(OBSOLETA AS BIT)";
+
+		String tableSQL = "CuentasDeFondos";
+
+		String attsSQL = id + ", " + cuentaFondoGrupo + ", " + numero + ", " + nombre + ", " + cuentaFondoTipo + ", "
+				+ banco + ", " + bloqueado;
+		String orderBySQL = numero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			CuentaFondo item = new CuentaFondo();
+			item.setter(table[i], 0);
+			try {
+				item.insert();
+			} catch (Exception e) {				
+				System.err.println(e);
+//				throw e;
+			}
 
 		}
 

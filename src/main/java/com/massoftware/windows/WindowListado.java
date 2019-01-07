@@ -3,8 +3,6 @@ package com.massoftware.windows;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.windows.cuentas_fondo.CuentasFondo;
-import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -63,7 +61,7 @@ public abstract class WindowListado extends Window {
 
 			// --------------------------------------
 
-			addBeansToitemsBIC();
+			addBeansToItemsBIC();
 
 			// --------------------------------------
 
@@ -86,8 +84,6 @@ public abstract class WindowListado extends Window {
 			eliminarBTN.setEnabled(enabled);
 			copiarBTN.setEnabled(enabled);
 
-		} catch (InvalidValueException e) {
-			LogAndNotification.print(e);
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
@@ -95,7 +91,7 @@ public abstract class WindowListado extends Window {
 
 	abstract protected void validateFilterSection();
 
-	abstract protected void addBeansToitemsBIC();
+	abstract protected void addBeansToItemsBIC();
 
 	protected HorizontalLayout buildBotonera1() {
 
@@ -146,7 +142,7 @@ public abstract class WindowListado extends Window {
 
 								try {
 									if (yes) {
-										if (itemsGRD.getSelectedRow() != null) {
+//										if (itemsGRD.getSelectedRow() != null) {
 
 											Object item = itemsGRD.getSelectedRow();
 
@@ -155,7 +151,7 @@ public abstract class WindowListado extends Window {
 											LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
 											loadData();
-										}
+//										}
 									}
 								} catch (Exception e) {
 									LogAndNotification.print(e);
@@ -193,8 +189,7 @@ public abstract class WindowListado extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				CuentasFondo item = (CuentasFondo) itemsGRD.getSelectedRow();
-				item.getNumero();
+				Object item = itemsGRD.getSelectedRow();
 
 				Window window = new Window("Modificar ítem " + item);
 				window.setModal(true);

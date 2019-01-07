@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.massoftware.model.CuentaFondo;
+import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
@@ -16,8 +18,6 @@ import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
-import com.massoftware.windows.cuentas_fondo.CuentasFondo;
-import com.massoftware.windows.cuentas_fondo.CuentasFondoFiltro;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -606,7 +606,7 @@ public class WValoresPropios extends Window {
 			cuentasFondoFiltro.setNumero(this.filterBI.getBean()
 					.getNumeroCuentaFondo());
 
-			WCuentasFondo window = new WCuentasFondo(cuentasFondoFiltro);
+			WCuentasFondo window = null;// new WCuentasFondo(cuentasFondoFiltro); 77
 			window.setModal(true);
 			window.center();
 
@@ -653,7 +653,7 @@ public class WValoresPropios extends Window {
 		try {
 			if (window.itemsGRD.getSelectedRow() != null) {
 
-				CuentasFondo item = (CuentasFondo) window.itemsGRD
+				CuentaFondo item = (CuentaFondo) window.itemsGRD
 						.getSelectedRow();
 
 				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(

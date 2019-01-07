@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.Context;
+import com.massoftware.model.CuentaFondo;
+import com.massoftware.model.CuentaFondoGrupo;
+import com.massoftware.model.CuentaFondoRubro;
+import com.massoftware.model.EntityId;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -15,7 +18,9 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.cuentas_fondo.rubros.Rubros;
+import com.massoftware.windows.chequeras.CuentasFondoFiltro;
+import com.massoftware.windows.cuentas_fondo.grupo.WCuentaFondoGrupo;
+import com.massoftware.windows.cuentas_fondo.rubro.WCuentaFondoRubro;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -40,12 +45,8 @@ public class WCuentasFondo extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	private CuentasFondoBO cuentasFondoBO = new CuentasFondoBO();
-
-	// -------------------------------------------------------------
-
 	BeanItem<CuentasFondoFiltro> filterBI;
-	protected BeanItemContainer<CuentasFondo> itemsBIC;
+	protected BeanItemContainer<CuentaFondo> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -170,8 +171,8 @@ public class WCuentasFondo extends WindowListado {
 		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 25, false, false, null, false,
 				UtilUI.CONTAINS_WORDS_AND);
 
-		activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Activas", "No activas",
-				true, 0);
+		activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Obsoletas", "Activas",
+				true, 2);
 
 		activoOG.addValueChangeListener(e -> {
 			loadDataResetPaged();
@@ -201,14 +202,14 @@ public class WCuentasFondo extends WindowListado {
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(
-				new Object[] { "numeroRubro", "numeroGrupo", "numeroBanco", "numero", "nombre", "tipo", "bloqueado" });
+				new Object[] { "id", "cuentaFondoGrupo", "banco", "numero", "nombre", "cuentaFondoTipo", "bloqueado" });
 
-		UtilUI.confColumn(itemsGRD.getColumn("numeroRubro"), "Rubro", true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("numeroGrupo"), "Grupo", true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("numeroBanco"), "Banco", true, true, false, true, 100);
+		UtilUI.confColumn(itemsGRD.getColumn("id"), "Id", true, true, false, true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoGrupo"), "Grupo", true, true, false, true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("banco"), "Banco", true, true, false, true, 100);
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Cuenta", true, 50);
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-		UtilUI.confColumn(itemsGRD.getColumn("tipo"), "Tipo", true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoTipo"), "Tipo", true, -1);
 		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, true, false, true, 30);
 
 		itemsGRD.setContainerDataSource(getItemsBIC());
@@ -232,8 +233,8 @@ public class WCuentasFondo extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("numeroRubro", SortDirection.ASCENDING));
-		order.add(new SortOrder("numeroGrupo", SortDirection.ASCENDING));
+		// order.add(new SortOrder("numeroRubro", SortDirection.ASCENDING));
+		order.add(new SortOrder("cuentaFondoGrupo", SortDirection.ASCENDING));
 		order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);
@@ -359,20 +360,19 @@ public class WCuentasFondo extends WindowListado {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void treeValueChangeListener(Object item) {
 		try {
-			if (item instanceof Rubros) {
-				filterBI.getItemProperty("numeroRubro").setValue(((Rubros) item).getNumero());
+			if (item instanceof CuentaFondoRubro) {
+				filterBI.getBean().setIdRubro(((CuentaFondoRubro) item).getId());
+				filterBI.getBean().setIdGrupo(null);
 				this.loadDataResetPaged();
-			} else if (item instanceof Grupos) {
-				filterBI.getItemProperty("numeroRubro").setValue(((Grupos) item).getNumeroRubro());
-
-				filterBI.getItemProperty("numeroGrupo").setValue(((Grupos) item).getNumero());
+			} else if (item instanceof CuentaFondoGrupo) {
+				filterBI.getBean().setIdRubro(null);
+				filterBI.getBean().setIdGrupo(((CuentaFondoGrupo) item).getId());
 				this.loadDataResetPaged();
 			} else {
-				filterBI.getItemProperty("numeroRubro").setValue(null);
-				filterBI.getItemProperty("numeroGrupo").setValue(null);
+				filterBI.getBean().setIdRubro(null);
+				filterBI.getBean().setIdGrupo(null);
 				this.loadDataResetPaged();
 			}
 
@@ -396,27 +396,22 @@ public class WCuentasFondo extends WindowListado {
 
 	private void addCuentasContablesTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
 
-		List<Rubros> rubros = queryDataRubrosFiltro();
+		List<CuentaFondoRubro> rubros = new CuentaFondoRubro().find();
 
-		for (Rubros rubro : rubros) {
+		for (CuentaFondoRubro rubro : rubros) {
 
 			tree.addItem(rubro);
 			tree.setParent(rubro, itemTodas);
 			// tree.setChildrenAllowed(cuentaContable, false);
-
-			GruposFiltro filtro = new GruposFiltro();
-			filtro.setNumeroRubro(rubro.getNumero());
-
-			List<Grupos> grupos = queryDataGruposFiltro(filtro);
 
 			if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)) {
 				tree.select(rubro);
 				tree.expandItem(rubro);
 			}
 
-			for (Grupos grupo : grupos) {
+			List<CuentaFondoGrupo> grupos = new CuentaFondoGrupo().findByRubro(rubro);
 
-				grupo.setNumeroRubro(rubro.getNumero());
+			for (CuentaFondoGrupo grupo : grupos) {
 
 				tree.addItem(grupo);
 				tree.setParent(grupo, rubro);
@@ -439,14 +434,15 @@ public class WCuentasFondo extends WindowListado {
 	protected void eliminarTreeBTNClick() {
 		try {
 
-			if (tree.getValue() != null && tree.getValue() instanceof Rubros || tree.getValue() instanceof Grupos) {
+			if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro
+					|| tree.getValue() instanceof CuentaFondoGrupo) {
 
 				getUI().addWindow(new EliminarDialog(tree.getValue().toString(), new EliminarDialog.Callback() {
 					public void onDialogResult(boolean yes) {
 
 						try {
 							if (yes) {
-								if (tree.getValue() != null) {
+//								if (tree.getValue() != null) {
 
 									Object item = tree.getValue();
 
@@ -454,15 +450,16 @@ public class WCuentasFondo extends WindowListado {
 
 									LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-									if (item instanceof Grupos) {
-										loadDataResetPagedTree(((Grupos) item).getNumeroRubro(), null);
+									if (item instanceof CuentaFondoGrupo) {
+										loadDataResetPagedTree(
+												((CuentaFondoGrupo) item).getCuentaFondoRubro().getNumero(), null);
 									} else {
 										loadDataResetPagedTree();
 									}
 
 									loadData();
 
-								}
+//								}
 							}
 						} catch (Exception e) {
 							LogAndNotification.print(e);
@@ -482,15 +479,15 @@ public class WCuentasFondo extends WindowListado {
 
 			if (tree.getValue() != null && tree.getValue() instanceof String || tree.getValue().equals(itemTodas)) {
 
-				WRubro window = new WRubro();
+				WCuentaFondoRubro window = new WCuentaFondoRubro();
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
 				getUI().addWindow(window);
 
-			} else if (tree.getValue() != null && tree.getValue() instanceof Rubros) {
+			} else if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro) {
 
-				WGrupo window = new WGrupo(((Rubros) tree.getValue()).getNumero());
+				WCuentaFondoGrupo window = new WCuentaFondoGrupo(((CuentaFondoRubro) tree.getValue()));
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -506,26 +503,21 @@ public class WCuentasFondo extends WindowListado {
 	protected void modificarTreeBTNClick() {
 		try {
 
-			if (tree.getValue() != null && tree.getValue() instanceof Rubros) {
+			if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro) {
 
-				Rubros item = (Rubros) tree.getValue();
-				RubroFiltro filtro = new RubroFiltro();
-				filtro.setNumero(item.getNumero());
+				CuentaFondoRubro item = (CuentaFondoRubro) tree.getValue();
 
-				WRubro window = new WRubro(WRubro.UPDATE_MODE, filtro);
+				WCuentaFondoRubro window = new WCuentaFondoRubro(WCuentaFondoRubro.UPDATE_MODE, item.getId());
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
 				getUI().addWindow(window);
 
-			} else if (tree.getValue() != null && tree.getValue() instanceof Grupos) {
+			} else if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoGrupo) {
 
-				Grupos item = (Grupos) tree.getValue();
-				GrupoFiltro filtro = new GrupoFiltro();
-				filtro.setNumero(item.getNumero());
-				filtro.setNumeroRubro(item.getNumeroRubro());
+				CuentaFondoGrupo item = (CuentaFondoGrupo) tree.getValue();
 
-				WGrupo window = new WGrupo(WGrupo.UPDATE_MODE, filtro);
+				WCuentaFondoGrupo window = new WCuentaFondoGrupo(WCuentaFondoGrupo.UPDATE_MODE, item.getId());
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -539,9 +531,9 @@ public class WCuentasFondo extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<CuentasFondo> getItemsBIC() {
+	protected BeanItemContainer<CuentaFondo> getItemsBIC() {
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<CuentasFondo>(CuentasFondo.class, new ArrayList<CuentasFondo>());
+			itemsBIC = new BeanItemContainer<CuentaFondo>(CuentaFondo.class, new ArrayList<CuentaFondo>());
 		}
 		return itemsBIC;
 	}
@@ -552,11 +544,11 @@ public class WCuentasFondo extends WindowListado {
 		nombreTB.validate();
 	}
 
-	protected void addBeansToitemsBIC() {
+	protected void addBeansToItemsBIC() {
 
-		List<CuentasFondo> items = queryData();
+		List<CuentaFondo> items = queryData();
 
-		for (CuentasFondo item : items) {
+		for (CuentaFondo item : items) {
 			getItemsBIC().addBean(item);
 		}
 	}
@@ -565,7 +557,7 @@ public class WCuentasFondo extends WindowListado {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	private List<CuentasFondo> queryData() {
+	private List<CuentaFondo> queryData() {
 
 		try {
 
@@ -576,65 +568,30 @@ public class WCuentasFondo extends WindowListado {
 						sortOrder.getDirection().toString().equals("ASCENDING"));
 			}
 
-			return cuentasFondoBO.find(limit, offset, orderBy, this.filterBI.getBean());
+			return new CuentaFondo().find(limit, offset, orderBy, filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<CuentasFondo>();
+		return new ArrayList<CuentaFondo>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	protected void deleteItem(Object item) {
-		try {
-
-			cuentasFondoBO.deleteItem((CuentasFondo) item);
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
+	protected void deleteItem(Object item) throws Exception {
+		((EntityId) item).delete();
 	}
 
 	// ------------------------------------------------------------------------------
 
-	private List<Rubros> queryDataRubrosFiltro() {
-		try {
-
-			return Context.getRubrosBO().find();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Rubros>();
-	}
-
-	private List<Grupos> queryDataGruposFiltro(GruposFiltro filtro) {
-		try {
-
-			return Context.getGruposBO().find(filtro);
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Grupos>();
-	}
-
 	// metodo que realiza el delete en la base de datos
-	private void deleteItemTree(Object item) {
-		try {
-
-			if (item instanceof Rubros) {
-				Context.getRubrosBO().deleteItem((Rubros) item);
-			} else if (item instanceof Grupos) {
-				Context.getGruposBO().deleteItem((Grupos) item);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
+	private void deleteItemTree(Object item) throws Exception {
+		if (item instanceof CuentaFondoRubro) {
+			((CuentaFondoRubro) item).delete();
+		} else if (item instanceof CuentaFondoGrupo) {
+			((CuentaFondoGrupo) item).delete();
 		}
+
 	}
 
 	// =================================================================================

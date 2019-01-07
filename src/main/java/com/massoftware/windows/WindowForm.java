@@ -45,6 +45,18 @@ public abstract class WindowForm extends Window {
 
 	// -------------------------------------------------------------
 
+	protected void actualizarTitulo() throws Exception {
+		if (INSERT_MODE.equalsIgnoreCase(mode)) {
+			this.setCaption("Agregar " + getCaption().toLowerCase());
+		} else if (UPDATE_MODE.equalsIgnoreCase(mode)) {
+			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getBean());
+		} else if (COPY_MODE.equalsIgnoreCase(mode)) {
+			this.setCaption("Copiar " + getCaption() + " : " + getBean());
+		}
+	}
+
+	// -------------------------------------------------------------
+
 	protected HorizontalLayout buildBotonera1() {
 
 		HorizontalLayout filaBotoneraHL = new HorizontalLayout();

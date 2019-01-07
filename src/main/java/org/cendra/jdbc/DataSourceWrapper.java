@@ -42,7 +42,7 @@ public class DataSourceWrapper {
 	}
 
 	public synchronized boolean isDatabasePostgreSql() {
-		return dataSourceMetaData.getDatabaseProductName().equals("PostgreSQL");
+		return dataSourceMetaData.isDatabasePostgreSql() ;
 	}
 
 	public synchronized boolean isDatabaseMicrosoftSQLServer() {

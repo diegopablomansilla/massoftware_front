@@ -1,7 +1,5 @@
 package com.massoftware.windows.bancos;
 
-import com.massoftware.windows.UtilModel;
-
 public class Bancos {
 
 	private String id;
@@ -30,7 +28,7 @@ public class Bancos {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);
+		this.nombre = nombre;
 	}
 
 	public Boolean getBloqueado() {
@@ -38,9 +36,7 @@ public class Bancos {
 	}
 
 	public void setBloqueado(Boolean bloqueado) {
-		this.bloqueado = UtilModel.format(bloqueado);
+		this.bloqueado = bloqueado;
 	}
-	
-	
 
 }

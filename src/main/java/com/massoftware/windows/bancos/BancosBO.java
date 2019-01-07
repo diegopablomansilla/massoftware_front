@@ -105,31 +105,31 @@ class BancosBO {
 		Integer c = ifExistsCuentasDeFondos(item.getNumero());
 
 		if (c > 0) {
-			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Cuenta de Fondo");
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, (long)c, "Cuenta de Fondo");
 		}
 
 		c = ifExistsPersonal(item.getNumero());
 
 		if (c > 0) {
-			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Personal");
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, (long)c, "Personal");
 		}
 
 		c = ifExistsProveedores(item.getNumero());
 
 		if (c > 0) {
-			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Proveedor");
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, (long)c, "Proveedor");
 		}
 
 		c = ifExistsValoresDeTerceros(item.getNumero());
 
 		if (c > 0) {
-			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Valor de Tercero");
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, (long)c, "Valor de Tercero");
 		}
 
 		c = ifExistsValoresPropios(item.getNumero());
 
 		if (c > 0) {
-			throw new DeleteForeingObjectConflictException("el", "Banco", item, c, "Valor Propio");
+			throw new DeleteForeingObjectConflictException("el", "Banco", item, (long)c, "Valor Propio");
 		}
 
 		// ==================================================================

@@ -2,13 +2,19 @@ package com.massoftware.model;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.cendra.ex.crud.DeleteForeingObjectConflictException;
 import org.cendra.ex.crud.NullFieldException;
+import org.cendra.jdbc.SQLExceptionWrapper;
 
 import com.massoftware.backend.BackendContext;
 
 public class EntityId extends Entity implements Comparable<EntityId> {
+
+	private int _defMaxLevel = 3;
 
 	protected String id;
 
@@ -16,34 +22,84 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 	public void loadById() throws Exception {
 
-		loadById(getId(), false);
+		loadById(getId(), _defMaxLevel);
 	}
 
-	public void loadById(boolean loadLevel1LeftScalar) throws Exception {
+	public void loadById(int maxLevel) throws Exception {
 
-		loadById(getId(), loadLevel1LeftScalar);
+		loadById(getId(), maxLevel);
 	}
 
 	public void loadById(String id) throws Exception {
-		loadById(id, false);
+		loadById(id, _defMaxLevel);
 	}
 
-	public void loadById(String id, boolean loadLevel1LeftScalar) throws Exception {
+	public void loadById(String id, int maxLevel) throws Exception {
 
 		if (id != null && id.trim().length() > 0) {
 
 			Object[] row = BackendContext.get().findById(this.getClass().getSimpleName(), id);
 
-			setter(row, true);
+			setter(row, 0, maxLevel);
 		}
 
 	}
 
 	public void setter(Object[] row) throws Exception {
-		setter(row, false);
+		setter(row, 0, _defMaxLevel);
 	}
 
-	public void setter(Object[] row, boolean loadLevel1LeftScalar) throws Exception {
+	// public void setterx(Object[] row, boolean loadLevel1Left) throws Exception {
+	//
+	// Field[] fields = getClass().getDeclaredFields();
+	//
+	// for (int i = 0; i < fields.length; i++) {
+	//
+	// Field field = fields[i];
+	//
+	// if (field.getName().startsWith("_") == false) {
+	//
+	// @SuppressWarnings("rawtypes")
+	// Class[] argTypes = new Class[] { field.getType() };
+	//
+	// Method methodSet = this.getClass().getDeclaredMethod("set" +
+	// toCamelCase(field.getName()), argTypes);
+	//
+	// methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
+	//
+	// if (isScalar(field.getType())) {
+	//
+	// methodSet.invoke(this, row[i]);
+	//
+	// } else if (row[i] != null) {
+	//
+	// EntityId other = (EntityId) field.getType().newInstance();
+	//
+	// if (loadLevel1Left) {
+	// Object[] rowOther =
+	// BackendContext.get().findById(field.getType().getSimpleName(),
+	// row[i].toString());
+	// other.setter(rowOther, false);
+	// } else {
+	// other.setId(row[i].toString());
+	// }
+	//
+	// methodSet.invoke(this, other);
+	// }
+	//
+	// }
+	//
+	// }
+	//
+	// _originalDTO = (EntityId) this.clone();
+	//
+	// }
+
+	public void setter(Object[] row, int maxLevel) throws Exception {
+		setter(row, 0, maxLevel);
+	}
+
+	public void setter(Object[] row, int level, int maxLevel) throws Exception {
 
 		Field[] fields = getClass().getDeclaredFields();
 
@@ -51,54 +107,40 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 			Field field = fields[i];
 
-			@SuppressWarnings("rawtypes")
-			Class[] argTypes = new Class[] { field.getType() };
+			if (field.getName().startsWith("_") == false) {
 
-			Method methodSet = this.getClass().getDeclaredMethod("set" + toCamelCase(field.getName()), argTypes);
+				@SuppressWarnings("rawtypes")
+				Class[] argTypes = new Class[] { field.getType() };
 
-			methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
+				Method methodSet = this.getClass().getDeclaredMethod("set" + toCamelCase(field.getName()), argTypes);
 
-			if (isScalar(field.getType())) {
+				methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
 
-				methodSet.invoke(this, row[i]);
+				if (isScalar(field.getType())) {
 
-			} else if (row[i] != null) {
+					methodSet.invoke(this, row[i]);
 
-				EntityId other = (EntityId) field.getType().newInstance();
+				} else if (row[i] != null) {
 
-				if (loadLevel1LeftScalar) {
-					Object[] rowOther = BackendContext.get().findById(field.getType().getSimpleName(),
-							row[i].toString());
-					other.setter(rowOther, false);
-				} else {
-					other.setId(row[i].toString());
+					EntityId other = (EntityId) field.getType().newInstance();
+
+					if (level < maxLevel) {
+						Object[] rowOther = BackendContext.get().findById(field.getType().getSimpleName(),
+								row[i].toString());
+						other.setter(rowOther, level + 1, maxLevel);
+					} else {
+						other.setId(row[i].toString());
+					}
+
+					methodSet.invoke(this, other);
 				}
 
-				methodSet.invoke(this, other);
 			}
 
 		}
 
 		_originalDTO = (EntityId) this.clone();
 
-	}
-
-	public void setterNull() throws Exception {
-
-		Field[] fields = getClass().getDeclaredFields();
-
-		for (int i = 0; i < fields.length; i++) {
-
-			Field field = fields[i];
-
-			@SuppressWarnings("rawtypes")
-			Class[] argTypes = new Class[] { field.getType() };
-
-			Method methodSet = this.getClass().getDeclaredMethod("set" + toCamelCase(field.getName()), argTypes);
-
-			methodSet.invoke(this, new Object[] { null });
-
-		}
 	}
 
 	public String getId() {
@@ -176,8 +218,14 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 			args[i] = methodGet.invoke(this);
 
-			if (args[i] == null) {
+			if (args[i] == null && isScalar(fields[i].getType()) == true) {
+
 				args[i] = fields[i].getType();
+
+			} else if (args[i] == null && isScalar(fields[i].getType()) == false) {
+
+				args[i] = String.class;
+
 			} else if (args[i] != null && isScalar(fields[i].getType()) == false) {
 
 				methodGet = fields[i].getType().getMethod("getId");
@@ -211,8 +259,14 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 			args[i] = methodGet.invoke(this);
 
-			if (args[i] == null) {
-				args[i] = field.getType();
+			if (args[i] == null && isScalar(fields[i].getType()) == true) {
+
+				args[i] = fields[i].getType();
+
+			} else if (args[i] == null && isScalar(fields[i].getType()) == false) {
+
+				args[i] = String.class;
+
 			} else if (args[i] != null && isScalar(fields[i].getType()) == false) {
 
 				methodGet = field.getType().getMethod("getId");
@@ -249,7 +303,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		}
 
 		if (value == null) {
-			
+
 			Field field = this.getClass().getDeclaredField(attName);
 
 			Method methodGet = this.getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
@@ -280,6 +334,59 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	public Object maxValue(String attName) throws Exception {
 
 		return BackendContext.get().maxValueInteger(attName, this.getClass().getSimpleName());
+
+	}
+
+	protected List<EntityId> findUtil(String orderBy, String where, int limit, int offset, Object[] args, int maxLevel)
+			throws Exception {
+
+		Object[][] table = BackendContext.get().find(this.getClass().getSimpleName(), "*", orderBy, where, limit,
+				offset, args);
+
+		List<EntityId> items = new ArrayList<EntityId>();
+
+		for (int i = 0; i < table.length; i++) {
+			EntityId item = this.getClass().newInstance();
+			item.setter(table[i], maxLevel);
+
+			items.add(item);
+		}
+
+		return items;
+	}
+
+	public void delete() throws Exception {
+
+		// ==================================================================
+		// CHECKs NULLs
+
+		// if (item == null) {
+		// throw new InsertNullException("Cuenta de fondo");
+		// }
+
+		// ==================================================================
+		// CHECKs FKs
+
+		// Long c = BackendContext.get().ifExistsByFkId(CuentaFondoRubro.class,
+		// getId());
+		//
+		// if (c > 0) {
+		// throw new DeleteForeingObjectConflictException("el", "item", this, c,
+		// "Rubro");
+		// }
+
+		// ==================================================================
+
+		try {
+			BackendContext.get().delete(this.getClass(), getId());
+		} catch (SQLExceptionWrapper e) {
+			if ("23503".equals(e.getSQLState())) {
+				throw new DeleteForeingObjectConflictException(this);
+			}
+
+			throw e;
+
+		}
 
 	}
 

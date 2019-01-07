@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import com.massoftware.model.CuentaFondo;
+import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
@@ -18,8 +20,6 @@ import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
-import com.massoftware.windows.cuentas_fondo.CuentasFondo;
-import com.massoftware.windows.cuentas_fondo.CuentasFondoFiltro;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -619,10 +619,10 @@ public class WValoresTerceros extends Window {
 			CuentasFondoFiltro cuentasFondoFiltro = new CuentasFondoFiltro();
 			cuentasFondoFiltro.setNumero(this.filterBI.getBean().getNumeroCuentaFondo());
 
-			WCuentasFondo window = new WCuentasFondo(cuentasFondoFiltro);
+			WCuentasFondo window = null; //new WCuentasFondo(cuentasFondoFiltro); // 777
 			window.setModal(true);
 			window.center();
-	
+
 			window.addCloseListener(new CloseListener() {
 				private static final long serialVersionUID = 1L;
 
@@ -665,7 +665,7 @@ public class WValoresTerceros extends Window {
 		try {
 			if (window.itemsGRD.getSelectedRow() != null) {
 
-				CuentasFondo item = (CuentasFondo) window.itemsGRD.getSelectedRow();
+				CuentaFondo item = (CuentaFondo) window.itemsGRD.getSelectedRow();
 
 				this.filterBI.getItemProperty("numeroCuentaFondo").setValue(item.getNumero());
 				this.filterBI.getItemProperty("nombreCuentaFondo").setValue(item.getNombre());
@@ -686,11 +686,11 @@ public class WValoresTerceros extends Window {
 		try {
 
 			// if (this.filterBI.getBean().getNumeroBanco() != null) {
-			
+
 			BancosFiltro bancosFiltro = new BancosFiltro();
 			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
 
-			WBancos window = new WBancos(bancosFiltro);			
+			WBancos window = new WBancos(bancosFiltro);
 			window.setModal(true);
 			window.center();
 

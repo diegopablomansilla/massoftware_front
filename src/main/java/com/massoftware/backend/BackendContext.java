@@ -167,6 +167,13 @@ public class BackendContext extends AbstractContext {
 
 	// ================================================================================
 
+	public synchronized Object[][] findAll(String tableName) throws Exception {
+		Object[][] table = find(tableName, "*", null, null, -1, -1, null);
+
+		return table;
+
+	}
+
 	public synchronized Object[] findById(String tableName, String id) throws Exception {
 		Object[][] table = find(tableName, "*", null, "id = ?", -1, -1, new Object[] { id });
 
@@ -240,6 +247,20 @@ public class BackendContext extends AbstractContext {
 			connectionWrapper.close(connectionWrapper);
 		}
 
+	}
+
+	@SuppressWarnings("rawtypes")
+	public synchronized boolean delete(Class clazz, String id) throws Exception {
+
+		String tableSQL = "massoftware." + clazz.getSimpleName();
+		String whereSQL = "";
+
+		ArrayList<Object> args = new ArrayList<Object>();
+
+		args.add(id);
+		whereSQL += "id = ?";
+
+		return BackendContext.get().delete(tableSQL, whereSQL, args.toArray());
 	}
 
 	public synchronized boolean delete(String nameTableDB, String where, Object... args) throws Exception {
@@ -480,8 +501,9 @@ public class BackendContext extends AbstractContext {
 
 		return insert(nameTableDB, nameAtts, args);
 	}
-	
-	public void checkUnique(EntityId dto, String attName, String label, Object originalValue, Object newValue) throws Exception {
+
+	public void checkUnique(EntityId dto, String attName, String label, Object originalValue, Object newValue)
+			throws Exception {
 
 		if (originalValue != null && originalValue.equals(newValue) == false) {
 
@@ -498,11 +520,34 @@ public class BackendContext extends AbstractContext {
 
 	}
 
+	@SuppressWarnings("rawtypes")
+	public Long ifExistsByFkId(Class clazz, String id) throws Exception {
+
+		String tableSQL = clazz.getSimpleName();
+
+		String attsSQL = "COUNT(" + clazz.getSimpleName() + ") ";
+		String orderBySQL = null;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		filtros.add(id);
+		whereSQL += clazz.getSimpleName() + " = ?";
+
+		// ==================================================================
+
+		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+				filtros.toArray());
+
+		return (Long) table[0][0];
+
+	}
+
 	private boolean ifExists(EntityId dto, String attName, Object arg) throws Exception {
 
 		String tableSQL = dto.getClass().getSimpleName();
 
-		String attsSQL = "COUNT(" + attName + ") ";
+		String attsSQL = "COUNT(" + "*" + ") ";
 		String orderBySQL = null;
 		String whereSQL = "";
 
@@ -510,9 +555,52 @@ public class BackendContext extends AbstractContext {
 
 		filtros.add(arg);
 		if (arg instanceof String) {
-			whereSQL += "LOWER(TRIM(massoftware.TRASLATE(" + attName + ")))::VARCHAR = LOWER(TRIM(massoftware.TRASLATE(?)))::VARCHAR";
+			whereSQL += "LOWER(TRIM(massoftware.TRANSLATE(" + attName
+					+ ")))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE(?)))::VARCHAR";
 		} else {
 			whereSQL += attName + " = ?";
+		}
+
+		// ==================================================================
+
+		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+				filtros.toArray());
+
+		return (Long) table[0][0] > 0;
+
+	}
+
+	public boolean ifExists(EntityId dto, String[] attNames, Object[] args) throws Exception {
+
+		String tableSQL = dto.getClass().getSimpleName();
+
+		String attsSQL = "COUNT(" + "*" + ") ";
+		String orderBySQL = null;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		for (int i = 0; i < attNames.length; i++) {
+			Object arg = args[i];
+			String attName = attNames[i];
+
+			filtros.add(arg);
+			if (arg instanceof String) {
+				whereSQL += "LOWER(TRIM(massoftware.TRANSLATE(" + attName
+						+ ")))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE(?)))::VARCHAR AND ";
+			} else {
+				whereSQL += attName + " = ? AND ";
+			}
+
+		}
+
+		// ==================================================================
+
+		whereSQL = whereSQL.trim();
+		if (whereSQL.length() > 0) {
+			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
+		} else {
+			whereSQL = null;
 		}
 
 		// ==================================================================

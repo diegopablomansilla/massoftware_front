@@ -1,5 +1,9 @@
 package com.massoftware.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Banco extends EntityId {
 
 	private String id;
@@ -131,46 +135,100 @@ public class Banco extends EntityId {
 
 	@Override
 	public String toString() {
-		return "Banco [id=" + id + ", numero=" + numero + ", nombre=" + nombre + ", cuit=" + cuit + ", bloqueado="
-				+ bloqueado + ", hoja=" + hoja + ", primeraFila=" + primeraFila + ", ultimaFila=" + ultimaFila
-				+ ", fecha=" + fecha + ", descripcion=" + descripcion + ", referencia1=" + referencia1 + ", importe="
-				+ importe + ", referencia2=" + referencia2 + ", saldo=" + saldo + "]";
+		return "(" + numero + ") " + nombre;
 	}
-	
-//	private boolean check(Banco itemOriginal, Banco item) throws Exception {
-//
-//		// ==================================================================
-//		// CHECKs NULLs
-//
-//		
-//		if (item.getNumero() == null) {
-//			throw new NullFieldException("Numero");
-//		}
-//		if (item.getNombre() == null) {
-//			throw new NullFieldException("Nombre");
-//		}		
-//		if (item.getCuit() == null) {
-//			throw new NullFieldException("CUIT");
-//		}
-//
-//		// ==================================================================
-//		// CHECKs UNIQUE
-//
-////		if (itemOriginal != null) {
-////			checkUniqueNumero("Numero", itemOriginal.getNumero(), item.getNumero());
-////			checkUniqueNombre("Nombre", itemOriginal.getNombre(), item.getNombre());
-////			checkUniqueNombreOficial("Nombre oficial", itemOriginal.getNombreOficial(), item.getNombreOficial());
-////			checkUniqueCuit("CUIT", itemOriginal.getCuit(), item.getCuit());
-////		} else {
-////			checkUniqueNumero("Numero", null, item.getNumero());
-////			checkUniqueNombre("Nombre", null, item.getNombre());
-////			checkUniqueNombreOficial("Nombre oficial", null, item.getNombreOficial());
-////			checkUniqueCuit("CUIT", null, item.getCuit());
-////		}
-//
-//		// ==================================================================
-//
-//		return true;
-//	}
+
+	public List<Banco> find(BancosFiltro2 bancosFiltro) throws Exception {
+		return find(-1, -1, null, bancosFiltro);
+	}
+
+	public List<Banco> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro2 filtro)
+			throws Exception {
+
+		filtro.setterTrim();
+
+		List<Banco> listado = new ArrayList<Banco>();
+
+		String orderBySQL = "numero";
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		if (filtro.getNumero() != null) {
+			filtros.add(filtro.getNumero());
+			whereSQL += "numero" + " = ? AND ";
+		}
+		if (filtro.getNombre() != null) {
+			String[] palabras = filtro.getNombre().split(" ");
+			for (String palabra : palabras) {
+				filtros.add(palabra.trim());
+				whereSQL += "TRIM(massoftware.TRANSLATE(" + "nombre"
+						+ "))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(?)) || '%')::VARCHAR AND ";
+			}
+		}
+		if (filtro.getBloqueado() != null && filtro.getBloqueado() == 1) {
+			filtros.add(true);
+			whereSQL += "bloqueado" + " = ? AND ";
+		} else if (filtro.getBloqueado() != null && filtro.getBloqueado() == 2) {
+			filtros.add(false);
+			whereSQL += "bloqueado" + " = ? AND ";
+		}
+
+		// ==================================================================
+
+		whereSQL = whereSQL.trim();
+		if (whereSQL.length() > 0) {
+			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
+		} else {
+			whereSQL = null;
+		}
+
+		// ==================================================================
+
+		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 1);
+
+		for (EntityId item : items) {
+			listado.add((Banco) item);
+		}
+
+		return listado;
+	}
+
+	// private boolean check(Banco itemOriginal, Banco item) throws Exception {
+	//
+	// // ==================================================================
+	// // CHECKs NULLs
+	//
+	//
+	// if (item.getNumero() == null) {
+	// throw new NullFieldException("Numero");
+	// }
+	// if (item.getNombre() == null) {
+	// throw new NullFieldException("Nombre");
+	// }
+	// if (item.getCuit() == null) {
+	// throw new NullFieldException("CUIT");
+	// }
+	//
+	// // ==================================================================
+	// // CHECKs UNIQUE
+	//
+	//// if (itemOriginal != null) {
+	//// checkUniqueNumero("Numero", itemOriginal.getNumero(), item.getNumero());
+	//// checkUniqueNombre("Nombre", itemOriginal.getNombre(), item.getNombre());
+	//// checkUniqueNombreOficial("Nombre oficial", itemOriginal.getNombreOficial(),
+	// item.getNombreOficial());
+	//// checkUniqueCuit("CUIT", itemOriginal.getCuit(), item.getCuit());
+	//// } else {
+	//// checkUniqueNumero("Numero", null, item.getNumero());
+	//// checkUniqueNombre("Nombre", null, item.getNombre());
+	//// checkUniqueNombreOficial("Nombre oficial", null, item.getNombreOficial());
+	//// checkUniqueCuit("CUIT", null, item.getCuit());
+	//// }
+	//
+	// // ==================================================================
+	//
+	// return true;
+	// }
 
 }

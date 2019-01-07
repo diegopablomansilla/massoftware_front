@@ -12,6 +12,7 @@ import org.vaadin.patrik.FastNavigation;
 import org.vaadin.patrik.FastNavigation.RowFocusListener;
 import org.vaadin.patrik.events.RowFocusEvent;
 
+import com.massoftware.model.Entity;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.converter.Converter;
@@ -444,7 +445,7 @@ public class UtilUI {
 	@Deprecated
 	public static HorizontalLayout buildTXTHL(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
-			boolean autoUnmask, String inputPrompt) {
+			boolean autoUnmask, String inputPrompt) throws Exception {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
@@ -482,7 +483,7 @@ public class UtilUI {
 	@Deprecated
 	public static HorizontalLayout buildTXTHLInteger(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
-			boolean autoUnmask, String inputPrompt, int minValue, int maxValue) {
+			boolean autoUnmask, String inputPrompt, int minValue, int maxValue) throws Exception {
 
 		HorizontalLayout txtHL = new HorizontalLayout();
 		txtHL.setSpacing(false);
@@ -549,12 +550,44 @@ public class UtilUI {
 
 		throw new RuntimeException(inputPrompt + " not found.");
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXT30100(BeanItem dtoBI, String attName, boolean readOnly, 
+			boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
+			throws Exception {
+
+		return buildTXT(dtoBI, attName, null, readOnly, 30, -1, 100, required, allowInputUnmask, mask,
+				autoUnmask);
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXT(BeanItem dtoBI, String attName, boolean readOnly, int columns, int minLength,
+			int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
+			throws Exception {
+		
+		if(required && minLength < 0) {
+			minLength = 1;
+		}
+
+		return buildTXT(dtoBI, attName, null, readOnly, columns, minLength, maxLength, required, allowInputUnmask, mask,
+				autoUnmask);
+
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXT(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
-			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask) {
+			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
+			throws Exception {
 
 		TextField txt = buildTXT();
+
+		if (label == null && dtoBI.getBean() instanceof Entity) {
+			String lbl = ((Entity) dtoBI.getBean()).label(attName);
+			if (lbl != null) {
+				label = lbl;
+			}
+		}
 
 		txt.setCaption(label);
 
@@ -567,8 +600,7 @@ public class UtilUI {
 
 		if (minLength > 0) {
 
-			// txt.addValidator(new MinLengthValidator(String.class, label,
-			// minLength));
+			// txt.addValidator(new MinLengthValidator(String.class, label, minLength));
 		}
 
 		if (allowInputUnmask == true) {
@@ -594,14 +626,14 @@ public class UtilUI {
 
 		txt.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
-		txt.setReadOnly(readOnly);				
+		txt.setReadOnly(readOnly);
 
 		return txt;
 	}
 
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTShortPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int minLength, boolean required) {
+			int minLength, boolean required) throws Exception {
 
 		int length = (Short.MAX_VALUE + "").length();
 
@@ -610,12 +642,24 @@ public class UtilUI {
 		}
 
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
-				1, Short.MAX_VALUE);
+				0, Short.MAX_VALUE);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, 
+			boolean required) throws Exception {
+		return buildTXTIntegerPlus(dtoBI, attName, null, readOnly, -1, required);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, int minLength,
+			boolean required) throws Exception {
+		return buildTXTIntegerPlus(dtoBI, attName, null, readOnly, minLength, required);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int minLength, boolean required) {
+			int minLength, boolean required) throws Exception {
 
 		int length = (Integer.MAX_VALUE + "").length();
 
@@ -624,12 +668,13 @@ public class UtilUI {
 		}
 
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
-				1, Integer.MAX_VALUE);
+				0, Integer.MAX_VALUE);
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTTinyintPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int minLength, boolean required) {
+			int minLength, boolean required) throws Exception {
 
 		int length = 3;
 
@@ -637,14 +682,18 @@ public class UtilUI {
 			minLength = 1;
 		}
 
-		return buildTXTInteger(dtoBI, attName, label, readOnly, 6, minLength, length, required, false, null, false, 1,
+		return buildTXTInteger(dtoBI, attName, label, readOnly, 6, minLength, length, required, false, null, false, 0,
 				255);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTInteger(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
-			int minValue, int maxValue) {
+			int minValue, int maxValue) throws Exception {
+
+		if (maxLength > (Integer.MAX_VALUE + "").length()) {
+			maxLength = (Integer.MAX_VALUE + "").length();
+		}
 
 		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
 				allowInputUnmask, mask, autoUnmask);
@@ -667,7 +716,7 @@ public class UtilUI {
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTLong(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
-			long minValue, long maxValue) {
+			long minValue, long maxValue) throws Exception {
 
 		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
 				allowInputUnmask, mask, autoUnmask);
@@ -1062,11 +1111,25 @@ public class UtilUI {
 		return txtHL;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, boolean readOnly, boolean required, Class clazz,
+			List options) throws Exception {
+
+		return buildFieldCB(dtoBI, attName, null, readOnly, required, clazz, options);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			boolean required, Class clazz, List options) throws Exception {
 
 		ComboBox cb = buildCB();
+
+		if (label == null && dtoBI.getBean() instanceof Entity) {
+			String lbl = ((Entity) dtoBI.getBean()).label(attName);
+			if (lbl != null) {
+				label = lbl;
+			}
+		}
 
 		cb.setCaption(label);
 

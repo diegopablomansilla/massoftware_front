@@ -24,7 +24,7 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings("rawtypes")
 	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
-			boolean autoUnmask, String inputPrompt) {
+			boolean autoUnmask, String inputPrompt) throws Exception {
 
 		this.setSpacing(false);
 

@@ -99,8 +99,8 @@ public class WBanco extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		confWinForm("BancoX");
-		this.setWidth(31f, Unit.EM);
+		confWinForm("Banco");
+		this.setWidth(28f, Unit.EM);
 
 		// =======================================================
 		// CUERPO
@@ -127,10 +127,10 @@ public class WBanco extends WindowForm {
 	private TabSheet buildCouerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTShortPlus(itemBI, "numero", "Número", false, 1, true);
+		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", "Número", false, 1, true);
 		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT(itemBI, "nombre", "Nombre", false, 40, 1, 40, true, false, null, false);
+		nombreTXT = UtilUI.buildTXT(itemBI, "nombre", "Nombre", false, 30, 1, 100, true, false, null, false);
 		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", "Nombre", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
 		cuitTXT = UtilUI.buildTXT(itemBI, "cuit", "CUIT", false, 11, 1, 11, true, true, "99-99999999-9", true);
@@ -138,13 +138,13 @@ public class WBanco extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		bloqueadoCHX = UtilUI.buildFieldCHK(itemBI, "bloqueado", "Bloqueado", false);
 		// ---------------------------------------------------------------------------------------------------------
-		hojaTXT = UtilUI.buildTXTTinyintPlus(itemBI, "hoja", "Hoja", false, 1, false);
+		hojaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "hoja", "Hoja", false, 1, false);
 		// ---------------------------------------------------------------------------------------------------------
 		primeraFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "primeraFila", "Primera fila", false, 1, false);
 		// ---------------------------------------------------------------------------------------------------------
 		ultimaFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "ultimaFila", "Última fila", false, 1, false);
 		// ---------------------------------------------------------------------------------------------------------
-		fechaTXT = UtilUI.buildTXT(itemBI, "fecha", "Fecha", false, 5, 1, 3, false, false, null, false);
+		fechaTXT = UtilUI.buildTXT(itemBI, "fecha", "Fecha", false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
 		descripcionTXT = UtilUI.buildTXT(itemBI, "descripcion", "Descripcion", false, 6, 1, 3, false, false, null,
 				false);

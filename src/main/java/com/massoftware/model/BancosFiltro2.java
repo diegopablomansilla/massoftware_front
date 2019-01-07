@@ -1,18 +1,10 @@
 package com.massoftware.model;
 
-public class Rubro extends EntityId {
+public class BancosFiltro2 extends Entity {
 
-	private String id;
 	private Integer numero;
 	private String nombre;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	private Integer bloqueado;
 
 	public Integer getNumero() {
 		return numero;
@@ -30,9 +22,17 @@ public class Rubro extends EntityId {
 		this.nombre = nombre;
 	}
 
+	public Integer getBloqueado() {
+		return bloqueado;
+	}
+
+	public void setBloqueado(Integer bloqueado) {
+		this.bloqueado = bloqueado;
+	}
+
 	@Override
 	public String toString() {
-		return "(" + numero + ") " + nombre;
+		return "BancosFiltro2 [numero=" + numero + ", nombre=" + nombre + ", bloqueado=" + bloqueado + "]";
 	}
 
 }

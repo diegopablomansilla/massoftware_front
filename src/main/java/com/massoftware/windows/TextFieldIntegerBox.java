@@ -22,9 +22,28 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int minLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
+			String inputPrompt) throws Exception {
+
+		init(window, dtoBI, attName, label, readOnly,  (Integer.MAX_VALUE+"").length(), minLength, (Integer.MAX_VALUE+"").length(), required, allowInputUnmask, mask,
+				autoUnmask, inputPrompt, 0, Integer.MAX_VALUE);
+		
+	}
+
+	@SuppressWarnings("rawtypes")
+	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
+			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
+			boolean autoUnmask, String inputPrompt, int minValue, int maxValue) throws Exception {
+
+		init(window, dtoBI, attName, label, readOnly, columns, minLength, maxLength, required, allowInputUnmask, mask,
+				autoUnmask, inputPrompt, minValue, maxValue);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void init(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
-			String inputPrompt, int minValue, int maxValue) {
+			String inputPrompt, int minValue, int maxValue) throws Exception {
 
 		this.setSpacing(false);
 
@@ -55,34 +74,35 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 			}
 		});
 
-//		valueTXT.addTextChangeListener(e -> {
-//			try {
-//				valueTXT.setValue(e.getText());
-//				window.loadDataResetPaged();
-//			} catch (Exception ex) {
-//				LogAndNotification.print(ex);
-//			}
-//		});
-		
+		// valueTXT.addTextChangeListener(e -> {
+		// try {
+		// valueTXT.setValue(e.getText());
+		// window.loadDataResetPaged();
+		// } catch (Exception ex) {
+		// LogAndNotification.print(ex);
+		// }
+		// });
+
 		valueTXT.addBlurListener(e -> {
-			try {				
+			try {
 				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
 			}
 		});
-		
-//		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
-//
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void handleAction(Object sender, Object target) {
-//				if (target.equals(valueTXT)) {
-//					valueTXT.setValue(null);
-//				}
-//			}
-//		});
+
+		// this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new
+		// int[] {}) {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// @Override
+		// public void handleAction(Object sender, Object target) {
+		// if (target.equals(valueTXT)) {
+		// valueTXT.setValue(null);
+		// }
+		// }
+		// });
 
 	}
 

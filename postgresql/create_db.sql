@@ -1,6 +1,6 @@
 -- CREATE EXTENSION "uuid-ossp";
 -- SELECT uuid_generate_v4();
-
+SELECT * FROM massoftware.Banco WHERE TRIM(massoftware.TRANSLATE(nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE('jujuy')) || '%')::VARCHAR AND bloqueado = '0' ORDER BY numero OFFSET 0 LIMIT 10;
 
 DROP SCHEMA IF EXISTS massoftware CASCADE;
 
@@ -69,9 +69,9 @@ $$  LANGUAGE plpgsql;
 
 -- SELECT TRANSLATE('12345', '134', 'ax')
 
-DROP FUNCTION IF EXISTS massoftware.traslate_from () CASCADE;
+DROP FUNCTION IF EXISTS massoftware.translate_from () CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.traslate_from() RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION massoftware.translate_from() RETURNS VARCHAR AS $$
 BEGIN
 	
 	RETURN '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'::VARCHAR;
@@ -83,9 +83,9 @@ $$  LANGUAGE plpgsql;
 
 -- SELECT massoftware.traslate_from();
 
-DROP FUNCTION IF EXISTS massoftware.traslate_to () CASCADE;
+DROP FUNCTION IF EXISTS massoftware.translate_to () CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.traslate_to() RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION massoftware.translate_to() RETURNS VARCHAR AS $$
 BEGIN
 	
 	RETURN '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'::VARCHAR;
@@ -97,21 +97,21 @@ $$  LANGUAGE plpgsql;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-DROP FUNCTION IF EXISTS massoftware.traslate (att_val VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.translate (att_val VARCHAR) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.traslate(att_val VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION massoftware.translate(att_val VARCHAR) RETURNS VARCHAR AS $$
 BEGIN
 	IF CHAR_LENGTH(TRIM(att_val)) = 0 THEN
 	
 		RETURN null::VARCHAR;
 	END IF;
 
-	RETURN TRANSLATE(att_val, massoftware.traslate_from (), massoftware.traslate_to())::VARCHAR;
+	RETURN TRANSLATE(att_val, massoftware.translate_from (), massoftware.translate_to())::VARCHAR;
 		
 END;
 $$  LANGUAGE plpgsql;
 
--- SELECT massoftware.traslate('1234567890' || massoftware.traslate_from());
+-- SELECT massoftware.translate('1234567890' || massoftware.translate_from());
 
 
 -- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -125,7 +125,7 @@ CREATE TABLE massoftware.Banco
     -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
     numero INTEGER  NOT NULL UNIQUE CONSTRAINT banco_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL UNIQUE CONSTRAINT banco_nombre_chk CHECK (char_length(nombre) >= 2),
+    nombre VARCHAR  NOT NULL CONSTRAINT banco_nombre_chk CHECK (char_length(nombre) >= 2),
     cuit BIGINT UNIQUE CONSTRAINT banco_cuit_chk CHECK (char_length(cuit::VARCHAR) = 11),
 	bloqueado BOOLEAN NOT NULL DEFAULT false,    
     hoja INTEGER CHECK (hoja > 0),
@@ -139,6 +139,9 @@ CREATE TABLE massoftware.Banco
     saldo VARCHAR(3)
 );
 
+CREATE UNIQUE INDEX u_Banco_nombre ON massoftware.Banco (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
 
 -- SELECT * FROM massoftware.Banco;
 
@@ -151,6 +154,7 @@ DECLARE
 BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
     NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);
     NEW.cuit := massoftware.zero_is_null(NEW.cuit);
@@ -180,88 +184,214 @@ CREATE TRIGGER tgFormatBanco BEFORE INSERT OR UPDATE
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
--- Table: massoftware.Rubro
+-- Table: massoftware.CuentaFondoRubro
 
-DROP TABLE IF EXISTS massoftware.Rubro CASCADE;
+DROP TABLE IF EXISTS massoftware.CuentaFondoRubro CASCADE;
 
-CREATE TABLE massoftware.Rubro
+CREATE TABLE massoftware.CuentaFondoRubro
 (
     -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    numero INTEGER  NOT NULL UNIQUE CONSTRAINT rubro_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL UNIQUE CONSTRAINT rubro_nombre_chk CHECK (char_length(nombre) >= 2)    
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT cuentafondorubro_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT cuentafondorubro_nombre_chk CHECK (char_length(nombre) >= 2)    
 );
 
--- SELECT * FROM massoftware.Rubro;
+CREATE UNIQUE INDEX u_CuentaFondoRubro_nombre ON massoftware.CuentaFondoRubro (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+
+-- SELECT * FROM massoftware.CuentaFondoRubro;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-DROP FUNCTION IF EXISTS massoftware.ftgFormatRubro() CASCADE;
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoRubro() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatRubro() RETURNS TRIGGER AS $formatRubro$
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoRubro() RETURNS TRIGGER AS $formatCuentaFondoRubro$
 DECLARE
 BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
     NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
 	RETURN NEW;
 END;
-$formatRubro$ LANGUAGE plpgsql;
+$formatCuentaFondoRubro$ LANGUAGE plpgsql;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-DROP TRIGGER IF EXISTS tgFormatRubro ON massoftware.Rubro CASCADE;
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoRubro ON massoftware.CuentaFondoRubro CASCADE;
 
-CREATE TRIGGER tgFormatRubro BEFORE INSERT OR UPDATE 
-    ON massoftware.Rubro FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatRubro();
+CREATE TRIGGER tgFormatCuentaFondoRubro BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaFondoRubro FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoRubro();
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
--- Table: massoftware.Grupo
+-- Table: massoftware.CuentaFondoGrupo
 
-DROP TABLE IF EXISTS massoftware.Grupo CASCADE;
+DROP TABLE IF EXISTS massoftware.CuentaFondoGrupo CASCADE;
 
-CREATE TABLE massoftware.Grupo
+CREATE TABLE massoftware.CuentaFondoGrupo
 (
     -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
-    rubro VARCHAR NOT NULL REFERENCES massoftware.Rubro (id),	
-    numero INTEGER  NOT NULL CONSTRAINT grupo_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL UNIQUE CONSTRAINT grupo_nombre_chk CHECK (char_length(nombre) >= 2)    
+    cuentaFondoRubro VARCHAR NOT NULL REFERENCES massoftware.CuentaFondoRubro (id),	
+    numero INTEGER  NOT NULL CONSTRAINT cuentafondogrupo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT cuentafondogrupo_nombre_chk CHECK (char_length(nombre) >= 2)    
 );
 
 
-CREATE UNIQUE INDEX u_Grupo_rubro_grupo ON massoftware.Grupo (rubro, numero);
+CREATE UNIQUE INDEX u_CuentaFondoGrupo_rubro_grupo ON massoftware.CuentaFondoGrupo (cuentaFondoRubro, numero);
+CREATE UNIQUE INDEX u_CuentaFondoGrupo_nombre ON massoftware.CuentaFondoGrupo (cuentaFondoRubro, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
 
--- SELECT * FROM massoftware.Grupo;
+
+-- SELECT * FROM massoftware.CuentaFondoGrupo;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-DROP FUNCTION IF EXISTS massoftware.ftgFormatGrupo() CASCADE;
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoGrupo() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatGrupo() RETURNS TRIGGER AS $formatGrupo$
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoGrupo() RETURNS TRIGGER AS $formatCuentaFondoGrupo$
 DECLARE
 BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.cuentaFondoRubro := massoftware.white_is_null(NEW.cuentaFondoRubro);
     NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
 	RETURN NEW;
 END;
-$formatGrupo$ LANGUAGE plpgsql;
+$formatCuentaFondoGrupo$ LANGUAGE plpgsql;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
-DROP TRIGGER IF EXISTS tgFormatGrupo ON massoftware.Grupo CASCADE;
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoGrupo ON massoftware.CuentaFondoGrupo CASCADE;
 
-CREATE TRIGGER tgFormatGrupo BEFORE INSERT OR UPDATE 
-    ON massoftware.Grupo FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatGrupo();
+CREATE TRIGGER tgFormatCuentaFondoGrupo BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaFondoGrupo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoGrupo();
+    
+
+    
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipo
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoTipo CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoTipo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT cuentafondotipo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT cuentafondotipo_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_CuentaFondoTipo_nombre ON massoftware.CuentaFondoTipo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.CuentaFondoTipo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoTipo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoTipo() RETURNS TRIGGER AS $formatCuentaFondoTipo$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatCuentaFondoTipo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoTipo ON massoftware.CuentaFondoTipo CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoTipo BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaFondoTipo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoTipo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('1', 1, 'Caja');
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('2', 2, 'Banco');
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('3', 3, 'Cartera');
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('4', 4, 'Tarjeta');
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('5', 5, 'Otra');
+INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('6', 6, 'Tickets');
+
+-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+-- Table: massoftware.CuentaFondo	
+
+DROP TABLE IF EXISTS massoftware.CuentaFondo CASCADE;
+
+CREATE TABLE massoftware.CuentaFondo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    cuentaFondoGrupo VARCHAR NOT NULL REFERENCES massoftware.CuentaFondoGrupo (id),	
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT cuentafondo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT cuentafondo_nombre_chk CHECK (char_length(nombre) >= 1),
+    cuentaFondoTipo VARCHAR NOT NULL REFERENCES massoftware.CuentaFondoTipo (id),	
+    banco VARCHAR REFERENCES massoftware.Banco (id),	    
+	bloqueado BOOLEAN NOT NULL DEFAULT false        
+);
+
+CREATE UNIQUE INDEX u_CuentaFondo_nombre ON massoftware.CuentaFondo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondo;
+-- SELECT * FROM massoftware.CuentaFondo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondo() RETURNS TRIGGER AS $formatCuentaFondo$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.cuentaFondoGrupo := massoftware.white_is_null(NEW.cuentaFondoGrupo);
+    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);
+    NEW.cuentaFondoTipo := massoftware.white_is_null(NEW.cuentaFondoTipo);
+    NEW.banco := massoftware.white_is_null(NEW.banco);
+    
+	RETURN NEW;
+END;
+$formatCuentaFondo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondo ON massoftware.CuentaFondo CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaFondo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondo();
+
     
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 

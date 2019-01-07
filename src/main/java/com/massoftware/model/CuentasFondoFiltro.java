@@ -1,4 +1,4 @@
-package com.massoftware.windows.cuentas_fondo;
+package com.massoftware.model;
 
 public class CuentasFondoFiltro {
 
