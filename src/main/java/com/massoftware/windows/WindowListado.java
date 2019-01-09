@@ -224,17 +224,17 @@ public abstract class WindowListado extends Window {
 
 	protected void addKeyEvents() {
 
-		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-				if (target.equals(itemsGRD)) {
-					modificarBTNClick();
-				}
-			}
-		});
+//		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void handleAction(Object sender, Object target) {
+//				if (target.equals(itemsGRD)) {
+//					modificarBTNClick();
+//				}
+//			}
+//		});
 
 		// --------------------------------------------------
 

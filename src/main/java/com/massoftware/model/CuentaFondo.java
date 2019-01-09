@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.backend.BackendContext;
-import com.massoftware.windows.chequeras.CuentasFondoFiltro;
+import com.massoftware.backend.BackendContextPG;
+import com.massoftware.backend.annotation.ClassLabelAnont;
+import com.massoftware.backend.annotation.FieldLabelAnont;
 
+@ClassLabelAnont(singular = "Cuenta de fondo", plural = "Cuentas de fondo")
 public class CuentaFondo extends EntityId {
 
 	// fk_ CuentasDeFondosGrupo FOREIGN KEY (Rubro, Grupo) REFERENCES
@@ -20,12 +22,25 @@ public class CuentaFondo extends EntityId {
 	// CuentasDeFondos(Cuenta)
 	// fk_ Monedas FOREIGN KEY (Moneda) REFERENCES Monedas(Moneda)
 
+	@FieldLabelAnont(value = "ID")
 	private String id;
+	
+	@FieldLabelAnont(value = "Grupo")
 	private CuentaFondoGrupo cuentaFondoGrupo;
+	
+	@FieldLabelAnont(value = "Nº cuenta")
 	private Integer numero;
+	
+	@FieldLabelAnont(value = "Nombre")
 	private String nombre;
+	
+	@FieldLabelAnont(value = "Tipo")
 	private CuentaFondoTipo cuentaFondoTipo;
+	
+	@FieldLabelAnont(value = "Banco")
 	private Banco banco;
+	
+	@FieldLabelAnont(value = "Obsoleto")
 	private Boolean bloqueado;
 
 	public String getId() {
@@ -173,7 +188,7 @@ public class CuentaFondo extends EntityId {
 			sql += " OFFSET " + offset + " LIMIT " + limit;
 		}
 
-		Object[][] table = BackendContext.get().find(sql, limit, offset, filtros.toArray());
+		Object[][] table = BackendContextPG.get().find(sql, limit, offset, filtros.toArray());
 
 		for (int i = 0; i < table.length; i++) {
 			CuentaFondo item = new CuentaFondo();

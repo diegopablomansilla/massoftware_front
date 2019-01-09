@@ -25,6 +25,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
@@ -98,7 +99,7 @@ public class WBancos2 extends WindowListado {
 
 	private void buildContent() throws Exception {
 
-		confWinList(this, "Bancos");
+		confWinList(this, new Banco().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -132,33 +133,36 @@ public class WBancos2 extends WindowListado {
 
 	private VerticalLayout buildFiltros() throws Exception {
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Numero", false, 2, false, false, null, false,
-				UtilUI.EQUALS);
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", false, false, UtilUI.EQUALS);
 
 		// --------------------------------------------------------
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
-				UtilUI.CONTAINS_WORDS_AND);
+		nombreTB = new TextFieldBox(this, filterBI, "nombre", false, false, UtilUI.CONTAINS_WORDS_AND);
 
-		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
-		// int[] {}) {
-		//
-		// private static final long serialVersionUID = 1L;
-		//
-		// @Override
-		// public void handleAction(Object sender, Object target) {
-		//
-		// if (target instanceof TextField && ((TextField)
-		// target).getCaption().equals(nombreTB.getCaption())) {
-		// loadDataResetPaged();
-		// }
-		// }
-		// });
+//		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+//
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void handleAction(Object sender, Object target) {
+//
+//				try {
+//
+//					if (target instanceof TextField
+//							&& ((TextField) target).getCaption().equals(nombreTB.valueTXT.getCaption())) {
+//						loadDataResetPaged();
+//					}
+//				} catch (Exception e) {
+//					LogAndNotification.print(e);
+//				}
+//
+//			}
+//		});
 
 		// --------------------------------------------------------
 
-		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todos", "Obsoletos",
-				"Activos", true, 2);
+		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todos", "Obsoletos", "Activos",
+				true, 2);
 
 		bloqueadoOG.addValueChangeListener(e -> {
 			loadDataResetPaged();
@@ -186,7 +190,7 @@ public class WBancos2 extends WindowListado {
 		return filasFiltroVL;
 	}
 
-	private Grid buildItemsGRD() {
+	private Grid buildItemsGRD() throws Exception {
 
 		itemsGRD = UtilUI.buildGrid();
 		FastNavigation nav = UtilUI.initNavigation(itemsGRD);
@@ -194,14 +198,19 @@ public class WBancos2 extends WindowListado {
 		// ------------------------------------------------------------------
 
 		// itemsGRD.setWidth("100%");
-		itemsGRD.setWidth(35f, Unit.EM);
+		itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(new Object[] { "numero", "nombre", "bloqueado" });
 
-		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 230);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, -1);
+
+		Banco dto = new Banco();
+		for (Column column : itemsGRD.getColumns()) {
+			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
+		}
 
 		itemsGRD.setContainerDataSource(getItemsBIC());
 

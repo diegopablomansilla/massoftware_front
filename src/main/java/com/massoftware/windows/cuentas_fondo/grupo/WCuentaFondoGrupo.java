@@ -4,7 +4,6 @@ import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UniqueValidator;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
@@ -18,14 +17,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class WCuentaFondoGrupo extends WindowForm {
-	
-	- enter en las cajas de filtrado
-	- label class singular y plural de las clases entity
-	- colocar los label en los entity y corregir en banco, rubro, tipoy grupo
-	- en grupo hacer el maxnumber compuesto
-	- el eliminar de entity id, buscar dependencias y hacer el check antes de eliminar
-	- hacer los check null y unique antes de insertar y eliminar, esto en base a los tags del entity
-	
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
@@ -95,7 +86,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		confWinForm("Grupo");
+		confWinForm(itemBI.getBean().labelSingular());
 		this.setWidth(31f, Unit.EM);
 
 		// =======================================================
@@ -138,8 +129,13 @@ public class WCuentaFondoGrupo extends WindowForm {
 			}
 		});
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true, false, null, false);
-		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
+		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
+//		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
+		nombreTXT.addValueChangeListener(new Property.ValueChangeListener() {
+			public void valueChange(ValueChangeEvent event) {
+				validateRubroAndNombre();
+			}
+		});
 
 		// ---------------------------------------------------------------------------------------------------------
 
@@ -153,7 +149,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	protected void setMaxValues() throws Exception {
 
-		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue("numero"));
+		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue(new String[] {"cuentaFondoRubro"}, "numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -186,7 +182,22 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 			this.itemBI.getBean().checkUniqueRubroAndNumero();
 
-		} catch (Exception ex) {			
+		} catch (Exception ex) {
+			LogAndNotification.print(ex);
+		}
+	}
+	
+	private void validateRubroAndNombre() {
+		try {
+
+			if (COPY_MODE.equals(mode)) {
+				((CuentaFondoGrupo) this.itemBI.getBean()._originalDTO).setNombre(null);
+				((CuentaFondoGrupo) this.itemBI.getBean()._originalDTO).getCuentaFondoRubro().setNumero(null);
+			}
+
+			this.itemBI.getBean().checkUniqueRubroAndNombre();
+
+		} catch (Exception ex) {
 			LogAndNotification.print(ex);
 		}
 	}

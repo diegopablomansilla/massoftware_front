@@ -33,7 +33,7 @@ public class LogAndNotification {
 			printDeleteForeingObjectConflictException((DeleteForeingObjectConflictException) e);
 		} else if (e instanceof IllegalArgumentException) {
 			printIllegalArgumentException((IllegalArgumentException) e);
-		} else{
+		} else {
 			Notification notification = new Notification("Error Interno del Sistema", e.toString(), Type.ERROR_MESSAGE);
 			notification.setStyleName("error bar small closable");
 			notification.setPosition(Position.BOTTOM_LEFT);
@@ -45,22 +45,23 @@ public class LogAndNotification {
 			e.printStackTrace();
 
 		}
-		
-//		e.printStackTrace();
-		
+
+		// e.printStackTrace();
 
 	}
 
-//	private static void print(DeleteForeingObjectConflictException e, String humanObject) {
-//		Notification notification = new Notification("Objeto no borrable", e.getMessage(), Type.WARNING_MESSAGE);
-//		// notification.setStyleName("warning failure");
-//		notification.setStyleName("tray failure");
-//		notification.setPosition(Position.BOTTOM_LEFT);
-//		// notification.setDelayMsec(10000);
-//		notification.show(Page.getCurrent());
-//
-//		// e.printStackTrace();
-//	}
+	// private static void print(DeleteForeingObjectConflictException e, String
+	// humanObject) {
+	// Notification notification = new Notification("Objeto no borrable",
+	// e.getMessage(), Type.WARNING_MESSAGE);
+	// // notification.setStyleName("warning failure");
+	// notification.setStyleName("tray failure");
+	// notification.setPosition(Position.BOTTOM_LEFT);
+	// // notification.setDelayMsec(10000);
+	// notification.show(Page.getCurrent());
+	//
+	// // e.printStackTrace();
+	// }
 
 	private static void printIllegalArgumentException(IllegalArgumentException e) {
 		Notification notification = new Notification("Argumento inválido", e.getMessage(), Type.WARNING_MESSAGE);
@@ -81,19 +82,20 @@ public class LogAndNotification {
 		// notification.setDelayMsec(10000);
 		notification.show(Page.getCurrent());
 
-//		 e.printStackTrace();
+		// e.printStackTrace();
 	}
 
-//	private static void print(InsertDuplicateException e) {
-//		Notification notification = new Notification("Duplicación de datos", e.getMessage(), Type.WARNING_MESSAGE);
-//		// notification.setStyleName("warning failure");
-//		notification.setStyleName("tray failure");
-//		notification.setPosition(Position.BOTTOM_LEFT);
-//		// notification.setDelayMsec(10000);
-//		notification.show(Page.getCurrent());
-//
-//		// e.printStackTrace();
-//	}
+	// private static void print(InsertDuplicateException e) {
+	// Notification notification = new Notification("Duplicación de datos",
+	// e.getMessage(), Type.WARNING_MESSAGE);
+	// // notification.setStyleName("warning failure");
+	// notification.setStyleName("tray failure");
+	// notification.setPosition(Position.BOTTOM_LEFT);
+	// // notification.setDelayMsec(10000);
+	// notification.show(Page.getCurrent());
+	//
+	// // e.printStackTrace();
+	// }
 
 	private static void printUniqueException(UniqueException e) {
 		Notification notification = new Notification("Duplicación de datos", e.getMessage(), Type.WARNING_MESSAGE);
@@ -105,7 +107,7 @@ public class LogAndNotification {
 
 		// e.printStackTrace();
 	}
-	
+
 	private static void printNullFieldException(NullFieldException e) {
 		Notification notification = new Notification("Campo vacio y requerido", e.getMessage(), Type.WARNING_MESSAGE);
 		// notification.setStyleName("warning failure");
@@ -116,10 +118,10 @@ public class LogAndNotification {
 
 		// e.printStackTrace();
 	}
-	
-	
+
 	private static void printDeleteForeingObjectConflictException(DeleteForeingObjectConflictException e) {
-		Notification notification = new Notification("Borrado no permitido - Objeto con relaciones", e.getMessage(), Type.WARNING_MESSAGE);
+		Notification notification = new Notification("Borrado no permitido - Objeto con relaciones", e.getMessage(),
+				Type.WARNING_MESSAGE);
 		// notification.setStyleName("warning failure");
 		notification.setStyleName("tray failure");
 		notification.setPosition(Position.BOTTOM_LEFT);
@@ -128,7 +130,6 @@ public class LogAndNotification {
 
 		// e.printStackTrace();
 	}
-	
 
 	public static void printSuccessOk(String msg) {
 		Notification notification = new Notification("Ok", msg, Type.HUMANIZED_MESSAGE);

@@ -1,5 +1,6 @@
 package com.massoftware.backend;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -17,111 +18,68 @@ import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
 import com.massoftware.model.EntityId;
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
-public class BackendContext extends AbstractContext {
+public class BackendContextPG extends AbstractContext {
 
-	public final static String MS = "sqlserver";
 	public final static String PG = "Postgresql";
 
 	private DataSourceWrapper dataSourceWrapper;
 
-	private static BackendContext backendContext;
+	private static BackendContextPG backendContext;
 
-	private BackendContext(String engineDB) {
-		Properties propertiesMS = new Properties();
+	private String dbFilesPath;
+	private String iconosPath;
 
-		propertiesMS.put("jdbc.driverClassName", "com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		propertiesMS.put("jdbc.userName", "sa");
-		propertiesMS.put("jdbc.userPassword", "cordoba");
-		// properties.put("jdbc.url", ds.getURL());
-		propertiesMS.put("jdbc.maxActive", "10");
-		propertiesMS.put("jdbc.initialSize", "5");
-		propertiesMS.put("jdbc.maxIdle", "5");
-		propertiesMS.put("jdbc.validationQuery", "SELECT 1");
-		propertiesMS.put("jdbc.verbose", "true");
-		propertiesMS.put("jdbc.serverName", "localhost");
-		propertiesMS.put("jdbc.databaseName", "VetaroRep");
-		propertiesMS.put("jdbc.portNumber", "1433");
+	private BackendContextPG() {
+		try {
 
-		Properties propertiesPG = new Properties();
+			init();
 
-		propertiesPG.put("jdbc.driverClassName", "org.postgresql.Driver");
-		propertiesPG.put("jdbc.userName", "postgres");
-		propertiesPG.put("jdbc.userPassword", "cordoba");
-		propertiesPG.put("jdbc.url", "jdbc:postgresql://localhost:5432/massoftware?searchpath=massoftware");
-		propertiesPG.put("jdbc.maxActive", "10");
-		propertiesPG.put("jdbc.initialSize", "5");
-		propertiesPG.put("jdbc.maxIdle", "5");
-		propertiesPG.put("jdbc.validationQuery", "SELECT 1");
-		propertiesPG.put("jdbc.verbose", "true");
-
-		start(engineDB, propertiesPG);
-
+		} catch (Exception e) {
+			printFatal(e);
+		}
 	}
 
-	public static synchronized BackendContext get() {
+	public static synchronized BackendContextPG get() {
 		if (backendContext == null) {
-			backendContext = new BackendContext(PG);
+			backendContext = new BackendContextPG();
 		}
 
 		return backendContext;
 	}
 
-	private void start(String type, Properties properties) {
-
-		try {
-
-			init(type, properties);
-
-		} catch (Exception e) {
-			printFatal(e);
-		}
-
+	public synchronized String getIconosPath() {
+		return iconosPath;
 	}
 
-	private void init(String dbType, Properties properties) throws Exception {
+//	private Properties loadProperties() {
+//
+//		Properties properties = new Properties();
+//
+//		properties.put("jdbc.driverClassName", "org.postgresql.Driver");
+//		properties.put("jdbc.userName", "postgres");
+//		properties.put("jdbc.userPassword", "cordoba");
+//		properties.put("jdbc.url", "jdbc:postgresql://localhost:5432/massoftware?searchpath=massoftware");
+//		properties.put("jdbc.maxActive", "10");
+//		properties.put("jdbc.initialSize", "5");
+//		properties.put("jdbc.maxIdle", "5");
+//		properties.put("jdbc.validationQuery", "SELECT 1");
+//		properties.put("jdbc.verbose", "true");
+//		properties.put("file.path", "D:\\dev\\source\\\\massoftware_front\\files_db");
+//
+//		return properties;
+//	}
 
-		if (dbType.equals(PG)) {
-			initContextDbPostgreSql(properties);
-		} else if (dbType.equals(MS)) {
-			initContextDbMsSqlServer(properties);
-		}
-	}
+	private void init() throws Exception {
 
-	private void initContextDbMsSqlServer(Properties properties) throws Exception {
+		Properties properties = loadProperties(
+				System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
 
-		String path = "jdbc.";
+		// -------------------------------------------------------------------
 
-		SQLServerDataSource ds = new SQLServerDataSource();
-		// ds.setIntegratedSecurity(true);
-		ds.setServerName(properties.getProperty(path + "serverName"));
-		ds.setPortNumber(new Integer(properties.getProperty(path + "portNumber")));
-		ds.setDatabaseName(properties.getProperty(path + "databaseName"));
-		ds.setUser(properties.getProperty(path + "userName"));
-		ds.setPassword(properties.getProperty(path + "userPassword"));
+		dbFilesPath = properties.getProperty("file.path");
 
-		properties.put("jdbc.url", ds.getURL());
-
-		DataSourceProperties dataSourceProperties = new DataSourceProperties();
-
-		dataSourceProperties.setDriverClassName(properties.getProperty(path + "driverClassName"));
-		dataSourceProperties.setUrl(properties.getProperty(path + "url"));
-		dataSourceProperties.setUserName(properties.getProperty(path + "userName"));
-		dataSourceProperties.setUserPassword(properties.getProperty(path + "userPassword"));
-		dataSourceProperties.setInitialSize(new Integer(properties.getProperty(path + "initialSize")));
-		dataSourceProperties.setMaxActive(new Integer(properties.getProperty(path + "maxActive")));
-		dataSourceProperties.setMaxIdle((new Integer(properties.getProperty(path + "maxIdle"))));
-		dataSourceProperties.setValidationQuery(properties.getProperty(path + "validationQuery"));
-		dataSourceProperties.setVerbose((new Boolean(properties.getProperty(path + "verbose"))));
-
-		// dataSource = ds;
-
-		dataSourceWrapper = new DataSourceWrapper(ds, dataSourceProperties);
-
-	}
-
-	private void initContextDbPostgreSql(Properties properties) throws Exception {
+		iconosPath = dbFilesPath + File.separatorChar + "iconos";
 
 		String path = "jdbc.";
 
@@ -147,23 +105,9 @@ public class BackendContext extends AbstractContext {
 		ds.setMaxIdle(dataSourceProperties.getMaxIdle());
 		ds.setValidationQuery(dataSourceProperties.getValidationQuery());
 
-		// dataSource = ds;
-
 		dataSourceWrapper = new DataSourceWrapper(ds, dataSourceProperties);
 
 	}
-
-	// -------------------------------------------------------------
-
-	// public ResourceBundle getMessages() {
-	// return loadResourceBundle("MessagesBundle");
-	// }
-	//
-	// public String getMessage(String key) {
-	// return loadResourceBundle("MessagesBundle").getString(key);
-	// }
-
-	// -------------------------------------------------------------
 
 	// ================================================================================
 
@@ -260,7 +204,7 @@ public class BackendContext extends AbstractContext {
 		args.add(id);
 		whereSQL += "id = ?";
 
-		return BackendContext.get().delete(tableSQL, whereSQL, args.toArray());
+		return BackendContextPG.get().delete(tableSQL, whereSQL, args.toArray());
 	}
 
 	public synchronized boolean delete(String nameTableDB, String where, Object... args) throws Exception {
@@ -322,6 +266,44 @@ public class BackendContext extends AbstractContext {
 		} finally {
 			connectionWrapper.close(connectionWrapper);
 		}
+
+	}
+
+	public synchronized Integer maxValueInteger(String tableName, String[] attNames, String attNameCount, Object[] args)
+			throws Exception {
+
+		String tableSQL = tableName;
+
+		String attsSQL = "MAX(" + attNameCount + ") + 1";
+		String orderBySQL = null;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		for (int i = 0; i < attNames.length; i++) {
+			Object arg = args[i];
+			String attName = attNames[i];
+
+			filtros.add(arg);
+			whereSQL += attName + " = ? AND ";
+
+		}
+
+		// ==================================================================
+
+		whereSQL = whereSQL.trim();
+		if (whereSQL.length() > 0) {
+			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
+		} else {
+			whereSQL = null;
+		}
+
+		// ==================================================================
+
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+				filtros.toArray());
+
+		return (Integer) table[0][0];
 
 	}
 
@@ -426,7 +408,7 @@ public class BackendContext extends AbstractContext {
 		}
 	}
 
-	public boolean insertByReflection(Object dto) throws Exception {
+	public synchronized boolean insertByReflection(Object dto) throws Exception {
 
 		Field[] fields = dto.getClass().getDeclaredFields();
 
@@ -462,7 +444,7 @@ public class BackendContext extends AbstractContext {
 		return insert(nameTableDB, nameAtts, args);
 	}
 
-	public boolean updateByReflection(Object dto) throws Exception {
+	public synchronized boolean updateByReflection(Object dto) throws Exception {
 
 		Field[] fields = dto.getClass().getDeclaredFields();
 
@@ -497,23 +479,21 @@ public class BackendContext extends AbstractContext {
 
 		String nameTableDB = "massoftware." + dto.getClass().getSimpleName();
 
-		update(nameTableDB, nameAtts, args, "id = ?");
-
-		return insert(nameTableDB, nameAtts, args);
+		return update(nameTableDB, nameAtts, args, "id = ?");
 	}
 
-	public void checkUnique(EntityId dto, String attName, String label, Object originalValue, Object newValue)
-			throws Exception {
+	public synchronized void checkUnique(String tableName, String attName, String label, Object originalValue,
+			Object newValue) throws Exception {
 
 		if (originalValue != null && originalValue.equals(newValue) == false) {
 
-			if (ifExists(dto, attName, newValue)) {
+			if (ifExists(tableName, attName, newValue)) {
 				throw new UniqueException(label);
 			}
 
 		} else if (originalValue == null) {
 
-			if (ifExists(dto, attName, newValue)) {
+			if (ifExists(tableName, attName, newValue)) {
 				throw new UniqueException(label);
 			}
 		}
@@ -521,7 +501,7 @@ public class BackendContext extends AbstractContext {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Long ifExistsByFkId(Class clazz, String id) throws Exception {
+	public synchronized Long ifExistsByFkId(Class clazz, String id) throws Exception {
 
 		String tableSQL = clazz.getSimpleName();
 
@@ -536,16 +516,16 @@ public class BackendContext extends AbstractContext {
 
 		// ==================================================================
 
-		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
 				filtros.toArray());
 
 		return (Long) table[0][0];
 
 	}
 
-	private boolean ifExists(EntityId dto, String attName, Object arg) throws Exception {
+	private synchronized boolean ifExists(String tableName, String attName, Object arg) throws Exception {
 
-		String tableSQL = dto.getClass().getSimpleName();
+		String tableSQL = tableName;
 
 		String attsSQL = "COUNT(" + "*" + ") ";
 		String orderBySQL = null;
@@ -563,14 +543,14 @@ public class BackendContext extends AbstractContext {
 
 		// ==================================================================
 
-		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
 				filtros.toArray());
 
 		return (Long) table[0][0] > 0;
 
 	}
 
-	public boolean ifExists(EntityId dto, String[] attNames, Object[] args) throws Exception {
+	public synchronized boolean ifExists(EntityId dto, String[] attNames, Object[] args) throws Exception {
 
 		String tableSQL = dto.getClass().getSimpleName();
 
@@ -605,7 +585,7 @@ public class BackendContext extends AbstractContext {
 
 		// ==================================================================
 
-		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
 				filtros.toArray());
 
 		return (Long) table[0][0] > 0;
@@ -613,7 +593,7 @@ public class BackendContext extends AbstractContext {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private boolean isPrimitive(Class c) {
+	private synchronized boolean isPrimitive(Class c) {
 
 		if (c.equals(String.class)) {
 			return true;

@@ -2,6 +2,7 @@ package com.massoftware.windows;
 
 import java.util.Collection;
 
+import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -22,13 +23,34 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int minLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
+	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, boolean readOnly, boolean required,
 			String inputPrompt) throws Exception {
 
-		init(window, dtoBI, attName, label, readOnly,  (Integer.MAX_VALUE+"").length(), minLength, (Integer.MAX_VALUE+"").length(), required, allowInputUnmask, mask,
-				autoUnmask, inputPrompt, 0, Integer.MAX_VALUE);
-		
+		int minLength = 0;
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		init(window, dtoBI, attName, null, readOnly, (Integer.MAX_VALUE + "").length(), minLength,
+				(Integer.MAX_VALUE + "").length(), required, false, null, false, inputPrompt, 0, Integer.MAX_VALUE);
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	public TextFieldIntegerBox(WindowListado window, BeanItem dtoBI, String attName, boolean readOnly, boolean required,
+			boolean allowInputUnmask, String mask, boolean autoUnmask, String inputPrompt) throws Exception {
+
+		int minLength = 0;
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		init(window, dtoBI, attName, null, readOnly, (Integer.MAX_VALUE + "").length(), minLength,
+				(Integer.MAX_VALUE + "").length(), required, allowInputUnmask, mask, autoUnmask, inputPrompt, 0,
+				Integer.MAX_VALUE);
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -46,6 +68,13 @@ public class TextFieldIntegerBox extends HorizontalLayout implements Validatable
 			String inputPrompt, int minValue, int maxValue) throws Exception {
 
 		this.setSpacing(false);
+
+		if (label == null && dtoBI.getBean() instanceof Entity) {
+			String lbl = ((Entity) dtoBI.getBean()).label(attName);
+			if (lbl != null) {
+				label = lbl;
+			}
+		}
 
 		valueTXT = UtilUI.buildTXTInteger(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
 				allowInputUnmask, mask, autoUnmask, minValue, maxValue);

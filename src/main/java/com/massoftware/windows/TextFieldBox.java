@@ -2,6 +2,7 @@ package com.massoftware.windows;
 
 import java.util.Collection;
 
+import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -22,11 +23,40 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
+	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, boolean readOnly, boolean required,
+			String inputPrompt) throws Exception {
+
+		int minLength = 0;
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+
+		init(window, dtoBI, attName, null, readOnly, 20, minLength, 100, required, false, null, false, inputPrompt);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
 			boolean autoUnmask, String inputPrompt) throws Exception {
 
+		init(window, dtoBI, attName, label, readOnly, columns, minLength, maxLength, required, allowInputUnmask, mask,
+				autoUnmask, inputPrompt);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void init(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
+			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
+			String inputPrompt) throws Exception {
+
 		this.setSpacing(false);
+
+		if (label == null && dtoBI.getBean() instanceof Entity) {
+			String lbl = ((Entity) dtoBI.getBean()).label(attName);
+			if (lbl != null) {
+				label = lbl;
+			}
+		}
 
 		valueTXT = UtilUI.buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
 				allowInputUnmask, mask, autoUnmask);
@@ -55,26 +85,22 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 			}
 		});
 
-//		valueTXT.addTextChangeListener(e -> {
-//			try {
-//				valueTXT.setValue(e.getText());
-//				window.loadDataResetPaged();
-//			} catch (Exception ex) {
-//				LogAndNotification.print(ex);
-//			}
-//		});	
-		
+		// valueTXT.addTextChangeListener(e -> {
+		// try {
+		// valueTXT.setValue(e.getText());
+		// window.loadDataResetPaged();
+		// } catch (Exception ex) {
+		// LogAndNotification.print(ex);
+		// }
+		// });
+
 		valueTXT.addBlurListener(e -> {
 			try {				
-				window.loadDataResetPaged();
+				 window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
 			}
 		});
-		
-
-		
-		
 
 	}
 

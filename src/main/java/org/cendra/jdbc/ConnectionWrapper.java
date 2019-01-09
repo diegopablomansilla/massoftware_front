@@ -457,7 +457,7 @@ public class ConnectionWrapper {
 			return execute(sql, args);
 
 		} catch (SQLException e) {
-			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);					
+			printSQLEnd(buildPrintSQLStart(formatSQL(args, sql)), null, false);
 			throw this.buildSQLExceptionWrapper(e, OPERATION_TYPE_INSERT, TITLE_INSERT, SUBJECT_INSERT);
 		}
 	}

@@ -158,13 +158,27 @@ public class UtilUI {
 		return nav;
 
 	}
+	
+	public static Column confColumn(Column column, boolean sortable, double pixelWidth) {
+		return confColumn(column, null, true, false, false, sortable, pixelWidth);
+	}
 
 	public static Column confColumn(Column column, String label, boolean sortable, double pixelWidth) {
 		return confColumn(column, label, true, false, false, sortable, pixelWidth);
 	}
 
+	public static Column confColumn(Column column, boolean hidable, boolean hidden, boolean editable, boolean sortable,
+			double pixelWidth) {
+
+		return confColumn(column, null, hidable, hidden, editable, sortable, pixelWidth);
+	}
+
 	public static Column confColumn(Column column, String label, boolean hidable, boolean hidden, boolean editable,
 			boolean sortable, double pixelWidth) {
+
+		if (label == null) {
+			label = column.getPropertyId().toString();
+		}
 
 		column.setHeaderCaption(label);
 		column.setHidable(hidable);
@@ -550,14 +564,13 @@ public class UtilUI {
 
 		throw new RuntimeException(inputPrompt + " not found.");
 	}
-	
+
+	/* Crea una caja con column 30 y de 100 como maximo numero de caracteres */
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXT30100(BeanItem dtoBI, String attName, boolean readOnly, 
-			boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
+	public static TextField buildTXT30100(BeanItem dtoBI, String attName, boolean readOnly, boolean required)
 			throws Exception {
 
-		return buildTXT(dtoBI, attName, null, readOnly, 30, -1, 100, required, allowInputUnmask, mask,
-				autoUnmask);
+		return buildTXT(dtoBI, attName, null, readOnly, 30, -1, 100, required, false, null, false);
 
 	}
 
@@ -565,8 +578,8 @@ public class UtilUI {
 	public static TextField buildTXT(BeanItem dtoBI, String attName, boolean readOnly, int columns, int minLength,
 			int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
 			throws Exception {
-		
-		if(required && minLength < 0) {
+
+		if (required && minLength < 0) {
 			minLength = 1;
 		}
 
@@ -644,10 +657,10 @@ public class UtilUI {
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
 				0, Short.MAX_VALUE);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, 
-			boolean required) throws Exception {
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, boolean required)
+			throws Exception {
 		return buildTXTIntegerPlus(dtoBI, attName, null, readOnly, -1, required);
 	}
 
@@ -1316,10 +1329,22 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
+	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName, boolean readOnly) throws Exception {
+		return buildFieldCHK(dtoBI, attName, null, readOnly);
+	}
+
+	@SuppressWarnings("rawtypes")
 	public static CheckBox buildFieldCHK(BeanItem dtoBI, String attName, String label, boolean readOnly)
 			throws Exception {
 
 		CheckBox chk = buildCHK();
+
+		if (label == null && dtoBI.getBean() instanceof Entity) {
+			String lbl = ((Entity) dtoBI.getBean()).label(attName);
+			if (lbl != null) {
+				label = lbl;
+			}
+		}
 
 		chk.setCaption(label);
 		chk.setPropertyDataSource(dtoBI.getItemProperty(attName));

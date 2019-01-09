@@ -10,7 +10,7 @@ import org.cendra.ex.crud.DeleteForeingObjectConflictException;
 import org.cendra.ex.crud.NullFieldException;
 import org.cendra.jdbc.SQLExceptionWrapper;
 
-import com.massoftware.backend.BackendContext;
+import com.massoftware.backend.BackendContextPG;
 
 public class EntityId extends Entity implements Comparable<EntityId> {
 
@@ -38,7 +38,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 		if (id != null && id.trim().length() > 0) {
 
-			Object[] row = BackendContext.get().findById(this.getClass().getSimpleName(), id);
+			Object[] row = BackendContextPG.get().findById(this.getClass().getSimpleName(), id);
 
 			setter(row, 0, maxLevel);
 		}
@@ -125,7 +125,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 					EntityId other = (EntityId) field.getType().newInstance();
 
 					if (level < maxLevel) {
-						Object[] rowOther = BackendContext.get().findById(field.getType().getSimpleName(),
+						Object[] rowOther = BackendContextPG.get().findById(field.getType().getSimpleName(),
 								row[i].toString());
 						other.setter(rowOther, level + 1, maxLevel);
 					} else {
@@ -236,7 +236,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 			}
 		}
 
-		BackendContext.get().insert(getClass().getSimpleName(), nameAtts, args);
+		BackendContextPG.get().insert(getClass().getSimpleName(), nameAtts, args);
 
 		return getId();
 	}
@@ -279,7 +279,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 		args[fields.length] = this._originalDTO.getId();
 
-		BackendContext.get().update(getClass().getSimpleName(), nameAtts, args, "id = ?");
+		BackendContextPG.get().update(getClass().getSimpleName(), nameAtts, args, "id = ?");
 
 		return this.getId();
 	}
@@ -313,7 +313,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		}
 
 		if (value != null) {
-			BackendContext.get().checkUnique(this, attName, label, valueOriginal, value);
+			BackendContextPG.get().checkUnique(this.getClass().getSimpleName(), attName, label, valueOriginal, value);
 		}
 
 	}
@@ -333,14 +333,48 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 	public Object maxValue(String attName) throws Exception {
 
-		return BackendContext.get().maxValueInteger(attName, this.getClass().getSimpleName());
+		return BackendContextPG.get().maxValueInteger(attName, this.getClass().getSimpleName());
 
+	}
+
+	public Object maxValue(String[] attNames, String attNameCount) throws Exception {
+
+		List<Object> filtros = new ArrayList<Object>();
+
+		for (String attName : attNames) {
+
+			Field field = getClass().getDeclaredField(attName);
+
+			Method methodGet = this.getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+
+			Object value = null;
+
+			if (isScalar(field.getType())) {
+
+				value = methodGet.invoke(this);
+
+			} else {
+
+				EntityId other = (EntityId) methodGet.invoke(this);
+
+				if (other != null) {
+					value = other.getId();
+				}
+
+			}
+
+			filtros.add(value);
+
+		}
+
+		return BackendContextPG.get().maxValueInteger(this.getClass().getSimpleName(), attNames, attNameCount,
+				filtros.toArray());
 	}
 
 	protected List<EntityId> findUtil(String orderBy, String where, int limit, int offset, Object[] args, int maxLevel)
 			throws Exception {
 
-		Object[][] table = BackendContext.get().find(this.getClass().getSimpleName(), "*", orderBy, where, limit,
+		Object[][] table = BackendContextPG.get().find(this.getClass().getSimpleName(), "*", orderBy, where, limit,
 				offset, args);
 
 		List<EntityId> items = new ArrayList<EntityId>();
@@ -378,7 +412,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		// ==================================================================
 
 		try {
-			BackendContext.get().delete(this.getClass(), getId());
+			BackendContextPG.get().delete(this.getClass(), getId());
 		} catch (SQLExceptionWrapper e) {
 			if ("23503".equals(e.getSQLState())) {
 				throw new DeleteForeingObjectConflictException(this);

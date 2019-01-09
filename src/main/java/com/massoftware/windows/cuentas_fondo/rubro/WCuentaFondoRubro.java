@@ -81,7 +81,7 @@ public class WCuentaFondoRubro extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		confWinForm("Banco");
+		confWinForm(this.itemBI.getBean().labelSingular());
 		this.setWidth(31f, Unit.EM);
 
 		// =======================================================
@@ -100,7 +100,7 @@ public class WCuentaFondoRubro extends WindowForm {
 		VerticalLayout content = UtilUI.buildWinContentVertical();
 
 		content.addComponents(cuerpo, filaBotoneraHL);
-
+ 
 		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 
 		this.setContent(content);
@@ -109,11 +109,11 @@ public class WCuentaFondoRubro extends WindowForm {
 	private VerticalLayout buildCouerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTShortPlus(itemBI, "numero", "Número", false, 1, true);
+		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);		
 		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT(itemBI, "nombre", "Nombre", false, 40, 1, 40, true, false, null, false);
-		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", "Nombre", itemBI));
+		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);		
+		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
 
 		// ---------------------------------------------------------------------------------------------------------
 

@@ -1,29 +1,71 @@
 package com.massoftware.model;
 
-public class CuentasFondoFiltro {
+import com.massoftware.backend.annotation.FieldLabelAnont;
 
-	private Integer numeroRubro;
-	private Integer numeroGrupo;
-	private Integer numero;
-	private String nombre;
+public class CuentasFondoFiltro extends Entity {
+
+	@FieldLabelAnont(value = "Rubro")
+	private String idRubro;
+
+	@FieldLabelAnont(value = "Grupo")
+	private String idGrupo;
+
+	@FieldLabelAnont(value = "Banco")
+	private String idBanco;
+
+	@FieldLabelAnont(value = "Banco")
 	private Integer numeroBanco;
+
+	@FieldLabelAnont(value = "Banco")
 	private String nombreBanco;
+
+	@FieldLabelAnont(value = "Nº cuenta")
+	private Integer numero;
+
+	@FieldLabelAnont(value = "Nombre")
+	private String nombre;
+
+	@FieldLabelAnont(value = "Obsoleta")
 	private Integer bloqueado;
 
-	public Integer getNumeroRubro() {
-		return numeroRubro;
+	public String getIdRubro() {
+		return idRubro;
 	}
 
-	public void setNumeroRubro(Integer numeroRubro) {
-		this.numeroRubro = numeroRubro;
+	public void setIdRubro(String idRubro) {
+		this.idRubro = idRubro;
 	}
 
-	public Integer getNumeroGrupo() {
-		return numeroGrupo;
+	public String getIdGrupo() {
+		return idGrupo;
 	}
 
-	public void setNumeroGrupo(Integer numeroGrupo) {
-		this.numeroGrupo = numeroGrupo;
+	public void setIdGrupo(String idGrupo) {
+		this.idGrupo = idGrupo;
+	}
+
+	public String getIdBanco() {
+		return idBanco;
+	}
+
+	public void setIdBanco(String idBanco) {
+		this.idBanco = idBanco;
+	}
+
+	public Integer getNumeroBanco() {
+		return numeroBanco;
+	}
+
+	public void setNumeroBanco(Integer numeroBanco) {
+		this.numeroBanco = numeroBanco;
+	}
+
+	public String getNombreBanco() {
+		return nombreBanco;
+	}
+
+	public void setNombreBanco(String nombreBanco) {
+		this.nombreBanco = nombreBanco;
 	}
 
 	public Integer getNumero() {
@@ -42,22 +84,6 @@ public class CuentasFondoFiltro {
 		this.nombre = nombre;
 	}
 
-	public Integer getNumeroBanco() {
-		return numeroBanco;
-	}
-
-	public void setNumeroBanco(Integer numeroBanco) {
-		this.numeroBanco = numeroBanco;
-	}
-
-	public String getNombreBanco() {
-		return nombreBanco;
-	}
-
-	public void setNombreBanco(String nombreBanco) {		
-		this.nombreBanco = nombreBanco;
-	}
-
 	public Integer getBloqueado() {
 		return bloqueado;
 	}
@@ -65,14 +91,4 @@ public class CuentasFondoFiltro {
 	public void setBloqueado(Integer bloqueado) {
 		this.bloqueado = bloqueado;
 	}
-
-	@Override
-	public String toString() {
-		return "CuentasFondoFiltro [numeroRubro=" + numeroRubro
-				+ ", numeroGrupo=" + numeroGrupo + ", numero=" + numero
-				+ ", nombre=" + nombre + ", numeroBanco=" + numeroBanco
-				+ ", nombreBanco=" + nombreBanco + ", bloqueado=" + bloqueado
-				+ "]";
-	}
-
 }

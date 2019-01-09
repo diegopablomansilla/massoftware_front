@@ -3,10 +3,19 @@ package com.massoftware.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.massoftware.backend.annotation.ClassLabelAnont;
+import com.massoftware.backend.annotation.FieldLabelAnont;
+
+@ClassLabelAnont(singular = "Rubro", plural = "Rubros")
 public class CuentaFondoRubro extends EntityId {
 
+	@FieldLabelAnont(value = "ID")
 	private String id;
+	
+	@FieldLabelAnont(value = "Nº rubro")
 	private Integer numero;
+	
+	@FieldLabelAnont(value = "Nombre")
 	private String nombre;
 
 	public String getId() {

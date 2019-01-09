@@ -7,6 +7,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldLabelAnont;
 
 public class Entity implements Cloneable {
@@ -296,10 +297,31 @@ public class Entity implements Cloneable {
 
 	}
 
-	private String label(Field field) {
+	private String label(Field field) {				
 		FieldLabelAnont[] a = field.getAnnotationsByType(FieldLabelAnont.class);
-		if (a != null && a.length > 0) {
+		if (a != null && a.length > 0) {			
 			return a[0].value();
+		}
+
+		return null;
+	}
+
+	public String labelSingular() {
+
+		ClassLabelAnont[] a = this.getClass().getAnnotationsByType(ClassLabelAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].singular();
+		}
+
+		return null;
+	}
+	
+	public String labelPlural() {
+
+		ClassLabelAnont[] a = this.getClass()
+				.getAnnotationsByType(ClassLabelAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].plural();
 		}
 
 		return null;

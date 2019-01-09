@@ -82,13 +82,7 @@ public class WBanco extends WindowForm {
 			// =======================================================
 			// ACTUALIZAR TITULO
 
-			if (INSERT_MODE.equalsIgnoreCase(mode)) {
-				this.setCaption("Agregar " + getCaption().toLowerCase());
-			} else if (UPDATE_MODE.equalsIgnoreCase(mode)) {
-				this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + itemBI.getBean());
-			} else if (COPY_MODE.equalsIgnoreCase(mode)) {
-				this.setCaption("Copiar " + getCaption() + " : " + itemBI.getBean());
-			}
+			this.actualizarTitulo();
 
 			// =======================================================
 
@@ -99,7 +93,7 @@ public class WBanco extends WindowForm {
 
 	private void buildContent() throws Exception {
 
-		confWinForm("Banco");
+		confWinForm(this.itemBI.getBean().labelSingular());
 		this.setWidth(28f, Unit.EM);
 
 		// =======================================================
@@ -127,37 +121,34 @@ public class WBanco extends WindowForm {
 	private TabSheet buildCouerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", "Número", false, 1, true);
-		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
+		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
+		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT(itemBI, "nombre", "Nombre", false, 30, 1, 100, true, false, null, false);
-		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", "Nombre", itemBI));
+		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
+		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
 		cuitTXT = UtilUI.buildTXT(itemBI, "cuit", "CUIT", false, 11, 1, 11, true, true, "99-99999999-9", true);
-		cuitTXT.addValidator(new UniqueValidator(Long.class, mode, "cuit", "CUIT", itemBI));
+		cuitTXT.addValidator(new UniqueValidator(Long.class, mode, "cuit", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		bloqueadoCHX = UtilUI.buildFieldCHK(itemBI, "bloqueado", "Bloqueado", false);
+		bloqueadoCHX = UtilUI.buildFieldCHK(itemBI, "bloqueado", false);
 		// ---------------------------------------------------------------------------------------------------------
-		hojaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "hoja", "Hoja", false, 1, false);
+		hojaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "hoja", false, false);
 		// ---------------------------------------------------------------------------------------------------------
-		primeraFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "primeraFila", "Primera fila", false, 1, false);
+		primeraFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "primeraFila", false, false);
 		// ---------------------------------------------------------------------------------------------------------
-		ultimaFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "ultimaFila", "Última fila", false, 1, false);
+		ultimaFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "ultimaFila", false, false);
 		// ---------------------------------------------------------------------------------------------------------
-		fechaTXT = UtilUI.buildTXT(itemBI, "fecha", "Fecha", false, 6, 1, 3, false, false, null, false);
+		fechaTXT = UtilUI.buildTXT(itemBI, "fecha", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
-		descripcionTXT = UtilUI.buildTXT(itemBI, "descripcion", "Descripcion", false, 6, 1, 3, false, false, null,
-				false);
+		descripcionTXT = UtilUI.buildTXT(itemBI, "descripcion", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
-		referencia1TXT = UtilUI.buildTXT(itemBI, "referencia1", "Referencia1", false, 6, 1, 3, false, false, null,
-				false);
+		referencia1TXT = UtilUI.buildTXT(itemBI, "referencia1", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
-		importeTXT = UtilUI.buildTXT(itemBI, "importe", "Importe", false, 6, 1, 3, false, false, null, false);
+		importeTXT = UtilUI.buildTXT(itemBI, "importe", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
-		referencia2TXT = UtilUI.buildTXT(itemBI, "referencia2", "Referencia2", false, 6, 1, 3, false, false, null,
-				false);
+		referencia2TXT = UtilUI.buildTXT(itemBI, "referencia2", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
-		saldoTXT = UtilUI.buildTXT(itemBI, "saldo", "Saldo", false, 6, 1, 3, false, false, null, false);
+		saldoTXT = UtilUI.buildTXT(itemBI, "saldo", null, false, 6, 1, 3, false, false, null, false);
 		// ---------------------------------------------------------------------------------------------------------
 
 		HorizontalLayout formatoExtractoRow0HL = UtilUI.buildHL();
@@ -195,7 +186,7 @@ public class WBanco extends WindowForm {
 
 	protected void setBean(EntityId obj) throws Exception {
 
-		itemBI.setBean( (Banco) obj);
+		itemBI.setBean((Banco) obj);
 	}
 
 	protected EntityId getBean() throws Exception {
@@ -242,8 +233,6 @@ public class WBanco extends WindowForm {
 
 		return new Banco();
 	}
-
-	
 
 	// =================================================================================
 

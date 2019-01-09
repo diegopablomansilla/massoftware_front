@@ -10,6 +10,7 @@ import org.vaadin.patrik.FastNavigation;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
+import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.model.EntityId;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
@@ -18,7 +19,6 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.chequeras.CuentasFondoFiltro;
 import com.massoftware.windows.cuentas_fondo.grupo.WCuentaFondoGrupo;
 import com.massoftware.windows.cuentas_fondo.rubro.WCuentaFondoRubro;
 import com.vaadin.data.sort.SortOrder;
@@ -32,6 +32,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Panel;
@@ -112,7 +113,7 @@ public class WCuentasFondo extends WindowListado {
 
 	private void buildContent() throws Exception {
 
-		confWinList(this, "Cuentas de fondo");
+		confWinList(this, new CuentaFondo().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -165,11 +166,9 @@ public class WCuentasFondo extends WindowListado {
 
 		bancoSB = new WCBancoSB(this);
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Cuenta", false, 5, -1, 3, false, false, null,
-				false, UtilUI.EQUALS, 0, 255);
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", false, false, UtilUI.EQUALS);
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 25, false, false, null, false,
-				UtilUI.CONTAINS_WORDS_AND);
+		nombreTB = new TextFieldBox(this, filterBI, "nombre", false, false, UtilUI.CONTAINS_WORDS_AND);
 
 		activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Obsoletas", "Activas",
 				true, 2);
@@ -190,7 +189,7 @@ public class WCuentasFondo extends WindowListado {
 		return filaFiltroHL;
 	}
 
-	private Grid buildItemsGRD() {
+	private Grid buildItemsGRD() throws Exception {
 
 		itemsGRD = UtilUI.buildGrid();
 		FastNavigation nav = UtilUI.initNavigation(itemsGRD);
@@ -204,13 +203,18 @@ public class WCuentasFondo extends WindowListado {
 		itemsGRD.setColumns(
 				new Object[] { "id", "cuentaFondoGrupo", "banco", "numero", "nombre", "cuentaFondoTipo", "bloqueado" });
 
-		UtilUI.confColumn(itemsGRD.getColumn("id"), "Id", true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoGrupo"), "Grupo", true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("banco"), "Banco", true, true, false, true, 100);
-		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Cuenta", true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoTipo"), "Tipo", true, -1);
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, true, false, true, 30);
+		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, false, true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoGrupo"), true, true, false, true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("banco"), true, true, false, true, 100);
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, false, false, true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, false, false, true, 200);
+		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoTipo"), true, false, false, true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, true, false, true, 30);
+
+		CuentaFondo dto = new CuentaFondo();
+		for (Column column : itemsGRD.getColumns()) {
+			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
+		}
 
 		itemsGRD.setContainerDataSource(getItemsBIC());
 
@@ -442,24 +446,24 @@ public class WCuentasFondo extends WindowListado {
 
 						try {
 							if (yes) {
-//								if (tree.getValue() != null) {
+								// if (tree.getValue() != null) {
 
-									Object item = tree.getValue();
+								Object item = tree.getValue();
 
-									deleteItemTree(item);
+								deleteItemTree(item);
 
-									LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
+								LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-									if (item instanceof CuentaFondoGrupo) {
-										loadDataResetPagedTree(
-												((CuentaFondoGrupo) item).getCuentaFondoRubro().getNumero(), null);
-									} else {
-										loadDataResetPagedTree();
-									}
+								if (item instanceof CuentaFondoGrupo) {
+									loadDataResetPagedTree(((CuentaFondoGrupo) item).getCuentaFondoRubro().getNumero(),
+											null);
+								} else {
+									loadDataResetPagedTree();
+								}
 
-									loadData();
+								loadData();
 
-//								}
+								// }
 							}
 						} catch (Exception e) {
 							LogAndNotification.print(e);

@@ -8,7 +8,7 @@ import org.cendra.ex.crud.DeleteForeingObjectConflictException;
 import org.cendra.ex.crud.InsertNullException;
 import org.cendra.ex.crud.NullFieldException;
 
-import com.massoftware.backend.BackendContext;
+import com.massoftware.backend.BackendContextPG;
 
 class BancosBO {
 
@@ -65,7 +65,7 @@ class BancosBO {
 
 		ArrayList<Bancos> lista = new ArrayList<Bancos>();
 
-		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, limit, offset,
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, limit, offset,
 				filtros.toArray());
 
 		for (int i = 0; i < table.length; i++) {
@@ -144,7 +144,7 @@ class BancosBO {
 		args.add(item.getNumero());
 		whereSQL += attNumero + " = ?";
 
-		BackendContext.get().delete(tableSQL, whereSQL, args.toArray());
+		BackendContextPG.get().delete(tableSQL, whereSQL, args.toArray());
 
 	}
 
@@ -207,7 +207,7 @@ class BancosBO {
 			whereSQL = null;
 		}
 
-		Object[][] table = BackendContext.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
+		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
 				filtros.toArray());
 
 		return (Integer) table[0][0];

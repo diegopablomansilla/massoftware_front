@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.cendra.ex.crud.UniqueException;
 
-import com.massoftware.backend.BackendContext;
+import com.massoftware.backend.BackendContextPG;
+import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldLabelAnont;
 
+@ClassLabelAnont(singular = "Grupo", plural = "Grupos")
 public class CuentaFondoGrupo extends EntityId {
 
 	@FieldLabelAnont(value = "ID")
@@ -112,14 +114,61 @@ public class CuentaFondoGrupo extends EntityId {
 		if (idRubroOriginal != null && numeroOriginal != null && idRubro != null && numero != null
 				&& (idRubroOriginal.equals(idRubro) == false || numeroOriginal.equals(numero) == false)) {
 
-			if (BackendContext.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this, attNames, args)) {
 				throw new UniqueException(labelRubro, labelNumero);
 			}
 
 		} else if (idRubroOriginal == null && numeroOriginal == null && idRubro != null && numero != null) {
 
-			if (BackendContext.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this, attNames, args)) {
 				throw new UniqueException(labelRubro, labelNumero);
+			}
+		}
+
+	}
+	
+	public void checkUniqueRubroAndNombre() throws Exception {
+
+		String labelRubro = this.label("cuentaFondoRubro");
+		String labelNombre = this.label("nombre");
+
+		// -----------------------------------------------
+
+		String idRubroOriginal = null;
+		String nombreOriginal = null;
+		if (this._originalDTO != null) {
+			nombreOriginal = ((CuentaFondoGrupo) this._originalDTO).getNombre();
+			if (((CuentaFondoGrupo) this._originalDTO).getCuentaFondoRubro() != null) {
+				idRubroOriginal = ((CuentaFondoGrupo) this._originalDTO).getCuentaFondoRubro().getId();
+			}
+		}
+
+		// -----------------------------------------------
+
+		String idRubro = null;
+		if (this.getCuentaFondoRubro() != null) {
+			idRubro = this.getCuentaFondoRubro().getId();
+		}
+		String nombre = this.getNombre();
+
+		// -----------------------------------------------
+
+		String[] attNames = { "cuentaFondoRubro", "nombre" };
+		Object[] args = { idRubro, nombre };
+
+		// -----------------------------------------------
+
+		if (idRubroOriginal != null && nombreOriginal != null && idRubro != null && nombre != null
+				&& (idRubroOriginal.equals(idRubro) == false || nombreOriginal.equals(nombre) == false)) {
+
+			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+				throw new UniqueException(labelRubro, labelNombre);
+			}
+
+		} else if (idRubroOriginal == null && nombreOriginal == null && idRubro != null && nombre != null) {
+
+			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+				throw new UniqueException(labelRubro, labelNombre);
 			}
 		}
 

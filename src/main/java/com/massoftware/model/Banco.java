@@ -4,21 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.massoftware.backend.annotation.ClassLabelAnont;
+import com.massoftware.backend.annotation.FieldLabelAnont;
+
+@ClassLabelAnont(singular = "Banco", plural = "Bancos")
 public class Banco extends EntityId {
 
+	@FieldLabelAnont(value = "ID")
 	private String id;
+	
+	@FieldLabelAnont(value = "Nº banco")
 	private Integer numero;
+	
+	@FieldLabelAnont(value = "Nombre")
 	private String nombre;
+	
+	@FieldLabelAnont(value = "CUIT")
 	private Long cuit;
+	
+	@FieldLabelAnont(value = "Obsoleto")
 	private Boolean bloqueado;
+	
+	@FieldLabelAnont(value = "Hoja")
 	private Integer hoja;
+	
+	@FieldLabelAnont(value = "Primera fila")
 	private Integer primeraFila;
+	
+	@FieldLabelAnont(value = "Última fila")
 	private Integer ultimaFila;
+	
+	@FieldLabelAnont(value = "Fecha")
 	private String fecha;
+	
+	@FieldLabelAnont(value = "Descripción")
 	private String descripcion;
+	
+	@FieldLabelAnont(value = "Referencia 1")
 	private String referencia1;
+	
+	@FieldLabelAnont(value = "Importe")
 	private String importe;
+	
+	@FieldLabelAnont(value = "Referencia 2")
 	private String referencia2;
+	
+	@FieldLabelAnont(value = "Saldo")
 	private String saldo;
 
 	public String getId() {

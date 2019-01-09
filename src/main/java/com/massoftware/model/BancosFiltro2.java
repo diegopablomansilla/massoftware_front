@@ -1,9 +1,16 @@
 package com.massoftware.model;
 
+import com.massoftware.backend.annotation.FieldLabelAnont;
+
 public class BancosFiltro2 extends Entity {
 
+	@FieldLabelAnont(value = "Nº banco")
 	private Integer numero;
+
+	@FieldLabelAnont(value = "Nombre")
 	private String nombre;
+
+	@FieldLabelAnont(value = "Obsoleto")
 	private Integer bloqueado;
 
 	public Integer getNumero() {
