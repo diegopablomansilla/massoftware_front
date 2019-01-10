@@ -1,6 +1,5 @@
 -- CREATE EXTENSION "uuid-ossp";
 -- SELECT uuid_generate_v4();
-SELECT * FROM massoftware.Banco WHERE TRIM(massoftware.TRANSLATE(nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE('jujuy')) || '%')::VARCHAR AND bloqueado = '0' ORDER BY numero OFFSET 0 LIMIT 10;
 
 DROP SCHEMA IF EXISTS massoftware CASCADE;
 
