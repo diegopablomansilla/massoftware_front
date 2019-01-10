@@ -28,58 +28,11 @@ public class WCuentaFondoRubro extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	public WCuentaFondoRubro() {
-		init(INSERT_MODE, null);
-	}
-
-	public WCuentaFondoRubro(String mode) {
-		init(mode, null);
-	}
-
 	public WCuentaFondoRubro(String mode, String id) {
-		init(mode, id);
+		super(mode, id);
 	}
 
-	private void init(String mode, String id) {
-
-		try {
-
-			this.id = id;
-			this.mode = mode;
-
-			// =======================================================
-			// BEAN
-
-			itemBI = new BeanItem<CuentaFondoRubro>(new CuentaFondoRubro());
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			buildContent();
-
-			// =======================================================
-			// KEY EVENTs
-
-			addKeyEvents();
-
-			// =======================================================
-			// CARGA DE DATOS
-
-			loadData(this.id);
-
-			// =======================================================
-			// ACTUALIZAR TITULO
-			 
-			actualizarTitulo();
-
-			// =======================================================
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	private void buildContent() throws Exception {
+	protected void buildContent() throws Exception {
 
 		confWinForm(this.itemBI.getBean().labelSingular());
 		this.setWidth(31f, Unit.EM);
@@ -87,7 +40,7 @@ public class WCuentaFondoRubro extends WindowForm {
 		// =======================================================
 		// CUERPO
 
-		VerticalLayout cuerpo = buildCouerpo();
+		VerticalLayout cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -100,19 +53,19 @@ public class WCuentaFondoRubro extends WindowForm {
 		VerticalLayout content = UtilUI.buildWinContentVertical();
 
 		content.addComponents(cuerpo, filaBotoneraHL);
- 
+
 		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 
 		this.setContent(content);
 	}
 
-	private VerticalLayout buildCouerpo() throws Exception {
+	private VerticalLayout buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);		
+		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
 		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);		
+		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
 		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -126,7 +79,7 @@ public class WCuentaFondoRubro extends WindowForm {
 	// =================================================================================
 
 	protected void setMaxValues() throws Exception {
-		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue("numero"));
+		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -134,16 +87,16 @@ public class WCuentaFondoRubro extends WindowForm {
 		itemBI.setBean((CuentaFondoRubro) obj);
 	}
 
-	protected EntityId getBean() throws Exception {
+	protected BeanItem<CuentaFondoRubro> getItemsBIC() {
 
-		return itemBI.getBean();
-	}
+		// -----------------------------------------------------------------
+		// Crea el Container del form, en base a al bean que queremos usar, y ademas
+		// carga el form con un bean vacio
 
-	// -----------------------------------------------------------------------------------
-
-	protected void validateForm() {
-		numeroTXT.validate();
-		nombreTXT.validate();
+		if (itemBI == null) {
+			itemBI = new BeanItem<CuentaFondoRubro>(new CuentaFondoRubro());
+		}
+		return itemBI;
 	}
 
 	// =================================================================================
@@ -173,13 +126,13 @@ public class WCuentaFondoRubro extends WindowForm {
 	protected Object insert() throws Exception {
 
 		try {
-			this.getBean().insert();
+			itemBI.getBean().insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getNumero(), null);
 			}
 
-			return this.getBean();
+			return itemBI.getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -190,13 +143,13 @@ public class WCuentaFondoRubro extends WindowForm {
 	protected Object update() throws Exception {
 
 		try {
-			this.getBean().update();
+			itemBI.getBean().update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getNumero(), null);
 			}
 
-			return this.getBean();
+			return itemBI.getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);

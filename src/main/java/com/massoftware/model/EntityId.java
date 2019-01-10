@@ -14,6 +14,8 @@ import com.massoftware.backend.BackendContextPG;
 
 public class EntityId extends Entity implements Comparable<EntityId> {
 
+	// Es la cantidad de tablas relacionadas que se van a consultar hacia la
+	// izquierda
 	private int _defMaxLevel = 3;
 
 	protected String id;
@@ -21,12 +23,10 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	public EntityId _originalDTO;
 
 	public void loadById() throws Exception {
-
 		loadById(getId(), _defMaxLevel);
 	}
 
 	public void loadById(int maxLevel) throws Exception {
-
 		loadById(getId(), maxLevel);
 	}
 
@@ -35,7 +35,6 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	}
 
 	public void loadById(String id, int maxLevel) throws Exception {
-
 		if (id != null && id.trim().length() > 0) {
 
 			Object[] row = BackendContextPG.get().findById(this.getClass().getSimpleName(), id);
@@ -48,52 +47,6 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	public void setter(Object[] row) throws Exception {
 		setter(row, 0, _defMaxLevel);
 	}
-
-	// public void setterx(Object[] row, boolean loadLevel1Left) throws Exception {
-	//
-	// Field[] fields = getClass().getDeclaredFields();
-	//
-	// for (int i = 0; i < fields.length; i++) {
-	//
-	// Field field = fields[i];
-	//
-	// if (field.getName().startsWith("_") == false) {
-	//
-	// @SuppressWarnings("rawtypes")
-	// Class[] argTypes = new Class[] { field.getType() };
-	//
-	// Method methodSet = this.getClass().getDeclaredMethod("set" +
-	// toCamelCase(field.getName()), argTypes);
-	//
-	// methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
-	//
-	// if (isScalar(field.getType())) {
-	//
-	// methodSet.invoke(this, row[i]);
-	//
-	// } else if (row[i] != null) {
-	//
-	// EntityId other = (EntityId) field.getType().newInstance();
-	//
-	// if (loadLevel1Left) {
-	// Object[] rowOther =
-	// BackendContext.get().findById(field.getType().getSimpleName(),
-	// row[i].toString());
-	// other.setter(rowOther, false);
-	// } else {
-	// other.setId(row[i].toString());
-	// }
-	//
-	// methodSet.invoke(this, other);
-	// }
-	//
-	// }
-	//
-	// }
-	//
-	// _originalDTO = (EntityId) this.clone();
-	//
-	// }
 
 	public void setter(Object[] row, int maxLevel) throws Exception {
 		setter(row, 0, maxLevel);
@@ -331,7 +284,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		}
 	}
 
-	public Object maxValue(String attName) throws Exception {
+	public Integer maxValueInteger(String attName) throws Exception {
 
 		return BackendContextPG.get().maxValueInteger(attName, this.getClass().getSimpleName());
 
@@ -423,5 +376,42 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		}
 
 	}
+
+	// private boolean check(Banco itemOriginal, Banco item) throws Exception {
+	//
+	// // ==================================================================
+	// // CHECKs NULLs
+	//
+	//
+	// if (item.getNumero() == null) {
+	// throw new NullFieldException("Numero");
+	// }
+	// if (item.getNombre() == null) {
+	// throw new NullFieldException("Nombre");
+	// }
+	// if (item.getCuit() == null) {
+	// throw new NullFieldException("CUIT");
+	// }
+	//
+	// // ==================================================================
+	// // CHECKs UNIQUE
+	//
+	//// if (itemOriginal != null) {
+	//// checkUniqueNumero("Numero", itemOriginal.getNumero(), item.getNumero());
+	//// checkUniqueNombre("Nombre", itemOriginal.getNombre(), item.getNombre());
+	//// checkUniqueNombreOficial("Nombre oficial", itemOriginal.getNombreOficial(),
+	// item.getNombreOficial());
+	//// checkUniqueCuit("CUIT", itemOriginal.getCuit(), item.getCuit());
+	//// } else {
+	//// checkUniqueNumero("Numero", null, item.getNumero());
+	//// checkUniqueNombre("Nombre", null, item.getNombre());
+	//// checkUniqueNombreOficial("Nombre oficial", null, item.getNombreOficial());
+	//// checkUniqueCuit("CUIT", null, item.getCuit());
+	//// }
+	//
+	// // ==================================================================
+	//
+	// return true;
+	// }
 
 }

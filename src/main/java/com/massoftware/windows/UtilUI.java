@@ -644,6 +644,7 @@ public class UtilUI {
 		return txt;
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTShortPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
 			int minLength, boolean required) throws Exception {
@@ -726,6 +727,7 @@ public class UtilUI {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	public static TextField buildTXTLong(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
 			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
@@ -1186,6 +1188,7 @@ public class UtilUI {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static ComboBox buildFieldCB(BeanItem dtoBI, String attName, String label, String attName1, String caption,
 			float widthEM, boolean readOnly, boolean required, boolean textInputAllowed, Class clazz, List options)

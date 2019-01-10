@@ -32,59 +32,25 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	public WCuentaFondoGrupo(CuentaFondoRubro cuentaFondoRubro) {
-		init(INSERT_MODE, null, cuentaFondoRubro);
-	}
-
-	public WCuentaFondoGrupo(String mode) {
-		init(mode, null, null);
-	}
-
 	public WCuentaFondoGrupo(String mode, String id) {
-		init(mode, id, null);
+
+		super(mode, id);
 	}
 
-	private void init(String mode, String id, CuentaFondoRubro cuentaFondoRubro) {
+	public WCuentaFondoGrupo(String mode, String id, String cuentaFondoRubroId) {
 
-		try {
+		if (cuentaFondoRubroId != null) {
+			CuentaFondoRubro cuentaFondoRubro = new CuentaFondoRubro();
+			cuentaFondoRubro.setId(cuentaFondoRubroId);
 
-			this.id = id;
-			this.mode = mode;
+			getItemsBIC().getBean().setCuentaFondoRubro(cuentaFondoRubro);
 
-			// =======================================================
-			// BEAN
-
-			itemBI = new BeanItem<CuentaFondoGrupo>(new CuentaFondoGrupo());
-			itemBI.getBean().setCuentaFondoRubro(cuentaFondoRubro);
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			buildContent();
-
-			// =======================================================
-			// KEY EVENTs
-
-			addKeyEvents();
-
-			// =======================================================
-			// CARGA DE DATOS
-
-			loadData(this.id);
-
-			// =======================================================
-			// ACTUALIZAR TITULO
-
-			actualizarTitulo();
-
-			// =======================================================
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
 		}
+
+		init(mode, id);
 	}
 
-	private void buildContent() throws Exception {
+	protected void buildContent() throws Exception {
 
 		confWinForm(itemBI.getBean().labelSingular());
 		this.setWidth(31f, Unit.EM);
@@ -92,7 +58,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 		// =======================================================
 		// CUERPO
 
-		VerticalLayout cuerpo = buildCouerpo();
+		VerticalLayout cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -112,7 +78,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 	}
 
 	@SuppressWarnings("serial")
-	private VerticalLayout buildCouerpo() throws Exception {
+	private VerticalLayout buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
 		rubroCB = UtilUI.buildFieldCB(itemBI, "cuentaFondoRubro", false, false, CuentaFondoRubro.class,
@@ -130,7 +96,6 @@ public class WCuentaFondoGrupo extends WindowForm {
 		});
 		// ---------------------------------------------------------------------------------------------------------
 		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
-//		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
 		nombreTXT.addValueChangeListener(new Property.ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
 				validateRubroAndNombre();
@@ -149,7 +114,8 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	protected void setMaxValues() throws Exception {
 
-		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue(new String[] {"cuentaFondoRubro"}, "numero"));
+		itemBI.getBean()
+				.setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "cuentaFondoRubro" }, "numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -157,17 +123,16 @@ public class WCuentaFondoGrupo extends WindowForm {
 		itemBI.setBean((CuentaFondoGrupo) obj);
 	}
 
-	protected EntityId getBean() throws Exception {
+	protected BeanItem<CuentaFondoGrupo> getItemsBIC() {
 
-		return itemBI.getBean();
-	}
+		// -----------------------------------------------------------------
+		// Crea el Container del form, en base a al bean que queremos usar, y ademas
+		// carga el form con un bean vacio
 
-	// -----------------------------------------------------------------------------------
-
-	protected void validateForm() {
-		rubroCB.validate();
-		numeroTXT.validate();
-		nombreTXT.validate();
+		if (itemBI == null) {
+			itemBI = new BeanItem<CuentaFondoGrupo>(new CuentaFondoGrupo());
+		}
+		return itemBI;
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -186,7 +151,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 			LogAndNotification.print(ex);
 		}
 	}
-	
+
 	private void validateRubroAndNombre() {
 		try {
 
@@ -229,14 +194,14 @@ public class WCuentaFondoGrupo extends WindowForm {
 	protected Object insert() throws Exception {
 
 		try {
-			this.getBean().insert();
+			itemBI.getBean().insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(
 						itemBI.getBean().getCuentaFondoRubro().getNumero(), itemBI.getBean().getNumero());
 			}
 
-			return this.getBean();
+			return itemBI.getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -247,19 +212,25 @@ public class WCuentaFondoGrupo extends WindowForm {
 	protected Object update() throws Exception {
 
 		try {
-			this.getBean().update();
+			itemBI.getBean().update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(
 						itemBI.getBean().getCuentaFondoRubro().getNumero(), itemBI.getBean().getNumero());
 			}
 
-			return this.getBean();
+			return itemBI.getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 			return null;
 		}
+	}
+	
+	protected void validateForm() throws Exception {
+		validateRubroAndNumero();
+		validateRubroAndNombre();
+		super.validateForm();
 	}
 
 }

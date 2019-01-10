@@ -1,19 +1,30 @@
 package com.massoftware.windows;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.massoftware.model.EntityId;
+import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.AbstractComponentContainer;
+import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -33,8 +44,62 @@ public abstract class WindowListado extends Window {
 	protected Button copiarBTN;
 	protected Button eliminarBTN;
 
+	public Button seleccionarBTN;
+
+	public WindowListado() {
+		super();
+	}
+
+	public void init(boolean selectionMode) {
+
+		try {
+
+			// =======================================================
+			// LAYOUT CONTROLs
+
+			buildContent();
+
+			if (selectionMode) {
+				buildSelectorSection();
+				this.setModal(true);
+			}
+
+			// =======================================================
+			// KEY EVENTs
+
+			addKeyEvents();
+
+			// =======================================================
+			// CARGA DE DATOS
+
+			loadData();
+
+			// =======================================================
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	private void buildSelectorSection() {
+
+		HorizontalLayout filaBotoneraHL = new HorizontalLayout();
+		filaBotoneraHL.setSpacing(true);
+
+		seleccionarBTN = UtilUI.buildButtonSeleccionar();
+
+		filaBotoneraHL.addComponents(seleccionarBTN);
+
+		((VerticalLayout) this.getContent()).addComponent(filaBotoneraHL);
+
+		((VerticalLayout) this.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
+
+	}
+
 	@SuppressWarnings("rawtypes")
 	abstract protected BeanItemContainer getItemsBIC();
+
+	abstract protected void buildContent() throws Exception;
 
 	protected void nextPageBTNClick() {
 		offset = offset + limit;
@@ -89,7 +154,31 @@ public abstract class WindowListado extends Window {
 		}
 	}
 
-	abstract protected void validateFilterSection();
+	protected void validateFilterSection() throws Exception {
+		// -----------------------------------------------------------------
+		// realiza la validacion de todos los filtros de la grilla, antes de realizar la
+		// consulta en la base de datos
+
+		validateAllFields((AbstractComponentContainer) this.getContent());
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	private void validateAllFields(AbstractComponentContainer componentContainer) throws Exception {
+
+		Iterator<Component> itr = componentContainer.iterator();
+
+		while (itr.hasNext()) {
+			Component component = itr.next();
+			if (component instanceof Validatable) {
+				((Validatable) component).validate();
+			} else if (component instanceof AbstractField) {
+				((AbstractField) component).validate();
+			} else if (component instanceof ComponentContainer) {
+				validateAllFields((AbstractComponentContainer) component);
+			}
+		}
+
+	}
 
 	abstract protected void addBeansToItemsBIC();
 
@@ -142,16 +231,16 @@ public abstract class WindowListado extends Window {
 
 								try {
 									if (yes) {
-//										if (itemsGRD.getSelectedRow() != null) {
+										// if (itemsGRD.getSelectedRow() != null) {
 
-											Object item = itemsGRD.getSelectedRow();
+										Object item = itemsGRD.getSelectedRow();
 
-											deleteItem(item);
+										deleteItem(item);
 
-											LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
+										LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-											loadData();
-//										}
+										loadData();
+										// }
 									}
 								} catch (Exception e) {
 									LogAndNotification.print(e);
@@ -166,75 +255,26 @@ public abstract class WindowListado extends Window {
 		}
 	}
 
-	abstract protected void deleteItem(Object item) throws Exception;
+	protected void deleteItem(Object item) throws Exception {
 
-	protected void agregarBTNClick() {
-		try {
+		((EntityId) item).delete();
 
-			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem ");
-			window.setModal(true);
-			window.center();
-			window.setWidth("400px");
-			window.setHeight("300px");
-			getUI().addWindow(window);
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	protected void modificarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-
-				Object item = itemsGRD.getSelectedRow();
-
-				Window window = new Window("Modificar ítem " + item);
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
-				getUI().addWindow(window);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	protected void copiarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-				itemsGRD.select(null);
-				Window window = new Window("Agregar ítem ");
-				window.setModal(true);
-				window.center();
-				window.setWidth("400px");
-				window.setHeight("300px");
-				getUI().addWindow(window);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
 	}
 
 	protected void addKeyEvents() {
 
-//		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
-//
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void handleAction(Object sender, Object target) {
-//				if (target.equals(itemsGRD)) {
-//					modificarBTNClick();
-//				}
-//			}
-//		});
+		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
+		// int[] {}) {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// @Override
+		// public void handleAction(Object sender, Object target) {
+		// if (target.equals(itemsGRD)) {
+		// modificarBTNClick();
+		// }
+		// }
+		// });
 
 		// --------------------------------------------------
 
@@ -336,6 +376,63 @@ public abstract class WindowListado extends Window {
 		window.center();
 
 		return window;
+	}
+
+	protected Map<String, Boolean> buildOrderBy() {
+
+		Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
+
+		for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
+			orderBy.put(sortOrder.getPropertyId().toString(), sortOrder.getDirection().toString().equals("ASCENDING"));
+		}
+
+		return orderBy;
+
+	}
+
+	abstract protected WindowForm buildWinddowForm(String mode, String id);
+
+	protected void agregarBTNClick() {
+		try {
+
+			itemsGRD.select(null);
+			WindowForm window = buildWinddowForm(WindowForm.INSERT_MODE, null);
+			window.setWindowListado(this);
+			getUI().addWindow(window);
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void modificarBTNClick() {
+		try {
+
+			if (itemsGRD.getSelectedRow() != null) {
+				EntityId item = (EntityId) itemsGRD.getSelectedRow();
+				WindowForm window = buildWinddowForm(WindowForm.UPDATE_MODE, item.getId());
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	protected void copiarBTNClick() {
+		try {
+
+			if (itemsGRD.getSelectedRow() != null) {
+				EntityId item = (EntityId) itemsGRD.getSelectedRow();
+				WindowForm window = buildWinddowForm(WindowForm.COPY_MODE, item.getId());
+				window.setWindowListado(this);
+				getUI().addWindow(window);
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
 	}
 
 }

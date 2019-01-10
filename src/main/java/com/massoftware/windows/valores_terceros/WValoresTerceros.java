@@ -10,13 +10,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import com.massoftware.model.Banco;
+import com.massoftware.model.BancosFiltro;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.bancos.Bancos;
-import com.massoftware.windows.bancos.BancosFiltro;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
@@ -736,7 +736,7 @@ public class WValoresTerceros extends Window {
 		try {
 			if (window.itemsGRD.getSelectedRow() != null) {
 
-				Bancos item = (Bancos) window.itemsGRD.getSelectedRow();
+				Banco item = (Banco) window.itemsGRD.getSelectedRow();
 
 				this.filterBI.getItemProperty("numeroBanco").setValue(item.getNumero());
 				this.filterBI.getItemProperty("nombreBanco").setValue(item.getNombre());

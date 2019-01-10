@@ -3,10 +3,10 @@ package com.massoftware.windows.cuentas_fondo;
 import java.util.List;
 
 import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro2;
+import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.bancos2.WBancos2;
+import com.massoftware.windows.bancos.WBancos;
 
 class WCBancoSB extends SelectorBox {
 
@@ -43,7 +43,7 @@ class WCBancoSB extends SelectorBox {
 
 			if (window.filterBI.getBean().getNombreBanco() != null) {
 
-				BancosFiltro2 bancosFiltro = new BancosFiltro2();
+				BancosFiltro bancosFiltro = new BancosFiltro();
 
 				Integer n = null;
 				try {
@@ -84,10 +84,10 @@ class WCBancoSB extends SelectorBox {
 			window.filterBI.getBean().setIdBanco(null);
 			window.filterBI.getBean().setNumeroBanco(null);
 
-			BancosFiltro2 bancosFiltro = new BancosFiltro2();
+			BancosFiltro bancosFiltro = new BancosFiltro();
 
 			bancosFiltro.setNombre(window.filterBI.getBean().getNombreBanco());
-			WBancos2 window = new WBancos2(bancosFiltro);
+			WBancos window = new WBancos(bancosFiltro);
 
 			window.addCloseListener(e -> {
 				setValue(window);
@@ -104,7 +104,7 @@ class WCBancoSB extends SelectorBox {
 		}
 	}
 
-	private void setValue(WBancos2 windowPopup) {
+	private void setValue(WBancos windowPopup) {
 		try {
 
 			Banco item = (Banco) windowPopup.itemsGRD.getSelectedRow();

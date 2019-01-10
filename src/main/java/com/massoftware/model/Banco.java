@@ -169,11 +169,11 @@ public class Banco extends EntityId {
 		return "(" + numero + ") " + nombre;
 	}
 
-	public List<Banco> find(BancosFiltro2 bancosFiltro) throws Exception {
+	public List<Banco> find(BancosFiltro bancosFiltro) throws Exception {
 		return find(-1, -1, null, bancosFiltro);
 	}
 
-	public List<Banco> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro2 filtro)
+	public List<Banco> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro)
 			throws Exception {
 
 		filtro.setterTrim();
@@ -216,7 +216,7 @@ public class Banco extends EntityId {
 
 		// ==================================================================
 
-		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 1);
+		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 0);
 
 		for (EntityId item : items) {
 			listado.add((Banco) item);
@@ -225,41 +225,6 @@ public class Banco extends EntityId {
 		return listado;
 	}
 
-	// private boolean check(Banco itemOriginal, Banco item) throws Exception {
-	//
-	// // ==================================================================
-	// // CHECKs NULLs
-	//
-	//
-	// if (item.getNumero() == null) {
-	// throw new NullFieldException("Numero");
-	// }
-	// if (item.getNombre() == null) {
-	// throw new NullFieldException("Nombre");
-	// }
-	// if (item.getCuit() == null) {
-	// throw new NullFieldException("CUIT");
-	// }
-	//
-	// // ==================================================================
-	// // CHECKs UNIQUE
-	//
-	//// if (itemOriginal != null) {
-	//// checkUniqueNumero("Numero", itemOriginal.getNumero(), item.getNumero());
-	//// checkUniqueNombre("Nombre", itemOriginal.getNombre(), item.getNombre());
-	//// checkUniqueNombreOficial("Nombre oficial", itemOriginal.getNombreOficial(),
-	// item.getNombreOficial());
-	//// checkUniqueCuit("CUIT", itemOriginal.getCuit(), item.getCuit());
-	//// } else {
-	//// checkUniqueNumero("Numero", null, item.getNumero());
-	//// checkUniqueNombre("Nombre", null, item.getNombre());
-	//// checkUniqueNombreOficial("Nombre oficial", null, item.getNombreOficial());
-	//// checkUniqueCuit("CUIT", null, item.getCuit());
-	//// }
-	//
-	// // ==================================================================
-	//
-	// return true;
-	// }
+
 
 }

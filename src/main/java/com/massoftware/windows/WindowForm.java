@@ -1,10 +1,18 @@
 package com.massoftware.windows;
 
+import java.util.Iterator;
+
 import com.massoftware.model.EntityId;
+import com.vaadin.data.Validatable;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.ui.AbstractComponentContainer;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -39,6 +47,55 @@ public abstract class WindowForm extends Window {
 
 	// -------------------------------------------------------------
 
+	public WindowForm() {
+	}
+
+	public WindowForm(String mode, String id) {
+		init(mode, id);
+	}
+
+	protected void init(String mode, String id) {
+		try {
+
+			this.id = id;
+			this.mode = mode;
+
+			// =======================================================
+			// BEAN
+
+			getItemsBIC();
+
+			// =======================================================
+			// LAYOUT CONTROLs
+
+			buildContent();
+
+			// =======================================================
+			// KEY EVENTs
+
+			addKeyEvents();
+
+			// =======================================================
+			// CARGA DE DATOS
+
+			loadData(this.id);
+
+			// =======================================================
+			// ACTUALIZAR TITULO
+
+			actualizarTitulo();
+
+			// =======================================================
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	abstract protected void buildContent() throws Exception;
+
+	// -------------------------------------------------------------
+
 	public void setWindowListado(WindowListado windowListado) {
 		this.windowListado = windowListado;
 	}
@@ -49,9 +106,9 @@ public abstract class WindowForm extends Window {
 		if (INSERT_MODE.equalsIgnoreCase(mode)) {
 			this.setCaption("Agregar " + getCaption().toLowerCase());
 		} else if (UPDATE_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getBean());
+			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getItemsBIC().getBean());
 		} else if (COPY_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Copiar " + getCaption() + " : " + getBean());
+			this.setCaption("Copiar " + getCaption() + " : " + getItemsBIC().getBean());
 		}
 	}
 
@@ -142,13 +199,14 @@ public abstract class WindowForm extends Window {
 		}
 	}
 
-	abstract protected EntityId queryData();
-
 	abstract protected void setMaxValues() throws Exception;
 
 	abstract protected void setBean(EntityId obj) throws Exception;
 
-	abstract protected EntityId getBean() throws Exception;
+	// abstract protected EntityId getBean() throws Exception;
+
+	@SuppressWarnings("rawtypes")
+	abstract protected BeanItem getItemsBIC();
 
 	protected void save() {
 
@@ -183,17 +241,15 @@ public abstract class WindowForm extends Window {
 
 	}
 
-	abstract protected void validateForm();
-
 	protected Object insert() throws Exception {
 
 		try {
-			this.getBean().insert();
+			((EntityId) getItemsBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 			}
 
-			return this.getBean();
+			return getItemsBIC().getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -204,12 +260,12 @@ public abstract class WindowForm extends Window {
 	protected Object update() throws Exception {
 
 		try {
-			this.getBean().update();
+			((EntityId) getItemsBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 			}
 
-			return this.getBean();
+			return getItemsBIC().getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -232,7 +288,59 @@ public abstract class WindowForm extends Window {
 		// window.setContent((Component) this);
 		// getUI().addWindow(window);
 
+		this.setModal(true);
+		this.center();
+
 		return this;
 	}
+
+	protected void validateForm() throws Exception {
+		// -----------------------------------------------------------------
+		// realiza la validacion de todos los campos del fomulario, antes de realizar la
+		// actualizacion o insercion en la base de datos
+
+		validateAllFields((AbstractComponentContainer) this.getContent());
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	private void validateAllFields(AbstractComponentContainer componentContainer) throws Exception {
+
+		Iterator<Component> itr = componentContainer.iterator();
+
+		while (itr.hasNext()) {
+			Component component = itr.next();
+			if (component instanceof Validatable) {
+				((Validatable) component).validate();
+			} else if (component instanceof AbstractField) {
+				((AbstractField) component).validate();
+			} else if (component instanceof ComponentContainer) {
+				validateAllFields((AbstractComponentContainer) component);
+			}
+		}
+
+	}
+
+	// =================================================================================
+
+	// metodo que realiza la consulta a la base de datos
+	protected EntityId queryData() throws Exception {
+		try {
+
+			EntityId item = (EntityId) getItemsBIC().getBean();
+			item.loadById(id); // consulta a DB
+			if (COPY_MODE.equals(mode)) {
+				item.setId(null);
+			}
+
+			return item;
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+
+		return (EntityId) getItemsBIC().getBean();
+	}
+
+	// =================================================================================
 
 }

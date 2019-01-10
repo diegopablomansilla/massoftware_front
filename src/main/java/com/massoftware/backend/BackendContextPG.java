@@ -1,6 +1,8 @@
 package com.massoftware.backend;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -20,6 +22,8 @@ import org.cendra.jdbc.DataSourceWrapper;
 import com.massoftware.model.EntityId;
 
 public class BackendContextPG extends AbstractContext {
+	
+//	C:\Program Files\Java\jre1.8.0_141\bin\server\jvm.dll
 
 	public final static String PG = "Postgresql";
 
@@ -70,10 +74,15 @@ public class BackendContextPG extends AbstractContext {
 //		return properties;
 //	}
 
+
+	
 	private void init() throws Exception {
 
-		Properties properties = loadProperties(
-				System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
+//		massoftware.properties
+//		Properties properties = loadProperties(
+//				System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
+		
+		Properties properties = loadProperties("massoftware.properties");
 
 		// -------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ import java.io.File;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
-import com.massoftware.windows.bancos2.WBancos2;
+import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.cajas.WCajas;
 import com.massoftware.windows.captura_lotes_tickets.WCapturaLotesTickets;
 import com.massoftware.windows.chequeras.WChequeras;
@@ -220,7 +220,7 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WBancos2();
+				Window window = new WBancos();
 				getUI().addWindow(window);
 			}
 		};

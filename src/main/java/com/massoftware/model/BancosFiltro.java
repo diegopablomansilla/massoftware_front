@@ -2,7 +2,7 @@ package com.massoftware.model;
 
 import com.massoftware.backend.annotation.FieldLabelAnont;
 
-public class BancosFiltro2 extends Entity {
+public class BancosFiltro extends Entity {
 
 	@FieldLabelAnont(value = "Nº banco")
 	private Integer numero;
@@ -35,11 +35,6 @@ public class BancosFiltro2 extends Entity {
 
 	public void setBloqueado(Integer bloqueado) {
 		this.bloqueado = bloqueado;
-	}
-
-	@Override
-	public String toString() {
-		return "BancosFiltro2 [numero=" + numero + ", nombre=" + nombre + ", bloqueado=" + bloqueado + "]";
 	}
 
 }

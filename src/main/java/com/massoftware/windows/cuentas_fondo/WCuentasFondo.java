@@ -1,9 +1,7 @@
 package com.massoftware.windows.cuentas_fondo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.vaadin.patrik.FastNavigation;
 
@@ -18,6 +16,7 @@ import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
 import com.massoftware.windows.cuentas_fondo.grupo.WCuentaFondoGrupo;
 import com.massoftware.windows.cuentas_fondo.rubro.WCuentaFondoRubro;
@@ -68,50 +67,17 @@ public class WCuentasFondo extends WindowListado {
 
 	public WCuentasFondo() {
 		super();
-		init(null);
+		filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
+		init(false);
 	}
 
 	public WCuentasFondo(CuentasFondoFiltro filtro) {
 		super();
-		init(filtro);
+		filterBI = new BeanItem<CuentasFondoFiltro>(filtro);
+		init(true);
 	}
 
-	public void init(CuentasFondoFiltro filtro) {
-
-		try {
-
-			// =======================================================
-			// FILTRO
-
-			if (filtro != null) {
-				filterBI = new BeanItem<CuentasFondoFiltro>(filtro);
-			} else {
-				filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
-			}
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			buildContent();
-
-			// =======================================================
-			// KEY EVENTs
-
-			addKeyEvents();
-
-			// =======================================================
-			// CARGA DE DATOS
-
-			loadData();
-
-			// =======================================================
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	private void buildContent() throws Exception {
+	protected void buildContent() throws Exception {
 
 		confWinList(this, new CuentaFondo().labelPlural());
 
@@ -483,7 +449,7 @@ public class WCuentasFondo extends WindowListado {
 
 			if (tree.getValue() != null && tree.getValue() instanceof String || tree.getValue().equals(itemTodas)) {
 
-				WCuentaFondoRubro window = new WCuentaFondoRubro();
+				WindowForm window = new WCuentaFondoRubro(WindowForm.INSERT_MODE, null);
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -491,7 +457,8 @@ public class WCuentasFondo extends WindowListado {
 
 			} else if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro) {
 
-				WCuentaFondoGrupo window = new WCuentaFondoGrupo(((CuentaFondoRubro) tree.getValue()));
+				WindowForm window = new WCuentaFondoGrupo(WindowForm.INSERT_MODE, null,
+						((CuentaFondoRubro) tree.getValue()).getId());
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -511,7 +478,7 @@ public class WCuentasFondo extends WindowListado {
 
 				CuentaFondoRubro item = (CuentaFondoRubro) tree.getValue();
 
-				WCuentaFondoRubro window = new WCuentaFondoRubro(WCuentaFondoRubro.UPDATE_MODE, item.getId());
+				WindowForm window = new WCuentaFondoRubro(WindowForm.UPDATE_MODE, item.getId());
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -521,7 +488,7 @@ public class WCuentasFondo extends WindowListado {
 
 				CuentaFondoGrupo item = (CuentaFondoGrupo) tree.getValue();
 
-				WCuentaFondoGrupo window = new WCuentaFondoGrupo(WCuentaFondoGrupo.UPDATE_MODE, item.getId());
+				WindowForm window = new WCuentaFondoGrupo(WCuentaFondoGrupo.UPDATE_MODE, item.getId(), null);
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -565,14 +532,7 @@ public class WCuentasFondo extends WindowListado {
 
 		try {
 
-			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
-
-			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				orderBy.put(sortOrder.getPropertyId().toString(),
-						sortOrder.getDirection().toString().equals("ASCENDING"));
-			}
-
-			return new CuentaFondo().find(limit, offset, orderBy, filterBI.getBean());
+			return new CuentaFondo().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -596,6 +556,12 @@ public class WCuentasFondo extends WindowListado {
 			((CuentaFondoGrupo) item).delete();
 		}
 
+	}
+
+	@Override
+	protected WindowForm buildWinddowForm(String mode, String id) {
+
+		return null;
 	}
 
 	// =================================================================================

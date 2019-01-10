@@ -1,5 +1,6 @@
 package org.cendra.cx;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +34,7 @@ public abstract class AbstractContext {
 	}
 
 	public void printFatal(Exception e) {
-		String msg = sep()
-				+ "ERROR FATAL!! - Se procede a interrumpir la ejecución del sistema. "
+		String msg = sep() + "ERROR FATAL!! - Se procede a interrumpir la ejecución del sistema. "
 				+ ZonedDateTime.now();
 		System.err.println(msg);
 		e.printStackTrace();
@@ -46,18 +46,14 @@ public abstract class AbstractContext {
 
 		try {
 
-			System.out
-					.println(sep()
-							+ "[..] Recopilando informacíon del ambiente de ejecución\n\n");
+			System.out.println(sep() + "[..] Recopilando informacíon del ambiente de ejecución\n\n");
 
 			InfoHost infoHost = new InfoHost();
 
 			String msg = "Ambiente de ejecución:\n\n" + infoHost.toJson();
 			System.out.println(msg);
 
-			System.out
-					.println("\n\n[OK] Informacíon del ambiente de ejecución recopilada"
-							+ sep());
+			System.out.println("\n\n[OK] Informacíon del ambiente de ejecución recopilada" + sep());
 
 			return infoHost;
 
@@ -72,14 +68,11 @@ public abstract class AbstractContext {
 
 		try {
 
-			System.out
-					.println(sep() + "[..] Leyendo archivo ResourceBundle \n\n"
-							+ path + sep());
+			System.out.println(sep() + "[..] Leyendo archivo ResourceBundle \n\n" + path + sep());
 
 			ResourceBundle messages = ResourceBundle.getBundle(path);
 
-			System.out.println("[OK] Leyendo archivo ResourceBundle \n\n"
-					+ path + sep());
+			System.out.println("[OK] Leyendo archivo ResourceBundle \n\n" + path + sep());
 
 			return messages;
 
@@ -94,36 +87,32 @@ public abstract class AbstractContext {
 
 		try {
 
-			System.out.println(sep()
-					+ "[..] Leyendo archivo de propiedades\n\n" + path + sep());
-
 			Properties properties = new Properties();
 			InputStream input = null;
 
 			try {
 
-				input = new FileInputStream(path);
+				System.out.println(sep() + "[..] Leyendo archivo de propiedades\n\n" + path + sep());
+
+				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+				input = classLoader.getResourceAsStream(path);
+				// input = new FileInputStream(path);
 
 				properties.load(input);
 
 				String json = "\n{\n";
 
-				for (Enumeration<Object> e = properties.keys(); e
-						.hasMoreElements();) {
+				for (Enumeration<Object> e = properties.keys(); e.hasMoreElements();) {
 					Object obj = e.nextElement();
-					json += "\n\t\""
-							+ obj
-							+ "\":"
-							+ buildValue(properties.getProperty(obj.toString()))
-							+ ",";
+					json += "\n\t\"" + obj + "\":" + buildValue(properties.getProperty(obj.toString())) + ",";
 				}
 
 				json = json.substring(0, json.length() - 1);
 
 				json += "\n}";
 
-				System.out.println("[OK] Lectura de archivo de propiedades\n\n"
-						+ path + "\n\nContenido:\n\n" + json + sep());
+				System.out.println(
+						"[OK] Lectura de archivo de propiedades\n\n" + path + "\n\nContenido:\n\n" + json + sep());
 
 			} catch (IOException ex) {
 				ex.printStackTrace();

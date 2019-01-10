@@ -2,7 +2,6 @@ package com.massoftware.windows.banco;
 
 import com.massoftware.model.Banco;
 import com.massoftware.model.EntityId;
-import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UniqueValidator;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -14,9 +13,8 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+@SuppressWarnings("serial")
 public class WBanco extends WindowForm {
-
-	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
@@ -40,58 +38,11 @@ public class WBanco extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	public WBanco() {
-		init(INSERT_MODE, null);
-	}
-
-	public WBanco(String mode) {
-		init(mode, null);
-	}
-
 	public WBanco(String mode, String id) {
-		init(mode, id);
+		super(mode, id);
 	}
 
-	private void init(String mode, String id) {
-
-		try {
-
-			this.id = id;
-			this.mode = mode;
-
-			// =======================================================
-			// BEAN
-
-			itemBI = new BeanItem<Banco>(new Banco());
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			buildContent();
-
-			// =======================================================
-			// KEY EVENTs
-
-			addKeyEvents();
-
-			// =======================================================
-			// CARGA DE DATOS
-
-			loadData(this.id);
-
-			// =======================================================
-			// ACTUALIZAR TITULO
-
-			this.actualizarTitulo();
-
-			// =======================================================
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	private void buildContent() throws Exception {
+	protected void buildContent() throws Exception {
 
 		confWinForm(this.itemBI.getBean().labelSingular());
 		this.setWidth(28f, Unit.EM);
@@ -99,7 +50,7 @@ public class WBanco extends WindowForm {
 		// =======================================================
 		// CUERPO
 
-		TabSheet cuerpo = buildCouerpo();
+		TabSheet cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -118,7 +69,7 @@ public class WBanco extends WindowForm {
 		this.setContent(content);
 	}
 
-	private TabSheet buildCouerpo() throws Exception {
+	private TabSheet buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
 		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
@@ -175,63 +126,44 @@ public class WBanco extends WindowForm {
 		tabSheet.addTab(generalVL, "General");
 		tabSheet.addTab(formatoExtractoVL, "Formato extracto");
 
+		// ---------------------------------------------------------------------------------------------------------
+
 		return tabSheet;
+
+		// ---------------------------------------------------------------------------------------------------------
 	}
 
 	// =================================================================================
 
 	protected void setMaxValues() throws Exception {
-		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValue("numero"));
+		// Al momento de insertar o copiar a veces se necesita el maximo valor de ese
+		// atributo, + 1, esto es asi para hacer una especie de numero incremental de
+		// ese atributo
+		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
+		// base a su id
+
+		itemBI.getBean().setNumero(this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
 
+		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
+
 		itemBI.setBean((Banco) obj);
 	}
 
-	protected EntityId getBean() throws Exception {
+	protected BeanItem<Banco> getItemsBIC() {
 
-		return itemBI.getBean();
-	}
+		// -----------------------------------------------------------------
+		// Crea el Container del form, en base a al bean que queremos usar, y ademas
+		// carga el form con un bean vacio
+		// como este metodo se llama muchas veces, inicializar el contenedor una sola
+		// vez
 
-	// -----------------------------------------------------------------------------------
-
-	protected void validateForm() {
-		numeroTXT.validate();
-		nombreTXT.validate();
-		cuitTXT.validate();
-		bloqueadoCHX.validate();
-		hojaTXT.validate();
-		primeraFilaTXT.validate();
-		ultimaFilaTXT.validate();
-		fechaTXT.validate();
-		descripcionTXT.validate();
-		referencia1TXT.validate();
-		importeTXT.validate();
-		referencia2TXT.validate();
-		saldoTXT.validate();
-	}
-
-	// =================================================================================
-	// SECCION PARA CONSULTAS A LA BASE DE DATOS
-
-	// metodo que realiza la consulta a la base de datos
-	protected Banco queryData() {
-		try {
-
-			Banco item = new Banco();
-			item.loadById(id);
-			if (COPY_MODE.equals(mode)) {
-				item.setId(null);
-			}
-
-			return item;
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
+		if (itemBI == null) {
+			itemBI = new BeanItem<Banco>(new Banco());
 		}
-
-		return new Banco();
+		return itemBI;
 	}
 
 	// =================================================================================

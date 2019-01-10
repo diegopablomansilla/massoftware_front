@@ -1,16 +1,17 @@
 package com.massoftware.windows.bancos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.vaadin.patrik.FastNavigation;
 
+import com.massoftware.model.Banco;
+import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
 import com.massoftware.windows.banco.WBanco;
 import com.vaadin.data.sort.SortOrder;
@@ -22,87 +23,43 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
+@SuppressWarnings("serial")
 public class WBancos extends WindowListado {
-
-	private static final long serialVersionUID = -6410625501465383928L;
-
-	// -------------------------------------------------------------
-
-	private BancosBO bo;
 
 	// -------------------------------------------------------------
 
 	BeanItem<BancosFiltro> filterBI;
-	protected BeanItemContainer<Bancos> itemsBIC;
+	protected BeanItemContainer<Banco> itemsBIC;
 
 	// -------------------------------------------------------------
 
 	private TextFieldIntegerBox numeroIB;
 	private TextFieldBox nombreTB;
-	private TextFieldBox nombreOficialTB;
 	private OptionGroup bloqueadoOG;
-
-	public Button seleccionarBTN;
 
 	// -------------------------------------------------------------
 
 	public WBancos() {
 		super();
-		init(null);
+		filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
+		init(false);
 	}
 
 	public WBancos(BancosFiltro filtro) {
 		super();
-		init(filtro);
-		buildSelectorSection();
-		this.setModal(true);
+		filterBI = new BeanItem<BancosFiltro>(filtro);
+		init(true);
 	}
 
-	public void init(BancosFiltro filtro) {
+	protected void buildContent() throws Exception {
 
-		try {
-
-			bo = new BancosBO();
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			if (filtro != null) {
-				filterBI = new BeanItem<BancosFiltro>(filtro);
-			} else {
-				filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
-			}
-
-			// =======================================================
-			// LAYOUT CONTROLs
-
-			buildContent();
-
-			// =======================================================
-			// KEY EVENTs
-
-			addKeyEvents();
-
-			// =======================================================
-			// CARGA DE DATOS
-
-			loadData();
-
-			// =======================================================
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	private void buildContent() throws Exception {
-
-		confWinList(this, "Bancos");
+		confWinList(this, new Banco().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -136,11 +93,11 @@ public class WBancos extends WindowListado {
 
 	private VerticalLayout buildFiltros() throws Exception {
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", "Numero", false, 10, 0, -1, false, false, null,
-				false, UtilUI.EQUALS, 0, Short.MAX_VALUE);
+		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", false, true, UtilUI.EQUALS);
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre", "Nombre", false, 20, -1, 40, false, false, null, false,
-				UtilUI.CONTAINS_WORDS_AND);
+		// --------------------------------------------------------
+
+		nombreTB = new TextFieldBox(this, filterBI, "nombre", false, false, UtilUI.CONTAINS_WORDS_AND);
 
 		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
 		// int[] {}) {
@@ -150,18 +107,24 @@ public class WBancos extends WindowListado {
 		// @Override
 		// public void handleAction(Object sender, Object target) {
 		//
-		// if (target instanceof TextField && ((TextField)
-		// target).getCaption().equals(nombreTB.getCaption())) {
+		// try {
+		//
+		// if (target instanceof TextField
+		// && ((TextField) target).getCaption().equals(nombreTB.valueTXT.getCaption()))
+		// {
 		// loadDataResetPaged();
 		// }
+		// } catch (Exception e) {
+		// LogAndNotification.print(e);
+		// }
+		//
 		// }
 		// });
 
-		nombreOficialTB = new TextFieldBox(this, filterBI, "nombreOficial", "Nombre oficial", false, 20, -1, 40, false,
-				false, null, false, UtilUI.CONTAINS_WORDS_AND);
+		// --------------------------------------------------------
 
-		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", "Situación", false, false, "Todos", "Bloquado",
-				"No bloqueado", true, 0);
+		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todos", "Obsoletos", "Activos",
+				true, 2);
 
 		bloqueadoOG.addValueChangeListener(e -> {
 			loadDataResetPaged();
@@ -180,7 +143,7 @@ public class WBancos extends WindowListado {
 		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
-		filaFiltro2HL.addComponents(nombreOficialTB, bloqueadoOG);
+		filaFiltro2HL.addComponents(bloqueadoOG);
 
 		VerticalLayout filasFiltroVL = new VerticalLayout();
 		filasFiltroVL.setWidth("100%");
@@ -189,7 +152,7 @@ public class WBancos extends WindowListado {
 		return filasFiltroVL;
 	}
 
-	private Grid buildItemsGRD() {
+	private Grid buildItemsGRD() throws Exception {
 
 		itemsGRD = UtilUI.buildGrid();
 		FastNavigation nav = UtilUI.initNavigation(itemsGRD);
@@ -197,14 +160,19 @@ public class WBancos extends WindowListado {
 		// ------------------------------------------------------------------
 
 		// itemsGRD.setWidth("100%");
-		itemsGRD.setWidth(35f, Unit.EM);
+		itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(new Object[] { "numero", "nombre", "bloqueado" });
 
-		UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), "Bloqueado", true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 230);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, -1);
+
+		Banco dto = new Banco();
+		for (Column column : itemsGRD.getColumns()) {
+			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
+		}
 
 		itemsGRD.setContainerDataSource(getItemsBIC());
 
@@ -250,130 +218,48 @@ public class WBancos extends WindowListado {
 		return itemsGRD;
 	}
 
-	private void buildSelectorSection() {
-
-		HorizontalLayout filaBotoneraHL = new HorizontalLayout();
-		filaBotoneraHL.setSpacing(true);
-
-		seleccionarBTN = UtilUI.buildButtonSeleccionar();
-
-		filaBotoneraHL.addComponents(seleccionarBTN);
-
-		((VerticalLayout) this.getContent()).addComponent(filaBotoneraHL);
-
-		((VerticalLayout) this.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
-
-	}
-
 	// =================================================================================
 
-	protected BeanItemContainer<Bancos> getItemsBIC() {
+	protected BeanItemContainer<Banco> getItemsBIC() {
+
+		// -----------------------------------------------------------------
+		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
+		// carga la grilla con una lista vacia
+
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<Bancos>(Bancos.class, new ArrayList<Bancos>());
+			itemsBIC = new BeanItemContainer<Banco>(Banco.class, new ArrayList<Banco>());
 		}
 		return itemsBIC;
 	}
 
-	protected void validateFilterSection() {
-		numeroIB.validate();
-		nombreTB.validate();
-		nombreOficialTB.validate();
-		bloqueadoOG.validate();
-	}
-
 	protected void addBeansToItemsBIC() {
 
-		List<Bancos> items = queryData();
+		// -----------------------------------------------------------------
+		// Consulta a la base de datos y agrega los beans conseguidos al contenedor de
+		// la grilla
 
-		for (Bancos item : items) {
-			getItemsBIC().addBean(item);
-		}
-	}
-
-	protected void agregarBTNClick() {
 		try {
 
-			itemsGRD.select(null);
-			WBanco window = new WBanco();
-			window.setModal(true);
-			window.center();
-			window.setWindowListado(this);
-			getUI().addWindow(window);
+			// -----------------------------------------------------------------
+			// realiza la consulta a la base de datos
+			List<Banco> items = new Banco().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	protected void modificarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
-
-				WBanco window = new WBanco(WBanco.UPDATE_MODE, item.getId());
-				window.setModal(true);
-				window.center();
-				window.setWindowListado(this);
-				getUI().addWindow(window);
+			// -----------------------------------------------------------------
+			// Agrega los resultados a la grilla
+			for (Banco item : items) {
+				getItemsBIC().addBean(item);
 			}
 
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	protected void copiarBTNClick() {
-		try {
-
-			if (itemsGRD.getSelectedRow() != null) {
-
-				Bancos item = (Bancos) itemsGRD.getSelectedRow();
-
-				WBanco window = new WBanco(WBanco.COPY_MODE, item.getId());
-				window.setModal(true);
-				window.center();
-				window.setWindowListado(this);
-				getUI().addWindow(window);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	// =================================================================================
-	// SECCION PARA CONSULTAS A LA BASE DE DATOS
-
-	// metodo que realiza la consulta a la base de datos
-	private List<Bancos> queryData() {
-
-		try {
-
-			Map<String, Boolean> orderBy = new HashMap<String, Boolean>();
-
-			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				orderBy.put(sortOrder.getPropertyId().toString(),
-						sortOrder.getDirection().toString().equals("ASCENDING"));
-			}
-
-			// return Context.getBancosBO().find(limit, offset, orderBy,
-			// this.filterBI.getBean());
-			return bo.find(limit, offset, orderBy, this.filterBI.getBean());
+			// -----------------------------------------------------------------
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Bancos>();
 	}
 
-	// metodo que realiza el delete en la base de datos
-	protected void deleteItem(Object item) throws Exception {
-
-		bo.deleteItem((Bancos) item);
-
+	protected WindowForm buildWinddowForm(String mode, String id) {
+		return new WBanco(mode, id);
 	}
 
 	// =================================================================================
