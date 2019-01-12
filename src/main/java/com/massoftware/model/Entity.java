@@ -5,12 +5,16 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;	
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
 public class Entity implements Cloneable {
+
+	
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
@@ -291,16 +295,147 @@ public class Entity implements Cloneable {
 		return label(field(attNamne));
 	}
 
+	public boolean unique(String attNamne) throws Exception {
+		return unique(field(attNamne));
+	}
+
+	public boolean readOnly(String attNamne) throws Exception {
+		return readOnly(field(attNamne));
+	}
+
+	public boolean required(String attNamne) throws Exception {
+		return required(field(attNamne));
+	}
+
+	public float columns(String attNamne) throws Exception {
+		return columns(field(attNamne));
+	}
+
+	public Integer maxLength(String attNamne) throws Exception {
+		return maxLength(field(attNamne));
+	}
+
+	public String minValue(String attNamne) throws Exception {
+		return minValue(field(attNamne));
+	}
+
+	public String maxValue(String attNamne) throws Exception {
+		return maxValue(field(attNamne));
+	}
+
+	public String mask(String attNamne) throws Exception {
+		return mask(field(attNamne));
+	}
+
 	private Field field(String attNamne) throws SecurityException, ClassNotFoundException, NoSuchFieldException {
 
 		return Class.forName(this.getClass().getCanonicalName()).getDeclaredField(attNamne);
 
 	}
 
-	private String label(Field field) {				
-		FieldLabelAnont[] a = field.getAnnotationsByType(FieldLabelAnont.class);
-		if (a != null && a.length > 0) {			
-			return a[0].value();
+	private String label(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			String label = a[0].label();
+
+			if (label != null && label.trim().length() > 0) {
+				return label.trim();
+			}
+
+		}
+
+		return null;
+	}
+
+	private boolean unique(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].unique();
+		}
+
+		return false;
+	}
+
+	private boolean readOnly(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].readOnly();
+		}
+
+		return false;
+	}
+
+	private boolean required(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].required();
+		}
+
+		return false;
+	}
+
+	private float columns(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].columns();
+		}
+
+		return 20;
+	}
+
+	private Integer maxLength(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			int maxLength = a[0].maxLength();
+
+			if (maxLength > 0) {
+				return maxLength;
+			}
+
+		}
+
+		return null;
+	}
+
+	private String minValue(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			String minValue = a[0].minValue();
+
+			if (minValue != null && minValue.trim().length() > 0) {
+				return minValue.trim();
+			}
+		}
+
+		return null;
+	}
+
+	private String maxValue(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			String maxValue = a[0].maxValue();
+
+			if (maxValue != null && maxValue.trim().length() > 0) {
+				return maxValue.trim();
+			}
+		}
+
+		return null;
+	}
+
+	private String mask(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			String mask = a[0].mask();
+
+			if (mask != null && mask.trim().length() > 0) {
+				return mask.trim();
+			}
 		}
 
 		return null;
@@ -310,21 +445,62 @@ public class Entity implements Cloneable {
 
 		ClassLabelAnont[] a = this.getClass().getAnnotationsByType(ClassLabelAnont.class);
 		if (a != null && a.length > 0) {
-			return a[0].singular();
+			return a[0].singular().trim();
 		}
 
 		return null;
 	}
 	
-	public String labelPlural() {
+	public String labelSingularPre() {
 
-		ClassLabelAnont[] a = this.getClass()
-				.getAnnotationsByType(ClassLabelAnont.class);
+		ClassLabelAnont[] a = this.getClass().getAnnotationsByType(ClassLabelAnont.class);
 		if (a != null && a.length > 0) {
-			return a[0].plural();
+			return a[0].singularPre().trim();
 		}
 
 		return null;
 	}
 
+	public String labelPlural() {
+
+		ClassLabelAnont[] a = this.getClass().getAnnotationsByType(ClassLabelAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].plural().trim();
+		}
+
+		return null;
+	}
+	
+	public String labelPluralPre() {
+
+		ClassLabelAnont[] a = this.getClass().getAnnotationsByType(ClassLabelAnont.class);
+		if (a != null && a.length > 0) {
+			return a[0].pluralPre().trim();
+		}
+
+		return null;
+	}
+
+
+
+	@SuppressWarnings({ "rawtypes" })
+	public List<Class> getClassDependencies(List<Class> objectsClass, Class objClassPattern)
+			throws ClassNotFoundException {
+
+		List<Class> classNameDependencies = new ArrayList<Class>();
+
+		for (Class objClass : objectsClass) {
+
+			Field[] fields = objClass.getDeclaredFields();
+
+			for (Field field : fields) {
+				if (objClassPattern.equals(field.getType())) {
+					classNameDependencies.add(objClass);
+					break;
+				}
+			}
+		}
+
+		return classNameDependencies;
+	}
 }

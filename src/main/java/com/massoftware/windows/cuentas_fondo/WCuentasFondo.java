@@ -12,9 +12,9 @@ import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.model.EntityId;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.OptionGroupEntity;
 import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.TextFieldBox;
-import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
@@ -33,7 +33,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
@@ -55,8 +54,8 @@ public class WCuentasFondo extends WindowListado {
 	// protected Button copiarTreeBTN;
 	protected Button eliminarTreeBTN;
 
-	private OptionGroup activoOG;
-	private TextFieldIntegerBox numeroIB;
+	private OptionGroupEntity activoOG;
+	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
 	private SelectorBox bancoSB;
 	private Tree tree;
@@ -132,16 +131,11 @@ public class WCuentasFondo extends WindowListado {
 
 		bancoSB = new WCBancoSB(this);
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", false, false, UtilUI.EQUALS);
+		numeroIB = new TextFieldBox(this, filterBI, "numero");
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre", false, false, UtilUI.CONTAINS_WORDS_AND);
-
-		activoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todas", "Obsoletas", "Activas",
-				true, 2);
-
-		activoOG.addValueChangeListener(e -> {
-			loadDataResetPaged();
-		});
+		nombreTB = new TextFieldBox(this, filterBI, "nombre");
+		
+		activoOG = new OptionGroupEntity(this, filterBI, "bloqueado", "Todas", "Obsoletas", "Activas", true, 2);
 
 		Button buscarBTN = buildButtonBuscar();
 
@@ -355,16 +349,54 @@ public class WCuentasFondo extends WindowListado {
 		loadDataResetPagedTree(null, null);
 	}
 
-	public void loadDataResetPagedTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
+	public void loadDataResetPagedTree(CuentaFondoRubro rubroSelected, CuentaFondoGrupo grupoSelected) throws Exception {
 
 		tree.removeAllItems();
 		tree.addItem(itemTodas);
 		tree.select(itemTodas);
-		addCuentasContablesTree(numeroRubro, numeroGrupo);
+		addCuentasContablesTree(rubroSelected, grupoSelected);
 		tree.expandItem(itemTodas);
 	}
 
-	private void addCuentasContablesTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
+//	private void addCuentasContablesTree(Integer numeroRubro, Integer numeroGrupo) throws Exception {
+//
+//		List<CuentaFondoRubro> rubros = new CuentaFondoRubro().find();
+//
+//		for (CuentaFondoRubro rubro : rubros) {
+//
+//			tree.addItem(rubro);
+//			tree.setParent(rubro, itemTodas);
+//			// tree.setChildrenAllowed(cuentaContable, false);
+//
+//			if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)) {
+//				tree.expandItem(rubro);
+//				tree.select(rubro);
+//			}
+//
+//			List<CuentaFondoGrupo> grupos = new CuentaFondoGrupo().findByRubro(rubro);
+//
+//			for (CuentaFondoGrupo grupo : grupos) {
+//
+//				tree.addItem(grupo);
+//				tree.setParent(grupo, rubro);
+//				tree.setChildrenAllowed(grupo, false);
+//				// tree.expandItem(grupo);
+//
+//				if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)
+//						&& numeroGrupo != null && grupo.getNumero() != null && grupo.getNumero().equals(numeroGrupo)) {
+//					tree.expandItem(grupo);
+//					tree.select(grupo);
+//
+//				}
+//
+//			}
+//
+//			// tree.expandItem(rubro);
+//
+//		}
+//	}
+
+	private void addCuentasContablesTree(CuentaFondoRubro rubroSelected, CuentaFondoGrupo grupoSelected) throws Exception {
 
 		List<CuentaFondoRubro> rubros = new CuentaFondoRubro().find();
 
@@ -374,9 +406,9 @@ public class WCuentasFondo extends WindowListado {
 			tree.setParent(rubro, itemTodas);
 			// tree.setChildrenAllowed(cuentaContable, false);
 
-			if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)) {
-				tree.select(rubro);
+			if (rubroSelected != null && rubro.equals(rubroSelected)) {
 				tree.expandItem(rubro);
+				tree.select(rubro);
 			}
 
 			List<CuentaFondoGrupo> grupos = new CuentaFondoGrupo().findByRubro(rubro);
@@ -388,10 +420,9 @@ public class WCuentasFondo extends WindowListado {
 				tree.setChildrenAllowed(grupo, false);
 				// tree.expandItem(grupo);
 
-				if (numeroRubro != null && rubro.getNumero() != null && rubro.getNumero().equals(numeroRubro)
-						&& numeroGrupo != null && grupo.getNumero() != null && grupo.getNumero().equals(numeroGrupo)) {
-					tree.select(grupo);
+				if (grupoSelected != null && grupo.equals(grupoSelected)) {
 					tree.expandItem(grupo);
+					tree.select(grupo);
 				}
 
 			}
@@ -421,7 +452,7 @@ public class WCuentasFondo extends WindowListado {
 								LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
 								if (item instanceof CuentaFondoGrupo) {
-									loadDataResetPagedTree(((CuentaFondoGrupo) item).getCuentaFondoRubro().getNumero(),
+									loadDataResetPagedTree(((CuentaFondoGrupo) item).getCuentaFondoRubro(),
 											null);
 								} else {
 									loadDataResetPagedTree();

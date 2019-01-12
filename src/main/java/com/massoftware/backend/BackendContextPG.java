@@ -1,14 +1,6 @@
 package com.massoftware.backend;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -19,11 +11,7 @@ import org.cendra.jdbc.ConnectionWrapper;
 import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
-import com.massoftware.model.EntityId;
-
 public class BackendContextPG extends AbstractContext {
-	
-//	C:\Program Files\Java\jre1.8.0_141\bin\server\jvm.dll
 
 	public final static String PG = "Postgresql";
 
@@ -56,32 +44,34 @@ public class BackendContextPG extends AbstractContext {
 		return iconosPath;
 	}
 
-//	private Properties loadProperties() {
-//
-//		Properties properties = new Properties();
-//
-//		properties.put("jdbc.driverClassName", "org.postgresql.Driver");
-//		properties.put("jdbc.userName", "postgres");
-//		properties.put("jdbc.userPassword", "cordoba");
-//		properties.put("jdbc.url", "jdbc:postgresql://localhost:5432/massoftware?searchpath=massoftware");
-//		properties.put("jdbc.maxActive", "10");
-//		properties.put("jdbc.initialSize", "5");
-//		properties.put("jdbc.maxIdle", "5");
-//		properties.put("jdbc.validationQuery", "SELECT 1");
-//		properties.put("jdbc.verbose", "true");
-//		properties.put("file.path", "D:\\dev\\source\\\\massoftware_front\\files_db");
-//
-//		return properties;
-//	}
+	// private Properties loadProperties() {
+	//
+	// Properties properties = new Properties();
+	//
+	// properties.put("jdbc.driverClassName", "org.postgresql.Driver");
+	// properties.put("jdbc.userName", "postgres");
+	// properties.put("jdbc.userPassword", "cordoba");
+	// properties.put("jdbc.url",
+	// "jdbc:postgresql://localhost:5432/massoftware?searchpath=massoftware");
+	// properties.put("jdbc.maxActive", "10");
+	// properties.put("jdbc.initialSize", "5");
+	// properties.put("jdbc.maxIdle", "5");
+	// properties.put("jdbc.validationQuery", "SELECT 1");
+	// properties.put("jdbc.verbose", "true");
+	// properties.put("file.path",
+	// "D:\\dev\\source\\\\massoftware_front\\files_db");
+	//
+	// return properties;
+	// }
 
-
-	
 	private void init() throws Exception {
 
-//		massoftware.properties
-//		Properties properties = loadProperties(
-//				System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
+		// massoftware.properties
+		// Properties properties = loadProperties(
+		// System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
 		
+		System.err.println("System.getProperty(\"user.dir\") " + System.getProperty("user.dir"));
+
 		Properties properties = loadProperties("massoftware.properties");
 
 		// -------------------------------------------------------------------
@@ -131,7 +121,12 @@ public class BackendContextPG extends AbstractContext {
 		Object[][] table = find(tableName, "*", null, "id = ?", -1, -1, new Object[] { id });
 
 		return table[0];
+	}
+	
+	public synchronized Object[] findByFkId(String tableName, String attNameFK, String idFk) throws Exception {
+		Object[][] table = find(tableName, "*", "id", attNameFK + " = ?", -1, -1, new Object[] { idFk });
 
+		return table[0];
 	}
 
 	public synchronized Object[][] find(String tableName, String atts, String orderBy, String where, int limit,
@@ -202,10 +197,9 @@ public class BackendContextPG extends AbstractContext {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	public synchronized boolean delete(Class clazz, String id) throws Exception {
+	public synchronized boolean delete(String tableSQL, String id) throws Exception {
 
-		String tableSQL = "massoftware." + clazz.getSimpleName();
+		tableSQL = "massoftware." + tableSQL;
 		String whereSQL = "";
 
 		ArrayList<Object> args = new ArrayList<Object>();
@@ -417,80 +411,6 @@ public class BackendContextPG extends AbstractContext {
 		}
 	}
 
-	public synchronized boolean insertByReflection(Object dto) throws Exception {
-
-		Field[] fields = dto.getClass().getDeclaredFields();
-
-		String[] nameAtts = new String[fields.length];
-		Object[] args = new Object[fields.length];
-
-		for (int i = 0; i < fields.length; i++) {
-
-			String nameAttDB = fields[i].getName();
-			nameAtts[i] = nameAttDB;
-
-			String methodName = "get" + fields[i].getName().substring(0, 1).toUpperCase()
-					+ fields[i].getName().substring(1, fields[i].getName().length());
-
-			Method method = dto.getClass().getMethod(methodName);
-
-			args[i] = method.invoke(dto);
-
-			if (args[i] == null) {
-				args[i] = fields[i].getType();
-			} else if (args[i] != null && isPrimitive(fields[i].getType()) == false) {
-
-				method = fields[i].getType().getMethod("getId");
-				args[i] = method.invoke(args[i]);
-				if (args[i] == null) {
-					args[i] = String.class;
-				}
-			}
-		}
-
-		String nameTableDB = "massoftware." + dto.getClass().getSimpleName();
-
-		return insert(nameTableDB, nameAtts, args);
-	}
-
-	public synchronized boolean updateByReflection(Object dto) throws Exception {
-
-		Field[] fields = dto.getClass().getDeclaredFields();
-
-		String[] nameAtts = new String[fields.length];
-		Object[] args = new Object[fields.length + 1];
-
-		for (int i = 0; i < fields.length; i++) {
-
-			String nameAttDB = fields[i].getName();
-			nameAtts[i] = nameAttDB;
-
-			String methodName = "get" + fields[i].getName().substring(0, 1).toUpperCase()
-					+ fields[i].getName().substring(1, fields[i].getName().length());
-
-			Method method = dto.getClass().getMethod(methodName);
-
-			args[i] = method.invoke(dto);
-
-			if (args[i] == null) {
-				args[i] = fields[i].getType();
-			} else if (args[i] != null && isPrimitive(fields[i].getType()) == false) {
-
-				method = fields[i].getType().getMethod("getId");
-				args[i] = method.invoke(args[i]);
-				if (args[i] == null) {
-					args[i] = String.class;
-				}
-			}
-		}
-
-		args[fields.length] = args[0];
-
-		String nameTableDB = "massoftware." + dto.getClass().getSimpleName();
-
-		return update(nameTableDB, nameAtts, args, "id = ?");
-	}
-
 	public synchronized void checkUnique(String tableName, String attName, String label, Object originalValue,
 			Object newValue) throws Exception {
 
@@ -506,29 +426,6 @@ public class BackendContextPG extends AbstractContext {
 				throw new UniqueException(label);
 			}
 		}
-
-	}
-
-	@SuppressWarnings("rawtypes")
-	public synchronized Long ifExistsByFkId(Class clazz, String id) throws Exception {
-
-		String tableSQL = clazz.getSimpleName();
-
-		String attsSQL = "COUNT(" + clazz.getSimpleName() + ") ";
-		String orderBySQL = null;
-		String whereSQL = "";
-
-		ArrayList<Object> filtros = new ArrayList<Object>();
-
-		filtros.add(id);
-		whereSQL += clazz.getSimpleName() + " = ?";
-
-		// ==================================================================
-
-		Object[][] table = BackendContextPG.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1,
-				filtros.toArray());
-
-		return (Long) table[0][0];
 
 	}
 
@@ -559,9 +456,7 @@ public class BackendContextPG extends AbstractContext {
 
 	}
 
-	public synchronized boolean ifExists(EntityId dto, String[] attNames, Object[] args) throws Exception {
-
-		String tableSQL = dto.getClass().getSimpleName();
+	public synchronized boolean ifExists(String tableSQL, String[] attNames, Object[] args) throws Exception {
 
 		String attsSQL = "COUNT(" + "*" + ") ";
 		String orderBySQL = null;
@@ -601,36 +496,24 @@ public class BackendContextPG extends AbstractContext {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	private synchronized boolean isPrimitive(Class c) {
+	public synchronized Object[] ifExistsByFkId(String tableSQLFK, String attNameFK, String idFK) throws Exception {
 
-		if (c.equals(String.class)) {
-			return true;
-		} else if (c.equals(Boolean.class)) {
-			return true;
-		} else if (c.equals(Short.class)) {
-			return true;
-		} else if (c.equals(Integer.class)) {
-			return true;
-		} else if (c.equals(Long.class)) {
-			return true;
-		} else if (c.equals(Float.class)) {
-			return true;
-		} else if (c.equals(Double.class)) {
-			return true;
-		} else if (c.equals(BigDecimal.class)) {
-			return true;
-		} else if (c.equals(Date.class)) {
-			return true;
-		} else if (c.equals(java.util.Date.class)) {
-			return true;
-		} else if (c.equals(Timestamp.class)) {
-			return true;
-		} else if (c.equals(Time.class)) {
-			return true;
-		} else {
-			return false;
-		}
+		String attsSQL = " * ";
+		String orderBySQL = null;
+		String whereSQL = "";
+
+		ArrayList<Object> filtros = new ArrayList<Object>();
+
+		filtros.add(idFK);
+		whereSQL += attNameFK + " = ?";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextPG.get().find(tableSQLFK, attsSQL, orderBySQL, whereSQL, -1, -1,
+				filtros.toArray());
+
+		return table[0];
+
 	}
 
 	// ================================================================================

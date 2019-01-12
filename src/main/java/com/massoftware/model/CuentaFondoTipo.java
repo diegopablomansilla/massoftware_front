@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Tipo", plural = "Tipos")
+@ClassLabelAnont(singular = "Tipo", plural = "Tipos", singularPre = "el tipo", pluralPre = "los tipos")
 public class CuentaFondoTipo extends EntityId {
 
-	@FieldLabelAnont(value = "ID")
+	@FieldConfAnont(label = "ID")
 	private String id;
 	
-	@FieldLabelAnont(value = "Nº tipo")
+	@FieldConfAnont(label = "Nº tipo", required = true, unique = true)
 	private Integer numero;
 	
-	@FieldLabelAnont(value = "Nombre")
+	@FieldConfAnont(label = "Nombre", required = true, unique = true)
 	private String nombre;
 
 	public String getId() {

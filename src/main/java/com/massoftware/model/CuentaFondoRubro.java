@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Rubro", plural = "Rubros")
+@ClassLabelAnont(singular = "Rubro", plural = "Rubros", singularPre = "el rubro", pluralPre = "los rubros" )
 public class CuentaFondoRubro extends EntityId {
 
-	@FieldLabelAnont(value = "ID")
+	@FieldConfAnont(label = "ID")
 	private String id;
 	
-	@FieldLabelAnont(value = "Nº rubro")
+	@FieldConfAnont(label = "Nº rubro", required = true, unique = true)
 	private Integer numero;
 	
-	@FieldLabelAnont(value = "Nombre")
+	@FieldConfAnont(label = "Nombre", required = true, unique = true)
 	private String nombre;
 
 	public String getId() {

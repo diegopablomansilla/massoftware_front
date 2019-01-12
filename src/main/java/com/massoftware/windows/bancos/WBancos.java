@@ -8,8 +8,8 @@ import org.vaadin.patrik.FastNavigation;
 import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.OptionGroupEntity;
 import com.massoftware.windows.TextFieldBox;
-import com.massoftware.windows.TextFieldIntegerBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
@@ -25,7 +25,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
@@ -39,9 +38,9 @@ public class WBancos extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	private TextFieldIntegerBox numeroIB;
+	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
-	private OptionGroup bloqueadoOG;
+	private OptionGroupEntity bloqueadoOG;
 
 	// -------------------------------------------------------------
 
@@ -93,11 +92,11 @@ public class WBancos extends WindowListado {
 
 	private VerticalLayout buildFiltros() throws Exception {
 
-		numeroIB = new TextFieldIntegerBox(this, filterBI, "numero", false, true, UtilUI.EQUALS);
+		numeroIB = new TextFieldBox(this, filterBI, "numero");
 
 		// --------------------------------------------------------
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre", false, false, UtilUI.CONTAINS_WORDS_AND);
+		nombreTB = new TextFieldBox(this, filterBI, "nombre");
 
 		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
 		// int[] {}) {
@@ -123,12 +122,7 @@ public class WBancos extends WindowListado {
 
 		// --------------------------------------------------------
 
-		bloqueadoOG = UtilUI.buildBooleanOG(filterBI, "bloqueado", null, false, false, "Todos", "Obsoletos", "Activos",
-				true, 2);
-
-		bloqueadoOG.addValueChangeListener(e -> {
-			loadDataResetPaged();
-		});
+		bloqueadoOG = new OptionGroupEntity(this, filterBI, "bloqueado", "Todos", "Obsoletos", "Activos", true, 2);
 
 		// --------------------------------------------------------
 

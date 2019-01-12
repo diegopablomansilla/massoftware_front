@@ -18,7 +18,7 @@ class WCBancoSB extends SelectorBox {
 	private WCuentasFondo window;
 
 	public WCBancoSB(WCuentasFondo window) throws Exception {
-		super(window.filterBI, "nombreBanco", new Banco().labelSingular(), false);
+		super(window.filterBI, "nombreBanco", "Nº o Nombre");
 
 		this.window = window;
 

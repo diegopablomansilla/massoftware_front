@@ -5,51 +5,51 @@ import java.util.List;
 import java.util.Map;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Banco", plural = "Bancos")
+@ClassLabelAnont(singular = "Banco", plural = "Bancos", singularPre = "el anco", pluralPre = "los bancos")
 public class Banco extends EntityId {
 
-	@FieldLabelAnont(value = "ID")
+	@FieldConfAnont(label = "ID")
 	private String id;
 	
-	@FieldLabelAnont(value = "Nº banco")
+	@FieldConfAnont(label = "Nº banco", required = true, unique = true)
 	private Integer numero;
 	
-	@FieldLabelAnont(value = "Nombre")
+	@FieldConfAnont(label = "Nombre", required = true, unique = true)
 	private String nombre;
 	
-	@FieldLabelAnont(value = "CUIT")
+	@FieldConfAnont(label = "CUIT", required = true, unique = true,  columns = 11, maxLength = 11, mask = "99-99999999-9" )
 	private Long cuit;
 	
-	@FieldLabelAnont(value = "Obsoleto")
+	@FieldConfAnont(label = "Obsoleto")
 	private Boolean bloqueado;
 	
-	@FieldLabelAnont(value = "Hoja")
+	@FieldConfAnont(label = "Hoja")
 	private Integer hoja;
 	
-	@FieldLabelAnont(value = "Primera fila")
+	@FieldConfAnont(label = "Primera fila")
 	private Integer primeraFila;
 	
-	@FieldLabelAnont(value = "Última fila")
+	@FieldConfAnont(label = "Última fila")
 	private Integer ultimaFila;
 	
-	@FieldLabelAnont(value = "Fecha")
+	@FieldConfAnont(label = "Fecha", columns = 6, maxLength = 3)
 	private String fecha;
 	
-	@FieldLabelAnont(value = "Descripción")
+	@FieldConfAnont(label = "Descripción", columns = 6, maxLength = 3)
 	private String descripcion;
 	
-	@FieldLabelAnont(value = "Referencia 1")
+	@FieldConfAnont(label = "Referencia 1", columns = 6, maxLength = 3)
 	private String referencia1;
 	
-	@FieldLabelAnont(value = "Importe")
+	@FieldConfAnont(label = "Importe", columns = 6, maxLength = 3)
 	private String importe;
 	
-	@FieldLabelAnont(value = "Referencia 2")
+	@FieldConfAnont(label = "Referencia 2", columns = 6, maxLength = 3)
 	private String referencia2;
 	
-	@FieldLabelAnont(value = "Saldo")
+	@FieldConfAnont(label = "Saldo", columns = 6, maxLength = 3)
 	private String saldo;
 
 	public String getId() {

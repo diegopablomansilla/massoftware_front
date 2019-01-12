@@ -3,7 +3,9 @@ package com.massoftware.windows.cuentas_fondo.grupo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EntityId;
+import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
@@ -11,9 +13,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class WCuentaFondoGrupo extends WindowForm {
@@ -26,9 +26,9 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private ComboBox rubroCB;
-	private TextField numeroTXT;
-	private TextField nombreTXT;
+	private ComboBoxEntity rubroCB;
+	private TextFieldEntity numeroTXT;
+	private TextFieldEntity nombreTXT;
 
 	// -------------------------------------------------------------
 
@@ -81,13 +81,14 @@ public class WCuentaFondoGrupo extends WindowForm {
 	private VerticalLayout buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		rubroCB = UtilUI.buildFieldCB(itemBI, "cuentaFondoRubro", false, false, CuentaFondoRubro.class,
-				new CuentaFondoRubro().find());
+		rubroCB = new ComboBoxEntity(this.itemBI, "cuentaFondoRubro", this.mode, new CuentaFondoRubro().find());
+//		rubroCB = UtilUI.buildFieldCB(itemBI, "cuentaFondoRubro", false, false, CuentaFondoRubro.class,
+//				new CuentaFondoRubro().find());
 		rubroCB.addValueChangeListener(e -> {
 			validateRubroAndNumero();
 		});
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
+		numeroTXT = new TextFieldEntity(this.itemBI, "numero", this.mode);
 		numeroTXT.addValueChangeListener(new Property.ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
 				// String value = (String) event.getProperty().getValue();
@@ -95,7 +96,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 			}
 		});
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
+		nombreTXT = new TextFieldEntity(this.itemBI, "nombre", this.mode);
 		nombreTXT.addValueChangeListener(new Property.ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
 				validateRubroAndNombre();
@@ -196,9 +197,12 @@ public class WCuentaFondoGrupo extends WindowForm {
 		try {
 			itemBI.getBean().insert();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				
+				System.out.println("itemBI.getBean().getCuentaFondoRubro().getNumero() " + itemBI.getBean().getCuentaFondoRubro().getId());
+				System.out.println("itemBI.getBean().getNumero() " + itemBI.getBean().getId());
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(
-						itemBI.getBean().getCuentaFondoRubro().getNumero(), itemBI.getBean().getNumero());
+						itemBI.getBean().getCuentaFondoRubro(), itemBI.getBean());
+				windowListado.loadDataResetPaged();
 			}
 
 			return itemBI.getBean();
@@ -214,9 +218,9 @@ public class WCuentaFondoGrupo extends WindowForm {
 		try {
 			itemBI.getBean().update();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
 				((WCuentasFondo) windowListado).loadDataResetPagedTree(
-						itemBI.getBean().getCuentaFondoRubro().getNumero(), itemBI.getBean().getNumero());
+						itemBI.getBean().getCuentaFondoRubro(), itemBI.getBean());
+				windowListado.loadDataResetPaged();
 			}
 
 			return itemBI.getBean();

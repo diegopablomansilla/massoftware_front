@@ -2,7 +2,6 @@ package com.massoftware.windows;
 
 import java.util.Collection;
 
-import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -10,7 +9,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 
 public class TextFieldBox extends HorizontalLayout implements Validatable {
 
@@ -19,49 +17,42 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 	 */
 	private static final long serialVersionUID = 2869082571369904793L;
 
-	public TextField valueTXT;
+	public TextFieldEntity valueTXT;
 	public Button removeFilterBTN;
-
+	
 	@SuppressWarnings("rawtypes")
-	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, boolean readOnly, boolean required,
-			String inputPrompt) throws Exception {
+	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName) throws Exception {
+		init(window, dtoBI, attName, null);
+	}
 
-		int minLength = 0;
-
-		if (required && minLength < 0) {
-			minLength = 1;
-		}
-
-		init(window, dtoBI, attName, null, readOnly, 20, minLength, 100, required, false, null, false, inputPrompt);
+		
+	@SuppressWarnings("rawtypes")
+	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String inputPrompt) throws Exception {
+		init(window, dtoBI, attName, inputPrompt);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int columns, int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask,
-			boolean autoUnmask, String inputPrompt) throws Exception {
-
-		init(window, dtoBI, attName, label, readOnly, columns, minLength, maxLength, required, allowInputUnmask, mask,
-				autoUnmask, inputPrompt);
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void init(WindowListado window, BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
-			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask,
-			String inputPrompt) throws Exception {
+	private void init(WindowListado window, BeanItem dtoBI, String attName, String inputPrompt) throws Exception {
 
 		this.setSpacing(false);
 
-		if (label == null && dtoBI.getBean() instanceof Entity) {
-			String lbl = ((Entity) dtoBI.getBean()).label(attName);
-			if (lbl != null) {
-				label = lbl;
-			}
+		// ----------------------------------------------
+
+		valueTXT = new TextFieldEntity(dtoBI, attName, null);
+
+		if (inputPrompt == null && dtoBI.getItemProperty(attName).getType() == Integer.class
+				|| dtoBI.getItemProperty(attName).getType() == Long.class) {
+
+			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.EQUALS));
+		
+		} else if (inputPrompt == null) {
+			
+			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.CONTAINS_WORDS_AND));
+		
+		}else {
+			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(inputPrompt));
 		}
 
-		valueTXT = UtilUI.buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
-				allowInputUnmask, mask, autoUnmask);
-
-		valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(inputPrompt));
 		valueTXT.setDescription(valueTXT.getInputPrompt());
 
 		this.addComponent(valueTXT);
@@ -71,7 +62,7 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN = new Button();
 		removeFilterBTN.addStyleName("borderless tiny");
 		removeFilterBTN.setIcon(FontAwesome.TIMES);
-		removeFilterBTN.setDescription("Quitar filtro " + label + ".");
+		removeFilterBTN.setDescription("Quitar filtro " + valueTXT.getCaption() + ".");
 
 		this.addComponent(removeFilterBTN);
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
@@ -95,8 +86,8 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 		// });
 
 		valueTXT.addBlurListener(e -> {
-			try {				
-				 window.loadDataResetPaged();
+			try {
+				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
 			}

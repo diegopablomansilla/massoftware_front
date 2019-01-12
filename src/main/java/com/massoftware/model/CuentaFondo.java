@@ -6,41 +6,30 @@ import java.util.Map;
 
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Cuenta de fondo", plural = "Cuentas de fondo")
+@ClassLabelAnont(singular = "Cuenta de fondo", plural = "Cuentas de fondo", singularPre = "la cuenta de fondo", pluralPre = "las cuentas de fondo")
 public class CuentaFondo extends EntityId {
 
-	// fk_ CuentasDeFondosGrupo FOREIGN KEY (Rubro, Grupo) REFERENCES
-	// CuentasDeFondosGrupo(Rubro, Grupo)
-	// fk_ PlanDeCuentas FOREIGN KEY (Ejercicio, CuentaContable) REFERENCES
-	// PlanDeCuentas(Ejercicio, CuentaContable)
-	// fk_ Bancos FOREIGN KEY (Banco) REFERENCES Bancos(Banco)
-	// fk_ CuentasDeFondos1 FOREIGN KEY (CuentaCaucion) REFERENCES
-	// CuentasDeFondos(Cuenta)
-	// fk_ CuentasDeFondos2 FOREIGN KEY (CuentaDiferidos) REFERENCES
-	// CuentasDeFondos(Cuenta)
-	// fk_ Monedas FOREIGN KEY (Moneda) REFERENCES Monedas(Moneda)
-
-	@FieldLabelAnont(value = "ID")
+	@FieldConfAnont(label = "ID")
 	private String id;
-	
-	@FieldLabelAnont(value = "Grupo")
+
+	@FieldConfAnont(label = "Grupo", required = true)
 	private CuentaFondoGrupo cuentaFondoGrupo;
-	
-	@FieldLabelAnont(value = "Nº cuenta")
+
+	@FieldConfAnont(label = "Nº cuenta", required = true)
 	private Integer numero;
-	
-	@FieldLabelAnont(value = "Nombre")
+
+	@FieldConfAnont(label = "Nombre", required = true)
 	private String nombre;
-	
-	@FieldLabelAnont(value = "Tipo")
+
+	@FieldConfAnont(label = "Tipo")
 	private CuentaFondoTipo cuentaFondoTipo;
-	
-	@FieldLabelAnont(value = "Banco")
+
+	@FieldConfAnont(label = "Banco")
 	private Banco banco;
-	
-	@FieldLabelAnont(value = "Obsoleto")
+
+	@FieldConfAnont(label = "Obsoleto")
 	private Boolean bloqueado;
 
 	public String getId() {
@@ -112,6 +101,20 @@ public class CuentaFondo extends EntityId {
 	//
 	// return listado;
 	// }
+
+	@Override
+	public String toString() {
+		if (cuentaFondoGrupo != null && cuentaFondoGrupo.getCuentaFondoRubro() != null) {
+			return "(" + cuentaFondoGrupo.getCuentaFondoRubro().getNumero() + "-" + cuentaFondoGrupo.getNumero() + "-"
+					+ numero + ") " + nombre;
+		}
+
+		if (cuentaFondoGrupo != null && cuentaFondoGrupo.getCuentaFondoRubro() == null) {
+			return "(" + cuentaFondoGrupo.getNumero() + "-" + numero + ") " + nombre;
+		}
+
+		return "(" + numero + ") " + nombre;
+	}
 
 	public List<CuentaFondo> find(int limit, int offset, Map<String, Boolean> orderBy, CuentasFondoFiltro filtro)
 			throws Exception {

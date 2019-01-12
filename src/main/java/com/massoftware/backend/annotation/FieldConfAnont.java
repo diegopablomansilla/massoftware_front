@@ -11,9 +11,17 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Documented
 @Inherited
-public @interface FieldLabelAnont {
+public @interface FieldConfAnont {
 
-	String value() default "";
+	String label() default "";
+	boolean unique() default false;
+	boolean readOnly() default false;
+	boolean required() default false;
+	float columns() default 20;
+	int maxLength() default 100;
+	String minValue() default "1";
+	String maxValue() default Integer.MAX_VALUE + "";
+	String mask() default "";
 	
 //	boolean visible() default true;
 

@@ -2,6 +2,7 @@ package com.massoftware.windows;
 
 import java.util.Collection;
 
+import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -26,24 +27,27 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(BeanItem dtoBI, String attName, String label, boolean required) throws Exception {
-		init(dtoBI, attName, label, required, null);
+	public SelectorBox(BeanItem dtoBI, String attName) throws Exception {
+		init(dtoBI, attName, null);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(BeanItem dtoBI, String attName, String label, boolean required, String label2)
-			throws Exception {
-		init(dtoBI, attName, label, required, label2);
+	public SelectorBox(BeanItem dtoBI, String attName, String label2) throws Exception {
+		init(dtoBI, attName, label2);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void init(BeanItem dtoBI, String attName, String label, boolean required, String label2) throws Exception {
+	private void init(BeanItem dtoBI, String attName, String label2) throws Exception {
 
 		// HorizontalLayout hl = buildHL();
 		this.setWidthUndefined();
 		this.setMargin(false);
 		this.setSpacing(false);
 		// hl.setCaption(label);
+
+		String label = ((Entity) dtoBI.getBean()).label(attName);
+		boolean required = ((Entity) dtoBI.getBean()).required(attName);
+		label2 = (label2 == null || label2.trim().length() == 0) ? label : label2;
 
 		openSelectorBTN = new Button();
 		openSelectorBTN.addStyleName("borderless tiny");
@@ -55,26 +59,15 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		valueTXT.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
 		valueTXT.setNullRepresentation("");
 		valueTXT.addStyleName(ValoTheme.TEXTFIELD_TINY);
-		valueTXT.setCaption(label);
-		// txtValue.setEnabled(false);
-		valueTXT.setRequired(required);
-		valueTXT.setInputPrompt(label2);
-		valueTXT.setDescription(label2);
 
-		String searchFor = label;
-		if (searchFor != null) {
-			searchFor = searchFor.toLowerCase();
-			valueTXT.setDescription("Buscar por " + searchFor);
-		} else {
-			searchFor = "";
-			valueTXT.setDescription("Buscar por " + label.toLowerCase());
-		}
-		valueTXT.setInputPrompt(searchFor);
+		// txtValue.setEnabled(false);
+		valueTXT.setRequired(required);		
+		valueTXT.setDescription("Buscar por " + label2);
+		valueTXT.setInputPrompt("Buscar por " + label2.toLowerCase());
+		valueTXT.setCaption(label);
 
 		this.addComponent(openSelectorBTN);
-		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);
-		valueTXT.setCaption(label);
-
+		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);		
 		this.addComponent(valueTXT);
 		this.setComponentAlignment(valueTXT, Alignment.MIDDLE_LEFT);
 
@@ -94,7 +87,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
 
 		valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
-		
+
 		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
 
 			private static final long serialVersionUID = 1L;

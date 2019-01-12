@@ -24,16 +24,27 @@ public class LogAndNotification {
 	public static void print(Exception e) {
 
 		if (e instanceof UniqueException) {
+			
 			printUniqueException((UniqueException) e);
+			
 		} else if (e instanceof InvalidValueException) {
+			
 			printInvalidValueException((InvalidValueException) e);
+			
 		} else if (e instanceof NullFieldException) {
+			
 			printNullFieldException((NullFieldException) e);
+			
 		} else if (e instanceof DeleteForeingObjectConflictException) {
+			
 			printDeleteForeingObjectConflictException((DeleteForeingObjectConflictException) e);
+			
 		} else if (e instanceof IllegalArgumentException) {
+			
 			printIllegalArgumentException((IllegalArgumentException) e);
+			
 		} else {
+			
 			Notification notification = new Notification("Error Interno del Sistema", e.toString(), Type.ERROR_MESSAGE);
 			notification.setStyleName("error bar small closable");
 			notification.setPosition(Position.BOTTOM_LEFT);
@@ -42,7 +53,7 @@ public class LogAndNotification {
 
 			notification.show(Page.getCurrent());
 
-			e.printStackTrace();
+//			e.printStackTrace();
 
 		}
 

@@ -1,31 +1,31 @@
 package com.massoftware.model;
 
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
 public class CuentasFondoFiltro extends Entity {
 
-	@FieldLabelAnont(value = "Rubro")
+	@FieldConfAnont(label = "Rubro")
 	private String idRubro;
 
-	@FieldLabelAnont(value = "Grupo")
+	@FieldConfAnont(label = "Grupo")
 	private String idGrupo;
 
-	@FieldLabelAnont(value = "Banco")
+	@FieldConfAnont(label = "Banco")
 	private String idBanco;
 
-	@FieldLabelAnont(value = "Banco")
+	@FieldConfAnont(label = "Banco")
 	private Integer numeroBanco;
 
-	@FieldLabelAnont(value = "Banco")
+	@FieldConfAnont(label = "Banco")
 	private String nombreBanco;
 
-	@FieldLabelAnont(value = "Nº cuenta")
+	@FieldConfAnont(label = "Nº cuenta")
 	private Integer numero;
 
-	@FieldLabelAnont(value = "Nombre")
+	@FieldConfAnont(label = "Nombre")
 	private String nombre;
 
-	@FieldLabelAnont(value = "Obsoleta")
+	@FieldConfAnont(label = "Obsoleta")
 	private Integer bloqueado;
 
 	public String getIdRubro() {

@@ -35,6 +35,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	}
 
 	public void loadById(String id, int maxLevel) throws Exception {
+
 		if (id != null && id.trim().length() > 0) {
 
 			Object[] row = BackendContextPG.get().findById(this.getClass().getSimpleName(), id);
@@ -53,6 +54,11 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 	}
 
 	public void setter(Object[] row, int level, int maxLevel) throws Exception {
+
+		if (row == null) {
+			this.setterNull();
+			return;
+		}
 
 		Field[] fields = getClass().getDeclaredFields();
 
@@ -344,34 +350,58 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 	public void delete() throws Exception {
 
-		// ==================================================================
-		// CHECKs NULLs
-
-		// if (item == null) {
-		// throw new InsertNullException("Cuenta de fondo");
-		// }
-
-		// ==================================================================
-		// CHECKs FKs
-
-		// Long c = BackendContext.get().ifExistsByFkId(CuentaFondoRubro.class,
-		// getId());
-		//
-		// if (c > 0) {
-		// throw new DeleteForeingObjectConflictException("el", "item", this, c,
-		// "Rubro");
-		// }
+		checkFKForDelete();
 
 		// ==================================================================
 
 		try {
-			BackendContextPG.get().delete(this.getClass(), getId());
+			BackendContextPG.get().delete(this.getClass().getSimpleName(), getId());
 		} catch (SQLExceptionWrapper e) {
+
 			if ("23503".equals(e.getSQLState())) {
+
 				throw new DeleteForeingObjectConflictException(this);
 			}
 
 			throw e;
+
+		}
+
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	private void checkFKForDelete() throws Exception {
+
+		String packageModel = "com.massoftware.model";
+
+		String[] classNames = { "Banco", "BancosFiltro", "CuentaFondo", "CuentaFondoGrupo", "CuentaFondoRubro",
+				"CuentaFondoTipo", "CuentasFondoFiltro" };
+
+		for (String nameJavaClass : classNames) {
+
+			Class objClass = Class.forName(packageModel + "." + nameJavaClass);
+
+			Field[] fields = objClass.getDeclaredFields();
+
+			for (Field field : fields) {
+
+				if (this.getClass().equals(field.getType())) {
+
+					Object[] row = BackendContextPG.get().findByFkId(objClass.getSimpleName(), field.getName(),
+							this.getId());
+
+					EntityId entityId = (EntityId) objClass.newInstance();
+
+					entityId.setter(row, 0, _defMaxLevel);
+
+					if (entityId.getId() != null) {
+
+						throw new DeleteForeingObjectConflictException(this, entityId.labelSingularPre(), entityId);
+					}
+
+					break;
+				}
+			}
 
 		}
 

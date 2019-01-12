@@ -2,15 +2,14 @@ package com.massoftware.windows.banco;
 
 import com.massoftware.model.Banco;
 import com.massoftware.model.EntityId;
-import com.massoftware.windows.UniqueValidator;
+import com.massoftware.windows.CheckBoxEntity;
+import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
@@ -22,19 +21,19 @@ public class WBanco extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private TextField numeroTXT;
-	private TextField nombreTXT;
-	private TextField cuitTXT;
-	private CheckBox bloqueadoCHX;
-	private TextField hojaTXT;
-	private TextField primeraFilaTXT;
-	private TextField ultimaFilaTXT;
-	private TextField fechaTXT;
-	private TextField descripcionTXT;
-	private TextField referencia1TXT;
-	private TextField importeTXT;
-	private TextField referencia2TXT;
-	private TextField saldoTXT;
+	private TextFieldEntity numeroTXT;
+	private TextFieldEntity nombreTXT;
+	private TextFieldEntity cuitTXT;
+	private CheckBoxEntity bloqueadoCHX;
+	private TextFieldEntity hojaTXT;
+	private TextFieldEntity primeraFilaTXT;
+	private TextFieldEntity ultimaFilaTXT;
+	private TextFieldEntity fechaTXT;
+	private TextFieldEntity descripcionTXT;
+	private TextFieldEntity referencia1TXT;
+	private TextFieldEntity importeTXT;
+	private TextFieldEntity referencia2TXT;
+	private TextFieldEntity saldoTXT;
 
 	// -------------------------------------------------------------
 
@@ -72,34 +71,31 @@ public class WBanco extends WindowForm {
 	private TabSheet buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
-		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", itemBI));
+		numeroTXT = new TextFieldEntity(this.itemBI, "numero", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
-		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
+		nombreTXT = new TextFieldEntity(this.itemBI, "nombre", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		cuitTXT = UtilUI.buildTXT(itemBI, "cuit", "CUIT", false, 11, 1, 11, true, true, "99-99999999-9", true);
-		cuitTXT.addValidator(new UniqueValidator(Long.class, mode, "cuit", itemBI));
+		cuitTXT = new TextFieldEntity(this.itemBI, "cuit", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		bloqueadoCHX = UtilUI.buildFieldCHK(itemBI, "bloqueado", false);
+		bloqueadoCHX = new CheckBoxEntity(this.itemBI, "bloqueado");
 		// ---------------------------------------------------------------------------------------------------------
-		hojaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "hoja", false, false);
+		hojaTXT = new TextFieldEntity(this.itemBI, "hoja", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		primeraFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "primeraFila", false, false);
+		primeraFilaTXT = new TextFieldEntity(this.itemBI, "primeraFila", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		ultimaFilaTXT = UtilUI.buildTXTIntegerPlus(itemBI, "ultimaFila", false, false);
+		ultimaFilaTXT = new TextFieldEntity(this.itemBI, "ultimaFila", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		fechaTXT = UtilUI.buildTXT(itemBI, "fecha", null, false, 6, 1, 3, false, false, null, false);
+		fechaTXT = new TextFieldEntity(this.itemBI, "fecha", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		descripcionTXT = UtilUI.buildTXT(itemBI, "descripcion", null, false, 6, 1, 3, false, false, null, false);
+		descripcionTXT = new TextFieldEntity(this.itemBI, "descripcion", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		referencia1TXT = UtilUI.buildTXT(itemBI, "referencia1", null, false, 6, 1, 3, false, false, null, false);
+		referencia1TXT = new TextFieldEntity(this.itemBI, "referencia1", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		importeTXT = UtilUI.buildTXT(itemBI, "importe", null, false, 6, 1, 3, false, false, null, false);
+		importeTXT = new TextFieldEntity(this.itemBI, "importe", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		referencia2TXT = UtilUI.buildTXT(itemBI, "referencia2", null, false, 6, 1, 3, false, false, null, false);
+		referencia2TXT = new TextFieldEntity(this.itemBI, "referencia2", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		saldoTXT = UtilUI.buildTXT(itemBI, "saldo", null, false, 6, 1, 3, false, false, null, false);
+		saldoTXT = new TextFieldEntity(this.itemBI, "saldo", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
 
 		HorizontalLayout formatoExtractoRow0HL = UtilUI.buildHL();

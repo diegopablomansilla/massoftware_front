@@ -589,8 +589,8 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXT(BeanItem dtoBI, String attName, String label, boolean readOnly, int columns,
-			int minLength, int maxLength, boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
+	public static TextField buildTXT(BeanItem dtoBI, String attName, String label, Boolean readOnly, int columns,
+			int minLength, int maxLength, Boolean required, boolean allowInputUnmask, String mask, boolean autoUnmask)
 			throws Exception {
 
 		TextField txt = buildTXT();
@@ -600,6 +600,19 @@ public class UtilUI {
 			if (lbl != null) {
 				label = lbl;
 			}
+		}
+		
+		if (required == null && dtoBI.getBean() instanceof Entity) {			
+			required = ((Entity) dtoBI.getBean()).required(attName);
+		}
+		
+
+		if (required && minLength < 0) {
+			minLength = 1;
+		}
+		
+		if (readOnly == null && dtoBI.getBean() instanceof Entity) {			
+			readOnly = ((Entity) dtoBI.getBean()).readOnly(attName);
 		}
 
 		txt.setCaption(label);
@@ -660,26 +673,24 @@ public class UtilUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, boolean required)
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, Boolean readOnly, Boolean required)
 			throws Exception {
 		return buildTXTIntegerPlus(dtoBI, attName, null, readOnly, -1, required);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, boolean readOnly, int minLength,
-			boolean required) throws Exception {
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, Boolean readOnly, int minLength,
+			Boolean required) throws Exception {
 		return buildTXTIntegerPlus(dtoBI, attName, null, readOnly, minLength, required);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, String label, boolean readOnly,
-			int minLength, boolean required) throws Exception {
+	public static TextField buildTXTIntegerPlus(BeanItem dtoBI, String attName, String label, Boolean readOnly,
+			int minLength, Boolean required) throws Exception {
 
 		int length = (Integer.MAX_VALUE + "").length();
 
-		if (required && minLength < 0) {
-			minLength = 1;
-		}
+		
 
 		return buildTXTInteger(dtoBI, attName, label, readOnly, length, minLength, length, required, false, null, false,
 				0, Integer.MAX_VALUE);
@@ -708,6 +719,7 @@ public class UtilUI {
 		if (maxLength > (Integer.MAX_VALUE + "").length()) {
 			maxLength = (Integer.MAX_VALUE + "").length();
 		}
+		
 
 		TextField txt = buildTXT(dtoBI, attName, label, readOnly, columns, minLength, maxLength, required,
 				allowInputUnmask, mask, autoUnmask);
@@ -1176,7 +1188,7 @@ public class UtilUI {
 			cb.setValue(optionsBIC.getIdByIndex(0));
 		}
 
-		cb.setValue(optionsBIC.getIdByIndex(0));
+//		cb.setValue(optionsBIC.getIdByIndex(0));
 
 		// ----------------
 

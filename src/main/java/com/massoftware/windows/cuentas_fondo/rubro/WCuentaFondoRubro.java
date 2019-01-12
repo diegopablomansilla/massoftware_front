@@ -3,14 +3,13 @@ package com.massoftware.windows.cuentas_fondo.rubro;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EntityId;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UniqueValidator;
+import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class WCuentaFondoRubro extends WindowForm {
@@ -23,8 +22,8 @@ public class WCuentaFondoRubro extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private TextField numeroTXT;
-	private TextField nombreTXT;
+	private TextFieldEntity numeroTXT;
+	private TextFieldEntity nombreTXT;
 
 	// -------------------------------------------------------------
 
@@ -62,12 +61,9 @@ public class WCuentaFondoRubro extends WindowForm {
 	private VerticalLayout buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		numeroTXT = UtilUI.buildTXTIntegerPlus(itemBI, "numero", false, true);
-		numeroTXT.addValidator(new UniqueValidator(Integer.class, mode, "numero", "Número", itemBI));
+		numeroTXT = new TextFieldEntity(this.itemBI, "numero", this.mode);		
 		// ---------------------------------------------------------------------------------------------------------
-		nombreTXT = UtilUI.buildTXT30100(itemBI, "nombre", false, true);
-		nombreTXT.addValidator(new UniqueValidator(String.class, mode, "nombre", itemBI));
-
+		nombreTXT = new TextFieldEntity(this.itemBI, "nombre", this.mode);		
 		// ---------------------------------------------------------------------------------------------------------
 
 		VerticalLayout generalVL = UtilUI.buildVL();
@@ -129,7 +125,7 @@ public class WCuentaFondoRubro extends WindowForm {
 			itemBI.getBean().insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
-				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getNumero(), null);
+				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean(), null);
 			}
 
 			return itemBI.getBean();
@@ -146,7 +142,7 @@ public class WCuentaFondoRubro extends WindowForm {
 			itemBI.getBean().update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
-				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getNumero(), null);
+				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean(), null);
 			}
 
 			return itemBI.getBean();

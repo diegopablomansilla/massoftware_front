@@ -15,6 +15,7 @@ public @interface ClassLabelAnont {
 
 	String singular() default "";
 	String plural() default "";
-
+	String singularPre() default "";
+	String pluralPre() default "";	
 	
 }

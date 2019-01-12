@@ -7,21 +7,21 @@ import org.cendra.ex.crud.UniqueException;
 
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.backend.annotation.ClassLabelAnont;
-import com.massoftware.backend.annotation.FieldLabelAnont;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Grupo", plural = "Grupos")
+@ClassLabelAnont(singular = "Grupo", plural = "Grupos", singularPre = "el grupo", pluralPre = "los grupos")
 public class CuentaFondoGrupo extends EntityId {
 
-	@FieldLabelAnont(value = "ID")
+	@FieldConfAnont(label = "ID")
 	private String id;
 
-	@FieldLabelAnont(value = "Rubro")
+	@FieldConfAnont(label = "Rubro", required = true)
 	private CuentaFondoRubro cuentaFondoRubro;
 
-	@FieldLabelAnont(value = "Nº grupo")
+	@FieldConfAnont(label = "Nº grupo", required = true)
 	private Integer numero;
 
-	@FieldLabelAnont(value = "Nombre")
+	@FieldConfAnont(label = "Nombre", required = true)
 	private String nombre;
 
 	public String getId() {
@@ -70,16 +70,6 @@ public class CuentaFondoGrupo extends EntityId {
 		return listado;
 	}
 
-	public String insert() throws Exception {
-		checkUniqueRubroAndNumero();
-		return super.insert();
-	}
-
-	public String update() throws Exception {
-		checkUniqueRubroAndNumero();
-		return super.update();
-	}
-
 	public void checkUniqueRubroAndNumero() throws Exception {
 
 		String labelRubro = this.label("cuentaFondoRubro");
@@ -114,19 +104,19 @@ public class CuentaFondoGrupo extends EntityId {
 		if (idRubroOriginal != null && numeroOriginal != null && idRubro != null && numero != null
 				&& (idRubroOriginal.equals(idRubro) == false || numeroOriginal.equals(numero) == false)) {
 
-			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
 				throw new UniqueException(labelRubro, labelNumero);
 			}
 
 		} else if (idRubroOriginal == null && numeroOriginal == null && idRubro != null && numero != null) {
 
-			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
 				throw new UniqueException(labelRubro, labelNumero);
 			}
 		}
 
 	}
-	
+
 	public void checkUniqueRubroAndNombre() throws Exception {
 
 		String labelRubro = this.label("cuentaFondoRubro");
@@ -161,13 +151,13 @@ public class CuentaFondoGrupo extends EntityId {
 		if (idRubroOriginal != null && nombreOriginal != null && idRubro != null && nombre != null
 				&& (idRubroOriginal.equals(idRubro) == false || nombreOriginal.equals(nombre) == false)) {
 
-			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
 				throw new UniqueException(labelRubro, labelNombre);
 			}
 
 		} else if (idRubroOriginal == null && nombreOriginal == null && idRubro != null && nombre != null) {
 
-			if (BackendContextPG.get().ifExists(this, attNames, args)) {
+			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
 				throw new UniqueException(labelRubro, labelNombre);
 			}
 		}
