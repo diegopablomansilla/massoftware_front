@@ -166,7 +166,11 @@ public class Banco extends EntityId {
 
 	@Override
 	public String toString() {
-		return "(" + numero + ") " + nombre;
+		if(numero != null && nombre != null) {
+			return "(" + numero + ") " + nombre;	
+		}
+		
+		return null;
 	}
 
 	public List<Banco> find(BancosFiltro bancosFiltro) throws Exception {

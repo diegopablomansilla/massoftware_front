@@ -263,10 +263,11 @@ public class MigradorMSToPG {
 		String attId = "CAST(A.CAJA AS VARCHAR)";
 		String attNumero = "CAST(A.CAJA AS INTEGER)";
 		String attNombre = "A.NOMBRE";
+		String attPuerta = "A.DOORNOPERMISO";
 
 		String tableSQL = "Cajas A";
 
-		String attsSQL = attId + ", " + attNumero + ", " + attNombre;
+		String attsSQL = attId + ", " + attNumero + ", " + attNombre + ", " + attPuerta;
 		String orderBySQL = attNumero;
 		String whereSQL = null;
 
@@ -279,7 +280,7 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Caja item = new Caja();
-			item.setter(table[i], 0);
+			item.setter(table[i], 0);						
 			try {
 				item.insert();
 			} catch (Exception e) {

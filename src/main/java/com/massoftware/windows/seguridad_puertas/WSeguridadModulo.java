@@ -82,7 +82,7 @@ public class WSeguridadModulo extends WindowForm {
 		itemBI.setBean((SeguridadModulo) obj);
 	}
 
-	protected BeanItem<SeguridadModulo> getItemsBIC() {
+	protected BeanItem<SeguridadModulo> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

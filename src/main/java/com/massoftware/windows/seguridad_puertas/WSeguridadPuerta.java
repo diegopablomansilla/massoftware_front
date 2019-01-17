@@ -48,10 +48,10 @@ public class WSeguridadPuerta extends WindowForm {
 			SeguridadModulo seguridadModulo = new SeguridadModulo();
 			seguridadModulo.setId(seguridadModuloId);
 
-			getItemsBIC().getBean().setSeguridadModulo(seguridadModulo);
+			getItemBIC().getBean().setSeguridadModulo(seguridadModulo);
 
 		} else {
-			getItemsBIC().getBean().setSeguridadModulo(modulos.get(0));
+			getItemBIC().getBean().setSeguridadModulo(modulos.get(0));
 		}
 
 		init(mode, id);
@@ -147,7 +147,7 @@ public class WSeguridadPuerta extends WindowForm {
 		itemBI.setBean((SeguridadPuerta) obj);
 	}
 
-	protected BeanItem<SeguridadPuerta> getItemsBIC() {
+	protected BeanItem<SeguridadPuerta> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

@@ -5,7 +5,7 @@ import com.massoftware.backend.annotation.FieldConfAnont;
 public class SeguridadPuertasFiltro extends Entity {
 
 	@FieldConfAnont(label = "Módulo")
-	private String idModulo;
+	private String idModulo;		
 
 	public String getIdModulo() {
 		return idModulo;

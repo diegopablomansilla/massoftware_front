@@ -91,8 +91,7 @@ public class FondosMenu extends AbstractMenu {
 //
 //		a7.setEnabled(false);
 //		a8.setEnabled(false);
-
-		a1.addItem("Zonas ...", openZonasCmd());
+		
 		a1.addItem("Módulos y puertas ...", openSeguridadPuertasCmd());
 		a1.addItem("Cuentas de fondo ...", openCuentasFondoCmd());
 		// archivos.addItem("Rubros y grupos de cuentas ...",

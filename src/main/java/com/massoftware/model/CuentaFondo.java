@@ -132,12 +132,12 @@ public class CuentaFondo extends EntityId {
 			filtros.add(filtro.getNumero());
 			whereSQL += "numero" + " = ? AND ";
 		}
-		if (filtro.getIdBanco() != null) {
-			filtros.add(filtro.getIdBanco());
+		if (filtro.getBanco() != null && filtro.getBanco().getId() != null) {
+			filtros.add(filtro.getBanco().getId());
 			whereSQL += "banco" + " = ? AND ";
 		}
-		if (filtro.getIdGrupo() != null) {
-			filtros.add(filtro.getIdGrupo());
+		if (filtro.getCuentaFondoGrupo() != null && filtro.getCuentaFondoGrupo().getId() != null) {
+			filtros.add(filtro.getCuentaFondoGrupo().getId());
 			whereSQL += "cuentaFondoGrupo" + " = ? AND ";
 		}
 		if (filtro.getNombre() != null) {
@@ -170,9 +170,9 @@ public class CuentaFondo extends EntityId {
 		String sql = "SELECT " + this.getClass().getSimpleName() + ".* FROM massoftware."
 				+ this.getClass().getSimpleName();
 
-		if (filtro.getIdRubro() != null) {
+		if (filtro.getCuentaFondoRubro() != null && filtro.getCuentaFondoRubro().getId() != null) {
 			sql += " JOIN massoftware." + CuentaFondoGrupo.class.getSimpleName() + " g ON g.id = cuentaFondoGrupo";
-			filtros.add(0, filtro.getIdRubro());
+			filtros.add(0, filtro.getCuentaFondoRubro().getId());
 			sql += " AND g.cuentaFondoRubro" + " = ?";
 		}
 

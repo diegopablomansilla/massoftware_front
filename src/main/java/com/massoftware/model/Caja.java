@@ -12,12 +12,15 @@ public class Caja extends EntityId {
 
 	@FieldConfAnont(label = "ID")
 	private String id;
-	
+
 	@FieldConfAnont(label = "Nº caja", required = true, unique = true)
 	private Integer numero;
-	
+
 	@FieldConfAnont(label = "Nombre", required = true, unique = true)
 	private String nombre;
+
+	@FieldConfAnont(label = "Puerta")
+	private SeguridadPuerta seguridadPuerta;
 
 	public String getId() {
 		return id;
@@ -43,13 +46,20 @@ public class Caja extends EntityId {
 		this.nombre = nombre;
 	}
 
+	public SeguridadPuerta getSeguridadPuerta() {
+		return seguridadPuerta;
+	}
+
+	public void setSeguridadPuerta(SeguridadPuerta seguridadPuerta) {
+		this.seguridadPuerta = seguridadPuerta;
+	}
+
 	@Override
 	public String toString() {
 		return "(" + numero + ") " + nombre;
 	}
-	
-	public List<Caja> find(int limit, int offset, Map<String, Boolean> orderBy, CajasFiltro filtro)
-			throws Exception {
+
+	public List<Caja> find(int limit, int offset, Map<String, Boolean> orderBy, CajasFiltro filtro) throws Exception {
 
 		filtro.setterTrim();
 

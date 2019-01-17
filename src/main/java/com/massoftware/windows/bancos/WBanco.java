@@ -148,7 +148,7 @@ public class WBanco extends WindowForm {
 		itemBI.setBean((Banco) obj);
 	}
 
-	protected BeanItem<Banco> getItemsBIC() {
+	protected BeanItem<Banco> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

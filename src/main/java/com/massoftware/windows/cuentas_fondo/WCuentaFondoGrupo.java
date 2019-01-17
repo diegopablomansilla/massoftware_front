@@ -42,7 +42,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 			CuentaFondoRubro cuentaFondoRubro = new CuentaFondoRubro();
 			cuentaFondoRubro.setId(cuentaFondoRubroId);
 
-			getItemsBIC().getBean().setCuentaFondoRubro(cuentaFondoRubro);
+			getItemBIC().getBean().setCuentaFondoRubro(cuentaFondoRubro);
 
 		}
 
@@ -136,7 +136,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 		itemBI.setBean((CuentaFondoGrupo) obj);
 	}
 
-	protected BeanItem<CuentaFondoGrupo> getItemsBIC() {
+	protected BeanItem<CuentaFondoGrupo> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

@@ -21,11 +21,13 @@ public class WCaja extends WindowForm {
 
 	private TextFieldEntity numeroTXT;
 	private TextFieldEntity nombreTXT;
+	private WCPuertaSB puertaSB;
 
 	// -------------------------------------------------------------
 
 	public WCaja(String mode, String id) {
 		super(mode, id);
+		puertaSB.setSelectedItem(itemBI.getBean().getSeguridadPuerta());
 	}
 
 	protected void buildContent() throws Exception {
@@ -62,9 +64,11 @@ public class WCaja extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		nombreTXT = new TextFieldEntity(this.itemBI, "nombre", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
+		puertaSB = new WCPuertaSB(this);
+		// ---------------------------------------------------------------------------------------------------------
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(numeroTXT, nombreTXT);
+		generalVL.addComponents(numeroTXT, nombreTXT, puertaSB);
 
 		// ---------------------------------------------------------------------------------------------------------
 
@@ -92,7 +96,7 @@ public class WCaja extends WindowForm {
 		itemBI.setBean((Caja) obj);
 	}
 
-	protected BeanItem<Caja> getItemsBIC() {
+	protected BeanItem<Caja> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

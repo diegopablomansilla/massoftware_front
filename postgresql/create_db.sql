@@ -507,6 +507,7 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.seguridadModulo := massoftware.white_is_null(NEW.seguridadModulo);
     NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     NEW.equate := massoftware.white_is_null(NEW.equate);    
@@ -537,7 +538,8 @@ CREATE TABLE massoftware.Caja
     -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
     numero INTEGER  NOT NULL UNIQUE CONSTRAINT Caja_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL CONSTRAINT Caja_nombre_chk CHECK (char_length(nombre) >= 2)    
+    nombre VARCHAR  NOT NULL CONSTRAINT Caja_nombre_chk CHECK (char_length(nombre) >= 2) ,
+    seguridadPuerta VARCHAR REFERENCES massoftware.SeguridadPuerta (id)	
 );
 
 CREATE UNIQUE INDEX u_Caja_nombre ON massoftware.Caja (TRANSLATE(LOWER(TRIM(nombre))
@@ -560,6 +562,7 @@ BEGIN
     NEW.id := massoftware.white_is_null(NEW.id);
     NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    NEW.seguridadPuerta := massoftware.white_is_null(NEW.seguridadPuerta);    
     
 	RETURN NEW;
 END;

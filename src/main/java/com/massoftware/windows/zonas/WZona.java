@@ -98,7 +98,7 @@ public class WZona extends WindowForm {
 		itemBI.setBean((Zona) obj);
 	}
 
-	protected BeanItem<Zona> getItemsBIC() {
+	protected BeanItem<Zona> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

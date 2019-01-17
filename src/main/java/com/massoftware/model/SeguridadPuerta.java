@@ -68,6 +68,10 @@ public class SeguridadPuerta extends EntityId {
 		this.equate = equate;
 	}
 
+	public List<SeguridadPuerta> find(SeguridadPuertasFiltro filtro) throws Exception {
+		return find(-1, -1, null, filtro);
+	}
+
 	public List<SeguridadPuerta> find(int limit, int offset, Map<String, Boolean> orderBy,
 			SeguridadPuertasFiltro filtro) throws Exception {
 
@@ -213,7 +217,7 @@ public class SeguridadPuerta extends EntityId {
 
 		} else if (idModuloOriginal == null && nombreOriginal == null && idModulo != null && nombre != null) {
 
-			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {				
+			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
 				throw new UniqueException(labelModulo, labelNombre);
 			}
 		}
@@ -226,8 +230,12 @@ public class SeguridadPuerta extends EntityId {
 		if (seguridadModulo != null && seguridadModulo.getNumero() != null) {
 			return "(" + seguridadModulo.getNumero() + "-" + numero + ") " + nombre;
 		}
+		
+		if(numero != null && nombre != null) {
+			return "(" + numero + ") " + nombre;	
+		}
 
-		return "(" + numero + ") " + nombre;
+		return null;
 
 	}
 

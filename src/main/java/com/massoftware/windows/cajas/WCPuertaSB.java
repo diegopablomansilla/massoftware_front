@@ -1,30 +1,30 @@
-package com.massoftware.windows.cuentas_fondo;
+package com.massoftware.windows.cajas;
 
 import java.util.List;
 
-import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro;
+import com.massoftware.model.SeguridadPuerta;
+import com.massoftware.model.SeguridadPuertasFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.bancos.WBancos;
+import com.massoftware.windows.seguridad_puertas.WSeguridadPuertas;
 
-class WCBancoSB extends SelectorBox {
+class WCPuertaSB extends SelectorBox {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7587377265502188967L;
 
-	private WCuentasFondo window;
+	private WCaja window;
 
-	public WCBancoSB(WCuentasFondo window) throws Exception {
-		super(window.filterBI, "banco", "Nº o Nombre");
+	public WCPuertaSB(WCaja window) throws Exception {
+		super(window.getItemBIC(), "seguridadPuerta", "");
 
 		this.window = window;
 
-		valueTXT.addBlurListener(e -> {
-			blur();
-		});
+//		valueTXT.addBlurListener(e -> {
+//			blur();
+//		});
 		openSelectorBTN.addClickListener(e -> {
 			open();
 		});
@@ -40,28 +40,28 @@ class WCBancoSB extends SelectorBox {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected void blur() {
+	@SuppressWarnings({ "rawtypes", "unused" })
+	private void blur() {
 		try {
 
 			String value = getValue();
 
 			if (value != null) {
 
-				BancosFiltro filtro = new BancosFiltro();
+				SeguridadPuertasFiltro filtro = new SeguridadPuertasFiltro();
 
-				try {
+				// try {
+				//
+				// filtro.setNumero(new Integer(value));
+				// filtro.setNombre(null);
+				//
+				// } catch (NumberFormatException e) {
+				//
+				// filtro.setNumero(null);
+				// filtro.setNombre(value);
+				// }
 
-					filtro.setNumero(new Integer(value));
-					filtro.setNombre(null);
-
-				} catch (NumberFormatException e) {
-
-					filtro.setNumero(null);
-					filtro.setNombre(value);
-				}
-
-				List items = new Banco().find(filtro);
+				List items = new SeguridadPuerta().find(filtro);
 
 				if (items.size() == 1) {
 
@@ -85,10 +85,10 @@ class WCBancoSB extends SelectorBox {
 	protected void open() {
 		try {
 
-			BancosFiltro filtro = new BancosFiltro();
-			filtro.setNombre(this.getValue());
+			SeguridadPuertasFiltro filtro = new SeguridadPuertasFiltro();
+			// filtro.setNombre(this.getValue());
 
-			WBancos windowPopup = new WBancos(filtro);
+			WSeguridadPuertas windowPopup = new WSeguridadPuertas(filtro);
 
 			windowPopup.addCloseListener(e -> {
 				try {
@@ -101,10 +101,14 @@ class WCBancoSB extends SelectorBox {
 			});
 
 			windowPopup.seleccionarBTN.addClickListener(e -> {
-				try {										
+				try {
+
 					if (windowPopup.itemsGRD.getSelectedRow() != null) {
+
 						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+						
 						windowPopup.close();
+						
 					}
 
 				} catch (Exception ex) {
@@ -119,17 +123,17 @@ class WCBancoSB extends SelectorBox {
 		}
 	}
 
-	private void setSelectedItem(Object item) {
+	public void setSelectedItem(Object item) {
 
 		if (item == null) {
-			item = new Banco();
+			item = new SeguridadPuerta();
 		}
 
 		valueTXT.setValue(item.toString());
 
-		window.filterBI.getBean().setBanco((Banco) item);
+		window.getItemBIC().getBean().setSeguridadPuerta((SeguridadPuerta) item);
 
-		window.loadDataResetPaged();
+		// window.loadDataResetPaged();
 
 	}
 

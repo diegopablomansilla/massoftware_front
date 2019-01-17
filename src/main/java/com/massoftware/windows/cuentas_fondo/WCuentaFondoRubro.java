@@ -82,7 +82,7 @@ public class WCuentaFondoRubro extends WindowForm {
 		itemBI.setBean((CuentaFondoRubro) obj);
 	}
 
-	protected BeanItem<CuentaFondoRubro> getItemsBIC() {
+	protected BeanItem<CuentaFondoRubro> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas

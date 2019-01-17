@@ -17,7 +17,7 @@ public class StringToBigDecimalConverterUnspecifiedLocale extends
 	
 	 @Override
 	    protected NumberFormat getFormat(Locale locale) {
-	        NumberFormat numberFormat = super.getFormat(locale.US);
+	        NumberFormat numberFormat = super.getFormat(Locale.US);
 	        if (numberFormat instanceof DecimalFormat) {
 	            ((DecimalFormat) numberFormat).setParseBigDecimal(true);
 	        }

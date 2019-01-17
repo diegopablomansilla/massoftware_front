@@ -63,7 +63,7 @@ public abstract class WindowForm extends Window {
 			// =======================================================
 			// BEAN
 
-			getItemsBIC();
+			getItemBIC();
 
 			// =======================================================
 			// LAYOUT CONTROLs
@@ -106,9 +106,9 @@ public abstract class WindowForm extends Window {
 		if (INSERT_MODE.equalsIgnoreCase(mode)) {
 			this.setCaption("Agregar " + getCaption().toLowerCase());
 		} else if (UPDATE_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getItemsBIC().getBean());
+			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getItemBIC().getBean());
 		} else if (COPY_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Copiar " + getCaption() + " : " + getItemsBIC().getBean());
+			this.setCaption("Copiar " + getCaption() + " : " + getItemBIC().getBean());
 		}
 	}
 
@@ -206,7 +206,7 @@ public abstract class WindowForm extends Window {
 	// abstract protected EntityId getBean() throws Exception;
 
 	@SuppressWarnings("rawtypes")
-	abstract protected BeanItem getItemsBIC();
+	abstract protected BeanItem getItemBIC();
 
 	protected void save() {
 
@@ -244,12 +244,12 @@ public abstract class WindowForm extends Window {
 	protected Object insert() throws Exception {
 
 		try {
-			((EntityId) getItemsBIC().getBean()).insert();
+			((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 			}
 
-			return getItemsBIC().getBean();
+			return getItemBIC().getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -260,12 +260,12 @@ public abstract class WindowForm extends Window {
 	protected Object update() throws Exception {
 
 		try {
-			((EntityId) getItemsBIC().getBean()).update();
+			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPaged();
 			}
 
-			return getItemsBIC().getBean();
+			return getItemBIC().getBean();
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -326,7 +326,7 @@ public abstract class WindowForm extends Window {
 	protected EntityId queryData() throws Exception {
 		try {
 
-			EntityId item = (EntityId) getItemsBIC().getBean();
+			EntityId item = (EntityId) getItemBIC().getBean();
 			item.loadById(id); // consulta a DB
 			if (COPY_MODE.equals(mode)) {
 				item.setId(null);
@@ -338,7 +338,7 @@ public abstract class WindowForm extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return (EntityId) getItemsBIC().getBean();
+		return (EntityId) getItemBIC().getBean();
 	}
 
 	// =================================================================================

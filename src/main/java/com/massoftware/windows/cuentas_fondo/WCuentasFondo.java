@@ -325,16 +325,16 @@ public class WCuentasFondo extends WindowListado {
 	private void treeValueChangeListener(Object item) {
 		try {
 			if (item instanceof CuentaFondoRubro) {
-				filterBI.getBean().setIdRubro(((CuentaFondoRubro) item).getId());
-				filterBI.getBean().setIdGrupo(null);
+				filterBI.getBean().getCuentaFondoRubro().setId(((CuentaFondoRubro) item).getId());
+				filterBI.getBean().getCuentaFondoGrupo().setId(null);
 				this.loadDataResetPaged();
 			} else if (item instanceof CuentaFondoGrupo) {
-				filterBI.getBean().setIdRubro(null);
-				filterBI.getBean().setIdGrupo(((CuentaFondoGrupo) item).getId());
+				filterBI.getBean().getCuentaFondoRubro().setId(null);
+				filterBI.getBean().getCuentaFondoGrupo().setId(((CuentaFondoGrupo) item).getId());
 				this.loadDataResetPaged();
 			} else {
-				filterBI.getBean().setIdRubro(null);
-				filterBI.getBean().setIdGrupo(null);
+				filterBI.getBean().getCuentaFondoRubro().setId(null);
+				filterBI.getBean().getCuentaFondoGrupo().setId(null);
 				this.loadDataResetPaged();
 			}
 
