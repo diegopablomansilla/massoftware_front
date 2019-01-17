@@ -1,32 +1,26 @@
-package com.massoftware.windows.cuentas_fondo;
+package com.massoftware.windows.seguridad_puertas;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.CuentaFondo;
-import com.massoftware.model.CuentaFondoGrupo;
-import com.massoftware.model.CuentaFondoRubro;
-import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.model.EntityId;
+import com.massoftware.model.SeguridadModulo;
+import com.massoftware.model.SeguridadPuerta;
+import com.massoftware.model.SeguridadPuertasFiltro;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.OptionGroupEntity;
-import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.cuentas_fondo.grupo.WCuentaFondoGrupo;
-import com.massoftware.windows.cuentas_fondo.rubro.WCuentaFondoRubro;
+import com.massoftware.windows.seguridad_puertas.seguridad_modulo.WSeguridadModulo;
+import com.massoftware.windows.seguridad_puertas.seguridad_puerta.WSeguridadPuerta;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -36,16 +30,15 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.renderers.HtmlRenderer;
 
-public class WCuentasFondo extends WindowListado {
+public class WSeguridadPuertas extends WindowListado {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	BeanItem<CuentasFondoFiltro> filterBI;
-	protected BeanItemContainer<CuentaFondo> itemsBIC;
+	BeanItem<SeguridadPuertasFiltro> filterBI;
+	protected BeanItemContainer<SeguridadPuerta> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -54,31 +47,27 @@ public class WCuentasFondo extends WindowListado {
 	// protected Button copiarTreeBTN;
 	protected Button eliminarTreeBTN;
 
-	private OptionGroupEntity activoOG;
-	private TextFieldBox numeroIB;
-	private TextFieldBox nombreTB;
-	private SelectorBox bancoSB;
 	private Tree tree;
 
-	private String itemTodas = "Todas las cuentas";
+	private String itemTodas = "Todas las puertas";
 
 	// -------------------------------------------------------------
 
-	public WCuentasFondo() {
+	public WSeguridadPuertas() {
 		super();
-		filterBI = new BeanItem<CuentasFondoFiltro>(new CuentasFondoFiltro());
+		filterBI = new BeanItem<SeguridadPuertasFiltro>(new SeguridadPuertasFiltro());
 		init(false);
 	}
 
-	public WCuentasFondo(CuentasFondoFiltro filtro) {
+	public WSeguridadPuertas(SeguridadPuertasFiltro filtro) {
 		super();
-		filterBI = new BeanItem<CuentasFondoFiltro>(filtro);
+		filterBI = new BeanItem<SeguridadPuertasFiltro>(filtro);
 		init(true);
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new CuentaFondo().labelPlural());
+		confWinList(this, new SeguridadModulo().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -129,20 +118,13 @@ public class WCuentasFondo extends WindowListado {
 
 	private HorizontalLayout buildFiltros() throws Exception {
 
-		bancoSB = new WCBancoSB(this);
-
-		numeroIB = new TextFieldBox(this, filterBI, "numero");
-
-		nombreTB = new TextFieldBox(this, filterBI, "nombre");
-
-		activoOG = new OptionGroupEntity(this, filterBI, "bloqueado", "Todas", "Obsoletas", "Activas", true, 2);
-
 		Button buscarBTN = buildButtonBuscar();
 
 		HorizontalLayout filaFiltroHL = new HorizontalLayout();
+		filaFiltroHL.setWidth("100%");
 		filaFiltroHL.setSpacing(true);
 
-		filaFiltroHL.addComponents(bancoSB, numeroIB, nombreTB, activoOG, buscarBTN);
+		filaFiltroHL.addComponents(buscarBTN);
 
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
@@ -157,21 +139,18 @@ public class WCuentasFondo extends WindowListado {
 		// ------------------------------------------------------------------
 
 		// itemsGRD.setWidth(22f, Unit.EM);
-		itemsGRD.setWidth("100%");
+		// itemsGRD.setWidth("100%");
+		itemsGRD.setWidth(20.5f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(
-				new Object[] { "id", "cuentaFondoGrupo", "banco", "numero", "nombre", "cuentaFondoTipo", "bloqueado" });
+		itemsGRD.setColumns(new Object[] { "id", "seguridadModulo", "numero", "nombre" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoGrupo"), true, true, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("banco"), true, true, false, true, 100);
+		UtilUI.confColumn(itemsGRD.getColumn("seguridadModulo"), true, true, false, true, 50);
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, false, false, true, 50);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, false, false, true, 200);
-		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondoTipo"), true, false, false, true, -1);
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, true, false, true, 30);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, false, false, true, -1);
 
-		CuentaFondo dto = new CuentaFondo();
+		SeguridadPuerta dto = new SeguridadPuerta();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -181,8 +160,9 @@ public class WCuentasFondo extends WindowListado {
 		// .......
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
+		// FontAwesome.SQUARE_O.getHtml()));
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
@@ -198,7 +178,7 @@ public class WCuentasFondo extends WindowListado {
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
 		// order.add(new SortOrder("numeroRubro", SortDirection.ASCENDING));
-		order.add(new SortOrder("cuentaFondoGrupo", SortDirection.ASCENDING));
+		order.add(new SortOrder("seguridadModulo", SortDirection.ASCENDING));
 		order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);
@@ -264,8 +244,8 @@ public class WCuentasFondo extends WindowListado {
 
 	private Panel buildPanelTree() {
 
-		Panel seccionIzquierda = new Panel("Estructura");
-		seccionIzquierda.setWidth(20f, Unit.EM);
+		Panel seccionIzquierda = new Panel("Módulos");
+		seccionIzquierda.setWidth(15f, Unit.EM);
 		seccionIzquierda.setHeight(20.5f, Unit.EM);
 		seccionIzquierda.setContent(buildTree());
 
@@ -302,7 +282,7 @@ public class WCuentasFondo extends WindowListado {
 				}
 			};
 
-			tree = new Tree("Estructura");
+			tree = new Tree("Módulos");
 
 			loadDataResetPagedTree();
 
@@ -326,17 +306,12 @@ public class WCuentasFondo extends WindowListado {
 
 	private void treeValueChangeListener(Object item) {
 		try {
-			if (item instanceof CuentaFondoRubro) {
-				filterBI.getBean().setIdRubro(((CuentaFondoRubro) item).getId());
-				filterBI.getBean().setIdGrupo(null);
-				this.loadDataResetPaged();
-			} else if (item instanceof CuentaFondoGrupo) {
-				filterBI.getBean().setIdRubro(null);
-				filterBI.getBean().setIdGrupo(((CuentaFondoGrupo) item).getId());
+			if (item instanceof SeguridadModulo) {
+				filterBI.getBean().setIdModulo(((SeguridadModulo) item).getId());
+				// filterBI.getBean().setIdGrupo(null);
 				this.loadDataResetPaged();
 			} else {
-				filterBI.getBean().setIdRubro(null);
-				filterBI.getBean().setIdGrupo(null);
+				filterBI.getBean().setIdModulo(null);
 				this.loadDataResetPaged();
 			}
 
@@ -346,94 +321,31 @@ public class WCuentasFondo extends WindowListado {
 	}
 
 	public void loadDataResetPagedTree() throws Exception {
-		loadDataResetPagedTree(null, null);
+		loadDataResetPagedTree(null);
 	}
 
-	public void loadDataResetPagedTree(CuentaFondoRubro rubroSelected, CuentaFondoGrupo grupoSelected)
-			throws Exception {
+	public void loadDataResetPagedTree(SeguridadModulo selected) throws Exception {
 
 		tree.removeAllItems();
 		tree.addItem(itemTodas);
 		tree.select(itemTodas);
-		addCuentasContablesTree(rubroSelected, grupoSelected);
+		addCuentasContablesTree(selected);
 		tree.expandItem(itemTodas);
 	}
 
-	// private void addCuentasContablesTree(Integer numeroRubro, Integer
-	// numeroGrupo) throws Exception {
-	//
-	// List<CuentaFondoRubro> rubros = new CuentaFondoRubro().find();
-	//
-	// for (CuentaFondoRubro rubro : rubros) {
-	//
-	// tree.addItem(rubro);
-	// tree.setParent(rubro, itemTodas);
-	// // tree.setChildrenAllowed(cuentaContable, false);
-	//
-	// if (numeroRubro != null && rubro.getNumero() != null &&
-	// rubro.getNumero().equals(numeroRubro)) {
-	// tree.expandItem(rubro);
-	// tree.select(rubro);
-	// }
-	//
-	// List<CuentaFondoGrupo> grupos = new CuentaFondoGrupo().findByRubro(rubro);
-	//
-	// for (CuentaFondoGrupo grupo : grupos) {
-	//
-	// tree.addItem(grupo);
-	// tree.setParent(grupo, rubro);
-	// tree.setChildrenAllowed(grupo, false);
-	// // tree.expandItem(grupo);
-	//
-	// if (numeroRubro != null && rubro.getNumero() != null &&
-	// rubro.getNumero().equals(numeroRubro)
-	// && numeroGrupo != null && grupo.getNumero() != null &&
-	// grupo.getNumero().equals(numeroGrupo)) {
-	// tree.expandItem(grupo);
-	// tree.select(grupo);
-	//
-	// }
-	//
-	// }
-	//
-	// // tree.expandItem(rubro);
-	//
-	// }
-	// }
+	private void addCuentasContablesTree(SeguridadModulo selected) throws Exception {
 
-	private void addCuentasContablesTree(CuentaFondoRubro rubroSelected, CuentaFondoGrupo grupoSelected)
-			throws Exception {
+		List<SeguridadModulo> modulos = new SeguridadModulo().find();
 
-		List<CuentaFondoRubro> rubros = new CuentaFondoRubro().find();
+		for (SeguridadModulo modulo : modulos) {
 
-		for (CuentaFondoRubro rubro : rubros) {
+			tree.addItem(modulo);
+			tree.setParent(modulo, itemTodas);
 
-			tree.addItem(rubro);
-			tree.setParent(rubro, itemTodas);
-			// tree.setChildrenAllowed(cuentaContable, false);
-
-			if (rubroSelected != null && rubro.equals(rubroSelected)) {
-				tree.expandItem(rubro);
-				tree.select(rubro);
+			if (selected != null && modulo.equals(selected)) {
+				tree.expandItem(modulo);
+				tree.select(modulo);
 			}
-
-			List<CuentaFondoGrupo> grupos = new CuentaFondoGrupo().findByRubro(rubro);
-
-			for (CuentaFondoGrupo grupo : grupos) {
-
-				tree.addItem(grupo);
-				tree.setParent(grupo, rubro);
-				tree.setChildrenAllowed(grupo, false);
-				// tree.expandItem(grupo);
-
-				if (grupoSelected != null && grupo.equals(grupoSelected)) {
-					tree.expandItem(grupo);
-					tree.select(grupo);
-				}
-
-			}
-
-			// tree.expandItem(rubro);
 
 		}
 	}
@@ -441,15 +353,13 @@ public class WCuentasFondo extends WindowListado {
 	protected void eliminarTreeBTNClick() {
 		try {
 
-			if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro
-					|| tree.getValue() instanceof CuentaFondoGrupo) {
+			if (tree.getValue() != null && tree.getValue() instanceof SeguridadModulo) {
 
 				getUI().addWindow(new EliminarDialog(tree.getValue().toString(), new EliminarDialog.Callback() {
 					public void onDialogResult(boolean yes) {
 
 						try {
 							if (yes) {
-								// if (tree.getValue() != null) {
 
 								Object item = tree.getValue();
 
@@ -457,15 +367,10 @@ public class WCuentasFondo extends WindowListado {
 
 								LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-								if (item instanceof CuentaFondoGrupo) {
-									loadDataResetPagedTree(((CuentaFondoGrupo) item).getCuentaFondoRubro(), null);
-								} else {
-									loadDataResetPagedTree();
-								}
+								loadDataResetPagedTree();
 
 								loadData();
 
-								// }
 							}
 						} catch (Exception e) {
 							LogAndNotification.print(e);
@@ -485,16 +390,15 @@ public class WCuentasFondo extends WindowListado {
 
 			if (tree.getValue() != null && tree.getValue() instanceof String || tree.getValue().equals(itemTodas)) {
 
-				WindowForm window = new WCuentaFondoRubro(WindowForm.INSERT_MODE, null);
+				WindowForm window = new WSeguridadModulo(WindowForm.INSERT_MODE, null);
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
 				getUI().addWindow(window);
 
-			} else if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro) {
+			} else if (tree.getValue() != null && tree.getValue() instanceof SeguridadModulo) {
 
-				WindowForm window = new WCuentaFondoGrupo(WindowForm.INSERT_MODE, null,
-						((CuentaFondoRubro) tree.getValue()).getId());
+				WindowForm window = new WSeguridadModulo(WindowForm.INSERT_MODE, null);
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
@@ -510,25 +414,16 @@ public class WCuentasFondo extends WindowListado {
 	protected void modificarTreeBTNClick() {
 		try {
 
-			if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoRubro) {
+			if (tree.getValue() != null && tree.getValue() instanceof SeguridadModulo) {
 
-				CuentaFondoRubro item = (CuentaFondoRubro) tree.getValue();
+				SeguridadModulo item = (SeguridadModulo) tree.getValue();
 
-				WindowForm window = new WCuentaFondoRubro(WindowForm.UPDATE_MODE, item.getId());
+				WindowForm window = new WSeguridadModulo(WindowForm.UPDATE_MODE, item.getId());
 				window.setModal(true);
 				window.center();
 				window.setWindowListado(this);
 				getUI().addWindow(window);
 
-			} else if (tree.getValue() != null && tree.getValue() instanceof CuentaFondoGrupo) {
-
-				CuentaFondoGrupo item = (CuentaFondoGrupo) tree.getValue();
-
-				WindowForm window = new WCuentaFondoGrupo(WCuentaFondoGrupo.UPDATE_MODE, item.getId(), null);
-				window.setModal(true);
-				window.center();
-				window.setWindowListado(this);
-				getUI().addWindow(window);
 			}
 
 		} catch (Exception e) {
@@ -538,18 +433,18 @@ public class WCuentasFondo extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<CuentaFondo> getItemsBIC() {
+	protected BeanItemContainer<SeguridadPuerta> getItemsBIC() {
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<CuentaFondo>(CuentaFondo.class, new ArrayList<CuentaFondo>());
+			itemsBIC = new BeanItemContainer<SeguridadPuerta>(SeguridadPuerta.class, new ArrayList<SeguridadPuerta>());
 		}
 		return itemsBIC;
 	}
 
 	protected void addBeansToItemsBIC() {
 
-		List<CuentaFondo> items = queryData();
+		List<SeguridadPuerta> items = queryData();
 
-		for (CuentaFondo item : items) {
+		for (SeguridadPuerta item : items) {
 			getItemsBIC().addBean(item);
 		}
 	}
@@ -558,17 +453,17 @@ public class WCuentasFondo extends WindowListado {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	private List<CuentaFondo> queryData() {
+	private List<SeguridadPuerta> queryData() {
 
 		try {
 
-			return new CuentaFondo().find(limit, offset, buildOrderBy(), filterBI.getBean());
+			return new SeguridadPuerta().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<CuentaFondo>();
+		return new ArrayList<SeguridadPuerta>();
 	}
 
 	// metodo que realiza el delete en la base de datos
@@ -580,18 +475,24 @@ public class WCuentasFondo extends WindowListado {
 
 	// metodo que realiza el delete en la base de datos
 	private void deleteItemTree(Object item) throws Exception {
-		if (item instanceof CuentaFondoRubro) {
-			((CuentaFondoRubro) item).delete();
-		} else if (item instanceof CuentaFondoGrupo) {
-			((CuentaFondoGrupo) item).delete();
-		}
 
+		if (item instanceof SeguridadModulo) {
+			((SeguridadModulo) item).delete();
+		}
 	}
 
 	@Override
-	protected WindowForm buildWinddowForm(String mode, String id) {
+	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
+		
+		if (tree.getValue() != null && tree.getValue() instanceof SeguridadModulo) {
 
-		return null;
+			SeguridadModulo item = (SeguridadModulo) tree.getValue();
+			
+			return new WSeguridadPuerta(mode, id, item.getId());
+
+		}
+
+		return new WSeguridadPuerta(mode, id, null);
 	}
 
 	// =================================================================================

@@ -10,8 +10,8 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.cajas.Cajas;
 import com.massoftware.windows.cajas.WCajas;
+import com.massoftware.windows.comprobante_de_fondo.Cajas;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -467,8 +467,10 @@ public class WAperturasCierresCajas extends Window {
 
 			if (this.filterBI.getBean().getNumeroCaja() != null) {
 
-				WCajas window = new WCajas(this.filterBI.getBean()
-						.getNumeroCaja());
+				WCajas window = new WCajas();
+
+//				WCajas window = new WCajas(this.filterBI.getBean()
+//						.getNumeroCaja());
 				window.setModal(true);
 				window.center();
 

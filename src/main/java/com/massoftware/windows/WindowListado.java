@@ -390,7 +390,7 @@ public abstract class WindowListado extends Window {
 
 	}
 
-	abstract protected WindowForm buildWinddowForm(String mode, String id);
+	abstract protected WindowForm buildWinddowForm(String mode, String id) throws Exception;
 
 	protected void agregarBTNClick() {
 		try {

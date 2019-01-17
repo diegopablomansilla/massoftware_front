@@ -1,4 +1,4 @@
-package com.massoftware.windows.banco;
+package com.massoftware.windows.bancos;
 
 import com.massoftware.model.Banco;
 import com.massoftware.model.EntityId;

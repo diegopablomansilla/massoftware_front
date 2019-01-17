@@ -23,7 +23,9 @@ public class LogAndNotification {
 
 	public static void print(Exception e) {
 
-		if (e instanceof UniqueException) {
+		
+		
+		if (e instanceof UniqueException) {						
 			
 			printUniqueException((UniqueException) e);
 			

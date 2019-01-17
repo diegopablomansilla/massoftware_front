@@ -5,6 +5,8 @@ import com.massoftware.model.Banco;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
+import com.massoftware.model.SeguridadModulo;
+import com.massoftware.model.SeguridadPuerta;
 
 public class MigradorMSToPG {
 
@@ -29,7 +31,11 @@ public class MigradorMSToPG {
 
 		grupo();
 
-		cuentaFondo();
+		cuentaFondo();				
+
+		modulo();
+		
+		puerta();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -174,6 +180,72 @@ public class MigradorMSToPG {
 				System.err.println(e);
 //				throw e;
 			}
+
+		}
+
+	}
+	
+	public static void modulo() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(A.NO AS VARCHAR)";
+		String attNumero = "A.NO";
+		String attNombre = "A.NAME";
+
+		String tableSQL = "SSECUR_DoorGroup A";
+
+		String attsSQL = attId + ", " + attNumero + ", " + attNombre;
+		String orderBySQL = null;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			SeguridadModulo item = new SeguridadModulo();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
+
+	}
+
+	public static void puerta() throws Exception {
+		
+		//SELECT  A."NO", A.DGRPNO, A.EQUATE, A.DESCRIPTION FROM dbo.SSECUR_Door A WHERE (  A.DGRPNO = 3 )  ORDER BY  A.DGRPNO, UPPER( A.DESCRIPTION)
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = " CONCAT (DGRPNO, '-', NO )";
+		String attNumeroModulo = "CASE WHEN DGRPNO = 0 THEN null ELSE DGRPNO END";
+		String attNumero = "CAST(NO AS INTEGER)";
+		String attNombre = "DESCRIPTION";
+		String attEquate = "EQUATE";
+
+		String tableSQL = "SSECUR_Door";
+
+		String attsSQL = attId + ", " + attNumeroModulo + ", " + attNumero + ", " + attNombre+ ", " + attEquate;
+		String orderBySQL = attNumeroModulo + ", " + attNumero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			SeguridadPuerta item = new SeguridadPuerta();
+			item.setter(table[i], 0);
+			item.insert();
 
 		}
 

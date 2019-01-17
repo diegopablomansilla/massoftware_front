@@ -73,7 +73,7 @@ public class ComboBoxEntity extends ComboBox {
 
 		if (isRequired() && optionsBIC.size() > 0) {
 			setValue(optionsBIC.getIdByIndex(0));
-		}
+		}		
 
 		// ----------------------------------------------------------------------------
 

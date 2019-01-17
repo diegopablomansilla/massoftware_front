@@ -254,7 +254,7 @@ public class BackendContextPG extends AbstractContext {
 
 	public synchronized Integer maxValueInteger(String attName, String tableName) throws Exception {
 
-		String sql = "SELECT MAX(" + attName + ") + 1 FROM massoftware." + tableName;
+		String sql = "SELECT COALESCE(MAX(" + attName + "), 0) + 1 FROM massoftware." + tableName;
 
 		ConnectionWrapper connectionWrapper = dataSourceWrapper.getConnectionWrapper();
 
@@ -277,7 +277,7 @@ public class BackendContextPG extends AbstractContext {
 
 		String tableSQL = tableName;
 
-		String attsSQL = "MAX(" + attNameCount + ") + 1";
+		String attsSQL = "COALESCE(MAX(" + attNameCount + "), 0) + 1";
 		String orderBySQL = null;
 		String whereSQL = "";
 

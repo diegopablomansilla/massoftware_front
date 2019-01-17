@@ -127,7 +127,7 @@ public abstract class WindowForm extends Window {
 		modificarBTN.addClickListener(e -> {
 			save();
 		});
-		copiarBTN = UtilUI.buildButtonModificar();
+		copiarBTN = UtilUI.buildButtonCopiar();
 		copiarBTN.addClickListener(e -> {
 			save();
 		});

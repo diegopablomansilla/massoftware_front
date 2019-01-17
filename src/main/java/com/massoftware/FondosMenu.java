@@ -23,6 +23,7 @@ import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
 import com.massoftware.windows.modelos_tickets.WModelosTickets;
 import com.massoftware.windows.monedas.WMonedas;
 import com.massoftware.windows.monedas_cotizaciones.WMonedasCotizaciones;
+import com.massoftware.windows.seguridad_puertas.WSeguridadPuertas;
 import com.massoftware.windows.sucursales.WSucursales;
 import com.massoftware.windows.talonarios.WTalonarios;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
@@ -90,6 +91,7 @@ public class FondosMenu extends AbstractMenu {
 //		a7.setEnabled(false);
 //		a8.setEnabled(false);
 
+		a1.addItem("Módulos y puertas ...", openSeguridadPuertasCmd());
 		a1.addItem("Cuentas de fondo ...", openCuentasFondoCmd());
 		// archivos.addItem("Rubros y grupos de cuentas ...",
 		// open(CuentaDeFondo.class));
@@ -97,7 +99,7 @@ public class FondosMenu extends AbstractMenu {
 //		a1.addItem("Chequeras ...", openChequerasCmd());
 		a1.addItem("Bancos ...", openBancosCmd());
 //		a1.addItem("Firmantes (cheques propios) ...", openFirmantesCmd());
-//		a1.addItem("Cajas", openCajasCmd());
+		a1.addItem("Cajas", openCajasCmd());
 //		a1.addItem("Monedas ...", openMonedasCmd());
 //		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 //		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd());
@@ -663,6 +665,23 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WComprobanteDeFondo();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openSeguridadPuertasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WSeguridadPuertas();
 				getUI().addWindow(window);
 			}
 		};
