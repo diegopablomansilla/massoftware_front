@@ -1,14 +1,15 @@
-package com.massoftware.windows.cuentas_fondo.grupo;
+package com.massoftware.windows.seguridad_puertas;
 
-import com.massoftware.model.CuentaFondoGrupo;
-import com.massoftware.model.CuentaFondoRubro;
+import java.util.List;
+
 import com.massoftware.model.EntityId;
+import com.massoftware.model.SeguridadModulo;
+import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
-import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanItem;
@@ -16,35 +17,41 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public class WCuentaFondoGrupo extends WindowForm {
+public class WSeguridadPuerta extends WindowForm {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<CuentaFondoGrupo> itemBI;
+	private BeanItem<SeguridadPuerta> itemBI;
+	private List<SeguridadModulo> modulos;
 
 	// -------------------------------------------------------------
 
 	private ComboBoxEntity rubroCB;
 	private TextFieldEntity numeroTXT;
 	private TextFieldEntity nombreTXT;
+	private TextFieldEntity equateTXT;
 
 	// -------------------------------------------------------------
 
-	public WCuentaFondoGrupo(String mode, String id) {
+	// public WSeguridadPuerta(String mode, String id) {
+	//
+	// super(mode, id);
+	// }
 
-		super(mode, id);
-	}
+	public WSeguridadPuerta(String mode, String id, String seguridadModuloId) throws Exception {
 
-	public WCuentaFondoGrupo(String mode, String id, String cuentaFondoRubroId) {
+		modulos = new SeguridadModulo().find();
 
-		if (cuentaFondoRubroId != null) {
-			CuentaFondoRubro cuentaFondoRubro = new CuentaFondoRubro();
-			cuentaFondoRubro.setId(cuentaFondoRubroId);
+		if (seguridadModuloId != null) {
+			SeguridadModulo seguridadModulo = new SeguridadModulo();
+			seguridadModulo.setId(seguridadModuloId);
 
-			getItemsBIC().getBean().setCuentaFondoRubro(cuentaFondoRubro);
+			getItemsBIC().getBean().setSeguridadModulo(seguridadModulo);
 
+		} else {
+			getItemsBIC().getBean().setSeguridadModulo(modulos.get(0));
 		}
 
 		init(mode, id);
@@ -81,13 +88,14 @@ public class WCuentaFondoGrupo extends WindowForm {
 	private VerticalLayout buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
-		rubroCB = new ComboBoxEntity(this.itemBI, "cuentaFondoRubro", this.mode, new CuentaFondoRubro().find());
+		rubroCB = new ComboBoxEntity(this.itemBI, "seguridadModulo", this.mode, modulos);
+
 		// rubroCB = UtilUI.buildFieldCB(itemBI, "cuentaFondoRubro", false, false,
 		// CuentaFondoRubro.class,
 		// new CuentaFondoRubro().find());
 		rubroCB.addValueChangeListener(e -> {
 			try {
-				validateRubroAndNumero();
+				validateModuloAndNumero();
 			} catch (Exception e1) {
 				LogAndNotification.print(e1);
 			}
@@ -98,7 +106,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 			public void valueChange(ValueChangeEvent event) {
 				// String value = (String) event.getProperty().getValue();
 				try {
-					validateRubroAndNumero();
+					validateModuloAndNumero();
 				} catch (Exception e) {
 					LogAndNotification.print(e);
 				}
@@ -109,17 +117,19 @@ public class WCuentaFondoGrupo extends WindowForm {
 		nombreTXT.addValueChangeListener(new Property.ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
 				try {
-					validateRubroAndNombre();
+					validateModuloAndNombre();
 				} catch (Exception e) {
 					LogAndNotification.print(e);
 				}
 			}
 		});
+		// ---------------------------------------------------------------------------------------------------------
+		equateTXT = new TextFieldEntity(this.itemBI, "equate", this.mode);
 
 		// ---------------------------------------------------------------------------------------------------------
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(rubroCB, numeroTXT, nombreTXT);
+		generalVL.addComponents(rubroCB, numeroTXT, nombreTXT, equateTXT);
 
 		return generalVL;
 	}
@@ -129,37 +139,39 @@ public class WCuentaFondoGrupo extends WindowForm {
 	protected void setMaxValues() throws Exception {
 
 		itemBI.getBean()
-				.setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "cuentaFondoRubro" }, "numero"));
+				.setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "seguridadModulo" }, "numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
 
-		itemBI.setBean((CuentaFondoGrupo) obj);
+		itemBI.setBean((SeguridadPuerta) obj);
 	}
 
-	protected BeanItem<CuentaFondoGrupo> getItemsBIC() {
+	protected BeanItem<SeguridadPuerta> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
 		// carga el form con un bean vacio
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<CuentaFondoGrupo>(new CuentaFondoGrupo());
+			itemBI = new BeanItem<SeguridadPuerta>(new SeguridadPuerta());
 		}
 		return itemBI;
 	}
 
 	// -----------------------------------------------------------------------------------
 
-	private void validateRubroAndNumero() throws Exception {
+	private void validateModuloAndNumero() throws Exception {
+
 		if (this.itemBI.getBean()._originalDTO != null && COPY_MODE.equals(mode)) {
 			this.itemBI.getBean()._originalDTO.setterNull();
 		}
 
-		this.itemBI.getBean().checkUniqueRubroAndNumero();
+		this.itemBI.getBean().checkUniqueModuloAndNumero();
 	}
 
-	private void validateRubroAndNombre() throws Exception {
+	private void validateModuloAndNombre() throws Exception {
+
 		if (this.itemBI.getBean()._originalDTO != null && COPY_MODE.equals(mode)) {
 			this.itemBI.getBean()._originalDTO.setterNull();
 		}
@@ -171,10 +183,10 @@ public class WCuentaFondoGrupo extends WindowForm {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	protected CuentaFondoGrupo queryData() {
+	protected SeguridadPuerta queryData() {
 		try {
 
-			CuentaFondoGrupo item = new CuentaFondoGrupo();
+			SeguridadPuerta item = new SeguridadPuerta();
 			item.loadById(id);
 			if (COPY_MODE.equals(mode)) {
 				item.setId(null);
@@ -186,7 +198,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 			LogAndNotification.print(e);
 		}
 
-		return new CuentaFondoGrupo();
+		return new SeguridadPuerta();
 	}
 
 	// =================================================================================
@@ -196,8 +208,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 		try {
 			itemBI.getBean().insert();
 			if (windowListado != null) {
-				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getCuentaFondoRubro(),
-						itemBI.getBean());
+				((WSeguridadPuertas) windowListado).loadDataResetPagedTree(itemBI.getBean().getSeguridadModulo());
 				windowListado.loadDataResetPaged();
 			}
 
@@ -214,8 +225,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 		try {
 			itemBI.getBean().update();
 			if (windowListado != null) {
-				((WCuentasFondo) windowListado).loadDataResetPagedTree(itemBI.getBean().getCuentaFondoRubro(),
-						itemBI.getBean());
+				((WSeguridadPuertas) windowListado).loadDataResetPagedTree(itemBI.getBean().getSeguridadModulo());
 				windowListado.loadDataResetPaged();
 			}
 
@@ -228,8 +238,8 @@ public class WCuentaFondoGrupo extends WindowForm {
 	}
 
 	protected void validateForm() throws Exception {
-		validateRubroAndNumero();
-		validateRubroAndNombre();
+		validateModuloAndNumero();
+		validateModuloAndNombre();
 		super.validateForm();
 	}
 

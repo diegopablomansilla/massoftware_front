@@ -75,8 +75,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 				methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
 
-				if (isScalar(field.getType())) {
-
+				if (isScalar(field.getType())) {					
 					methodSet.invoke(this, row[i]);
 
 				} else if (row[i] != null) {

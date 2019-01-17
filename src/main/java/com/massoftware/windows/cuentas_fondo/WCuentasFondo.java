@@ -18,8 +18,6 @@ import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.cuentas_fondo.grupo.WCuentaFondoGrupo;
-import com.massoftware.windows.cuentas_fondo.rubro.WCuentaFondoRubro;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;

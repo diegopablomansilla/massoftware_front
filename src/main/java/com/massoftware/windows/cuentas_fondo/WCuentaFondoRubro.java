@@ -1,4 +1,4 @@
-package com.massoftware.windows.cuentas_fondo.rubro;
+package com.massoftware.windows.cuentas_fondo;
 
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EntityId;
@@ -6,7 +6,6 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
-import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;

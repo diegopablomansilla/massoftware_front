@@ -1,4 +1,4 @@
-package com.massoftware.windows.seguridad_puertas.seguridad_modulo;
+package com.massoftware.windows.seguridad_puertas;
 
 import com.massoftware.model.EntityId;
 import com.massoftware.model.SeguridadModulo;
@@ -6,7 +6,6 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
-import com.massoftware.windows.seguridad_puertas.WSeguridadPuertas;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;

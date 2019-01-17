@@ -14,8 +14,6 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
-import com.massoftware.windows.seguridad_puertas.seguridad_modulo.WSeguridadModulo;
-import com.massoftware.windows.seguridad_puertas.seguridad_puerta.WSeguridadPuerta;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -67,7 +65,7 @@ public class WSeguridadPuertas extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new SeguridadModulo().labelPlural());
+		confWinList(this, "Módulos y puertas");
 
 		// =======================================================
 		// FILTROS
