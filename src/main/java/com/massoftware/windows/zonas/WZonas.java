@@ -1,12 +1,12 @@
-package com.massoftware.windows.cajas;
+package com.massoftware.windows.zonas;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.Caja;
-import com.massoftware.model.CajasFiltro;
+import com.massoftware.model.Zona;
+import com.massoftware.model.ZonasFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
@@ -24,12 +24,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
-public class WCajas extends WindowListado {
+public class WZonas extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<CajasFiltro> filterBI;
-	protected BeanItemContainer<Caja> itemsBIC;
+	BeanItem<ZonasFiltro> filterBI;
+	protected BeanItemContainer<Zona> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -38,21 +38,21 @@ public class WCajas extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	public WCajas() {
+	public WZonas() {
 		super();
-		filterBI = new BeanItem<CajasFiltro>(new CajasFiltro());
+		filterBI = new BeanItem<ZonasFiltro>(new ZonasFiltro());
 		init(false);
 	}
 
-	public WCajas(CajasFiltro filtro) {
+	public WZonas(ZonasFiltro filtro) {
 		super();
-		filterBI = new BeanItem<CajasFiltro>(filtro);
+		filterBI = new BeanItem<ZonasFiltro>(filtro);
 		init(true);
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Caja().labelPlural());
+		confWinList(this, new Zona().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -100,7 +100,7 @@ public class WCajas extends WindowListado {
 		filaFiltroHL.setSpacing(true);
 
 		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
-		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);		
+		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 		return filaFiltroHL;
 	}
@@ -119,9 +119,9 @@ public class WCajas extends WindowListado {
 		itemsGRD.setColumns(new Object[] { "numero", "nombre" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);		
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
 
-		Caja dto = new Caja();
+		Zona dto = new Zona();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -131,8 +131,9 @@ public class WCajas extends WindowListado {
 		// .......
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-//		itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-//				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
+		// FontAwesome.SQUARE_O.getHtml()));
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
@@ -172,14 +173,14 @@ public class WCajas extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Caja> getItemsBIC() {
+	protected BeanItemContainer<Zona> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
 		// carga la grilla con una lista vacia
 
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<Caja>(Caja.class, new ArrayList<Caja>());
+			itemsBIC = new BeanItemContainer<Zona>(Zona.class, new ArrayList<Zona>());
 		}
 		return itemsBIC;
 	}
@@ -194,11 +195,11 @@ public class WCajas extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			List<Caja> items = new Caja().find(limit, offset, buildOrderBy(), filterBI.getBean());						
+			List<Zona> items = new ArrayList<Zona>();
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
-			for (Caja item : items) {
+			for (Zona item : items) {
 				getItemsBIC().addBean(item);
 			}
 
@@ -211,7 +212,7 @@ public class WCajas extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WCaja(mode, id);		
+		return new WZona(mode, id);
 	}
 
 	// =================================================================================

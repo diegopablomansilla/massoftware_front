@@ -1,9 +1,12 @@
 package com.massoftware.windows;
 
+import java.math.BigDecimal;
+
 import org.vaadin.inputmask.InputMask;
 
 import com.massoftware.model.Entity;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.BigDecimalRangeValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.LongRangeValidator;
 import com.vaadin.ui.TextField;
@@ -67,7 +70,8 @@ public class TextFieldEntity extends TextField {
 			im.extend(this);
 
 			if (dtoBI.getItemProperty(attName).getType() == Integer.class
-					|| dtoBI.getItemProperty(attName).getType() == Long.class) {
+					|| dtoBI.getItemProperty(attName).getType() == Long.class
+					|| dtoBI.getItemProperty(attName).getType() == BigDecimal.class) {
 				addStyleName("align-right");
 			}
 
@@ -146,6 +150,45 @@ public class TextFieldEntity extends TextField {
 					+ minValue + " hasta " + maxValue + ".";
 
 			addValidator(new LongRangeValidator(msg, minValue, maxValue));
+
+			setConversionError(msg);
+
+		} else if (dtoBI.getItemProperty(attName).getType() == BigDecimal.class) {
+
+			String minValueString = ((Entity) dtoBI.getBean()).minValue(attName);
+			String maxValueString = ((Entity) dtoBI.getBean()).maxValue(attName);
+
+			BigDecimal minValue = new BigDecimal(Double.MIN_VALUE);
+			BigDecimal maxValue = new BigDecimal(Double.MAX_VALUE);
+
+			if (minValueString != null) {
+				minValue = new BigDecimal(minValueString);
+			}
+			if (maxValueString != null) {
+				maxValue = new BigDecimal(maxValueString);
+			}
+
+			Integer maxLengthMin = minValue.toString().length();
+			Integer maxLengthMax = maxValue.toString().length();
+
+			if (maxLengthMax > maxLengthMin) {
+				maxLengthMin = maxLengthMax;
+			}
+
+			// ----------------------------------------------------------------------------
+
+			addStyleName("align-right");
+
+			setColumns(maxLengthMin);
+
+			setMaxLength(maxLengthMin);
+
+			setConverter(new StringToBigDecimalConverterUnspecifiedLocale());
+
+			String msg = "El campo " + label + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
+					+ minValue + " hasta " + maxValue + ".";
+
+			addValidator(new BigDecimalRangeValidator(msg, minValue, maxValue));
 
 			setConversionError(msg);
 

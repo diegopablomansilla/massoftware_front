@@ -29,6 +29,7 @@ import com.massoftware.windows.talonarios.WTalonarios;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.massoftware.windows.valores_propios.WValoresPropios;
 import com.massoftware.windows.valores_terceros.WValoresTerceros;
+import com.massoftware.windows.zonas.WZonas;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FileResource;
@@ -91,6 +92,7 @@ public class FondosMenu extends AbstractMenu {
 //		a7.setEnabled(false);
 //		a8.setEnabled(false);
 
+		a1.addItem("Zonas ...", openZonasCmd());
 		a1.addItem("Módulos y puertas ...", openSeguridadPuertasCmd());
 		a1.addItem("Cuentas de fondo ...", openCuentasFondoCmd());
 		// archivos.addItem("Rubros y grupos de cuentas ...",
@@ -682,6 +684,23 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WSeguridadPuertas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openZonasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WZonas();
 				getUI().addWindow(window);
 			}
 		};
