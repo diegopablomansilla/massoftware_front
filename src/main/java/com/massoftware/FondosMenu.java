@@ -104,7 +104,7 @@ public class FondosMenu extends AbstractMenu {
 //		a1.addItem("Monedas ...", openMonedasCmd());
 //		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 //		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd());
-//		a1.addItem("Sucursales ...", openSucursalesCmd());
+		a1.addItem("Sucursales ...", openSucursalesCmd());
 //		a1.addItem("Juridicciones convenio multilateral",
 //				openJurisdiccionesConvenioMultilateralCmd());
 //		a1.addSeparator();

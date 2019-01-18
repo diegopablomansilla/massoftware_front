@@ -1,19 +1,19 @@
 package com.massoftware.windows.tipos_comprobantes;
 
 import com.massoftware.windows.UtilModel;
-import com.massoftware.windows.sucursales.Sucursales;
+import com.massoftware.windows.sucursales.SucursalesOld;
 
 public class TiposComprobantesFiltro {
 
-	private Sucursales sucursal;
+	private SucursalesOld sucursal;
 	private Integer numero;
 	private String nombre;
 
-	public Sucursales getSucursal() {
+	public SucursalesOld getSucursal() {
 		return sucursal;
 	}
 
-	public void setSucursal(Sucursales sucursal) {
+	public void setSucursal(SucursalesOld sucursal) {
 		this.sucursal = sucursal;
 	}
 

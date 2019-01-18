@@ -1,10 +1,13 @@
-package com.massoftware.windows.comprobante_de_fondo;
+package com.massoftware.model;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-public class Cajas {
-	
+public class SucursalesFiltro extends Entity {
+
+	@FieldConfAnont(label = "Nº sucursal")
 	private Integer numero;
+
+	@FieldConfAnont(label = "Nombre")
 	private String nombre;
 
 	public Integer getNumero() {
@@ -20,12 +23,7 @@ public class Cajas {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);
-	}
-
-	@Override
-	public String toString() {
-		return "(" + numero + ") " + nombre;
+		this.nombre = nombre;
 	}
 
 }

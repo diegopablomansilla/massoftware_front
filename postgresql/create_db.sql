@@ -124,7 +124,9 @@ $$  LANGUAGE plpgsql;
 -- ==========================================================================================================================
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: Banco															 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -194,7 +196,9 @@ CREATE TRIGGER tgFormatBanco BEFORE INSERT OR UPDATE
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: CuentaFondoRubro													 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -245,7 +249,9 @@ CREATE TRIGGER tgFormatCuentaFondoRubro BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoRubro();
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: CuentaFondoGrupo													 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -301,7 +307,9 @@ CREATE TRIGGER tgFormatCuentaFondoGrupo BEFORE INSERT OR UPDATE
 
     
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: CuentaFondoTipo													 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -360,7 +368,9 @@ INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('5', 5, 'Otr
 INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('6', 6, 'Tickets');
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: CuentaFondo														 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -418,7 +428,9 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
     
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: SeguridadModulo													 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -467,7 +479,9 @@ CREATE TRIGGER tgFormatSeguridadModulo BEFORE INSERT OR UPDATE
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: SeguridadPuerta													 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -525,7 +539,9 @@ CREATE TRIGGER tgFormatSeguridadPuerta BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatSeguridadPuerta();
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: Caja																 //		
+-- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -576,7 +592,148 @@ CREATE TRIGGER tgFormatCaja BEFORE INSERT OR UPDATE
     ON massoftware.Caja FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCaja();
 
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: SucursalTipo													 	 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.SucursalTipo
+
+DROP TABLE IF EXISTS massoftware.SucursalTipo CASCADE;
+
+CREATE TABLE massoftware.SucursalTipo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT SucursalTipo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT SucursalTipo_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_SucursalTipo_nombre ON massoftware.SucursalTipo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.SucursalTipo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatSucursalTipo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatSucursalTipo() RETURNS TRIGGER AS $formatSucursalTipo$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
+	RETURN NEW;
+END;
+$formatSucursalTipo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatSucursalTipo ON massoftware.SucursalTipo CASCADE;
+
+CREATE TRIGGER tgFormatSucursalTipo BEFORE INSERT OR UPDATE 
+    ON massoftware.SucursalTipo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatSucursalTipo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('1', 1, 'Centralizador');
+INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('2', 2, 'Casa central');
+INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('3', 3, 'Sucursal');
+INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('4', 4, 'Punto de venta');
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Sucursal													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.Sucursal
+
+DROP TABLE IF EXISTS massoftware.Sucursal CASCADE;
+
+CREATE TABLE massoftware.Sucursal
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+    sucursalTipo VARCHAR NOT NULL REFERENCES massoftware.SucursalTipo (id),	
+    numero INTEGER  NOT NULL CONSTRAINT Sucursal_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT Sucursal_nombre_chk CHECK (char_length(nombre) >= 2),
+    abreviatura VARCHAR  NOT NULL CONSTRAINT Sucursal_abreviatura_chk CHECK (char_length(nombre) >= 1),
+    -- --------------------------------------------------------		
+	cuentaClienteDesde VARCHAR,
+	cuentaClienteHasa VARCHAR,
+	cantidadCaracteresCliente INTEGER,
+	identificacionNumericaCliente BOOLEAN,
+	permiteCambiarCliente BOOLEAN,
+	-- --------------------------------------------------------		
+	clientesOcacionalesDesde INTEGER,
+	clientesOcacionalesHasa INTEGER,
+	-- --------------------------------------------------------		
+	nroCobranzaDesde INTEGER,
+	nroCobranzaHasa INTEGER,
+	-- --------------------------------------------------------		
+	proveedoresDesde VARCHAR,
+	proveedoresHasa VARCHAR,
+	cantidadCaracteresProveedor INTEGER,
+	identificacionNumericaProveedor BOOLEAN,
+	permiteCambiarProveedor BOOLEAN
+
+);
+
+CREATE UNIQUE INDEX u_Sucursal_nombre ON massoftware.Sucursal (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.Sucursal;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatSucursal() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatSucursal() RETURNS TRIGGER AS $formatSucursal$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.sucursalTipo := massoftware.white_is_null(NEW.sucursalTipo);
+    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre); 
+    NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura); 
+    NEW.cuentaClienteDesde := massoftware.white_is_null(NEW.cuentaClienteDesde); 
+    NEW.cuentaClienteHasa := massoftware.white_is_null(NEW.cuentaClienteHasa); 
+    NEW.proveedoresDesde := massoftware.white_is_null(NEW.proveedoresDesde); 
+    NEW.proveedoresHasa := massoftware.white_is_null(NEW.proveedoresHasa);
+    
+	RETURN NEW;
+END;
+$formatSucursal$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatSucursal ON massoftware.Sucursal CASCADE;
+
+CREATE TRIGGER tgFormatSucursal BEFORE INSERT OR UPDATE 
+    ON massoftware.Sucursal FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatSucursal();
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
 -- ==========================================================================================================================

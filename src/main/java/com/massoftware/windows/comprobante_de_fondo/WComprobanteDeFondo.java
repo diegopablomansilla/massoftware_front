@@ -6,6 +6,8 @@ import java.util.List;
 import org.cendra.ex.crud.InsertDuplicateException;
 import org.cendra.ex.crud.UniqueException;
 
+import com.massoftware.model.Caja;
+import com.massoftware.model.ComprobanteDeFondo;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.Validator.InvalidValueException;
@@ -85,7 +87,7 @@ public class WComprobanteDeFondo extends Window {
 			HorizontalLayout hl = UtilUI.buildHL();
 
 			cajasCBX = UtilUI.buildFieldCB(itemBI, "caja", "Caja", false,
-					true, Cajas.class, queryDataCajas());
+					true, Caja.class, queryDataCajas());
 
 			conciliacionAutomaticaCHK = UtilUI.buildFieldCHK(itemBI,
 					"conciliacionAutomatica", "Conciliación automática", false);
@@ -268,7 +270,7 @@ public class WComprobanteDeFondo extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 	
-	private List<Cajas> queryDataCajas() {
+	private List<Caja> queryDataCajas() {
 		try {
 
 			return mockDataCajas();
@@ -277,7 +279,7 @@ public class WComprobanteDeFondo extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Cajas>();
+		return new ArrayList<Caja>();
 	}
 
 	// metodo que realiza la consulta a la base de datos
@@ -335,15 +337,15 @@ public class WComprobanteDeFondo extends Window {
 
 	}
 	
-	private List<Cajas> mockDataCajas() {
+	private List<Caja> mockDataCajas() {
 
-		List<Cajas> itemsMock = new ArrayList<Cajas>();
+		List<Caja> itemsMock = new ArrayList<Caja>();
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				Cajas item = new Cajas();
+				Caja item = new Caja();
 
 				item.setNumero(i);
 				item.setNombre("Nombre " + i);

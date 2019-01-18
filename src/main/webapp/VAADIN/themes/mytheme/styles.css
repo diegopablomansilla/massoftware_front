@@ -13257,6 +13257,12 @@ div.v-layout.v-horizontal.v-widget {
 	font-weight: bold;
 }
 
+.mytheme .v-labeltext {
+	color: #6aaef2;
+	font-size: 11px;
+	font-weight: bold;
+}
+
 .mytheme .v-captiontext {
 	display: inline-block;
 	line-height: inherit;

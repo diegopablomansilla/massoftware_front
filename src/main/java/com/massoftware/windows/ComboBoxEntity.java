@@ -17,10 +17,24 @@ public class ComboBoxEntity extends ComboBox {
 	 */
 	private static final long serialVersionUID = -1040125093311821579L;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("rawtypes")
 	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options) throws Exception {
+		init(dtoBI, attName, mode, options, null);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options, Object selectItem) throws Exception {
+		init(dtoBI, attName, mode, options, selectItem);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void init(BeanItem dtoBI, String attName, String mode, List options, Object selectItem) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
+		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
+		if(labelError == null || labelError.trim().length() == 0) {
+			labelError  = label;
+		}
 		boolean required = ((Entity) dtoBI.getBean()).required(attName);
 		boolean readOnly = ((Entity) dtoBI.getBean()).readOnly(attName);
 		boolean unique = ((Entity) dtoBI.getBean()).unique(attName);
@@ -31,8 +45,7 @@ public class ComboBoxEntity extends ComboBox {
 		addStyleName(ValoTheme.COMBOBOX_TINY);
 
 		setWidth("100%");
-		setHeightUndefined();
-		setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		setHeightUndefined();		
 		setValidationVisible(true);
 		setVisible(true);
 		setEnabled(true);
@@ -54,7 +67,7 @@ public class ComboBoxEntity extends ComboBox {
 
 		setCaption(label);
 
-		setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
+		setRequiredError("El campo '" + labelError + "' es requerido. Es decir no debe estar vacio.");
 		setRequired(required);
 		if (isRequired()) {
 			setNullSelectionAllowed(false);
@@ -71,7 +84,12 @@ public class ComboBoxEntity extends ComboBox {
 
 		// ----------------------------------------------------------------------------
 
-		if (isRequired() && optionsBIC.size() > 0) {
+		if(selectItem != null && optionsBIC.size() > 0) {
+			
+			setValue(selectItem);
+			
+		} else if (isRequired() && optionsBIC.size() > 0) {
+			
 			setValue(optionsBIC.getIdByIndex(0));
 		}		
 

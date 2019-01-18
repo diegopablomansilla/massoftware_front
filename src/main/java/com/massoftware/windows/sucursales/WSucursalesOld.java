@@ -1,17 +1,13 @@
-package com.massoftware.windows.aperturas_cierres_cajas;
+package com.massoftware.windows.sucursales;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.model.Caja;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.cajas.WCajas;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -23,26 +19,23 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.SortEvent;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.renderers.DateRenderer;
 
-public class WAperturasCierresCajas extends Window {
+public class WSucursalesOld extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<AperturasCierresCajasFiltro> filterBI;
-	private BeanItemContainer<AperturasCierresCajas> itemsBIC;
+	private BeanItem<SucursalesFiltroOld> filterBI;
+	private BeanItemContainer<SucursalesOld> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -51,7 +44,7 @@ public class WAperturasCierresCajas extends Window {
 
 	// -------------------------------------------------------------
 
-	public Grid itemsGRD;
+	private Grid itemsGRD;
 	private Button prevPageBTN;
 	private Button nextPageBTN;
 	private Button agregarBTN;
@@ -60,24 +53,20 @@ public class WAperturasCierresCajas extends Window {
 
 	// -------------------------------------------------------------
 
-	private HorizontalLayout numeroCajaCBXHL;
-	private HorizontalLayout usuarioCBXHL;
+	private HorizontalLayout numeroTXTHL;
+	private HorizontalLayout nombreTXTHL;
 
 	// -------------------------------------------------------------
 
-	public WAperturasCierresCajas() {
-		super();
-		init();
-	}
-
 	@SuppressWarnings("serial")
-	public void init() {
+	public WSucursalesOld() {
+		super();
 
 		try {
 
 			buildContainersItems();
 
-			UtilUI.confWinList(this, "Aperturas y cierres de cajas");
+			UtilUI.confWinList(this, "Sucursales");
 
 			VerticalLayout content = UtilUI.buildWinContentVertical();
 
@@ -90,17 +79,17 @@ public class WAperturasCierresCajas extends Window {
 
 			// -----------
 
-			numeroCajaCBXHL = UtilUI.buildSearchBox(filterBI, "numeroCaja",
-					"nombreCaja", "Caja", "numero", false);
+			numeroTXTHL = UtilUI.buildTXTHLInteger(filterBI, "numero",
+					"Numero", false, 5, -1, 3, false, false, null, false,
+					UtilUI.EQUALS, 0, 255);
 
-			TextField numeroCajaTXT = (TextField) numeroCajaCBXHL
-					.getComponent(0);
+			TextField numeroTXT = (TextField) numeroTXTHL.getComponent(0);
 
-			numeroCajaTXT.addTextChangeListener(new TextChangeListener() {
+			numeroTXT.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
 					try {
-						numeroCajaTXT.setValue(event.getText());
-						selectCajaTXTShortcutEnter();
+						numeroTXT.setValue(event.getText());
+						loadDataResetPaged();
 					} catch (Exception e) {
 						LogAndNotification.print(e);
 					}
@@ -108,26 +97,35 @@ public class WAperturasCierresCajas extends Window {
 
 			});
 
-			Button numeroCajaBTN = (Button) numeroCajaCBXHL.getComponent(2);
+			Button numeroBTN = (Button) numeroTXTHL.getComponent(1);
 
-			numeroCajaBTN.addClickListener(e -> {
+			numeroBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
 			// -----------
 
-			usuarioCBXHL = UtilUI.buildCBHL(filterBI, "usuario", "Cajero",
-					false, true, Usuarios.class, queryDataUsuarios());
+			nombreTXTHL = UtilUI.buildTXTHL(filterBI, "nombre", "Nombre",
+					false, 20, -1, 35, false, false, null, false,
+					UtilUI.CONTAINS_WORDS_AND);
 
-			ComboBox usuarioCBX = (ComboBox) usuarioCBXHL.getComponent(0);
+			TextField nombreTXT = (TextField) nombreTXTHL.getComponent(0);
 
-			usuarioCBX.addValueChangeListener(e -> {
-				this.loadDataResetPaged();
+			nombreTXT.addTextChangeListener(new TextChangeListener() {
+				public void textChange(TextChangeEvent event) {
+					try {
+						nombreTXT.setValue(event.getText());
+						loadDataResetPaged();
+					} catch (Exception e) {
+						LogAndNotification.print(e);
+					}
+				}
+
 			});
 
-			Button usuarioBTN = (Button) usuarioCBXHL.getComponent(1);
+			Button nombreBTN = (Button) nombreTXTHL.getComponent(1);
 
-			usuarioBTN.addClickListener(e -> {
+			nombreBTN.addClickListener(e -> {
 				this.loadDataResetPaged();
 			});
 
@@ -138,8 +136,7 @@ public class WAperturasCierresCajas extends Window {
 				loadData();
 			});
 
-			filaFiltroHL
-					.addComponents(numeroCajaCBXHL, usuarioCBXHL, buscarBTN);
+			filaFiltroHL.addComponents(numeroTXTHL, nombreTXTHL, buscarBTN);
 
 			filaFiltroHL.setComponentAlignment(buscarBTN,
 					Alignment.MIDDLE_RIGHT);
@@ -149,24 +146,15 @@ public class WAperturasCierresCajas extends Window {
 			// GRILLA
 
 			itemsGRD = UtilUI.buildGrid();
-			itemsGRD.setWidth(38.5f, Unit.EM);
+			itemsGRD.setWidth(23f, Unit.EM);
 
-			itemsGRD.setColumns(new Object[] { "numeroCaja", "nombreCaja",
-					"numero", "numeroUsuario", "nombreUsuario", "apertura",
-					"cierre" });
+			itemsGRD.setColumns(new Object[] { "numero", "nombre",
+					"tipoSucursal" });
 
-			UtilUI.confColumn(itemsGRD.getColumn("numeroCaja"), "Nro. caja",
-					true, true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreCaja"), "Caja", true,
-					150);
-			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Caja", true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("numeroUsuario"), "Usuario",
-					true, true, false, true, 50);
-			UtilUI.confColumn(itemsGRD.getColumn("nombreUsuario"), "Responsable",
-					true, 150);
-			UtilUI.confColumn(itemsGRD.getColumn("apertura"), "Apertura", true,
-					120);
-			UtilUI.confColumn(itemsGRD.getColumn("cierre"), "Cierre", true, 120);
+			UtilUI.confColumn(itemsGRD.getColumn("numero"), "Nro.", true, 50);
+			UtilUI.confColumn(itemsGRD.getColumn("nombre"), "Nombre", true, 200);
+			UtilUI.confColumn(itemsGRD.getColumn("tipoSucursal"), "Tipo",
+					true, 100);
 
 			itemsGRD.setContainerDataSource(itemsBIC);
 
@@ -183,19 +171,14 @@ public class WAperturasCierresCajas extends Window {
 			// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 
 			// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-			itemsGRD.getColumn("apertura").setRenderer(
-					new DateRenderer(
-							new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-
-			itemsGRD.getColumn("cierre").setRenderer(
-					new DateRenderer(
-							new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+			// itemsGRD.getColumn("attName").setRenderer(
+			// new DateRenderer(
+			// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
 			// .......
 
 			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			order.add(new SortOrder("numeroCaja", SortDirection.ASCENDING));
 			order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 			itemsGRD.setSortOrder(order);
@@ -230,14 +213,8 @@ public class WAperturasCierresCajas extends Window {
 			modificarBTN.addClickListener(e -> {
 				modificarBTNClick();
 			});
-			
-			Button cierreBTN = UtilUI.buildButton("Cierre", "Cierre");
-			cierreBTN.setIcon(FontAwesome.CLOSE);
-			cierreBTN.addClickListener(e -> {
-//				modificarBTNClick();
-			});
 
-			filaBotoneraHL.addComponents(agregarBTN, modificarBTN, cierreBTN);
+			filaBotoneraHL.addComponents(agregarBTN, modificarBTN);
 
 			// -------------------------------------------------------
 			// BOTONERA 2
@@ -343,11 +320,9 @@ public class WAperturasCierresCajas extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<AperturasCierresCajasFiltro>(
-				new AperturasCierresCajasFiltro());
-		itemsBIC = new BeanItemContainer<AperturasCierresCajas>(
-				AperturasCierresCajas.class,
-				new ArrayList<AperturasCierresCajas>());
+		filterBI = new BeanItem<SucursalesFiltroOld>(new SucursalesFiltroOld());
+		itemsBIC = new BeanItemContainer<SucursalesOld>(SucursalesOld.class,
+				new ArrayList<SucursalesOld>());
 	}
 
 	// =================================================================================
@@ -398,7 +373,7 @@ public class WAperturasCierresCajas extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													AperturasCierresCajas item = (AperturasCierresCajas) itemsGRD
+													SucursalesOld item = (SucursalesOld) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -427,7 +402,7 @@ public class WAperturasCierresCajas extends Window {
 		try {
 
 			itemsGRD.select(null);
-			Window window = new Window("Agregar ítem");
+			Window window = new Window("Agregar ítem ");
 			window.setModal(true);
 			window.center();
 			window.setWidth("400px");
@@ -444,8 +419,7 @@ public class WAperturasCierresCajas extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				AperturasCierresCajas item = (AperturasCierresCajas) itemsGRD
-						.getSelectedRow();
+				SucursalesOld item = (SucursalesOld) itemsGRD.getSelectedRow();
 				item.getNumero();
 
 				Window window = new Window("Modificar ítem " + item);
@@ -461,82 +435,6 @@ public class WAperturasCierresCajas extends Window {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void selectCajaTXTShortcutEnter() {
-		try {
-
-			if (this.filterBI.getBean().getNumeroCaja() != null) {
-
-				WCajas window = new WCajas();
-
-//				WCajas window = new WCajas(this.filterBI.getBean()
-//						.getNumeroCaja());
-				window.setModal(true);
-				window.center();
-
-				window.addCloseListener(new CloseListener() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void windowClose(CloseEvent event) {
-						setNumeroCajaOnFilter(window);
-					}
-				});
-
-				// -------------------------------------------------------
-				// BOTONERA SELECCION
-
-				HorizontalLayout filaBotoneraHL = new HorizontalLayout();
-				filaBotoneraHL.setSpacing(true);
-
-				Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
-				seleccionarBTN.addClickListener(e -> {
-					setNumeroCajaOnFilter(window);
-				});
-
-				filaBotoneraHL.addComponents(seleccionarBTN);
-
-				((VerticalLayout) window.getContent())
-						.addComponent(filaBotoneraHL);
-
-				((VerticalLayout) window.getContent()).setComponentAlignment(
-						filaBotoneraHL, Alignment.MIDDLE_CENTER);
-
-				getUI().addWindow(window);
-
-			} else {
-				this.filterBI.getItemProperty("nombreCaja").setValue(null);
-			}
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void setNumeroCajaOnFilter(WCajas window) {
-		try {
-			if (window.itemsGRD.getSelectedRow() != null) {
-
-				Caja item = (Caja) window.itemsGRD.getSelectedRow();
-
-				this.filterBI.getItemProperty("numeroCaja").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreCaja").setValue(
-						item.getNombre());
-
-				window.close();
-
-				loadDataResetPaged();
-			} else {
-				this.filterBI.getItemProperty("numeroCaja").setValue(null);
-				this.filterBI.getItemProperty("nombreCaja").setValue(null);
-			}
-		} catch (Exception ex) {
-			LogAndNotification.print(ex);
-		}
-	}
-
 	// =================================================================================
 
 	private void loadDataResetPaged() {
@@ -547,14 +445,14 @@ public class WAperturasCierresCajas extends Window {
 	private void loadData() {
 		try {
 
-			((Validatable) usuarioCBXHL.getComponent(0)).validate();
-			((Validatable) numeroCajaCBXHL.getComponent(0)).validate();
+			((Validatable) numeroTXTHL.getComponent(0)).validate();
+			((Validatable) nombreTXTHL.getComponent(0)).validate();
 
-			List<AperturasCierresCajas> items = queryData();
+			List<SucursalesOld> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (AperturasCierresCajas item : items) {
+			for (SucursalesOld item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -564,8 +462,8 @@ public class WAperturasCierresCajas extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 
-			nextPageBTN.setEnabled(itemsBIC.size() > 0
-					&& itemsBIC.size() >= limit);
+			nextPageBTN
+					.setEnabled(itemsBIC.size() > 0 && itemsBIC.size() >= limit);
 
 			prevPageBTN.setEnabled(offset >= limit);
 
@@ -579,20 +477,8 @@ public class WAperturasCierresCajas extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	private List<Usuarios> queryDataUsuarios() {
-		try {
-
-			return mockDataUsuarios();
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new ArrayList<Usuarios>();
-	}
-
 	// metodo que realiza la consulta a la base de datos
-	private List<AperturasCierresCajas> queryData() {
+	private List<SucursalesOld> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -610,7 +496,7 @@ public class WAperturasCierresCajas extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<AperturasCierresCajas> items = mockData(limit, offset,
+			List<SucursalesOld> items = mockData(limit, offset,
 					this.filterBI.getBean());
 
 			return items;
@@ -619,11 +505,11 @@ public class WAperturasCierresCajas extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<AperturasCierresCajas>();
+		return new ArrayList<SucursalesOld>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(AperturasCierresCajas item) {
+	private void deleteItem(SucursalesOld item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
@@ -641,40 +527,36 @@ public class WAperturasCierresCajas extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<AperturasCierresCajas> itemsMock = new ArrayList<AperturasCierresCajas>();
+	List<SucursalesOld> itemsMock = new ArrayList<SucursalesOld>();
 
-	private List<AperturasCierresCajas> mockData(int limit, int offset,
-			AperturasCierresCajasFiltro filtro) {
+	private List<SucursalesOld> mockData(int limit, int offset, SucursalesFiltroOld filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				AperturasCierresCajas item = new AperturasCierresCajas();
+				SucursalesOld item = new SucursalesOld();
 
 				item.setNumero(i);
-				item.setNumeroCaja(i);
-				item.setNombreCaja("Caja " + i);
-				item.setNumeroUsuario(i);
-				item.setNombreUsuario("Usuario " + 1);
-				item.setApertura(new Timestamp(System.currentTimeMillis()));
-				item.setCierre(new Timestamp(System.currentTimeMillis()));
+				item.setNombre("Nombre " + i);
+				item.setTipoSucursal("Tipo sucursal " + i);
 
 				itemsMock.add(item);
 			}
 		}
 
-		ArrayList<AperturasCierresCajas> arrayList = new ArrayList<AperturasCierresCajas>();
+		ArrayList<SucursalesOld> arrayList = new ArrayList<SucursalesOld>();
 
-		for (AperturasCierresCajas item : itemsMock) {
+		for (SucursalesOld item : itemsMock) {
 
-			boolean passesFilterNumeroUsuario = (filtro.getUsuario() == null || item
-					.getNumeroUsuario().equals(filtro.getUsuario().getNumero()));
+			boolean passesFilterNumero = (filtro.getNumero() == null || item
+					.getNumero().equals(filtro.getNumero()));
 
-			boolean passesFilterNumeroCaja = (filtro.getNumeroCaja() == null || item
-					.getNumeroCaja().equals(filtro.getNumeroCaja()));
+			boolean passesFilterNombre = (filtro.getNombre() == null || item
+					.getNombre().toLowerCase()
+					.contains(filtro.getNombre().toLowerCase()));
 
-			if (passesFilterNumeroCaja && passesFilterNumeroUsuario) {
+			if (passesFilterNumero && passesFilterNombre) {
 				arrayList.add(item);
 			}
 		}
@@ -685,26 +567,6 @@ public class WAperturasCierresCajas extends Window {
 		}
 
 		return arrayList.subList(offset, end);
-	}
-
-	private List<Usuarios> mockDataUsuarios() {
-
-		List<Usuarios> itemsMock = new ArrayList<Usuarios>();
-
-		if (itemsMock.size() == 0) {
-
-			for (int i = 0; i < 500; i++) {
-
-				Usuarios item = new Usuarios();
-
-				item.setNumero(i);
-				item.setNombre("Nombre " + i);
-
-				itemsMock.add(item);
-			}
-		}
-
-		return itemsMock;
 	}
 
 	// =================================================================================

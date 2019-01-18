@@ -8,6 +8,7 @@ import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
+import com.massoftware.model.Sucursal;
 
 public class MigradorMSToPG {
 
@@ -39,6 +40,8 @@ public class MigradorMSToPG {
 		grupo();
 
 		cuentaFondo();
+
+		sucursal();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -280,13 +283,79 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Caja item = new Caja();
-			item.setter(table[i], 0);						
+			item.setter(table[i], 0);
 			try {
 				item.insert();
 			} catch (Exception e) {
 				System.err.println(e);
 				// throw e;
-			}			
+			}
+
+		}
+
+	}
+
+	public static void sucursal() throws Exception {
+
+		// 'SELECT A.SUCURSAL, A.NOMBRE, A.TIPOSUCURSAL FROM Sucursales A ORDER BY
+		// A.NOMBRE'
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(A.SUCURSAL AS VARCHAR)";
+		String attTipo = "A.TIPOSUCURSAL";
+		String attNumero = "CAST(A.SUCURSAL AS INTEGER)";
+		String attNombre = "A.NOMBRE";
+
+		String attAbreviatura = "A.ABREVIATURA";
+
+		String cuentaClienteDesde = "A.CUENTASCLIENTESDESDE";
+		String cuentaClienteHasa = "A.CUENTASCLIENTESHASTA";
+		String cantidadCaracteresCliente = "CAST(A.CANTIDADCARACTERESCLIENTES AS INTEGER)";
+		String identificacionNumericaCliente = "CAST(A.NUMERICOCLIENTES AS BIT)";
+		String permiteCambiarCliente = "CAST(A.PERMITECAMBIARCLIENTES AS BIT)";
+		// -- --------------------------------------------------------
+		String clientesOcacionalesDesde = "CASE WHEN A.CUENTASCLIENTESOCASIONALESDESDE = 0 THEN null ELSE CAST(A.CUENTASCLIENTESOCASIONALESDESDE AS INTEGER) END";
+		String clientesOcacionalesHasa = "CASE WHEN A.CUENTASCLIENTESOCASIONALESHASTA = 0 THEN null ELSE CAST(A.CUENTASCLIENTESOCASIONALESHASTA AS INTEGER) END";
+		// -- --------------------------------------------------------
+		String nroCobranzaDesde = "CASE WHEN A.NROCOBRANZADESDE = 0 THEN null ELSE CAST(A.NROCOBRANZADESDE AS INTEGER) END"; 
+		String nroCobranzaHasa = "CASE WHEN A.NROCOBRANZAHASTA = 0 THEN null ELSE CAST(A.NROCOBRANZAHASTA AS INTEGER) END";
+		// -- --------------------------------------------------------
+		String proveedoresDesde = "A.CUENTASPROVEEDORESDESDE";
+		String proveedoresHasa = "A.CUENTASPROVEEDORESHASTA";
+		String cantidadCaracteresProveedor = "CAST(A.CANTIDADCARACTERESPROVEEDOR AS INTEGER)";
+		String identificacionNumericaProveedor = "CAST(A.NUMERICOPROVEEDOR AS BIT)";
+		String permiteCambiarProveedor = "CAST(A.PERMITECAMBIARPROVEEDOR AS BIT)";
+
+		String tableSQL = "Sucursales A";
+
+		String attsSQL = attId + ", " + attTipo + ", " + attNumero + ", " + attNombre + ", " + attAbreviatura + ", "
+				+ cuentaClienteDesde + ", " + cuentaClienteHasa + ", " + cantidadCaracteresCliente + ", "
+				+ identificacionNumericaCliente + ", " + permiteCambiarCliente + ", " + clientesOcacionalesDesde + ", "
+				+ clientesOcacionalesHasa + ", " + nroCobranzaDesde + ", " + nroCobranzaHasa + ", " + proveedoresDesde
+				+ ", " + proveedoresHasa + ", " + cantidadCaracteresProveedor + ", " + identificacionNumericaProveedor
+				+ ", " + permiteCambiarProveedor;
+
+		String orderBySQL = attNumero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Sucursal item = new Sucursal();
+			item.setter(table[i], 0);
+			try {
+				item.insert();
+			} catch (Exception e) {
+				System.err.println(e);
+				// throw e;
+			}
 
 		}
 

@@ -28,6 +28,10 @@ public class TextFieldEntity extends TextField {
 	private void init(BeanItem dtoBI, String attName, String mode) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
+		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
+		if(labelError == null || labelError.trim().length() == 0) {
+			labelError  = label;
+		}
 		boolean required = ((Entity) dtoBI.getBean()).required(attName);
 		boolean readOnly = ((Entity) dtoBI.getBean()).readOnly(attName);
 		boolean unique = ((Entity) dtoBI.getBean()).unique(attName);
@@ -42,8 +46,7 @@ public class TextFieldEntity extends TextField {
 		// txt.setHeight("-1px");
 		setWidthUndefined();
 		setHeightUndefined();
-		setValidationVisible(true);
-		setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		setValidationVisible(true);		
 		setNullRepresentation("");
 		setVisible(true);
 		setEnabled(true);
@@ -51,7 +54,7 @@ public class TextFieldEntity extends TextField {
 		setImmediate(true);
 
 		setCaption(label);
-		setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
+		setRequiredError("El campo '" + labelError + "' es requerido. Es decir no debe estar vacio.");
 		setRequired(required);
 		setColumns(columns);
 		if (maxLength != null) {
@@ -107,7 +110,7 @@ public class TextFieldEntity extends TextField {
 
 			setConverter(new StringToIntegerConverterUnspecifiedLocale());
 
-			String msg = "El campo " + label + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
+			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
 					+ minValue + " hasta " + maxValue + ".";
 
 			addValidator(new IntegerRangeValidator(msg, minValue, maxValue));
@@ -146,7 +149,7 @@ public class TextFieldEntity extends TextField {
 
 			setConverter(new StringToIntegerConverterUnspecifiedLocale());
 
-			String msg = "El campo " + label + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
+			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
 					+ minValue + " hasta " + maxValue + ".";
 
 			addValidator(new LongRangeValidator(msg, minValue, maxValue));
@@ -185,7 +188,7 @@ public class TextFieldEntity extends TextField {
 
 			setConverter(new StringToBigDecimalConverterUnspecifiedLocale());
 
-			String msg = "El campo " + label + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
+			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
 					+ minValue + " hasta " + maxValue + ".";
 
 			addValidator(new BigDecimalRangeValidator(msg, minValue, maxValue));

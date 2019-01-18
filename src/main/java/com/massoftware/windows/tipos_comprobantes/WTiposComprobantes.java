@@ -8,7 +8,7 @@ import java.util.Map;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.sucursales.Sucursales;
+import com.massoftware.windows.sucursales.SucursalesOld;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;
@@ -99,7 +99,7 @@ public class WTiposComprobantes extends Window {
 			// -----------
 
 			HorizontalLayout paisesCBXHL = UtilUI.buildCBHL(filterBI,
-					"sucursal", "Sucursal", false, true, Sucursales.class,
+					"sucursal", "Sucursal", false, true, SucursalesOld.class,
 					queryDataSucursales());
 
 			ComboBox paisesCBX = (ComboBox) paisesCBXHL.getComponent(0);
@@ -547,7 +547,7 @@ public class WTiposComprobantes extends Window {
 	// =================================================================================
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
-	private List<Sucursales> queryDataSucursales() {
+	private List<SucursalesOld> queryDataSucursales() {
 		try {
 
 			return mockDataSucursales();
@@ -556,7 +556,7 @@ public class WTiposComprobantes extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<Sucursales>();
+		return new ArrayList<SucursalesOld>();
 	}
 
 	// metodo que realiza la consulta a la base de datos
@@ -665,15 +665,15 @@ public class WTiposComprobantes extends Window {
 		return arrayList.subList(offset, end);
 	}
 
-	private List<Sucursales> mockDataSucursales() {
+	private List<SucursalesOld> mockDataSucursales() {
 
-		List<Sucursales> itemsMock = new ArrayList<Sucursales>();
+		List<SucursalesOld> itemsMock = new ArrayList<SucursalesOld>();
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				Sucursales item = new Sucursales();
+				SucursalesOld item = new SucursalesOld();
 
 				item.setNumero(i);
 				item.setNombre("Nombre " + i);

@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
 public @interface FieldConfAnont {
 
 	String label() default "";
+	String labelError() default "";
 	boolean unique() default false;
 	boolean readOnly() default false;
 	boolean required() default false;

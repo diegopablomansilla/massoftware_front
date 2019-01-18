@@ -2,7 +2,7 @@ package com.massoftware.windows.sucursales;
 
 import com.massoftware.windows.UtilModel;
 
-public class Sucursales {
+public class SucursalesOld {
 
 	private Integer numero;
 	private String nombre;

@@ -294,6 +294,10 @@ public class Entity implements Cloneable {
 	public String label(String attNamne) throws Exception {
 		return label(field(attNamne));
 	}
+	
+	public String labelError(String attNamne) throws Exception {
+		return labelError(field(attNamne));
+	}
 
 	public boolean unique(String attNamne) throws Exception {
 		return unique(field(attNamne));
@@ -338,6 +342,21 @@ public class Entity implements Cloneable {
 		if (a != null && a.length > 0) {
 
 			String label = a[0].label();
+
+			if (label != null && label.trim().length() > 0) {
+				return label.trim();
+			}
+
+		}
+
+		return null;
+	}
+	
+	private String labelError(Field field) {
+		FieldConfAnont[] a = field.getAnnotationsByType(FieldConfAnont.class);
+		if (a != null && a.length > 0) {
+
+			String label = a[0].labelError();
 
 			if (label != null && label.trim().length() > 0) {
 				return label.trim();

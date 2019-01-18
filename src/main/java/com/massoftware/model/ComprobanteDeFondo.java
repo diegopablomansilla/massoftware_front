@@ -1,13 +1,22 @@
-package com.massoftware.windows.comprobante_de_fondo;
+package com.massoftware.model;
 
 import java.security.Timestamp;
 import java.util.Date;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.windows.comprobante_de_fondo.Comprobantes;
 
 public class ComprobanteDeFondo {
 
-	private Cajas caja;
+	// ALTER TABLE Fondos ADD CONSTRAINT fk_ TablaDeComprobantes FOREIGN KEY
+	// (TipoID) REFERENCES TablaDeComprobantes(Tipo)
+	// ALTER TABLE Fondos ADD CONSTRAINT fk_ TablaDeMultiproposito FOREIGN KEY
+	// (Multiproposito) REFERENCES TablaDeMultiproposito(Multiproposito)
+	// ALTER TABLE Fondos ADD CONSTRAINT fk_ CajasApertura FOREIGN KEY (Caja,
+	// NroCaja) REFERENCES CajasApertura(Caja, NroCaja)
+	// ALTER TABLE Fondos ADD CONSTRAINT fk_ Usuarios FOREIGN KEY (Usuario)
+	// REFERENCES SSECUR_User(No)
+
+	private Caja caja;
 	private Timestamp apertura;
 	private Comprobantes comprobante;
 	private Integer codigo;
@@ -15,11 +24,11 @@ public class ComprobanteDeFondo {
 	private String detalle;
 	private Boolean conciliacionAutomatica;
 
-	public Cajas getCaja() {
+	public Caja getCaja() {
 		return caja;
 	}
 
-	public void setCaja(Cajas caja) {
+	public void setCaja(Caja caja) {
 		this.caja = caja;
 	}
 
@@ -55,12 +64,12 @@ public class ComprobanteDeFondo {
 		this.fecha = fecha;
 	}
 
-	public String getDetalle() {		
+	public String getDetalle() {
 		return detalle;
 	}
 
 	public void setDetalle(String detalle) {
-		this.detalle = UtilModel.format(detalle);
+		this.detalle = detalle;
 	}
 
 	public Boolean getConciliacionAutomatica() {
@@ -68,17 +77,7 @@ public class ComprobanteDeFondo {
 	}
 
 	public void setConciliacionAutomatica(Boolean conciliacionAutomatica) {
-		this.conciliacionAutomatica = UtilModel.format(conciliacionAutomatica);
+		this.conciliacionAutomatica = conciliacionAutomatica;
 	}
-
-	@Override
-	public String toString() {
-		return "ComprobanteDeFondo [caja=" + caja + ", apertura=" + apertura
-				+ ", comprobante=" + comprobante + ", codigo=" + codigo
-				+ ", fecha=" + fecha + ", detalle=" + detalle
-				+ ", conciliacionAutomatica=" + conciliacionAutomatica + "]";
-	}
-	
-	
 
 }
