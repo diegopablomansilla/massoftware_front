@@ -36,6 +36,14 @@
 
   // Insert your own theme rules here
   
+  	.v-radiobutton label {		
+		font-size: 11px;
+	}
+	
+	.v-checkbox label {
+		font-size: 11px;
+	}
+  
   	.v-grid-row.red-row {
     	color: red;
 	}

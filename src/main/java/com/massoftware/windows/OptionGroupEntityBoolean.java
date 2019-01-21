@@ -1,13 +1,11 @@
 package com.massoftware.windows;
 
-import java.util.List;
-
 import com.massoftware.model.Entity;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class OptionGroupEntity extends OptionGroup {
+public class OptionGroupEntityBoolean extends OptionGroup {
 
 	/**
 	 * 
@@ -15,14 +13,10 @@ public class OptionGroupEntity extends OptionGroup {
 	private static final long serialVersionUID = 7741977244792585335L;
 
 	@SuppressWarnings("rawtypes")
-	public OptionGroupEntity(WindowForm window, BeanItem dtoBI, String attName, List options, boolean horizontal,
-			Object selectItem) throws Exception {
+	public OptionGroupEntityBoolean(WindowListado window, BeanItem dtoBI, String attName, String labelAll, String labelTrue, String labelFalse,
+			boolean horizontal, int value) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
-		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
-		if (labelError == null || labelError.trim().length() == 0) {
-			labelError = label;
-		}
 		boolean required = ((Entity) dtoBI.getBean()).required(attName);
 		boolean readOnly = ((Entity) dtoBI.getBean()).readOnly(attName);
 
@@ -34,15 +28,18 @@ public class OptionGroupEntity extends OptionGroup {
 
 		setCaption(label);
 
-		setRequiredError("El campo '" + labelError + "' es requerido. Es decir no debe estar vacio.");
+		setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		setRequired(required);
 
 		// ----------------------------------------------
 
-		for (Object option : options) {
-			addItem(option);
-		}
-		// setItemCaption(0, labelAll);
+		addItem(0);
+		addItem(1);
+		addItem(2);
+
+		setItemCaption(0, labelAll);
+		setItemCaption(1, labelTrue);
+		setItemCaption(2, labelFalse);
 
 		// ----------------------------------------------
 
@@ -56,14 +53,22 @@ public class OptionGroupEntity extends OptionGroup {
 
 		// ----------------------------------------------
 
-		if (selectItem != null) {
-			setValue(selectItem);
-		}
+		setValue(value);
 
 		// ----------------------------------------------
 
 		setReadOnly(readOnly);
 
+		// ----------------------------------------------
+		
+		addValueChangeListener(e -> {
+			try {
+				window.loadDataResetPaged();
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+		
 		// ----------------------------------------------
 
 	}

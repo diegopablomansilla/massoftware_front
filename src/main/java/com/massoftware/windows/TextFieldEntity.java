@@ -147,7 +147,7 @@ public class TextFieldEntity extends TextField {
 
 			setMaxLength(maxLengthMin);
 
-			setConverter(new StringToIntegerConverterUnspecifiedLocale());
+			setConverter(new StringToLongConverterUnspecifiedLocale());
 
 			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
 					+ minValue + " hasta " + maxValue + ".";

@@ -169,12 +169,12 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);
-    NEW.cuit := massoftware.zero_is_null(NEW.cuit);
-    NEW.hoja := massoftware.zero_is_null(NEW.hoja);
-    NEW.primeraFila := massoftware.zero_is_null(NEW.primeraFila);
-    NEW.ultimaFila := massoftware.zero_is_null(NEW.ultimaFila);
+    -- NEW.cuit := massoftware.zero_is_null(NEW.cuit);
+    -- NEW.hoja := massoftware.zero_is_null(NEW.hoja);
+    -- NEW.primeraFila := massoftware.zero_is_null(NEW.primeraFila);
+    -- -- NEW.ultimaFila := massoftware.zero_is_null(NEW.ultimaFila);
     NEW.fecha := massoftware.white_is_null(NEW.fecha);
     NEW.descripcion := massoftware.white_is_null(NEW.descripcion);
     NEW.referencia1 := massoftware.white_is_null(NEW.referencia1);
@@ -289,7 +289,7 @@ BEGIN
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
     NEW.cuentaFondoRubro := massoftware.white_is_null(NEW.cuentaFondoRubro);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
 	RETURN NEW;
@@ -343,7 +343,7 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
 	RETURN NEW;
@@ -409,7 +409,7 @@ BEGIN
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
     NEW.cuentaFondoGrupo := massoftware.white_is_null(NEW.cuentaFondoGrupo);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);
     NEW.cuentaFondoTipo := massoftware.white_is_null(NEW.cuentaFondoTipo);
     NEW.banco := massoftware.white_is_null(NEW.banco);
@@ -462,7 +462,7 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
 
 	RETURN NEW;
@@ -522,7 +522,7 @@ BEGIN
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
     NEW.seguridadModulo := massoftware.white_is_null(NEW.seguridadModulo);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     NEW.equate := massoftware.white_is_null(NEW.equate);    
 
@@ -576,7 +576,7 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     NEW.seguridadPuerta := massoftware.white_is_null(NEW.seguridadPuerta);    
     
@@ -630,7 +630,7 @@ BEGIN
    
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre);    
     
 	RETURN NEW;
@@ -712,7 +712,7 @@ BEGIN
 	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
     NEW.id := massoftware.white_is_null(NEW.id);
     NEW.sucursalTipo := massoftware.white_is_null(NEW.sucursalTipo);
-    NEW.numero := massoftware.zero_is_null(NEW.numero);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
     NEW.nombre := massoftware.white_is_null(NEW.nombre); 
     NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura); 
     NEW.cuentaClienteDesde := massoftware.white_is_null(NEW.cuentaClienteDesde); 
@@ -731,6 +731,198 @@ DROP TRIGGER IF EXISTS tgFormatSucursal ON massoftware.Sucursal CASCADE;
 CREATE TRIGGER tgFormatSucursal BEFORE INSERT OR UPDATE 
     ON massoftware.Sucursal FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatSucursal();
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: TalonarioLetra													 	 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.TalonarioLetra
+
+DROP TABLE IF EXISTS massoftware.TalonarioLetra CASCADE;
+
+CREATE TABLE massoftware.TalonarioLetra
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),      
+    nombre VARCHAR  NOT NULL    
+);
+
+CREATE UNIQUE INDEX u_TalonarioLetra_nombre ON massoftware.TalonarioLetra (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.TalonarioLetra;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonarioLetra() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonarioLetra() RETURNS TRIGGER AS $formatTalonarioLetra$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatTalonarioLetra$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonarioLetra ON massoftware.TalonarioLetra CASCADE;
+
+CREATE TRIGGER tgFormatTalonarioLetra BEFORE INSERT OR UPDATE 
+    ON massoftware.TalonarioLetra FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatTalonarioLetra();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('A', 'A');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('B', 'B');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('C', 'C');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('E', 'E');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('M', 'M');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('R', 'R');
+INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('X', 'X');
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: TalonarioControladorFizcal													 	 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+DROP TABLE IF EXISTS massoftware.TalonarioControladorFizcal CASCADE;
+
+CREATE TABLE massoftware.TalonarioControladorFizcal
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    codigo VARCHAR  NOT NULL,    
+    nombre VARCHAR  NOT NULL
+);
+
+
+CREATE UNIQUE INDEX u_TalonarioControladorFizcal_codigo ON massoftware.TalonarioControladorFizcal (TRANSLATE(LOWER(TRIM(codigo))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_TalonarioControladorFizcal_nombre ON massoftware.TalonarioControladorFizcal (LOWER(TRIM(nombre)));
+
+
+-- SELECT * FROM massoftware.TalonarioControladorFizcal;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonarioControladorFizcal() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonarioControladorFizcal() RETURNS TRIGGER AS $formatTalonarioControladorFizcal$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.codigo := massoftware.white_is_null(NEW.codigo);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatTalonarioControladorFizcal$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonarioControladorFizcal ON massoftware.TalonarioControladorFizcal CASCADE;
+
+CREATE TRIGGER tgFormatTalonarioControladorFizcal BEFORE INSERT OR UPDATE 
+    ON massoftware.TalonarioControladorFizcal FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatTalonarioControladorFizcal();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('S', 'S', 'Sin controlador');
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('H', 'H', 'Hasar SMH/P-614F');
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('E', 'E', 'Epson TM-300A/F');
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('W', 'W', 'WSFE');
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('M', 'M', 'WSMTXCA');
+INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('X', 'X', 'WSFEX');
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Talonario													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.Talonario
+
+DROP TABLE IF EXISTS massoftware.Talonario CASCADE;
+
+CREATE TABLE massoftware.Talonario
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),    
+    numero INTEGER  NOT NULL CONSTRAINT Talonario_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT Talonario_nombre_chk CHECK (char_length(nombre) >= 2),    
+    talonarioLetra VARCHAR NOT NULL REFERENCES massoftware.TalonarioLetra (id),	        
+	puntoVenta INTEGER  NOT NULL CONSTRAINT Talonario_puntoVenta_chk CHECK (numero > 0),
+	autonumeracion BOOLEAN,
+	numeracionPreImpresa BOOLEAN,
+	asociadoRG10098 BOOLEAN,
+    talonarioControladorFizcal VARCHAR NOT NULL REFERENCES massoftware.TalonarioControladorFizcal (id),		
+	primerNumero INTEGER  CONSTRAINT Talonario_primerNumero_chk CHECK (numero > 0),
+	proximoNumero INTEGER  CONSTRAINT Talonario_proximoNumero_chk CHECK (numero > 0),
+	ultimoNumero INTEGER  CONSTRAINT Talonario_ultimoNumero_chk CHECK (numero > 0),
+	cantidadMinimaComprobantes INTEGER  CONSTRAINT Talonario_cantidadMinimaComprobantes_chk CHECK (numero > 0),
+	fecha DATE,	
+	numeroCAI NUMERIC,
+	vencimiento DATE,	
+    diasAvisoVencimiento INTEGER
+);
+
+CREATE UNIQUE INDEX u_Talonario_nombre ON massoftware.Talonario (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.Talonario;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonario() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonario() RETURNS TRIGGER AS $formatTalonario$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);        
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);     
+    NEW.talonarioLetra := massoftware.white_is_null(NEW.talonarioLetra);     
+    NEW.talonarioControladorFizcal := massoftware.white_is_null(NEW.talonarioControladorFizcal);     
+    
+	RETURN NEW;
+END;
+$formatTalonario$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonario ON massoftware.Talonario CASCADE;
+
+CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE 
+    ON massoftware.Talonario FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatTalonario();
 
 
 

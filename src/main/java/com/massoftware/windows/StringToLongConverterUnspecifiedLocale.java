@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 
-public class StringToIntegerConverterUnspecifiedLocale extends
+public class StringToLongConverterUnspecifiedLocale extends
 		StringToIntegerConverter {
 
 	/**
@@ -12,7 +12,7 @@ public class StringToIntegerConverterUnspecifiedLocale extends
 	 */
 	private static final long serialVersionUID = 5943612309620235994L;
 
-	public String convertToPresentation(Integer value,
+	public String convertToPresentation(Long value,
 			Class<? extends String> targetType, Locale locale)
 			throws ConversionException {
 		

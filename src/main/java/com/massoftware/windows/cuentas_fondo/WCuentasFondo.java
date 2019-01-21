@@ -12,7 +12,7 @@ import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.model.EntityId;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.OptionGroupEntity;
+import com.massoftware.windows.OptionGroupEntityBoolean;
 import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
@@ -52,7 +52,7 @@ public class WCuentasFondo extends WindowListado {
 	// protected Button copiarTreeBTN;
 	protected Button eliminarTreeBTN;
 
-	private OptionGroupEntity activoOG;
+	private OptionGroupEntityBoolean activoOG;
 	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
 	private SelectorBox bancoSB;
@@ -133,7 +133,7 @@ public class WCuentasFondo extends WindowListado {
 
 		nombreTB = new TextFieldBox(this, filterBI, "nombre");
 
-		activoOG = new OptionGroupEntity(this, filterBI, "bloqueado", "Todas", "Obsoletas", "Activas", true, 2);
+		activoOG = new OptionGroupEntityBoolean(this, filterBI, "bloqueado", "Todas", "Obsoletas", "Activas", true, 2);
 
 		Button buscarBTN = buildButtonBuscar();
 

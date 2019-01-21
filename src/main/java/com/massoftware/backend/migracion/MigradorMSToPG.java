@@ -9,6 +9,7 @@ import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
+import com.massoftware.model.Talonario;
 
 public class MigradorMSToPG {
 
@@ -42,6 +43,8 @@ public class MigradorMSToPG {
 		cuentaFondo();
 
 		sucursal();
+		
+		talonario();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -55,7 +58,7 @@ public class MigradorMSToPG {
 		String attId = "CAST(A.BANCO AS VARCHAR)";
 		String attNumero = "CAST(A.BANCO AS INTEGER)";
 		String attNombre = "A.NOMBRE";
-		String attCuit = "CAST(A.CUIT AS BIGINT)";
+		String attCuit = "CASE WHEN A.CUIT = 0 THEN null ELSE CAST(A.CUIT AS BIGINT) END";
 		String attBloqueado = "CAST(A.BLOQUEADO AS BIT)";
 		String attHoja = "CAST(A.HOJA AS INTEGER)";
 		String attPrimeraFila = "A.PRIMERAFILA";
@@ -180,12 +183,7 @@ public class MigradorMSToPG {
 
 			CuentaFondo item = new CuentaFondo();
 			item.setter(table[i], 0);
-			try {
-				item.insert();
-			} catch (Exception e) {
-				System.err.println(e);
-				// throw e;
-			}
+			item.insert();
 
 		}
 
@@ -284,12 +282,7 @@ public class MigradorMSToPG {
 
 			Caja item = new Caja();
 			item.setter(table[i], 0);
-			try {
-				item.insert();
-			} catch (Exception e) {
-				System.err.println(e);
-				// throw e;
-			}
+			item.insert();
 
 		}
 
@@ -319,7 +312,7 @@ public class MigradorMSToPG {
 		String clientesOcacionalesDesde = "CASE WHEN A.CUENTASCLIENTESOCASIONALESDESDE = 0 THEN null ELSE CAST(A.CUENTASCLIENTESOCASIONALESDESDE AS INTEGER) END";
 		String clientesOcacionalesHasa = "CASE WHEN A.CUENTASCLIENTESOCASIONALESHASTA = 0 THEN null ELSE CAST(A.CUENTASCLIENTESOCASIONALESHASTA AS INTEGER) END";
 		// -- --------------------------------------------------------
-		String nroCobranzaDesde = "CASE WHEN A.NROCOBRANZADESDE = 0 THEN null ELSE CAST(A.NROCOBRANZADESDE AS INTEGER) END"; 
+		String nroCobranzaDesde = "CASE WHEN A.NROCOBRANZADESDE = 0 THEN null ELSE CAST(A.NROCOBRANZADESDE AS INTEGER) END";
 		String nroCobranzaHasa = "CASE WHEN A.NROCOBRANZAHASTA = 0 THEN null ELSE CAST(A.NROCOBRANZAHASTA AS INTEGER) END";
 		// -- --------------------------------------------------------
 		String proveedoresDesde = "A.CUENTASPROVEEDORESDESDE";
@@ -350,12 +343,60 @@ public class MigradorMSToPG {
 
 			Sucursal item = new Sucursal();
 			item.setter(table[i], 0);
-			try {
-				item.insert();
-			} catch (Exception e) {
-				System.err.println(e);
-				// throw e;
-			}
+			item.insert();
+
+		}
+
+	}
+
+	public static void talonario() throws Exception {
+
+		// SELECT A.MULTIPROPOSITO, A.NOMBRE, A.LETRA, A.SUCURSAL, A.PROXIMONUMERO FROM
+		// TablaDeMultiproposito A ORDER BY A.MULTIPROPOSITO
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String id = "CAST(A.MULTIPROPOSITO AS VARCHAR)";
+		String numero = "CAST(A.MULTIPROPOSITO AS INTEGER)";
+		String nombre = "A.NOMBRE";
+		String talonarioLetra = "A.LETRA";
+		String puntoVenta = "CAST(A.SUCURSAL AS INTEGER)";
+		String autonumeracion = "CAST(A.AUTONUMERACION AS BIT)";
+		String numeracionPreImpresa = "CAST(A.NUMERACIONPREIMPRESA AS BIT)";
+		String asociadoRG10098 = "CAST(A.RG10098 AS BIT)";
+		String talonarioControladorFizcal = "A.CONTROLFISCAL";
+		String primerNumero = "CASE WHEN A.PRIMERNUMERO = 0 THEN null ELSE CAST(A.PRIMERNUMERO AS INTEGER) END";
+		String proximoNumero = "CASE WHEN A.PROXIMONUMERO = 0 THEN null ELSE CAST(A.PROXIMONUMERO AS INTEGER) END";
+		String ultimoNumero = "CASE WHEN A.ULTIMONUMERO = 0 THEN null ELSE CAST(A.ULTIMONUMERO AS INTEGER) END";
+		String cantidadMinimaComprobantes = "CASE WHEN A.ALERTACANTIDADMINIMADECBTES = 0 THEN null ELSE CAST(A.ALERTACANTIDADMINIMADECBTES AS INTEGER) END";
+		String fecha = "A.ULTIMAFECHASQL";
+		String numeroCAI = "CASE WHEN A.CAI = 0 THEN null ELSE A.CAI END";
+		String vencimiento = "A.VENCIMIENTOCAISQL";
+		String diasAvisoVencimiento = "CASE WHEN A.DIASAVISOVENCIMIENTO = 0 THEN null ELSE CAST(A.DIASAVISOVENCIMIENTO AS INTEGER) END";
+
+		String tableSQL = "TablaDeMultiproposito A";
+
+		String attsSQL = id + ", " + numero + ", " + nombre + ", " + talonarioLetra + ", " + puntoVenta + ", "
+				+ autonumeracion + ", " + numeracionPreImpresa + ", " + asociadoRG10098 + ", "
+				+ talonarioControladorFizcal + ", " + primerNumero + ", " + proximoNumero + ", " + ultimoNumero + ", "
+				+ cantidadMinimaComprobantes + ", " + fecha + ", " + numeroCAI + ", " + vencimiento + ", "
+				+ diasAvisoVencimiento;
+
+		String orderBySQL = numero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Talonario item = new Talonario();
+			item.setter(table[i], 0);
+			item.insert();
 
 		}
 

@@ -13237,6 +13237,14 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
+.mytheme .v-radiobutton label {
+	font-size: 11px;
+}
+
+.mytheme .v-checkbox label {
+	font-size: 11px;
+}
+
 .mytheme .v-grid-row.red-row {
 	color: red;
 }

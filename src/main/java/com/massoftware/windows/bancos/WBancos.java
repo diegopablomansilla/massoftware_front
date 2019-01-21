@@ -8,7 +8,7 @@ import org.vaadin.patrik.FastNavigation;
 import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.OptionGroupEntity;
+import com.massoftware.windows.OptionGroupEntityBoolean;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -39,7 +39,7 @@ public class WBancos extends WindowListado {
 
 	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
-	private OptionGroupEntity bloqueadoOG;
+	private OptionGroupEntityBoolean bloqueadoOG;
 
 	// -------------------------------------------------------------
 
@@ -121,7 +121,7 @@ public class WBancos extends WindowListado {
 
 		// --------------------------------------------------------
 
-		bloqueadoOG = new OptionGroupEntity(this, filterBI, "bloqueado", "Todos", "Obsoletos", "Activos", true, 2);
+		bloqueadoOG = new OptionGroupEntityBoolean(this, filterBI, "bloqueado", "Todos", "Obsoletos", "Activos", true, 2);
 
 		// --------------------------------------------------------
 

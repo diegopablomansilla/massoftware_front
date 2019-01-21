@@ -113,7 +113,7 @@ public class FondosMenu extends AbstractMenu {
 //		a1.addItem("Ticket's denunciados ...", null).setEnabled(false);
 //		a1.addSeparator();
 //		a1.addItem("Tipos de comprobante", openTiposComprobantesCmd());
-//		a1.addItem("Talonarios ...", openTalonariosCmd());
+		a1.addItem("Talonarios ...", openTalonariosCmd());
 //		a1.addSeparator();
 //		a1.addItem("Parámetros generales", null).setEnabled(false);
 //		a1.addItem("Fechas de cierres por módulos", openFechaCierreXModuloCmd());

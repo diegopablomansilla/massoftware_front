@@ -1,6 +1,6 @@
 package com.massoftware.windows.talonarios;
 
-public class Talonarios {
+public class TalonariosOld {
 
 	private Integer numero;
 	private String nombre;

@@ -2,7 +2,7 @@ package com.massoftware.windows.talonarios;
 
 import com.massoftware.windows.UtilModel;
 
-public class TalonariosFiltro {
+public class TalonariosFiltroOld {
 
 	private Integer numero;
 	private String nombre;

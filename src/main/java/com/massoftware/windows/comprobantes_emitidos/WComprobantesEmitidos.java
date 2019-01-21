@@ -13,8 +13,8 @@ import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.aperturas_cierres_cajas.AperturasCierresCajas;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
-import com.massoftware.windows.talonarios.Talonarios;
-import com.massoftware.windows.talonarios.WTalonarios;
+import com.massoftware.windows.talonarios.TalonariosOld;
+import com.massoftware.windows.talonarios.WTalonariosOld;
 import com.massoftware.windows.tipos_comprobantes.TiposComprobantes;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -720,7 +720,7 @@ public class WComprobantesEmitidos extends Window {
 
 			if (this.filterBI.getBean().getNumeroTalonario() != null) {
 
-				WTalonarios window = new WTalonarios(this.filterBI.getBean()
+				WTalonariosOld window = new WTalonariosOld(this.filterBI.getBean()
 						.getNumeroTalonario());
 				window.setModal(true);
 				window.center();
@@ -765,11 +765,11 @@ public class WComprobantesEmitidos extends Window {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setNumeroTalonarioOnFilter(WTalonarios window) {
+	private void setNumeroTalonarioOnFilter(WTalonariosOld window) {
 		try {
 			if (window.itemsGRD.getSelectedRow() != null) {
 
-				Talonarios item = (Talonarios) window.itemsGRD.getSelectedRow();
+				TalonariosOld item = (TalonariosOld) window.itemsGRD.getSelectedRow();
 
 				this.filterBI.getItemProperty("numeroTalonario").setValue(
 						item.getNumero());
