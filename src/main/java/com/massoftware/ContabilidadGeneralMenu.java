@@ -2,10 +2,14 @@ package com.massoftware;
 
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.ejercicios_contables.WEjerciciosContables;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.Command;
+import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class ContabilidadGeneralMenu extends AbstractMenu {
@@ -63,7 +67,7 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 		final MenuBar.MenuItem a7 = menubar.addItem("Ayuda", null);
 
 		a2.setEnabled(false);
-		// a3.setEnabled(false);
+		a3.setEnabled(false);
 		a4.setEnabled(false);
 		a5.setEnabled(false);
 		a6.setEnabled(false);
@@ -71,13 +75,13 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 
 		// a1.addItem("Plan de cuentas (orden -> cta de jerarquía) ...", null)
 		// .setEnabled(false);
-		a1.addItem("Plan de cuentas ...", null);
-		a1.addItem("Ejercicios contables ...", null);
-		a1.addItem("Modelos de asientos", null);
-		a1.addItem("Centros de costos ...", null);
-		a1.addItem("Puntos de equilibrio ...", null);
+		a1.addItem("Plan de cuentas ...", null).setEnabled(false);
+		a1.addItem("Ejercicios contables ...", openEjerciciosContablesCmd());
+		a1.addItem("Modelos de asientos", null).setEnabled(false);
+		a1.addItem("Centros de costos ...", null).setEnabled(false);
+		a1.addItem("Puntos de equilibrio ...", null).setEnabled(false);
 		a1.addSeparator();
-		a1.addItem("Parámetros generales", null);
+		a1.addItem("Parámetros generales", null).setEnabled(false);
 		a1.addItem("Fecha de cierre por módulos", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Especificar impresora ...", null).setEnabled(false);
@@ -103,10 +107,26 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 		return menubar;
 	}
 
-	@SuppressWarnings("serial")
 	protected HorizontalLayout getControlBar() throws Exception {
 
 		return UtilUI.buildHL();
+	}
+
+	protected Command openEjerciciosContablesCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WEjerciciosContables();
+				getUI().addWindow(window);
+			}
+		};
 	}
 
 }

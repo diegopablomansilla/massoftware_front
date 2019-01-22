@@ -125,6 +125,56 @@ $$  LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
+-- //												TABLA: EjercicioContable															 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.EjercicioContable
+
+DROP TABLE IF EXISTS massoftware.EjercicioContable CASCADE;
+
+CREATE TABLE massoftware.EjercicioContable
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT EjercicioContable_numero_chk CHECK (numero > 0),
+    apertura DATE NOT NULL,    
+    cierre DATE NOT NULL,    
+	cerrado BOOLEAN NOT NULL DEFAULT false,    
+    cerradoModulos BOOLEAN NOT NULL DEFAULT false,        
+    comentario VARCHAR        
+);
+
+-- SELECT * FROM massoftware.EjercicioContable;
+-- SELECT * FROM massoftware.EjercicioContable WHERE  numero = 2030 ORDER BY 1;
+-- SELECT now()::timestamp + '1 years'::interval;
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatEjercicioContable() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatEjercicioContable() RETURNS TRIGGER AS $formatEjercicioContable$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.comentario := massoftware.white_is_null(NEW.comentario);
+    
+	RETURN NEW;
+END;
+$formatEjercicioContable$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatEjercicioContable ON massoftware.EjercicioContable CASCADE;
+
+CREATE TRIGGER tgFormatEjercicioContable BEFORE INSERT OR UPDATE 
+    ON massoftware.EjercicioContable FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatEjercicioContable();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: Banco															 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,7 +16,7 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 	// Es la cantidad de tablas relacionadas que se van a consultar hacia la
 	// izquierda
-	private int _defMaxLevel = 3;
+	protected int _defMaxLevel = 3;
 
 	protected String id;
 

@@ -6,6 +6,7 @@ import com.massoftware.model.Caja;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
+import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
@@ -29,6 +30,8 @@ public class MigradorMSToPG {
 
 		System.out.println("\n\nStart Migrador\n\n");
 
+		ejercicioContable();
+		
 		modulo();
 
 		puerta();
@@ -46,10 +49,48 @@ public class MigradorMSToPG {
 		sucursal();
 
 		talonario();
-		
+
 		firmante();
 
 		System.out.println("\n\nEnd Migrador\n\n");
+
+	}
+
+	public static void ejercicioContable() throws Exception {
+
+		// SELECT A.EJERCICIO, A.FECHAAPERTURASQL, A.FECHACIERRESQL, A.EJERCICIOCERRADO,
+		// A.EJERCICIOCERRADOMODULOS FROM EjerciciosContables A ORDER BY A.EJERCICIO
+		// DESC
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(A.EJERCICIO AS VARCHAR)";
+		String attNumero = "CAST(A.EJERCICIO AS INTEGER)";
+		String apertura = "A.FECHAAPERTURASQL";
+		String cierre = "A.FECHACIERRESQL";
+		String cerrado = "CAST(A.EJERCICIOCERRADO AS BIT)";
+		String cerradoModulos = "CAST(A.EJERCICIOCERRADOMODULOS AS BIT)";
+		String comentario = "A.COMENTARIO";
+
+		String tableSQL = "EjerciciosContables A";
+
+		String attsSQL = attId + ", " + attNumero + ", " + apertura + ", " + cierre + ", " + cerrado + ", "
+				+ cerradoModulos + ", " + comentario;
+		String orderBySQL = attNumero + " DESC";
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			EjercicioContable item = new EjercicioContable();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
 
 	}
 

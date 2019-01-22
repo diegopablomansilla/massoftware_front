@@ -7,7 +7,7 @@ import java.util.Map;
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Banco", plural = "Bancos", singularPre = "el anco", pluralPre = "los bancos")
+@ClassLabelAnont(singular = "Banco", plural = "Bancos", singularPre = "el banco", pluralPre = "los bancos")
 public class Banco extends EntityId {
 
 	@FieldConfAnont(label = "ID")
