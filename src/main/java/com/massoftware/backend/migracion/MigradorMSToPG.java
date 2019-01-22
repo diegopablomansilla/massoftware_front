@@ -6,6 +6,7 @@ import com.massoftware.model.Caja;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
+import com.massoftware.model.Firmante;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
@@ -43,8 +44,10 @@ public class MigradorMSToPG {
 		cuentaFondo();
 
 		sucursal();
-		
+
 		talonario();
+		
+		firmante();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -395,6 +398,40 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Talonario item = new Talonario();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
+
+	}
+
+	public static void firmante() throws Exception {
+
+		// SELECT A.CODIGO, A.NOMBRE, A.CARGO, A.ACTIVO FROM BancosFirmantes A ORDER BY
+		// A.CODIGO
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(A.CODIGO AS VARCHAR)";
+		String attNumero = "CAST(A.CODIGO AS INTEGER)";
+		String attNombre = "A.NOMBRE";
+		String attCargo = "A.CARGO";
+		String attBloqueado = "CASE WHEN A.ACTIVO = 1 THEN CAST(0 AS BIT) ELSE CAST(A.ACTIVO AS BIT) END";
+
+		String tableSQL = "BancosFirmantes A";
+
+		String attsSQL = attId + ", " + attNumero + ", " + attNombre + ", " + attCargo + ", " + attBloqueado;
+		String orderBySQL = attNumero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Firmante item = new Firmante();
 			item.setter(table[i], 0);
 			item.insert();
 

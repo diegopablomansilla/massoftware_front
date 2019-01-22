@@ -2,7 +2,7 @@ package com.massoftware.windows.firmantes;
 
 import com.massoftware.windows.UtilModel;
 
-public class Firmantes {
+public class FirmantesOld {
 
 	private Integer numero;
 	private String nombre;

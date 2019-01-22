@@ -924,6 +924,57 @@ CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE
     ON massoftware.Talonario FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatTalonario();
 
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Firmante															 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Firmante
+
+DROP TABLE IF EXISTS massoftware.Firmante CASCADE;
+
+CREATE TABLE massoftware.Firmante
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT Firmante_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT Firmante_nombre_chk CHECK (char_length(nombre) >= 2),
+    cargo VARCHAR  NOT NULL,    
+	bloqueado BOOLEAN NOT NULL DEFAULT false    
+    
+);
+
+CREATE UNIQUE INDEX u_Firmante_nombre ON massoftware.Firmante (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- SELECT * FROM massoftware.Firmante;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatFirmante() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatFirmante() RETURNS TRIGGER AS $formatFirmante$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);
+    NEW.cargo := massoftware.white_is_null(NEW.cargo);    
+
+	RETURN NEW;
+END;
+$formatFirmante$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatFirmante ON massoftware.Firmante CASCADE;
+
+CREATE TRIGGER tgFormatFirmante BEFORE INSERT OR UPDATE 
+    ON massoftware.Firmante FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatFirmante();
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    

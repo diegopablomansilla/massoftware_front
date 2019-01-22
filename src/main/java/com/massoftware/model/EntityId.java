@@ -75,8 +75,8 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 				methodSet.invoke(this, new Object[] { null }); // para limpiar el objeto
 
-				if (isScalar(field.getType())) {				
-				
+				if (isScalar(field.getType())) {
+
 					methodSet.invoke(this, row[i]);
 
 				} else if (row[i] != null) {
@@ -374,8 +374,10 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 
 		String packageModel = "com.massoftware.model";
 
-		String[] classNames = { "Banco", "BancosFiltro", "CuentaFondo", "CuentaFondoGrupo", "CuentaFondoRubro",
-				"CuentaFondoTipo", "CuentasFondoFiltro" };
+		String[] classNames = { "Banco", "Caja", "ComprobanteDeFondo", "CuentaFondo", "CuentaFondoGrupo",
+				"CuentaFondoRubro", "CuentaFondoTipo", "Firmante", "SeguridadModulo", "SeguridadPuerta", "Sucursal",
+				"SucursalTipo", "Talonario", "TalonarioControladorFizcal", "TalonarioLetra", "TipoComprobante",
+				"Zona" };
 
 		for (String nameJavaClass : classNames) {
 
