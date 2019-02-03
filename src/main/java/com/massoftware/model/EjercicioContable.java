@@ -96,6 +96,10 @@ public class EjercicioContable extends EntityId {
 		return numero + "";
 	}
 
+	public List<EjercicioContable> find() throws Exception {
+		return find(-1, -1, null, new EjerciciosContablesFiltro());
+	}
+	
 	public List<EjercicioContable> find(EjerciciosContablesFiltro filtro) throws Exception {
 		return find(-1, -1, null, filtro);
 	}

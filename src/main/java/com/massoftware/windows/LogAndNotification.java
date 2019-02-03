@@ -23,7 +23,7 @@ public class LogAndNotification {
 
 	public static void print(Exception e) {
 
-		
+	
 		
 		if (e instanceof UniqueException) {						
 			
@@ -118,7 +118,7 @@ public class LogAndNotification {
 		// notification.setDelayMsec(10000);
 		notification.show(Page.getCurrent());
 
-		// e.printStackTrace();
+		 e.printStackTrace();
 	}
 
 	private static void printNullFieldException(NullFieldException e) {

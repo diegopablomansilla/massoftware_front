@@ -87,6 +87,7 @@ public class WCuentaFondoGrupo extends WindowForm {
 		rubroCB.addValueChangeListener(e -> {
 			try {
 				validateRubroAndNumero();
+				validateRubroAndNombre();
 			} catch (Exception e1) {
 				LogAndNotification.print(e1);
 			}
@@ -125,10 +126,9 @@ public class WCuentaFondoGrupo extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
+	protected void setMaxValues(EntityId item) throws Exception {
 
-		itemBI.getBean()
-				.setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "cuentaFondoRubro" }, "numero"));
+		((CuentaFondoGrupo) item).setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "cuentaFondoRubro" }, "numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -170,23 +170,23 @@ public class WCuentaFondoGrupo extends WindowForm {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	protected CuentaFondoGrupo queryData() {
-		try {
-
-			CuentaFondoGrupo item = new CuentaFondoGrupo();
-			item.loadById(id);
-			if (COPY_MODE.equals(mode)) {
-				item.setId(null);
-			}
-
-			return item;
-
-		} catch (Exception e) {
-			LogAndNotification.print(e);
-		}
-
-		return new CuentaFondoGrupo();
-	}
+	// protected CuentaFondoGrupo queryData() {
+	// try {
+	//
+	// CuentaFondoGrupo item = new CuentaFondoGrupo();
+	// item.loadById(id);
+	// if (COPY_MODE.equals(mode)) {
+	// item.setId(null);
+	// }
+	//
+	// return item;
+	//
+	// } catch (Exception e) {
+	// LogAndNotification.print(e);
+	// }
+	//
+	// return new CuentaFondoGrupo();
+	// }
 
 	// =================================================================================
 

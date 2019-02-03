@@ -136,10 +136,9 @@ public class WSeguridadPuerta extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
+	protected void setMaxValues(EntityId item) throws Exception {
 
-		itemBI.getBean()
-				.setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "seguridadModulo" }, "numero"));
+		((SeguridadPuerta) item).setNumero((Integer) this.itemBI.getBean().maxValue(new String[] { "seguridadModulo" }, "numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {

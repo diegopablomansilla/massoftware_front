@@ -15,8 +15,30 @@ public class OptionGroupEntity extends OptionGroup {
 	private static final long serialVersionUID = 7741977244792585335L;
 
 	@SuppressWarnings("rawtypes")
+	public OptionGroupEntity(WindowListado window, BeanItem dtoBI, String attName, List options, boolean horizontal,
+			Object selectItem) throws Exception {
+		
+		init(dtoBI, attName, options, horizontal, selectItem);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Deprecated()
 	public OptionGroupEntity(WindowForm window, BeanItem dtoBI, String attName, List options, boolean horizontal,
 			Object selectItem) throws Exception {
+		
+		init(dtoBI, attName, options, horizontal, selectItem);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public OptionGroupEntity(BeanItem dtoBI, String attName, List options, boolean horizontal,
+			Object selectItem) throws Exception {
+		
+		init(dtoBI, attName, options, horizontal, selectItem);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void init(BeanItem dtoBI, String attName, List options, boolean horizontal, Object selectItem)
+			throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
 		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);

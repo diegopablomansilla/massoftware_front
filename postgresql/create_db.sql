@@ -173,6 +173,188 @@ CREATE TRIGGER tgFormatEjercicioContable BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatEjercicioContable();
 
 
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: PuntoEquilibrioTipo												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.PuntoEquilibrioTipo
+
+DROP TABLE IF EXISTS massoftware.PuntoEquilibrioTipo CASCADE;
+
+CREATE TABLE massoftware.PuntoEquilibrioTipo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT PuntoEquilibrioTipo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT PuntoEquilibrioTipo_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_PuntoEquilibrioTipo_nombre ON massoftware.PuntoEquilibrioTipo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.PuntoEquilibrioTipo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatPuntoEquilibrioTipo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatPuntoEquilibrioTipo() RETURNS TRIGGER AS $formatPuntoEquilibrioTipo$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatPuntoEquilibrioTipo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatPuntoEquilibrioTipo ON massoftware.PuntoEquilibrioTipo CASCADE;
+
+CREATE TRIGGER tgFormatPuntoEquilibrioTipo BEFORE INSERT OR UPDATE 
+    ON massoftware.PuntoEquilibrioTipo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatPuntoEquilibrioTipo();
+    
+    
+INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('1', 1, 'Individual');
+INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('2', 2, 'Costo de ventas');
+INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('3', 3, 'Utilidad bruta');
+INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('4', 4, 'Resultados por sección');
+INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('5', 5, 'Resultados operativos');
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: PuntoEquilibrio													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.PuntoEquilibrio
+
+DROP TABLE IF EXISTS massoftware.PuntoEquilibrio CASCADE;
+
+CREATE TABLE massoftware.PuntoEquilibrio
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+    ejercicioContable VARCHAR NOT NULL REFERENCES massoftware.EjercicioContable (id),	
+    puntoEquilibrioTipo VARCHAR NOT NULL REFERENCES massoftware.PuntoEquilibrioTipo (id),	
+    numero INTEGER  NOT NULL CONSTRAINT PuntoEquilibrio_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL -- CONSTRAINT PuntoEquilibrio_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+
+CREATE UNIQUE INDEX u_PuntoEquilibrio_ejercicioContable_numero ON massoftware.PuntoEquilibrio (ejercicioContable, numero);
+CREATE UNIQUE INDEX u_PuntoEquilibrio_ejercicioContable_nombre ON massoftware.PuntoEquilibrio (ejercicioContable, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.PuntoEquilibrio;
+-- SELECT COUNT(*)  FROM massoftware.PuntoEquilibrio WHERE LOWER(TRIM(massoftware.TRANSLATE(ejercicioContable)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('2015')))::VARCHAR AND numero = '6' ORDER BY 1;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatPuntoEquilibrio() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatPuntoEquilibrio() RETURNS TRIGGER AS $formatPuntoEquilibrio$
+DECLARE
+BEGIN
+   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.ejercicioContable := massoftware.white_is_null(NEW.ejercicioContable);    
+    NEW.puntoEquilibrioTipo := massoftware.white_is_null(NEW.puntoEquilibrioTipo);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatPuntoEquilibrio$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatPuntoEquilibrio ON massoftware.PuntoEquilibrio CASCADE;
+
+CREATE TRIGGER tgFormatPuntoEquilibrio BEFORE INSERT OR UPDATE 
+    ON massoftware.PuntoEquilibrio FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatPuntoEquilibrio();
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: CentroCostoContable												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.CentroCostoContable
+
+DROP TABLE IF EXISTS massoftware.CentroCostoContable CASCADE;
+
+CREATE TABLE massoftware.CentroCostoContable
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+    ejercicioContable VARCHAR NOT NULL REFERENCES massoftware.EjercicioContable (id),	    
+    numero INTEGER  NOT NULL CONSTRAINT PuntoEquilibrio_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL, -- CONSTRAINT PuntoEquilibrio_nombre_chk CHECK (char_length(nombre) >= 2),
+    abreviatura VARCHAR  NOT NULL -- CONSTRAINT PuntoEquilibrio_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+
+CREATE UNIQUE INDEX u_CentroCostoContable_ejercicioContable_numero ON massoftware.CentroCostoContable (ejercicioContable, numero);
+CREATE UNIQUE INDEX u_CentroCostoContable_ejercicioContable_nombre ON massoftware.CentroCostoContable (ejercicioContable, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+CREATE UNIQUE INDEX u_CentroCostoContable_ejercicioContable_abreviatura ON massoftware.CentroCostoContable (ejercicioContable, TRANSLATE(LOWER(TRIM(abreviatura))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+            
+
+
+-- SELECT * FROM massoftware.CentroCostoContable;
+-- SELECT COUNT(*)  FROM massoftware.CentroCostoContable WHERE LOWER(TRIM(massoftware.TRANSLATE(ejercicioContable)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('2015')))::VARCHAR AND numero = '6' ORDER BY 1;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCentroCostoContable() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCentroCostoContable() RETURNS TRIGGER AS $formatCentroCostoContable$
+DECLARE
+BEGIN
+   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.ejercicioContable := massoftware.white_is_null(NEW.ejercicioContable);        
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);    
+    
+	RETURN NEW;
+END;
+$formatCentroCostoContable$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCentroCostoContable ON massoftware.CentroCostoContable CASCADE;
+
+CREATE TRIGGER tgFormatCentroCostoContable BEFORE INSERT OR UPDATE 
+    ON massoftware.CentroCostoContable FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCentroCostoContable();
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: Banco															 //		

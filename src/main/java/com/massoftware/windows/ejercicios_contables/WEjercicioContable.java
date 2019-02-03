@@ -99,7 +99,7 @@ public class WEjercicioContable extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
+	protected void setMaxValues(EntityId item) throws Exception {
 		// Al momento de insertar o copiar a veces se necesita el maximo valor de ese
 		// atributo, + 1, esto es asi para hacer una especie de numero incremental de
 		// ese atributo
@@ -107,7 +107,7 @@ public class WEjercicioContable extends WindowForm {
 		// base a su id
 
 //		itemBI.getBean().setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
-		itemBI.getBean().loadByMaxEjercicioContable();
+		((EjercicioContable) item).loadByMaxEjercicioContable();
 		
 		
 	}

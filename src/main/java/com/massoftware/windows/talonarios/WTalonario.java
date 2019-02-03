@@ -1,7 +1,5 @@
 package com.massoftware.windows.talonarios;
 
-import java.util.List;
-
 import com.massoftware.model.EntityId;
 import com.massoftware.model.Talonario;
 import com.massoftware.model.TalonarioControladorFizcal;
@@ -84,7 +82,7 @@ public class WTalonario extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		TalonarioLetra talonarioLetra = new TalonarioLetra();
 		talonarioLetra.setId("X");
-		talonarioLetraOGE = new OptionGroupEntity(this, this.itemBI, "talonarioLetra", new TalonarioLetra().find(),
+		talonarioLetraOGE = new OptionGroupEntity(this.itemBI, "talonarioLetra", new TalonarioLetra().find(),
 				true, talonarioLetra);
 		// ---------------------------------------------------------------------------------------------------------
 		puntoVentaTXT = new TextFieldEntity(this.itemBI, "puntoVenta", this.mode);
@@ -97,7 +95,7 @@ public class WTalonario extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		TalonarioControladorFizcal talonarioControladorFizcal = new TalonarioControladorFizcal();
 		talonarioControladorFizcal.setId("S");
-		talonarioControladorFizcalOGE = new OptionGroupEntity(this, this.itemBI, "talonarioControladorFizcal",
+		talonarioControladorFizcalOGE = new OptionGroupEntity(this.itemBI, "talonarioControladorFizcal",
 				new TalonarioControladorFizcal().find(), false, talonarioControladorFizcal);
 		// ---------------------------------------------------------------------------------------------------------
 		primerNumeroTXT = new TextFieldEntity(this.itemBI, "primerNumero", this.mode);
@@ -158,14 +156,14 @@ public class WTalonario extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
+	protected void setMaxValues(EntityId item) throws Exception {
 		// Al momento de insertar o copiar a veces se necesita el maximo valor de ese
 		// atributo, + 1, esto es asi para hacer una especie de numero incremental de
 		// ese atributo
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		itemBI.getBean().setNumero(this.itemBI.getBean().maxValueInteger("numero"));
+		((Talonario) item).setNumero(this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {

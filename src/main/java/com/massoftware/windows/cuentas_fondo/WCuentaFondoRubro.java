@@ -73,8 +73,8 @@ public class WCuentaFondoRubro extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
-		itemBI.getBean().setNumero((Integer) this.itemBI.getBean().maxValueInteger("numero"));
+	protected void setMaxValues(EntityId item) throws Exception {
+		((CuentaFondoRubro) item).setNumero((Integer) this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {

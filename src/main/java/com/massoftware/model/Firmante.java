@@ -23,7 +23,7 @@ public class Firmante extends EntityId {
 	private String cargo;
 
 	@FieldConfAnont(label = "Obsoleto")
-	private Boolean bloqueado;
+	private Boolean bloqueado;	
 
 	public String getId() {
 		return id;

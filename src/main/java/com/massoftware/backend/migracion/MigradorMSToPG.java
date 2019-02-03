@@ -3,11 +3,13 @@ package com.massoftware.backend.migracion;
 import com.massoftware.backend.BackendContextMS;
 import com.massoftware.model.Banco;
 import com.massoftware.model.Caja;
+import com.massoftware.model.CentroCostoContable;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
+import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
@@ -31,6 +33,10 @@ public class MigradorMSToPG {
 		System.out.println("\n\nStart Migrador\n\n");
 
 		ejercicioContable();
+		
+		puntoEquilibrio() ;
+		
+		centroCostoContable();
 		
 		modulo();
 
@@ -473,6 +479,72 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Firmante item = new Firmante();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
+
+	}
+	
+	public static void puntoEquilibrio() throws Exception {
+
+//		SELECT  A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A ORDER BY  A.EJERCICIO,  A.PUNTODEEQUILIBRIO
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.PUNTODEEQUILIBRIO AS VARCHAR)) AS VARCHAR)";
+		String ejercicioContable = "CAST(A.EJERCICIO AS VARCHAR)";
+		String puntoEquilibrioTipo = "CAST(A.TIPO AS VARCHAR)";
+		String attNumero = "CAST(A.PUNTODEEQUILIBRIO AS INTEGER)";
+		String attNombre = "CAST(A.NOMBRE AS VARCHAR(40))";
+
+		String tableSQL = "PuntoDeEquilibrio A";
+
+		String attsSQL = attId + ", " + ejercicioContable + ", " + puntoEquilibrioTipo + ", " + attNumero + ", " + attNombre;
+		String orderBySQL = ejercicioContable + ", " + attNumero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			PuntoEquilibrio item = new PuntoEquilibrio();
+			item.setter(table[i], 0);
+			item.insert();
+
+		}
+
+	}
+	
+	public static void centroCostoContable() throws Exception {
+
+//		SELECT  A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A ORDER BY  A.EJERCICIO,  A.PUNTODEEQUILIBRIO
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String attId = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CENTRODECOSTOCONTABLE AS VARCHAR)) AS VARCHAR)";
+		String ejercicioContable = "CAST(A.EJERCICIO AS VARCHAR)";		
+		String attNumero = "CAST(A.CENTRODECOSTOCONTABLE AS INTEGER)";
+		String attNombre = "CAST(A.NOMBRE AS VARCHAR(30))";
+		String attAbreviatura = "CAST(A.ABREVIATURA AS VARCHAR(12))";
+
+		String tableSQL = "CentrosDeCostoContable A";
+
+		String attsSQL = attId + ", " + ejercicioContable + ", " + attNumero + ", " + attNombre + ", " + attAbreviatura;
+		String orderBySQL = ejercicioContable + ", " + attNumero;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			CentroCostoContable item = new CentroCostoContable();
 			item.setter(table[i], 0);
 			item.insert();
 

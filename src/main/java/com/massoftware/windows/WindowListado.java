@@ -239,7 +239,7 @@ public abstract class WindowListado extends Window {
 
 										LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-										loadData();
+										loadDataResetPaged();
 										// }
 									}
 								} catch (Exception e) {

@@ -83,14 +83,14 @@ public class WFirmante extends WindowForm {
 
 	// =================================================================================
 
-	protected void setMaxValues() throws Exception {
+	protected void setMaxValues(EntityId item) throws Exception {
 		// Al momento de insertar o copiar a veces se necesita el maximo valor de ese
 		// atributo, + 1, esto es asi para hacer una especie de numero incremental de
 		// ese atributo
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		itemBI.getBean().setNumero(this.itemBI.getBean().maxValueInteger("numero"));
+		((Firmante) item).setNumero(this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {

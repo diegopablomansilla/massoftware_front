@@ -1,8 +1,13 @@
 package com.massoftware;
 
+import com.massoftware.model.CentrosCostoContableFiltro;
+import com.massoftware.model.EjercicioContable;
+import com.massoftware.model.PuntosEquilibrioFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.centros_costo_contable.WCentrosCostoContable;
 import com.massoftware.windows.ejercicios_contables.WEjerciciosContables;
+import com.massoftware.windows.puntos_equilibrio.WPuntosEquilibrio;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.HorizontalLayout;
@@ -78,8 +83,8 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 		a1.addItem("Plan de cuentas ...", null).setEnabled(false);
 		a1.addItem("Ejercicios contables ...", openEjerciciosContablesCmd());
 		a1.addItem("Modelos de asientos", null).setEnabled(false);
-		a1.addItem("Centros de costos ...", null).setEnabled(false);
-		a1.addItem("Puntos de equilibrio ...", null).setEnabled(false);
+		a1.addItem("Centros de costos ...", openCentrosCostoContableCmd());
+		a1.addItem("Puntos de equilibrio ...", openPuntosEquilibrioCmd());
 		a1.addSeparator();
 		a1.addItem("Parámetros generales", null).setEnabled(false);
 		a1.addItem("Fecha de cierre por módulos", null).setEnabled(false);
@@ -122,8 +127,53 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
-
 				Window window = new WEjerciciosContables();
+				getUI().addWindow(window);
+			}
+		};
+	}
+
+	protected Command openPuntosEquilibrioCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				EjercicioContable ejercicioContable = new EjercicioContable();
+				ejercicioContable.setId("2015");
+
+				PuntosEquilibrioFiltro filtro = new PuntosEquilibrioFiltro();
+				filtro.setEjercicioContable(ejercicioContable);
+
+				Window window = new WPuntosEquilibrio(filtro);
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCentrosCostoContableCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				EjercicioContable ejercicioContable = new EjercicioContable();
+				ejercicioContable.setId("2015");
+
+				CentrosCostoContableFiltro filtro = new CentrosCostoContableFiltro();
+				filtro.setEjercicioContable(ejercicioContable);
+
+				Window window = new WCentrosCostoContable(filtro);
 				getUI().addWindow(window);
 			}
 		};

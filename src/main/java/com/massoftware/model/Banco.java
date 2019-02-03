@@ -173,8 +173,8 @@ public class Banco extends EntityId {
 		return null;
 	}
 
-	public List<Banco> find(BancosFiltro bancosFiltro) throws Exception {
-		return find(-1, -1, null, bancosFiltro);
+	public List<Banco> find(BancosFiltro filtro) throws Exception {
+		return find(-1, -1, null, filtro);
 	}
 
 	public List<Banco> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro)
