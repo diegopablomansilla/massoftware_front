@@ -90,7 +90,7 @@ public class CentroCostoContable extends EntityId {
 
 		List<CentroCostoContable> listado = new ArrayList<CentroCostoContable>();
 
-		String orderBySQL = "numero";
+		String orderBySQL = "ejercicioContable, numero";
 		String whereSQL = "";
 
 		ArrayList<Object> filtros = new ArrayList<Object>();
@@ -175,7 +175,7 @@ public class CentroCostoContable extends EntityId {
 				&& numero != null) {
 
 			if (BackendContextPG.get().ifExists(this.getClass().getSimpleName(), attNames, args)) {
-				throw new UniqueException(labelEjercicioContable, labelNumero + " xxx " + args[0] + " xxx " + args[1]);
+				throw new UniqueException(labelEjercicioContable, labelNumero);
 			}
 		}
 

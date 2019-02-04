@@ -125,6 +125,119 @@ $$  LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
+-- //												TABLA: SeguridadModulo													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadModulo
+
+DROP TABLE IF EXISTS massoftware.SeguridadModulo CASCADE;
+
+CREATE TABLE massoftware.SeguridadModulo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT SeguridadModulo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT SeguridadModulo_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_SeguridadModulo_nombre ON massoftware.SeguridadModulo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- SELECT * FROM massoftware.SeguridadModulo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatSeguridadModulo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatSeguridadModulo() RETURNS TRIGGER AS $formatSeguridadModulo$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+
+	RETURN NEW;
+END;
+$formatSeguridadModulo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatSeguridadModulo ON massoftware.SeguridadModulo CASCADE;
+
+CREATE TRIGGER tgFormatSeguridadModulo BEFORE INSERT OR UPDATE 
+    ON massoftware.SeguridadModulo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatSeguridadModulo();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: SeguridadPuerta													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadPuerta
+
+DROP TABLE IF EXISTS massoftware.SeguridadPuerta CASCADE;
+
+CREATE TABLE massoftware.SeguridadPuerta
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    seguridadModulo VARCHAR NOT NULL REFERENCES massoftware.SeguridadModulo (id),	
+    numero INTEGER  NOT NULL CONSTRAINT SeguridadPuerta_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT SeguridadPuerta_nombre_chk CHECK (char_length(nombre) >= 2),    
+    equate VARCHAR  NOT NULL    
+);
+
+CREATE UNIQUE INDEX u_SeguridadPuerta_seguridadModulo_numero ON massoftware.SeguridadPuerta (seguridadModulo, numero);
+CREATE UNIQUE INDEX u_SeguridadPuerta_seguridadModulo_nombre ON massoftware.SeguridadPuerta (seguridadModulo, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- SELECT * FROM massoftware.SeguridadPuerta;
+-- SELECT * FROM massoftware.SeguridadPuerta ORDER BY seguridadModulo, numero;
+-- SELECT * FROM massoftware.SeguridadPuerta ORDER BY numero, seguridadModulo;
+-- SELECT COALESCE(MAX(numero), 0) + 1 FROM massoftware.SeguridadPuerta WHERE seguridadModulo = '1' ORDER BY 1;
+-- SELECT equate FROM massoftware.SeguridadPuerta ORDER BY equate;
+-- SELECT COUNT(*)  FROM massoftware.SeguridadPuerta WHERE LOWER(TRIM(massoftware.TRANSLATE(seguridadModulo)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('9')))::VARCHAR AND LOWER(TRIM(massoftware.TRANSLATE(nombre)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('11')))::VARCHAR ORDER BY 1;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatSeguridadPuerta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatSeguridadPuerta() RETURNS TRIGGER AS $formatSeguridadPuerta$
+DECLARE
+BEGIN
+   
+	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.seguridadModulo := massoftware.white_is_null(NEW.seguridadModulo);
+    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    NEW.equate := massoftware.white_is_null(NEW.equate);    
+
+	RETURN NEW;
+END;
+$formatSeguridadPuerta$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatSSeguridadPuerta ON massoftware.SeguridadPuerta CASCADE;
+
+CREATE TRIGGER tgFormatSeguridadPuerta BEFORE INSERT OR UPDATE 
+    ON massoftware.SeguridadPuerta FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatSeguridadPuerta();
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
 -- //												TABLA: EjercicioContable															 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,6 +346,8 @@ INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('3', 3, 
 INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('4', 4, 'Resultados por sección');
 INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('5', 5, 'Resultados operativos');
 
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: PuntoEquilibrio													 //		
@@ -290,6 +405,8 @@ DROP TRIGGER IF EXISTS tgFormatPuntoEquilibrio ON massoftware.PuntoEquilibrio CA
 CREATE TRIGGER tgFormatPuntoEquilibrio BEFORE INSERT OR UPDATE 
     ON massoftware.PuntoEquilibrio FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatPuntoEquilibrio();
+
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
@@ -352,6 +469,203 @@ DROP TRIGGER IF EXISTS tgFormatCentroCostoContable ON massoftware.CentroCostoCon
 CREATE TRIGGER tgFormatCentroCostoContable BEFORE INSERT OR UPDATE 
     ON massoftware.CentroCostoContable FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCentroCostoContable();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: CuentaContableEstado												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.CuentaContableEstado
+
+DROP TABLE IF EXISTS massoftware.CuentaContableEstado CASCADE;
+
+CREATE TABLE massoftware.CuentaContableEstado
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT CuentaContableEstado_numero_chk CHECK (numero > -1),
+    nombre VARCHAR  NOT NULL CONSTRAINT CuentaContableEstado_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_CuentaContableEstado_nombre ON massoftware.CuentaContableEstado (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.CuentaContableEstado;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaContableEstado() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaContableEstado() RETURNS TRIGGER AS $formatCuentaContableEstado$
+DECLARE
+BEGIN   	
+    
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatCuentaContableEstado$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaContableEstado ON massoftware.CuentaContableEstado CASCADE;
+
+CREATE TRIGGER tgFormatCuentaContableEstado BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaContableEstado FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaContableEstado();
+    
+    
+INSERT INTO massoftware.CuentaContableEstado(id, numero, nombre) VALUES ('0', 0, 'Cuenta fuera de uso');
+INSERT INTO massoftware.CuentaContableEstado(id, numero, nombre) VALUES ('1', 1, 'Cuenta en uso');
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: CostoVenta												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.CostoVenta
+
+DROP TABLE IF EXISTS massoftware.CostoVenta CASCADE;
+
+CREATE TABLE massoftware.CostoVenta
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT CostoVenta_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT CostoVenta_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+CREATE UNIQUE INDEX u_CostoVenta_nombre ON massoftware.CostoVenta (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.CostoVenta;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCostoVenta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCostoVenta() RETURNS TRIGGER AS $formatCostoVenta$
+DECLARE
+BEGIN   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatCostoVenta$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCostoVenta ON massoftware.CostoVenta CASCADE;
+
+CREATE TRIGGER tgFormatCostoVenta BEFORE INSERT OR UPDATE 
+    ON massoftware.CostoVenta FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCostoVenta();
+    
+    
+INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('1', 1, 'No participa');
+INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('2', 2, 'Stock');
+INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('3', 3, 'Compras');
+INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('4', 4, 'Gastos');
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: CuentaContable													 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.CuentaContable
+
+DROP TABLE IF EXISTS massoftware.CuentaContable CASCADE;
+
+CREATE TABLE massoftware.CuentaContable
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+    ejercicioContable VARCHAR NOT NULL REFERENCES massoftware.EjercicioContable (id),	    
+    integra VARCHAR  NOT NULL,
+    cuentaJerarquia VARCHAR  NOT NULL,
+    codigo VARCHAR  NOT NULL,
+    nombre VARCHAR  NOT NULL,     
+    -- ----------------------------------------------------------------	
+    imputable BOOLEAN NOT NULL DEFAULT false,    
+    ajustaPorInflacion BOOLEAN NOT NULL DEFAULT false,    		
+    cuentaContableEstado VARCHAR NOT NULL REFERENCES massoftware.CuentaContableEstado (id),	
+    cuentaConApropiacion BOOLEAN NOT NULL DEFAULT false,    		
+    -- ----------------------------------------------------------------
+    centroCostoContable VARCHAR REFERENCES massoftware.CentroCostoContable (id),	
+    cuentaAgrupadora VARCHAR,	    
+    porcentaje DOUBLE PRECISION,	
+	puntoEquilibrio VARCHAR REFERENCES massoftware.PuntoEquilibrio (id),
+    costoVenta VARCHAR REFERENCES massoftware.CostoVenta (id),
+    seguridadPuerta VARCHAR REFERENCES massoftware.SeguridadPuerta (id)
+    
+);
+
+-- CREATE UNIQUE INDEX u_CuentaContable_ejercicioContable_integra ON massoftware.CuentaContable (ejercicioContable, LOWER(TRIM(integra)));
+CREATE UNIQUE INDEX u_CuentaContable_ejercicioContable_cuentaJerarquia ON massoftware.CuentaContable (ejercicioContable, LOWER(TRIM(cuentaJerarquia)));
+CREATE UNIQUE INDEX u_CuentaContable_ejercicioContable_codigo ON massoftware.CuentaContable (ejercicioContable, LOWER(TRIM(codigo)));
+-- CREATE UNIQUE INDEX u_CuentaContable_ejercicioContable_nombre ON massoftware.CuentaContable (ejercicioContable, TRANSLATE(LOWER(TRIM(nombre))
+--             , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+--             , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.CuentaContable;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaContable() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaContable() RETURNS TRIGGER AS $formatCuentaContable$
+DECLARE
+BEGIN   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.ejercicioContable := massoftware.white_is_null(NEW.ejercicioContable);    
+    NEW.integra := massoftware.white_is_null(NEW.integra);    
+    NEW.cuentaJerarquia := massoftware.white_is_null(NEW.cuentaJerarquia);    
+    NEW.codigo := massoftware.white_is_null(NEW.codigo);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    -- ----------------------------------------------------------------	     
+    NEW.cuentaContableEstado := massoftware.white_is_null(NEW.cuentaContableEstado);                                            
+    -- ----------------------------------------------------------------
+    NEW.centroCostoContable := massoftware.white_is_null(NEW.centroCostoContable);    
+    NEW.cuentaAgrupadora := massoftware.white_is_null(NEW.cuentaAgrupadora);    
+    NEW.puntoEquilibrio := massoftware.white_is_null(NEW.puntoEquilibrio);    
+    NEW.costoVenta := massoftware.white_is_null(NEW.costoVenta);    
+    NEW.seguridadPuerta := massoftware.white_is_null(NEW.seguridadPuerta);
+    
+	RETURN NEW;
+END;
+$formatCuentaContable$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaContable ON massoftware.CuentaContable CASCADE;
+
+CREATE TRIGGER tgFormatCuentaContable BEFORE INSERT OR UPDATE 
+    ON massoftware.CuentaContable FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatCuentaContable();
+
+
 
 
 
@@ -659,116 +973,7 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondo();
     
 
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //																														 //		
--- //												TABLA: SeguridadModulo													 //		
--- //																														 //		
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
--- Table: massoftware.SeguridadModulo
-
-DROP TABLE IF EXISTS massoftware.SeguridadModulo CASCADE;
-
-CREATE TABLE massoftware.SeguridadModulo
-(
-    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    numero INTEGER  NOT NULL UNIQUE CONSTRAINT SeguridadModulo_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL CONSTRAINT SeguridadModulo_nombre_chk CHECK (char_length(nombre) >= 2)    
-);
-
-CREATE UNIQUE INDEX u_SeguridadModulo_nombre ON massoftware.SeguridadModulo (TRANSLATE(LOWER(TRIM(nombre))
-            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
-            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
-
--- SELECT * FROM massoftware.SeguridadModulo;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP FUNCTION IF EXISTS massoftware.ftgFormatSeguridadModulo() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatSeguridadModulo() RETURNS TRIGGER AS $formatSeguridadModulo$
-DECLARE
-BEGIN
-   
-	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
-    NEW.id := massoftware.white_is_null(NEW.id);
-    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
-    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
-
-	RETURN NEW;
-END;
-$formatSeguridadModulo$ LANGUAGE plpgsql;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP TRIGGER IF EXISTS tgFormatSeguridadModulo ON massoftware.SeguridadModulo CASCADE;
-
-CREATE TRIGGER tgFormatSeguridadModulo BEFORE INSERT OR UPDATE 
-    ON massoftware.SeguridadModulo FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatSeguridadModulo();
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //																														 //		
--- //												TABLA: SeguridadPuerta													 //		
--- //																														 //		
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.SeguridadPuerta
-
-DROP TABLE IF EXISTS massoftware.SeguridadPuerta CASCADE;
-
-CREATE TABLE massoftware.SeguridadPuerta
-(
-    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    seguridadModulo VARCHAR NOT NULL REFERENCES massoftware.SeguridadModulo (id),	
-    numero INTEGER  NOT NULL CONSTRAINT SeguridadPuerta_numero_chk CHECK (numero > 0),
-    nombre VARCHAR  NOT NULL CONSTRAINT SeguridadPuerta_nombre_chk CHECK (char_length(nombre) >= 2),    
-    equate VARCHAR  NOT NULL    
-);
-
-CREATE UNIQUE INDEX u_SeguridadPuerta_seguridadModulo_numero ON massoftware.SeguridadPuerta (seguridadModulo, numero);
-CREATE UNIQUE INDEX u_SeguridadPuerta_seguridadModulo_nombre ON massoftware.SeguridadPuerta (seguridadModulo, TRANSLATE(LOWER(TRIM(nombre))
-            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
-            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
-
--- SELECT * FROM massoftware.SeguridadPuerta;
--- SELECT * FROM massoftware.SeguridadPuerta ORDER BY seguridadModulo, numero;
--- SELECT * FROM massoftware.SeguridadPuerta ORDER BY numero, seguridadModulo;
--- SELECT COALESCE(MAX(numero), 0) + 1 FROM massoftware.SeguridadPuerta WHERE seguridadModulo = '1' ORDER BY 1;
--- SELECT equate FROM massoftware.SeguridadPuerta ORDER BY equate;
--- SELECT COUNT(*)  FROM massoftware.SeguridadPuerta WHERE LOWER(TRIM(massoftware.TRANSLATE(seguridadModulo)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('9')))::VARCHAR AND LOWER(TRIM(massoftware.TRANSLATE(nombre)))::VARCHAR = LOWER(TRIM(massoftware.TRANSLATE('11')))::VARCHAR ORDER BY 1;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP FUNCTION IF EXISTS massoftware.ftgFormatSeguridadPuerta() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatSeguridadPuerta() RETURNS TRIGGER AS $formatSeguridadPuerta$
-DECLARE
-BEGIN
-   
-	-- NEW.comentario := massoftware.white_is_null(REPLACE(TRIM(NEW.comentario), '"', ''));	
-    NEW.id := massoftware.white_is_null(NEW.id);
-    NEW.seguridadModulo := massoftware.white_is_null(NEW.seguridadModulo);
-    -- NEW.numero := massoftware.zero_is_null(NEW.numero);
-    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
-    NEW.equate := massoftware.white_is_null(NEW.equate);    
-
-	RETURN NEW;
-END;
-$formatSeguridadPuerta$ LANGUAGE plpgsql;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP TRIGGER IF EXISTS tgFormatSSeguridadPuerta ON massoftware.SeguridadPuerta CASCADE;
-
-CREATE TRIGGER tgFormatSeguridadPuerta BEFORE INSERT OR UPDATE 
-    ON massoftware.SeguridadPuerta FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatSeguridadPuerta();
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		

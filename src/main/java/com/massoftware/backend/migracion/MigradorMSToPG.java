@@ -4,6 +4,7 @@ import com.massoftware.backend.BackendContextMS;
 import com.massoftware.model.Banco;
 import com.massoftware.model.Caja;
 import com.massoftware.model.CentroCostoContable;
+import com.massoftware.model.CuentaContable;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
@@ -32,15 +33,17 @@ public class MigradorMSToPG {
 
 		System.out.println("\n\nStart Migrador\n\n");
 
-		ejercicioContable();
-		
-		puntoEquilibrio() ;
-		
-		centroCostoContable();
-		
 		modulo();
 
 		puerta();
+		
+		ejercicioContable();
+
+		puntoEquilibrio();
+
+		centroCostoContable();
+		
+		cuentaContable();		
 
 		caja();
 
@@ -278,7 +281,8 @@ public class MigradorMSToPG {
 		// ==================================================================
 		// MS SQL SERVER
 
-		String attId = " CONCAT (DGRPNO, '-', NO )";
+//		String attId = " CONCAT (DGRPNO, '-', NO )";
+		String attId = "CAST(NO AS VARCHAR)";
 		String attNumeroModulo = "CASE WHEN DGRPNO = 0 THEN null ELSE DGRPNO END";
 		String attNumero = "CAST(NO AS INTEGER)";
 		String attNombre = "DESCRIPTION";
@@ -485,10 +489,11 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
+
 	public static void puntoEquilibrio() throws Exception {
 
-//		SELECT  A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A ORDER BY  A.EJERCICIO,  A.PUNTODEEQUILIBRIO
+		// SELECT A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A
+		// ORDER BY A.EJERCICIO, A.PUNTODEEQUILIBRIO
 
 		// ==================================================================
 		// MS SQL SERVER
@@ -501,7 +506,8 @@ public class MigradorMSToPG {
 
 		String tableSQL = "PuntoDeEquilibrio A";
 
-		String attsSQL = attId + ", " + ejercicioContable + ", " + puntoEquilibrioTipo + ", " + attNumero + ", " + attNombre;
+		String attsSQL = attId + ", " + ejercicioContable + ", " + puntoEquilibrioTipo + ", " + attNumero + ", "
+				+ attNombre;
 		String orderBySQL = ejercicioContable + ", " + attNumero;
 		String whereSQL = null;
 
@@ -518,16 +524,17 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
+
 	public static void centroCostoContable() throws Exception {
 
-//		SELECT  A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A ORDER BY  A.EJERCICIO,  A.PUNTODEEQUILIBRIO
+		// SELECT A.EJERCICIO, A.PUNTODEEQUILIBRIO, A.NOMBRE FROM PuntoDeEquilibrio A
+		// ORDER BY A.EJERCICIO, A.PUNTODEEQUILIBRIO
 
 		// ==================================================================
 		// MS SQL SERVER
 
 		String attId = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CENTRODECOSTOCONTABLE AS VARCHAR)) AS VARCHAR)";
-		String ejercicioContable = "CAST(A.EJERCICIO AS VARCHAR)";		
+		String ejercicioContable = "CAST(A.EJERCICIO AS VARCHAR)";
 		String attNumero = "CAST(A.CENTRODECOSTOCONTABLE AS INTEGER)";
 		String attNombre = "CAST(A.NOMBRE AS VARCHAR(30))";
 		String attAbreviatura = "CAST(A.ABREVIATURA AS VARCHAR(12))";
@@ -547,6 +554,79 @@ public class MigradorMSToPG {
 			CentroCostoContable item = new CentroCostoContable();
 			item.setter(table[i], 0);
 			item.insert();
+
+		}
+
+	}
+
+	public static void cuentaContable() throws Exception {
+
+		// SELECT
+		// CUENTACONTABLE
+		// ,CUENTAINTEGRADORA
+		// ,CUENTADEJERARQUIAIND
+		// ,NOMBRE
+		// ,IMPUTABLE
+		// ,APROPIA
+		// ,AJUSTEINF
+		// ,DOORNO
+		// ,ESTADO
+		// ,CENTRODECOSTOCONTABLE
+		// ,PUNTODEEQUILIBRIO
+		// ,COSTODEVENTA
+		// ,CUENTAAGRUPADORA
+		// ,PORCENTAJE
+		// ,EJERCICIO
+		// FROM PlanDeCuentas
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String id = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CUENTACONTABLE AS VARCHAR(11))) AS VARCHAR)";
+		String ejercicioContable = "CAST(A.EJERCICIO AS VARCHAR)";
+		String integra = "CAST(A.CUENTAINTEGRADORA AS VARCHAR(11))";
+		String cuentaJerarquia = "CAST(A.CUENTADEJERARQUIAIND AS VARCHAR(11))";
+		String codigo = "CAST(A.CUENTACONTABLE AS VARCHAR(11))";
+		String nombre = "CAST(A.NOMBRE AS VARCHAR(35))";
+		// --------------------------------------------------------------------------
+		
+		
+		
+		String imputable = "CASE WHEN A.IMPUTABLE = 'N' THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END";
+		String ajustaPorInflacion = "CASE WHEN A.AJUSTEINF = 'N' THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END";
+		String cuentaContableEstado = "CAST(A.ESTADO AS VARCHAR)";
+		String cuentaConApropiacion = "CAST(A.APROPIA AS BIT)";
+		// --------------------------------------------------------------------------
+		String centroCostoContable = "CASE WHEN A.CENTRODECOSTOCONTABLE IS NOT NULL THEN CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CENTRODECOSTOCONTABLE AS VARCHAR)) AS VARCHAR) ELSE null END";
+		String cuentaAgrupadora = "CAST(A.CUENTAAGRUPADORA AS VARCHAR(11))";
+		String porcentaje = "CASE WHEN A.PORCENTAJE = 0 THEN null ELSE CAST(A.PORCENTAJE AS DOUBLE PRECISION) END";
+		String puntoEquilibrio = "CASE WHEN A.PUNTODEEQUILIBRIO IS NOT NULL THEN CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CENTRODECOSTOCONTABLE AS VARCHAR)) AS VARCHAR) ELSE null END";
+		//String puntoEquilibrio = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.PUNTODEEQUILIBRIO AS VARCHAR)) AS VARCHAR)";
+		String costoVenta = "CAST(A.COSTODEVENTA AS VARCHAR)";
+		String seguridadPuerta = "CAST(A.DOORNO AS VARCHAR)";
+
+		String tableSQL = "PlanDeCuentas A";
+
+		String attsSQL = id + ", " + ejercicioContable + ", " + integra + ", " + cuentaJerarquia + ", " + codigo + ", "
+				+ nombre + ", " + imputable + ", " + ajustaPorInflacion + ", " + cuentaContableEstado + ", "
+				+ cuentaConApropiacion + ", " + centroCostoContable + ", " + cuentaAgrupadora + ", " + porcentaje + ", "
+				+ puntoEquilibrio + ", " + costoVenta + ", " + seguridadPuerta;
+		String orderBySQL = ejercicioContable + ", " + codigo;
+		String whereSQL = null;
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(tableSQL, attsSQL, orderBySQL, whereSQL, -1, -1, null);
+
+		for (int i = 0; i < table.length; i++) {
+
+			CuentaContable item = new CuentaContable();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			if(item.getIntegra() != null) {
+				item.insert();	
+			}
+			
 
 		}
 
