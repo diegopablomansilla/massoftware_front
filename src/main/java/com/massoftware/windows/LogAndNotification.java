@@ -55,11 +55,11 @@ public class LogAndNotification {
 
 			notification.show(Page.getCurrent());
 
-			e.printStackTrace();
+//			e.printStackTrace();
 
 		}
 
-		// e.printStackTrace();
+		 e.printStackTrace();
 
 	}
 

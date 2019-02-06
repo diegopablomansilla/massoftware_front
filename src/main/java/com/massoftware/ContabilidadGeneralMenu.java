@@ -1,11 +1,13 @@
 package com.massoftware;
 
 import com.massoftware.model.CentrosCostoContableFiltro;
+import com.massoftware.model.CuentasContableFiltro;
 import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.PuntosEquilibrioFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.centros_costo_contable.WCentrosCostoContable;
+import com.massoftware.windows.cuentas_contable.WCuentasContable;
 import com.massoftware.windows.ejercicios_contables.WEjerciciosContables;
 import com.massoftware.windows.puntos_equilibrio.WPuntosEquilibrio;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -80,7 +82,7 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 
 		// a1.addItem("Plan de cuentas (orden -> cta de jerarquía) ...", null)
 		// .setEnabled(false);
-		a1.addItem("Plan de cuentas ...", null).setEnabled(false);
+		a1.addItem("Plan de cuentas ...", openCuentasContableCmd());
 		a1.addItem("Ejercicios contables ...", openEjerciciosContablesCmd());
 		a1.addItem("Modelos de asientos", null).setEnabled(false);
 		a1.addItem("Centros de costos ...", openCentrosCostoContableCmd());
@@ -174,6 +176,29 @@ public class ContabilidadGeneralMenu extends AbstractMenu {
 				filtro.setEjercicioContable(ejercicioContable);
 
 				Window window = new WCentrosCostoContable(filtro);
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCuentasContableCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				EjercicioContable ejercicioContable = new EjercicioContable();
+				ejercicioContable.setId("2015");
+
+				CuentasContableFiltro filtro = new CuentasContableFiltro();
+				filtro.setEjercicioContable(ejercicioContable);
+
+				Window window = new WCuentasContable(filtro);
 				getUI().addWindow(window);
 			}
 		};

@@ -123,7 +123,7 @@ public class PuntoEquilibrio extends EntityId {
 
 		// ==================================================================
 
-		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 1);
+		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 0);
 
 		for (EntityId item : items) {
 			listado.add((PuntoEquilibrio) item);

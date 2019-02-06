@@ -74,7 +74,9 @@ public class TextFieldEntity extends TextField {
 
 			if (dtoBI.getItemProperty(attName).getType() == Integer.class
 					|| dtoBI.getItemProperty(attName).getType() == Long.class
+					|| dtoBI.getItemProperty(attName).getType() == Double.class
 					|| dtoBI.getItemProperty(attName).getType() == BigDecimal.class) {
+				
 				addStyleName("align-right");
 			}
 
@@ -156,7 +158,47 @@ public class TextFieldEntity extends TextField {
 
 			setConversionError(msg);
 
-		} else if (dtoBI.getItemProperty(attName).getType() == BigDecimal.class) {
+		} else if (dtoBI.getItemProperty(attName).getType() == Double.class) {
+
+			String minValueString = ((Entity) dtoBI.getBean()).minValue(attName);
+			String maxValueString = ((Entity) dtoBI.getBean()).maxValue(attName);
+
+			Double minValue = Double.MIN_VALUE;
+			Double maxValue = Double.MAX_VALUE;
+
+			if (minValueString != null) {
+				minValue = new Double(minValueString);
+			}
+			if (maxValueString != null) {
+				maxValue = new Double(maxValueString);
+			}
+
+			Integer maxLengthMin = minValue.toString().length();
+			Integer maxLengthMax = maxValue.toString().length();
+
+			if (maxLengthMax > maxLengthMin) {
+				maxLengthMin = maxLengthMax;
+			}
+
+			// ----------------------------------------------------------------------------
+
+			addStyleName("align-right");
+
+			setColumns(maxLengthMin);
+
+			setMaxLength(maxLengthMin);
+
+			setConverter(new StringToDoubleConverterUnspecifiedLocale());
+//			setConverter(new StringToDoubleConverter());						
+
+			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos con decimales, desde "
+					+ minValue + " hasta " + maxValue + ".";
+
+//			addValidator(new DoubleRangeValidator(msg, minValue, maxValue));
+
+			setConversionError(msg);
+
+		}else if (dtoBI.getItemProperty(attName).getType() == BigDecimal.class) {
 
 			String minValueString = ((Entity) dtoBI.getBean()).minValue(attName);
 			String maxValueString = ((Entity) dtoBI.getBean()).maxValue(attName);
@@ -188,7 +230,7 @@ public class TextFieldEntity extends TextField {
 
 			setConverter(new StringToBigDecimalConverterUnspecifiedLocale());
 
-			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos sin decimales, desde "
+			String msg = "El campo " + labelError + " es inválido, se permiten sólo valores numéricos con decimales, desde "
 					+ minValue + " hasta " + maxValue + ".";
 
 			addValidator(new BigDecimalRangeValidator(msg, minValue, maxValue));

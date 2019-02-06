@@ -254,8 +254,8 @@ CREATE TABLE massoftware.EjercicioContable
     numero INTEGER  NOT NULL UNIQUE CONSTRAINT EjercicioContable_numero_chk CHECK (numero > 0),
     apertura DATE NOT NULL,    
     cierre DATE NOT NULL,    
-	cerrado BOOLEAN NOT NULL DEFAULT false,    
-    cerradoModulos BOOLEAN NOT NULL DEFAULT false,        
+	cerrado BOOLEAN  DEFAULT false,    
+    cerradoModulos BOOLEAN DEFAULT false,        
     comentario VARCHAR        
 );
 
@@ -606,10 +606,10 @@ CREATE TABLE massoftware.CuentaContable
     codigo VARCHAR  NOT NULL,
     nombre VARCHAR  NOT NULL,     
     -- ----------------------------------------------------------------	
-    imputable BOOLEAN NOT NULL DEFAULT false,    
-    ajustaPorInflacion BOOLEAN NOT NULL DEFAULT false,    		
+    imputable BOOLEAN DEFAULT false,    
+    ajustaPorInflacion BOOLEAN DEFAULT false,    		
     cuentaContableEstado VARCHAR NOT NULL REFERENCES massoftware.CuentaContableEstado (id),	
-    cuentaConApropiacion BOOLEAN NOT NULL DEFAULT false,    		
+    cuentaConApropiacion BOOLEAN DEFAULT false,    		
     -- ----------------------------------------------------------------
     centroCostoContable VARCHAR REFERENCES massoftware.CentroCostoContable (id),	
     cuentaAgrupadora VARCHAR,	    
@@ -629,7 +629,9 @@ CREATE UNIQUE INDEX u_CuentaContable_ejercicioContable_codigo ON massoftware.Cue
 
 
 -- SELECT * FROM massoftware.CuentaContable;
-
+-- SELECT * FROM massoftware.CuentaContable WHERE ejercicioContable = '2015' ORDER BY ejercicioContable, integra, cuentaJerarquia, codigo, nombre;
+-- SELECT * FROM massoftware.CuentaContable WHERE integra = '00000000000' AND ejercicioContable = '2015' ORDER BY cuentaJerarquia ASC, ejercicioContable ASC;
+-- SELECT * FROM massoftware.CuentaContable WHERE id = '2015-2' ORDER BY 1;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaContable() CASCADE;
@@ -687,7 +689,7 @@ CREATE TABLE massoftware.Banco
     numero INTEGER  NOT NULL UNIQUE CONSTRAINT banco_numero_chk CHECK (numero > 0),
     nombre VARCHAR  NOT NULL CONSTRAINT banco_nombre_chk CHECK (char_length(nombre) >= 2),
     cuit BIGINT UNIQUE CONSTRAINT banco_cuit_chk CHECK (char_length(cuit::VARCHAR) = 11),
-	bloqueado BOOLEAN NOT NULL DEFAULT false,    
+	bloqueado BOOLEAN DEFAULT false,    
     hoja INTEGER CHECK (hoja > 0),
     primeraFila INTEGER CHECK (primeraFila > 0),
     ultimaFila INTEGER CHECK (ultimaFila > 0),
@@ -933,7 +935,7 @@ CREATE TABLE massoftware.CuentaFondo
     nombre VARCHAR  NOT NULL CONSTRAINT cuentafondo_nombre_chk CHECK (char_length(nombre) >= 1),
     cuentaFondoTipo VARCHAR NOT NULL REFERENCES massoftware.CuentaFondoTipo (id),	
     banco VARCHAR REFERENCES massoftware.Banco (id),	    
-	bloqueado BOOLEAN NOT NULL DEFAULT false        
+	bloqueado BOOLEAN DEFAULT false        
 );
 
 CREATE UNIQUE INDEX u_CuentaFondo_nombre ON massoftware.CuentaFondo (TRANSLATE(LOWER(TRIM(nombre))
@@ -1114,8 +1116,8 @@ CREATE TABLE massoftware.Sucursal
 	cuentaClienteDesde VARCHAR,
 	cuentaClienteHasa VARCHAR,
 	cantidadCaracteresCliente INTEGER,
-	identificacionNumericaCliente BOOLEAN,
-	permiteCambiarCliente BOOLEAN,
+	identificacionNumericaCliente BOOLEAN DEFAULT false,
+	permiteCambiarCliente BOOLEAN DEFAULT false,
 	-- --------------------------------------------------------		
 	clientesOcacionalesDesde INTEGER,
 	clientesOcacionalesHasa INTEGER,
@@ -1126,8 +1128,8 @@ CREATE TABLE massoftware.Sucursal
 	proveedoresDesde VARCHAR,
 	proveedoresHasa VARCHAR,
 	cantidadCaracteresProveedor INTEGER,
-	identificacionNumericaProveedor BOOLEAN,
-	permiteCambiarProveedor BOOLEAN
+	identificacionNumericaProveedor BOOLEAN DEFAULT false,
+	permiteCambiarProveedor BOOLEAN DEFAULT false
 
 );
 
@@ -1314,9 +1316,9 @@ CREATE TABLE massoftware.Talonario
     nombre VARCHAR  NOT NULL CONSTRAINT Talonario_nombre_chk CHECK (char_length(nombre) >= 2),    
     talonarioLetra VARCHAR NOT NULL REFERENCES massoftware.TalonarioLetra (id),	        
 	puntoVenta INTEGER  NOT NULL CONSTRAINT Talonario_puntoVenta_chk CHECK (numero > 0),
-	autonumeracion BOOLEAN,
-	numeracionPreImpresa BOOLEAN,
-	asociadoRG10098 BOOLEAN,
+	autonumeracion BOOLEAN DEFAULT false,
+	numeracionPreImpresa BOOLEAN DEFAULT false,
+	asociadoRG10098 BOOLEAN DEFAULT false,
     talonarioControladorFizcal VARCHAR NOT NULL REFERENCES massoftware.TalonarioControladorFizcal (id),		
 	primerNumero INTEGER  CONSTRAINT Talonario_primerNumero_chk CHECK (numero > 0),
 	proximoNumero INTEGER  CONSTRAINT Talonario_proximoNumero_chk CHECK (numero > 0),
@@ -1379,7 +1381,7 @@ CREATE TABLE massoftware.Firmante
     numero INTEGER  NOT NULL UNIQUE CONSTRAINT Firmante_numero_chk CHECK (numero > 0),
     nombre VARCHAR  NOT NULL CONSTRAINT Firmante_nombre_chk CHECK (char_length(nombre) >= 2),
     cargo VARCHAR  NOT NULL,    
-	bloqueado BOOLEAN NOT NULL DEFAULT false    
+	bloqueado BOOLEAN DEFAULT false    
     
 );
 

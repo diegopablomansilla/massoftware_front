@@ -2,10 +2,10 @@ package com.massoftware.windows;
 
 import java.util.Locale;
 
-import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.util.converter.StringToLongConverter;
 
 public class StringToLongConverterUnspecifiedLocale extends
-		StringToIntegerConverter {
+		StringToLongConverter {
 
 	/**
 	 * 
