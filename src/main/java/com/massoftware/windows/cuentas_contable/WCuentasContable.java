@@ -64,6 +64,12 @@ public class WCuentasContable extends WindowListado {
 		filterBI = new BeanItem<CuentasContableFiltro>(new CuentasContableFiltro());
 		init(false);
 	}
+	
+	public WCuentasContable(CuentasContableFiltro filtro, boolean selectionMode) {
+		super();
+		filterBI = new BeanItem<CuentasContableFiltro>(filtro);
+		init(selectionMode);
+	}
 
 	public WCuentasContable(CuentasContableFiltro filtro) {
 		super();

@@ -130,7 +130,15 @@ public class BackendContextMS extends AbstractContext {
 		return find(sql, limit, offset, args);
 	}
 
-	private synchronized Object[][] find(String sql, int limit, int offset, Object[] args) throws Exception {
+	public synchronized Object[][] find(String sql) throws Exception {
+		return find(sql, -1, -1);
+	}
+	
+	public synchronized Object[][] find(String sql, int limit, int offset) throws Exception {
+		return find(sql, limit, offset, null);
+	}
+	
+	public synchronized Object[][] find(String sql, int limit, int offset, Object[] args) throws Exception {
 
 		if (args == null) {
 			args = new Object[0];

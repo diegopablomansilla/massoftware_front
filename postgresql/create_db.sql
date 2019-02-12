@@ -668,6 +668,111 @@ CREATE TRIGGER tgFormatCuentaContable BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaContable();
 
 
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: AsientoModelo												 	 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.AsientoModelo
+
+DROP TABLE IF EXISTS massoftware.AsientoModelo CASCADE;
+
+CREATE TABLE massoftware.AsientoModelo
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    ejercicioContable VARCHAR NOT NULL REFERENCES massoftware.EjercicioContable (id),	
+    numero INTEGER  NOT NULL CONSTRAINT AsientoModelo_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL CONSTRAINT AsientoModelo_nombre_chk CHECK (char_length(nombre) >= 2)    
+);
+
+
+CREATE UNIQUE INDEX u_AsientoModelo_ejercicioContable_numero ON massoftware.AsientoModelo (ejercicioContable, numero);
+CREATE UNIQUE INDEX u_AsientoModelo_ejercicioContable_nombre ON massoftware.AsientoModelo (ejercicioContable, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.AsientoModelo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatAsientoModelo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatAsientoModelo() RETURNS TRIGGER AS $formatAsientoModelo$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.ejercicioContable := massoftware.white_is_null(NEW.ejercicioContable);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    
+	RETURN NEW;
+END;
+$formatAsientoModelo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatAsientoModelo ON massoftware.AsientoModelo CASCADE;
+
+CREATE TRIGGER tgFormatAsientoModelo BEFORE INSERT OR UPDATE 
+    ON massoftware.AsientoModelo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatAsientoModelo();        
+    
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: AsientoModeloItem											 	 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.AsientoModeloItem
+
+DROP TABLE IF EXISTS massoftware.AsientoModeloItem CASCADE;
+
+CREATE TABLE massoftware.AsientoModeloItem
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    asientoModelo VARCHAR NOT NULL REFERENCES massoftware.AsientoModelo (id),	
+    numero INTEGER  NOT NULL CONSTRAINT AsientoModeloItem_numero_chk CHECK (numero > 0),
+    cuentaContable VARCHAR NOT NULL REFERENCES massoftware.CuentaContable (id)	            
+);
+
+CREATE UNIQUE INDEX u_AsientoModeloItem_asientoModelo_numero ON massoftware.AsientoModeloItem (asientoModelo, numero);
+CREATE UNIQUE INDEX u_AsientoModeloItem_asientoModelo_cuentaContable ON massoftware.AsientoModeloItem (asientoModelo, cuentaContable);
+
+
+-- SELECT * FROM massoftware.AsientoModeloItem;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatAsientoModeloItem() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatAsientoModeloItem() RETURNS TRIGGER AS $formatAsientoModeloItem$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.asientoModelo := massoftware.white_is_null(NEW.asientoModelo);    
+    NEW.cuentaContable := massoftware.white_is_null(NEW.cuentaContable);    
+    
+	RETURN NEW;
+END;
+$formatAsientoModeloItem$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatAsientoModeloItem ON massoftware.AsientoModeloItem CASCADE;
+
+CREATE TRIGGER tgFormatAsientoModeloItem BEFORE INSERT OR UPDATE 
+    ON massoftware.AsientoModeloItem FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatAsientoModeloItem();        
 
 
 

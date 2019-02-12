@@ -1,6 +1,7 @@
 package com.massoftware;
 
-import com.massoftware.windows.paises.WPaises;
+import org.vaadin.patrik.demo.DemoUI;
+
 import com.massoftware.windows.provincias.WProvincias;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -27,7 +28,7 @@ public class SuperMenu extends AbstractMenu {
 
 		final MenuBar.MenuItem a1 = menubar.addItem("Ventas-Archivo", null);
 
-		a1.addItem("Países", openPaisesCmd());
+		a1.addItem("Demo", openPaisesCmd());
 		a1.addItem("Provincias", openProvinciasCmd());
 
 		return menubar;
@@ -44,7 +45,12 @@ public class SuperMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WPaises();
+				Window window = new Window();
+				window.setCaption("Demo");
+				window.setClosable(true);
+				window.setWidth("100%");
+				window.setHeight("100%");
+				window.setContent(new DemoUI());								 
 				getUI().addWindow(window);
 			}
 		};

@@ -1,6 +1,8 @@
 package com.massoftware.backend.migracion;
 
 import com.massoftware.backend.BackendContextMS;
+import com.massoftware.model.AsientoModelo;
+import com.massoftware.model.AsientoModeloItem;
 import com.massoftware.model.Banco;
 import com.massoftware.model.Caja;
 import com.massoftware.model.CentroCostoContable;
@@ -36,14 +38,18 @@ public class MigradorMSToPG {
 		modulo();
 
 		puerta();
-		
+
 		ejercicioContable();
 
 		puntoEquilibrio();
 
 		centroCostoContable();
+
+		cuentaContable();
 		
-		cuentaContable();		
+		asientoModelo();
+		
+		asientoModeloItem();
 
 		caja();
 
@@ -281,7 +287,7 @@ public class MigradorMSToPG {
 		// ==================================================================
 		// MS SQL SERVER
 
-//		String attId = " CONCAT (DGRPNO, '-', NO )";
+		// String attId = " CONCAT (DGRPNO, '-', NO )";
 		String attId = "CAST(NO AS VARCHAR)";
 		String attNumeroModulo = "CASE WHEN DGRPNO = 0 THEN null ELSE DGRPNO END";
 		String attNumero = "CAST(NO AS INTEGER)";
@@ -589,9 +595,7 @@ public class MigradorMSToPG {
 		String codigo = "CAST(A.CUENTACONTABLE AS VARCHAR(11))";
 		String nombre = "CAST(A.NOMBRE AS VARCHAR(35))";
 		// --------------------------------------------------------------------------
-		
-		
-		
+
 		String imputable = "CASE WHEN A.IMPUTABLE = 'N' THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END";
 		String ajustaPorInflacion = "CASE WHEN A.AJUSTEINF = 'N' THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END";
 		String cuentaContableEstado = "CAST(A.ESTADO AS VARCHAR)";
@@ -601,7 +605,8 @@ public class MigradorMSToPG {
 		String cuentaAgrupadora = "CAST(A.CUENTAAGRUPADORA AS VARCHAR(11))";
 		String porcentaje = "CASE WHEN A.PORCENTAJE = 0 THEN null ELSE CAST(A.PORCENTAJE AS DOUBLE PRECISION) END";
 		String puntoEquilibrio = "CASE WHEN A.PUNTODEEQUILIBRIO IS NOT NULL THEN CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.CENTRODECOSTOCONTABLE AS VARCHAR)) AS VARCHAR) ELSE null END";
-		//String puntoEquilibrio = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-', CAST(A.PUNTODEEQUILIBRIO AS VARCHAR)) AS VARCHAR)";
+		// String puntoEquilibrio = "CAST(CONCAT(CAST(A.EJERCICIO AS VARCHAR), '-',
+		// CAST(A.PUNTODEEQUILIBRIO AS VARCHAR)) AS VARCHAR)";
 		String costoVenta = "CAST(A.COSTODEVENTA AS VARCHAR)";
 		String seguridadPuerta = "CAST(A.DOORNO AS VARCHAR)";
 
@@ -623,10 +628,55 @@ public class MigradorMSToPG {
 			CuentaContable item = new CuentaContable();
 			item.setter(table[i], 0);
 			item.setterTrim();
-			if(item.getIntegra() != null) {
-				item.insert();	
+			if (item.getIntegra() != null) {
+				item.insert();
 			}
-			
+
+		}
+
+	}
+
+	public static void asientoModelo() throws Exception {
+
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT	DISTINCT CONCAT(CAST(B.EJERCICIO AS VARCHAR(250)), '-', CAST(B.ASIENTOMODELO AS VARCHAR(250))) AS id, CAST(B.EJERCICIO AS VARCHAR(250)) AS ejercicioContable, CAST(B.ASIENTOMODELO AS INTEGER) AS numero, (SELECT A.DENOMINACION FROM AsientosModelos A WHERE A.ASIENTOMODELO = B.ASIENTOMODELO) AS nombre	FROM AsientosModelosMov B ORDER BY CAST(B.EJERCICIO AS VARCHAR(250)), CAST(B.ASIENTOMODELO AS INTEGER)";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			AsientoModelo item = new AsientoModelo();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+	
+	public static void asientoModeloItem() throws Exception {
+
+
+		// ==================================================================
+		// MS SQL SERVER
+		
+		String sql = "SELECT	CONCAT(CAST(B.EJERCICIO AS VARCHAR), '-', CAST(B.ASIENTOMODELO AS VARCHAR(250)), '-', CAST(B.REGISTRO AS VARCHAR(250))) AS id, CONCAT(CAST(B.EJERCICIO AS VARCHAR(250)), '-', CAST(B.ASIENTOMODELO AS VARCHAR(250))) AS asientoModelo, CAST(B.REGISTRO AS INTEGER) AS numero, CAST(CONCAT(CAST(B.EJERCICIO AS VARCHAR), '-', CAST(B.CUENTACONTABLE AS VARCHAR(11))) AS VARCHAR) AS cuentaContable FROM	AsientosModelosMov B ORDER BY CAST(B.ASIENTOMODELO AS INTEGER), CAST(B.REGISTRO AS INTEGER)";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			AsientoModeloItem item = new AsientoModeloItem();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
 
 		}
 

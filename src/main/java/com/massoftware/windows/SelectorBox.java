@@ -86,6 +86,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		this.addComponent(removeFilterBTN);
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
+		
+		this.setComponentAlignment(valueTXT, Alignment.BOTTOM_LEFT);
+		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);
+		
 
 //		valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
 

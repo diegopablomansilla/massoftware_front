@@ -201,6 +201,10 @@ public class CuentaContable extends EntityId {
 		if (ejercicioContable != null && ejercicioContable.getNumero() != null) {
 			return "(" + ejercicioContable.getNumero() + "-" + codigo + ") " + nombre;
 		}
+		
+		if(codigo == null && nombre == null ) {
+			return null;
+		}
 
 		return "(" + codigo + ") " + nombre;
 
