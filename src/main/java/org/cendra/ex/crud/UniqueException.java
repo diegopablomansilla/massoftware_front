@@ -31,5 +31,10 @@ public class UniqueException extends IllegalStateException {
 	public String getMessage() {
 		return msg;
 	}
+	
+	public void setMessage(String msg) {
+		this.msg = msg;
+	}
+
 
 }

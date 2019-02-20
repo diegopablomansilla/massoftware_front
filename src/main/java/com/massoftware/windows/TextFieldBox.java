@@ -5,10 +5,13 @@ import java.util.Collection;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 
 public class TextFieldBox extends HorizontalLayout implements Validatable {
 
@@ -19,13 +22,12 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 
 	public TextFieldEntity valueTXT;
 	public Button removeFilterBTN;
-	
+
 	@SuppressWarnings("rawtypes")
 	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName) throws Exception {
 		init(window, dtoBI, attName, null);
 	}
 
-		
 	@SuppressWarnings("rawtypes")
 	public TextFieldBox(WindowListado window, BeanItem dtoBI, String attName, String inputPrompt) throws Exception {
 		init(window, dtoBI, attName, inputPrompt);
@@ -44,12 +46,12 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 				|| dtoBI.getItemProperty(attName).getType() == Long.class) {
 
 			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.EQUALS));
-		
+
 		} else if (inputPrompt == null) {
-			
+
 			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.CONTAINS_WORDS_AND));
-		
-		}else {
+
+		} else {
 			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(inputPrompt));
 		}
 

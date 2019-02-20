@@ -1,6 +1,8 @@
 package com.massoftware.windows.asientos_modelo;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import com.massoftware.model.AsientoModeloItem;
 import com.massoftware.model.CuentaContable;
@@ -9,7 +11,7 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
 import com.massoftware.windows.cuentas_contable.WCuentasContable;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.Window;
 
 class WCCuentaContableSB extends SelectorBox {
 
@@ -22,8 +24,12 @@ class WCCuentaContableSB extends SelectorBox {
 
 	private BeanItem<AsientoModeloItem> itemBI;
 
+	private String uuid;
+
 	public WCCuentaContableSB(BeanItem<AsientoModeloItem> itemBI, WAsientoModelo window) throws Exception {
 		super(itemBI, "cuentaContable", "");
+
+		uuid = UUID.randomUUID().toString();
 
 		setCaption(null);
 		valueTXT.setCaption(null);
@@ -35,6 +41,7 @@ class WCCuentaContableSB extends SelectorBox {
 		valueTXT.addBlurListener(e -> {
 			blur();
 		});
+
 		openSelectorBTN.addClickListener(e -> {
 			open();
 		});
@@ -48,9 +55,12 @@ class WCCuentaContableSB extends SelectorBox {
 				LogAndNotification.print(ex);
 			}
 		});
-		
-		this.setWidth("100%");		
+
+		this.setWidth("100%");
 		valueTXT.setWidth(25f, Unit.EM);
+		
+		
+		setSelectedItem(itemBI.getBean().getCuentaContable());
 	}
 
 	@SuppressWarnings({ "rawtypes" })
@@ -86,11 +96,13 @@ class WCCuentaContableSB extends SelectorBox {
 				setSelectedItem(null);
 
 			}
+
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected void open() {
 		try {
 
@@ -98,7 +110,16 @@ class WCCuentaContableSB extends SelectorBox {
 			filtro.setEjercicioContable(window.getItemBIC().getBean().getEjercicioContable());
 			// filtro.setNombre(this.getValue());
 
+			Iterator it = getUI().getWindows().iterator();
+			while (it.hasNext()) {
+				Window w = (Window) it.next();
+				if (w.getClass() == WCuentasContable.class && w.getId().equals(uuid)) {
+					return;
+				}
+			}
+
 			WCuentasContable windowPopup = new WCuentasContable(filtro, true);
+			windowPopup.setId(uuid);
 
 			windowPopup.addCloseListener(e -> {
 				try {
@@ -140,8 +161,10 @@ class WCCuentaContableSB extends SelectorBox {
 		}
 
 		if (((CuentaContable) item).getCodigo() != null) {
+
 			valueTXT.setValue(((CuentaContable) item).getCodigo() + " - " + ((CuentaContable) item).getNombre());
 			itemBI.getBean().setCuentaContable((CuentaContable) item);
+
 		} else {
 			valueTXT.setValue(null);
 			itemBI.getBean().setCuentaContable(null);

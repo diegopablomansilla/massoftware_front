@@ -2,6 +2,7 @@ package com.massoftware.backend;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -69,7 +70,7 @@ public class BackendContextPG extends AbstractContext {
 		// massoftware.properties
 		// Properties properties = loadProperties(
 		// System.getProperty("user.dir") + File.separatorChar + "massoftware.conf");
-		
+
 		System.err.println("System.getProperty(\"user.dir\") " + System.getProperty("user.dir"));
 
 		Properties properties = loadProperties("massoftware.properties");
@@ -122,7 +123,7 @@ public class BackendContextPG extends AbstractContext {
 
 		return table[0];
 	}
-	
+
 	public synchronized Object[] findByFkId(String tableName, String attNameFK, String idFk) throws Exception {
 		Object[][] table = find(tableName, "*", "id", attNameFK + " = ?", -1, -1, new Object[] { idFk });
 
@@ -344,6 +345,84 @@ public class BackendContextPG extends AbstractContext {
 		}
 	}
 
+	public synchronized boolean update(List<String> tableNames, List<List<String>> nameAtts, List<List<Object>> args,
+			List<String> where, List<Integer> operation) throws Exception {
+
+		if (tableNames == null) {
+			tableNames = new ArrayList<String>();
+		}
+
+		if (nameAtts == null) {
+			nameAtts = new ArrayList<List<String>>();
+		}
+
+		if (args == null) {
+			args = new ArrayList<List<Object>>();
+		}
+
+		if (where == null) {
+			where = new ArrayList<String>();
+		}
+
+		ConnectionWrapper connectionWrapper = dataSourceWrapper.getConnectionWrapper();
+
+		try {
+
+			connectionWrapper.begin();
+
+			for (int i = 0; i < tableNames.size(); i++) {
+
+				String[] nameAttsArray = new String[nameAtts.get(i).size()];
+				nameAttsArray = nameAtts.get(i).toArray(nameAttsArray);
+
+				String sql = null;
+
+				if (operation.get(i) == 1) {
+
+					sql = "DELETE FROM massoftware." + tableNames.get(i);
+
+					if (where.get(i) != null && where.get(i).trim().length() > 0) {
+						sql += " WHERE " + where.get(i);
+					}
+
+					connectionWrapper.update(sql, args.get(i).toArray());
+
+				} else if (operation.get(i) == 2) {
+					sql = buildUpdate(tableNames.get(i), nameAttsArray, where.get(i));
+
+					int rows = connectionWrapper.update(sql, args.get(i).toArray());
+
+					if (rows != 1) {
+						throw new Exception("La sentencia debería afectar un registro, la sentencia afecto " + rows
+								+ " registros.");
+					}
+
+				} else if (operation.get(i) == 3) {
+					sql = buildInsert(tableNames.get(i), nameAttsArray);
+
+					int rows = connectionWrapper.update(sql, args.get(i).toArray());
+
+					if (rows != 1) {
+						throw new Exception("La sentencia debería afectar un registro, la sentencia afecto " + rows
+								+ " registros.");
+					}
+
+				}
+
+			}
+
+			connectionWrapper.commit();
+
+			return true;
+
+		} catch (Exception e) {
+			connectionWrapper.rollBack();
+			throw e;
+		} finally {
+			connectionWrapper.close(connectionWrapper);
+		}
+	}
+
 	private synchronized String buildUpdate(String tableName, String[] nameAtts, String where) throws Exception {
 
 		String sql = "UPDATE " + "massoftware." + tableName + " SET ";
@@ -356,6 +435,31 @@ public class BackendContextPG extends AbstractContext {
 		}
 
 		sql += " WHERE " + where + ";";
+
+		return sql;
+	}
+
+	private synchronized String buildInsert(String tableName, String[] nameAtts) throws Exception {
+
+		String sql = "INSERT INTO " + "massoftware." + tableName + " (";
+
+		for (int i = 0; i < nameAtts.length; i++) {
+			sql += nameAtts[i];
+			if (i < nameAtts.length - 1) {
+				sql += ", ";
+			}
+		}
+
+		sql += ") VALUES (";
+
+		for (int i = 0; i < nameAtts.length; i++) {
+			sql += "?";
+			if (i < nameAtts.length - 1) {
+				sql += ", ";
+			}
+		}
+
+		sql += ")";
 
 		return sql;
 	}
@@ -397,6 +501,72 @@ public class BackendContextPG extends AbstractContext {
 			if (rows != 1) {
 				throw new Exception(
 						"La sentencia debería afectar un registro, la sentencia afecto " + rows + " registros.");
+			}
+
+			connectionWrapper.commit();
+
+			return true;
+
+		} catch (Exception e) {
+			connectionWrapper.rollBack();
+			throw e;
+		} finally {
+			connectionWrapper.close(connectionWrapper);
+		}
+	}
+
+	public synchronized boolean insert(List<String> tableNames, List<List<String>> nameAtts, List<List<Object>> args)
+			throws Exception {
+
+		if (tableNames == null) {
+			tableNames = new ArrayList<String>();
+		}
+
+		if (nameAtts == null) {
+			nameAtts = new ArrayList<List<String>>();
+		}
+
+		if (args == null) {
+			args = new ArrayList<List<Object>>();
+		}
+
+		ConnectionWrapper connectionWrapper = dataSourceWrapper.getConnectionWrapper();
+
+		try {
+
+			connectionWrapper.begin();
+
+			for (int i = 0; i < tableNames.size(); i++) {
+
+				String sql = "INSERT INTO " + "massoftware." + tableNames.get(i) + " (";
+
+				for (int j = 0; j < nameAtts.get(i).size(); j++) {
+
+					sql += nameAtts.get(i).get(j);
+					if (j < nameAtts.get(i).size() - 1) {
+						sql += ", ";
+					}
+
+				}
+
+				sql += ") VALUES (";
+
+				for (int j = 0; j < args.get(i).size(); j++) {
+					sql += "?";
+					if (j < args.get(i).size() - 1) {
+						sql += ", ";
+					}
+				}
+
+				sql += ")";
+
+				int rows = connectionWrapper.insert(sql, args.get(i).toArray());
+
+				if (rows != 1) {
+					throw new Exception(
+							"La sentencia debería afectar un registro, la sentencia afecto " + rows + " registros.");
+				}
+
 			}
 
 			connectionWrapper.commit();

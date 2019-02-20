@@ -18,7 +18,7 @@ public class AsientoModeloItem extends EntityId {
 	@FieldConfAnont(label = "Asiento modelo", required = true, readOnly = true)
 	private AsientoModelo asientoModelo;
 
-	@FieldConfAnont(label = "Nº asiento modelo item", required = true)
+	@FieldConfAnont(label = "Nº item", required = true)
 	private Integer numero;
 
 	@FieldConfAnont(label = "Cuenta contable", required = true)
@@ -93,6 +93,7 @@ public class AsientoModeloItem extends EntityId {
 		List<EntityId> items = findUtil(orderBySQL, whereSQL, -1, -1, filtros.toArray(), 2);
 
 		for (EntityId item : items) {
+			
 			listado.add((AsientoModeloItem) item);
 		}
 

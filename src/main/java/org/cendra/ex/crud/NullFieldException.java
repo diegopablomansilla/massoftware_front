@@ -31,5 +31,9 @@ public class NullFieldException extends IllegalStateException {
 	public String getMessage() {
 		return msg;
 	}
+	
+	public void setMessage(String msg) {
+		this.msg = msg;
+	}
 
 }

@@ -13257,6 +13257,17 @@ div.v-layout.v-horizontal.v-widget {
 	color: gray;
 }
 
+.mytheme .textfield-tiny-grid-selected {
+	background: #197de1;
+	color: white;
+}
+
+.mytheme .textfield-tiny-grid-gray {
+	background: #ececec;
+	border-radius: 0px;
+	line-height: 0px;
+}
+
 .mytheme .footer-error {
 	display: inline-block;
 	line-height: inherit;

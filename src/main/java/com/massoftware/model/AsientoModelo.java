@@ -1,8 +1,11 @@
 package com.massoftware.model;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.cendra.ex.crud.UniqueException;
 
@@ -24,7 +27,6 @@ public class AsientoModelo extends EntityId {
 
 	@FieldConfAnont(label = "Nombre", required = true)
 	private String nombre;
-
 
 	public String getId() {
 		return id;
@@ -73,8 +75,8 @@ public class AsientoModelo extends EntityId {
 		return find(-1, -1, null, filtro);
 	}
 
-	public List<AsientoModelo> find(int limit, int offset, Map<String, Boolean> orderBy,
-			AsientosModeloFiltro filtro) throws Exception {
+	public List<AsientoModelo> find(int limit, int offset, Map<String, Boolean> orderBy, AsientosModeloFiltro filtro)
+			throws Exception {
 
 		filtro.setterTrim();
 
@@ -219,7 +221,305 @@ public class AsientoModelo extends EntityId {
 		}
 
 	}
-	
 
+	public String insert(List<AsientoModeloItem> items) throws Exception {
+
+		if (this.getId() == null || this.getId().trim().length() == 0) {
+			this.setId(UUID.randomUUID().toString());
+		}
+
+		Field[] fields = getClass().getDeclaredFields();
+
+		String[] nameAtts = new String[fields.length];
+		Object[] args = new Object[fields.length];
+
+		for (int i = 0; i < fields.length; i++) {
+
+			Field field = fields[i];
+
+			String nameAttDB = fields[i].getName();
+			nameAtts[i] = nameAttDB;
+
+			Method methodGet = getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+
+			args[i] = methodGet.invoke(this);
+
+			if (args[i] == null && isScalar(fields[i].getType()) == true) {
+
+				args[i] = fields[i].getType();
+
+			} else if (args[i] == null && isScalar(fields[i].getType()) == false) {
+
+				args[i] = String.class;
+
+			} else if (args[i] != null && isScalar(fields[i].getType()) == false) {
+
+				methodGet = fields[i].getType().getMethod("getId");
+				args[i] = methodGet.invoke(args[i]);
+				if (args[i] == null) {
+					args[i] = String.class;
+				}
+			}
+		}
+
+		// ----------------------------------------------------------------------
+
+		List<String> tableNamesMatrix = new ArrayList<String>();
+		List<List<String>> nameAttsMatrix = new ArrayList<List<String>>();
+		List<List<Object>> argsMatrix = new ArrayList<List<Object>>();
+
+		tableNamesMatrix.add(getClass().getSimpleName());
+
+		List<String> nameAttsList = new ArrayList<String>();
+
+		for (String s : nameAtts) {
+			nameAttsList.add(s);
+		}
+
+		nameAttsMatrix.add(nameAttsList);
+
+		List<Object> argsList = new ArrayList<Object>();
+
+		for (Object o : args) {
+			argsList.add(o);
+		}
+
+		argsMatrix.add(argsList);
+
+		// ----------------------------------------------------------------------
+
+		for (AsientoModeloItem item : items) {
+
+			item.setAsientoModelo(this);
+
+			tableNamesMatrix.add(item.getClass().getSimpleName());
+
+			// if (item.getId() == null || item.getId().trim().length() == 0) {
+			// item.setId(UUID.randomUUID().toString());
+			// }
+
+			item.setId(UUID.randomUUID().toString());
+
+			Field[] fields2 = item.getClass().getDeclaredFields();
+
+			String[] nameAtts2 = new String[fields2.length];
+			Object[] args2 = new Object[fields2.length];
+
+			for (int i = 0; i < fields2.length; i++) {
+
+				Field field2 = fields2[i];
+
+				String nameAttDB2 = fields2[i].getName();
+				nameAtts2[i] = nameAttDB2;
+
+				Method methodGet = item.getClass().getDeclaredMethod("get" + toCamelCase(field2.getName()));
+
+				args2[i] = methodGet.invoke(item);
+
+				if (args2[i] == null && isScalar(fields2[i].getType()) == true) {
+
+					args2[i] = fields2[i].getType();
+
+				} else if (args2[i] == null && isScalar(fields2[i].getType()) == false) {
+
+					args2[i] = String.class;
+
+				} else if (args2[i] != null && isScalar(fields2[i].getType()) == false) {
+
+					methodGet = fields2[i].getType().getMethod("getId");
+					args2[i] = methodGet.invoke(args2[i]);
+					if (args2[i] == null) {
+						args2[i] = String.class;
+					}
+				}
+			}
+
+			nameAttsList = new ArrayList<String>();
+
+			for (String s : nameAtts2) {
+				nameAttsList.add(s);
+			}
+
+			nameAttsMatrix.add(nameAttsList);
+
+			argsList = new ArrayList<Object>();
+
+			for (Object o : args2) {
+				argsList.add(o);
+			}
+
+			argsMatrix.add(argsList);
+
+		}
+
+		// ----------------------------------------------------------------------
+
+		BackendContextPG.get().insert(tableNamesMatrix, nameAttsMatrix, argsMatrix);
+
+		return getId();
+	}
+
+	public String update(List<AsientoModeloItem> items) throws Exception {
+
+		Field[] fields = getClass().getDeclaredFields();
+
+		String[] nameAtts = new String[fields.length];
+		Object[] args = new Object[fields.length + 1];
+
+		for (int i = 0; i < fields.length; i++) {
+
+			Field field = fields[i];
+
+			String nameAttDB = field.getName();
+			nameAtts[i] = nameAttDB;
+
+			Method methodGet = getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+
+			args[i] = methodGet.invoke(this);
+
+			if (args[i] == null && isScalar(fields[i].getType()) == true) {
+
+				args[i] = fields[i].getType();
+
+			} else if (args[i] == null && isScalar(fields[i].getType()) == false) {
+
+				args[i] = String.class;
+
+			} else if (args[i] != null && isScalar(fields[i].getType()) == false) {
+
+				methodGet = field.getType().getMethod("getId");
+				args[i] = methodGet.invoke(args[i]);
+				if (args[i] == null) {
+					args[i] = String.class;
+				}
+			}
+		}
+
+		args[fields.length] = this._originalDTO.getId();
+
+		// ----------------------------------------------------------------------
+
+		List<String> tableNamesMatrix = new ArrayList<String>();
+		List<List<String>> nameAttsMatrix = new ArrayList<List<String>>();
+		List<List<Object>> argsMatrix = new ArrayList<List<Object>>();
+		List<String> whereMatrix = new ArrayList<String>();
+		List<Integer> operationMatrix = new ArrayList<Integer>();
+
+		// ----------------------------------------------------------------------
+
+		operationMatrix.add(2);
+
+		tableNamesMatrix.add(getClass().getSimpleName());
+
+		List<String> nameAttsList = new ArrayList<String>();
+
+		for (String s : nameAtts) {
+			nameAttsList.add(s);
+		}
+
+		nameAttsMatrix.add(nameAttsList);
+
+		List<Object> argsList = new ArrayList<Object>();
+
+		for (Object o : args) {
+			argsList.add(o);
+		}
+
+		argsMatrix.add(argsList);
+
+		whereMatrix.add("id = ?");
+
+		// ----------------------------------------------------------------------
+
+		operationMatrix.add(1);
+
+		tableNamesMatrix.add(AsientoModeloItem.class.getSimpleName());
+
+		nameAttsList = new ArrayList<String>();
+		
+		nameAttsMatrix.add(nameAttsList);
+
+		argsList = new ArrayList<Object>();
+		
+		argsList.add(this.getId());
+		
+		argsMatrix.add(argsList);
+
+		whereMatrix.add("asientoModelo = ?");
+
+		// ----------------------------------------------------------------------
+
+		for (AsientoModeloItem item : items) {
+			
+			operationMatrix.add(3);
+
+			item.setAsientoModelo(this);
+
+			tableNamesMatrix.add(item.getClass().getSimpleName());
+
+			// if (item.getId() == null || item.getId().trim().length() == 0) {
+			// item.setId(UUID.randomUUID().toString());
+			// }
+
+			item.setId(UUID.randomUUID().toString());
+
+			Field[] fields2 = item.getClass().getDeclaredFields();
+
+			String[] nameAtts2 = new String[fields2.length];
+			Object[] args2 = new Object[fields2.length];
+
+			for (int i = 0; i < fields2.length; i++) {
+
+				Field field2 = fields2[i];
+
+				String nameAttDB2 = fields2[i].getName();
+				nameAtts2[i] = nameAttDB2;
+
+				Method methodGet = item.getClass().getDeclaredMethod("get" + toCamelCase(field2.getName()));
+
+				args2[i] = methodGet.invoke(item);
+
+				if (args2[i] == null && isScalar(fields2[i].getType()) == true) {
+
+					args2[i] = fields2[i].getType();
+
+				} else if (args2[i] == null && isScalar(fields2[i].getType()) == false) {
+
+					args2[i] = String.class;
+
+				} else if (args2[i] != null && isScalar(fields2[i].getType()) == false) {
+
+					methodGet = fields2[i].getType().getMethod("getId");
+					args2[i] = methodGet.invoke(args2[i]);
+					if (args2[i] == null) {
+						args2[i] = String.class;
+					}
+				}
+			}
+
+			nameAttsList = new ArrayList<String>();
+
+			for (String s : nameAtts2) {
+				nameAttsList.add(s);
+			}
+
+			nameAttsMatrix.add(nameAttsList);
+
+			argsList = new ArrayList<Object>();
+
+			for (Object o : args2) {
+				argsList.add(o);
+			}
+
+			argsMatrix.add(argsList);
+
+		}
+
+		// ----------------------------------------------------------------------
+
+		BackendContextPG.get().update(tableNamesMatrix, nameAttsMatrix, argsMatrix, whereMatrix, operationMatrix);
+
+		return this.getId();
+	}
 
 }

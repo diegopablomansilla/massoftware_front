@@ -179,24 +179,24 @@ public abstract class WindowForm extends Window {
 			// validateForm();
 
 			if (INSERT_MODE.equals(mode)) {
-				
+
 				EntityId item = (EntityId) getItemBIC().getBean();
-				setMaxValues(item);				
+				setMaxValues(item);
 
 			} else {
 				EntityId item = queryData();
 				if (item != null) {
 					if (COPY_MODE.equals(mode)) {
-						
+
 						setMaxValues(item);
 						item.setId(null);
-						
+
 						setBean(item);
-						
+
 					} else {
-						
+
 						setBean(item);
-						
+
 					}
 				} else {
 					LogAndNotification.printError("No se encontro el item",
@@ -210,7 +210,7 @@ public abstract class WindowForm extends Window {
 		}
 	}
 
-	abstract protected void setMaxValues(EntityId item) throws Exception;		
+	abstract protected void setMaxValues(EntityId item) throws Exception;
 
 	abstract protected void setBean(EntityId obj) throws Exception;
 
@@ -337,9 +337,9 @@ public abstract class WindowForm extends Window {
 	protected EntityId queryData() throws Exception {
 		try {
 
-			EntityId item = (EntityId) getItemBIC().getBean();			
-			item.loadById(id); // consulta a DB			 
-			
+			EntityId item = (EntityId) getItemBIC().getBean();
+			item.loadById(id); // consulta a DB
+
 			return item;
 
 		} catch (Exception e) {

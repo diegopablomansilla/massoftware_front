@@ -61,14 +61,14 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		valueTXT.addStyleName(ValoTheme.TEXTFIELD_TINY);
 
 		// txtValue.setEnabled(false);
-		valueTXT.setRequired(required);		
+		valueTXT.setRequired(required);
 		valueTXT.setDescription("Buscar por " + label2);
 		valueTXT.setInputPrompt("Buscar por " + label2.toLowerCase());
-//		valueTXT.setCaption(label);
+		// valueTXT.setCaption(label);
 		setCaption(label);
 
 		this.addComponent(openSelectorBTN);
-		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);		
+		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);
 		this.addComponent(valueTXT);
 		this.setComponentAlignment(valueTXT, Alignment.MIDDLE_LEFT);
 
@@ -86,12 +86,11 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		this.addComponent(removeFilterBTN);
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
-		
+
 		this.setComponentAlignment(valueTXT, Alignment.BOTTOM_LEFT);
 		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);
-		
 
-//		valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
+		// valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
 		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
 
@@ -106,7 +105,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		});
 
 	}
-	
+
 	protected String getValue() {
 
 		String value = this.valueTXT.getValue();
