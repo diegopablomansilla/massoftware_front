@@ -5,13 +5,10 @@ import java.util.Collection;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 
 public class TextFieldBox extends HorizontalLayout implements Validatable {
 
@@ -80,12 +77,25 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 
 		// valueTXT.addTextChangeListener(e -> {
 		// try {
-		// valueTXT.setValue(e.getText());
+		//
+		// if (e.getText() == null || e.getText().trim().length() == 0) {
 		// window.loadDataResetPaged();
+		// }
 		// } catch (Exception ex) {
 		// LogAndNotification.print(ex);
 		// }
 		// });
+
+		valueTXT.addValueChangeListener(e -> {
+			try {
+
+				if (valueTXT.getValue() == null || valueTXT.getValue().trim().length() == 0) {
+					window.loadDataResetPaged();
+				}
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
 
 		valueTXT.addBlurListener(e -> {
 			try {

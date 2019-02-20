@@ -1,8 +1,8 @@
-package com.massoftware.windows.jurisdicciones_convenio_multilateral;
+package com.massoftware.windows.a.jurisdicciones_convenio_multilateral;
 
 import com.massoftware.windows.UtilModel;
 
-public class JurisdiccionesConvenioMultilateral {
+public class OldJurisdiccionesConvenioMultilateral {
 
 	private Integer numero;
 	private String nombre;

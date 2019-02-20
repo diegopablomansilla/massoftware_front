@@ -116,6 +116,10 @@ public class CuentaFondo extends EntityId {
 		return "(" + numero + ") " + nombre;
 	}
 
+	public List<CuentaFondo> find(CuentasFondoFiltro filtro) throws Exception {
+		return find(-1, -1, null, filtro);
+	}
+
 	public List<CuentaFondo> find(int limit, int offset, Map<String, Boolean> orderBy, CuentasFondoFiltro filtro)
 			throws Exception {
 

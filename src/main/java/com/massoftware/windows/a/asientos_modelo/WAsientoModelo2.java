@@ -1,4 +1,4 @@
-package com.massoftware.windows.asientos_modelo;
+package com.massoftware.windows.a.asientos_modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
-public class WAsientoModelo2 extends WindowForm {
+class WAsientoModelo2 extends WindowForm {
 
 	// -------------------------------------------------------------
 

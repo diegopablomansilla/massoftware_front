@@ -12,6 +12,7 @@ import com.massoftware.model.CuentaFondoGrupo;
 import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
+import com.massoftware.model.JuridiccionConvnioMultilateral;
 import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
@@ -60,6 +61,8 @@ public class MigradorMSToPG {
 		grupo();
 
 		cuentaFondo();
+		
+		juridiccionConvnioMultilateral();
 
 		sucursal();
 
@@ -674,6 +677,29 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			AsientoModeloItem item = new AsientoModeloItem();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+	
+	public static void juridiccionConvnioMultilateral() throws Exception {
+
+
+		// ==================================================================
+		// MS SQL SERVER
+		
+		String sql = "SELECT CONCAT(CAST( LTRIM(RTRIM(CUENTAFONDO)) AS VARCHAR(11)), '-', CAST(JURISDICCION AS VARCHAR(250))) AS id, CAST(CUENTAFONDO AS VARCHAR(11)) AS cuentaFondo, CAST(JURISDICCION AS INTEGER) AS numero, CAST(NOMBRE AS VARCHAR(30)) AS nombre FROM ConvenioMultilateralJurisdicciones";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			JuridiccionConvnioMultilateral item = new JuridiccionConvnioMultilateral();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

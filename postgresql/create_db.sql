@@ -901,6 +901,10 @@ CREATE TRIGGER tgFormatCuentaFondoRubro BEFORE INSERT OR UPDATE
     ON massoftware.CuentaFondoRubro FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoRubro();
 
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaFondoGrupo													 //		
@@ -957,6 +961,9 @@ CREATE TRIGGER tgFormatCuentaFondoGrupo BEFORE INSERT OR UPDATE
     ON massoftware.CuentaFondoGrupo FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoGrupo();
     
+
+
+
 
     
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1020,6 +1027,11 @@ INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('4', 4, 'Tar
 INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('5', 5, 'Otra');
 INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('6', 6, 'Tickets');
 
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaFondo														 //		
@@ -1079,6 +1091,77 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
     ON massoftware.CuentaFondo FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondo();
     
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: JuridiccionConvnioMultilateral												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.JuridiccionConvnioMultilateral
+
+DROP TABLE IF EXISTS massoftware.JuridiccionConvnioMultilateral CASCADE;
+
+CREATE TABLE massoftware.JuridiccionConvnioMultilateral
+(
+    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cuentaFondo VARCHAR NOT NULL REFERENCES massoftware.CuentaFondo (id),	    
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT JuridiccionConvnioMultilateral_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL -- CONSTRAINT PuntoEquilibrio_nombre_chk CHECK (char_length(nombre) >= 2)
+    
+);
+
+/*
+CREATE UNIQUE INDEX u_JuridiccionConvnioMultilateral_cuentaFondo_numero ON massoftware.JuridiccionConvnioMultilateral (cuentaFondo, numero);
+CREATE UNIQUE INDEX u_JuridiccionConvnioMultilateral_cuentaFondo_nombre ON massoftware.JuridiccionConvnioMultilateral (cuentaFondo, TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+*/            
+CREATE UNIQUE INDEX u_JuridiccionConvnioMultilateral_nombre ON massoftware.JuridiccionConvnioMultilateral (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+            
+
+
+-- SELECT * FROM massoftware.JuridiccionConvnioMultilateral;
+-- SELECT COUNT(*)  FROM massoftware.JuridiccionConvnioMultilateral;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatJuridiccionConvnioMultilateral() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatJuridiccionConvnioMultilateral() RETURNS TRIGGER AS $formatJuridiccionConvnioMultilateral$
+DECLARE
+BEGIN
+   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.cuentaFondo := massoftware.white_is_null(NEW.cuentaFondo);        
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);        
+    
+	RETURN NEW;
+END;
+$formatJuridiccionConvnioMultilateral$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatJuridiccionConvnioMultilateral ON massoftware.JuridiccionConvnioMultilateral CASCADE;
+
+CREATE TRIGGER tgFormatJuridiccionConvnioMultilateral BEFORE INSERT OR UPDATE 
+    ON massoftware.JuridiccionConvnioMultilateral FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatJuridiccionConvnioMultilateral();
+
+
+
+
+
 
 
 
@@ -1243,6 +1326,7 @@ CREATE UNIQUE INDEX u_Sucursal_nombre ON massoftware.Sucursal (TRANSLATE(LOWER(T
             , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
 
 
+-- SELECT COUNT(*) FROM massoftware.Sucursal;
 -- SELECT * FROM massoftware.Sucursal;
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -1440,6 +1524,7 @@ CREATE UNIQUE INDEX u_Talonario_nombre ON massoftware.Talonario (TRANSLATE(LOWER
             , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
 
 
+-- SELECT COUNT(*) FROM massoftware.Talonario;
 -- SELECT * FROM massoftware.Talonario;
 
 -- ---------------------------------------------------------------------------------------------------------------------------

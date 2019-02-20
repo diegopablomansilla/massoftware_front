@@ -1,4 +1,4 @@
-package com.massoftware.windows.asientos_modelo;
+package com.massoftware.windows.a.asientos_modelo;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;

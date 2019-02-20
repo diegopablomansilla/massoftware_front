@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
 import com.massoftware.windows.bancos.WBancos;
 import com.massoftware.windows.cajas.WCajas;
@@ -17,7 +18,6 @@ import com.massoftware.windows.conciliaciones_bancarias.WConciliacionesBancarias
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.massoftware.windows.fecha_cierre_x_modulo.WFechaCierreXModulo;
 import com.massoftware.windows.firmantes.WFirmantes;
-import com.massoftware.windows.jurisdicciones_convenio_multilateral.WJurisdiccionesConvenioMultilateral;
 import com.massoftware.windows.marcas_tickets.WMarcasTickets;
 import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
 import com.massoftware.windows.modelos_tickets.WModelosTickets;
@@ -101,8 +101,7 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd()).setEnabled(false);
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
-		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd())
-				.setEnabled(false);
+		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
 		a1.addSeparator();
 		a1.addItem("Marcas de ticket's ...", openMarcasTicketsCmd()).setEnabled(false);
 		a1.addItem("Series de ticket's ...", openModelosTicketsCmd()).setEnabled(false);
@@ -333,7 +332,7 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WJurisdiccionesConvenioMultilateral();
+				Window window = new WJuridiccionesConvnioMultilateral();
 				getUI().addWindow(window);
 			}
 		};

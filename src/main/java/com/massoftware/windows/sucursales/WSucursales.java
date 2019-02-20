@@ -197,6 +197,7 @@ public class WSucursales extends WindowListado {
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
 			List<Sucursal> items = new Sucursal().find(limit, offset, buildOrderBy(), filterBI.getBean());
+//			List<Sucursal> items = new Sucursal().find(-1, -1, buildOrderBy(), filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla

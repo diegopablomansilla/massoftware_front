@@ -7,7 +7,7 @@ import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.PuntosEquilibrioFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.asientos_modelo.WAsientosModelo;
+import com.massoftware.windows.a.asientos_modelo.WAsientosModelo;
 import com.massoftware.windows.centros_costo_contable.WCentrosCostoContable;
 import com.massoftware.windows.cuentas_contable.WCuentasContable;
 import com.massoftware.windows.ejercicios_contables.WEjerciciosContables;

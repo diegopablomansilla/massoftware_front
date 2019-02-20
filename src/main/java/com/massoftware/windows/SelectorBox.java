@@ -1,13 +1,12 @@
 package com.massoftware.windows;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -26,6 +25,11 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	public TextField valueTXT;
 	public Button removeFilterBTN;
 
+	protected String uuid;
+
+	@SuppressWarnings("rawtypes")
+	protected BeanItem dtoBI;
+
 	@SuppressWarnings("rawtypes")
 	public SelectorBox(BeanItem dtoBI, String attName) throws Exception {
 		init(dtoBI, attName, null);
@@ -39,6 +43,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings("rawtypes")
 	private void init(BeanItem dtoBI, String attName, String label2) throws Exception {
 
+		uuid = UUID.randomUUID().toString();
+
+		this.dtoBI = dtoBI;
+
 		// HorizontalLayout hl = buildHL();
 		this.setWidthUndefined();
 		this.setMargin(false);
@@ -48,6 +56,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		String label = ((Entity) dtoBI.getBean()).label(attName);
 		boolean required = ((Entity) dtoBI.getBean()).required(attName);
 		label2 = (label2 == null || label2.trim().length() == 0) ? label : label2;
+		int columns = (int) ((Entity) dtoBI.getBean()).columns(attName);
 
 		openSelectorBTN = new Button();
 		openSelectorBTN.addStyleName("borderless tiny");
@@ -59,6 +68,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		valueTXT.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
 		valueTXT.setNullRepresentation("");
 		valueTXT.addStyleName(ValoTheme.TEXTFIELD_TINY);
+		valueTXT.setColumns(columns);
 
 		// txtValue.setEnabled(false);
 		valueTXT.setRequired(required);
@@ -92,17 +102,18 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		// valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
 
-		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-				if (target.equals(valueTXT)) {
-					valueTXT.setValue(null);
-				}
-			}
-		});
+		// this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new
+		// int[] {}) {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// @Override
+		// public void handleAction(Object sender, Object target) {
+		// if (target.equals(valueTXT)) {
+		// valueTXT.setValue(null);
+		// }
+		// }
+		// });
 
 	}
 

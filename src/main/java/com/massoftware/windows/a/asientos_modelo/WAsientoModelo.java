@@ -1,4 +1,4 @@
-package com.massoftware.windows.asientos_modelo;
+package com.massoftware.windows.a.asientos_modelo;
 
 import java.util.ArrayList;
 import java.util.List;

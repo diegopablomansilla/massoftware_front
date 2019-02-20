@@ -1,4 +1,4 @@
-package com.massoftware.windows.jurisdicciones_convenio_multilateral;
+package com.massoftware.windows.a.jurisdicciones_convenio_multilateral;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,14 +28,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class WJurisdiccionesConvenioMultilateral extends Window {
+public class OldWJurisdiccionesConvenioMultilateral extends Window {
 
 	private static final long serialVersionUID = -6410625501465383928L;
 
 	// -------------------------------------------------------------
 
-	private BeanItem<JurisdiccionesConvenioMultilateralFiltro> filterBI;
-	private BeanItemContainer<JurisdiccionesConvenioMultilateral> itemsBIC;
+	private BeanItem<OldJurisdiccionesConvenioMultilateralFiltro> filterBI;
+	private BeanItemContainer<OldJurisdiccionesConvenioMultilateral> itemsBIC;
 
 	// -------------------------------------------------------------
 
@@ -59,7 +59,7 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 	// -------------------------------------------------------------
 
 	@SuppressWarnings("serial")
-	public WJurisdiccionesConvenioMultilateral() {
+	public OldWJurisdiccionesConvenioMultilateral() {
 		super();
 
 		try {
@@ -320,11 +320,11 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 
 	private void buildContainersItems() throws Exception {
 
-		filterBI = new BeanItem<JurisdiccionesConvenioMultilateralFiltro>(
-				new JurisdiccionesConvenioMultilateralFiltro());
-		itemsBIC = new BeanItemContainer<JurisdiccionesConvenioMultilateral>(
-				JurisdiccionesConvenioMultilateral.class,
-				new ArrayList<JurisdiccionesConvenioMultilateral>());
+		filterBI = new BeanItem<OldJurisdiccionesConvenioMultilateralFiltro>(
+				new OldJurisdiccionesConvenioMultilateralFiltro());
+		itemsBIC = new BeanItemContainer<OldJurisdiccionesConvenioMultilateral>(
+				OldJurisdiccionesConvenioMultilateral.class,
+				new ArrayList<OldJurisdiccionesConvenioMultilateral>());
 	}
 
 	// =================================================================================
@@ -375,7 +375,7 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 											if (yes) {
 												if (itemsGRD.getSelectedRow() != null) {
 
-													JurisdiccionesConvenioMultilateral item = (JurisdiccionesConvenioMultilateral) itemsGRD
+													OldJurisdiccionesConvenioMultilateral item = (OldJurisdiccionesConvenioMultilateral) itemsGRD
 															.getSelectedRow();
 
 													deleteItem(item);
@@ -421,7 +421,7 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 
 			if (itemsGRD.getSelectedRow() != null) {
 
-				JurisdiccionesConvenioMultilateral item = (JurisdiccionesConvenioMultilateral) itemsGRD
+				OldJurisdiccionesConvenioMultilateral item = (OldJurisdiccionesConvenioMultilateral) itemsGRD
 						.getSelectedRow();
 				item.getNumero();
 
@@ -451,11 +451,11 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 			((Validatable) numeroTXTHL.getComponent(0)).validate();
 			((Validatable) nombreTXTHL.getComponent(0)).validate();
 
-			List<JurisdiccionesConvenioMultilateral> items = queryData();
+			List<OldJurisdiccionesConvenioMultilateral> items = queryData();
 
 			itemsBIC.removeAllItems();
 
-			for (JurisdiccionesConvenioMultilateral item : items) {
+			for (OldJurisdiccionesConvenioMultilateral item : items) {
 				itemsBIC.addBean(item);
 			}
 
@@ -481,7 +481,7 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 	// SECCION PARA CONSULTAS A LA BASE DE DATOS
 
 	// metodo que realiza la consulta a la base de datos
-	private List<JurisdiccionesConvenioMultilateral> queryData() {
+	private List<OldJurisdiccionesConvenioMultilateral> queryData() {
 		try {
 
 			System.out.println("Los filtros son "
@@ -499,7 +499,7 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 						+ sortOrder.getDirection());
 			}
 
-			List<JurisdiccionesConvenioMultilateral> items = mockData(limit,
+			List<OldJurisdiccionesConvenioMultilateral> items = mockData(limit,
 					offset, this.filterBI.getBean());
 
 			return items;
@@ -508,11 +508,11 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 			LogAndNotification.print(e);
 		}
 
-		return new ArrayList<JurisdiccionesConvenioMultilateral>();
+		return new ArrayList<OldJurisdiccionesConvenioMultilateral>();
 	}
 
 	// metodo que realiza el delete en la base de datos
-	private void deleteItem(JurisdiccionesConvenioMultilateral item) {
+	private void deleteItem(OldJurisdiccionesConvenioMultilateral item) {
 		try {
 
 			for (int i = 0; i < itemsMock.size(); i++) {
@@ -530,16 +530,16 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 	// =================================================================================
 	// SECCION SOLO PARA FINES DE MOCKUP
 
-	List<JurisdiccionesConvenioMultilateral> itemsMock = new ArrayList<JurisdiccionesConvenioMultilateral>();
+	List<OldJurisdiccionesConvenioMultilateral> itemsMock = new ArrayList<OldJurisdiccionesConvenioMultilateral>();
 
-	private List<JurisdiccionesConvenioMultilateral> mockData(int limit,
-			int offset, JurisdiccionesConvenioMultilateralFiltro filtro) {
+	private List<OldJurisdiccionesConvenioMultilateral> mockData(int limit,
+			int offset, OldJurisdiccionesConvenioMultilateralFiltro filtro) {
 
 		if (itemsMock.size() == 0) {
 
 			for (int i = 0; i < 500; i++) {
 
-				JurisdiccionesConvenioMultilateral item = new JurisdiccionesConvenioMultilateral();
+				OldJurisdiccionesConvenioMultilateral item = new OldJurisdiccionesConvenioMultilateral();
 
 				item.setNumero(i);
 				item.setNombre("Nombre " + i);
@@ -549,9 +549,9 @@ public class WJurisdiccionesConvenioMultilateral extends Window {
 			}
 		}
 
-		ArrayList<JurisdiccionesConvenioMultilateral> arrayList = new ArrayList<JurisdiccionesConvenioMultilateral>();
+		ArrayList<OldJurisdiccionesConvenioMultilateral> arrayList = new ArrayList<OldJurisdiccionesConvenioMultilateral>();
 
-		for (JurisdiccionesConvenioMultilateral item : itemsMock) {
+		for (OldJurisdiccionesConvenioMultilateral item : itemsMock) {
 
 			boolean passesFilterNumero = (filtro.getNumero() == null || item
 					.getNumero().equals(filtro.getNumero()));
