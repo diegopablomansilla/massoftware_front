@@ -7,6 +7,7 @@ import java.util.Map;
 import com.massoftware.model.Entity;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.converter.Converter;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -19,11 +20,16 @@ public class DateFieldEntity extends DateField {
 
 	@SuppressWarnings("rawtypes")
 	public DateFieldEntity(BeanItem dtoBI, String attName, String mode) throws Exception {
-		init(dtoBI, attName, mode);
+		init(dtoBI, attName, mode, false);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public DateFieldEntity(BeanItem dtoBI, String attName, String mode, boolean timestamp) throws Exception {
+		init(dtoBI, attName, mode, timestamp);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void init(BeanItem dtoBI, String attName, String mode) throws Exception {
+	private void init(BeanItem dtoBI, String attName, String mode, boolean timestamp) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
 		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
@@ -49,9 +55,20 @@ public class DateFieldEntity extends DateField {
 		setReadOnly(false);
 		setImmediate(true);
 
-		setWidth(10f, Unit.EM );
+		
 		setLocale(new Locale("es", "AR"));
-		setDateFormat("dd/MM/yyyy");		
+		
+		if (timestamp) {
+			setWidth(15f, Unit.EM );
+			setDateFormat("dd/MM/yyyy HH:mm:ss");
+			setResolution(Resolution.SECOND);
+			// df.setResolution(DateResolution.DAY);
+			setShowISOWeekNumbers(true);
+		} else {
+			setWidth(10f, Unit.EM );
+			setDateFormat("dd/MM/yyyy");	
+		}		
+				
 		setLenient(true);
 
 		setCaption(label);

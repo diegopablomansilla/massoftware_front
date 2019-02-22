@@ -1,4 +1,4 @@
-package com.massoftware.windows.ejercicios_contables;
+package com.massoftware.windows.a.ejercicios_contables;
 
 import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.EntityId;
@@ -24,7 +24,7 @@ public class WEjercicioContable extends WindowForm {
 
 	private TextFieldEntity numeroTXT;
 	private DateFieldEntity aperturaTXT;
-	private DateFieldEntity cierreTXT;
+	private DateFieldEntity cierreDFT;
 	private CheckBoxEntity cerradoCHX;
 	private CheckBoxEntity cerradoModulosCHX;
 	private TextAreaEntity comentarioTXT;
@@ -69,7 +69,7 @@ public class WEjercicioContable extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		aperturaTXT = new DateFieldEntity(this.itemBI, "apertura", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		cierreTXT = new DateFieldEntity(this.itemBI, "cierre", this.mode);
+		cierreDFT = new DateFieldEntity(this.itemBI, "cierre", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
 		cerradoCHX = new CheckBoxEntity(this.itemBI, "cerrado");
 		// ---------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ public class WEjercicioContable extends WindowForm {
 
 		HorizontalLayout fechasHL = UtilUI.buildHL();
 		fechasHL.setMargin(false);
-		fechasHL.addComponents(aperturaTXT, cierreTXT);
+		fechasHL.addComponents(aperturaTXT, cierreDFT);
 		
 		HorizontalLayout cerradoHL = UtilUI.buildHL();
 		cerradoHL.setMargin(false);

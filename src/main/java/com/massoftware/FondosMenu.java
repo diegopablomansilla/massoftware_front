@@ -7,6 +7,7 @@ import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
 import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
+import com.massoftware.windows.a.marcas_ticket.WMarcasTicket;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.a.zonas.WZonas;
@@ -21,9 +22,7 @@ import com.massoftware.windows.conciliaciones_bancarias.WConciliacionesBancarias
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.massoftware.windows.fecha_cierre_x_modulo.WFechaCierreXModulo;
 import com.massoftware.windows.firmantes.WFirmantes;
-import com.massoftware.windows.marcas_tickets.WMarcasTickets;
 import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
-import com.massoftware.windows.modelos_tickets.WModelosTickets;
 import com.massoftware.windows.monedas.WMonedas;
 import com.massoftware.windows.monedas_cotizaciones.WMonedasCotizaciones;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
@@ -103,8 +102,8 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Sucursales ...", openSucursalesCmd());
 		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
 		a1.addSeparator();
-		a1.addItem("Marcas de ticket's ...", openMarcasTicketsCmd()).setEnabled(false);
-		a1.addItem("Series de ticket's ...", openModelosTicketsCmd()).setEnabled(false);
+		a1.addItem("Marcas de ticket's ...", openMarcasTicketCmd());
+		a1.addItem("Series de ticket's ...", null).setEnabled(false);
 		a1.addItem("Ticket's denunciados ...", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
@@ -333,40 +332,6 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WJuridiccionesConvnioMultilateral();
-				getUI().addWindow(window);
-			}
-		};
-	}
-
-	protected Command openMarcasTicketsCmd() {
-
-		return new Command() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4645387020070455569L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem) {
-
-				Window window = new WMarcasTickets();
-				getUI().addWindow(window);
-			}
-		};
-	}
-
-	protected Command openModelosTicketsCmd() {
-
-		return new Command() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4645387020070455569L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem) {
-
-				Window window = new WModelosTickets();
 				getUI().addWindow(window);
 			}
 		};
@@ -673,6 +638,23 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WZonas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+
+	protected Command openMarcasTicketCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WMarcasTicket();
 				getUI().addWindow(window);
 			}
 		};

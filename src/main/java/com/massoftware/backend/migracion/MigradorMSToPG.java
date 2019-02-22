@@ -13,6 +13,7 @@ import com.massoftware.model.CuentaFondoRubro;
 import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
 import com.massoftware.model.JuridiccionConvnioMultilateral;
+import com.massoftware.model.MarcaTicket;
 import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
@@ -75,6 +76,8 @@ public class MigradorMSToPG {
 		zona();
 		
 		tipoDocumentoAFIP();
+		
+		marcaTicket();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -747,6 +750,28 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			TipoDocumentoAFIP item = new TipoDocumentoAFIP();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+	
+	public static void marcaTicket() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( TICKET AS VARCHAR(250)) AS id, CAST( TICKET AS INTEGER) AS numero, CAST( DESCRIPCION AS VARCHAR(40)) AS nombre, FECHAACTUALIZACIONSQL AS fecha, CAST( CANTIDADPORLOTES AS INTEGER) AS cantidadPorLotes, CAST( CONTROLDENUNCIADO AS VARCHAR(250)) AS controlDenunciado, CAST( VALORMAXIMO AS DECIMAL(7,2)) AS cantidadPorLotes	FROM Tickets ORDER BY  TICKET";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			MarcaTicket item = new MarcaTicket();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

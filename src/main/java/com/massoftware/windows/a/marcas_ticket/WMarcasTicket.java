@@ -1,4 +1,4 @@
-package com.massoftware.windows.ejercicios_contables;
+package com.massoftware.windows.a.marcas_ticket;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,56 +6,60 @@ import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.EjercicioContable;
-import com.massoftware.model.EjerciciosContablesFiltro;
+import com.massoftware.model.MarcaTicket;
+import com.massoftware.model.MarcasTicketFiltro;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.massoftware.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.DateRenderer;
-import com.vaadin.ui.renderers.HtmlRenderer;
 
 @SuppressWarnings("serial")
-public class WEjerciciosContables extends WindowListado {
+public class WMarcasTicket extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<EjerciciosContablesFiltro> filterBI;
-	protected BeanItemContainer<EjercicioContable> itemsBIC;
+	BeanItem<MarcasTicketFiltro> filterBI;
+	protected BeanItemContainer<MarcaTicket> itemsBIC;
 
 	// -------------------------------------------------------------
 
+	private TextFieldBox numeroIB;
+	private TextFieldBox nombreTB;
+
 	// -------------------------------------------------------------
 
-	public WEjerciciosContables() {
+	public WMarcasTicket() {
 		super();
-		filterBI = new BeanItem<EjerciciosContablesFiltro>(new EjerciciosContablesFiltro());
+		filterBI = new BeanItem<MarcasTicketFiltro>(new MarcasTicketFiltro());
 		init(false);
 	}
 
-	public WEjerciciosContables(EjerciciosContablesFiltro filtro) {
+	public WMarcasTicket(MarcasTicketFiltro filtro) {
 		super();
-		filterBI = new BeanItem<EjerciciosContablesFiltro>(filtro);
+		filterBI = new BeanItem<MarcasTicketFiltro>(filtro);
 		init(true);
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new EjercicioContable().labelPlural());
+		confWinList(this, new MarcaTicket().labelPlural());
 
 		// =======================================================
 		// FILTROS
+
+		HorizontalLayout filtrosLayout = buildFiltros();
 
 		// =======================================================
 		// CUERPO
@@ -73,12 +77,34 @@ public class WEjerciciosContables extends WindowListado {
 
 		VerticalLayout content = UtilUI.buildWinContentVertical();
 
-		content.addComponents(buildItemsGRD(), filaBotoneraHL, filaBotonera2HL);
+		content.addComponents(filtrosLayout, buildItemsGRD(), filaBotoneraHL, filaBotonera2HL);
 
+		content.setComponentAlignment(filtrosLayout, Alignment.MIDDLE_CENTER);
 		content.setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_LEFT);
 		content.setComponentAlignment(filaBotonera2HL, Alignment.MIDDLE_RIGHT);
 
 		this.setContent(content);
+	}
+
+	private HorizontalLayout buildFiltros() throws Exception {
+
+		numeroIB = new TextFieldBox(this, filterBI, "numero");
+
+		// --------------------------------------------------------
+
+		nombreTB = new TextFieldBox(this, filterBI, "nombre");
+
+		// --------------------------------------------------------
+
+		Button buscarBTN = buildButtonBuscar();
+
+		HorizontalLayout filaFiltroHL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
+
+		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
+		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
+
+		return filaFiltroHL;
 	}
 
 	private Grid buildItemsGRD() throws Exception {
@@ -89,18 +115,16 @@ public class WEjerciciosContables extends WindowListado {
 		// ------------------------------------------------------------------
 
 		// itemsGRD.setWidth("100%");
-		itemsGRD.setWidth(30f, Unit.EM);
+		itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "numero", "apertura", "cierre", "cerrado", "cerradoModulos" });
+		itemsGRD.setColumns(new Object[] { "numero", "nombre", "fecha" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("apertura"), true, 100);
-		UtilUI.confColumn(itemsGRD.getColumn("cierre"), true, 100);
-		UtilUI.confColumn(itemsGRD.getColumn("cerrado"), true, -1);
-		UtilUI.confColumn(itemsGRD.getColumn("cerradoModulos"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 200);
+		UtilUI.confColumn(itemsGRD.getColumn("fecha"), true, -1);
 
-		EjercicioContable dto = new EjercicioContable();
+		MarcaTicket dto = new MarcaTicket();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -110,24 +134,22 @@ public class WEjerciciosContables extends WindowListado {
 		// .......
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		itemsGRD.getColumn("cerrado").setRenderer(new HtmlRenderer(),
-				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
-		itemsGRD.getColumn("cerradoModulos").setRenderer(new HtmlRenderer(),
-				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
+		// FontAwesome.SQUARE_O.getHtml()));
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-		itemsGRD.getColumn("cierre").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+		// itemsGRD.getColumn("attName").setRenderer(
+		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(
-		// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+		itemsGRD.getColumn("fecha").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
 		// .......
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("numero", SortDirection.DESCENDING));
+		order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);
 
@@ -152,15 +174,14 @@ public class WEjerciciosContables extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<EjercicioContable> getItemsBIC() {
+	protected BeanItemContainer<MarcaTicket> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
 		// carga la grilla con una lista vacia
 
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<EjercicioContable>(EjercicioContable.class,
-					new ArrayList<EjercicioContable>());
+			itemsBIC = new BeanItemContainer<MarcaTicket>(MarcaTicket.class, new ArrayList<MarcaTicket>());
 		}
 		return itemsBIC;
 	}
@@ -175,12 +196,11 @@ public class WEjerciciosContables extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			List<EjercicioContable> items = new EjercicioContable().find(limit, offset, buildOrderBy(),
-					filterBI.getBean());
+			List<MarcaTicket> items = new MarcaTicket().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
-			for (EjercicioContable item : items) {
+			for (MarcaTicket item : items) {
 				getItemsBIC().addBean(item);
 			}
 
@@ -193,7 +213,7 @@ public class WEjerciciosContables extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WEjercicioContable(mode, id);
+		return new WMarcaTicket(mode, id);
 	}
 
 	// =================================================================================

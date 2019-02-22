@@ -1845,7 +1845,7 @@ DROP TABLE IF EXISTS massoftware.TipoDocumentoAFIP CASCADE;
 CREATE TABLE massoftware.TipoDocumentoAFIP
 (
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    numero INTEGER UNIQUE NOT NULL,
+    numero INTEGER NOT NULL UNIQUE CONSTRAINT TipoDocumentoAFIP_numero_chk CHECK (numero > -1),
     nombre VARCHAR  NOT NULL    
     
 );
@@ -1880,6 +1880,127 @@ DROP TRIGGER IF EXISTS tgFormatTipoDocumentoAFIP ON massoftware.TipoDocumentoAFI
 CREATE TRIGGER tgFormatTipoDocumentoAFIP BEFORE INSERT OR UPDATE 
     ON massoftware.TipoDocumentoAFIP FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatTipoDocumentoAFIP();
+
+
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: ControlDenunciado												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ControlDenunciado
+
+DROP TABLE IF EXISTS massoftware.ControlDenunciado CASCADE;
+
+CREATE TABLE massoftware.ControlDenunciado
+(
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER NOT NULL UNIQUE CONSTRAINT ControlDenunciados_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL    
+    
+);
+
+CREATE UNIQUE INDEX u_ControlDenunciado_nombre ON massoftware.ControlDenunciado (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+
+-- SELECT * FROM massoftware.ControlDenunciado;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatControlDenunciado() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatControlDenunciado() RETURNS TRIGGER AS $formatControlDenunciado$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);        
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+
+	RETURN NEW;
+END;
+$formatControlDenunciado$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatControlDenunciado ON massoftware.ControlDenunciado CASCADE;
+
+CREATE TRIGGER tgFormatControlDenunciado BEFORE INSERT OR UPDATE 
+    ON massoftware.ControlDenunciado FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatControlDenunciado();        
+    
+    
+INSERT INTO massoftware.ControlDenunciado(id, numero, nombre) VALUES ('1', 1, 'Control numeración siempre en modelo 1');    
+INSERT INTO massoftware.ControlDenunciado(id, numero, nombre) VALUES ('2', 2, 'Control numeración en el modelo del ticket');    
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: MarcaTicket														 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MarcaTicket
+
+DROP TABLE IF EXISTS massoftware.MarcaTicket CASCADE;
+
+CREATE TABLE massoftware.MarcaTicket
+(
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER NOT NULL UNIQUE CONSTRAINT MarcaTicket_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL,    
+    fecha TIMESTAMP NOT NULL,
+    cantidadPorLotes INTEGER CONSTRAINT MarcaTicket_cantidadPorLotes_chk CHECK (numero > 0),
+    controlDenunciado VARCHAR NOT NULL REFERENCES massoftware.ControlDenunciado (id),	        
+    valorMaximo DECIMAL(7,2) CONSTRAINT MarcaTicket_valorMaximo_chk CHECK (numero > 0)
+    
+);
+
+CREATE UNIQUE INDEX u_MarcaTicket_nombre ON massoftware.MarcaTicket (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+
+-- SELECT * FROM massoftware.MarcaTicket;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMarcaTicket() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMarcaTicket() RETURNS TRIGGER AS $formatMarcaTicket$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);        
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+
+	RETURN NEW;
+END;
+$formatMarcaTicket$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMarcaTicket ON massoftware.MarcaTicket CASCADE;
+
+CREATE TRIGGER tgFormatMarcaTicket BEFORE INSERT OR UPDATE 
+    ON massoftware.MarcaTicket FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatMarcaTicket();              
+    
+    
+    
+
 
 
 
