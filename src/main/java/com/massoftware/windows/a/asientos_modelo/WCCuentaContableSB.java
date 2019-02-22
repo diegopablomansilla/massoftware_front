@@ -9,7 +9,7 @@ import com.massoftware.model.CuentaContable;
 import com.massoftware.model.CuentasContableFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.cuentas_contable.WCuentasContable;
+import com.massoftware.windows.a.cuentas_contable.WCuentasContable;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 

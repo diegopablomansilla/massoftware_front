@@ -15,7 +15,7 @@ import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.bancos.WBancos;
+import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;

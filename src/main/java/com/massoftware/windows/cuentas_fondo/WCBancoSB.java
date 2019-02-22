@@ -6,7 +6,7 @@ import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.bancos.WBancos;
+import com.massoftware.windows.a.bancos.WBancos;
 
 class WCBancoSB extends SelectorBox {
 

@@ -1,11 +1,12 @@
 package com.massoftware;
 
-import com.massoftware.windows.sucursales.WSucursales;
-import com.massoftware.windows.talonarios.WTalonarios;
+import com.massoftware.windows.a.sucursales.WSucursales;
+import com.massoftware.windows.a.talonarios.WTalonarios;
+import com.massoftware.windows.a.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class VentasMenu extends AbstractMenu {
@@ -49,7 +50,7 @@ public class VentasMenu extends AbstractMenu {
 		a1.addItem("condiciones de ventas ...", null).setEnabled(false);
 		a1.addItem("Bonificaciones ...", null).setEnabled(false);
 		a1.addItem("Vendedores y zonas de ventas ...", null).setEnabled(false);
-		a1.addItem("Zonas ...", null).setEnabled(false);
+		a1.addItem("Zonas ...", openZonasCmd());
 		a1.addItem("Canales de comercialización ...", null).setEnabled(false);
 		a1.addItem("Transportes", null).setEnabled(false);
 		a1.addItem("Convenios de elaboración ...", null).setEnabled(false);
@@ -116,6 +117,23 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WTalonarios();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openZonasCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WZonas();
 				getUI().addWindow(window);
 			}
 		};

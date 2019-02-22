@@ -263,18 +263,19 @@ public abstract class WindowListado extends Window {
 
 	protected void addKeyEvents() {
 
-		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
-		// int[] {}) {
-		//
-		// private static final long serialVersionUID = 1L;
-		//
-		// @Override
-		// public void handleAction(Object sender, Object target) {
-		// if (target.equals(itemsGRD)) {
-		// modificarBTNClick();
-		// }
-		// }
-		// });
+		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+				if (target.equals(itemsGRD)) {
+					modificarBTNClick();
+				} else if (target instanceof TextField) {
+					loadDataResetPaged();
+				}
+			}
+		});
 
 		// --------------------------------------------------
 
@@ -324,34 +325,33 @@ public abstract class WindowListado extends Window {
 		});
 
 		// --------------------------------------------------
-		
+
 		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void handleAction(Object sender, Object target) {
-				
+
 				if (target instanceof TextField && ((TextField) target).isEnabled()
 						&& ((TextField) target).isReadOnly() == false) {
-					
+
 					((TextField) target).setValue(null);
 
 					loadDataResetPaged();
 
 				} else if (target instanceof DateField && ((DateField) target).isEnabled()
 						&& ((DateField) target).isReadOnly() == false) {
-					
+
 					((DateField) target).setValue(null);
 
 					loadDataResetPaged();
 				}
 			}
 		});
-		
+
 		// --------------------------------------------------
 
-	
 	}
 
 	protected Button buildButtonBuscar() {

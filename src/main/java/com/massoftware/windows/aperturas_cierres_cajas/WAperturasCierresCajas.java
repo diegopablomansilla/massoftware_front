@@ -11,7 +11,7 @@ import com.massoftware.model.Caja;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.cajas.WCajas;
+import com.massoftware.windows.a.cajas.WCajas;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;

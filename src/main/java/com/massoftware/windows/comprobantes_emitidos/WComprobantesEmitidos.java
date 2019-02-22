@@ -11,10 +11,9 @@ import java.util.Map;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.UtilUI;
+import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.aperturas_cierres_cajas.AperturasCierresCajas;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
-import com.massoftware.windows.talonarios.TalonariosOld;
-import com.massoftware.windows.talonarios.WTalonariosOld;
 import com.massoftware.windows.tipos_comprobantes.TiposComprobantes;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -720,40 +719,40 @@ public class WComprobantesEmitidos extends Window {
 
 			if (this.filterBI.getBean().getNumeroTalonario() != null) {
 
-				WTalonariosOld window = new WTalonariosOld(this.filterBI.getBean()
-						.getNumeroTalonario());
-				window.setModal(true);
-				window.center();
-
-				window.addCloseListener(new CloseListener() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void windowClose(CloseEvent event) {
-						setNumeroTalonarioOnFilter(window);
-					}
-				});
-
-				// -------------------------------------------------------
-				// BOTONERA SELECCION
-
-				HorizontalLayout filaBotoneraHL = new HorizontalLayout();
-				filaBotoneraHL.setSpacing(true);
-
-				Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
-				seleccionarBTN.addClickListener(e -> {
-					setNumeroTalonarioOnFilter(window);
-				});
-
-				filaBotoneraHL.addComponents(seleccionarBTN);
-
-				((VerticalLayout) window.getContent())
-						.addComponent(filaBotoneraHL);
-
-				((VerticalLayout) window.getContent()).setComponentAlignment(
-						filaBotoneraHL, Alignment.MIDDLE_CENTER);
-
-				getUI().addWindow(window);
+//				WTalonariosOld window = new WTalonariosOld(this.filterBI.getBean()
+//						.getNumeroTalonario());
+//				window.setModal(true);
+//				window.center();
+//
+//				window.addCloseListener(new CloseListener() {
+//					private static final long serialVersionUID = 1L;
+//
+//					@Override
+//					public void windowClose(CloseEvent event) {
+//						setNumeroTalonarioOnFilter(window);
+//					}
+//				});
+//
+//				// -------------------------------------------------------
+//				// BOTONERA SELECCION
+//
+//				HorizontalLayout filaBotoneraHL = new HorizontalLayout();
+//				filaBotoneraHL.setSpacing(true);
+//
+//				Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
+//				seleccionarBTN.addClickListener(e -> {
+//					setNumeroTalonarioOnFilter(window);
+//				});
+//
+//				filaBotoneraHL.addComponents(seleccionarBTN);
+//
+//				((VerticalLayout) window.getContent())
+//						.addComponent(filaBotoneraHL);
+//
+//				((VerticalLayout) window.getContent()).setComponentAlignment(
+//						filaBotoneraHL, Alignment.MIDDLE_CENTER);
+//
+//				getUI().addWindow(window);
 
 			} else {
 				this.filterBI.getItemProperty("nombreTalonario").setValue(null);
@@ -764,29 +763,29 @@ public class WComprobantesEmitidos extends Window {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void setNumeroTalonarioOnFilter(WTalonariosOld window) {
-		try {
-			if (window.itemsGRD.getSelectedRow() != null) {
-
-				TalonariosOld item = (TalonariosOld) window.itemsGRD.getSelectedRow();
-
-				this.filterBI.getItemProperty("numeroTalonario").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreTalonario").setValue(
-						item.getNombre());
-
-				window.close();
-
-				loadDataResetPaged();
-			} else {
-				this.filterBI.getItemProperty("numeroTalonario").setValue(null);
-				this.filterBI.getItemProperty("nombreTalonario").setValue(null);
-			}
-		} catch (Exception ex) {
-			LogAndNotification.print(ex);
-		}
-	}
+//	@SuppressWarnings("unchecked")
+//	private void setNumeroTalonarioOnFilter(WTalonarios window) {
+//		try {
+//			if (window.itemsGRD.getSelectedRow() != null) {
+//
+//				Talonarios item = (Talonarios) window.itemsGRD.getSelectedRow();
+//
+//				this.filterBI.getItemProperty("numeroTalonario").setValue(
+//						item.getNumero());
+//				this.filterBI.getItemProperty("nombreTalonario").setValue(
+//						item.getNombre());
+//
+//				window.close();
+//
+//				loadDataResetPaged();
+//			} else {
+//				this.filterBI.getItemProperty("numeroTalonario").setValue(null);
+//				this.filterBI.getItemProperty("nombreTalonario").setValue(null);
+//			}
+//		} catch (Exception ex) {
+//			LogAndNotification.print(ex);
+//		}
+//	}
 
 	// =================================================================================
 

@@ -138,19 +138,17 @@ public class MasSoftware extends UI {
 		navigator.addView("b", new VentasMenu());
 		navigator.addView("c", new StockMenu());
 		navigator.addView("d", new FondosMenu());
-		navigator.addView("e", new FondosMenu());
+		navigator.addView("e", new GeneralMenu());
 		navigator.addView("f", new ContabilidadGeneralMenu());
-		navigator.addView("g", new FondosMenu());
-		navigator.addView("h", new FondosMenu());
-		navigator.addView("i", new FondosMenu());
-		navigator.addView("j", new FondosMenu());
-		navigator.addView("k", new FondosMenu());
-		navigator.addView("l", new SuperMenu());
+		navigator.addView("g", new GeneralMenu());
+		navigator.addView("h", new GeneralMenu());
+		navigator.addView("i", new GeneralMenu());
+		navigator.addView("j", new GeneralMenu());
+		navigator.addView("k", new GeneralMenu());
 
 		String f = Page.getCurrent().getUriFragment();
 		if (f == null || f.equals("")) {
-			// navigator.navigateTo("a");
-			navigator.navigateTo("l");
+			navigator.navigateTo("a");
 		}
 
 		navigator.setErrorView(new FondosMenu());
@@ -188,7 +186,6 @@ public class MasSoftware extends UI {
 		menuItems.put("i", "Comercio exterior");
 		menuItems.put("j", "Devol.y ganancias");
 		menuItems.put("k", "ISO 9001");
-		menuItems.put("l", "Super menu");
 
 		HorizontalLayout top = new HorizontalLayout();
 		top.setWidth("100%");

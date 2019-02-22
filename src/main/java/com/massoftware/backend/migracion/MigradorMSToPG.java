@@ -18,6 +18,7 @@ import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
 import com.massoftware.model.Talonario;
+import com.massoftware.model.Zona;
 
 public class MigradorMSToPG {
 
@@ -47,9 +48,9 @@ public class MigradorMSToPG {
 		centroCostoContable();
 
 		cuentaContable();
-		
+
 		asientoModelo();
-		
+
 		asientoModeloItem();
 
 		caja();
@@ -61,7 +62,7 @@ public class MigradorMSToPG {
 		grupo();
 
 		cuentaFondo();
-		
+
 		juridiccionConvnioMultilateral();
 
 		sucursal();
@@ -69,6 +70,8 @@ public class MigradorMSToPG {
 		talonario();
 
 		firmante();
+
+		zona();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -641,7 +644,6 @@ public class MigradorMSToPG {
 
 	public static void asientoModelo() throws Exception {
 
-
 		// ==================================================================
 		// MS SQL SERVER
 
@@ -661,13 +663,12 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
-	public static void asientoModeloItem() throws Exception {
 
+	public static void asientoModeloItem() throws Exception {
 
 		// ==================================================================
 		// MS SQL SERVER
-		
+
 		String sql = "SELECT	CONCAT(CAST(B.EJERCICIO AS VARCHAR), '-', CAST(B.ASIENTOMODELO AS VARCHAR(250)), '-', CAST(B.REGISTRO AS VARCHAR(250))) AS id, CONCAT(CAST(B.EJERCICIO AS VARCHAR(250)), '-', CAST(B.ASIENTOMODELO AS VARCHAR(250))) AS asientoModelo, CAST(B.REGISTRO AS INTEGER) AS numero, CAST(CONCAT(CAST(B.EJERCICIO AS VARCHAR), '-', CAST(B.CUENTACONTABLE AS VARCHAR(11))) AS VARCHAR) AS cuentaContable FROM	AsientosModelosMov B ORDER BY CAST(B.ASIENTOMODELO AS INTEGER), CAST(B.REGISTRO AS INTEGER)";
 
 		// ==================================================================
@@ -684,13 +685,12 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
-	public static void juridiccionConvnioMultilateral() throws Exception {
 
+	public static void juridiccionConvnioMultilateral() throws Exception {
 
 		// ==================================================================
 		// MS SQL SERVER
-		
+
 		String sql = "SELECT CONCAT(CAST( LTRIM(RTRIM(CUENTAFONDO)) AS VARCHAR(11)), '-', CAST(JURISDICCION AS VARCHAR(250))) AS id, CAST(CUENTAFONDO AS VARCHAR(11)) AS cuentaFondo, CAST(JURISDICCION AS INTEGER) AS numero, CAST(NOMBRE AS VARCHAR(30)) AS nombre FROM ConvenioMultilateralJurisdicciones";
 
 		// ==================================================================
@@ -700,6 +700,28 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			JuridiccionConvnioMultilateral item = new JuridiccionConvnioMultilateral();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+
+	public static void zona() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( LTRIM(RTRIM(ZONA)) AS VARCHAR(3)) AS id, CAST( ZONA AS VARCHAR(3)) AS codigo, CAST( NOMBRE AS VARCHAR(30)) AS nombre, CAST( BONIFICACION AS DOUBLE PRECISION) AS bonificacion, CAST( RECARGO AS DOUBLE PRECISION) AS recargo FROM Zonas ORDER BY ZONA";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Zona item = new Zona();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

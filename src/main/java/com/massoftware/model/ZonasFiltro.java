@@ -4,18 +4,18 @@ import com.massoftware.backend.annotation.FieldConfAnont;
 
 public class ZonasFiltro extends Entity {
 
-	@FieldConfAnont(label = "Nº zona")
-	private Integer numero;
+	@FieldConfAnont(label = "Código")
+	private String codigo;
 
 	@FieldConfAnont(label = "Nombre")
 	private String nombre;
 
-	public Integer getNumero() {
-		return numero;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getNombre() {

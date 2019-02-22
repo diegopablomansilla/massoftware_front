@@ -1,6 +1,6 @@
 package com.massoftware;
 
-import com.massoftware.windows.seguridad_puertas.WSeguridadPuertas;
+import com.massoftware.windows.a.seguridad_puertas.WSeguridadPuertas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.MenuBar.Command;

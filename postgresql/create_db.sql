@@ -172,6 +172,16 @@ DROP TRIGGER IF EXISTS tgFormatSeguridadModulo ON massoftware.SeguridadModulo CA
 CREATE TRIGGER tgFormatSeguridadModulo BEFORE INSERT OR UPDATE 
     ON massoftware.SeguridadModulo FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatSeguridadModulo();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,12 +243,23 @@ DROP TRIGGER IF EXISTS tgFormatSSeguridadPuerta ON massoftware.SeguridadPuerta C
 CREATE TRIGGER tgFormatSeguridadPuerta BEFORE INSERT OR UPDATE 
     ON massoftware.SeguridadPuerta FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatSeguridadPuerta();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: EjercicioContable															 //		
+-- //												TABLA: EjercicioContable												 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -284,6 +305,17 @@ DROP TRIGGER IF EXISTS tgFormatEjercicioContable ON massoftware.EjercicioContabl
 CREATE TRIGGER tgFormatEjercicioContable BEFORE INSERT OR UPDATE 
     ON massoftware.EjercicioContable FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatEjercicioContable();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -348,6 +380,14 @@ INSERT INTO massoftware.PuntoEquilibrioTipo(id, numero, nombre) VALUES ('5', 5, 
 
 
 
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: PuntoEquilibrio													 //		
@@ -405,6 +445,18 @@ DROP TRIGGER IF EXISTS tgFormatPuntoEquilibrio ON massoftware.PuntoEquilibrio CA
 CREATE TRIGGER tgFormatPuntoEquilibrio BEFORE INSERT OR UPDATE 
     ON massoftware.PuntoEquilibrio FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatPuntoEquilibrio();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
@@ -471,6 +523,15 @@ CREATE TRIGGER tgFormatCentroCostoContable BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatCentroCostoContable();
 
 
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaContableEstado												 //		
@@ -525,9 +586,21 @@ CREATE TRIGGER tgFormatCuentaContableEstado BEFORE INSERT OR UPDATE
 INSERT INTO massoftware.CuentaContableEstado(id, numero, nombre) VALUES ('0', 0, 'Cuenta fuera de uso');
 INSERT INTO massoftware.CuentaContableEstado(id, numero, nombre) VALUES ('1', 1, 'Cuenta en uso');
 
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: CostoVenta												 //		
+-- //												TABLA: CostoVenta														 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -580,6 +653,14 @@ INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('1', 1, 'No parti
 INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('2', 2, 'Stock');
 INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('3', 3, 'Compras');
 INSERT INTO massoftware.CostoVenta(id, numero, nombre) VALUES ('4', 4, 'Gastos');
+
+
+
+
+
+
+
+
 
 
 
@@ -666,6 +747,16 @@ DROP TRIGGER IF EXISTS tgFormatCuentaContable ON massoftware.CuentaContable CASC
 CREATE TRIGGER tgFormatCuentaContable BEFORE INSERT OR UPDATE 
     ON massoftware.CuentaContable FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCuentaContable();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -720,7 +811,19 @@ DROP TRIGGER IF EXISTS tgFormatAsientoModelo ON massoftware.AsientoModelo CASCAD
 
 CREATE TRIGGER tgFormatAsientoModelo BEFORE INSERT OR UPDATE 
     ON massoftware.AsientoModelo FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatAsientoModelo();        
+    EXECUTE PROCEDURE massoftware.ftgFormatAsientoModelo();       
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,6 +876,15 @@ DROP TRIGGER IF EXISTS tgFormatAsientoModeloItem ON massoftware.AsientoModeloIte
 CREATE TRIGGER tgFormatAsientoModeloItem BEFORE INSERT OR UPDATE 
     ON massoftware.AsientoModeloItem FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatAsientoModeloItem();        
+
+
+
+
+
+
+
+
+
 
 
 
@@ -846,6 +958,15 @@ DROP TRIGGER IF EXISTS tgFormatBanco ON massoftware.Banco CASCADE;
 CREATE TRIGGER tgFormatBanco BEFORE INSERT OR UPDATE 
     ON massoftware.Banco FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatBanco();
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1218,6 +1339,14 @@ DROP TRIGGER IF EXISTS tgFormatCaja ON massoftware.Caja CASCADE;
 CREATE TRIGGER tgFormatCaja BEFORE INSERT OR UPDATE 
     ON massoftware.Caja FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCaja();
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1359,10 +1488,16 @@ DROP TRIGGER IF EXISTS tgFormatSucursal ON massoftware.Sucursal CASCADE;
 CREATE TRIGGER tgFormatSucursal BEFORE INSERT OR UPDATE 
     ON massoftware.Sucursal FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatSucursal();
+    
+    
+    
+    
+    
+    
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: TalonarioLetra													 	 //		
+-- //												TABLA: TalonarioLetra												 	 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1420,9 +1555,16 @@ INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('M', 'M');
 INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('R', 'R');
 INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('X', 'X');
 
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: TalonarioControladorFizcal													 	 //		
+-- //												TABLA: TalonarioControladorFizcal									 	 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1485,9 +1627,16 @@ INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('
 INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('X', 'X', 'WSFEX');
 
 
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: Talonario													 //		
+-- //												TABLA: Talonario	 													 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1552,6 +1701,13 @@ DROP TRIGGER IF EXISTS tgFormatTalonario ON massoftware.Talonario CASCADE;
 CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE 
     ON massoftware.Talonario FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatTalonario();
+    
+    
+    
+    
+    
+    
+    
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
@@ -1604,6 +1760,79 @@ DROP TRIGGER IF EXISTS tgFormatFirmante ON massoftware.Firmante CASCADE;
 CREATE TRIGGER tgFormatFirmante BEFORE INSERT OR UPDATE 
     ON massoftware.Firmante FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatFirmante();
+
+
+
+
+
+
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Zona															 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Zona
+
+DROP TABLE IF EXISTS massoftware.Zona CASCADE;
+
+CREATE TABLE massoftware.Zona
+(
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    codigo VARCHAR  NOT NULL,
+    nombre VARCHAR  NOT NULL,
+    bonificacion DOUBLE PRECISION,
+	recargo DOUBLE PRECISION
+    
+);
+
+CREATE UNIQUE INDEX u_Zona_codigo ON massoftware.Zona (TRANSLATE(LOWER(TRIM(codigo))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+CREATE UNIQUE INDEX u_Zona_nombre ON massoftware.Zona (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+
+-- SELECT * FROM massoftware.Zona;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatZona() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatZona() RETURNS TRIGGER AS $formatZona$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.codigo := massoftware.white_is_null(NEW.codigo);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+
+	RETURN NEW;
+END;
+$formatZona$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatZona ON massoftware.Zona CASCADE;
+
+CREATE TRIGGER tgFormatZona BEFORE INSERT OR UPDATE 
+    ON massoftware.Zona FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatZona();
+
+
+
+
+
+
+
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    

@@ -36,7 +36,7 @@ public class StockMenu extends AbstractMenu {
 		a1.addItem("Productos conjunto ...", null).setEnabled(false);
 		a1.addItem("Marcas ...", null).setEnabled(false);
 		a1.addItem("Unidades de medida ...", null).setEnabled(false);
-		a1.addItem("Códigos convenio multilateral ...", null);
+		a1.addItem("Códigos convenio multilateral ...", null).setEnabled(false);
 		a1.addItem("Depósitos ...", null).setEnabled(false);
 		a1.addItem("Sucursales ...", null).setEnabled(false);
 		a1.addSeparator();

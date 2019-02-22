@@ -1,13 +1,14 @@
-package com.massoftware.windows.a.jurisdicciones_convenio_multilateral;
+package com.massoftware.windows.a.bancos;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.JuridiccionConvnioMultilateral;
-import com.massoftware.model.JuridiccionConvnioMultilateralFiltro;
+import com.massoftware.model.Banco;
+import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
+import com.massoftware.windows.OptionGroupEntityBoolean;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -15,53 +16,53 @@ import com.massoftware.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.event.ShortcutListener;
+import com.vaadin.data.util.converter.StringToBooleanConverter;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.HtmlRenderer;
 
 @SuppressWarnings("serial")
-public class WJuridiccionesConvnioMultilateral extends WindowListado {
+public class WBancos extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<JuridiccionConvnioMultilateralFiltro> filterBI;
-	protected BeanItemContainer<JuridiccionConvnioMultilateral> itemsBIC;
+	BeanItem<BancosFiltro> filterBI;
+	protected BeanItemContainer<Banco> itemsBIC;
 
 	// -------------------------------------------------------------
 
 	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
-	private WCCuentaFondoSB cuentaFondoSB;
+	private OptionGroupEntityBoolean bloqueadoOG;
 
 	// -------------------------------------------------------------
 
-	public WJuridiccionesConvnioMultilateral() {
+	public WBancos() {
 		super();
-		filterBI = new BeanItem<JuridiccionConvnioMultilateralFiltro>(new JuridiccionConvnioMultilateralFiltro());
+		filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
 		init(false);
 	}
 
-	public WJuridiccionesConvnioMultilateral(JuridiccionConvnioMultilateralFiltro filtro) {
+	public WBancos(BancosFiltro filtro) {
 		super();
-		filterBI = new BeanItem<JuridiccionConvnioMultilateralFiltro>(filtro);
+		filterBI = new BeanItem<BancosFiltro>(filtro);
 		init(true);
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new JuridiccionConvnioMultilateral().labelPlural());
+		confWinList(this, new Banco().labelPlural());
 
 		// =======================================================
 		// FILTROS
 
-		HorizontalLayout filtrosLayout = buildFiltros();
+		VerticalLayout filtrosLayout = buildFiltros();
 
 		// =======================================================
 		// CUERPO
@@ -88,69 +89,7 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 		this.setContent(content);
 	}
 
-	private HorizontalLayout buildFiltros() throws Exception {
-
-		// --------------------------------------------------------
-
-		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-
-				try {
-
-					// if (target instanceof TextField
-					// && ((TextField) target).getCaption().equals(nombreTB.valueTXT.getCaption()))
-					// {
-
-					if (target instanceof TextField && ((TextField) target).getParent().equals(cuentaFondoSB)) {
-						cuentaFondoSB.blur();
-					} else if (target instanceof TextField) {
-						loadDataResetPaged();
-					} else if (target.equals(itemsGRD)) {
-						modificarBTNClick();
-					} 
-				} catch (Exception e) {
-					LogAndNotification.print(e);
-				}
-
-			}
-		});
-
-		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handleAction(Object sender, Object target) {
-
-				if (target instanceof TextField && ((TextField) target).isEnabled()
-						&& ((TextField) target).isReadOnly() == false) {
-
-					if (target instanceof TextField && ((TextField) target).isEnabled()
-							&& ((TextField) target).isReadOnly() == false
-							&& ((TextField) target).getParent().equals(cuentaFondoSB)) {
-
-						cuentaFondoSB.setSelectedItem(null);
-
-						loadDataResetPaged();
-
-					} else if (target instanceof TextField && ((TextField) target).isEnabled()
-							&& ((TextField) target).isReadOnly() == false) {
-
-						((TextField) target).setValue(null);
-
-						loadDataResetPaged();
-
-					}
-
-				}
-			}
-		});
-
-		// --------------------------------------------------------
+	private VerticalLayout buildFiltros() throws Exception {
 
 		numeroIB = new TextFieldBox(this, filterBI, "numero");
 
@@ -158,9 +97,31 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 
 		nombreTB = new TextFieldBox(this, filterBI, "nombre");
 
+		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
+		// int[] {}) {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// @Override
+		// public void handleAction(Object sender, Object target) {
+		//
+		// try {
+		//
+		// if (target instanceof TextField
+		// && ((TextField) target).getCaption().equals(nombreTB.valueTXT.getCaption()))
+		// {
+		// loadDataResetPaged();
+		// }
+		// } catch (Exception e) {
+		// LogAndNotification.print(e);
+		// }
+		//
+		// }
+		// });
+
 		// --------------------------------------------------------
 
-		cuentaFondoSB = new WCCuentaFondoSB(this);
+		bloqueadoOG = new OptionGroupEntityBoolean(this, filterBI, "bloqueado", "Todos", "Obsoletos", "Activos", true, 2);
 
 		// --------------------------------------------------------
 
@@ -169,10 +130,19 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 		HorizontalLayout filaFiltroHL = new HorizontalLayout();
 		filaFiltroHL.setSpacing(true);
 
-		filaFiltroHL.addComponents(numeroIB, nombreTB, cuentaFondoSB, buscarBTN);
+		HorizontalLayout filaFiltro2HL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
+
+		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
-		return filaFiltroHL;
+		filaFiltro2HL.addComponents(bloqueadoOG);
+
+		VerticalLayout filasFiltroVL = new VerticalLayout();
+		filasFiltroVL.setWidth("100%");
+		filasFiltroVL.addComponents(filaFiltroHL, filaFiltro2HL);
+
+		return filasFiltroVL;
 	}
 
 	private Grid buildItemsGRD() throws Exception {
@@ -182,17 +152,17 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		 itemsGRD.setWidth("100%");
-//		itemsGRD.setWidth(33f, Unit.EM);
+		// itemsGRD.setWidth("100%");
+		itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "numero", "nombre", "cuentaFondo" });
+		itemsGRD.setColumns(new Object[] { "numero", "nombre", "bloqueado" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
-		UtilUI.confColumn(itemsGRD.getColumn("cuentaFondo"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 230);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, -1);
 
-		JuridiccionConvnioMultilateral dto = new JuridiccionConvnioMultilateral();
+		Banco dto = new Banco();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -202,9 +172,8 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 		// .......
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
-		// FontAwesome.SQUARE_O.getHtml()));
+		itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
@@ -220,7 +189,6 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
 		order.add(new SortOrder("numero", SortDirection.ASCENDING));
-		order.add(new SortOrder("cuentaFondo", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);
 
@@ -245,15 +213,14 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<JuridiccionConvnioMultilateral> getItemsBIC() {
+	protected BeanItemContainer<Banco> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
 		// carga la grilla con una lista vacia
 
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<JuridiccionConvnioMultilateral>(JuridiccionConvnioMultilateral.class,
-					new ArrayList<JuridiccionConvnioMultilateral>());
+			itemsBIC = new BeanItemContainer<Banco>(Banco.class, new ArrayList<Banco>());
 		}
 		return itemsBIC;
 	}
@@ -267,14 +234,12 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 		try {
 
 			// -----------------------------------------------------------------
-
 			// realiza la consulta a la base de datos
-			List<JuridiccionConvnioMultilateral> items = new JuridiccionConvnioMultilateral().find(limit, offset,
-					buildOrderBy(), filterBI.getBean());
+			List<Banco> items = new Banco().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
-			for (JuridiccionConvnioMultilateral item : items) {
+			for (Banco item : items) {
 				getItemsBIC().addBean(item);
 			}
 
@@ -287,7 +252,7 @@ public class WJuridiccionesConvnioMultilateral extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WJuridiccionConvnioMultilateral(mode, id);
+		return new WBanco(mode, id);
 	}
 
 	// =================================================================================
