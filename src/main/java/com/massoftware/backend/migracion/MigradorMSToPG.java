@@ -18,6 +18,7 @@ import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
 import com.massoftware.model.Talonario;
+import com.massoftware.model.TipoDocumentoAFIP;
 import com.massoftware.model.Zona;
 
 public class MigradorMSToPG {
@@ -72,6 +73,8 @@ public class MigradorMSToPG {
 		firmante();
 
 		zona();
+		
+		tipoDocumentoAFIP();
 
 		System.out.println("\n\nEnd Migrador\n\n");
 
@@ -722,6 +725,28 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Zona item = new Zona();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+	
+	public static void tipoDocumentoAFIP() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( LTRIM(RTRIM(TIPO)) AS VARCHAR(3)) AS id, CAST( TIPO AS INTEGER) AS numero, CAST( DESCRIPCION AS VARCHAR(40)) AS nombre FROM AfipTiposDocumentos ORDER BY TIPO";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			TipoDocumentoAFIP item = new TipoDocumentoAFIP();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

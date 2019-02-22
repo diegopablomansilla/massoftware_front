@@ -2,6 +2,7 @@ package com.massoftware;
 
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
+import com.massoftware.windows.a.tipos_documento_afip.WTiposDocumentoAFIP;
 import com.massoftware.windows.a.zonas.WZonas;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
@@ -72,7 +73,7 @@ public class VentasMenu extends AbstractMenu {
 		a1.addItem("Cargas ...", null).setEnabled(false);
 		a1.addItem("Depósitos ...", null).setEnabled(false);		
 		a1.addItem("Sucursales ...", openSucursalesCmd());
-		a1.addItem("Tipos de documentos AFIP ...", null).setEnabled(false);
+		a1.addItem("Tipos de documentos AFIP ...", openTiposDocumentoAFIPCmd());
 		a11.addItem("Motivos notas de creditos", null).setEnabled(false);
 		a1.addItem("Motivos comentarios", null).setEnabled(false);
 		a1.addItem("Motivos notas de crédito", null).setEnabled(false);
@@ -134,6 +135,23 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WZonas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openTiposDocumentoAFIPCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WTiposDocumentoAFIP();
 				getUI().addWindow(window);
 			}
 		};
