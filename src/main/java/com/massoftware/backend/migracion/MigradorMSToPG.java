@@ -14,6 +14,8 @@ import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
 import com.massoftware.model.JuridiccionConvnioMultilateral;
 import com.massoftware.model.MarcaTicket;
+import com.massoftware.model.Moneda;
+import com.massoftware.model.MonedaAFIP;
 import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
@@ -38,6 +40,10 @@ public class MigradorMSToPG {
 	public static void migrar() throws Exception {
 
 		System.out.println("\n\nStart Migrador\n\n");
+
+		monedaAFIP();
+		
+		moneda();
 
 		modulo();
 
@@ -74,9 +80,9 @@ public class MigradorMSToPG {
 		firmante();
 
 		zona();
-		
+
 		tipoDocumentoAFIP();
-		
+
 		marcaTicket();
 
 		System.out.println("\n\nEnd Migrador\n\n");
@@ -735,7 +741,7 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
+
 	public static void tipoDocumentoAFIP() throws Exception {
 
 		// ==================================================================
@@ -757,7 +763,7 @@ public class MigradorMSToPG {
 		}
 
 	}
-	
+
 	public static void marcaTicket() throws Exception {
 
 		// ==================================================================
@@ -772,6 +778,50 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			MarcaTicket item = new MarcaTicket();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+
+	public static void monedaAFIP() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( MONEDAAFIP AS VARCHAR(3)) AS id, CAST( MONEDAAFIP AS VARCHAR(3)) AS codigo, CAST( DESCRIPCION AS VARCHAR(30)) AS nombre FROM AfipMonedas ORDER BY CAST( MONEDAAFIP AS VARCHAR(3)) ";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			MonedaAFIP item = new MonedaAFIP();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+
+	public static void moneda() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( MONEDA AS VARCHAR(250)) AS id, CAST( MONEDA AS INTEGER) AS numero, CAST( DESCRIPCION AS VARCHAR(30)) AS nombre, CAST( ABREVIATURA AS VARCHAR(5)) AS abreviatura, COTIZACION  AS cotizacion, FECHASQL  AS cotizacionFecha, CAST( CONTROLDEACTUALIZACION AS BIT) AS controlActualizacion, CAST( MONEDAAFIP AS VARCHAR(250)) AS monedaAFIP FROM Monedas ORDER BY CAST( MONEDA AS INTEGER)";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Moneda item = new Moneda();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

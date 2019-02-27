@@ -8,6 +8,8 @@ import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
 import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
 import com.massoftware.windows.a.marcas_ticket.WMarcasTicket;
+import com.massoftware.windows.a.monedas.WMonedas;
+import com.massoftware.windows.a.monedas_afip.WMonedasAFIP;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.a.zonas.WZonas;
@@ -23,8 +25,6 @@ import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.massoftware.windows.fecha_cierre_x_modulo.WFechaCierreXModulo;
 import com.massoftware.windows.firmantes.WFirmantes;
 import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
-import com.massoftware.windows.monedas.WMonedas;
-import com.massoftware.windows.monedas_cotizaciones.WMonedasCotizaciones;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.massoftware.windows.valores_propios.WValoresPropios;
 import com.massoftware.windows.valores_terceros.WValoresTerceros;
@@ -96,7 +96,8 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Bancos ...", openBancosCmd());
 		a1.addItem("Firmantes (cheques propios) ...", openFirmantesCmd());
 		a1.addItem("Cajas", openCajasCmd());
-		a1.addItem("Monedas ...", openMonedasCmd()).setEnabled(false);
+		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
+		a1.addItem("Monedas ...", openMonedasCmd());		
 		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd()).setEnabled(false);
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
@@ -251,6 +252,23 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	protected Command openMonedasAFIPCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WMonedasAFIP();
+				getUI().addWindow(window);
+			}
+		};
+	}
 
 	protected Command openMonedasCmd() {
 
@@ -280,8 +298,8 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WMonedasCotizaciones();
-				getUI().addWindow(window);
+//				Window window = new WMonedasCotizaciones();
+//				getUI().addWindow(window);
 			}
 		};
 	}

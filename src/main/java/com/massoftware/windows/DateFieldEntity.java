@@ -22,7 +22,7 @@ public class DateFieldEntity extends DateField {
 	public DateFieldEntity(BeanItem dtoBI, String attName, String mode) throws Exception {
 		init(dtoBI, attName, mode, false);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public DateFieldEntity(BeanItem dtoBI, String attName, String mode, boolean timestamp) throws Exception {
 		init(dtoBI, attName, mode, timestamp);
@@ -45,7 +45,7 @@ public class DateFieldEntity extends DateField {
 
 		// ----------------------------------------------------------------------------
 
-		addStyleName(ValoTheme.DATEFIELD_TINY);		
+		addStyleName(ValoTheme.DATEFIELD_TINY);
 		// txt.setHeight("-1px");
 		setWidthUndefined();
 		setHeightUndefined();
@@ -55,20 +55,22 @@ public class DateFieldEntity extends DateField {
 		setReadOnly(false);
 		setImmediate(true);
 
-		
 		setLocale(new Locale("es", "AR"));
-		
+
 		if (timestamp) {
-			setWidth(15f, Unit.EM );
+			setWidth(15f, Unit.EM);
 			setDateFormat("dd/MM/yyyy HH:mm:ss");
-			setResolution(Resolution.SECOND);
+			setResolution(Resolution.MINUTE);
 			// df.setResolution(DateResolution.DAY);
 			setShowISOWeekNumbers(true);
+			
+			setConverter(new DateToSqlTimestampConverter());
+
 		} else {
-			setWidth(10f, Unit.EM );
-			setDateFormat("dd/MM/yyyy");	
-		}		
-				
+			setWidth(10f, Unit.EM);
+			setDateFormat("dd/MM/yyyy");
+		}
+
 		setLenient(true);
 
 		setCaption(label);
@@ -111,7 +113,7 @@ public class DateFieldEntity extends DateField {
 		// variables.put("sec", -1);
 		// variables.put("min", -1);
 		// variables.put("hour", -1);
-		
+
 		super.changeVariables(source, variables);
 	}
 

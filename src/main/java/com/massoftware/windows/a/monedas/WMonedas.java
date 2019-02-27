@@ -1,14 +1,14 @@
-package com.massoftware.windows.a.bancos;
+package com.massoftware.windows.a.monedas;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro;
+import com.massoftware.model.Moneda;
+import com.massoftware.model.MonedasFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.OptionGroupEntityBoolean;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -16,8 +16,6 @@ import com.massoftware.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -25,44 +23,43 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.renderers.HtmlRenderer;
+import com.vaadin.ui.renderers.DateRenderer;
 
 @SuppressWarnings("serial")
-public class WBancos extends WindowListado {
+public class WMonedas extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<BancosFiltro> filterBI;
-	protected BeanItemContainer<Banco> itemsBIC;
+	BeanItem<MonedasFiltro> filterBI;
+	protected BeanItemContainer<Moneda> itemsBIC;
 
 	// -------------------------------------------------------------
 
 	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
-	private OptionGroupEntityBoolean bloqueadoOG;
 
 	// -------------------------------------------------------------
 
-	public WBancos() {
+	public WMonedas() {
 		super();
-		filterBI = new BeanItem<BancosFiltro>(new BancosFiltro());
+		filterBI = new BeanItem<MonedasFiltro>(new MonedasFiltro());
 		init(false);
 	}
 
-	public WBancos(BancosFiltro filtro) {
+	public WMonedas(MonedasFiltro filtro) {
 		super();
-		filterBI = new BeanItem<BancosFiltro>(filtro);
+		filterBI = new BeanItem<MonedasFiltro>(filtro);
 		init(true);
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Banco().labelPlural());
+		confWinList(this, new Moneda().labelPlural());
 
 		// =======================================================
 		// FILTROS
 
-		VerticalLayout filtrosLayout = buildFiltros();
+		HorizontalLayout filtrosLayout = buildFiltros();
 
 		// =======================================================
 		// CUERPO
@@ -89,39 +86,13 @@ public class WBancos extends WindowListado {
 		this.setContent(content);
 	}
 
-	private VerticalLayout buildFiltros() throws Exception {
+	private HorizontalLayout buildFiltros() throws Exception {
 
 		numeroIB = new TextFieldBox(this, filterBI, "numero");
 
 		// --------------------------------------------------------
 
 		nombreTB = new TextFieldBox(this, filterBI, "nombre");
-
-		// this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new
-		// int[] {}) {
-		//
-		// private static final long serialVersionUID = 1L;
-		//
-		// @Override
-		// public void handleAction(Object sender, Object target) {
-		//
-		// try {
-		//
-		// if (target instanceof TextField
-		// && ((TextField) target).getCaption().equals(nombreTB.valueTXT.getCaption()))
-		// {
-		// loadDataResetPaged();
-		// }
-		// } catch (Exception e) {
-		// LogAndNotification.print(e);
-		// }
-		//
-		// }
-		// });
-
-		// --------------------------------------------------------
-
-		bloqueadoOG = new OptionGroupEntityBoolean(this, filterBI, "bloqueado", "Todos", "Obsoletos", "Activos", true, 2);
 
 		// --------------------------------------------------------
 
@@ -130,19 +101,10 @@ public class WBancos extends WindowListado {
 		HorizontalLayout filaFiltroHL = new HorizontalLayout();
 		filaFiltroHL.setSpacing(true);
 
-		HorizontalLayout filaFiltro2HL = new HorizontalLayout();
-		filaFiltro2HL.setSpacing(true);
-
 		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
-		filaFiltro2HL.addComponents(bloqueadoOG);
-
-		VerticalLayout filasFiltroVL = new VerticalLayout();
-		filasFiltroVL.setWidth("100%");
-		filasFiltroVL.addComponents(filaFiltroHL, filaFiltro2HL);
-
-		return filasFiltroVL;
+		return filaFiltroHL;
 	}
 
 	private Grid buildItemsGRD() throws Exception {
@@ -153,16 +115,20 @@ public class WBancos extends WindowListado {
 		// ------------------------------------------------------------------
 
 		// itemsGRD.setWidth("100%");
-		itemsGRD.setWidth(25f, Unit.EM);
+		itemsGRD.setWidth(43f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "numero", "nombre", "bloqueado" });
+		itemsGRD.setColumns(
+				new Object[] { "numero", "abreviatura", "nombre", "cotizacion", "cotizacionFecha", "monedaAFIP" });
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 70);
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 230);
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 50);
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacion"), true, 70);
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacionFecha"), true, 120);
+		UtilUI.confColumn(itemsGRD.getColumn("monedaAFIP"), true, -1);
 
-		Banco dto = new Banco();
+		Moneda dto = new Moneda();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -172,17 +138,17 @@ public class WBancos extends WindowListado {
 		// .......
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-				new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
+		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
+		// FontAwesome.SQUARE_O.getHtml()));
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
 		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(
-		// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+		itemsGRD.getColumn("cotizacionFecha")
+				.setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
 		// .......
 
@@ -213,14 +179,14 @@ public class WBancos extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Banco> getItemsBIC() {
+	protected BeanItemContainer<Moneda> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
 		// carga la grilla con una lista vacia
 
 		if (itemsBIC == null) {
-			itemsBIC = new BeanItemContainer<Banco>(Banco.class, new ArrayList<Banco>());
+			itemsBIC = new BeanItemContainer<Moneda>(Moneda.class, new ArrayList<Moneda>());
 		}
 		return itemsBIC;
 	}
@@ -235,11 +201,11 @@ public class WBancos extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			List<Banco> items = new Banco().find(limit, offset, buildOrderBy(), filterBI.getBean());
+			List<Moneda> items = new Moneda().find(limit, offset, buildOrderBy(), filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
-			for (Banco item : items) {
+			for (Moneda item : items) {
 				getItemsBIC().addBean(item);
 			}
 
@@ -252,7 +218,7 @@ public class WBancos extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WBanco(mode, id);
+		return new WMoneda(mode, id);
 	}
 
 	// =================================================================================

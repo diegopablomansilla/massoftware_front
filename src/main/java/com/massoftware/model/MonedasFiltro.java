@@ -1,10 +1,13 @@
-package com.massoftware.windows.monedas;
+package com.massoftware.model;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.backend.annotation.FieldConfAnont;
 
-public class MonedasFiltro {
+public class MonedasFiltro extends Entity {
 
+	@FieldConfAnont(label = "Nº moneda")
 	private Integer numero;
+
+	@FieldConfAnont(label = "Nombre")
 	private String nombre;
 
 	public Integer getNumero() {
@@ -20,12 +23,7 @@ public class MonedasFiltro {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = UtilModel.format(nombre);
-	}
-
-	@Override
-	public String toString() {
-		return "PaisesFiltro [numero=" + numero + ", nombre=" + nombre + "]";
+		this.nombre = nombre;
 	}
 
 }

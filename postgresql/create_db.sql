@@ -123,6 +123,152 @@ $$  LANGUAGE plpgsql;
 -- ==========================================================================================================================
 -- ==========================================================================================================================
 
+
+
+
+
+
+
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: MonedaAFIP																 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaAFIP
+
+DROP TABLE IF EXISTS massoftware.MonedaAFIP CASCADE;
+
+CREATE TABLE massoftware.MonedaAFIP
+(
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    codigo VARCHAR  NOT NULL,
+    nombre VARCHAR  NOT NULL
+    
+);
+
+CREATE UNIQUE INDEX u_MonedaAFIP_codigo ON massoftware.MonedaAFIP (TRANSLATE(LOWER(TRIM(codigo))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+CREATE UNIQUE INDEX u_MonedaAFIP_nombre ON massoftware.MonedaAFIP (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+
+-- SELECT COUNT(*) FROM massoftware.MonedaAFIP;
+-- SELECT * FROM massoftware.MonedaAFIP;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMonedaAFIP() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMonedaAFIP() RETURNS TRIGGER AS $formatMonedaAFIP$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.codigo := massoftware.white_is_null(NEW.codigo);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+
+	RETURN NEW;
+END;
+$formatMonedaAFIP$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMonedaAFIP ON massoftware.MonedaAFIP CASCADE;
+
+CREATE TRIGGER tgFormatMonedaAFIP BEFORE INSERT OR UPDATE 
+    ON massoftware.MonedaAFIP FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatMonedaAFIP();
+
+
+
+
+
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Moneda												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.Moneda
+
+DROP TABLE IF EXISTS massoftware.Moneda CASCADE;
+
+CREATE TABLE massoftware.Moneda
+( 
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    numero INTEGER  NOT NULL UNIQUE CONSTRAINT Moneda_numero_chk CHECK (numero > 0),
+    nombre VARCHAR  NOT NULL,
+    abreviatura VARCHAR  NOT NULL,
+    cotizacion DECIMAL(9,4)  NOT NULL, -- CONSTRAINT Moneda_cotizacion_chk CHECK (numero > 0),
+    cotizacionFecha TIMESTAMP  NOT NULL,    
+    controlActualizacion BOOLEAN  DEFAULT false, 
+    monedaAFIP VARCHAR REFERENCES massoftware.MonedaAFIP (id)	
+    
+);
+
+CREATE UNIQUE INDEX u_Moneda_nombre ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_Moneda_abreviatura ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(abreviatura))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+
+-- SELECT * FROM massoftware.Moneda;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMoneda() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMoneda() RETURNS TRIGGER AS $formatMoneda$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);    
+    NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);    
+    NEW.monedaAFIP := massoftware.white_is_null(NEW.monedaAFIP);    
+    
+	RETURN NEW;
+END;
+$formatMoneda$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMoneda ON massoftware.Moneda CASCADE;
+
+CREATE TRIGGER tgFormatMoneda BEFORE INSERT OR UPDATE 
+    ON massoftware.Moneda FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatMoneda();
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: SeguridadModulo													 //		
@@ -1153,6 +1299,10 @@ INSERT INTO massoftware.cuentafondotipo(id, numero, nombre) VALUES ('6', 6, 'Tic
 
 
 
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaFondo														 //		
@@ -1217,9 +1367,13 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
 
 
 
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: JuridiccionConvnioMultilateral												 //		
+-- //												TABLA: JuridiccionConvnioMultilateral									 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1409,6 +1563,21 @@ INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('3', 3, 'Sucurs
 INSERT INTO massoftware.SucursalTipo(id, numero, nombre) VALUES ('4', 4, 'Punto de venta');
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: Sucursal													 //		
@@ -1494,6 +1663,13 @@ CREATE TRIGGER tgFormatSucursal BEFORE INSERT OR UPDATE
     
     
     
+    
+    
+    
+    
+    
+    
+    
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
@@ -1554,6 +1730,14 @@ INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('E', 'E');
 INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('M', 'M');
 INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('R', 'R');
 INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES ('X', 'X');
+
+
+
+
+
+
+
+
 
 
 
@@ -1634,6 +1818,15 @@ INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES ('
 
 
 
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: Talonario	 													 //		
@@ -1701,6 +1894,14 @@ DROP TRIGGER IF EXISTS tgFormatTalonario ON massoftware.Talonario CASCADE;
 CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE 
     ON massoftware.Talonario FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatTalonario();
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
