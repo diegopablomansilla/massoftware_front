@@ -9,7 +9,7 @@ import java.util.Map;
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 
-@ClassLabelAnont(singular = "Monneda", plural = "Monedas", singularPre = "la moneda", pluralPre = "las monedas")
+@ClassLabelAnont(singular = "Moneda", plural = "Monedas", singularPre = "la moneda", pluralPre = "las monedas")
 public class Moneda extends EntityId {
 
 	@FieldConfAnont(label = "ID")
@@ -107,6 +107,10 @@ public class Moneda extends EntityId {
 		}
 
 		return null;
+	}
+	
+	public List<Moneda> find() throws Exception {
+		return find(-1, -1, null, new MonedasFiltro());
 	}
 
 	public List<Moneda> find(MonedasFiltro filtro) throws Exception {

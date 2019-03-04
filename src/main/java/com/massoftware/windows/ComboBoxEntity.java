@@ -21,19 +21,20 @@ public class ComboBoxEntity extends ComboBox {
 	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options) throws Exception {
 		init(dtoBI, attName, mode, options, null);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options, Object selectItem) throws Exception {
+	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options, Object selectItem)
+			throws Exception {
 		init(dtoBI, attName, mode, options, selectItem);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void init(BeanItem dtoBI, String attName, String mode, List options, Object selectItem) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
 		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
-		if(labelError == null || labelError.trim().length() == 0) {
-			labelError  = label;
+		if (labelError == null || labelError.trim().length() == 0) {
+			labelError = label;
 		}
 		boolean required = ((Entity) dtoBI.getBean()).required(attName);
 		boolean readOnly = ((Entity) dtoBI.getBean()).readOnly(attName);
@@ -45,7 +46,7 @@ public class ComboBoxEntity extends ComboBox {
 		addStyleName(ValoTheme.COMBOBOX_TINY);
 
 		setWidth("100%");
-		setHeightUndefined();		
+		setHeightUndefined();
 		setValidationVisible(true);
 		setVisible(true);
 		setEnabled(true);
@@ -84,18 +85,19 @@ public class ComboBoxEntity extends ComboBox {
 
 		// ----------------------------------------------------------------------------
 
-		if(selectItem != null && optionsBIC.size() > 0) {
-			
-			setValue(selectItem);
-			
-		} else if (isRequired() && optionsBIC.size() > 0) {
-			
-			setValue(optionsBIC.getIdByIndex(0));
-		}		
+		setPropertyDataSource(dtoBI.getItemProperty(attName));
 
 		// ----------------------------------------------------------------------------
 
-		setPropertyDataSource(dtoBI.getItemProperty(attName));
+		if (selectItem != null && optionsBIC.size() > 0) {
+
+			setValue(selectItem);
+
+		} else if (isRequired() && optionsBIC.size() > 0) {
+
+			// setValue(optionsBIC.getIdByIndex(0));
+			select(getItemIds().toArray()[0]);
+		}
 
 		// ----------------------------------------------------------------------------
 

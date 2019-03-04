@@ -3,6 +3,7 @@ package com.massoftware;
 import java.io.File;
 
 import com.massoftware.backend.BackendContextPG;
+import com.massoftware.model.Usuario;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
@@ -10,6 +11,7 @@ import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridicci
 import com.massoftware.windows.a.marcas_ticket.WMarcasTicket;
 import com.massoftware.windows.a.monedas.WMonedas;
 import com.massoftware.windows.a.monedas_afip.WMonedasAFIP;
+import com.massoftware.windows.a.monedas_cotizaciones.WMonedasCotizacion;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.a.zonas.WZonas;
@@ -98,7 +100,7 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Cajas", openCajasCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
 		a1.addItem("Monedas ...", openMonedasCmd());		
-		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd()).setEnabled(false);
+		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
 		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
@@ -298,8 +300,12 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-//				Window window = new WMonedasCotizaciones();
-//				getUI().addWindow(window);
+				Usuario usuario = new Usuario();
+				usuario.setId("1");
+				usuario.setNombre("Administrador");
+				
+				Window window = new WMonedasCotizacion(usuario);
+				getUI().addWindow(window);
 			}
 		};
 	}

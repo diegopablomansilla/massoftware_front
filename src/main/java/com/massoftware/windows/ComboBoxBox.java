@@ -26,6 +26,12 @@ public class ComboBoxBox extends HorizontalLayout implements Validatable {
 			throws Exception {
 		init(window, dtoBI, attName, options, null);
 	}
+	
+	@SuppressWarnings("rawtypes")
+	public ComboBoxBox(WindowListado window, BeanItem dtoBI, String attName, List options, Object selectItem)
+			throws Exception {
+		init(window, dtoBI, attName, options, selectItem);
+	}
 
 	@SuppressWarnings("rawtypes")
 	private void init(WindowListado window, BeanItem dtoBI, String attName, List options, Object selectItem)

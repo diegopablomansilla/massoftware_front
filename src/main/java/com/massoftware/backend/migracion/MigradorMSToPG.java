@@ -16,12 +16,14 @@ import com.massoftware.model.JuridiccionConvnioMultilateral;
 import com.massoftware.model.MarcaTicket;
 import com.massoftware.model.Moneda;
 import com.massoftware.model.MonedaAFIP;
+import com.massoftware.model.MonedaCotizacion;
 import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
 import com.massoftware.model.Talonario;
 import com.massoftware.model.TipoDocumentoAFIP;
+import com.massoftware.model.Usuario;
 import com.massoftware.model.Zona;
 
 public class MigradorMSToPG {
@@ -41,9 +43,13 @@ public class MigradorMSToPG {
 
 		System.out.println("\n\nStart Migrador\n\n");
 
+		usuario();
+
 		monedaAFIP();
-		
+
 		moneda();
+
+		monedaCotizacion();
 
 		modulo();
 
@@ -822,6 +828,50 @@ public class MigradorMSToPG {
 		for (int i = 0; i < table.length; i++) {
 
 			Moneda item = new Moneda();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+
+	public static void usuario() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT CAST( NO AS VARCHAR(250)) AS id, CAST( NO AS INTEGER) AS numero, CAST( LASTNAME AS VARCHAR(30)) AS nombre FROM SSECUR_User ORDER BY CAST( NO AS INTEGER), CAST( LASTNAME AS VARCHAR(30))";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			Usuario item = new Usuario();
+			item.setter(table[i], 0);
+			item.setterTrim();
+			item.insert();
+
+		}
+
+	}
+
+	public static void monedaCotizacion() throws Exception {
+
+		// ==================================================================
+		// MS SQL SERVER
+
+		String sql = "SELECT	CONCAT(CAST( LTRIM(RTRIM(MONEDA)) AS VARCHAR(250)), '-', CAST(FECHASQL AS VARCHAR(250))) AS id, CAST( MONEDA AS VARCHAR(250)) AS moneda, FECHASQL  AS fecha, COMPRA  AS compra, VENTA  AS venta, FECHAINGRESOSQL  AS auditoriaFecha, CAST( USUARIO AS VARCHAR(250)) AS usuario FROM MonedasCotizaciones ORDER BY CAST( MONEDA AS INTEGER), FECHASQL DESC";
+
+		// ==================================================================
+
+		Object[][] table = BackendContextMS.get().find(sql);
+
+		for (int i = 0; i < table.length; i++) {
+
+			MonedaCotizacion item = new MonedaCotizacion();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

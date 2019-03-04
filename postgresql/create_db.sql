@@ -129,6 +129,52 @@ $$  LANGUAGE plpgsql;
 
 
 
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Usuario														 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+-- Table: massoftware.Usuario
+
+DROP TABLE IF EXISTS massoftware.Usuario CASCADE;
+
+CREATE TABLE massoftware.Usuario
+(    
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),      
+    numero INTEGER NOT NULL UNIQUE,
+    nombre VARCHAR NOT NULL
+);
+
+-- CREATE UNIQUE INDEX u_Usuario_nombre ON massoftware.Usuario (LOWER(TRIM(nombre)));
+
+CREATE UNIQUE INDEX u_Usuario_nombre ON massoftware.Usuario (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- SELECT * FROM massoftware.Usuario;    
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatUsuario() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatUsuario() RETURNS TRIGGER AS $formatUsuario$
+DECLARE
+BEGIN   
+	
+    NEW.nombre := massoftware.white_is_null(TRIM(NEW.nombre));	
+
+	RETURN NEW;
+END;
+$formatUsuario$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatUsuario ON massoftware.Usuario CASCADE;
+
+CREATE TRIGGER tgFormatUsuario BEFORE INSERT OR UPDATE 
+    ON massoftware.Usuario FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatUsuario();
 
 
 
@@ -136,7 +182,7 @@ $$  LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: MonedaAFIP																 //		
+-- //												TABLA: MonedaAFIP														 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -197,10 +243,9 @@ CREATE TRIGGER tgFormatMonedaAFIP BEFORE INSERT OR UPDATE
 
 
 
-
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
--- //												TABLA: Moneda												 //		
+-- //												TABLA: Moneda															 //		
 -- //																														 //		
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -258,6 +303,70 @@ DROP TRIGGER IF EXISTS tgFormatMoneda ON massoftware.Moneda CASCADE;
 CREATE TRIGGER tgFormatMoneda BEFORE INSERT OR UPDATE 
     ON massoftware.Moneda FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatMoneda();
+
+
+
+
+
+
+
+
+
+
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: Moneda cotización												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+-- Table: massoftware.MonedaCotizacion
+
+DROP TABLE IF EXISTS massoftware.MonedaCotizacion CASCADE;
+
+CREATE TABLE massoftware.MonedaCotizacion
+( 
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
+    moneda VARCHAR REFERENCES massoftware.Moneda (id),	
+    fecha TIMESTAMP  NOT NULL,
+    compra DECIMAL(9,4)  NOT NULL, -- CONSTRAINT Moneda_cotizacion_chk CHECK (numero > 0),
+    venta DECIMAL(9,4)  NOT NULL, -- CONSTRAINT Moneda_cotizacion_chk CHECK (numero > 0),
+    auditoriafecha TIMESTAMP  NOT NULL, 
+    usuario VARCHAR REFERENCES massoftware.Usuario (id) -- NOT NULL
+    
+);
+
+-- CREATE UNIQUE INDEX u_MonedaCotizacion_fecha ON massoftware.MonedaCotizacion (moneda, fecha);
+-- CREATE UNIQUE INDEX u_MonedaCotizacion_auditoriafecha ON massoftware.MonedaCotizacion (moneda, auditoriafecha);
+
+-- SELECT * FROM massoftware.MonedaCotizacion;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMonedaCotizacion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMonedaCotizacion() RETURNS TRIGGER AS $formatMonedaCotizacion$
+DECLARE
+BEGIN   
+
+    NEW.id := massoftware.white_is_null(NEW.id);    
+    NEW.moneda := massoftware.white_is_null(NEW.moneda);    
+    NEW.usuario := massoftware.white_is_null(NEW.usuario);        
+    
+	RETURN NEW;
+END;
+$formatMonedaCotizacion$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMonedaCotizacion ON massoftware.MonedaCotizacion CASCADE;
+
+CREATE TRIGGER tgFormatMonedaCotizacion BEFORE INSERT OR UPDATE 
+    ON massoftware.MonedaCotizacion FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatMonedaCotizacion();
 
 
 
@@ -2261,47 +2370,6 @@ CREATE TRIGGER tgFormatEjercicioContable BEFORE INSERT OR UPDATE
     EXECUTE PROCEDURE massoftware.ftgFormatEjercicioContable();
     
 
--- ==========================================================================================================================
-
--- Table: massoftware.Usuario
-
-DROP TABLE IF EXISTS massoftware.Usuario CASCADE;
-
-CREATE TABLE massoftware.Usuario
-(
-    -- id VARCHAR NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),  
-    ejercicioContable VARCHAR REFERENCES massoftware.EjercicioContable (id),	
-    numero INTEGER NOT NULL UNIQUE,
-    nombre VARCHAR NOT NULL
-);
-
-CREATE UNIQUE INDEX u_Usuario_nombre ON massoftware.Usuario (LOWER(TRIM(nombre)));
-
--- SELECT * FROM massoftware.Usuario;    
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP FUNCTION IF EXISTS massoftware.ftgFormatUsuario() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatUsuario() RETURNS TRIGGER AS $formatUsuario$
-DECLARE
-BEGIN
-   
-	-- NEW.nombre := massoftware.white_is_null(REPLACE(TRIM(NEW.nombre), '"', ''));	
-    NEW.nombre := massoftware.white_is_null(TRIM(NEW.nombre));	
-
-	RETURN NEW;
-END;
-$formatUsuario$ LANGUAGE plpgsql;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP TRIGGER IF EXISTS tgFormatUsuario ON massoftware.Usuario CASCADE;
-
-CREATE TRIGGER tgFormatUsuario BEFORE INSERT OR UPDATE 
-    ON massoftware.Usuario FOR EACH ROW 
-    EXECUTE PROCEDURE massoftware.ftgFormatUsuario();
 
 
 -- ==========================================================================================================================
