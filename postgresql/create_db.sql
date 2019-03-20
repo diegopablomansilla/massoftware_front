@@ -1281,6 +1281,21 @@ CREATE TRIGGER tgFormatCuentaFondoRubro BEFORE INSERT OR UPDATE
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaFondoGrupo													 //		
@@ -1341,7 +1356,18 @@ CREATE TRIGGER tgFormatCuentaFondoGrupo BEFORE INSERT OR UPDATE
 
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: CuentaFondoTipo													 //		
@@ -1480,6 +1506,16 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
 
 
 
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: JuridiccionConvnioMultilateral									 //		
@@ -1549,6 +1585,15 @@ CREATE TRIGGER tgFormatJuridiccionConvnioMultilateral BEFORE INSERT OR UPDATE
 
 
 
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: Caja																 //		
@@ -1602,6 +1647,14 @@ DROP TRIGGER IF EXISTS tgFormatCaja ON massoftware.Caja CASCADE;
 CREATE TRIGGER tgFormatCaja BEFORE INSERT OR UPDATE 
     ON massoftware.Caja FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatCaja();
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -2141,6 +2194,18 @@ CREATE TRIGGER tgFormatZona BEFORE INSERT OR UPDATE
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: TipoDocumentoAFIP												 //		
@@ -2190,6 +2255,16 @@ DROP TRIGGER IF EXISTS tgFormatTipoDocumentoAFIP ON massoftware.TipoDocumentoAFI
 CREATE TRIGGER tgFormatTipoDocumentoAFIP BEFORE INSERT OR UPDATE 
     ON massoftware.TipoDocumentoAFIP FOR EACH ROW 
     EXECUTE PROCEDURE massoftware.ftgFormatTipoDocumentoAFIP();
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2254,6 +2329,18 @@ INSERT INTO massoftware.ControlDenunciado(id, numero, nombre) VALUES ('2', 2, 'C
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //																														 //		
 -- //												TABLA: MarcaTicket														 //		
@@ -2310,6 +2397,94 @@ CREATE TRIGGER tgFormatMarcaTicket BEFORE INSERT OR UPDATE
     
     
     
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //																														 //		
+-- //												TABLA: MarcaTicketModelo												 //		
+-- //																														 //		
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MarcaTicketModelo
+
+DROP TABLE IF EXISTS massoftware.MarcaTicketModelo CASCADE;
+
+CREATE TABLE massoftware.MarcaTicketModelo
+(
+    id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),     	
+    marcaTicket VARCHAR NOT NULL REFERENCES massoftware.MarcaTicket (id),		 
+	numero INTEGER UNIQUE CHECK (hoja > 0),
+	nombre VARCHAR,	
+	pruebaLectura VARCHAR,	
+	identificacionPosicion INTEGER CHECK (hoja > 0),	
+	identificacionIdentificacion VARCHAR;	
+	importePosicion INTEGER CHECK (hoja > 0),	
+	importeLongitud INTEGER CHECK (hoja > 0),	
+	importeCantidadDecimales INTEGER CHECK (hoja > 0),	
+	numeroPosicion INTEGER CHECK (hoja > 0),	
+	numeroLongitud INTEGER CHECK (hoja > 0),	
+	prefijoIdentificacionImportacion VARCHAR,	
+	prefijoPosicion INTEGER CHECK (hoja > 0),	
+	bloqueado BOOLEAN DEFAULT false   
+    
+);
+            
+CREATE UNIQUE INDEX u_MarcaTicketModelo_nombre ON massoftware.MarcaTicketModelo (TRANSLATE(LOWER(TRIM(nombre))
+            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+            
+
+-- SELECT * FROM massoftware.MarcaTicketModelo;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMarcaTicketModelo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMarcaTicketModelo() RETURNS TRIGGER AS $formatMarcaTicketModelo$
+DECLARE
+BEGIN
+   
+	
+    NEW.id := massoftware.white_is_null(NEW.id);
+    NEW.marcaTicket := massoftware.white_is_null(NEW.marcaTicket);
+    NEW.nombre := massoftware.white_is_null(NEW.nombre);
+    NEW.pruebaLectura := massoftware.white_is_null(NEW.pruebaLectura);
+    NEW.identificacionIdentificacion := massoftware.white_is_null(NEW.identificacionIdentificacion);
+    NEW.prefijoIdentificacionImportacion := massoftware.white_is_null(NEW.prefijoIdentificacionImportacion);    	
+
+	RETURN NEW;
+END;
+$formatMarcaTicketModelo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMarcaTicketModelo ON massoftware.MarcaTicketModelo CASCADE;
+
+CREATE TRIGGER tgFormatMarcaTicketModelo BEFORE INSERT OR UPDATE 
+    ON massoftware.MarcaTicketModelo FOR EACH ROW 
+    EXECUTE PROCEDURE massoftware.ftgFormatMarcaTicketModelo();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

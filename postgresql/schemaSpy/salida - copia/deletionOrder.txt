@@ -1,6 +1,0 @@
-plandecuenta
-usuario
-puntodeequilibrio
-centrodecostocontable
-puntodeequilibriotipo
-ejerciciocontable

@@ -1,4 +1,0 @@
-plandecuenta
-puntodeequilibrio
-centrodecostocontable
-ejerciciocontable
