@@ -1,4 +1,4 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;

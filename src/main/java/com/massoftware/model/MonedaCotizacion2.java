@@ -11,7 +11,7 @@ import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 
 @ClassLabelAnont(singular = "Cotización de moneda", plural = "Cotizaciones de monedas", singularPre = "la cotización de moneda", pluralPre = "las cotizaciones de monedas")
-public class MonedaCotizacion extends EntityId {
+public class MonedaCotizacion2 extends EntityId {
 
 	@FieldConfAnont(label = "ID")
 	private String id;
@@ -97,16 +97,16 @@ public class MonedaCotizacion extends EntityId {
 		return d.format(fecha) + " - " + moneda;
 	}
 
-	public List<MonedaCotizacion> find(MonedasCotizacionFiltro filtro) throws Exception {
+	public List<MonedaCotizacion2> find(MonedasCotizacionFiltro filtro) throws Exception {
 		return find(-1, -1, null, filtro);
 	}
 
-	public List<MonedaCotizacion> find(int limit, int offset, Map<String, Boolean> orderBy,
+	public List<MonedaCotizacion2> find(int limit, int offset, Map<String, Boolean> orderBy,
 			MonedasCotizacionFiltro filtro) throws Exception {
 
 		filtro.setterTrim();
 
-		List<MonedaCotizacion> listado = new ArrayList<MonedaCotizacion>();
+		List<MonedaCotizacion2> listado = new ArrayList<MonedaCotizacion2>();
 
 		String orderBySQL = "moneda, fecha desc";
 		String whereSQL = "";
@@ -132,7 +132,7 @@ public class MonedaCotizacion extends EntityId {
 		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 1);
 
 		for (EntityId item : items) {
-			listado.add((MonedaCotizacion) item);
+			listado.add((MonedaCotizacion2) item);
 		}
 
 		return listado;

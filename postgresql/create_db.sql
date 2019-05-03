@@ -1,3 +1,22 @@
+/*
+CREATE OR REPLACE  FUNCTION kuntur.ftg_number_admission_period_increment() RETURNS trigger AS $admission_period_increment$
+    BEGIN
+       
+         SELECT INTO NEW.number_admission_period coalesce(MAX(number_admission_period),0) + 1 
+         FROM kuntur.admission_period;
+         --WHERE 	coalesce(agreement_id,'') = coalesce(NEW.agreement_id,'');
+      
+        RETURN NEW;
+    END;
+$admission_period_increment$ LANGUAGE plpgsql;
+
+--DROP TRIGGER tg_number_batch_increment ON model.task;
+CREATE TRIGGER tg_number_admission_period_increment BEFORE INSERT ON kuntur.admission_period
+    FOR EACH ROW EXECUTE PROCEDURE kuntur.ftg_number_admission_period_increment();
+*/
+
+
+
 -- CREATE EXTENSION "uuid-ossp";
 -- SELECT uuid_generate_v4();
 
@@ -15,7 +34,20 @@ CREATE SCHEMA massoftware AUTHORIZATION massoftwareroot;
 -- ==========================================================================================================================
 -- ==========================================================================================================================
 
+DROP FUNCTION IF EXISTS massoftware.random_between (low INT ,high INT) CASCADE;
 
+CREATE OR REPLACE FUNCTION massoftware.random_between (low INT ,high INT) 
+   RETURNS INT AS
+$$
+BEGIN
+   RETURN floor(random()* (high-low + 1) + low);
+END;
+$$ language 'plpgsql' STRICT;
+
+
+-- SELECT massoftware.random_between(1, 100);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
 
 DROP FUNCTION IF EXISTS massoftware.white_is_null (att_val VARCHAR) CASCADE;
 
@@ -1174,8 +1206,9 @@ CREATE TABLE massoftware.Banco
 );
 
 CREATE UNIQUE INDEX u_Banco_nombre ON massoftware.Banco (TRANSLATE(LOWER(TRIM(nombre))
-            , '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
-            , '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
 
 -- SELECT * FROM massoftware.Banco;
 
@@ -2412,18 +2445,18 @@ CREATE TABLE massoftware.MarcaTicketModelo
 (
     id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),     	
     marcaTicket VARCHAR NOT NULL REFERENCES massoftware.MarcaTicket (id),		 
-	numero INTEGER UNIQUE CHECK (hoja > 0),
+	numero INTEGER UNIQUE CHECK (numero > 0),
 	nombre VARCHAR,	
 	pruebaLectura VARCHAR,	
-	identificacionPosicion INTEGER CHECK (hoja > 0),	
-	identificacionIdentificacion VARCHAR;	
-	importePosicion INTEGER CHECK (hoja > 0),	
-	importeLongitud INTEGER CHECK (hoja > 0),	
-	importeCantidadDecimales INTEGER CHECK (hoja > 0),	
-	numeroPosicion INTEGER CHECK (hoja > 0),	
-	numeroLongitud INTEGER CHECK (hoja > 0),	
+	identificacionPosicion INTEGER CHECK (identificacionPosicion > 0),	
+	identificacionIdentificacion VARCHAR,	
+	importePosicion INTEGER CHECK (importePosicion > 0),	
+	importeLongitud INTEGER CHECK (importeLongitud > 0),	
+	importeCantidadDecimales INTEGER CHECK (importeCantidadDecimales > 0),	
+	numeroPosicion INTEGER CHECK (numeroPosicion > 0),	
+	numeroLongitud INTEGER CHECK (numeroLongitud > 0),	
 	prefijoIdentificacionImportacion VARCHAR,	
-	prefijoPosicion INTEGER CHECK (hoja > 0),	
+	prefijoPosicion INTEGER CHECK (prefijoPosicion > 0),	
 	bloqueado BOOLEAN DEFAULT false   
     
 );
@@ -2449,7 +2482,7 @@ BEGIN
     NEW.nombre := massoftware.white_is_null(NEW.nombre);
     NEW.pruebaLectura := massoftware.white_is_null(NEW.pruebaLectura);
     NEW.identificacionIdentificacion := massoftware.white_is_null(NEW.identificacionIdentificacion);
-    NEW.prefijoIdentificacionImportacion := massoftware.white_is_null(NEW.prefijoIdentificacionImportacion);    	
+    NEW.prefijoIdentificacionImportacion := massoftware.white_is_null(NEW.prefijoIdentificacionImportacion);
 
 	RETURN NEW;
 END;

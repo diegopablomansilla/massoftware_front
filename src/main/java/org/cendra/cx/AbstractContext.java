@@ -92,7 +92,7 @@ public abstract class AbstractContext {
 
 				System.out.println(sep() + "[..] Leyendo archivo de propiedades\n\n" + path + sep());
 
-				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();				
 				input = classLoader.getResourceAsStream(path);
 				// input = new FileInputStream(path);
 

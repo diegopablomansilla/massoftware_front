@@ -159,6 +159,10 @@ public class UtilUI {
 
 	}
 	
+	public static Column confColumn(Column column, boolean hidable, boolean hidden, boolean sortable, double pixelWidth) {
+		return confColumn(column, null, hidable, hidden, false, sortable, pixelWidth);
+	}
+	
 	public static Column confColumn(Column column, boolean sortable, double pixelWidth) {
 		return confColumn(column, null, true, false, false, sortable, pixelWidth);
 	}

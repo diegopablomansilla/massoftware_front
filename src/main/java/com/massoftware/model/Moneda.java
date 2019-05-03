@@ -34,7 +34,7 @@ public class Moneda extends EntityId {
 	private Boolean controlActualizacion;
 
 	@FieldConfAnont(label = "Moneda AFIP")
-	private MonedaAFIP monedaAFIP;
+	private MonedaAFIP2 monedaAFIP;
 
 	public String getId() {
 		return id;
@@ -92,11 +92,11 @@ public class Moneda extends EntityId {
 		this.controlActualizacion = controlActualizacion;
 	}
 
-	public MonedaAFIP getMonedaAFIP() {
+	public MonedaAFIP2 getMonedaAFIP() {
 		return monedaAFIP;
 	}
 
-	public void setMonedaAFIP(MonedaAFIP monedaAFIP) {
+	public void setMonedaAFIP(MonedaAFIP2 monedaAFIP) {
 		this.monedaAFIP = monedaAFIP;
 	}
 
@@ -116,7 +116,7 @@ public class Moneda extends EntityId {
 	public List<Moneda> find(MonedasFiltro filtro) throws Exception {
 		return find(-1, -1, null, filtro);
 	}
-
+	
 	public List<Moneda> find(int limit, int offset, Map<String, Boolean> orderBy, MonedasFiltro filtro)
 			throws Exception {
 

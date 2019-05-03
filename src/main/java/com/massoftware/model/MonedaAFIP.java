@@ -1,103 +1,81 @@
 package com.massoftware.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 
 @ClassLabelAnont(singular = "Moneda AFIP", plural = "Monedas AFIP", singularPre = "la moneda AFIP", pluralPre = "las monedas AFIP")
 public class MonedaAFIP extends EntityId {
 
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
 	@FieldConfAnont(label = "ID")
 	private String id;
 
-	@FieldConfAnont(label = "Código", required = true, unique = true, columns = 5, maxLength = 3)
+	// Código
+	@FieldConfAnont(label = "Código", labelError = "", unique = true, readOnly = false, required = true, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
 	private String codigo;
 
-	@FieldConfAnont(label = "Nombre", required = true, unique = true)
+	// Nombre
+	@FieldConfAnont(label = "Nombre", labelError = "", unique = true, readOnly = false, required = true, columns = 20.0f, maxLength = 50, minValue = "", maxValue = "", mask = "")
 	private String nombre;
 
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public MonedaAFIP() {
+	}
+
+	public MonedaAFIP(String idArg0, String codigoArg1, String nombreArg2) {
+
+		setter(idArg0, codigoArg1, nombreArg2);
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	// GET ID
 	public String getId() {
-		return id;
+		return this.id;
+	}
+	// SET ID
+	public void setId(String id){
+		id = (id != null) ? id.trim() : null;
+		this.id = (id != null && id.length() == 0) ? null : id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
+	// GET Código
 	public String getCodigo() {
-		return codigo;
+		return this.codigo;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	// SET Código
+	public void setCodigo(String codigo ){
+		codigo = (codigo != null) ? codigo.trim() : null;
+		this.codigo = (codigo != null && codigo.length() == 0) ? null : codigo;
 	}
 
+	// GET Nombre
 	public String getNombre() {
-		return nombre;
+		return this.nombre;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	// SET Nombre
+	public void setNombre(String nombre ){
+		nombre = (nombre != null) ? nombre.trim() : null;
+		this.nombre = (nombre != null && nombre.length() == 0) ? null : nombre;
 	}
 
-	@Override
-	public String toString() {
-		return "(" + codigo + ") " + nombre;
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public void setter(String idArg0, String codigoArg1, String nombreArg2) {
+
+		this.setId(idArg0);
+		this.setCodigo(codigoArg1);
+		this.setNombre(nombreArg2);
+
 	}
 
-	public List<MonedaAFIP> find()
-			throws Exception {
-		
-		return find(-1, -1, null, new MonedasAFIPFiltro());
-		
-	}
-	
-	public List<MonedaAFIP> find(int limit, int offset, Map<String, Boolean> orderBy, MonedasAFIPFiltro filtro)
-			throws Exception {
-
-		filtro.setterTrim();
-
-		List<MonedaAFIP> listado = new ArrayList<MonedaAFIP>();
-
-		String orderBySQL = "codigo";
-		String whereSQL = "";
-
-		ArrayList<Object> filtros = new ArrayList<Object>();
-
-		if (filtro.getCodigo() != null) {
-			filtros.add(filtro.getCodigo());
-			whereSQL += "codigo" + " = ? AND ";
-		}
-		if (filtro.getNombre() != null) {
-			String[] palabras = filtro.getNombre().split(" ");
-			for (String palabra : palabras) {
-				filtros.add(palabra.trim());
-				whereSQL += "TRIM(massoftware.TRANSLATE(" + "nombre"
-						+ "))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(?)) || '%')::VARCHAR AND ";
-			}
-		}
-
-		// ==================================================================
-
-		whereSQL = whereSQL.trim();
-		if (whereSQL.length() > 0) {
-			whereSQL = whereSQL.substring(0, whereSQL.length() - 4);
-		} else {
-			whereSQL = null;
-		}
-
-		// ==================================================================
-
-		List<EntityId> items = findUtil(orderBySQL, whereSQL, limit, offset, filtros.toArray(), 1);
-
-		for (EntityId item : items) {
-			listado.add((MonedaAFIP) item);
-		}
-
-		return listado;
-	}
-
-}
+} // END CLASS ----------------------------------------------------------------------------------------------------------

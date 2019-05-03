@@ -40,6 +40,8 @@ public class TextFieldEntity extends TextField {
 		String mask = ((Entity) dtoBI.getBean()).mask(attName);
 
 		// ----------------------------------------------------------------------------
+		
+//		System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPP " + attName + " --------- " + dtoBI.getItemProperty(attName) + " -----------------");
 
 		addStyleName(ValoTheme.TEXTFIELD_TINY);
 		// txt.setWidth("-1px");

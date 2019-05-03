@@ -1,4 +1,4 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.themes.ValoTheme;

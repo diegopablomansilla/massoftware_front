@@ -1,16 +1,17 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import java.io.File;
 
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.Usuario;
+import com.massoftware.w.monedaafip.WLMonedaAFIP;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
 import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
+import com.massoftware.windows.a.marca_ticket_modelo.WMarcasTicketModelo;
 import com.massoftware.windows.a.marcas_ticket.WMarcasTicket;
 import com.massoftware.windows.a.monedas.WMonedas;
-import com.massoftware.windows.a.monedas_afip.WMonedasAFIP;
 import com.massoftware.windows.a.monedas_cotizaciones.WMonedasCotizacion;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
@@ -106,7 +107,7 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
 		a1.addSeparator();
 		a1.addItem("Marcas de ticket's ...", openMarcasTicketCmd());
-		a1.addItem("Series de ticket's ...", null).setEnabled(false);
+		a1.addItem("Series de ticket's ...", openWMarcasTicketModeloCmd());
 		a1.addItem("Ticket's denunciados ...", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
@@ -266,7 +267,7 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WMonedasAFIP();
+				Window window = new WLMonedaAFIP();
 				getUI().addWindow(window);
 			}
 		};
@@ -679,6 +680,23 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WMarcasTicket();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openWMarcasTicketModeloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WMarcasTicketModelo();
 				getUI().addWindow(window);
 			}
 		};

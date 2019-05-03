@@ -1,4 +1,4 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import com.massoftware.model.AsientosModeloFiltro;
 import com.massoftware.model.CentrosCostoContableFiltro;

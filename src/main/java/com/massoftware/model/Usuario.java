@@ -8,7 +8,7 @@ import com.massoftware.backend.annotation.FieldConfAnont;
 
 @ClassLabelAnont(singular = "Usuario", plural = "Usuarios", singularPre = "el usuario", pluralPre = "los usuarios")
 public class Usuario extends EntityId {
-
+	
 	@FieldConfAnont(label = "ID")
 	private String id;
 	

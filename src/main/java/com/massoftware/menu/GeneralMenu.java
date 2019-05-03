@@ -1,4 +1,4 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import com.massoftware.windows.a.seguridad_puertas.WSeguridadPuertas;
 import com.vaadin.ui.MenuBar;

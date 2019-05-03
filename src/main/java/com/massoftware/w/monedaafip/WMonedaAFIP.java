@@ -1,7 +1,9 @@
-package com.massoftware.windows.a.monedas_afip;
+package com.massoftware.w.monedaafip;
 
+import com.massoftware.dao.MonedaAFIPDAO;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.MonedaAFIP;
+import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -106,7 +108,24 @@ public class WMonedaAFIP extends WindowForm {
 		return itemBI;
 	}
 
+	protected Object insert() throws Exception {
 
+		try {
+			
+			MonedaAFIPDAO dao = new MonedaAFIPDAO();			
+			dao.insert(getItemBIC().getBean());			
+//			((EntityId) getItemBIC().getBean()).insert();
+			if (windowListado != null) {
+				windowListado.loadDataResetPaged();
+			}
+
+			return getItemBIC().getBean();
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+			return null;
+		}
+	}
 
 	// =================================================================================
 

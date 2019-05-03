@@ -1,58 +1,55 @@
-package com.massoftware.windows.a.monedas;
+package com.massoftware.windows.a.marca_ticket_modelo;
 
-import java.util.List;
-
+import com.massoftware.model.MarcaTicketModelo;
 import com.massoftware.model.EntityId;
-import com.massoftware.model.Moneda;
-import com.massoftware.model.MonedaAFIP2;
 import com.massoftware.windows.CheckBoxEntity;
-import com.massoftware.windows.ComboBoxEntity;
-import com.massoftware.windows.DateFieldEntity;
 import com.massoftware.windows.TextFieldEntity;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings("serial")
-public class WMoneda extends WindowForm {
+public class WMarcaTicketModelo extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<Moneda> itemBI;
+	private BeanItem<MarcaTicketModelo> itemBI;
 
 	// -------------------------------------------------------------
 
 	private TextFieldEntity numeroTXT;
 	private TextFieldEntity nombreTXT;
-	private TextFieldEntity abreviaturaTXT;
-	private TextFieldEntity cotizacionTXT;
-	private DateFieldEntity cotizacionFechaDFT;
-	private CheckBoxEntity controlActualizacionCHX;
-	private ComboBoxEntity monedaAFIPCBX;
-
-	private HorizontalLayout cotizacionHL;
+	private TextFieldEntity cuitTXT;
+	private CheckBoxEntity bloqueadoCHX;
+	private TextFieldEntity hojaTXT;
+	private TextFieldEntity primeraFilaTXT;
+	private TextFieldEntity ultimaFilaTXT;
+	private TextFieldEntity fechaTXT;
+	private TextFieldEntity descripcionTXT;
+	private TextFieldEntity referencia1TXT;
+	private TextFieldEntity importeTXT;
+	private TextFieldEntity referencia2TXT;
+	private TextFieldEntity saldoTXT;
 
 	// -------------------------------------------------------------
 
-	public WMoneda(String mode, String id) {
+	public WMarcaTicketModelo(String mode, String id) {
 		super(mode, id);
-
-		cotizacionHL.setVisible(UPDATE_MODE.equals(mode));
-
 	}
 
 	protected void buildContent() throws Exception {
 
 		confWinForm(this.itemBI.getBean().labelSingular());
-		// this.setWidth(28f, Unit.EM);
+		this.setWidth(28f, Unit.EM);
 
 		// =======================================================
 		// CUERPO
 
-		VerticalLayout cuerpo = buildCuerpo();
+		TabSheet cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -71,39 +68,63 @@ public class WMoneda extends WindowForm {
 		this.setContent(content);
 	}
 
-	private VerticalLayout buildCuerpo() throws Exception {
+	private TabSheet buildCuerpo() throws Exception {
 
 		// ---------------------------------------------------------------------------------------------------------
 		numeroTXT = new TextFieldEntity(this.itemBI, "numero", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
 		nombreTXT = new TextFieldEntity(this.itemBI, "nombre", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		abreviaturaTXT = new TextFieldEntity(this.itemBI, "abreviatura", this.mode);
+		cuitTXT = new TextFieldEntity(this.itemBI, "cuit", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		cotizacionTXT = new TextFieldEntity(this.itemBI, "cotizacion", this.mode);
+		bloqueadoCHX = new CheckBoxEntity(this.itemBI, "bloqueado");
 		// ---------------------------------------------------------------------------------------------------------
-		cotizacionFechaDFT = new DateFieldEntity(this.itemBI, "cotizacionFecha", this.mode, true);
+		hojaTXT = new TextFieldEntity(this.itemBI, "hoja", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		controlActualizacionCHX = new CheckBoxEntity(this.itemBI, "controlActualizacion");
+		primeraFilaTXT = new TextFieldEntity(this.itemBI, "primeraFila", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		List<MonedaAFIP2> monedasAFIP = new MonedaAFIP2().find();
-		monedaAFIPCBX = new ComboBoxEntity(this.itemBI, "monedaAFIP", this.mode, monedasAFIP);
+		ultimaFilaTXT = new TextFieldEntity(this.itemBI, "ultimaFila", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		fechaTXT = new TextFieldEntity(this.itemBI, "fecha", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		descripcionTXT = new TextFieldEntity(this.itemBI, "descripcion", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		referencia1TXT = new TextFieldEntity(this.itemBI, "referencia1", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		importeTXT = new TextFieldEntity(this.itemBI, "importe", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		referencia2TXT = new TextFieldEntity(this.itemBI, "referencia2", this.mode);
+		// ---------------------------------------------------------------------------------------------------------
+		saldoTXT = new TextFieldEntity(this.itemBI, "saldo", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
 
-		HorizontalLayout nombresHL = UtilUI.buildHL();
-		nombresHL.setMargin(false);
-		nombresHL.addComponents(abreviaturaTXT, nombreTXT);
+		HorizontalLayout formatoExtractoRow0HL = UtilUI.buildHL();
+		formatoExtractoRow0HL.setMargin(false);
+		formatoExtractoRow0HL.addComponents(hojaTXT, primeraFilaTXT, ultimaFilaTXT);
 
-		cotizacionHL = UtilUI.buildHL();
-		cotizacionHL.setMargin(false);
-		cotizacionHL.addComponents(cotizacionTXT, cotizacionFechaDFT);
+		HorizontalLayout formatoExtractoRow3HL = UtilUI.buildHL();
+		formatoExtractoRow3HL.setMargin(false);
+		formatoExtractoRow3HL.addComponents(referencia1TXT, referencia2TXT);
+
+		HorizontalLayout formatoExtractoRow4HL = UtilUI.buildHL();
+		formatoExtractoRow4HL.setMargin(false);
+		formatoExtractoRow4HL.addComponents(importeTXT, saldoTXT);
+
+		VerticalLayout formatoExtractoVL = UtilUI.buildVL();
+		formatoExtractoVL.addComponents(formatoExtractoRow0HL, fechaTXT, descripcionTXT, formatoExtractoRow3HL,
+				formatoExtractoRow4HL);
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(numeroTXT, nombresHL, cotizacionHL, controlActualizacionCHX, monedaAFIPCBX);
+		generalVL.addComponents(numeroTXT, nombreTXT, cuitTXT, bloqueadoCHX);
+
+		TabSheet tabSheet = UtilUI.buildTS();
+
+		tabSheet.addTab(generalVL, "General");
+		tabSheet.addTab(formatoExtractoVL, "Formato extracto");
 
 		// ---------------------------------------------------------------------------------------------------------
 
-		return generalVL;
+		return tabSheet;
 
 		// ---------------------------------------------------------------------------------------------------------
 	}
@@ -117,17 +138,17 @@ public class WMoneda extends WindowForm {
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		((Moneda) item).setNumero(this.itemBI.getBean().maxValueInteger("numero"));
+		((MarcaTicketModelo) item).setNumero(this.itemBI.getBean().maxValueInteger("numero"));
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((Moneda) obj);
+		itemBI.setBean((MarcaTicketModelo) obj);
 	}
 
-	protected BeanItem<Moneda> getItemBIC() {
+	protected BeanItem<MarcaTicketModelo> getItemBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -136,7 +157,7 @@ public class WMoneda extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<Moneda>(new Moneda());
+			itemBI = new BeanItem<MarcaTicketModelo>(new MarcaTicketModelo());
 		}
 		return itemBI;
 	}

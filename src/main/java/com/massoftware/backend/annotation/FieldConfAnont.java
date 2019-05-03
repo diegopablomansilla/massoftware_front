@@ -19,7 +19,7 @@ public @interface FieldConfAnont {
 	boolean readOnly() default false;
 	boolean required() default false;
 	float columns() default 20;
-	int maxLength() default 100;
+	int maxLength() default 500;
 	String minValue() default "1";
 	String maxValue() default Integer.MAX_VALUE + "";
 	String mask() default "";

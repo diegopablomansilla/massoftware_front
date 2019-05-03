@@ -118,7 +118,7 @@ public class SeguridadPuerta extends EntityId {
 			sql += " OFFSET " + offset + " LIMIT " + limit;
 		}
 
-		Object[][] table = BackendContextPG.get().find(sql, limit, offset, filtros.toArray());
+		Object[][] table = BackendContextPG.get().find(sql, filtros.toArray());
 
 		for (int i = 0; i < table.length; i++) {
 			SeguridadPuerta item = new SeguridadPuerta();

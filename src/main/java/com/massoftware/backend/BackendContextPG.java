@@ -127,7 +127,11 @@ public class BackendContextPG extends AbstractContext {
 	public synchronized Object[] findByFkId(String tableName, String attNameFK, String idFk) throws Exception {
 		Object[][] table = find(tableName, "*", "id", attNameFK + " = ?", -1, -1, new Object[] { idFk });
 
-		return table[0];
+		if(table.length > 0) {
+			return table[0];	
+		}
+		
+		return new Object[0][0];
 	}
 
 	public synchronized Object[][] find(String tableName, String atts, String orderBy, String where, int limit,
@@ -160,10 +164,10 @@ public class BackendContextPG extends AbstractContext {
 
 		// sql += ";";
 
-		return find(sql, limit, offset, args);
+		return find(sql, args);
 	}
 
-	public synchronized Object[][] find(String sql, int limit, int offset, Object[] args) throws Exception {
+	public synchronized Object[][] find(String sql, Object[] args) throws Exception {
 
 		if (args == null) {
 			args = new Object[0];

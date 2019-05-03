@@ -1,12 +1,11 @@
-package com.massoftware.windows.a.monedas_afip;
+
+package com.massoftware.w.monedaafip;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.MonedaAFIP;
-import com.massoftware.model.MonedasAFIPFiltro;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
@@ -23,30 +22,38 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import com.massoftware.model.EntityId;
+
+import com.massoftware.model.MonedaAFIP;
+import com.massoftware.dao.model.MonedaAFIPFiltro;
+import com.massoftware.dao.MonedaAFIPDAO;
+
 @SuppressWarnings("serial")
-public class WMonedasAFIP extends WindowListado {
+public class WLMonedaAFIP extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MonedasAFIPFiltro> filterBI;
+	BeanItem<MonedaAFIPFiltro> filterBI;
 	protected BeanItemContainer<MonedaAFIP> itemsBIC;
 
 	// -------------------------------------------------------------
 
-	private TextFieldBox numeroIB;
-	private TextFieldBox nombreTB;
+	
+	private TextFieldBox codigoTXTB;
+	private TextFieldBox nombreTXTB;
+
 
 	// -------------------------------------------------------------
 
-	public WMonedasAFIP() {
+	public WLMonedaAFIP() {
 		super();
-		filterBI = new BeanItem<MonedasAFIPFiltro>(new MonedasAFIPFiltro());
+		filterBI = new BeanItem<MonedaAFIPFiltro>(new MonedaAFIPFiltro());
 		init(false);
 	}
 
-	public WMonedasAFIP(MonedasAFIPFiltro filtro) {
+	public WLMonedaAFIP(MonedaAFIPFiltro filtro) {
 		super();
-		filterBI = new BeanItem<MonedasAFIPFiltro>(filtro);
+		filterBI = new BeanItem<MonedaAFIPFiltro>(filtro);
 		init(true);
 	}
 
@@ -84,22 +91,26 @@ public class WMonedasAFIP extends WindowListado {
 		this.setContent(content);
 	}
 
-	private HorizontalLayout buildFiltros() throws Exception {
+	private HorizontalLayout buildFiltros() throws Exception {		
+		
 
-		numeroIB = new TextFieldBox(this, filterBI, "codigo");
+		// ------------------------------------------------------------------
 
-		// --------------------------------------------------------
+		codigoTXTB = new TextFieldBox(this, filterBI, "codigo");
 
-		nombreTB = new TextFieldBox(this, filterBI, "nombre");
+		// ------------------------------------------------------------------
 
-		// --------------------------------------------------------
+		nombreTXTB = new TextFieldBox(this, filterBI, "nombre");
 
+		
+		// ------------------------------------------------------------------
+		
 		Button buscarBTN = buildButtonBuscar();
 
 		HorizontalLayout filaFiltroHL = new HorizontalLayout();
 		filaFiltroHL.setSpacing(true);
 
-		filaFiltroHL.addComponents(numeroIB, nombreTB, buscarBTN);
+		filaFiltroHL.addComponents(codigoTXTB, nombreTXTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 		return filaFiltroHL;
@@ -116,10 +127,16 @@ public class WMonedasAFIP extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "codigo", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "codigo", "nombre" });
 
-		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 70);
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		// ------------------------------------------------------------------
+		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
+
+		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 72);
+
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+		
+		// ------------------------------------------------------------------
 
 		MonedaAFIP dto = new MonedaAFIP();
 		for (Column column : itemsGRD.getColumns()) {
@@ -138,6 +155,7 @@ public class WMonedasAFIP extends WindowListado {
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
 		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+		
 
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(
@@ -148,7 +166,7 @@ public class WMonedasAFIP extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("codigo", SortDirection.ASCENDING));
+		order.add(new SortOrder("id", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);
 
@@ -197,7 +215,16 @@ public class WMonedasAFIP extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			List<MonedaAFIP> items = new MonedaAFIP().find(limit, offset, buildOrderBy(), filterBI.getBean());
+			// List<MonedaAFIP> items = new MonedaAFIP().find(limit, offset, buildOrderBy(),
+			// filterBI.getBean());
+
+			MonedaAFIPDAO dao = new MonedaAFIPDAO();
+
+			filterBI.getBean().setLimit(limit);
+			filterBI.getBean().setOffset(offset);
+			// filterBI.getBean().setOrderBy("codigo");
+
+			List<MonedaAFIP> items = dao.find(filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
@@ -210,6 +237,15 @@ public class WMonedasAFIP extends WindowListado {
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
+
+	}
+
+	protected void deleteItem(Object item) throws Exception {
+
+		// ((EntityId) item).delete();
+
+		MonedaAFIPDAO dao = new MonedaAFIPDAO();
+		dao.deleteById(((EntityId) item).getId());
 
 	}
 

@@ -133,8 +133,7 @@ public class WCuentasContable extends WindowListado {
 		CentrosCostoContableFiltro centroCostoContableFiltro = new CentrosCostoContableFiltro();
 		centroCostoContableFiltro.setEjercicioContable(filterBI.getBean().getEjercicioContable());
 
-		centroCostoContableCB = new ComboBoxBox(this, filterBI, "centroCostoContable",
-				new CentroCostoContable().find(centroCostoContableFiltro));
+		centroCostoContableCB = new ComboBoxBox(this, filterBI, "centroCostoContable", new CentroCostoContable().find(centroCostoContableFiltro));
 
 		PuntosEquilibrioFiltro puntosEquilibrioFiltro = new PuntosEquilibrioFiltro();
 		puntosEquilibrioFiltro.setEjercicioContable(filterBI.getBean().getEjercicioContable());

@@ -81,7 +81,7 @@ public class WBanco extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		hojaTXT = new TextFieldEntity(this.itemBI, "hoja", this.mode);
 		// ---------------------------------------------------------------------------------------------------------
-		primeraFilaTXT = new TextFieldEntity(this.itemBI, "primeraFila", this.mode);
+		primeraFilaTXT = new TextFieldEntity(this.itemBI, "primeraFila", this.mode);		
 		// ---------------------------------------------------------------------------------------------------------
 		ultimaFilaTXT = new TextFieldEntity(this.itemBI, "ultimaFila", this.mode);
 		// ---------------------------------------------------------------------------------------------------------

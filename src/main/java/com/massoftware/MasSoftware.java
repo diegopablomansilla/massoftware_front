@@ -7,6 +7,12 @@ import java.util.Map.Entry;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.massoftware.menu.ContabilidadGeneralMenu;
+import com.massoftware.menu.FondosMenu;
+import com.massoftware.menu.GeneralMenu;
+import com.massoftware.menu.StockMenu;
+import com.massoftware.menu.ValoMenuLayout;
+import com.massoftware.menu.VentasMenu;
 import com.massoftware.windows.LogAndNotification;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;

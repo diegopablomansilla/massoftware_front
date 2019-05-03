@@ -1,4 +1,4 @@
-package com.massoftware;
+package com.massoftware.menu;
 
 import com.massoftware.windows.LogAndNotification;
 import com.vaadin.navigator.View;
