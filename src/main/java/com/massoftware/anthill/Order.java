@@ -94,12 +94,12 @@ public class Order extends Att {
 		att.setUnique(unique);
 	}
 
-	public boolean isReadOnly() {
-		return att.isReadOnly();
+	public boolean isReadOnlyGUI() {
+		return att.isReadOnlyGUI();
 	}
 
-	public void setReadOnly(boolean readOnly) {
-		att.setReadOnly(readOnly);
+	public void setReadOnlyGUI(boolean readOnly) {
+		att.setReadOnlyGUI(readOnly);
 	}
 
 	public boolean isRequired() {

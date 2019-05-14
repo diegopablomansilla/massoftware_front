@@ -4,63 +4,123 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Builder {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
+
+		List<Clazz> clazzList = new ArrayList<Clazz>();
+
+		///////////////////////////////////////////////////////////////////
+
+		// Clazz banco = buildBanco();
+		// Clazz usuario = buildUsuario();
+		Clazz monedaAFIP = buildMonedaAFIP();
+		clazzList.add(monedaAFIP);
+		Clazz moneda = buildMoneda(monedaAFIP);
+		clazzList.add(moneda);
+		// Clazz monedaCotizacion = buildMonedaCotizacion(moneda, usuario);
+
+		write(clazzList);
+
+	}
+
+	private static void write(List<Clazz> clazzList) throws IOException {
+
+		String massoftware_front = "D:\\dev\\source\\massoftware_front";
+
+		String src_java = massoftware_front + File.separatorChar + "src\\main\\java";
+
+		File folderSQL = new File(massoftware_front + File.separatorChar + "postgresql");
+		folderSQL.mkdirs();
+
+		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware\\populate");
+		folderPopulate.mkdirs();
+
+		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
+		folderPOJO.mkdirs();
+
+		File folderDAO = new File(src_java + File.separatorChar + "com\\massoftware\\dao");
+		folderDAO.mkdirs();
+
+		File folderWindows = new File(src_java + File.separatorChar + "com\\massoftware\\x");
+		folderWindows.mkdirs();
 
 		String sql = "";
 
-//		Clazz banco = buildBanco();
-//		Clazz usuario = buildUsuario();
-		Clazz monedaAFIP = buildMonedaAFIP();
-//		Clazz moneda = buildMoneda(monedaAFIP);
-//		Clazz monedaCotizacion = buildMonedaCotizacion(moneda, usuario);
+		String javaPopulateBody = "";
+		String javaPopulateImport = "";
+		String javaPopulateInsert = "";
 
-//		sql += usuario.toSQL();
-		sql += "\n\n";
-		sql += monedaAFIP.toSQL();
-		sql += "\n\n";
-//		sql += moneda.toSQL();
-		sql += "\n\n";
-//		sql += monedaCotizacion.toSQL();
+		for (Clazz clazz : clazzList) {
 
-		// System.out.println(banco.toSQL());
-//		System.out.println(usuario.toSQL());
-//		System.out.println(monedaAFIP.toSQL());
-//		System.out.println(moneda.toSQL());
-//		System.out.println(monedaCotizacion.toSQL());
+			sql += "\n\n";
+			sql += clazz.toSQL();
 
-		// System.out.println(usuario.toJava());
-		// System.out.println(banco.toJava());
-//		 System.out.println(monedaAFIP.toJava());
-		// System.out.println(moneda.toJava());
-		// System.out.println(monedaCotizacion.toJava());
+			javaPopulateInsert += "\n\t\ttry {";					
+			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
+			javaPopulateInsert += "\n\t\t} catch (Exception e) {}";
+			
+			
+			
+			javaPopulateBody += "\n\n";
+			javaPopulateBody += clazz.toPopulateJava();
+			
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
 
-		write("D:\\dev\\salidas_pruebas\\sql.sql", sql);
+			File folderPOJOPackage = new File(
+					folderPOJO.getAbsolutePath() + File.separatorChar + clazz.getNamePackage());
+			folderPOJOPackage.mkdirs();
+
+			File folderDAOPackage = new File(folderDAO.getAbsolutePath() + File.separatorChar + clazz.getNamePackage());
+			folderDAOPackage.mkdirs();
+
+			File folderWindosPackage = new File(
+					folderWindows.getAbsolutePath() + File.separatorChar + clazz.getNamePackage());
+			folderWindosPackage.mkdirs();
+
+			write(folderPOJOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + ".java", clazz.toJava());
+			write(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "DAO.java",
+					clazz.toJavaDao());
+			write(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Filtro.java",
+					clazz.toJavaFilter());
+			write(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" + clazz.getName() + ".java",
+					clazz.toJavaWL());
+			write(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WF" + clazz.getName() + ".java",
+					clazz.toJavaWF());
+
+		}
+
+		String javaPopulate = "package com.massoftware.populate;\n";
+
+		javaPopulate += "import java.util.List;\n";
+		javaPopulate += "import java.util.Random;\n";
+		javaPopulate += javaPopulateImport;
+		javaPopulate += "\n\npublic class Populate {";
 		
-//		write("D:\\dev\\salidas_pruebas\\" + usuario.getName() + ".java", usuario.toJava());
-		write("D:\\dev\\salidas_pruebas\\" + monedaAFIP.getName() + ".java", monedaAFIP.toJava());
-//		write("D:\\dev\\salidas_pruebas\\" + moneda.getName() + ".java", moneda.toJava());
-//		write("D:\\dev\\salidas_pruebas\\" + monedaCotizacion.getName() + ".java", monedaCotizacion.toJava());
+		javaPopulate += "\n\n\tstatic int maxRows = 1000000;";		
 		
-//		write("D:\\dev\\salidas_pruebas\\" + usuario.getName() + "Filtro.java", usuario.toJavaFilter());
-		write("D:\\dev\\salidas_pruebas\\" + monedaAFIP.getName() + "Filtro.java", monedaAFIP.toJavaFilter());
-//		write("D:\\dev\\salidas_pruebas\\" + moneda.getName() + "Filtro.java", moneda.toJavaFilter());
-//		write("D:\\dev\\salidas_pruebas\\" + monedaCotizacion.getName() + "Filtro.java", monedaCotizacion.toJavaFilter());
+		javaPopulate += "\n\n\tpublic static void main(String[] args) {";
+		javaPopulate += javaPopulateInsert;
+		javaPopulate += "\n\t}";
 		
-//		write("D:\\dev\\salidas_pruebas\\" + usuario.getName() + "DAO.java", usuario.toJavaDao());
-		write("D:\\dev\\salidas_pruebas\\" + monedaAFIP.getName() + "DAO.java", monedaAFIP.toJavaDao());
-//		write("D:\\dev\\salidas_pruebas\\" + moneda.getName() + "DAO.java", moneda.toJavaDao());
-//		write("D:\\dev\\salidas_pruebas\\" + monedaCotizacion.getName() + "DAO.java", monedaCotizacion.toJavaDao());
-		
-		write("D:\\dev\\salidas_pruebas\\WL" + monedaAFIP.getName() + ".java", monedaAFIP.toJavaWListado());
-		
-//		System.out.println(monedaAFIP.toJavaWListado());
-		
+		javaPopulate += javaPopulateBody;
+
+		javaPopulate += "\n\n}";
+
+		write(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
+
+		write(folderSQL.getAbsolutePath() + File.separatorChar + "sql.sql", sql);
 
 	}
-	
+
 	private static void write(String fileName, String content) throws IOException {
 		File file = new File(fileName);
 
@@ -77,7 +137,7 @@ public class Builder {
 		writer.close();
 	}
 
-	public static Clazz buildUsuario() {
+	public static Clazz buildUsuario() throws CloneNotSupportedException {
 
 		Clazz usuario = new Clazz();
 
@@ -104,9 +164,10 @@ public class Builder {
 		return usuario;
 	}
 
-	public static Clazz buildMonedaAFIP() {
+	public static Clazz buildMonedaAFIP() throws CloneNotSupportedException {
 
 		Clazz monedaAFIP = new Clazz();
+		monedaAFIP.setNamePackage("monedas");
 		monedaAFIP.setSingular("Moneda AFIP");
 		monedaAFIP.setPlural("Monedas AFIP");
 		monedaAFIP.setSingularPre("la moneda AFIP");
@@ -128,7 +189,9 @@ public class Builder {
 		monedaAFIP.addAtt(nombre);
 
 		monedaAFIP.addArgument(codigo, Argument.EQUALS_IGNORE_CASE);
+		monedaAFIP.getLastArgument().setRequired(false);
 		monedaAFIP.addArgument(nombre);
+		monedaAFIP.getLastArgument().setRequired(false);
 
 		monedaAFIP.addOrder(codigo);
 		monedaAFIP.addOrder(nombre);
@@ -136,9 +199,14 @@ public class Builder {
 		return monedaAFIP;
 	}
 
-	public static Clazz buildMoneda(Clazz monedaAFIPClazz) {
+	public static Clazz buildMoneda(Clazz monedaAFIPClazz) throws CloneNotSupportedException {
 
 		Clazz moneda = new Clazz();
+		moneda.setNamePackage("monedas");
+		moneda.setSingular("Moneda");
+		moneda.setPlural("Monedas");
+		moneda.setSingularPre("la moneda");
+		moneda.setPluralPre("las monedas");
 
 		moneda.setName("Moneda");
 
@@ -164,13 +232,13 @@ public class Builder {
 		Att cotizacion = new Att("cotizacion", "Cotización");
 		cotizacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 9, 4);
 		cotizacion.setRequired(true);
-		cotizacion.setReadOnly(true);
+		cotizacion.setReadOnlyGUI(true);
 		moneda.addAtt(cotizacion);
 
 		Att cotizacionFecha = new Att("cotizacionFecha", "Fecha cotización");
 		cotizacionFecha.setDataTypeTimestamp();
 		cotizacionFecha.setRequired(true);
-		cotizacionFecha.setReadOnly(true);
+		cotizacionFecha.setReadOnlyGUI(true);
 		moneda.addAtt(cotizacionFecha);
 
 		Att controlActualizacion = new Att("controlActualizacion", "Control de actualizacion");
@@ -183,17 +251,23 @@ public class Builder {
 		moneda.addAtt(monedaAFIP);
 
 		moneda.addArgument(numero, true);
+		moneda.getLastArgument().setRequired(false);
 		moneda.addArgument(nombre);
+		moneda.getLastArgument().setRequired(false);
 		moneda.addArgument(abreviatura);
+		moneda.getLastArgument().setRequired(false);
 
 		moneda.addOrder(numero);
 		moneda.addOrder(nombre);
 		moneda.addOrder(abreviatura);
+		moneda.addOrder(cotizacion);
+		moneda.addOrder(controlActualizacion);
+		moneda.addOrder(monedaAFIP);
 
 		return moneda;
 	}
 
-	public static Clazz buildMonedaCotizacion(Clazz monedaClazz, Clazz usuarioClazz) {
+	public static Clazz buildMonedaCotizacion(Clazz monedaClazz, Clazz usuarioClazz) throws CloneNotSupportedException {
 
 		Clazz monedaCotizacion = new Clazz();
 
@@ -222,18 +296,18 @@ public class Builder {
 		Att auditoriaFecha = new Att("auditoriaFecha", "Fecha ingreso");
 		auditoriaFecha.setDataTypeTimestamp();
 		auditoriaFecha.setRequired(true);
-		auditoriaFecha.setReadOnly(true);
+		auditoriaFecha.setReadOnlyGUI(true);
 		monedaCotizacion.addAtt(auditoriaFecha);
 
 		Att usuario = new Att("usuario", "Usuario");
 		usuario.setDataTypeClazz(usuarioClazz);
 		usuario.setRequired(true);
-		usuario.setReadOnly(true);
+		usuario.setReadOnlyGUI(true);
 		monedaCotizacion.addAtt(usuario);
 
 		monedaCotizacion.addArgument(moneda);
-		monedaCotizacion.addArgument(fecha, true);		
-		
+		monedaCotizacion.addArgument(fecha, true);
+
 		monedaCotizacion.addOrder(fecha);
 		monedaCotizacion.addOrder(monedaClazz.getAtts().get(0));
 		monedaCotizacion.addOrder(monedaClazz.getAtts().get(1));

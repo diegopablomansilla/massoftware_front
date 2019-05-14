@@ -1,5 +1,7 @@
 package com.massoftware.windows;
 
+import org.cendra.ex.crud.UniqueException;
+
 import com.massoftware.model.Entity;
 import com.massoftware.model.EntityId;
 import com.vaadin.data.util.BeanItem;
@@ -29,7 +31,7 @@ public class UniqueValidator extends AbstractValidator<Object> {
 		this.caption = caption;
 		this.dtoBI = dtoBI;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public UniqueValidator(Class clazz, String mode, String attName, BeanItem dtoBI) throws Exception {
 		super("");
@@ -38,7 +40,7 @@ public class UniqueValidator extends AbstractValidator<Object> {
 		this.attName = attName;
 		this.caption = null;
 		this.dtoBI = dtoBI;
-		
+
 		if (dtoBI.getBean() instanceof Entity) {
 			String lbl = ((Entity) dtoBI.getBean()).label(attName);
 			if (lbl != null) {
@@ -51,12 +53,32 @@ public class UniqueValidator extends AbstractValidator<Object> {
 	@Override
 	protected boolean isValidValue(Object value) {
 
-		try {						
+		try {
+
+			Object valueOriginal = null;
 
 			if (WindowForm.COPY_MODE.equals(mode)) {
-				((EntityId) dtoBI.getBean()).checkUnique(value, attName, caption, true);
+
+				// ((EntityId) dtoBI.getBean()).checkUnique(value, attName, caption, true);
+
+				valueOriginal = ((EntityId) dtoBI.getBean()).checkUniqueValueOriginal(value, attName, true);
+				value = ((EntityId) dtoBI.getBean()).checkUniqueValue(value, attName);
+
+				if (value != null) {
+					checkUnique(caption, valueOriginal, value);
+				}
+
 			} else {
-				((EntityId) dtoBI.getBean()).checkUnique(value, attName, caption, false);
+
+				// ((EntityId) dtoBI.getBean()).checkUnique(value, attName, caption, false);
+
+				valueOriginal = ((EntityId) dtoBI.getBean()).checkUniqueValueOriginal(value, attName, false);
+				value = ((EntityId) dtoBI.getBean()).checkUniqueValue(value, attName);
+
+				if (value != null) {
+					checkUnique(caption, valueOriginal, value);
+				}
+
 			}
 
 			return true;
@@ -73,6 +95,28 @@ public class UniqueValidator extends AbstractValidator<Object> {
 	public Class<Object> getType() {
 
 		return clazz;
+	}
+
+	private void checkUnique(String label, Object originalValue, Object newValue) throws Exception {
+
+		if (originalValue != null && originalValue.equals(newValue) == false) {
+
+			if (ifExists(newValue)) {
+				throw new UniqueException(label);
+			}
+
+		} else if (originalValue == null) {
+
+			if (ifExists(newValue)) {
+				throw new UniqueException(label);
+			}
+		}
+
+	}
+
+	protected boolean ifExists(Object arg) throws Exception {	
+
+		return false;
 	}
 
 }

@@ -603,7 +603,7 @@ public class BackendContextPG extends AbstractContext {
 
 	}
 
-	private synchronized boolean ifExists(String tableName, String attName, Object arg) throws Exception {
+	public synchronized boolean ifExists(String tableName, String attName, Object arg) throws Exception {
 
 		String tableSQL = tableName;
 

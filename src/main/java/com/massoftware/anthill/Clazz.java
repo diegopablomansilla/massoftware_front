@@ -4,15 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.massoftware.windows.UtilUI;
+import java.util.Random;
 
 public class Clazz {
 
+	 not null en codigo moneda afip nop anda
+	 por defecto la consultas deben retornar el max level
+	 en los form inicializar una sola vez el dao
+	 copiar en el readonly
+	 
+	
 	private int maxLevel = 2;
 
+	private String namePackage;
 	private String name;
 	private String singular;
 	private String plural;
@@ -21,6 +28,15 @@ public class Clazz {
 	private List<Att> atts = new ArrayList<Att>();
 	private List<Argument> args = new ArrayList<Argument>();
 	private List<Order> orderAtts = new ArrayList<Order>();
+	private List<Uniques> uniques = new ArrayList<Uniques>();
+
+	public String getNamePackage() {
+		return namePackage;
+	}
+
+	public void setNamePackage(String namePackage) {
+		this.namePackage = namePackage;
+	}
 
 	public String getName() {
 		return name;
@@ -83,11 +99,19 @@ public class Clazz {
 		this.args = args;
 	}
 
-	public boolean addArgument(Att att) {
+	public boolean addArgument(Att att) throws CloneNotSupportedException {
 		return args.add(new Argument(att));
 	}
 
-	public boolean addArgument(Att att, Boolean range) {
+	public Argument getLastArgument() {
+		if (args.size() > 0) {
+			return args.get(args.size() - 1);
+		}
+
+		return null;
+	}
+
+	public boolean addArgument(Att att, Boolean range) throws CloneNotSupportedException {
 		return args.add(new Argument(att, range));
 	}
 
@@ -110,6 +134,26 @@ public class Clazz {
 	// public boolean addOrder(Att att, Boolean desc) {
 	// return orderAtts.add(new Order(att, desc));
 	// }
+
+	public List<Uniques> getUniques() {
+		return uniques;
+	}
+
+	public void setUniques(List<Uniques> uniques) {
+		this.uniques = uniques;
+	}
+
+	public boolean addUniques(Uniques e) {
+		return uniques.add(e);
+	}
+
+	public boolean addUniques(Unique... args) {
+		return uniques.add(new Uniques(args));
+	}
+
+	public boolean addUniques(Att... args) {
+		return uniques.add(new Uniques(args));
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,7 +199,7 @@ public class Clazz {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
 					sqlField = "LEFT JOIN massoftware." + dataTypeClazz.getClazz().getName() + " ON " + clazz.getName()
-							+ ".id = " + dataTypeClazz.getClazz().getName() + ".id";
+							+ "." + att.getName() + " = " + dataTypeClazz.getClazz().getName() + ".id";
 
 					fields.add(sqlField);
 
@@ -220,10 +264,11 @@ public class Clazz {
 
 	public String toJava() {
 
-		String java = "package com.massoftware.model;";
+		String java = "package com.massoftware.model." + this.getNamePackage() + ";";
 
 		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
 		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
+		java += "\nimport com.massoftware.model.EntityId;";
 
 		java += "\n\n@ClassLabelAnont(singular = \"" + this.getSingular() + "\", plural = \"" + this.getPlural()
 				+ "\", singularPre = \"" + this.getSingularPre() + "\", pluralPre = \"" + this.getPluralPre() + "\")";
@@ -242,8 +287,8 @@ public class Clazz {
 			String label = "label = \"" + att.getLabel() + "\"";
 			String labelError = "labelError = \"\"";
 			String unique = "unique = " + att.isUnique();
-			String readOnly = "readOnly = " + att.isReadOnly();
-			String required = "required = " + att.isRequired();
+			String readOnly = "readOnly = " + att.isReadOnlyGUI();
+			String required = "required = " + ((att.isReadOnlyGUI() == true) ? false : att.isRequired());
 			String columns = "columns = 20f";
 			String maxLength = "maxLength = " + att.getMaxLength();
 			String minValue = "minValue = \"" + "" + "\"";
@@ -436,7 +481,8 @@ public class Clazz {
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-		java += "\n\n\tpublic " + this.getName() + "() {";
+		java += "\n\n\tpublic " + this.getName() + "() throws Exception {";
+		// java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
 		java += "\n\t}";
 
 		java += buildConstructorAtts();
@@ -459,7 +505,7 @@ public class Clazz {
 			if (att.isSimple() == false) {
 				java += "\n\n\t// BUILD IF NULL AND GET " + att.getLabel();
 				java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " build"
-						+ att.getNameJavaUperCase() + "() {";
+						+ att.getNameJavaUperCase() + "() throws Exception {";
 
 				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null) ? new "
 						+ att.getDataType().getName() + "() : this." + att.getName() + ";";
@@ -475,7 +521,7 @@ public class Clazz {
 				java += "\n\t\treturn this." + att.getName() + ";";
 			} else {
 				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " != null && this."
-						+ att.getName() + ".getId() == null) ? null : this.moneda;";
+						+ att.getName() + ".getId() == null) ? null : this." + att.getName() + " ;";
 				java += "\n\t\treturn this." + att.getName() + ";";
 			}
 
@@ -554,7 +600,7 @@ public class Clazz {
 
 		}
 
-		java += ") {\n";
+		java += ") throws Exception {\n";
 
 		///////////////////////////////////////////////////////
 
@@ -575,6 +621,8 @@ public class Clazz {
 		}
 
 		java += ");";
+
+		// java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
 
 		java += "\n\n\t}";
 
@@ -680,7 +728,7 @@ public class Clazz {
 
 		}
 
-		java += ") {\n";
+		java += ") throws Exception {\n";
 
 		///////////////////////////////////////////////////////
 
@@ -766,7 +814,7 @@ public class Clazz {
 		String label = "label = \"" + att.getLabel() + "\"";
 		String labelError = "labelError = \"\"";
 		// String unique = "unique = " + att.isUnique();
-		String readOnly = "readOnly = " + att.isReadOnly();
+		String readOnly = "readOnly = " + att.isReadOnlyGUI();
 		String required = "required = " + att.isRequired();
 		String columns = "columns = 20f";
 		String maxLength = "maxLength = " + att.getMaxLength();
@@ -958,9 +1006,11 @@ public class Clazz {
 		return java;
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public String toJavaFilter() {
 
-		String java = "package com.massoftware.dao.model;";
+		String java = "package com.massoftware.dao." + this.getNamePackage() + ";";
 
 		java += "\n\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\nimport com.massoftware.model.Entity;";
@@ -1162,16 +1212,18 @@ public class Clazz {
 		return java;
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public String toJavaDao() {
 
-		String java = "package com.massoftware.dao;";
+		String java = "package com.massoftware.dao." + this.getNamePackage() + ";";
 
 		java += "\n\nimport java.util.List;";
 		java += "\nimport java.util.ArrayList;";
 		java += "\nimport java.util.UUID;";
 		java += "\nimport com.massoftware.backend.BackendContextPG;";
-		java += "\nimport com.massoftware.dao.model." + this.getName() + "Filtro;";
-		java += "\nimport com.massoftware.model." + this.getName() + ";";
+		java += "\nimport com.massoftware.model.EntityId;";
+		java += "\nimport com.massoftware.model." + this.getNamePackage() + "." + this.getName() + ";";
 
 		java += "\n\npublic class " + this.getName() + "DAO {";
 
@@ -1267,7 +1319,116 @@ public class Clazz {
 
 		java += "\n\n\t\t} else {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+
+		java += "\n\n\t\t}";
+
+		// java += "\n\n\t\treturn null;";
+
+		java += "\n\n\t}";
+
+		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		java += "\n\n\tpublic String update(" + this.getName() + " obj) throws Exception {";
+
+		java += "\n\n\t\tif(obj == null){";
+
+		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + this.getName()
+				+ " no nulo.\");";
+
+		java += "\n\n\t\t}";
+
+		java += "\n";
+
+		java += "\n\n\t\tif(obj.getId() == null || obj.getId().trim().length() == 0){";
+
+		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + this.getName()
+				+ " con id no nulo/vacio.\");";
+
+		java += "\n\n\t\t}";
+
+		java += "\n";
+
+		args = "\n\t\tObject id = ( obj.getId() == null ) ? String.class : obj.getId();";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n\t\t";
+
+			String n = "obj.get" + this.toCamelStart(att.getName()) + "()";
+
+			if (att.isSimple()) {
+
+				args += sc + "Object " + att.getName() + " = ( " + n + " == null ) ? "
+						+ att.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+
+			} else {
+
+				args += sc + "Object " + att.getName() + " = ( " + n + " != null && " + n + ".getId() != null) ? " + n
+						+ ".getId() : String.class;";
+
+			}
+		}
+
+		java += "\n";
+
+		java += args;
+
+		java += "\n";
+
+		args = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			args += ", ?";
+		}
+
+		java += "\n\t\tString sql = \"SELECT * FROM massoftware.u_" + this.getName() + "(?" + args + ")\";";
+
+		java += "\n";
+
+		args = "id";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			args += ", " + att.getName();
+		}
+
+		java += "\n\t\tObject[] args = new Object[] {" + args + "};";
+
+		java += "\n\n\t\tObject[][] table = BackendContextPG.get().find(sql, args);";
+
+		java += "\n\n\t\tif(table.length == 1){";
+
+		java += "\n\n\t\t\tObject[] row = table[0];";
+
+		java += "\n\n\t\t\tif(row.length == 1){";
+
+		java += "\n\n\t\t\t\tBoolean ok = (Boolean) row[0];";
+
+		java += "\n\n\t\t\t\tif(ok){";
+
+		java += "\n\n\t\t\t\t\treturn id.toString();";
+
+		java += "\n\n\t\t\t\t} else { ";
+
+		java += "\n\n\t\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la sentencia no actualizara en la base de datos.\");";
+
+		java += "\n\n\t\t\t\t}";
+
+		java += "\n\n\t\t\t} else {";
+
+		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
+
+		java += "\n\n\t\t\t}";
+
+		java += "\n\n\t\t} else {";
+
+		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
 		java += "\n\n\t\t}";
 
@@ -1278,6 +1439,15 @@ public class Clazz {
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
 		java += "\n\n\tpublic boolean deleteById(String id) throws Exception {";
+
+		java += "\n";
+
+		java += "\n\n\t\tif(id == null || id.trim().length() == 0){";
+
+		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + this.getName()
+				+ ".id) no nulo/vacio.\");";
+
+		java += "\n\n\t\t}";
 
 		java += "\n";
 
@@ -1297,7 +1467,7 @@ public class Clazz {
 
 		java += "\n\n\t\t} else if(table.length > 1 ) {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
 		java += "\n\n\t\t}";
 
@@ -1307,7 +1477,67 @@ public class Clazz {
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
+		for (Att att : atts) {
+
+			if (att.isUnique()) {
+
+				java += "\n\n\tpublic boolean isUnique" + this.toCamelStart(att.getName()) + "("
+						+ att.getDataType().getName().replace("java.lang.", "") + " arg) throws Exception {";
+
+				java += "\n";
+
+				java += "\n\n\t\tif(arg == null || arg.toString().trim().length() == 0){";
+
+				java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un arg (" + this.getName() + "."
+						+ att.getName() + ") no nulo/vacio.\");";
+
+				java += "\n\n\t\t}";
+
+				java += "\n";
+
+				java += "\n\t\tString sql = \"SELECT * FROM massoftware.f_u_" + this.getName() + "_" + att.getName()
+						+ "(?)\";";
+
+				java += "\n";
+
+				java += "\n\t\tObject[] args = new Object[] {arg};";
+
+				java += "\n\n\t\tObject[][] table = BackendContextPG.get().find(sql, args);";
+
+				java += "\n\n\t\tif(table.length == 1){";
+
+				java += "\n\n\t\t\tObject[] row = table[0];";
+
+				java += "\n\n\t\t\treturn (Long) row[0] > 0;";
+
+				// java += "\n\n\t\t} else if(table.length > 1 ) {";
+				java += "\n\n\t\t} else {";
+
+				java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+
+				java += "\n\n\t\t}";
+
+				// java += "\n\n\t\treturn false;";
+
+				java += "\n\n\t}";
+
+			}
+		}
+
+		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+
 		java += "\n\n\tpublic " + this.getName() + " findById(String id, Integer level) throws Exception {";
+
+		java += "\n";
+
+		java += "\n\n\t\tif(id == null || id.trim().length() == 0){";
+
+		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + this.getName()
+				+ ".id) no nulo/vacio.\");";
+
+		java += "\n\n\t\t}";
+
+		java += "\n";
 
 		java += "\n";
 		java += "\n\t\t" + this.getName() + " obj = null;";
@@ -1315,6 +1545,7 @@ public class Clazz {
 		java += "\n";
 
 		java += "\n\t\tlevel = (level == null || level < 0) ? 0 : level;";
+		// java += "\n\t\tlevel = (level == null || level < 0) ? 4 : level;";
 		java += "\n\t\tlevel = (level != null && level > 3) ? 3 : level;";
 
 		java += "\n";
@@ -1381,7 +1612,7 @@ public class Clazz {
 
 				} else {
 					java += (i == 0) ? "?" : ", ?";
-					java += (i == 0) ? "?" : ", ?";
+					java += ", ?";
 				}
 
 			} else if (arg.isString()) {
@@ -1773,7 +2004,7 @@ public class Clazz {
 
 					javaArgs += (i == 0) ? "" : ", ";
 					javaArgs += arg.getName() + "From";
-					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += ", ";
 					javaArgs += arg.getName() + "To";
 				}
 
@@ -1996,6 +2227,9 @@ public class Clazz {
 		java += "\n\n\t\t\tif(row.length == " + fieldsSQL.size() + ") {";
 
 		java += "\n\n\t\t\t\tobj = mapper" + fieldsSQL.size() + "Fields(row);";
+
+		java += "\n\n\t\t\t\tobj._originalDTO = (EntityId) obj.clone();";
+
 		java += "\n\n\t\t\t\treturn obj;";
 
 		java += "\n\n\t\t\t}";
@@ -2011,9 +2245,10 @@ public class Clazz {
 		String java = "";
 
 		for (int i = 0; i <= maxLevel; i++) {
+
 			String java2 = buildMapperIf(i, level);
 
-			if (java.contains(java2) == false) {
+			if (java.contains(java2.trim()) == false) {
 				if (i == 0) {
 					java += java2;
 				} else {
@@ -2043,6 +2278,7 @@ public class Clazz {
 		java += "\n\n\t\t\tif(row.length == " + fieldsSQL.size() + ") {";
 
 		java += "\n\n\t\t\t\t" + this.getName() + " obj = mapper" + fieldsSQL.size() + "Fields(row);";
+		java += "\n\n\t\t\t\tobj._originalDTO = (EntityId) obj.clone();";
 		java += "\n\n\t\t\t\tlistado.add(obj);";
 
 		java += "\n\n\t\t\t}";
@@ -2078,7 +2314,8 @@ public class Clazz {
 
 		buildMapper(maxLevel, level, this, fieldsSQL);
 
-		java += "\n\n\tprivate " + this.getName() + " mapper" + fieldsSQL.size() + "Fields(Object[] row) {";
+		java += "\n\n\tprivate " + this.getName() + " mapper" + fieldsSQL.size()
+				+ "Fields(Object[] row) throws Exception {";
 
 		java += "\n\n\t\tint c = -1;\n";
 
@@ -2178,16 +2415,15 @@ public class Clazz {
 
 	/////////////////////////////////////////////////////////////////////////////////
 
-	public String toJavaWListado() throws IOException {
+	public String toJavaWL() throws IOException {
 		String java = "";
 
 		String linea;
 		String source = "";
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL url = classLoader.getResource("wlistado.txt");
+		URL url = classLoader.getResource("wl.txt");
 		String path = url.toString().substring(6, url.toString().length());
-		System.out.println(path);
 
 		FileReader f = new FileReader(path);
 		BufferedReader b = new BufferedReader(f);
@@ -2197,18 +2433,17 @@ public class Clazz {
 		}
 		b.close();
 
-		source = source.replaceAll("NOMBRE_PAQUETE", this.getName().toLowerCase());
+		source = source.replaceAll("NOMBRE_PAQUETE", this.getNamePackage());
 		source = source.replaceAll("NOMBRE_CLASE", this.getName());
-		source = source.replaceAll("CONTROLES", buildWListadoControls());
-		source = source.replaceAll("INSTANCE", buildWListadoControlsInstance());
-		source = source.replaceAll("ADD", buildWListadoControlsInstanceAdd());
+		source = source.replaceAll("CONTROLES", buildWLControls());
+		source = source.replaceAll("INSTANCE", buildWLControlsInstance());
+		source = source.replaceAll("ADD", buildWLControlsInstanceAdd());
 		source = source.replaceAll("COLUMNAS", buildWColumnsAdd());
 		source = source.replaceAll("ANCHOS", buildWColumnsProperties());
 		source = source.replaceAll("LOGICO", buildWColumnsPropertiesLogico());
 		source = source.replaceAll("FECHA", buildWColumnsPropertiesDate());
 		source = source.replaceAll("TIEMPO", buildWColumnsPropertiesTiempo());
-
-		System.out.println(source);
+		source = source.replaceAll("@HH:SS@", ZonedDateTime.now().toString());
 
 		java += source;
 
@@ -2220,46 +2455,7 @@ public class Clazz {
 		return java;
 	}
 
-	// private String buildWListadoPackage() {
-	// String java = "";
-	//
-	// java += "\n";
-	// java += "package com.massoftware.windows." + this.getName().toLowerCase() +
-	// ";";
-	// java += "\n";
-	//
-	// return java;
-	// }
-	//
-	// private String buildWListadoImports() {
-	// String java = "";
-	//
-	// java += "\n";
-	// java += "import com.massoftware.model." + this.getName() + ";";
-	// java += "\n";
-	// java += "import com.massoftware.dao.model." + this.getName() + "Filtro;";
-	// java += "\n";
-	// java += "import com.massoftware.dao." + this.getName() + "DAO;";
-	// java += "\n";
-	//
-	// return java;
-	// }
-	//
-	// private String buildWListadoClassName() {
-	// String java = "";
-	//
-	// java += "\n";
-	// java += "import com.massoftware.model." + this.getName() + ";";
-	// java += "\n";
-	// java += "import com.massoftware.dao.model." + this.getName() + "Filtro;";
-	// java += "\n";
-	// java += "import com.massoftware.dao." + this.getName() + "DAO;";
-	// java += "\n";
-	//
-	// return java;
-	// }
-
-	private String buildWListadoControls() {
+	private String buildWLControls() {
 		String java = "";
 
 		for (int i = 0; i < this.getArgs().size(); i++) {
@@ -2297,7 +2493,7 @@ public class Clazz {
 		return java;
 	}
 
-	private String buildWListadoControlsInstance() {
+	private String buildWLControlsInstance() {
 		String java = "";
 
 		for (int i = 0; i < this.getArgs().size(); i++) {
@@ -2315,15 +2511,16 @@ public class Clazz {
 				} else {
 
 					java += sc + arg.getName() + "FromTXTB = new TextFieldBox(this, filterBI, \"" + arg.getName()
-							+ "\");";
+							+ "From\");";
 					java += sc + arg.getName() + "ToTXTB = new TextFieldBox(this, filterBI, \"" + arg.getName()
-							+ "\");";
+							+ "To\");";
 
 				}
 
 			} else if (arg.isString()) {
 
-				java += sc + arg.getName() + "TXTB = new TextFieldBox(this, filterBI, \"" + arg.getName() + "\");";
+				java += sc + arg.getName() + "TXTB = new TextFieldBox(this, filterBI, \"" + arg.getName() + "\", \""
+						+ arg.getSearchOptionValue() + "\");";
 
 			} else if (arg.isBoolean()) {
 
@@ -2351,7 +2548,7 @@ public class Clazz {
 		return java;
 	}
 
-	private String buildWListadoControlsInstanceAdd() {
+	private String buildWLControlsInstanceAdd() {
 		String java = "";
 
 		for (int i = 0; i < this.getArgs().size(); i++) {
@@ -2369,6 +2566,7 @@ public class Clazz {
 				} else {
 
 					java += sc + arg.getName() + "FromTXTB";
+					sc = ", ";
 					java += sc + arg.getName() + "ToTXTB";
 
 				}
@@ -2440,7 +2638,6 @@ public class Clazz {
 
 				java += sc + "itemsGRD.getColumn(\"" + att.getName()
 						+ "\").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),FontAwesome.SQUARE_O.getHtml()));";
-				;
 
 			}
 
@@ -2489,6 +2686,503 @@ public class Clazz {
 		return java;
 	}
 
+	///////////////////////////////////////////////////////////////////
+
+	public String toJavaWF() throws IOException {
+		String java = "";
+
+		String linea;
+		String source = "";
+
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		URL url = classLoader.getResource("wf.txt");
+		String path = url.toString().substring(6, url.toString().length());
+
+		FileReader f = new FileReader(path);
+		BufferedReader b = new BufferedReader(f);
+		while ((linea = b.readLine()) != null) {
+			source += "\n" + linea;
+			// System.out.println(linea);
+		}
+		b.close();
+
+		source = source.replaceAll("NOMBRE_PAQUETE", this.getNamePackage());
+		source = source.replaceAll("FK", buildWFControlsImportModel());
+		source = source.replaceAll("NOMBRE_CLASE", this.getName());
+		source = source.replaceAll("CONTROLES", buildWFControls());
+		source = source.replaceAll("INSTANCE", buildWFControlsInstance());
+		source = source.replaceAll("ADD", buildWFControlsInstanceAdd());
+		source = source.replaceAll("@HH:SS@", ZonedDateTime.now().toString());
+
+		java += source;
+
+		return java;
+	}
+
+	private String buildWFControlsImportModel() {
+
+		String java = "";
+
+		boolean b = false;
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n";
+
+			if (att.isSimple() == false) {
+
+				b = true;
+
+				Clazz clazz = ((DataTypeClazz) att.getDataType()).getClazz();
+
+				java += sc + "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
+				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
+				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
+			}
+		}
+
+		if (b) {
+			java = "\n" + "import java.util.List;" + java;
+		}
+
+		java += "\n";
+
+		return java;
+	}
+
+	private String buildWFControls() {
+		String java = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n\t";
+
+			if (att.isNumber()) {
+
+				java += sc + "private TextFieldEntity " + att.getName() + "TXT;";
+
+			} else if (att.isString()) {
+
+				java += sc + "private TextFieldEntity " + att.getName() + "TXT;";
+
+			} else if (att.isBoolean()) {
+
+				java += sc + "private CheckBoxEntity " + att.getName() + "CHK;";
+
+			} else if (att.isDate()) {
+
+				java += sc + "private DateFieldEntity " + att.getName() + "DAF;";
+
+			} else if (att.isTimestamp()) {
+
+				java += sc + "private DateFieldEntity " + att.getName() + "DAF;";
+
+			} else if (att.isSimple() == false) {
+
+				java += sc + "private ComboBoxEntity " + att.getName() + "CBX;";
+			}
+		}
+
+		java += "\n";
+
+		return java;
+	}
+
+	private String buildWFControlsInstance() {
+
+		String java = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n\n\t\t// ------------------------------------------------------------------\n\n\t\t";
+
+			if (att.isNumber()) {
+
+				if (att.isUnique()) {
+
+					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+							+ "\", this.mode) {";
+
+					java += "\n\t\t\tprotected boolean checkUnique(Object arg) throws Exception {";
+					java += "\n\t\t\t\t//MonedaAFIPDAO dao = new MonedaAFIPDAO();";
+					java += "\n\t\t\t\treturn dao.isUnique" + this.toCamelStart(att.getName()) + "(("
+							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
+					java += "\n\t\t\t}";
+					java += "\n\t\t};";
+
+				} else {
+					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+							+ "\", this.mode);";
+				}
+
+			} else if (att.isString()) {
+
+				if (att.isUnique()) {
+					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+							+ "\", this.mode) {";
+
+					java += "\n\t\t\tprotected boolean checkUnique(Object arg) throws Exception {";
+					java += "\n\t\t\t\t//MonedaAFIPDAO dao = new MonedaAFIPDAO();";
+					java += "\n\t\t\t\treturn dao.isUnique" + this.toCamelStart(att.getName()) + "(("
+							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
+					java += "\n\t\t\t}";
+					java += "\n\t\t};";
+
+				} else {
+					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+							+ "\", this.mode);";
+				}
+
+			} else if (att.isBoolean()) {
+
+				java += sc + att.getName() + "CHK = new CheckBoxEntity(itemBI, \"" + att.getName() + "\");";
+
+			} else if (att.isTimestamp()) {
+
+				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
+						+ "\", this.mode, true);";
+
+			} else if (att.isDate()) {
+
+				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
+						+ "\", this.mode, false);";
+
+			} else if (att.isSimple() == false) {
+
+				String sc2 = "\n\n\t\t";
+
+				java += sc + att.getDataType().getName() + "Filtro " + att.getName() + "Filtro = new "
+						+ att.getDataType().getName() + "Filtro();";
+				java += sc2 + att.getName() + "Filtro.setUnlimited(true);";
+				java += sc2 + att.getDataType().getName() + "DAO " + att.getName() + "DAO = new "
+						+ att.getDataType().getName() + "DAO();";
+				java += sc2 + "List<" + att.getDataType().getName().replaceAll("java.lang", "") + "> " + att.getName()
+						+ "Lista = " + att.getName() + "DAO.find(" + att.getName() + "Filtro);";
+
+				java += sc2 + att.getName() + "CBX = new ComboBoxEntity(itemBI, \"" + att.getName() + "\", this.mode, "
+						+ att.getName() + "Lista" + ");";
+
+			}
+		}
+
+		java += "\n";
+
+		return java;
+	}
+
+	private String buildWFControlsInstanceAdd() {
+		String java = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = (i == 0) ? "" : ", ";
+
+			if (att.isNumber()) {
+
+				java += sc + att.getName() + "TXT";
+
+			} else if (att.isString()) {
+
+				java += sc + att.getName() + "TXT";
+
+			} else if (att.isBoolean()) {
+
+				java += sc + att.getName() + "CHK";
+
+			} else if (att.isTimestamp()) {
+
+				java += sc + att.getName() + "DAF";
+
+			} else if (att.isDate()) {
+
+				java += sc + att.getName() + "DAF";
+
+			} else if (att.isSimple() == false) {
+
+				java += sc + att.getName() + "CBX";
+			}
+		}
+
+		return java;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
+
+	public String toPopulateJava() {
+		String java = "";
+
+		java += "\n";
+		java += "\t";
+
+		java += "public static void insert" + this.getName() + "() throws Exception {";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += this.getName() + "DAO dao = new " + this.getName() + "DAO();";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "for(int i = 0; i < maxRows; i++){";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "try {";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += this.getName() + " obj = new " + this.getName() + "();";
+
+		for (Att att : this.getAtts()) {
+
+			java += "\n";
+
+			if (att.isBigDecimal()) {
+
+				DataTypeBigDecimal td = (DataTypeBigDecimal) att.getDataType();
+
+				String min = null;
+				String max = null;
+
+				if (td.getMaxValue() != null) {
+					max = "new java.math.BigDecimal(\"" + td.getMaxValue() + "\")";
+				}
+				if (td.getMinValue() != null) {
+					min = "new java.math.BigDecimal(\"" + td.getMinValue() + "\")";
+				}
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(UtilPopulate.getBigDecimalRandom(" + min + ", "
+						+ max + ", " + att.isRequired() + "));";
+
+			} else if (att.isDouble()) {
+
+				DataTypeDouble td = (DataTypeDouble) att.getDataType();
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(UtilPopulate.getDoubleRandom("
+						+ td.getMinValue() + ", " + td.getMaxValue() + ", " + att.isRequired() + "));";
+
+			} else if (att.isLong()) {
+
+				DataTypeLong td = (DataTypeLong) att.getDataType();
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(UtilPopulate.getLongRandom(" + td.getMinValue()
+						+ ", " + td.getMaxValue() + ", " + att.isRequired() + "));";
+
+			} else if (att.isInteger()) {
+
+				DataTypeInteger td = (DataTypeInteger) att.getDataType();
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(UtilPopulate.getIntegerRandom("
+						+ td.getMinValue() + ", " + td.getMaxValue() + ", " + att.isRequired() + "));";
+
+			} else if (att.isBoolean()) {
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(new Random().nextBoolean());";
+
+			} else if (att.isString()) {
+
+				int leftLimit = 97; // letter 'a'
+				int rightLimit = 122; // letter 'z'
+				int targetStringLength = 30;
+
+				if (att.getMinLength() != null && att.getMaxLength() != null) {
+					targetStringLength = att.getMaxLength();
+				} else if (att.getMinLength() != null && att.getMaxLength() == null) {
+					targetStringLength = att.getMinLength();
+				} else if (att.getMinLength() == null && att.getMaxLength() != null) {
+					targetStringLength = att.getMaxLength();
+				}
+
+				Random r = new Random();
+
+				StringBuilder buffer = new StringBuilder(targetStringLength);
+
+				for (int i = 0; i < targetStringLength; i++) {
+
+					int randomLimitedInt = leftLimit + (int) (r.nextFloat() * (rightLimit - leftLimit + 1));
+					buffer.append((char) randomLimitedInt);
+
+				}
+
+				String value = buffer.toString();
+
+				if (att.isRequired() == false) {
+					value = (r.nextBoolean()) ? value : null;
+				}
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(UtilPopulate.getStringRandom("
+						+ att.getMinLength() + ", " + att.getMaxLength() + ", " + att.isRequired() + "));";
+
+			} else if (att.isDate()) {
+
+//				long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
+//				long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
+//				long diff = end - offset + 1;
+//				long value = offset + (long) (Math.random() * diff);
+//
+//				if (att.isRequired() == false) {
+//					value = (new Random().nextBoolean()) ? value : null;
+//				}
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + ")));";
+				
+				
+
+			} else if (att.isTimestamp()) {
+
+//				long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
+//				long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
+//				long diff = end - offset + 1;
+//				long value = offset + (long) (Math.random() * diff);
+//
+//				if (att.isRequired() == false) {
+//					value = (new Random().nextBoolean()) ? value : null;
+//				}
+//
+//				java += "\n";
+//				java += "\t";
+//				java += "\t";
+//				java += "\t";
+//				java += "\t";
+//				java += "obj.set" + this.toCamelStart(att.getName()) + "(new java.sql.Timestamp(" + value + "L));";
+				
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + ")));";
+
+			} else if (att.isSimple() == false) {
+
+				DataTypeClazz dt = (DataTypeClazz) att.getDataType();
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += dt.getClazz().getName() + "Filtro filtro = new " + dt.getClazz().getName() + "Filtro();";
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "filtro.setUnlimited(true);";
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "List<" + dt.getClazz().getName() + "> listado = new " + dt.getClazz().getName()
+						+ "DAO().find(filtro);";
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				// java += "int index = new Random().nextInt(((listado.size()-1) - 0) + 1) +
+				// (listado.size()-1);";
+				java += "int index = UtilPopulate.getIntegerRandom(0, listado.size()-1);";
+
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "obj.set" + this.toCamelStart(att.getName()) + "(listado.get(index));";
+
+			}
+
+		}
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "dao.insert(obj);";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "} catch (Exception e) {}";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "}";
+
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "}";
+
+		java += "\n";
+
+		return java;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////
 
 	private String toCamelStart(String text) {
@@ -2526,6 +3220,10 @@ public class Clazz {
 
 		sql += buildSQLSelects();
 
+		sql += buildSQLFindUnique();
+
+		sql += buildSQLFindMax();
+
 		// buildSelect();
 
 		sql += buildSQLFindById();
@@ -2535,6 +3233,8 @@ public class Clazz {
 		sql += buildSQLDeleteById();
 
 		sql += buildSQLInsert();
+
+		sql += buildSQLUpdate();
 
 		return sql;
 	}
@@ -2563,10 +3263,28 @@ public class Clazz {
 		for (Att att : atts) {
 
 			if (att.isUnique() && att.isString()) {
-				sql += "\n\nCREATE UNIQUE INDEX u_" + this.getName() + "_" + att.getName() + " ON massoftware."
-						+ this.getName() + " (TRANSLATE(LOWER(TRIM(" + att.getName() + "))"
-						+ "\n\t, '/\\\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'"
-						+ "\n\t, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));";
+
+				if (Unique.EQUALS_TRASLATE.equals(att.getSearchOptionUnique())) {
+
+					sql += "\n\nCREATE UNIQUE INDEX u_" + this.getName() + "_" + att.getName() + " ON massoftware."
+							+ this.getName() + " (TRANSLATE(TRIM(" + att.getName() + ")"
+							+ "\n\t, '/\\\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'"
+							+ "\n\t, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));";
+
+				} else if (Unique.EQUALS_IGNORE_CASE.equals(att.getSearchOptionUnique())) {
+
+					sql += "\n\nCREATE UNIQUE INDEX u_" + this.getName() + "_" + att.getName() + " ON massoftware."
+							+ this.getName() + " (LOWER(TRIM(" + att.getName() + ")));";
+
+				} else if (Unique.EQUALS_IGNORE_CASE_TRASLATE.equals(att.getSearchOptionUnique())) {
+
+					sql += "\n\nCREATE UNIQUE INDEX u_" + this.getName() + "_" + att.getName() + " ON massoftware."
+							+ this.getName() + " (TRANSLATE(LOWER(TRIM(" + att.getName() + "))"
+							+ "\n\t, '/\\\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'"
+							+ "\n\t, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));";
+
+				}
+
 			}
 		}
 
@@ -3447,6 +4165,151 @@ public class Clazz {
 		return sql;
 	}
 
+	private String buildSQLFindUnique() {
+		String sql = "";
+
+		for (Att att : atts) {
+			if (att.isUnique()) {
+				sql += buildSQLFindUnique(att);
+			}
+		}
+
+		return sql;
+	}
+
+	private String buildSQLFindUnique(Att att) {
+
+		String sql = "";
+
+		sql += "\n\n-- ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_u_" + this.getName() + "_" + att.getName() + "("
+				+ att.getName() + "Arg " + att.getNameSQL() + ") CASCADE;";
+
+		sql += "\n\nCREATE FUNCTION massoftware.f_u_" + this.getName() + "_" + att.getName() + "(" + att.getName()
+				+ "Arg " + att.getNameSQL() + ") RETURNS BIGINT ";
+		sql += " AS $$";
+
+		sql += "\n\n\tSELECT COUNT(*)::BIGINT\n\tFROM\tmassoftware." + getName() + "\n\tWHERE";
+
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		if (att.isNumber() || att.isTimestamp() || att.isDate()) {
+
+			sql += "\t" + "(" + att.getName() + "Arg" + " IS NULL OR " + this.getName() + "." + att.getName() + " = "
+					+ att.getName() + "Arg" + ")";
+
+		} else if (att.isString()) {
+
+			if (att.getSearchOptionUnique().equals(Argument.EQUALS)) {
+
+				String attName = this.getName() + "." + att.getName();
+				String argName = att.getName() + "Arg";
+				String whereSQL = "TRIM(" + attName + ")::VARCHAR = TRIM(" + argName + ")::VARCHAR";
+
+				sql += "\t" + "(" + argName + " IS NULL OR (CHAR_LENGTH(TRIM(" + argName + ")) > 0 AND " + whereSQL
+						+ "))";
+
+			} else if (att.getSearchOptionUnique().equals(Argument.EQUALS_TRASLATE)) {
+
+				String attName = this.getName() + "." + att.getName();
+				String argName = att.getName() + "Arg";
+				String whereSQL = "TRIM(massoftware.TRANSLATE(" + attName + "))::VARCHAR = TRIM(massoftware.TRANSLATE("
+						+ argName + "))::VARCHAR";
+
+				sql += "\t" + "(" + argName + " IS NULL OR (CHAR_LENGTH(TRIM(" + argName + ")) > 0 AND " + whereSQL
+						+ "))";
+
+			} else if (att.getSearchOptionUnique().equals(Argument.EQUALS_IGNORE_CASE)) {
+
+				String attName = this.getName() + "." + att.getName();
+				String argName = att.getName() + "Arg";
+				String whereSQL = "TRIM(LOWER(" + attName + "))::VARCHAR = TRIM(LOWER(" + argName + "))::VARCHAR";
+
+				sql += "\t" + "(" + argName + " IS NULL OR (CHAR_LENGTH(TRIM(" + argName + ")) > 0 AND " + whereSQL
+						+ "))";
+
+			} else if (att.getSearchOptionUnique().equals(Argument.EQUALS_IGNORE_CASE_TRASLATE)) {
+
+				String attName = this.getName() + "." + att.getName();
+				String argName = att.getName() + "Arg";
+				String whereSQL = "TRIM(LOWER(massoftware.TRANSLATE(" + attName
+						+ ")))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(" + argName + ")))::VARCHAR";
+
+				sql += "\t" + "(" + argName + " IS NULL OR (CHAR_LENGTH(TRIM(" + argName + ")) > 0 AND " + whereSQL
+						+ "))";
+			}
+		} else if (att.isBoolean()) {
+
+			sql += "\t" + att.getName() + " = " + att.getName() + "Arg" + " " + att.getNameSQL();
+
+		} else if (att.isSimple() == false) {
+
+			String attName = this.getName() + "." + att.getName();
+			String argName = att.getName() + "Arg";
+			String whereSQL = attName + " = TRIM(" + argName + ")::VARCHAR";
+
+			sql += "\t" + "(" + argName + " IS NULL OR (CHAR_LENGTH(TRIM(" + argName + ")) > 0 AND " + whereSQL + "))";
+		}
+
+		sql += ";";
+
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		sql += "\n\n$$ LANGUAGE SQL;";
+
+		sql += "\n\n/*";
+
+		sql += "\n\nSELECT * FROM massoftware.f_u_" + this.getName() + "_" + att.getName() + "(" + "null::"
+				+ att.getNameSQL() + ");";
+
+		sql += "\n\n*/";
+
+		return sql;
+	}
+
+	private String buildSQLFindMax() {
+		String sql = "";
+
+		for (Att att : atts) {
+			if (att.isNumber()) {
+				sql += buildSQLFindMax(att);
+			}
+		}
+
+		return sql;
+	}
+
+	private String buildSQLFindMax(Att att) {
+
+		String sql = "";
+
+		sql += "\n\n-- ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_max_" + this.getName() + "_" + att.getName() + "("
+				+ att.getName() + "Arg " + att.getNameSQL() + ") CASCADE;";
+
+		sql += "\n\nCREATE FUNCTION massoftware.f_max_" + this.getName() + "_" + att.getName() + "(" + att.getName()
+				+ "Arg " + att.getNameSQL() + ") RETURNS " + att.getNameSQL();
+		sql += " AS $$";
+
+		sql += "\n\n\tSELECT MAX(" + att.getName() + ")::" + att.getNameSQL() + "\n\tFROM\tmassoftware." + getName()
+				+ ";";
+
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		sql += "\n\n$$ LANGUAGE SQL;";
+
+		sql += "\n\n/*";
+
+		sql += "\n\nSELECT * FROM massoftware.f_max_" + this.getName() + "_" + att.getName() + "(" + "null::"
+				+ att.getNameSQL() + ");";
+
+		sql += "\n\n*/";
+
+		return sql;
+	}
+
 	private String buildSQLDeleteById() {
 
 		String sql = "";
@@ -3581,6 +4444,110 @@ public class Clazz {
 
 		sql += "\n\n/*";
 		sql += "\n\nSELECT * FROM massoftware.i_" + this.getName() + "(\n\t\tnull::VARCHAR(36)" + argsSQL + "\n);";
+
+		sql += "\n\n*/";
+
+		return sql;
+	}
+
+	private String buildSQLUpdate() {
+
+		String sql = "";
+
+		sql += "\n\n-- ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		String argsSQL = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n\t\t, ";
+
+			if (att.isNumber() || att.isTimestamp() || att.isDate()) {
+
+				argsSQL += sc + att.getName() + "Arg" + " " + att.getNameSQL();
+
+			} else if (att.isString()) {
+
+				argsSQL += sc + att.getName() + "Arg" + " " + att.getNameSQL() + "(" + att.getMaxLength() + ")";
+
+			} else if (att.isBoolean()) {
+
+				argsSQL += sc + att.getName() + "Arg" + " " + att.getNameSQL();
+
+			} else if (att.isSimple() == false) {
+
+				argsSQL += sc + att.getName() + "Arg" + " " + "VARCHAR(36)";
+			}
+		}
+
+		sql += "\n\nDROP FUNCTION IF EXISTS massoftware.u_" + this.getName() + "(\n\t\t  idArg VARCHAR(36)\n" + argsSQL
+				+ "\n) CASCADE;";
+
+		sql += "\n\nCREATE FUNCTION massoftware.u_" + this.getName() + "(\n\t\t  idArg VARCHAR(36)\n" + argsSQL
+				+ "\n) RETURNS BOOLEAN AS $$\n\nBEGIN";
+
+		// String attNames = "";
+
+		// for (int i = 0; i < this.getAtts().size(); i++) {
+		//
+		// Att att = this.getAtts().get(i);
+		//
+		// attNames += (i == 0) ? att.getName() : ", " + att.getName();
+		// }
+
+		argsSQL = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			argsSQL += (i == 0) ? "\n\t\t  " + att.getName() + " = " + att.getName() + "Arg"
+					: "\n\t\t, " + att.getName() + " = " + att.getName() + "Arg";
+
+		}
+
+		sql += "\n\n\tUPDATE massoftware." + this.getName() + " SET " + argsSQL
+				+ "\n\tWHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND " + this.getName()
+				+ ".id = TRIM(idArg)::VARCHAR;";
+
+		sql += "\n\n\tRETURN ((SELECT COUNT(*) FROM massoftware." + getName()
+				+ " WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND " + this.getName()
+				+ ".id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;";
+
+		/////////////////////////////////////////////////////////////////////////////////////
+
+		sql += "\n\nEND;\n$$ LANGUAGE plpgsql;";
+
+		argsSQL = "";
+
+		for (int i = 0; i < this.getAtts().size(); i++) {
+
+			Att att = this.getAtts().get(i);
+
+			String sc = "\n\t\t, ";
+
+			if (att.isSimple()) {
+
+				argsSQL += sc + "null::" + att.getNameSQL();
+
+			} else if (att.isString()) {
+
+				argsSQL += sc + "null::" + att.getNameSQL();
+
+			} else if (att.isBoolean()) {
+
+				argsSQL += sc + "null::" + att.getNameSQL();
+
+			} else if (att.isSimple() == false) {
+
+				argsSQL += sc + "null::" + "VARCHAR(36)";
+			}
+		}
+
+		sql += "\n\n/*";
+		sql += "\n\nSELECT * FROM massoftware.u_" + this.getName() + "(\n\t\tnull::VARCHAR(36)" + argsSQL + "\n);";
 
 		sql += "\n\n*/";
 

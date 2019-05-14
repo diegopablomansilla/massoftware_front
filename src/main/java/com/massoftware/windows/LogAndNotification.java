@@ -55,11 +55,11 @@ public class LogAndNotification {
 
 			notification.show(Page.getCurrent());
 
-//			e.printStackTrace();
+			e.printStackTrace();
 
 		}
 
-		 e.printStackTrace();
+//		 e.printStackTrace();
 
 	}
 
@@ -118,7 +118,7 @@ public class LogAndNotification {
 		// notification.setDelayMsec(10000);
 		notification.show(Page.getCurrent());
 
-		 e.printStackTrace();
+//		 e.printStackTrace();
 	}
 
 	private static void printNullFieldException(NullFieldException e) {

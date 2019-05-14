@@ -34,18 +34,55 @@ public class Argument extends Att {
 	public static String CONTAINS_WORDS_AND_IGNORE_CASE = "CONTAINS_WORDS_AND_IGNORE_CASE";
 	public static String CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE = "CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE";
 
+	///////////////////////////////////////////
+
+	public static String EQUALS_VALUE = "igual a ..";
+	public static String EQUALS_TRASLATE_VALUE = "igual a ..";
+	public static String EQUALS_IGNORE_CASE_VALUE = "igual a ..";
+	public static String EQUALS_IGNORE_CASE_TRASLATE_VALUE = "igual a ..";
+
+	public static String STARTS_WITCH_VALUE = "comienza con ..";
+	public static String STARTS_WITCH_TRASLATE_VALUE = "comienza con ..";
+	public static String STARTS_WITCH_IGNORE_CASE_VALUE = "comienza con ..";
+	public static String STARTS_WITCH_IGNORE_CASE_TRASLATE_VALUE = "comienza con ..";
+
+	public static String ENDS_WITCH_VALUE = "termina con ..";
+	public static String ENDS_WITCH_TRASLATE_VALUE = "termina con ..";
+	public static String ENDS_WITCH_IGNORE_CASE_VALUE = "termina con ..";
+	public static String ENDS_WITCH_IGNORE_CASE_TRASLATE_VALUE = "termina con ..";
+
+	public static String CONTAINS_VALUE = "contiene ..";
+	public static String CONTAINS_TRASLATE_VALUE = "contiene ..";
+	public static String CONTAINS_IGNORE_CASE_VALUE = "contiene ..";
+	public static String CONTAINS_IGNORE_CASE_TRASLATE_VALUE = "contiene ..";
+
+	// public static String CONTAINS_WORDS_OR_VALUE = "CONTAINS_WORDS_OR";
+	// public static String CONTAINS_WORDS_OR_TRASLATE_VALUE =
+	// "CONTAINS_WORDS_OR_TRASLATE";
+	// public static String CONTAINS_WORDS_OR_IGNORE_CASE_VALUE =
+	// "CONTAINS_WORDS_OR_IGNORE_CASE";
+	// public static String CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE_VALUE =
+	// "CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE";
+
+	public static String CONTAINS_WORDS_AND_VALUE = "contiene las palabras ..";
+	public static String CONTAINS_WORDS_AND_TRASLATE_VALUE = "contiene las palabras ..";
+	public static String CONTAINS_WORDS_AND_IGNORE_CASE_VALUE = "contiene las palabras ..";
+	public static String CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE_VALUE = "contiene las palabras ..";
+
+	///////////////////////////////////////////
+
 	private Att att;
 	private Boolean range = false;
 	private String searchOption = CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE;
 
-	public Argument(Att att) {
+	public Argument(Att att) throws CloneNotSupportedException {
 		super();
-		this.att = att;
+		this.att = (Att) att.clone();
 	}
 
-	public Argument(Att att, Boolean range, String searchOption) {
+	public Argument(Att att, Boolean range, String searchOption) throws CloneNotSupportedException {
 		super();
-		this.att = att;
+		this.att = (Att) att.clone();
 		this.range = range;
 		this.searchOption = searchOption;
 	}
@@ -56,9 +93,9 @@ public class Argument extends Att {
 		this.searchOption = searchOption;
 	}
 
-	public Argument(Att att, Boolean range) {
+	public Argument(Att att, Boolean range) throws CloneNotSupportedException {
 		super();
-		this.att = att;
+		this.att = (Att) att.clone();
 		this.range = range;
 	}
 
@@ -130,20 +167,20 @@ public class Argument extends Att {
 		att.setLabelError(labelError);
 	}
 
-	public boolean isUnique() {
-		return att.isUnique();
+//	public boolean isUnique() {
+//		return att.isUnique();
+//	}
+//
+//	public void setUnique(boolean unique) {
+//		att.setUnique(unique);
+//	}
+
+	public boolean isReadOnlyGUI() {
+		return att.isReadOnlyGUI();
 	}
 
-	public void setUnique(boolean unique) {
-		att.setUnique(unique);
-	}
-
-	public boolean isReadOnly() {
-		return att.isReadOnly();
-	}
-
-	public void setReadOnly(boolean readOnly) {
-		att.setReadOnly(readOnly);
+	public void setReadOnlyGUI(boolean readOnly) {
+		att.setReadOnlyGUI(readOnly);
 	}
 
 	public boolean isRequired() {
@@ -229,7 +266,7 @@ public class Argument extends Att {
 	public boolean isTimestamp() {
 		return att.isTimestamp();
 	}
-	
+
 	public boolean isDate() {
 		return att.isDate();
 	}
@@ -252,6 +289,93 @@ public class Argument extends Att {
 
 	public void setSearchOption(String searchOption) {
 		this.searchOption = searchOption;
+	}
+
+	public String getSearchOptionValue() {
+
+		if (EQUALS.equals(searchOption)) {
+
+			return EQUALS_VALUE;
+
+		} else if (EQUALS_TRASLATE.equals(searchOption)) {
+
+			return EQUALS_TRASLATE_VALUE;
+
+		} else if (EQUALS_IGNORE_CASE.equals(searchOption)) {
+
+			return EQUALS_IGNORE_CASE_VALUE;
+
+		} else if (EQUALS_IGNORE_CASE_TRASLATE.equals(searchOption)) {
+
+			return EQUALS_IGNORE_CASE_TRASLATE_VALUE;
+
+		} else if (STARTS_WITCH.equals(searchOption)) {
+
+			return STARTS_WITCH_VALUE;
+
+		} else if (STARTS_WITCH_TRASLATE.equals(searchOption)) {
+
+			return STARTS_WITCH_TRASLATE_VALUE;
+
+		} else if (STARTS_WITCH_IGNORE_CASE.equals(searchOption)) {
+
+			return STARTS_WITCH_IGNORE_CASE_VALUE;
+
+		} else if (STARTS_WITCH_IGNORE_CASE_TRASLATE.equals(searchOption)) {
+
+			return STARTS_WITCH_IGNORE_CASE_TRASLATE_VALUE;
+
+		} else if (ENDS_WITCH.equals(searchOption)) {
+
+			return ENDS_WITCH_VALUE;
+
+		} else if (ENDS_WITCH_TRASLATE.equals(searchOption)) {
+
+			return ENDS_WITCH_TRASLATE_VALUE;
+
+		} else if (ENDS_WITCH_IGNORE_CASE.equals(searchOption)) {
+
+			return ENDS_WITCH_IGNORE_CASE_VALUE;
+
+		} else if (ENDS_WITCH_IGNORE_CASE_TRASLATE.equals(searchOption)) {
+
+			return ENDS_WITCH_IGNORE_CASE_TRASLATE_VALUE;
+
+		} else if (CONTAINS.equals(searchOption)) {
+
+			return CONTAINS_VALUE;
+
+		} else if (CONTAINS_TRASLATE.equals(searchOption)) {
+
+			return CONTAINS_TRASLATE_VALUE;
+
+		} else if (CONTAINS_IGNORE_CASE.equals(searchOption)) {
+
+			return CONTAINS_IGNORE_CASE_VALUE;
+
+		} else if (CONTAINS_IGNORE_CASE_TRASLATE.equals(searchOption)) {
+
+			return CONTAINS_IGNORE_CASE_TRASLATE_VALUE;
+
+		} else if (CONTAINS_WORDS_AND.equals(searchOption)) {
+
+			return CONTAINS_WORDS_AND_VALUE;
+
+		} else if (CONTAINS_WORDS_AND_TRASLATE.equals(searchOption)) {
+
+			return CONTAINS_WORDS_AND_TRASLATE_VALUE;
+
+		} else if (CONTAINS_WORDS_AND_IGNORE_CASE.equals(searchOption)) {
+
+			return CONTAINS_WORDS_AND_IGNORE_CASE_VALUE;
+
+		} else if (CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE.equals(searchOption)) {
+
+			return CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE_VALUE;
+
+		}
+
+		return null;
 	}
 
 }

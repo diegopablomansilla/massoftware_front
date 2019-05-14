@@ -1,9 +1,9 @@
-package com.massoftware.dao.model;
+package com.massoftware.dao.monedas;
 
 import com.massoftware.backend.annotation.FieldConfAnont;
 import com.massoftware.model.Entity;
 
-public class MonedaAFIPFiltro extends Entity {
+public class MonedaFiltro extends Entity {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
@@ -26,13 +26,21 @@ public class MonedaAFIPFiltro extends Entity {
 	@FieldConfAnont(label = "Level")
 	private Integer level = 0;
 
-	// Código
-	@FieldConfAnont(label = "Código", labelError = "", readOnly = false, required = false, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
-	private String codigo;
+	// Nº moneda (desde)
+	@FieldConfAnont(label = "Nº moneda (desde)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
+	private Integer numeroFrom;
+
+	// Nº moneda (hasta)
+	@FieldConfAnont(label = "Nº moneda (hasta)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
+	private Integer numeroTo;
 
 	// Nombre
 	@FieldConfAnont(label = "Nombre", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 50, minValue = "", maxValue = "", mask = "")
 	private String nombre;
+
+	// Abreviatura
+	@FieldConfAnont(label = "Abreviatura", labelError = "", readOnly = false, required = false, columns = 5.0f, maxLength = 5, minValue = "", maxValue = "", mask = "")
+	private String abreviatura;
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
@@ -103,14 +111,24 @@ public class MonedaAFIPFiltro extends Entity {
 		this.level = level;
 	}
 
-	// GET Código
-	public String getCodigo() {
-		return this.codigo;
+	// GET Nº moneda (desde)
+	public Integer getNumeroFrom() {
+		return this.numeroFrom;
 	}
 
-	// SET Código
-	public void setCodigo(String codigo ){
-		this.codigo = (codigo != null && codigo.trim().length() == 0) ? null : codigo;
+	// SET Nº moneda (desde)
+	public void setNumeroFrom(Integer numeroFrom ){
+		this.numeroFrom = numeroFrom;
+	}
+
+	// GET Nº moneda (hasta)
+	public Integer getNumeroTo() {
+		return this.numeroTo;
+	}
+
+	// SET Nº moneda (hasta)
+	public void setNumeroTo(Integer numeroTo ){
+		this.numeroTo = numeroTo;
 	}
 
 	// GET Nombre
@@ -121,6 +139,16 @@ public class MonedaAFIPFiltro extends Entity {
 	// SET Nombre
 	public void setNombre(String nombre ){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
+	}
+
+	// GET Abreviatura
+	public String getAbreviatura() {
+		return this.abreviatura;
+	}
+
+	// SET Abreviatura
+	public void setAbreviatura(String abreviatura ){
+		this.abreviatura = (abreviatura != null && abreviatura.trim().length() == 0) ? null : abreviatura;
 	}
 
 } // END CLASS ----------------------------------------------------------------------------------------------------------

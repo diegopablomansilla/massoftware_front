@@ -276,6 +276,40 @@ public class EntityId extends Entity implements Comparable<EntityId> {
 		}
 
 	}
+	
+	public Object checkUniqueValueOriginal(Object value, String attName, boolean ignoreOriginal) throws Exception {
+
+		Object valueOriginal = null;
+
+		if (_originalDTO != null && ignoreOriginal == false) {
+
+			Field fieldOriginal = _originalDTO.getClass().getDeclaredField(attName);
+
+			Method methodGetOriginal = this.getClass().getDeclaredMethod("get" + toCamelCase(fieldOriginal.getName()));
+
+			valueOriginal = methodGetOriginal.invoke(this);
+
+		}
+
+		return valueOriginal;
+
+	}
+	
+	public Object checkUniqueValue(Object value, String attName) throws Exception {
+
+		if (value == null) {
+
+			Field field = this.getClass().getDeclaredField(attName);
+
+			Method methodGet = this.getClass().getDeclaredMethod("get" + toCamelCase(field.getName()));
+
+			value = methodGet.invoke(this);
+
+		}
+
+		return value;
+
+	}
 
 	public void checkNull(String attName) throws Exception {
 

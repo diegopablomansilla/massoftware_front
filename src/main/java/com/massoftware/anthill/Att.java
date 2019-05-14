@@ -14,7 +14,8 @@ class Att {
 	private String labelError;
 
 	private boolean unique;
-	private boolean readOnly;
+	private String searchOptionUnique = Unique.EQUALS_IGNORE_CASE_TRASLATE;
+	private boolean readOnlyGUI;
 	private boolean required;
 
 	private Float columns = 20F;
@@ -25,7 +26,7 @@ class Att {
 	private String mask;
 
 	public Att() {
-		super();		
+		super();
 	}
 
 	public Att(String name, String label) {
@@ -118,12 +119,20 @@ class Att {
 		this.unique = unique;
 	}
 
-	public boolean isReadOnly() {
-		return readOnly;
+	public String getSearchOptionUnique() {
+		return searchOptionUnique;
 	}
 
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
+	public void setSearchOptionUnique(String searchOptionUnique) {
+		this.searchOptionUnique = searchOptionUnique;
+	}
+
+	public boolean isReadOnlyGUI() {
+		return readOnlyGUI;
+	}
+
+	public void setReadOnlyGUI(boolean readOnlyGUI) {
+		this.readOnlyGUI = readOnlyGUI;
 	}
 
 	public boolean isRequired() {
@@ -216,7 +225,7 @@ class Att {
 	public boolean isTimestamp() {
 		return dataType.isTimestamp();
 	}
-	
+
 	public boolean isDate() {
 		return dataType.isDate();
 	}
@@ -254,8 +263,21 @@ class Att {
 				sql += " NOT NULL ";
 			}
 
-			if (this.isUnique() && this.isNumber()) {
-				sql += " UNIQUE ";
+			if (this.isUnique()) {
+
+				if (this.isNumber()) {
+					sql += " UNIQUE ";
+				} else if (this.isString()) {
+
+					if (Unique.EQUALS.equals(getSearchOptionUnique())) {
+						sql += " UNIQUE ";
+					}
+
+				} else if (this.isDate()) {
+					sql += " UNIQUE ";
+				} else if (this.isTimestamp()) {
+					sql += " UNIQUE ";
+				}
 			}
 
 			sql += this.constraintSQL();
@@ -370,6 +392,26 @@ class Att {
 		}
 
 		return text.substring(0, 1).toUpperCase() + text.substring(1, text.length());
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+
+		Att other = new Att();
+		other.setClazz(getClazz());
+		other.setName(getName());
+		other.setDataType(getDataType());
+		other.setLabel(getLabel());
+		other.setLabelError(getLabelError());
+		other.setUnique(isUnique());
+		other.setReadOnlyGUI(isReadOnlyGUI());
+		other.setRequired(isRequired());
+		other.setColumns(getColumns());
+		other.setMinLength(getMinLength());
+		other.setMaxLength(getMaxLength());
+		other.setMask(getMask());
+
+		return other;
 	}
 
 }

@@ -217,7 +217,7 @@ public abstract class WindowForm extends Window {
 	// abstract protected EntityId getBean() throws Exception;
 
 	@SuppressWarnings("rawtypes")
-	abstract protected BeanItem getItemBIC();
+	abstract protected BeanItem getItemBIC() throws Exception;
 
 	protected void save() {
 

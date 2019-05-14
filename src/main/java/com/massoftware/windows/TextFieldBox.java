@@ -37,20 +37,28 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 
 		// ----------------------------------------------
 
-		valueTXT = new TextFieldEntity(dtoBI, attName, null);
-
-		if (inputPrompt == null && dtoBI.getItemProperty(attName).getType() == Integer.class
-				|| dtoBI.getItemProperty(attName).getType() == Long.class) {
-
-			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.EQUALS));
-
-		} else if (inputPrompt == null) {
-
-			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.CONTAINS_WORDS_AND));
-
-		} else {
-			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(inputPrompt));
-		}
+		valueTXT = new TextFieldEntity(dtoBI, attName, null);		
+		
+//		if (inputPrompt == null && dtoBI.getItemProperty(attName).getType() == Integer.class
+//				|| dtoBI.getItemProperty(attName).getType() == Long.class) {
+//
+//			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.EQUALS));
+//
+//		} else if (inputPrompt == null) {
+//
+//			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(UtilUI.CONTAINS_WORDS_AND));
+//
+//		} else {			
+//			valueTXT.setInputPrompt(UtilUI.buildWinFilterTXTInputPromptList(inputPrompt));
+//		}
+//		
+//		try {
+//			
+//		}catch(Exception e) {
+//			valueTXT.setInputPrompt(inputPrompt);	
+//		}
+		
+		valueTXT.setInputPrompt(inputPrompt);
 
 		valueTXT.setDescription(valueTXT.getInputPrompt());
 

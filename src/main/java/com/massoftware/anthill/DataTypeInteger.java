@@ -3,7 +3,7 @@ package com.massoftware.anthill;
 class DataTypeInteger extends DataType {
 
 	private Integer minValue;
-	private Integer maxValue;
+	private Integer maxValue;	
 
 	public DataTypeInteger() {
 		super(Integer.class.getCanonicalName());

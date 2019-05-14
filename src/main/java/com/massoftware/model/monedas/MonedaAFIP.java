@@ -1,7 +1,8 @@
-package com.massoftware.model;
+package com.massoftware.model.monedas;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.model.EntityId;
 
 @ClassLabelAnont(singular = "Moneda AFIP", plural = "Monedas AFIP", singularPre = "la moneda AFIP", pluralPre = "las monedas AFIP")
 public class MonedaAFIP extends EntityId {
@@ -13,7 +14,7 @@ public class MonedaAFIP extends EntityId {
 	private String id;
 
 	// Código
-	@FieldConfAnont(label = "Código", labelError = "", unique = true, readOnly = false, required = true, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
+	@FieldConfAnont(label = "Código", labelError = "", unique = true, readOnly = false, required = false, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
 	private String codigo;
 
 	// Nombre
@@ -23,10 +24,10 @@ public class MonedaAFIP extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public MonedaAFIP() {
+	public MonedaAFIP() throws Exception {
 	}
 
-	public MonedaAFIP(String idArg0, String codigoArg1, String nombreArg2) {
+	public MonedaAFIP(String idArg0, String codigoArg1, String nombreArg2) throws Exception {
 
 		setter(idArg0, codigoArg1, nombreArg2);
 
@@ -70,7 +71,7 @@ public class MonedaAFIP extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, String codigoArg1, String nombreArg2) {
+	public void setter(String idArg0, String codigoArg1, String nombreArg2) throws Exception {
 
 		this.setId(idArg0);
 		this.setCodigo(codigoArg1);

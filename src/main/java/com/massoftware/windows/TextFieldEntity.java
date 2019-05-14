@@ -24,7 +24,7 @@ public class TextFieldEntity extends TextField {
 		init(dtoBI, attName, mode);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "serial" })
 	private void init(BeanItem dtoBI, String attName, String mode) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
@@ -63,7 +63,15 @@ public class TextFieldEntity extends TextField {
 			setMaxLength(maxLength);
 		}
 		if (unique) {
-			addValidator(new UniqueValidator(dtoBI.getItemProperty(attName).getType(), mode, attName, dtoBI));
+			addValidator(new UniqueValidator(dtoBI.getItemProperty(attName).getType(), mode, attName, dtoBI) {
+				
+				
+				protected boolean ifExists(Object arg) throws Exception {	
+
+					return checkUnique(arg);
+				}
+				
+			});
 		}
 
 		if (mask != null) {
@@ -251,6 +259,10 @@ public class TextFieldEntity extends TextField {
 
 		// ----------------------------------------------------------------------------
 
+	}
+	
+	protected boolean checkUnique(Object arg) throws Exception {
+		return true;
 	}
 
 }

@@ -1,11 +1,11 @@
-package com.massoftware.dao;
+package com.massoftware.dao.monedas;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
 import com.massoftware.backend.BackendContextPG;
-import com.massoftware.dao.model.MonedaAFIPFiltro;
-import com.massoftware.model.MonedaAFIP;
+import com.massoftware.model.EntityId;
+import com.massoftware.model.monedas.MonedaAFIP;
 
 public class MonedaAFIPDAO {
 
@@ -57,7 +57,68 @@ public class MonedaAFIPDAO {
 
 		} else {
 
-				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+
+		}
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public String update(MonedaAFIP obj) throws Exception {
+
+		if(obj == null){
+
+			throw new IllegalArgumentException("Se esperaba un objeto MonedaAFIP no nulo.");
+
+		}
+
+
+		if(obj.getId() == null || obj.getId().trim().length() == 0){
+
+			throw new IllegalArgumentException("Se esperaba un objeto MonedaAFIP con id no nulo/vacio.");
+
+		}
+
+
+		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
+		Object codigo = ( obj.getCodigo() == null ) ? String.class : obj.getCodigo();
+		Object nombre = ( obj.getNombre() == null ) ? String.class : obj.getNombre();
+
+		String sql = "SELECT * FROM massoftware.u_MonedaAFIP(?, ?, ?)";
+
+		Object[] args = new Object[] {id, codigo, nombre};
+
+		Object[][] table = BackendContextPG.get().find(sql, args);
+
+		if(table.length == 1){
+
+			Object[] row = table[0];
+
+			if(row.length == 1){
+
+				Boolean ok = (Boolean) row[0];
+
+				if(ok){
+
+					return id.toString();
+
+				} else { 
+
+					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
+
+				}
+
+			} else {
+
+				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
+
+			}
+
+		} else {
+
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
 
 		}
 
@@ -67,6 +128,13 @@ public class MonedaAFIPDAO {
 
 
 	public boolean deleteById(String id) throws Exception {
+
+
+		if(id == null || id.trim().length() == 0){
+
+			throw new IllegalArgumentException("Se esperaba un id (MonedaAFIP.id) no nulo/vacio.");
+
+		}
 
 		String sql = "SELECT * FROM massoftware.d_MonedaAFIPById(?)";
 
@@ -82,7 +150,7 @@ public class MonedaAFIPDAO {
 
 		} else if(table.length > 1 ) {
 
-				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
 
 		}
 
@@ -93,7 +161,76 @@ public class MonedaAFIPDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
+	public boolean isUniqueCodigo(String arg) throws Exception {
+
+
+		if(arg == null || arg.toString().trim().length() == 0){
+
+			throw new IllegalArgumentException("Se esperaba un arg (MonedaAFIP.codigo) no nulo/vacio.");
+
+		}
+
+		String sql = "SELECT * FROM massoftware.f_u_MonedaAFIP_codigo(?)";
+
+		Object[] args = new Object[] {arg};
+
+		Object[][] table = BackendContextPG.get().find(sql, args);
+
+		if(table.length == 1){
+
+			Object[] row = table[0];
+
+			return (Long) row[0] > 0;
+
+		} else {
+
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+
+		}
+
+	}
+
+	public boolean isUniqueNombre(String arg) throws Exception {
+
+
+		if(arg == null || arg.toString().trim().length() == 0){
+
+			throw new IllegalArgumentException("Se esperaba un arg (MonedaAFIP.nombre) no nulo/vacio.");
+
+		}
+
+		String sql = "SELECT * FROM massoftware.f_u_MonedaAFIP_nombre(?)";
+
+		Object[] args = new Object[] {arg};
+
+		Object[][] table = BackendContextPG.get().find(sql, args);
+
+		if(table.length == 1){
+
+			Object[] row = table[0];
+
+			return (Long) row[0] > 0;
+
+		} else {
+
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+
+		}
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
 	public MonedaAFIP findById(String id, Integer level) throws Exception {
+
+
+		if(id == null || id.trim().length() == 0){
+
+			throw new IllegalArgumentException("Se esperaba un id (MonedaAFIP.id) no nulo/vacio.");
+
+		}
+
 
 		MonedaAFIP obj = null;
 
@@ -115,6 +252,8 @@ public class MonedaAFIPDAO {
 			if(row.length == 3) {
 
 				obj = mapper3Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
@@ -173,6 +312,8 @@ public class MonedaAFIPDAO {
 
 				MonedaAFIP obj = mapper3Fields(row);
 
+				obj._originalDTO = (EntityId) obj.clone();
+
 				listado.add(obj);
 
 			} else {
@@ -193,7 +334,7 @@ public class MonedaAFIPDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private MonedaAFIP mapper3Fields(Object[] row) {
+	private MonedaAFIP mapper3Fields(Object[] row) throws Exception {
 
 		int c = -1;
 

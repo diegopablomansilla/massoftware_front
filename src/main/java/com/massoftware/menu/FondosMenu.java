@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.Usuario;
-import com.massoftware.w.monedaafip.WLMonedaAFIP;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
@@ -31,6 +30,8 @@ import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.massoftware.windows.valores_propios.WValoresPropios;
 import com.massoftware.windows.valores_terceros.WValoresTerceros;
+import com.massoftware.x.monedas.WLMoneda;
+import com.massoftware.x.monedas.WLMonedaAFIP;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FileResource;
@@ -101,6 +102,7 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Cajas", openCajasCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
 		a1.addItem("Monedas ...", openMonedasCmd());		
+		a1.addItem("Monedas 2 ...", openMonedasCmd2());
 		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
@@ -285,6 +287,23 @@ public class FondosMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WMonedas();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openMonedasCmd2() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WLMoneda();
 				getUI().addWindow(window);
 			}
 		};
