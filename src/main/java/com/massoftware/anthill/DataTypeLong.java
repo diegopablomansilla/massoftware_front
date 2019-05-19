@@ -4,6 +4,7 @@ class DataTypeLong extends DataType {
 
 	private Long minValue;
 	private Long maxValue;
+	private Boolean nextValueProposed = false;
 
 	public DataTypeLong() {
 		super(Long.class.getCanonicalName());
@@ -50,6 +51,16 @@ class DataTypeLong extends DataType {
 			this.maxValue = maxValue;
 		}
 
+	}
+	
+	
+
+	public Boolean getNextValueProposed() {
+		return nextValueProposed;
+	}
+
+	public void setNextValueProposed(Boolean nextValueProposed) {
+		this.nextValueProposed = nextValueProposed;
 	}
 
 	@Override

@@ -5,10 +5,10 @@ import java.util.List;
 import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBox;
+import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.bancos.WBancos;
 
-class WCBancoSB extends SelectorBox {
+class WCBancoSB extends SelectorBoxOld {
 
 	/**
 	 * 

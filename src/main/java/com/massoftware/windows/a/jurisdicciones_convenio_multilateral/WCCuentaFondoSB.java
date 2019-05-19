@@ -8,12 +8,12 @@ import com.massoftware.model.CuentasFondoFiltro;
 import com.massoftware.model.JuridiccionConvnioMultilateral;
 import com.massoftware.model.JuridiccionConvnioMultilateralFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBox;
+import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 
-class WCCuentaFondoSB extends SelectorBox {
+class WCCuentaFondoSB extends SelectorBoxOld {
 
 	/**
 	 * 

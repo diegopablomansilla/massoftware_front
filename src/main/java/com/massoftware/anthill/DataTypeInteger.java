@@ -3,7 +3,8 @@ package com.massoftware.anthill;
 class DataTypeInteger extends DataType {
 
 	private Integer minValue;
-	private Integer maxValue;	
+	private Integer maxValue;
+	private Boolean nextValueProposed = false;
 
 	public DataTypeInteger() {
 		super(Integer.class.getCanonicalName());
@@ -15,10 +16,10 @@ class DataTypeInteger extends DataType {
 	}
 
 	@Override
-	public String getNameJava() {		
+	public String getNameJava() {
 		return Integer.class.getSimpleName();
 	}
-	
+
 	@Override
 	public boolean isSimple() {
 		return true;
@@ -50,6 +51,14 @@ class DataTypeInteger extends DataType {
 			this.maxValue = maxValue;
 		}
 
+	}
+
+	public Boolean getNextValueProposed() {
+		return nextValueProposed;
+	}
+
+	public void setNextValueProposed(Boolean nextValueProposed) {
+		this.nextValueProposed = nextValueProposed;
 	}
 
 	@Override

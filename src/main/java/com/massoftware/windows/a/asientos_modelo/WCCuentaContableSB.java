@@ -8,12 +8,12 @@ import com.massoftware.model.AsientoModeloItem;
 import com.massoftware.model.CuentaContable;
 import com.massoftware.model.CuentasContableFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBox;
+import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.cuentas_contable.WCuentasContable;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 
-class WCCuentaContableSB extends SelectorBox {
+class WCCuentaContableSB extends SelectorBoxOld {
 
 	/**
 	 * 

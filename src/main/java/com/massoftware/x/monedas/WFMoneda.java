@@ -3,6 +3,7 @@ package com.massoftware.x.monedas;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -38,12 +39,13 @@ public class WFMoneda extends WindowForm {
 	private DateFieldEntity cotizacionFechaDAF;
 	private CheckBoxEntity controlActualizacionCHK;
 	private ComboBoxEntity monedaAFIPCBX;
+	private SelectorBox monedaAFIPSBX;
 
 
 	// -------------------------------------------------------------
 
 	public WFMoneda(String mode, String id) {
-		super(mode, id);
+		super(mode, id);				
 		dao = new MonedaDAO();
 	}
 
@@ -55,7 +57,7 @@ public class WFMoneda extends WindowForm {
 		// =======================================================
 		// CUERPO
 
-		VerticalLayout cuerpo = buildCuerpo();
+		Component cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -74,34 +76,34 @@ public class WFMoneda extends WindowForm {
 		this.setContent(content);
 	}
 
-	private VerticalLayout buildCuerpo() throws Exception {
+	private Component buildCuerpo() throws Exception {
 
 		
 
 		// ------------------------------------------------------------------
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
-			protected boolean checkUnique(Object arg) throws Exception {
+			protected boolean ifExists(Object arg) throws Exception {
 				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isUniqueNumero((Integer)arg);
+				return dao.isExistsNumero((Integer)arg);
 			}
 		};
 
 		// ------------------------------------------------------------------
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
-			protected boolean checkUnique(Object arg) throws Exception {
+			protected boolean ifExists(Object arg) throws Exception {
 				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isUniqueNombre((String)arg);
+				return dao.isExistsNombre((String)arg);
 			}
 		};
 
 		// ------------------------------------------------------------------
 
 		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
-			protected boolean checkUnique(Object arg) throws Exception {
+			protected boolean ifExists(Object arg) throws Exception {
 				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isUniqueAbreviatura((String)arg);
+				return dao.isExistsAbreviatura((String)arg);
 			}
 		};
 
@@ -117,23 +119,90 @@ public class WFMoneda extends WindowForm {
 
 		controlActualizacionCHK = new CheckBoxEntity(itemBI, "controlActualizacion");
 
-		// ------------------------------------------------------------------
-
-		MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
-
-		monedaAFIPFiltro.setUnlimited(true);
-
 		MonedaAFIPDAO monedaAFIPDAO = new MonedaAFIPDAO();
 
-		List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
+		long items = monedaAFIPDAO.count();
 
-		monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);
+		if (items < 300) {
 
+			MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
 
-		// ------------------------------------------------------------------
+			monedaAFIPFiltro.setUnlimited(true);
+
+			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
+
+			monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);
+
+		} else {
+
+			monedaAFIPSBX = new SelectorBox(WLMonedaAFIP.class, itemBI, "monedaAFIP") {
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					MonedaAFIPDAO dao = new MonedaAFIPDAO();
+
+					return dao.findByCodigoOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) {
+
+					MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					return new WLMonedaAFIP(filtro);
+
+				}
+
+			};
+
+		}
+
+		
+		// ---------------------------------------------------------------------------------------------------------
+
+		return buildCuerpoLayout();
+
+		// ---------------------------------------------------------------------------------------------------------
+	}
+	
+	protected Component buildCuerpoLayout() throws Exception {		
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(numeroTXT, nombreTXT, abreviaturaTXT, cotizacionTXT, cotizacionFechaDAF, controlActualizacionCHK, monedaAFIPCBX);
+
+		// ------------------------------------------------------------------		
+		
+		
+		if (numeroTXT != null) {
+			generalVL.addComponent(numeroTXT);
+		}
+		if (nombreTXT != null) {
+			generalVL.addComponent(nombreTXT);
+		}
+		if (abreviaturaTXT != null) {
+			generalVL.addComponent(abreviaturaTXT);
+		}
+		if (cotizacionTXT != null) {
+			generalVL.addComponent(cotizacionTXT);
+		}
+		if (cotizacionFechaDAF != null) {
+			generalVL.addComponent(cotizacionFechaDAF);
+		}
+		if (controlActualizacionCHK != null) {
+			generalVL.addComponent(controlActualizacionCHK);
+		}
+		if (monedaAFIPCBX != null) {
+			generalVL.addComponent(monedaAFIPCBX);
+		}
+		if (monedaAFIPSBX != null) {
+			generalVL.addComponent(monedaAFIPSBX);
+		}
 
 		// ---------------------------------------------------------------------------------------------------------
 
@@ -152,6 +221,15 @@ public class WFMoneda extends WindowForm {
 		// base a su id
 
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
+		
+		//MonedaDAO dao = new MonedaDAO();
+		if(dao == null){
+			dao = new MonedaDAO();
+		}	
+		
+		
+		((Moneda) item).setNumero(dao.nextValueNumero());
+
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -219,8 +297,11 @@ public class WFMoneda extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB
-			dao = new MonedaDAO();
-			Moneda item = dao.findById(id, 1);
+			//MonedaDAO dao = new MonedaDAO();
+			if(dao == null){
+				dao = new MonedaDAO();
+			}			
+			Moneda item = dao.findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

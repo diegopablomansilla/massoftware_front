@@ -7,12 +7,12 @@ import com.massoftware.model.CuentaContable;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.SeguridadPuertasFiltro;
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBox;
+import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.seguridad_puertas.WSeguridadPuertas;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 
-class WCPuertaSB extends SelectorBox {
+class WCPuertaSB extends SelectorBoxOld {
 
 	/**
 	 * 

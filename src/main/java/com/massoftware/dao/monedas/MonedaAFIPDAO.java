@@ -9,6 +9,8 @@ import com.massoftware.model.monedas.MonedaAFIP;
 
 public class MonedaAFIPDAO {
 
+	private int levelDefault = 0;
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -136,6 +138,9 @@ public class MonedaAFIPDAO {
 
 		}
 
+
+		id = id.trim();
+
 		String sql = "SELECT * FROM massoftware.d_MonedaAFIPById(?)";
 
 		Object[] args = new Object[] {id};
@@ -161,7 +166,7 @@ public class MonedaAFIPDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public boolean isUniqueCodigo(String arg) throws Exception {
+	public boolean isExistsCodigo(String arg) throws Exception {
 
 
 		if(arg == null || arg.toString().trim().length() == 0){
@@ -170,7 +175,7 @@ public class MonedaAFIPDAO {
 
 		}
 
-		String sql = "SELECT * FROM massoftware.f_u_MonedaAFIP_codigo(?)";
+		String sql = "SELECT * FROM massoftware.f_exists_MonedaAFIP_codigo(?)";
 
 		Object[] args = new Object[] {arg};
 
@@ -180,7 +185,7 @@ public class MonedaAFIPDAO {
 
 			Object[] row = table[0];
 
-			return (Long) row[0] > 0;
+			return (Boolean) row[0];
 
 		} else {
 
@@ -190,7 +195,7 @@ public class MonedaAFIPDAO {
 
 	}
 
-	public boolean isUniqueNombre(String arg) throws Exception {
+	public boolean isExistsNombre(String arg) throws Exception {
 
 
 		if(arg == null || arg.toString().trim().length() == 0){
@@ -199,7 +204,7 @@ public class MonedaAFIPDAO {
 
 		}
 
-		String sql = "SELECT * FROM massoftware.f_u_MonedaAFIP_nombre(?)";
+		String sql = "SELECT * FROM massoftware.f_exists_MonedaAFIP_nombre(?)";
 
 		Object[] args = new Object[] {arg};
 
@@ -209,7 +214,7 @@ public class MonedaAFIPDAO {
 
 			Object[] row = table[0];
 
-			return (Long) row[0] > 0;
+			return (Boolean) row[0];
 
 		} else {
 
@@ -217,6 +222,96 @@ public class MonedaAFIPDAO {
 
 		}
 
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public Long count() throws Exception {
+
+		String sql = "SELECT COUNT(*) FROM massoftware.MonedaAFIP;";
+
+		Object[] args = new Object[] {};
+
+		Object[][] table = BackendContextPG.get().find(sql, args);
+
+		if(table.length == 1){
+
+			Object[] row = table[0];
+
+			return (Long) row[0];
+
+		} else {
+
+			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
+
+		}
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public List<MonedaAFIP> findByCodigoOrNombre(String arg) throws Exception {
+
+
+		if (arg == null || arg.trim().length() == 0) {
+
+			throw new IllegalArgumentException("Se esperaba un arg (MonedaAFIP.codigo o MonedaAFIP.nombre) no nulo/vacio.");
+
+		}
+
+
+		arg = arg.trim();
+
+
+		//------------ buscar por Código
+
+		MonedaAFIPFiltro filtroCodigo = new MonedaAFIPFiltro();
+
+		filtroCodigo.setUnlimited(true);
+
+		filtroCodigo.setCodigo(arg);
+
+		List<MonedaAFIP> listadoCodigo = find(filtroCodigo);
+
+		if(listadoCodigo.size() > 0) {
+
+			return listadoCodigo;
+
+		}
+
+
+		//------------ buscar por Nombre
+
+		MonedaAFIPFiltro filtroNombre = new MonedaAFIPFiltro();
+
+		filtroNombre.setUnlimited(true);
+
+		filtroNombre.setNombre(arg);
+
+		List<MonedaAFIP> listadoNombre = find(filtroNombre);
+
+		if(listadoNombre.size() > 0) {
+
+			return listadoNombre;
+
+		}
+
+
+		return new ArrayList<MonedaAFIP>();
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+
+	public MonedaAFIP findById(String id) throws Exception {
+
+		return findById(id, levelDefault);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -232,10 +327,13 @@ public class MonedaAFIPDAO {
 		}
 
 
+		id = id.trim();
+
+
 		MonedaAFIP obj = null;
 
-		level = (level == null || level < 0) ? 0 : level;
-		level = (level != null && level > 3) ? 3 : level;
+		level = (level == null || level < 0) ? levelDefault : level;
+		level = (level != null && level > 3) ? levelDefault : level;
 
 		String levelString = (level > 0) ? "_" + level : "";
 
@@ -327,9 +425,6 @@ public class MonedaAFIPDAO {
 		return listado;
 
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
-
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 

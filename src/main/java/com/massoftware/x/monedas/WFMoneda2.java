@@ -12,31 +12,41 @@ import com.massoftware.windows.*;
 import com.massoftware.model.EntityId;
 
 
-
+import java.util.List;
 import com.massoftware.model.monedas.MonedaAFIP;
+import com.massoftware.dao.monedas.MonedaAFIPFiltro;
 import com.massoftware.dao.monedas.MonedaAFIPDAO;
 
+import com.massoftware.model.monedas.Moneda;
+import com.massoftware.dao.monedas.MonedaDAO;
+
 @SuppressWarnings("serial")
-public class WFMonedaAFIP extends WindowForm {
+public class WFMoneda2 extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<MonedaAFIP> itemBI;
+	private BeanItem<Moneda> itemBI;
 	
-	private MonedaAFIPDAO dao;
+	private MonedaDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	private TextFieldEntity codigoTXT;
+	private TextFieldEntity numeroTXT;
 	private TextFieldEntity nombreTXT;
+	private TextFieldEntity abreviaturaTXT;
+	private TextFieldEntity cotizacionTXT;
+	private DateFieldEntity cotizacionFechaDAF;
+	private CheckBoxEntity controlActualizacionCHK;
+	private ComboBoxEntity monedaAFIPCBX;
+	private SelectorBox monedaAFIPSBX;
 
 
 	// -------------------------------------------------------------
 
-	public WFMonedaAFIP(String mode, String id) {
+	public WFMoneda2(String mode, String id) {
 		super(mode, id);				
-		dao = new MonedaAFIPDAO();
+		dao = new MonedaDAO();
 	}
 
 	protected void buildContent() throws Exception {
@@ -72,10 +82,10 @@ public class WFMonedaAFIP extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
+		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
 				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsCodigo((String)arg);
+				return dao.isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -87,6 +97,72 @@ public class WFMonedaAFIP extends WindowForm {
 				return dao.isExistsNombre((String)arg);
 			}
 		};
+
+		// ------------------------------------------------------------------
+
+		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
+			protected boolean ifExists(Object arg) throws Exception {
+				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
+				return dao.isExistsAbreviatura((String)arg);
+			}
+		};
+
+		// ------------------------------------------------------------------
+
+		cotizacionTXT = new TextFieldEntity(itemBI, "cotizacion", this.mode);
+
+		// ------------------------------------------------------------------
+
+		cotizacionFechaDAF = new DateFieldEntity(itemBI, "cotizacionFecha", this.mode, true);
+
+		// ------------------------------------------------------------------
+
+		controlActualizacionCHK = new CheckBoxEntity(itemBI, "controlActualizacion");
+
+		MonedaAFIPDAO monedaAFIPDAO = new MonedaAFIPDAO();
+
+		long items = monedaAFIPDAO.count();
+
+		if (items < 300) {
+
+			MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
+
+			monedaAFIPFiltro.setUnlimited(true);
+
+			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
+
+			monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);
+
+		} else {
+
+			monedaAFIPSBX = new SelectorBox(WLMonedaAFIP.class, itemBI, "monedaAFIP") {
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					MonedaAFIPDAO dao = new MonedaAFIPDAO();
+
+					return dao.findByCodigoOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) {
+
+					MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					return new WLMonedaAFIP(filtro);
+
+				}
+
+			};
+
+		}
 
 		
 		// ---------------------------------------------------------------------------------------------------------
@@ -103,11 +179,29 @@ public class WFMonedaAFIP extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (codigoTXT != null) {
-			generalVL.addComponent(codigoTXT);
+		if (numeroTXT != null) {
+			generalVL.addComponent(numeroTXT);
 		}
 		if (nombreTXT != null) {
 			generalVL.addComponent(nombreTXT);
+		}
+		if (abreviaturaTXT != null) {
+			generalVL.addComponent(abreviaturaTXT);
+		}
+		if (cotizacionTXT != null) {
+			generalVL.addComponent(cotizacionTXT);
+		}
+		if (cotizacionFechaDAF != null) {
+			generalVL.addComponent(cotizacionFechaDAF);
+		}
+		if (controlActualizacionCHK != null) {
+			generalVL.addComponent(controlActualizacionCHK);
+		}
+		if (monedaAFIPCBX != null) {
+			generalVL.addComponent(monedaAFIPCBX);
+		}
+		if (monedaAFIPSBX != null) {
+			generalVL.addComponent(monedaAFIPSBX);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -128,12 +222,13 @@ public class WFMonedaAFIP extends WindowForm {
 
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
 		
-		//MonedaAFIPDAO dao = new MonedaAFIPDAO();
+		//MonedaDAO dao = new MonedaDAO();
 		if(dao == null){
-			dao = new MonedaAFIPDAO();
+			dao = new MonedaDAO();
 		}	
 		
 		
+		((Moneda) item).setNumero(dao.nextValueNumero());
 
 	}
 
@@ -141,10 +236,10 @@ public class WFMonedaAFIP extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((MonedaAFIP) obj);
+		itemBI.setBean((Moneda) obj);
 	}
 
-	protected BeanItem<MonedaAFIP> getItemBIC() throws Exception {
+	protected BeanItem<Moneda> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -153,7 +248,7 @@ public class WFMonedaAFIP extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<MonedaAFIP>(new MonedaAFIP());
+			itemBI = new BeanItem<Moneda>(new Moneda());
 		}
 		return itemBI;
 	}
@@ -162,7 +257,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 		try {
 
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
+			//MonedaDAO dao = new MonedaDAO();
 			dao.insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
@@ -181,7 +276,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 		try {
 
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
+			//MonedaDAO dao = new MonedaDAO();
 			dao.update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
@@ -202,11 +297,11 @@ public class WFMonedaAFIP extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
+			//MonedaDAO dao = new MonedaDAO();
 			if(dao == null){
-				dao = new MonedaAFIPDAO();
+				dao = new MonedaDAO();
 			}			
-			MonedaAFIP item = dao.findById(id);
+			Moneda item = dao.findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

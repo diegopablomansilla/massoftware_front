@@ -20,6 +20,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Component;
 
 import org.vaadin.patrik.FastNavigation;
 
@@ -38,6 +39,8 @@ public class WLMoneda extends WindowListado {
 
 	BeanItem<MonedaFiltro> filterBI;
 	protected BeanItemContainer<Moneda> itemsBIC;
+	
+	private MonedaDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -52,14 +55,18 @@ public class WLMoneda extends WindowListado {
 
 	public WLMoneda() {
 		super();
+		dao = new MonedaDAO();
 		filterBI = new BeanItem<MonedaFiltro>(new MonedaFiltro());
 		init(false);
+		setFocusGrid();
 	}
 
 	public WLMoneda(MonedaFiltro filtro) {
 		super();
+		dao = new MonedaDAO();
 		filterBI = new BeanItem<MonedaFiltro>(filtro);
 		init(true);
+		setFocusGrid();
 	}
 
 	protected void buildContent() throws Exception {
@@ -69,7 +76,7 @@ public class WLMoneda extends WindowListado {
 		// =======================================================
 		// FILTROS
 
-		HorizontalLayout filtrosLayout = buildFiltros();
+		Component filtrosLayout = buildFiltros();
 
 		// =======================================================
 		// CUERPO
@@ -96,7 +103,7 @@ public class WLMoneda extends WindowListado {
 		this.setContent(content);
 	}
 
-	private HorizontalLayout buildFiltros() throws Exception {		
+	private Component buildFiltros() throws Exception {		
 		
 
 		// ------------------------------------------------------------------
@@ -114,19 +121,28 @@ public class WLMoneda extends WindowListado {
 		// ------------------------------------------------------------------
 
 		abreviaturaTXTB = new TextFieldBox(this, filterBI, "abreviatura", "contiene las palabras ..");
+				
 
+		return buildFiltrosLayout();
+	}
+	
+	protected Component buildFiltrosLayout() throws Exception {	
+		
+		HorizontalLayout filaFiltroHL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
 		
 		// ------------------------------------------------------------------
 		
-		Button buscarBTN = buildButtonBuscar();
-
-		HorizontalLayout filaFiltroHL = new HorizontalLayout();
-		filaFiltroHL.setSpacing(true);
+		Button buscarBTN = buildButtonBuscar();		
 
 		filaFiltroHL.addComponents(numeroFromTXTB, numeroToTXTB, nombreTXTB, abreviaturaTXTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
+		// ------------------------------------------------------------------
+
 		return filaFiltroHL;
+		
+		// ------------------------------------------------------------------
 	}
 
 	private Grid buildItemsGRD() throws Exception {
@@ -136,68 +152,7 @@ public class WLMoneda extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		itemsGRD.setWidth("100%");
-		// itemsGRD.setWidth(25f, Unit.EM);
-		itemsGRD.setHeight(20.5f, Unit.EM);
-
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "abreviatura", "cotizacion", "cotizacionFecha", "controlActualizacion", "monedaAFIP" });
-
-		// ------------------------------------------------------------------
-		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
-
-		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 240);
-
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
-
-		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 60);
-
-		UtilUI.confColumn(itemsGRD.getColumn("cotizacion"), true, 240);
-
-		UtilUI.confColumn(itemsGRD.getColumn("cotizacionFecha"), true, 240);
-
-		UtilUI.confColumn(itemsGRD.getColumn("controlActualizacion"), true, 240);
-
-		UtilUI.confColumn(itemsGRD.getColumn("monedaAFIP"), true, 240);
-		
-		// ------------------------------------------------------------------
-
-		Moneda dto = new Moneda();
-		for (Column column : itemsGRD.getColumns()) {
-			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
-		}
-
-		itemsGRD.setContainerDataSource(getItemsBIC());
-
-		// .......
-
-		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
-		// FontAwesome.SQUARE_O.getHtml()));
-		
-
-		itemsGRD.getColumn("controlActualizacion").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),FontAwesome.SQUARE_O.getHtml()));
-
-		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
-		
-
-		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(
-		// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-		
-
-		itemsGRD.getColumn("cotizacionFecha").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-
-		// .......
-
-		List<SortOrder> order = new ArrayList<SortOrder>();
-
-		order.add(new SortOrder("id", SortDirection.ASCENDING));
-
-		itemsGRD.setSortOrder(order);
+		buildItemsGRDLayout();
 
 		// ------------------------------------------------------------------
 
@@ -216,6 +171,72 @@ public class WLMoneda extends WindowListado {
 		// ------------------------------------------------------------------
 
 		return itemsGRD;
+	}
+	
+	protected void buildItemsGRDLayout() throws Exception {		
+
+		// ------------------------------------------------------------------
+
+		itemsGRD.setWidth("100%");
+		// itemsGRD.setWidth(25f, Unit.EM);
+		itemsGRD.setHeight(20.5f, Unit.EM);
+
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "abreviatura", "cotizacion", "cotizacionFecha", "controlActualizacion", "monedaAFIP" });
+
+		// ------------------------------------------------------------------
+		
+		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
+
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
+
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 60);
+
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacion"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacionFecha"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("controlActualizacion"), true, 70);
+
+		UtilUI.confColumn(itemsGRD.getColumn("monedaAFIP"), true, 240);
+		
+		// ------------------------------------------------------------------
+
+		Moneda dto = new Moneda();
+		for (Column column : itemsGRD.getColumns()) {
+			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
+		}
+
+		itemsGRD.setContainerDataSource(getItemsBIC());
+
+		// ------------------------------------------------------------------
+
+		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		
+
+		itemsGRD.getColumn("controlActualizacion").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),FontAwesome.SQUARE_O.getHtml()));
+
+		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+		
+
+		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+		
+
+		itemsGRD.getColumn("cotizacionFecha").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+
+		// ------------------------------------------------------------------
+
+		List<SortOrder> order = new ArrayList<SortOrder>();
+
+		order.add(new SortOrder("id", SortDirection.ASCENDING));
+
+		itemsGRD.setSortOrder(order);			
+		
+		// ------------------------------------------------------------------		
 	}
 
 	// =================================================================================
@@ -247,12 +268,20 @@ public class WLMoneda extends WindowListado {
 			// List<Moneda> items = new Moneda().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
-			MonedaDAO dao = new MonedaDAO();
-
-			filterBI.getBean().setLimit(limit);
-			filterBI.getBean().setOffset(offset);
-			filterBI.getBean().setLevel(1);
-			// filterBI.getBean().setOrderBy("codigo");
+			//MonedaDAO dao = new MonedaDAO();
+			dao = new MonedaDAO();			
+			
+			filterBI.getBean().setLimit((long)limit);
+			filterBI.getBean().setOffset((long)offset);
+			filterBI.getBean().setOrderBy(itemsGRD.getSortOrder().get(0).getPropertyId().toString());
+			filterBI.getBean().setOrderByDesc(itemsGRD.getSortOrder().get(0).getDirection().toString().equals("ASCENDING") == false);
+			
+			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {								
+				System.out.println(sortOrder.getPropertyId().toString() + " " + sortOrder.getDirection().toString());				
+//				orderBy.put(sortOrder.getPropertyId().toString(), sortOrder.getDirection().toString().equals("ASCENDING"));
+			}
+			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
 			List<Moneda> items = dao.find(filterBI.getBean());
 
@@ -274,7 +303,8 @@ public class WLMoneda extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		MonedaDAO dao = new MonedaDAO();
+		//MonedaDAO dao = new MonedaDAO();
+		dao = new MonedaDAO();
 		dao.deleteById(((EntityId) item).getId());
 
 	}
@@ -282,9 +312,18 @@ public class WLMoneda extends WindowListado {
 	protected WindowForm buildWinddowForm(String mode, String id) {
 		return new WFMoneda(mode, id);
 	}
+	
+	public void setFocusGrid() {
+		if( itemsBIC.size() > 0) {
+			itemsGRD.select(itemsBIC.getIdByIndex(0));	
+		}					
+		itemsGRD.focus();
+	}
+	
+	
 
 	// =================================================================================
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-14T20:14:03.399-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-19T20:05:30.712-03:00[America/Buenos_Aires]

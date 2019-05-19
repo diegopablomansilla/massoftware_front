@@ -8,7 +8,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.AbstractValidator;
 
 public class UniqueValidator extends AbstractValidator<Object> {
-
+	
 	/**
 	 * 
 	 */
@@ -101,20 +101,20 @@ public class UniqueValidator extends AbstractValidator<Object> {
 
 		if (originalValue != null && originalValue.equals(newValue) == false) {
 
-			if (ifExists(newValue)) {
+			if (ifExistsObject(newValue)) {
 				throw new UniqueException(label);
 			}
 
 		} else if (originalValue == null) {
 
-			if (ifExists(newValue)) {
+			if (ifExistsObject(newValue)) {
 				throw new UniqueException(label);
 			}
 		}
 
 	}
 
-	protected boolean ifExists(Object arg) throws Exception {	
+	protected boolean ifExistsObject(Object arg) throws Exception {	
 
 		return false;
 	}

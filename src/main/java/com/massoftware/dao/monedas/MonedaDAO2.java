@@ -8,7 +8,7 @@ import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.monedas.Moneda;
 
-public class MonedaDAO {
+public class MonedaDAO2 {
 
 	private int levelDefault = 1;
 
@@ -471,6 +471,10 @@ public class MonedaDAO {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
+modificar este metodo
+modificar en WL
+agregar el buscar por timestamp y date (no se por que faltan)
+agregar un tostring por los dos primeros atributos del atts
 
 	public List<Moneda> find(MonedaFiltro filtro) throws Exception {
 
@@ -486,9 +490,7 @@ public class MonedaDAO {
 			orderByASCString = "_asc_";
 			if(filtro.getOrderByDesc() == true) {
 				orderByASCString = "_des_";
-			}
-			
-			
+			}			
 			
 			orderByString = orderByASCString + orderByString;
 		}

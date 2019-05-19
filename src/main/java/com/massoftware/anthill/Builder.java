@@ -105,7 +105,7 @@ public class Builder {
 		javaPopulate += javaPopulateImport;
 		javaPopulate += "\n\npublic class Populate {";
 		
-		javaPopulate += "\n\n\tstatic int maxRows = 1000000;";		
+		javaPopulate += "\n\n\tstatic int maxRows = 10000;";		
 		
 		javaPopulate += "\n\n\tpublic static void main(String[] args) {";
 		javaPopulate += javaPopulateInsert;
@@ -190,11 +190,16 @@ public class Builder {
 
 		monedaAFIP.addArgument(codigo, Argument.EQUALS_IGNORE_CASE);
 		monedaAFIP.getLastArgument().setRequired(false);
+		monedaAFIP.addArgumentSBX(monedaAFIP.getLastArgument());
+		
 		monedaAFIP.addArgument(nombre);
 		monedaAFIP.getLastArgument().setRequired(false);
+		monedaAFIP.addArgumentSBX(monedaAFIP.getLastArgument());
 
 		monedaAFIP.addOrder(codigo);
 		monedaAFIP.addOrder(nombre);
+		
+		monedaAFIP.setToString("\t\treturn this.getCodigo() + \" - \" + this.getNombre();");
 
 		return monedaAFIP;
 	}
@@ -212,6 +217,7 @@ public class Builder {
 
 		Att numero = new Att("numero", "Nº moneda");
 		numero.setDataTypeInteger(1, null);
+		((DataTypeInteger)numero.getDataType()).setNextValueProposed(true);
 		numero.setRequired(true);
 		numero.setUnique(true);
 		moneda.addAtt(numero);
@@ -231,12 +237,14 @@ public class Builder {
 
 		Att cotizacion = new Att("cotizacion", "Cotización");
 		cotizacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 9, 4);
+		((DataTypeBigDecimal)cotizacion.getDataType()).setDefValueInsert(new BigDecimal("1"));
 		cotizacion.setRequired(true);
-		cotizacion.setReadOnlyGUI(true);
+		cotizacion.setReadOnlyGUI(true);		
 		moneda.addAtt(cotizacion);
 
 		Att cotizacionFecha = new Att("cotizacionFecha", "Fecha cotización");
 		cotizacionFecha.setDataTypeTimestamp();
+		((DataTypeTimestamp)cotizacionFecha.getDataType()).setDefNowInsert(true);
 		cotizacionFecha.setRequired(true);
 		cotizacionFecha.setReadOnlyGUI(true);
 		moneda.addAtt(cotizacionFecha);
@@ -252,8 +260,12 @@ public class Builder {
 
 		moneda.addArgument(numero, true);
 		moneda.getLastArgument().setRequired(false);
+		moneda.addArgumentSBX(moneda.getLastArgument());
+		
 		moneda.addArgument(nombre);
 		moneda.getLastArgument().setRequired(false);
+		moneda.addArgumentSBX(moneda.getLastArgument());
+		
 		moneda.addArgument(abreviatura);
 		moneda.getLastArgument().setRequired(false);
 
@@ -263,6 +275,8 @@ public class Builder {
 		moneda.addOrder(cotizacion);
 		moneda.addOrder(controlActualizacion);
 		moneda.addOrder(monedaAFIP);
+		
+		moneda.setToString("\t\treturn this.getNumero() + \" - \" + this.getNombre();");
 
 		return moneda;
 	}

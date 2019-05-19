@@ -6,6 +6,9 @@ class DataTypeBigDecimal extends DataType {
 
 	private BigDecimal minValue;
 	private BigDecimal maxValue;
+	private BigDecimal defValueInsert;
+	private BigDecimal defValueUpdate;
+	private Boolean nextValueProposed = false;
 
 	private Integer precision;
 	private Integer scale;
@@ -45,6 +48,22 @@ class DataTypeBigDecimal extends DataType {
 		this.maxValue = maxValue;
 	}
 
+	public BigDecimal getDefValueInsert() {
+		return defValueInsert;
+	}
+
+	public void setDefValueInsert(BigDecimal defValueInsert) {
+		this.defValueInsert = defValueInsert;
+	}
+
+	public BigDecimal getDefValueUpdate() {
+		return defValueUpdate;
+	}
+
+	public void setDefValueUpdate(BigDecimal defValueUpdate) {
+		this.defValueUpdate = defValueUpdate;
+	}
+
 	public Integer getPrecision() {
 		return precision;
 	}
@@ -59,6 +78,14 @@ class DataTypeBigDecimal extends DataType {
 
 	public void setScale(Integer scale) {
 		this.scale = scale;
+	}
+
+	public Boolean getNextValueProposed() {
+		return nextValueProposed;
+	}
+
+	public void setNextValueProposed(Boolean nextValueProposed) {
+		this.nextValueProposed = nextValueProposed;
 	}
 
 	@Override

@@ -66,6 +66,11 @@ public abstract class WindowForm extends Window {
 			getItemBIC();
 
 			// =======================================================
+			// CARGA DE DATOS
+
+			loadData(this.id);
+
+			// =======================================================
 			// LAYOUT CONTROLs
 
 			buildContent();
@@ -78,7 +83,7 @@ public abstract class WindowForm extends Window {
 			// =======================================================
 			// CARGA DE DATOS
 
-			loadData(this.id);
+			// loadData(this.id);
 
 			// =======================================================
 			// ACTUALIZAR TITULO

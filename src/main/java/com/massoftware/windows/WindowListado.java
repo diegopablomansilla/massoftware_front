@@ -1,9 +1,7 @@
 package com.massoftware.windows;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import com.massoftware.model.EntityId;
@@ -13,6 +11,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.event.SortEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.AbstractField;
@@ -130,13 +129,13 @@ public abstract class WindowListado extends Window {
 
 			// --------------------------------------
 
-			List<SortOrder> order = new ArrayList<SortOrder>();
+//			List<SortOrder> order = new ArrayList<SortOrder>();
 
-			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-				order.add(new SortOrder(sortOrder.getPropertyId().toString(), sortOrder.getDirection()));
-			}
+//			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
+//				order.add(new SortOrder(sortOrder.getPropertyId().toString(), sortOrder.getDirection()));
+//			}
 
-			itemsGRD.setSortOrder(order);
+//			itemsGRD.setSortOrder(order);
 
 			itemsGRD.refreshAllRows();
 
@@ -148,6 +147,10 @@ public abstract class WindowListado extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 			copiarBTN.setEnabled(enabled);
+			
+			itemsGRD.addSortListener(e -> {
+				sort(e);
+			});
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -446,5 +449,14 @@ public abstract class WindowListado extends Window {
 			LogAndNotification.print(e);
 		}
 	}
+	
+	protected void sort(SortEvent sortEvent) {
+		try {
+			loadData();
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
 
+	}
+			
 }

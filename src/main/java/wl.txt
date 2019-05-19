@@ -19,6 +19,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Component;
 
 import org.vaadin.patrik.FastNavigation;
 
@@ -37,6 +38,8 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 	BeanItem<NOMBRE_CLASEFiltro> filterBI;
 	protected BeanItemContainer<NOMBRE_CLASE> itemsBIC;
+	
+	private NOMBRE_CLASEDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -46,14 +49,18 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 	public WLNOMBRE_CLASE() {
 		super();
+		dao = new NOMBRE_CLASEDAO();
 		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(new NOMBRE_CLASEFiltro());
 		init(false);
+		setFocusGrid();
 	}
 
 	public WLNOMBRE_CLASE(NOMBRE_CLASEFiltro filtro) {
 		super();
+		dao = new NOMBRE_CLASEDAO();
 		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(filtro);
 		init(true);
+		setFocusGrid();
 	}
 
 	protected void buildContent() throws Exception {
@@ -63,7 +70,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		// =======================================================
 		// FILTROS
 
-		HorizontalLayout filtrosLayout = buildFiltros();
+		Component filtrosLayout = buildFiltros();
 
 		// =======================================================
 		// CUERPO
@@ -90,20 +97,29 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		this.setContent(content);
 	}
 
-	private HorizontalLayout buildFiltros() throws Exception {		
-		INSTANCE
+	private Component buildFiltros() throws Exception {		
+		INSTANCE				
+
+		return buildFiltrosLayout();
+	}
+	
+	protected Component buildFiltrosLayout() throws Exception {	
+		
+		HorizontalLayout filaFiltroHL = new HorizontalLayout();
+		filaFiltroHL.setSpacing(true);
 		
 		// ------------------------------------------------------------------
 		
-		Button buscarBTN = buildButtonBuscar();
-
-		HorizontalLayout filaFiltroHL = new HorizontalLayout();
-		filaFiltroHL.setSpacing(true);
+		Button buscarBTN = buildButtonBuscar();		
 
 		filaFiltroHL.addComponents(ADD, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
+		// ------------------------------------------------------------------
+
 		return filaFiltroHL;
+		
+		// ------------------------------------------------------------------
 	}
 
 	private Grid buildItemsGRD() throws Exception {
@@ -113,50 +129,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		itemsGRD.setWidth("100%");
-		// itemsGRD.setWidth(25f, Unit.EM);
-		itemsGRD.setHeight(20.5f, Unit.EM);
-
-		itemsGRD.setColumns(new Object[] { COLUMNAS });
-
-		// ------------------------------------------------------------------
-		ANCHOS
-		
-		// ------------------------------------------------------------------
-
-		NOMBRE_CLASE dto = new NOMBRE_CLASE();
-		for (Column column : itemsGRD.getColumns()) {
-			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
-		}
-
-		itemsGRD.setContainerDataSource(getItemsBIC());
-
-		// .......
-
-		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
-		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(),
-		// new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),
-		// FontAwesome.SQUARE_O.getHtml()));
-		LOGICO
-
-		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
-		FECHA
-
-		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
-		// itemsGRD.getColumn("attName").setRenderer(
-		// new DateRenderer(
-		// new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-		TIEMPO
-
-		// .......
-
-		List<SortOrder> order = new ArrayList<SortOrder>();
-
-		order.add(new SortOrder("id", SortDirection.ASCENDING));
-
-		itemsGRD.setSortOrder(order);
+		buildItemsGRDLayout();
 
 		// ------------------------------------------------------------------
 
@@ -175,6 +148,54 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		// ------------------------------------------------------------------
 
 		return itemsGRD;
+	}
+	
+	protected void buildItemsGRDLayout() throws Exception {		
+
+		// ------------------------------------------------------------------
+
+		itemsGRD.setWidth("100%");
+		// itemsGRD.setWidth(25f, Unit.EM);
+		itemsGRD.setHeight(20.5f, Unit.EM);
+
+		itemsGRD.setColumns(new Object[] { COLUMNAS });
+
+		// ------------------------------------------------------------------
+		
+		ANCHOS
+		
+		// ------------------------------------------------------------------
+
+		NOMBRE_CLASE dto = new NOMBRE_CLASE();
+		for (Column column : itemsGRD.getColumns()) {
+			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
+		}
+
+		itemsGRD.setContainerDataSource(getItemsBIC());
+
+		// ------------------------------------------------------------------
+
+		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
+		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
+		LOGICO
+
+		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
+		FECHA
+
+		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
+		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
+		TIEMPO
+
+		// ------------------------------------------------------------------
+
+		List<SortOrder> order = new ArrayList<SortOrder>();
+
+		order.add(new SortOrder("id", SortDirection.ASCENDING));
+
+		itemsGRD.setSortOrder(order);			
+		
+		// ------------------------------------------------------------------		
 	}
 
 	// =================================================================================
@@ -206,10 +227,11 @@ public class WLNOMBRE_CLASE extends WindowListado {
 			// List<NOMBRE_CLASE> items = new NOMBRE_CLASE().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
-			NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+			dao = new NOMBRE_CLASEDAO();
 
-			filterBI.getBean().setLimit(limit);
-			filterBI.getBean().setOffset(offset);
+			filterBI.getBean().setLimit((long)limit);
+			filterBI.getBean().setOffset((long)offset);
 			// filterBI.getBean().setOrderBy("codigo");
 
 			List<NOMBRE_CLASE> items = dao.find(filterBI.getBean());
@@ -232,7 +254,8 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+		//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+		dao = new NOMBRE_CLASEDAO();
 		dao.deleteById(((EntityId) item).getId());
 
 	}
@@ -240,6 +263,15 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	protected WindowForm buildWinddowForm(String mode, String id) {
 		return new WFNOMBRE_CLASE(mode, id);
 	}
+	
+	public void setFocusGrid() {
+		if( itemsBIC.size() > 0) {
+			itemsGRD.select(itemsBIC.getIdByIndex(0));	
+		}					
+		itemsGRD.focus();
+	}
+	
+	
 
 	// =================================================================================
 

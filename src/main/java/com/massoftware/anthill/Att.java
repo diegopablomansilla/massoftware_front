@@ -253,15 +253,21 @@ class Att {
 				sql += "(" + ((DataTypeBigDecimal) this.getDataType()).getPrecision() + ", "
 						+ ((DataTypeBigDecimal) this.getDataType()).getScale() + ")";
 
-			}
+			}			
 
-			if (this.isBoolean()) {
-				sql += " DEFAULT false ";
-			}
-
-			if (this.isRequired()) {
+			if (this.isRequired() || this.isBoolean()) {
 				sql += " NOT NULL ";
 			}
+			
+//			if (this.isBoolean()) {
+//				if (this.isRequired()) {
+//					sql += " DEFAULT false ";
+//				} else {
+//					sql += " NOT NULL DEFAULT false ";					
+//				}
+//				
+//				sql += " NOT NULL ";
+//			}
 
 			if (this.isUnique()) {
 
@@ -279,6 +285,22 @@ class Att {
 					sql += " UNIQUE ";
 				}
 			}
+			
+//			if (this.isRequired()) {
+//				if(this.isTimestamp()) {
+//					DataTypeTimestamp dt = (DataTypeTimestamp) this.getDataType();
+//					if(dt.getDefNow() == true) {
+//						sql += " DEFAULT now() ";
+//					}
+//				} else if(this.isBigDecimal()) {
+//					DataTypeBigDecimal dt = (DataTypeBigDecimal) this.getDataType();
+//					if(dt.getDefValue() != null) {
+//						sql += " DEFAULT " + dt.getDefValue() + " ";
+//					}
+//				}
+//			}
+			
+			
 
 			sql += this.constraintSQL();
 

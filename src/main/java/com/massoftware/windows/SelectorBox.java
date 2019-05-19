@@ -1,9 +1,11 @@
 package com.massoftware.windows;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
-import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
@@ -12,7 +14,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+
+import com.massoftware.model.Entity;
 
 public class SelectorBox extends HorizontalLayout implements Validatable {
 
@@ -21,31 +26,38 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	 */
 	private static final long serialVersionUID = 2869082571369904793L;
 
-	public Button openSelectorBTN;
-	public TextField valueTXT;
-	public Button removeFilterBTN;
+	private Button openSelectorBTN;
+	private TextField valueTXT;
+	private Button removeFilterBTN;
 
 	protected String uuid;
 
-	@SuppressWarnings("rawtypes")
-	protected BeanItem dtoBI;
+	@SuppressWarnings({ "rawtypes" })
+	private BeanItem itemBI;
+
+	@SuppressWarnings({ "rawtypes" })
+	private Class classWindow;
+
+	private String attName;
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(BeanItem dtoBI, String attName) throws Exception {
-		init(dtoBI, attName, null);
+	public SelectorBox(Class classWindow, BeanItem itemBI, String attName) throws Exception {
+		init(classWindow, itemBI, attName, null);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(BeanItem dtoBI, String attName, String label2) throws Exception {
-		init(dtoBI, attName, label2);
+	public SelectorBox(Class classWindow, BeanItem itemBI, String attName, String label2) throws Exception {
+		init(classWindow, itemBI, attName, label2);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void init(BeanItem dtoBI, String attName, String label2) throws Exception {
+	private void init(Class classWindow, BeanItem itemBI, String attName, String label2) throws Exception {
 
 		uuid = UUID.randomUUID().toString();
 
-		this.dtoBI = dtoBI;
+		this.classWindow = classWindow;
+		this.itemBI = itemBI;
+		this.attName = attName;
 
 		// HorizontalLayout hl = buildHL();
 		this.setWidthUndefined();
@@ -53,10 +65,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		this.setSpacing(false);
 		// hl.setCaption(label);
 
-		String label = ((Entity) dtoBI.getBean()).label(attName);
-		boolean required = ((Entity) dtoBI.getBean()).required(attName);
+		String label = ((Entity) itemBI.getBean()).label(attName);
+		boolean required = ((Entity) itemBI.getBean()).required(attName);
 		label2 = (label2 == null || label2.trim().length() == 0) ? label : label2;
-		int columns = (int) ((Entity) dtoBI.getBean()).columns(attName);
+		int columns = (int) ((Entity) itemBI.getBean()).columns(attName);
 
 		openSelectorBTN = new Button();
 		openSelectorBTN.addStyleName("borderless tiny");
@@ -65,7 +77,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		valueTXT = new TextField();
 		valueTXT.setValidationVisible(true);
-		valueTXT.setRequiredError("El campo es requerido. Es decir no debe estar vacio.");
+		valueTXT.setRequiredError("El campo '" + label + "' es requerido. Es decir no debe estar vacio.");
 		valueTXT.setNullRepresentation("");
 		valueTXT.addStyleName(ValoTheme.TEXTFIELD_TINY);
 		valueTXT.setColumns(columns);
@@ -100,7 +112,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		this.setComponentAlignment(valueTXT, Alignment.BOTTOM_LEFT);
 		this.setComponentAlignment(openSelectorBTN, Alignment.BOTTOM_LEFT);
 
-		// valueTXT.setPropertyDataSource(dtoBI.getItemProperty(attName));
+		// valueTXT.setPropertyDataSource(itemBI.getItemProperty(attName));
 
 		// this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new
 		// int[] {}) {
@@ -115,7 +127,186 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		// }
 		// });
 
+		valueTXT.addBlurListener(e -> {
+			blur();
+		});
+
+		openSelectorBTN.addClickListener(e -> {
+			open(false);
+		});
+		removeFilterBTN.addClickListener(e -> {
+			try {
+
+				valueTXT.setValue(null);
+				setSelectedItem(null);
+
+			} catch (Exception ex) {
+				LogAndNotification.print(ex);
+			}
+		});
+
+		// this.setWidth("100%");
+		valueTXT.setWidth(25f, Unit.EM);
+
+		setInitValue(itemBI.getItemProperty(attName).getValue());
+
 	}
+
+	///////////////////////////////////////////////////////////////////////
+
+	@SuppressWarnings({ "rawtypes" })
+	private void blur() {
+		try {
+
+			String value = getValue();
+
+			if (value != null) {
+
+				List items = find(value);
+
+				if (items.size() == 1) {
+
+					setSelectedItem(items.get(0));
+
+				} else {
+
+					open(items.size() > 0);
+
+				}
+			} else {
+
+				setSelectedItem(null);
+
+			}
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	// --------------------------------------------------------
+
+	@SuppressWarnings("rawtypes")
+	private void open(boolean filter) {
+		try {
+
+			Iterator it = getUI().getWindows().iterator();
+			while (it.hasNext()) {
+				Window w = (Window) it.next();
+				if (w.getClass() == classWindow && w.getId().equals(uuid)) {
+					return;
+				}
+			}
+
+			WindowListado windowPopup = getPopup(filter);
+			windowPopup.setId(uuid);
+
+			windowPopup.addCloseListener(e -> {
+				try {
+
+					setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+
+				} catch (Exception ex) {
+					LogAndNotification.print(ex);
+				}
+			});
+
+			windowPopup.seleccionarBTN.addClickListener(e -> {
+				try {
+
+					if (windowPopup.itemsGRD.getSelectedRow() != null) {
+
+						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+
+						windowPopup.close();
+
+					}
+
+				} catch (Exception ex) {
+					LogAndNotification.print(ex);
+				}
+			});
+
+			getUI().addWindow(windowPopup);
+
+		} catch (Exception e) {
+			LogAndNotification.print(e);
+		}
+	}
+
+	///////////////////////////////////////////////////////////////////////
+
+	protected void setInitValue(Object item) {
+
+		if (item != null) {
+			valueTXT.setValue(item.toString());
+		} else {
+			valueTXT.setValue(null);
+		}
+	}
+
+	protected void setSelectedItem(Object item) {
+
+		if (item != null) {
+			valueTXT.setValue(item.toString());
+		} else {
+			valueTXT.setValue(null);
+		}
+
+		setSelectedItemBean(item);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void setSelectedItemBean(Object item) {
+
+		itemBI.getItemProperty(attName).setValue(item);
+
+		// if (item != null) {
+		// ((Moneda) itemBI.getBean()).setMonedaAFIP((MonedaAFIP) item);
+		// } else {
+		// ((Moneda) itemBI.getBean()).setMonedaAFIP(null);
+		// }
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected List find(String value) throws Exception {
+
+		if (value.contains("-")) {
+			value = value.split("-")[0].trim();
+		}
+
+		return findBean(value);
+	}
+
+	// --------------------------------------------------------
+
+	protected WindowListado getPopup(boolean filter) {
+
+		// MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
+		//
+		// if (filter) {
+		// filtro.setNombre(this.getValue());
+		// }
+		//
+		// return new WLMonedaAFIP(filtro);
+
+		return null;
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected List findBean(String value) throws Exception {
+
+		// MonedaAFIPDAO dao = new MonedaAFIPDAO();
+		//
+		// return dao.findByCodigoOrNombre(value);
+
+		return new ArrayList();
+	}
+	
+	
+
+	///////////////////////////////////////////////////////////////////////
 
 	protected String getValue() {
 

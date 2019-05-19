@@ -28,48 +28,50 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.monedas.MonedaAFIP;
-import com.massoftware.dao.monedas.MonedaAFIPFiltro;
-import com.massoftware.dao.monedas.MonedaAFIPDAO;
+import com.massoftware.model.monedas.Moneda;
+import com.massoftware.dao.monedas.MonedaFiltro;
+import com.massoftware.dao.monedas.MonedaDAO;
 
 @SuppressWarnings("serial")
-public class WLMonedaAFIP extends WindowListado {
+public class WLMoneda2 extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MonedaAFIPFiltro> filterBI;
-	protected BeanItemContainer<MonedaAFIP> itemsBIC;
+	BeanItem<MonedaFiltro> filterBI;
+	protected BeanItemContainer<Moneda> itemsBIC;
 	
-	private MonedaAFIPDAO dao;
+	private MonedaDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	private TextFieldBox codigoTXTB;
+	private TextFieldBox numeroFromTXTB;
+	private TextFieldBox numeroToTXTB;
 	private TextFieldBox nombreTXTB;
+	private TextFieldBox abreviaturaTXTB;
 
 
 	// -------------------------------------------------------------
 
-	public WLMonedaAFIP() {
+	public WLMoneda2() {
 		super();
-		dao = new MonedaAFIPDAO();
-		filterBI = new BeanItem<MonedaAFIPFiltro>(new MonedaAFIPFiltro());
+		dao = new MonedaDAO();
+		filterBI = new BeanItem<MonedaFiltro>(new MonedaFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLMonedaAFIP(MonedaAFIPFiltro filtro) {
+	public WLMoneda2(MonedaFiltro filtro) {
 		super();
-		dao = new MonedaAFIPDAO();
-		filterBI = new BeanItem<MonedaAFIPFiltro>(filtro);
+		dao = new MonedaDAO();
+		filterBI = new BeanItem<MonedaFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new MonedaAFIP().labelPlural());
+		confWinList(this, new Moneda().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -106,11 +108,19 @@ public class WLMonedaAFIP extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		codigoTXTB = new TextFieldBox(this, filterBI, "codigo", "igual a ..");
+		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
+
+		// ------------------------------------------------------------------
+
+		numeroToTXTB = new TextFieldBox(this, filterBI, "numeroTo");
 
 		// ------------------------------------------------------------------
 
 		nombreTXTB = new TextFieldBox(this, filterBI, "nombre", "contiene las palabras ..");
+
+		// ------------------------------------------------------------------
+
+		abreviaturaTXTB = new TextFieldBox(this, filterBI, "abreviatura", "contiene las palabras ..");
 				
 
 		return buildFiltrosLayout();
@@ -125,7 +135,7 @@ public class WLMonedaAFIP extends WindowListado {
 		
 		Button buscarBTN = buildButtonBuscar();		
 
-		filaFiltroHL.addComponents(codigoTXTB, nombreTXTB, buscarBTN);
+		filaFiltroHL.addComponents(numeroFromTXTB, numeroToTXTB, nombreTXTB, abreviaturaTXTB, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 		// ------------------------------------------------------------------
@@ -171,19 +181,29 @@ public class WLMonedaAFIP extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "codigo", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "abreviatura", "cotizacion", "cotizacionFecha", "controlActualizacion", "monedaAFIP" });
 
 		// ------------------------------------------------------------------
 		
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
-		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 72);
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 60);
+
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacion"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("cotizacionFecha"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("controlActualizacion"), true, 70);
+
+		UtilUI.confColumn(itemsGRD.getColumn("monedaAFIP"), true, 240);
 		
 		// ------------------------------------------------------------------
 
-		MonedaAFIP dto = new MonedaAFIP();
+		Moneda dto = new Moneda();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -196,6 +216,8 @@ public class WLMonedaAFIP extends WindowListado {
 		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
 		
 
+		itemsGRD.getColumn("controlActualizacion").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),FontAwesome.SQUARE_O.getHtml()));
+
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 		
@@ -203,6 +225,8 @@ public class WLMonedaAFIP extends WindowListado {
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 		
+
+		itemsGRD.getColumn("cotizacionFecha").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
 		// ------------------------------------------------------------------
 
@@ -217,7 +241,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<MonedaAFIP> getItemsBIC() {
+	protected BeanItemContainer<Moneda> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -225,7 +249,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<MonedaAFIP>(MonedaAFIP.class, new ArrayList<MonedaAFIP>());
+			itemsBIC = new BeanItemContainer<Moneda>(Moneda.class, new ArrayList<Moneda>());
 		}
 
 		return itemsBIC;
@@ -241,21 +265,29 @@ public class WLMonedaAFIP extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<MonedaAFIP> items = new MonedaAFIP().find(limit, offset, buildOrderBy(),
+			// List<Moneda> items = new Moneda().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-			dao = new MonedaAFIPDAO();
+			//MonedaDAO dao = new MonedaDAO();
+			dao = new MonedaDAO();
 
 			filterBI.getBean().setLimit((long)limit);
 			filterBI.getBean().setOffset((long)offset);
-			// filterBI.getBean().setOrderBy("codigo");
+			filterBI.getBean().setOrderBy(itemsGRD.getSortOrder().get(0).getPropertyId().toString());
+			filterBI.getBean().setOrderByDesc(itemsGRD.getSortOrder().get(0).getDirection().toString().equals("ASCENDING") == false);
+			
+			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {								
+				System.out.println(sortOrder.getPropertyId().toString() + " " + sortOrder.getDirection().toString());				
+//				orderBy.put(sortOrder.getPropertyId().toString(), sortOrder.getDirection().toString().equals("ASCENDING"));
+			}
+			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
-			List<MonedaAFIP> items = dao.find(filterBI.getBean());
+			List<Moneda> items = dao.find(filterBI.getBean());
 
 			// -----------------------------------------------------------------
 			// Agrega los resultados a la grilla
-			for (MonedaAFIP item : items) {
+			for (Moneda item : items) {
 				getItemsBIC().addBean(item);
 			}
 
@@ -271,14 +303,14 @@ public class WLMonedaAFIP extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-		dao = new MonedaAFIPDAO();
+		//MonedaDAO dao = new MonedaDAO();
+		dao = new MonedaDAO();
 		dao.deleteById(((EntityId) item).getId());
 
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WFMonedaAFIP(mode, id);
+		return new WFMoneda(mode, id);
 	}
 	
 	public void setFocusGrid() {
@@ -294,4 +326,4 @@ public class WLMonedaAFIP extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-19T20:07:29.932-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-19T20:05:30.712-03:00[America/Buenos_Aires]

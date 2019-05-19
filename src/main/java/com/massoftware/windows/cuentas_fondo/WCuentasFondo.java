@@ -13,7 +13,7 @@ import com.massoftware.model.EntityId;
 import com.massoftware.windows.EliminarDialog;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.OptionGroupEntityBoolean;
-import com.massoftware.windows.SelectorBox;
+import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.TextFieldBox;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
@@ -55,7 +55,7 @@ public class WCuentasFondo extends WindowListado {
 	private OptionGroupEntityBoolean activoOG;
 	private TextFieldBox numeroIB;
 	private TextFieldBox nombreTB;
-	private SelectorBox bancoSB;
+	private SelectorBoxOld bancoSB;
 	private Tree tree;
 
 	private String itemTodas = "Todas las cuentas";

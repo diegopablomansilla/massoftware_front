@@ -68,6 +68,10 @@ public class UtilPopulate {
 
 		return value;
 
+	}	
+	
+	public static Long getLongRandom(Long min, Long max) {
+		return getLongRandom(min, max, true);
 	}
 
 	public static Long getLongRandom(Long min, Long max, boolean required) {

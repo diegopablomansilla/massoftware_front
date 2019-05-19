@@ -7,15 +7,16 @@ public class MonedaFiltro extends Entity {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
+	private int _levelDefault = 1;
 
 	@FieldConfAnont(label = "Unlimited")
 	private Boolean unlimited = false;
 
 	@FieldConfAnont(label = "Limit")
-	private Integer limit;
+	private Long limit;
 
 	@FieldConfAnont(label = "Offset")
-	private Integer offset;
+	private Long offset;
 
 	@FieldConfAnont(label = "Order by att")
 	private String orderBy;
@@ -24,7 +25,7 @@ public class MonedaFiltro extends Entity {
 	private Boolean orderByDesc = false;
 
 	@FieldConfAnont(label = "Level")
-	private Integer level = 0;
+	private Integer level = _levelDefault;
 
 	// Nº moneda (desde)
 	@FieldConfAnont(label = "Nº moneda (desde)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
@@ -57,23 +58,23 @@ public class MonedaFiltro extends Entity {
 	}
 
 	// GET Limit
-	public Integer getLimit() {
+	public Long getLimit() {
 		return this.limit;
 	}
 
 	// SET Limit
-	public void setLimit(Integer limit){
+	public void setLimit(Long limit){
 		limit = (limit == null || limit < 1) ? 100 : limit;
 		this.limit = limit;
 	}
 
 	// GET Offset
-	public Integer getOffset() {
+	public Long getOffset() {
 		return this.offset;
 	}
 
 	// SET Offset
-	public void setOffset(Integer offset){
+	public void setOffset(Long offset){
 		offset = (offset == null || offset < 0) ? 0 : offset;
 		this.offset = offset;
 	}
@@ -106,8 +107,8 @@ public class MonedaFiltro extends Entity {
 
 	// SET Level
 	public void setLevel(Integer level){
-		level = (level == null || level < 0) ? 0 : level;
-		level = (level != null && level > 3) ? 3 : level;
+		level = (level == null || level < 0) ? _levelDefault : level;
+		level = (level != null && level > 3) ? _levelDefault : level;
 		this.level = level;
 	}
 

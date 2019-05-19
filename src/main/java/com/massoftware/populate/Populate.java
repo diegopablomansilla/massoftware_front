@@ -11,7 +11,7 @@ import com.massoftware.dao.monedas.MonedaDAO;
 
 public class Populate {
 
-	static int maxRows = 200;
+	static int maxRows = 10000;
 
 	public static void main(String[] args) {
 		try {
@@ -33,7 +33,7 @@ public class Populate {
 
 				MonedaAFIP obj = new MonedaAFIP();
 
-				obj.setCodigo(UtilPopulate.getStringRandom(null, 3, false));
+				obj.setCodigo(UtilPopulate.getStringRandom(null, 3, true));
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
@@ -69,11 +69,14 @@ public class Populate {
 
 				obj.setControlActualizacion(new Random().nextBoolean());
 
+				MonedaAFIPDAO daoMonedaAFIP = new MonedaAFIPDAO();
 				MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
-				filtro.setUnlimited(true);
-				List<MonedaAFIP> listado = new MonedaAFIPDAO().find(filtro);
-				int index = UtilPopulate.getIntegerRandom(0, listado.size()-1);
-				obj.setMonedaAFIP(listado.get(index));
+				Long count = daoMonedaAFIP.count();
+				long index = UtilPopulate.getLongRandom(0L, count-1);
+				filtro.setOffset(index);
+				filtro.setLimit(index);
+				List<MonedaAFIP> listado = daoMonedaAFIP.find(filtro);
+				obj.setMonedaAFIP(listado.get(0));
 
 				dao.insert(obj);
 

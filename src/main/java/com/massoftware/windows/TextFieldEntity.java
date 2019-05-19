@@ -13,7 +13,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class TextFieldEntity extends TextField {
-
+	
 	/**
 	 * 
 	 */
@@ -64,11 +64,10 @@ public class TextFieldEntity extends TextField {
 		}
 		if (unique) {
 			addValidator(new UniqueValidator(dtoBI.getItemProperty(attName).getType(), mode, attName, dtoBI) {
-				
-				
-				protected boolean ifExists(Object arg) throws Exception {	
+								
+				protected boolean ifExistsObject(Object arg) throws Exception {	
 
-					return checkUnique(arg);
+					return ifExists(arg);
 				}
 				
 			});
@@ -261,7 +260,7 @@ public class TextFieldEntity extends TextField {
 
 	}
 	
-	protected boolean checkUnique(Object arg) throws Exception {
+	protected boolean ifExists(Object arg) throws Exception {
 		return true;
 	}
 

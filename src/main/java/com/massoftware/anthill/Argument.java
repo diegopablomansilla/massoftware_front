@@ -87,9 +87,9 @@ public class Argument extends Att {
 		this.searchOption = searchOption;
 	}
 
-	public Argument(Att att, String searchOption) {
+	public Argument(Att att, String searchOption) throws CloneNotSupportedException {
 		super();
-		this.att = att;
+		this.att = (Att) att.clone();
 		this.searchOption = searchOption;
 	}
 

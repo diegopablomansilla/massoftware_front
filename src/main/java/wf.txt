@@ -2,6 +2,7 @@ package com.massoftware.x.NOMBRE_PAQUETE;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -29,7 +30,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 	// -------------------------------------------------------------
 
 	public WFNOMBRE_CLASE(String mode, String id) {
-		super(mode, id);
+		super(mode, id);				
 		dao = new NOMBRE_CLASEDAO();
 	}
 
@@ -41,7 +42,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		// =======================================================
 		// CUERPO
 
-		VerticalLayout cuerpo = buildCuerpo();
+		Component cuerpo = buildCuerpo();
 
 		// =======================================================
 		// BOTONERAS
@@ -60,14 +61,24 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		this.setContent(content);
 	}
 
-	private VerticalLayout buildCuerpo() throws Exception {
+	private Component buildCuerpo() throws Exception {
 
 		INSTANCE
+		
+		// ---------------------------------------------------------------------------------------------------------
 
-		// ------------------------------------------------------------------
+		return buildCuerpoLayout();
+
+		// ---------------------------------------------------------------------------------------------------------
+	}
+	
+	protected Component buildCuerpoLayout() throws Exception {		
 
 		VerticalLayout generalVL = UtilUI.buildVL();
-		generalVL.addComponents(ADD);
+
+		// ------------------------------------------------------------------		
+		
+		ADD
 
 		// ---------------------------------------------------------------------------------------------------------
 
@@ -86,6 +97,13 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		// base a su id
 
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
+		
+		//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+		if(dao == null){
+			dao = new NOMBRE_CLASEDAO();
+		}	
+		
+		NEXT
 	}
 
 	protected void setBean(EntityId obj) throws Exception {
@@ -153,8 +171,11 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB
-			NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-			NOMBRE_CLASE item = dao.findById(id, 0);
+			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
+			if(dao == null){
+				dao = new NOMBRE_CLASEDAO();
+			}			
+			NOMBRE_CLASE item = dao.findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

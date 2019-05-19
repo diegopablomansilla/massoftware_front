@@ -14,7 +14,7 @@ public class MonedaAFIP extends EntityId {
 	private String id;
 
 	// Código
-	@FieldConfAnont(label = "Código", labelError = "", unique = true, readOnly = false, required = false, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
+	@FieldConfAnont(label = "Código", labelError = "", unique = true, readOnly = false, required = true, columns = 6.0f, maxLength = 3, minValue = "", maxValue = "", mask = "")
 	private String codigo;
 
 	// Nombre
@@ -77,6 +77,10 @@ public class MonedaAFIP extends EntityId {
 		this.setCodigo(codigoArg1);
 		this.setNombre(nombreArg2);
 
+	}
+
+	public String toString(){
+		return this.getCodigo() + " - " + this.getNombre();
 	}
 
 } // END CLASS ----------------------------------------------------------------------------------------------------------
