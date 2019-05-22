@@ -45,8 +45,15 @@ public class WFMoneda extends WindowForm {
 	// -------------------------------------------------------------
 
 	public WFMoneda(String mode, String id) {
-		super(mode, id);				
-		dao = new MonedaDAO();
+		super(mode, id);					
+	}
+
+	protected MonedaDAO getDAO() {
+		if(dao == null){
+			dao = new MonedaDAO();
+		}
+		
+		return dao;
 	}
 
 	protected void buildContent() throws Exception {
@@ -84,17 +91,17 @@ public class WFMoneda extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsNumero((Integer)arg);
+				return getDAO().isExistsNumero((Integer)arg);
 			}
 		};
+
+		numeroTXT.focus();
 
 		// ------------------------------------------------------------------
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsNombre((String)arg);
+				return getDAO().isExistsNombre((String)arg);
 			}
 		};
 
@@ -102,8 +109,7 @@ public class WFMoneda extends WindowForm {
 
 		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsAbreviatura((String)arg);
+				return getDAO().isExistsAbreviatura((String)arg);
 			}
 		};
 
@@ -220,15 +226,10 @@ public class WFMoneda extends WindowForm {
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
-		
-		//MonedaDAO dao = new MonedaDAO();
-		if(dao == null){
-			dao = new MonedaDAO();
-		}	
+		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Moneda) item).setNumero(dao.nextValueNumero());
+		((Moneda) item).setNumero(getDAO().nextValueNumero());
 
 	}
 
@@ -256,12 +257,11 @@ public class WFMoneda extends WindowForm {
 	protected Object insert() throws Exception {
 
 		try {
-
-			//MonedaDAO dao = new MonedaDAO();
-			dao.insert(getItemBIC().getBean());
+			
+			getDAO().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -276,11 +276,11 @@ public class WFMoneda extends WindowForm {
 
 		try {
 
-			//MonedaDAO dao = new MonedaDAO();
-			dao.update(getItemBIC().getBean());
+
+			getDAO().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -296,12 +296,8 @@ public class WFMoneda extends WindowForm {
 		try {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
-			//item.loadById(id); // consulta a DB
-			//MonedaDAO dao = new MonedaDAO();
-			if(dao == null){
-				dao = new MonedaDAO();
-			}			
-			Moneda item = dao.findById(id);
+			//item.loadById(id); // consulta a DB						
+			Moneda item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

@@ -28,6 +28,8 @@ public class UtilJavaList {
 		b.close();
 
 		source = source.replaceAll("NOMBRE_PAQUETE", clazzX.getNamePackage());
+		source = source.replaceAll("@REDERBOOLEAN@", buildWColumnsPropertiesLogicoImport(clazzX));
+		source = source.replaceAll("@REDERDATE@", buildWColumnsPropertiesDateImport(clazzX));
 		source = source.replaceAll("NOMBRE_CLASE", clazzX.getName());
 		source = source.replaceAll("CONTROLES", buildWLControls(clazzX));
 		source = source.replaceAll("INSTANCE", buildWLControlsInstance(clazzX));
@@ -38,6 +40,9 @@ public class UtilJavaList {
 		source = source.replaceAll("FECHA", buildWColumnsPropertiesDate(clazzX));
 		source = source.replaceAll("TIEMPO", buildWColumnsPropertiesTiempo(clazzX));
 		source = source.replaceAll("@HH:SS@", ZonedDateTime.now().toString());
+		source = source.replaceAll("@ORDERDEFAULT@", clazzX.getOrderDefault().getName());
+		source = source.replaceAll("@ORDERDDIRECTIONEFAULT@",
+				clazzX.getOrderDefault().getDesc() == true ? "DESCENDING" : "ASCENDING");
 
 		java += source;
 
@@ -210,17 +215,23 @@ public class UtilJavaList {
 			String w = "-1";
 
 			if (att.getColumns() != null) {
+				
 				w = att.getColumns().intValue() * 12 + "";
-				if(att.isTimestamp()) {
-					w = "120";					
-				} else if(att.isBoolean()) {
-					w = "70";					
-				} else if(att.isInteger()) {
-					w = "100";					
-				} else if(att.isBigDecimal()) {
-					w = "120";					
+				
+				if (att.isTimestamp()) {
+					w = "120";
+				} else if (att.isBoolean()) {
+					w = "70";
+				} else if (att.isInteger()) {
+					w = "100";
+				} else if (att.isBigDecimal()) {
+					w = "120";
 				}
 				
+				if(i == clazzX.getAtts().size() - 1) {
+					w = "-1";
+				}
+
 			}
 
 			java += sc + "UtilUI.confColumn(itemsGRD.getColumn(\"" + att.getName() + "\"), true, " + w + ");";
@@ -228,6 +239,23 @@ public class UtilJavaList {
 		}
 
 		return java;
+	}
+
+	private static String buildWColumnsPropertiesLogicoImport(Clazz clazzX) {
+
+		for (int i = 0; i < clazzX.getAtts().size(); i++) {
+
+			Att att = clazzX.getAtts().get(i);
+
+			if (att.isBoolean()) {
+
+				return "\nimport com.vaadin.data.util.converter.StringToBooleanConverter;\nimport com.vaadin.server.FontAwesome;\nimport com.vaadin.ui.renderers.HtmlRenderer;";
+
+			}
+
+		}
+
+		return "";
 	}
 
 	private static String buildWColumnsPropertiesLogico(Clazz clazzX) {
@@ -248,6 +276,23 @@ public class UtilJavaList {
 		}
 
 		return java;
+	}
+	
+	private static String buildWColumnsPropertiesDateImport(Clazz clazzX) {
+
+		for (int i = 0; i < clazzX.getAtts().size(); i++) {
+
+			Att att = clazzX.getAtts().get(i);
+
+			if (att.isDate() || att.isTimestamp()) {
+
+				return "\nimport com.vaadin.ui.renderers.DateRenderer;\nimport java.text.SimpleDateFormat;";
+
+			}
+
+		}
+
+		return "";
 	}
 
 	private static String buildWColumnsPropertiesDate(Clazz clazzX) {

@@ -35,8 +35,15 @@ public class WFMonedaAFIP extends WindowForm {
 	// -------------------------------------------------------------
 
 	public WFMonedaAFIP(String mode, String id) {
-		super(mode, id);				
-		dao = new MonedaAFIPDAO();
+		super(mode, id);					
+	}
+
+	protected MonedaAFIPDAO getDAO() {
+		if(dao == null){
+			dao = new MonedaAFIPDAO();
+		}
+		
+		return dao;
 	}
 
 	protected void buildContent() throws Exception {
@@ -74,17 +81,17 @@ public class WFMonedaAFIP extends WindowForm {
 
 		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsCodigo((String)arg);
+				return getDAO().isExistsCodigo((String)arg);
 			}
 		};
+
+		codigoTXT.focus();
 
 		// ------------------------------------------------------------------
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-				return dao.isExistsNombre((String)arg);
+				return getDAO().isExistsNombre((String)arg);
 			}
 		};
 
@@ -126,12 +133,7 @@ public class WFMonedaAFIP extends WindowForm {
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
-		
-		//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-		if(dao == null){
-			dao = new MonedaAFIPDAO();
-		}	
+		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
 
@@ -161,12 +163,11 @@ public class WFMonedaAFIP extends WindowForm {
 	protected Object insert() throws Exception {
 
 		try {
-
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-			dao.insert(getItemBIC().getBean());
+			
+			getDAO().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -181,11 +182,11 @@ public class WFMonedaAFIP extends WindowForm {
 
 		try {
 
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-			dao.update(getItemBIC().getBean());
+
+			getDAO().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -201,12 +202,8 @@ public class WFMonedaAFIP extends WindowForm {
 		try {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
-			//item.loadById(id); // consulta a DB
-			//MonedaAFIPDAO dao = new MonedaAFIPDAO();
-			if(dao == null){
-				dao = new MonedaAFIPDAO();
-			}			
-			MonedaAFIP item = dao.findById(id);
+			//item.loadById(id); // consulta a DB						
+			MonedaAFIP item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

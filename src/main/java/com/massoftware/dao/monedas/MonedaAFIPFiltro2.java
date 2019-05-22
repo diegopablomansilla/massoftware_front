@@ -3,11 +3,11 @@ package com.massoftware.dao.monedas;
 import com.massoftware.backend.annotation.FieldConfAnont;
 import com.massoftware.dao.AbstractFilter;
 
-public class MonedaAFIPFiltro extends AbstractFilter {
+public class MonedaAFIPFiltro2 extends AbstractFilter {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	public MonedaAFIPFiltro() {
+	public MonedaAFIPFiltro2() {
 		_levelDefault = 0;
 	}
 
@@ -21,14 +21,13 @@ public class MonedaAFIPFiltro extends AbstractFilter {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-
 	// GET Código
 	public String getCodigo() {
 		return this.codigo;
 	}
 
 	// SET Código
-	public void setCodigo(String codigo ){
+	public void setCodigo(String codigo) {
 		this.codigo = (codigo != null && codigo.trim().length() == 0) ? null : codigo;
 	}
 
@@ -38,12 +37,13 @@ public class MonedaAFIPFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre) {
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
-		
+
+	@Override
 	public boolean equals(Object obj) {
-		
+
 		if (super.equals(obj) == false) {
 			return false;
 		}
@@ -51,51 +51,49 @@ public class MonedaAFIPFiltro extends AbstractFilter {
 		if (obj == this) {
 			return true;
 		}
-		
-		MonedaAFIPFiltro other = (MonedaAFIPFiltro) obj;
-		
-		
+
+		MonedaAFIPFiltro2 other = (MonedaAFIPFiltro2) obj;
+
 		// -------------------------------------------------------------------
-		
+
 		if (other.getCodigo() == null && this.getCodigo() != null) {
 			return false;
 		}
-		
+
 		if (other.getCodigo() != null && this.getCodigo() == null) {
 			return false;
 		}
 		
 		if (other.getCodigo() != null && this.getCodigo() != null) {
-		
+			
 			if (other.getCodigo().equals(this.getCodigo()) == false) {
 				return false;
 			}
-		
-		}
-		
+			
+		}					
+
 		// -------------------------------------------------------------------
-		
+
 		if (other.getNombre() == null && this.getNombre() != null) {
 			return false;
 		}
-		
+
 		if (other.getNombre() != null && this.getNombre() == null) {
 			return false;
 		}
-		
+
 		if (other.getNombre() != null && this.getNombre() != null) {
-		
+			
 			if (other.getNombre().equals(this.getNombre()) == false) {
 				return false;
 			}
-		
+			
 		}
-		
+
 		// -------------------------------------------------------------------
-		
+
 		return true;
-		
-		// -------------------------------------------------------------------
 	}
 
-} // END CLASS ----------------------------------------------------------------------------------------------------------
+} // END CLASS
+	// ----------------------------------------------------------------------------------------------------------

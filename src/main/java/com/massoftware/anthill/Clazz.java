@@ -17,7 +17,7 @@ public class Clazz {
 	private List<Order> orderAtts = new ArrayList<Order>();
 	private List<Uniques> uniques = new ArrayList<Uniques>();
 	private List<Argument> argsSBX = new ArrayList<Argument>();
-	private String toString;
+	private Order orderDefault;	
 
 	public String getNamePackage() {
 		return namePackage;
@@ -115,7 +115,7 @@ public class Clazz {
 	public void setArgsSBX(List<Argument> argsSBX) {
 		this.argsSBX = argsSBX;
 	}
-	
+
 	public boolean addArgumentSBX(Argument arg) throws CloneNotSupportedException {
 		return argsSBX.add(arg);
 	}
@@ -126,6 +126,12 @@ public class Clazz {
 
 	public void setOrderAtts(List<Order> orderAtts) {
 		this.orderAtts = orderAtts;
+	}
+
+	public void addOrderAllAtts() {
+		for (Att att : this.getAtts()) {
+			addOrder(att);
+		}
 	}
 
 	public boolean addOrder(Att att) {
@@ -156,12 +162,15 @@ public class Clazz {
 		return uniques.add(new Uniques(args));
 	}
 
-	public String getToString() {
-		return toString;
+	public Order getOrderDefault() {
+		if(orderDefault == null) {
+			orderDefault = this.getOrderAtts().get(0);
+		}
+		return orderDefault;
 	}
 
-	public void setToString(String toString) {
-		this.toString = toString;
+	public void setOrderDefault(Order orderDefault) {
+		this.orderDefault = orderDefault;
 	}
 
 	////////////////////////////////////////////

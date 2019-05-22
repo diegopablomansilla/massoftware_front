@@ -3,8 +3,8 @@ package com.massoftware.anthill;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilJavaPOJO {		
-	
+public class UtilJavaPOJO {
+
 	public static int getDefaultMaxLevel() {
 		return 3;
 	}
@@ -308,11 +308,13 @@ public class UtilJavaPOJO {
 		// java += "\n\n\t//
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
 		//
-		 java += "\n\n\tpublic String toString(){\n" + clazzX.getToString() + "\n\t}";
+		// java += "\n\n\tpublic String toString(){\n" + clazzX.getToString() + "\n\t}";
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
 		//
 		// java += "\n\n\t//
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		java += toStringMethod(clazzX);
 
 		java += "\n\n} // END CLASS ----------------------------------------------------------------------------------------------------------";
 
@@ -616,6 +618,77 @@ public class UtilJavaPOJO {
 
 		return levelCount;
 
+	}
+
+	////////////////////////////////////////////
+
+	private static String toStringMethod(Clazz clazz) {
+		String java = "";
+
+		String n = "\n";
+		String t = "\t";
+
+		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		java += n + t + "public String toString() {";
+
+		if (clazz.getAtts().size() > 1) {
+
+			String n0 = toCamelStart(clazz.getAtts().get(0).getName()) + "()";
+			String n1 = toCamelStart(clazz.getAtts().get(1).getName()) + "()";
+			String n00 = n0;
+			String n11 = n1;
+
+			java += n + t + t + "if(this.get" + n0 + " != null && this.get" + n1 + " != null){";
+
+			java += n + t + t + t + "return this.get" + n00 + " + \" - \" +  this.get" + n11 + ";";
+
+			if (clazz.getAtts().get(0).isString() == false) {
+				n00 += ".toString()";
+			}
+			if (clazz.getAtts().get(1).isString() == false) {
+				n11 += ".toString()";
+			}
+
+			java += n + t + t + "} else if(this.get" + n0 + " != null && this.get" + n1 + " == null){";
+
+			java += n + t + t + t + "return this.get" + n00 + ";";
+
+			java += n + t + t + "} else if(this.get" + n0 + " == null && this.get" + n1 + " != null){";
+
+			java += n + t + t + t + "return this.get" + n11 + ";";
+
+			java += n + t + t + "} else {";
+
+			java += n + t + t + t + "return super.toString();";
+
+			java += n + t + t + "}";
+
+		} else if (clazz.getAtts().size() > 0) {
+
+			String n0 = toCamelStart(clazz.getAtts().get(0).getName()) + "()";
+			String n00 = n0;
+
+			java += n + t + t + "if(this.get" + n0 + " != null){";
+
+			java += n + t + t + t + "return this.get" + n00 + ";";
+
+			if (clazz.getAtts().get(0).isString() == false) {
+				n00 += ".toString()";
+			}
+
+			java += n + t + t + "} else {";
+
+			java += n + t + t + t + "return super.toString();";
+
+			java += n + t + t + "}";
+
+		} else {
+			java += n + t + t + t + "return super.toString();";
+		}
+		java += n + t + "}";
+
+		return java;
 	}
 
 }

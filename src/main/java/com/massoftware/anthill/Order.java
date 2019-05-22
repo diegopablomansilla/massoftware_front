@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Order extends Att {
 
 	private Att att;
-//	private Boolean desc = false;
+	private Boolean desc = false;
 
 	public Order(Att att) {
 		super();
@@ -194,12 +194,12 @@ public class Order extends Att {
 		return att.getNameSQL();
 	}
 
-//	public Boolean getDesc() {
-//		return desc;
-//	}
-//
-//	public void setDesc(Boolean desc) {
-//		this.desc = desc;
-//	}
+	public Boolean getDesc() {
+		return desc;
+	}
+
+	public void setDesc(Boolean desc) {
+		this.desc = desc;
+	}
 
 }

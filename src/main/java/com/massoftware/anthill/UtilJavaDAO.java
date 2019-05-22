@@ -632,6 +632,10 @@ public class UtilJavaDAO {
 						+ att.getName() + ") no nulo/vacio.\");";
 
 				java += "\n\n\t\t}";
+				
+				if(att.isString()) {
+					java += "\n\n\t\targ = arg.trim();";	
+				} 				
 
 				java += "\n";
 
@@ -646,11 +650,19 @@ public class UtilJavaDAO {
 
 				java += "\n\n\t\tif(table.length == 1){";
 
-				java += "\n\n\t\t\tObject[] row = table[0];";
+				java += "\n\n\t\t\tObject[] row = table[0];";							
+
+				java += "\n\n\t\t\tif(row.length == 1){";
 
 				// java += "\n\n\t\t\treturn (Long) row[0] > 0;";
 
-				java += "\n\n\t\t\treturn (Boolean) row[0];";
+				java += "\n\n\t\t\t\treturn (Boolean) row[0];";
+				
+				java += "\n\n\t\t\t} else { ";
+
+				java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";				
+
+				java += "\n\n\t\t\t}";
 
 				// java += "\n\n\t\t} else if(table.length > 1 ) {";
 				java += "\n\n\t\t} else {";
@@ -786,9 +798,9 @@ public class UtilJavaDAO {
 
 		java += "\n";
 
-		java += "\n\t\tlevel = (level == null || level < 0) ? levelDefault : level;";
+		java += "\n\t\tlevel = (level == null || level < 0 || level > 3) ? levelDefault : level;";
 		// java += "\n\t\tlevel = (level == null || level < 0) ? 4 : level;";
-		java += "\n\t\tlevel = (level != null && level > 3) ? levelDefault : level;";
+//		java += "\n\t\tlevel = (level != null && level > 3) ? levelDefault : level;";
 
 		java += "\n";
 
@@ -839,7 +851,22 @@ public class UtilJavaDAO {
 
 		java += "\n\t\tString levelString = (filtro.getLevel() > 0) ? \"_\" + filtro.getLevel() : \"\";";
 
-		java += "\n\t\tString orderByString = (filtro.getOrderBy() == null) ? \"\" : \"_\" + filtro.getOrderBy();";
+//		java += "\n\t\tString orderByString = (filtro.getOrderBy() == null) ? \"\" : \"_\" + filtro.getOrderBy();";		
+		java += "\n\t\tString orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals(\"id\")) ? \"\" : \"_\" + filtro.getOrderBy();";
+		
+		java += "\n\t\tString orderByASCString = \"\";";
+		java += "\n\t\tif(orderByString != null && orderByString.trim().length() > 0) {";
+		java += "\n";
+		java += "\n\t\t\torderByString = \"" + clazzX.getName() + "\" + orderByString;";
+		java += "\n\t\t\torderByASCString = \"_asc_\";";
+		java += "\n\t\t\tif(filtro.getOrderByDesc() == true) {";
+		java += "\n\t\t\t\torderByASCString = \"_des_\";";
+		java += "\n\t\t\t}";
+		java += "\n\t\t\torderByString = orderByASCString + orderByString;";		
+		java += "\n\t\t}";
+		
+//		java += "\n\t\t";
+		
 
 		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?, \";";
 

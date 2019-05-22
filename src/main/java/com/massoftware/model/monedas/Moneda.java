@@ -184,8 +184,18 @@ public class Moneda extends EntityId {
 
 	}
 
-	public String toString(){
-		return this.getNumero() + " - " + this.getNombre();
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	public String toString() {
+		if(this.getNumero() != null && this.getNombre() != null){
+			return this.getNumero() + " - " +  this.getNombre();
+		} else if(this.getNumero() != null && this.getNombre() == null){
+			return this.getNumero().toString();
+		} else if(this.getNumero() == null && this.getNombre() != null){
+			return this.getNombre();
+		} else {
+			return super.toString();
+		}
 	}
 
 } // END CLASS ----------------------------------------------------------------------------------------------------------

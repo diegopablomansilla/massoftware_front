@@ -55,6 +55,8 @@ public class UtilJavaPopulate {
 
 				DataTypeBigDecimal td = (DataTypeBigDecimal) att.getDataType();
 
+				td.getPrecision();
+
 				String min = null;
 				String max = null;
 
@@ -71,7 +73,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "obj.set" + toCamelStart(att.getName()) + "(UtilPopulate.getBigDecimalRandom(" + min + ", "
-						+ max + ", " + att.isRequired() + "));";
+						+ max + ", " + att.isRequired() + ", " + td.getPrecision() + ", " + td.getScale() + "));";
 
 			} else if (att.isDouble()) {
 
@@ -212,7 +214,8 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += dt.getClazz().getName() + "DAO dao" + dt.getClazz().getName() + " = new " + dt.getClazz().getName() + "DAO();";
+				java += dt.getClazz().getName() + "DAO dao" + dt.getClazz().getName() + " = new "
+						+ dt.getClazz().getName() + "DAO();";
 
 				java += "\n";
 				java += "\t";
@@ -221,34 +224,34 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += dt.getClazz().getName() + "Filtro filtro = new " + dt.getClazz().getName() + "Filtro();";
 
-//				java += "\n";
-//				java += "\t";
-//				java += "\t";
-//				java += "\t";
-//				java += "\t";
-//				java += "filtro.setUnlimited(true);";
-				
+				// java += "\n";
+				// java += "\t";
+				// java += "\t";
+				// java += "\t";
+				// java += "\t";
+				// java += "filtro.setUnlimited(true);";
+
 				java += "\n";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "Long count = dao" + dt.getClazz().getName() + ".count();";
-				
+
 				java += "\n";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "long index = UtilPopulate.getLongRandom(0L, count-1);";
-				
+
 				java += "\n";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "filtro.setOffset(index);";
-				
+
 				java += "\n";
 				java += "\t";
 				java += "\t";
@@ -256,29 +259,29 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "filtro.setLimit(index);";
 
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "List<" + dt.getClazz().getName() + "> listado = dao" + dt.getClazz().getName()
+						+ ".find(filtro);";
+
+				// java += "\n";
+				// java += "\t";
+				// java += "\t";
+				// java += "\t";
+				// java += "\t";
+				// // java += "int index = new Random().nextInt(((listado.size()-1) - 0) + 1) +
+				// // (listado.size()-1);";
+				// java += "int index = UtilPopulate.getIntegerRandom(0, listado.size()-1);";
 
 				java += "\n";
 				java += "\t";
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += "List<" + dt.getClazz().getName() + "> listado = dao" + dt.getClazz().getName() + ".find(filtro);";
-
-//				java += "\n";
-//				java += "\t";
-//				java += "\t";
-//				java += "\t";
-//				java += "\t";
-//				// java += "int index = new Random().nextInt(((listado.size()-1) - 0) + 1) +
-//				// (listado.size()-1);";
-//				java += "int index = UtilPopulate.getIntegerRandom(0, listado.size()-1);";
-
-				java += "\n";
-				java += "\t";
-				java += "\t";
-				java += "\t";
-				java += "\t";
-//				java += "obj.set" + toCamelStart(att.getName()) + "(listado.get(index));";
+				// java += "obj.set" + toCamelStart(att.getName()) + "(listado.get(index));";
 				java += "obj.set" + toCamelStart(att.getName()) + "(listado.get(0));";
 
 			}

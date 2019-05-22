@@ -10,8 +10,8 @@ class DataTypeBigDecimal extends DataType {
 	private BigDecimal defValueUpdate;
 	private Boolean nextValueProposed = false;
 
-	private Integer precision;
-	private Integer scale;
+	private Integer precision = 20;
+	private Integer scale = 7;
 
 	public DataTypeBigDecimal() {
 		super(BigDecimal.class.getCanonicalName());

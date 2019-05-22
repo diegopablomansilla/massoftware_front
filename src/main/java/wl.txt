@@ -1,13 +1,16 @@
 package com.massoftware.x.NOMBRE_PAQUETE;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.renderers.DateRenderer;
-import com.vaadin.ui.renderers.HtmlRenderer;
+//import com.vaadin.data.util.converter.StringToBooleanConverter;
+//import com.vaadin.server.FontAwesome;
+//import com.vaadin.ui.renderers.DateRenderer;
+//import com.vaadin.ui.renderers.HtmlRenderer;
+
+@REDERBOOLEAN@
+@REDERDATE@
 
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
@@ -48,19 +51,25 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	// -------------------------------------------------------------
 
 	public WLNOMBRE_CLASE() {
-		super();
-		dao = new NOMBRE_CLASEDAO();
+		super();		
 		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(new NOMBRE_CLASEFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
 	public WLNOMBRE_CLASE(NOMBRE_CLASEFiltro filtro) {
-		super();
-		dao = new NOMBRE_CLASEDAO();
+		super();		
 		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(filtro);
 		init(true);
 		setFocusGrid();
+	}
+	
+	protected NOMBRE_CLASEDAO getDAO() {
+		if(dao == null){
+			dao = new NOMBRE_CLASEDAO();
+		}
+		
+		return dao;
 	}
 
 	protected void buildContent() throws Exception {
@@ -144,6 +153,12 @@ public class WLNOMBRE_CLASE extends WindowListado {
 				LogAndNotification.print(ex);
 			}
 		});
+		
+		// ------------------------------------------------------------------
+		
+		itemsGRD.addSortListener(e -> {
+			sort(e);
+		});
 
 		// ------------------------------------------------------------------
 
@@ -191,7 +206,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("id", SortDirection.ASCENDING));
+		order.add(new SortOrder("@ORDERDEFAULT@", SortDirection.@ORDERDDIRECTIONEFAULT@));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -214,7 +229,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		return itemsBIC;
 	}
 
-	protected void addBeansToItemsBIC() {
+	protected void addBeansToItemsBIC(boolean removeAllItems) {
 
 		// -----------------------------------------------------------------
 		// Consulta a la base de datos y agrega los beans conseguidos al contenedor de
@@ -227,20 +242,27 @@ public class WLNOMBRE_CLASE extends WindowListado {
 			// List<NOMBRE_CLASE> items = new NOMBRE_CLASE().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
-			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-			dao = new NOMBRE_CLASEDAO();
-
 			filterBI.getBean().setLimit((long)limit);
 			filterBI.getBean().setOffset((long)offset);
-			// filterBI.getBean().setOrderBy("codigo");
-
-			List<NOMBRE_CLASE> items = dao.find(filterBI.getBean());
-
-			// -----------------------------------------------------------------
-			// Agrega los resultados a la grilla
-			for (NOMBRE_CLASE item : items) {
-				getItemsBIC().addBean(item);
-			}
+			filterBI.getBean().setOrderBy(itemsGRD.getSortOrder().get(0).getPropertyId().toString());
+			filterBI.getBean().setOrderByDesc(itemsGRD.getSortOrder().get(0).getDirection().toString().equals("ASCENDING") == false);
+			
+			if (filterBI.getBean().equals(lastFilter) == false) {
+			
+				lastFilter = (NOMBRE_CLASEFiltro) filterBI.getBean().clone();
+				
+				if (removeAllItems) {
+					getItemsBIC().removeAllItems();
+				}						 
+			
+				List<NOMBRE_CLASE> items = getDAO().find(filterBI.getBean());
+				
+				// Agrega los resultados a la grilla
+				for (NOMBRE_CLASE item : items) {
+					getItemsBIC().addBean(item);
+				}
+			
+			}							
 
 			// -----------------------------------------------------------------
 
@@ -254,9 +276,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-		dao = new NOMBRE_CLASEDAO();
-		dao.deleteById(((EntityId) item).getId());
+		getDAO().deleteById(((EntityId) item).getId());
 
 	}
 

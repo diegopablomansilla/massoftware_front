@@ -5,9 +5,9 @@ import java.sql.Timestamp;
 import java.util.Random;
 
 public class UtilPopulate {
-	
+
 	public static String getStringRandom(Integer min, Integer max, boolean required) {
-		
+
 		int leftLimit = 97; // letter 'a'
 		int rightLimit = 122; // letter 'z'
 		int targetStringLength = 30;
@@ -36,10 +36,10 @@ public class UtilPopulate {
 		if (required == false) {
 			value = (r.nextBoolean()) ? value : null;
 		}
-		
+
 		return value;
 	}
-	
+
 	public static Integer getIntegerRandom(Integer min, Integer max) {
 
 		return getIntegerRandom(min, max, true);
@@ -68,8 +68,8 @@ public class UtilPopulate {
 
 		return value;
 
-	}	
-	
+	}
+
 	public static Long getLongRandom(Long min, Long max) {
 		return getLongRandom(min, max, true);
 	}
@@ -121,7 +121,7 @@ public class UtilPopulate {
 		return value;
 
 	}
-	
+
 	public static Long getDateRandom(Integer min, Integer max, boolean required) {
 
 		long offset = Timestamp.valueOf(min + "-01-01 00:00:00").getTime();
@@ -137,36 +137,37 @@ public class UtilPopulate {
 
 	}
 
-	public static BigDecimal getBigDecimalRandom(BigDecimal min, BigDecimal max, boolean required) {
+	public static BigDecimal getBigDecimalRandom(BigDecimal min, BigDecimal max, boolean required, Integer precision,
+			Integer scale) {
 
 		Random r = new Random();
 
 		BigDecimal value = null;
 
-		if (max != null && min != null) {
-			BigDecimal a = max.subtract(min);
-			BigDecimal b = a.multiply(new BigDecimal("" + r.nextDouble()));
-			value = b.add(b);
-		} else if (max != null && min == null) {
-			BigDecimal minV = new BigDecimal("" + Double.MIN_VALUE);
+		boolean b = false;
 
-			BigDecimal a = max.subtract(minV);
-			BigDecimal b = a.multiply(new BigDecimal("" + r.nextDouble()));
-			value = b.add(b);
-		} else if (max == null && min != null) {
-			BigDecimal maxV = new BigDecimal("" + Double.MAX_VALUE);
+		do {
 
-			BigDecimal a = maxV.subtract(min);
-			BigDecimal b = a.multiply(new BigDecimal("" + r.nextDouble()));
-			value = b.add(b);
-		} else if (max == null && min == null) {
-			BigDecimal maxV = new BigDecimal("" + Double.MAX_VALUE);
-			BigDecimal minV = new BigDecimal("" + Double.MIN_VALUE);
+			String stringScale = "";
+			String stringPrecision = "";
 
-			BigDecimal a = maxV.subtract(minV);
-			BigDecimal b = a.multiply(new BigDecimal("" + r.nextDouble()));
-			value = b.add(b);
-		}
+			int length = getIntegerRandom(1, scale - 1);
+
+			for (int i = 0; i < length; i++) {
+				stringScale += getIntegerRandom(0, 9);
+			}
+
+			length = getIntegerRandom(1, precision - scale - 1);
+
+			for (int i = 0; i < length; i++) {
+				stringPrecision += getIntegerRandom(0, 9);
+			}
+
+			value = new BigDecimal(stringPrecision + "." + stringScale);
+
+			b = value.compareTo(min) > 0 && value.compareTo(max) < 0;
+
+		} while (!b);
 
 		if (required == false) {
 			value = (r.nextBoolean()) ? value : null;

@@ -471,10 +471,8 @@ public class MonedaDAO2 {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-modificar este metodo
-modificar en WL
-agregar el buscar por timestamp y date (no se por que faltan)
-agregar un tostring por los dos primeros atributos del atts
+
+	
 
 	public List<Moneda> find(MonedaFiltro filtro) throws Exception {
 

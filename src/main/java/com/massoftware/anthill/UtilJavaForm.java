@@ -5,14 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
-import java.util.List;
-
-import com.massoftware.dao.monedas.MonedaAFIPDAO;
-import com.massoftware.dao.monedas.MonedaAFIPFiltro;
-import com.massoftware.model.monedas.Moneda;
-import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.WindowListado;
-import com.massoftware.x.monedas.WLMonedaAFIP;
 
 public class UtilJavaForm {
 
@@ -148,8 +140,8 @@ public class UtilJavaForm {
 							+ "\", this.mode) {";
 
 					java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
-					java += "\n\t\t\t\t//MonedaAFIPDAO dao = new MonedaAFIPDAO();";
-					java += "\n\t\t\t\treturn dao.isExists" + toCamelStart(att.getName()) + "(("
+					
+					java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
 							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
 					java += "\n\t\t\t}";
 					java += "\n\t\t};";
@@ -157,6 +149,10 @@ public class UtilJavaForm {
 				} else {
 					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
 							+ "\", this.mode);";
+				}
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "TXT.focus();";
 				}
 
 			} else if (att.isString()) {
@@ -166,8 +162,8 @@ public class UtilJavaForm {
 							+ "\", this.mode) {";
 
 					java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
-					java += "\n\t\t\t\t//MonedaAFIPDAO dao = new MonedaAFIPDAO();";
-					java += "\n\t\t\t\treturn dao.isExists" + toCamelStart(att.getName()) + "(("
+					
+					java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
 							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
 					java += "\n\t\t\t}";
 					java += "\n\t\t};";
@@ -176,20 +172,36 @@ public class UtilJavaForm {
 					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
 							+ "\", this.mode);";
 				}
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "TXT.focus();";
+				}
 
 			} else if (att.isBoolean()) {
 
 				java += sc + att.getName() + "CHK = new CheckBoxEntity(itemBI, \"" + att.getName() + "\");";
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "CHK.focus();";
+				}
 
 			} else if (att.isTimestamp()) {
 
 				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
 						+ "\", this.mode, true);";
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "DAF.focus();";
+				}
 
 			} else if (att.isDate()) {
 
 				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
 						+ "\", this.mode, false);";
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "DAF.focus();";
+				}
 
 			} else if (att.isSimple() == false) {
 
@@ -215,6 +227,10 @@ public class UtilJavaForm {
 
 				java += sc3 + att.getName() + "CBX = new ComboBoxEntity(itemBI, \"" + att.getName() + "\", this.mode, "
 						+ att.getName() + "Lista" + ");";
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "CBX.focus();";
+				}
 
 				java += sc2 + "} else {";
 
@@ -259,6 +275,10 @@ public class UtilJavaForm {
 				java += sc4 + "}";
 
 				java += sc3 + "};";
+				
+				if(i == 0) {
+					java += "\n\n\t\t" + att.getName() + "SBX.focus();";
+				}
 
 				java += sc2 + "}";
 
@@ -317,7 +337,7 @@ public class UtilJavaForm {
 
 			Att att = clazzX.getAtts().get(i);
 
-			String sc = (i == 0) ? "" : ", ";
+//			String sc = (i == 0) ? "" : ", ";
 
 			if (att.isNumber()) {
 
@@ -378,13 +398,13 @@ public class UtilJavaForm {
 
 				if (att.isBigDecimal() && ((DataTypeBigDecimal) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
-							+ "(dao.nextValue" + toCamelStart(att.getName()) + "());";
+							+ "(getDAO().nextValue" + toCamelStart(att.getName()) + "());";
 				} else if (att.isLong() && ((DataTypeLong) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
 							+ "(dao.nextValue" + toCamelStart(att.getName()) + "());";
 				} else if (att.isInteger() && ((DataTypeInteger) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
-							+ "(dao.nextValue" + toCamelStart(att.getName()) + "());";
+							+ "(getDAO().nextValue" + toCamelStart(att.getName()) + "());";
 				}
 
 			}

@@ -194,7 +194,7 @@ public class BackendContextPG extends AbstractContext {
 			return table;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			throw e;
 		} finally {
 			connectionWrapper.close(connectionWrapper);

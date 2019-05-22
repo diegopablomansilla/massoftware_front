@@ -79,8 +79,18 @@ public class MonedaAFIP extends EntityId {
 
 	}
 
-	public String toString(){
-		return this.getCodigo() + " - " + this.getNombre();
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	public String toString() {
+		if(this.getCodigo() != null && this.getNombre() != null){
+			return this.getCodigo() + " - " +  this.getNombre();
+		} else if(this.getCodigo() != null && this.getNombre() == null){
+			return this.getCodigo();
+		} else if(this.getCodigo() == null && this.getNombre() != null){
+			return this.getNombre();
+		} else {
+			return super.toString();
+		}
 	}
 
 } // END CLASS ----------------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.monedas.MonedaAFIP;
 
-public class MonedaAFIPDAO {
+public class MonedaAFIPDAO2 {
 
 	private int levelDefault = 0;
 

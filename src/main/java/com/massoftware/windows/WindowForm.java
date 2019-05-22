@@ -88,7 +88,7 @@ public abstract class WindowForm extends Window {
 			// =======================================================
 			// ACTUALIZAR TITULO
 
-			actualizarTitulo();
+			actualizarTitulo();						
 
 			// =======================================================
 
@@ -109,12 +109,14 @@ public abstract class WindowForm extends Window {
 
 	protected void actualizarTitulo() throws Exception {
 		if (INSERT_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Agregar " + getCaption().toLowerCase());
+			this.setCaption("Agregar " + getCaption());
 		} else if (UPDATE_MODE.equalsIgnoreCase(mode)) {
-			this.setCaption("Modificar " + getCaption().toLowerCase() + " : " + getItemBIC().getBean());
+			this.setCaption("Modificar " + getCaption() + " : " + getItemBIC().getBean());
 		} else if (COPY_MODE.equalsIgnoreCase(mode)) {
 			this.setCaption("Copiar " + getCaption() + " : " + getItemBIC().getBean());
 		}
+		
+		this.setDescription(this.getCaption());
 	}
 
 	// -------------------------------------------------------------
@@ -125,14 +127,17 @@ public abstract class WindowForm extends Window {
 		filaBotoneraHL.setSpacing(true);
 
 		agregarBTN = UtilUI.buildButtonAgregar();
+		agregarBTN.setDescription(agregarBTN.getCaption() + " (Ctrl+S)");		
 		agregarBTN.addClickListener(e -> {
 			save();
 		});
 		modificarBTN = UtilUI.buildButtonModificar();
+		modificarBTN.setDescription(modificarBTN.getCaption() + " (Ctrl+S)");
 		modificarBTN.addClickListener(e -> {
 			save();
 		});
 		copiarBTN = UtilUI.buildButtonCopiar();
+		copiarBTN.setDescription(copiarBTN.getCaption() + " (Ctrl+S)");
 		copiarBTN.addClickListener(e -> {
 			save();
 		});

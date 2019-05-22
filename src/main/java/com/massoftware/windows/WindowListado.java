@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.massoftware.dao.AbstractFilter;
 import com.massoftware.model.EntityId;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
@@ -36,6 +37,7 @@ public abstract class WindowListado extends Window {
 
 	protected int limit = 10;
 	protected int offset = 0;
+	protected AbstractFilter lastFilter;
 
 	public Grid itemsGRD;
 	protected Button agregarBTN;
@@ -106,7 +108,13 @@ public abstract class WindowListado extends Window {
 	}
 
 	public void loadDataResetPaged() {
+		offset = 0;		
+		loadData();
+	}
+	
+	public void loadDataResetPagedFull() {
 		offset = 0;
+		lastFilter = null;
 		loadData();
 	}
 
@@ -119,23 +127,24 @@ public abstract class WindowListado extends Window {
 
 			validateFilterSection();
 
-			if (removeAllItems) {
-				getItemsBIC().removeAllItems();
-			}
-
-			// --------------------------------------
-
-			addBeansToItemsBIC();
-
-			// --------------------------------------
-
-//			List<SortOrder> order = new ArrayList<SortOrder>();
-
-//			for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
-//				order.add(new SortOrder(sortOrder.getPropertyId().toString(), sortOrder.getDirection()));
+//			if (removeAllItems) {
+				// getItemsBIC().removeAllItems();
 //			}
 
-//			itemsGRD.setSortOrder(order);
+			// --------------------------------------
+
+			addBeansToItemsBIC(removeAllItems);
+
+			// --------------------------------------
+
+			// List<SortOrder> order = new ArrayList<SortOrder>();
+
+			// for (SortOrder sortOrder : itemsGRD.getSortOrder()) {
+			// order.add(new SortOrder(sortOrder.getPropertyId().toString(),
+			// sortOrder.getDirection()));
+			// }
+
+			// itemsGRD.setSortOrder(order);
 
 			itemsGRD.refreshAllRows();
 
@@ -148,9 +157,7 @@ public abstract class WindowListado extends Window {
 			eliminarBTN.setEnabled(enabled);
 			copiarBTN.setEnabled(enabled);
 			
-			itemsGRD.addSortListener(e -> {
-				sort(e);
-			});
+			
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -183,7 +190,13 @@ public abstract class WindowListado extends Window {
 
 	}
 
-	abstract protected void addBeansToItemsBIC();
+	protected void addBeansToItemsBIC() {
+		
+	}
+
+	protected void addBeansToItemsBIC(boolean removeAllItems) {
+
+	}
 
 	protected HorizontalLayout buildBotonera1() {
 
@@ -242,7 +255,7 @@ public abstract class WindowListado extends Window {
 
 										LogAndNotification.printSuccessOk("Se eliminó con éxito el ítem " + item);
 
-										loadDataResetPaged();
+										loadDataResetPagedFull();
 										// }
 									}
 								} catch (Exception e) {
@@ -317,7 +330,7 @@ public abstract class WindowListado extends Window {
 
 		// --------------------------------------------------
 
-		this.addShortcutListener(new ShortcutListener("CTRL+B", KeyCode.B, new int[] { ModifierKey.CTRL }) {
+		this.addShortcutListener(new ShortcutListener("CTRL+E", KeyCode.E, new int[] { ModifierKey.CTRL }) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -449,14 +462,17 @@ public abstract class WindowListado extends Window {
 			LogAndNotification.print(e);
 		}
 	}
-	
+
 	protected void sort(SortEvent sortEvent) {
 		try {
-			loadData();
+			// loadData();
+			loadDataResetPaged();
 		} catch (Exception e) {
 			LogAndNotification.print(e);
 		}
 
 	}
-			
+	
+
+
 }

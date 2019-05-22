@@ -196,7 +196,15 @@ public class MonedaDAO {
 
 			Object[] row = table[0];
 
-			return (Boolean) row[0];
+			if(row.length == 1){
+
+				return (Boolean) row[0];
+
+			} else { 
+
+				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
+
+			}
 
 		} else {
 
@@ -215,6 +223,8 @@ public class MonedaDAO {
 
 		}
 
+		arg = arg.trim();
+
 		String sql = "SELECT * FROM massoftware.f_exists_Moneda_nombre(?)";
 
 		Object[] args = new Object[] {arg};
@@ -225,7 +235,15 @@ public class MonedaDAO {
 
 			Object[] row = table[0];
 
-			return (Boolean) row[0];
+			if(row.length == 1){
+
+				return (Boolean) row[0];
+
+			} else { 
+
+				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
+
+			}
 
 		} else {
 
@@ -244,6 +262,8 @@ public class MonedaDAO {
 
 		}
 
+		arg = arg.trim();
+
 		String sql = "SELECT * FROM massoftware.f_exists_Moneda_abreviatura(?)";
 
 		Object[] args = new Object[] {arg};
@@ -254,7 +274,15 @@ public class MonedaDAO {
 
 			Object[] row = table[0];
 
-			return (Boolean) row[0];
+			if(row.length == 1){
+
+				return (Boolean) row[0];
+
+			} else { 
+
+				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
+
+			}
 
 		} else {
 
@@ -422,8 +450,7 @@ public class MonedaDAO {
 
 		Moneda obj = null;
 
-		level = (level == null || level < 0) ? levelDefault : level;
-		level = (level != null && level > 3) ? levelDefault : level;
+		level = (level == null || level < 0 || level > 3) ? levelDefault : level;
 
 		String levelString = (level > 0) ? "_" + level : "";
 
@@ -477,19 +504,15 @@ public class MonedaDAO {
 		List<Moneda> listado = new ArrayList<Moneda>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();				
+		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
 		String orderByASCString = "";
-		if(orderByString != null && orderByString.length() > 0) {
-			
+		if(orderByString != null && orderByString.trim().length() > 0) {
+
 			orderByString = "Moneda" + orderByString;
-			
 			orderByASCString = "_asc_";
 			if(filtro.getOrderByDesc() == true) {
 				orderByASCString = "_des_";
 			}
-			
-			
-			
 			orderByString = orderByASCString + orderByString;
 		}
 		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";

@@ -30,8 +30,15 @@ public class WFNOMBRE_CLASE extends WindowForm {
 	// -------------------------------------------------------------
 
 	public WFNOMBRE_CLASE(String mode, String id) {
-		super(mode, id);				
-		dao = new NOMBRE_CLASEDAO();
+		super(mode, id);					
+	}
+
+	protected NOMBRE_CLASEDAO getDAO() {
+		if(dao == null){
+			dao = new NOMBRE_CLASEDAO();
+		}
+		
+		return dao;
 	}
 
 	protected void buildContent() throws Exception {
@@ -96,12 +103,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		// Este metodo se ejecuta despues de consultar a la base de datos el bean en
 		// base a su id
 
-		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));
-		
-		//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-		if(dao == null){
-			dao = new NOMBRE_CLASEDAO();
-		}	
+		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		NEXT
 	}
@@ -130,12 +132,11 @@ public class WFNOMBRE_CLASE extends WindowForm {
 	protected Object insert() throws Exception {
 
 		try {
-
-			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-			dao.insert(getItemBIC().getBean());
+			
+			getDAO().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -150,11 +151,11 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 		try {
 
-			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-			dao.update(getItemBIC().getBean());
+
+			getDAO().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
-				windowListado.loadDataResetPaged();
+				windowListado.loadDataResetPagedFull();
 			}
 
 			return getItemBIC().getBean();
@@ -170,12 +171,8 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		try {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
-			//item.loadById(id); // consulta a DB
-			//NOMBRE_CLASEDAO dao = new NOMBRE_CLASEDAO();
-			if(dao == null){
-				dao = new NOMBRE_CLASEDAO();
-			}			
-			NOMBRE_CLASE item = dao.findById(id);
+			//item.loadById(id); // consulta a DB						
+			NOMBRE_CLASE item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

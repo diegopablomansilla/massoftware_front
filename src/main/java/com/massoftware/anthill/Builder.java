@@ -8,8 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Builder {
+	
+	//modificar este metodo
+	//modificar en WL	
+	//agregar el buscar por timestamp y date (no se por que faltan)	
+	//agregar un tostring por los dos primeros atributos del atts	
+	//paginado con cursor para abajo, probar y calibrar
+	// order by default en clazz
+		
+	//limit puede ser int, pero offset tiene que ser bigint
+	// addBeansToItemsBIC(boolean removeAllItems) uno solo y abstracto
 
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
+		
+		System.exit(0);
 
 		List<Clazz> clazzList = new ArrayList<Clazz>();
 
@@ -59,21 +71,22 @@ public class Builder {
 			sql += "\n\n";
 			sql += clazz.toSQL();
 
-			javaPopulateInsert += "\n\t\ttry {";					
+			javaPopulateInsert += "\n\t\ttry {";
 			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
 			javaPopulateInsert += "\n\t\t} catch (Exception e) {}";
-			
-			
-			
+
 			javaPopulateBody += "\n\n";
 			javaPopulateBody += clazz.toPopulateJava();
-			
+
 			javaPopulateImport += "\n";
-			javaPopulateImport += "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
+			javaPopulateImport += "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName()
+					+ ";";
 			javaPopulateImport += "\n";
-			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
+			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName()
+					+ "Filtro;";
 			javaPopulateImport += "\n";
-			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
+			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName()
+					+ "DAO;";
 
 			File folderPOJOPackage = new File(
 					folderPOJO.getAbsolutePath() + File.separatorChar + clazz.getNamePackage());
@@ -104,13 +117,13 @@ public class Builder {
 		javaPopulate += "import java.util.Random;\n";
 		javaPopulate += javaPopulateImport;
 		javaPopulate += "\n\npublic class Populate {";
-		
-		javaPopulate += "\n\n\tstatic int maxRows = 10000;";		
-		
+
+		javaPopulate += "\n\n\tstatic int maxRows = 10000;";
+
 		javaPopulate += "\n\n\tpublic static void main(String[] args) {";
 		javaPopulate += javaPopulateInsert;
 		javaPopulate += "\n\t}";
-		
+
 		javaPopulate += javaPopulateBody;
 
 		javaPopulate += "\n\n}";
@@ -165,6 +178,8 @@ public class Builder {
 	}
 
 	public static Clazz buildMonedaAFIP() throws CloneNotSupportedException {
+		
+		//SELECT  A.MONEDAAFIP, A.DESCRIPCION FROM AfipMonedas A ORDER BY  A.MONEDAAFIP 
 
 		Clazz monedaAFIP = new Clazz();
 		monedaAFIP.setNamePackage("monedas");
@@ -191,15 +206,13 @@ public class Builder {
 		monedaAFIP.addArgument(codigo, Argument.EQUALS_IGNORE_CASE);
 		monedaAFIP.getLastArgument().setRequired(false);
 		monedaAFIP.addArgumentSBX(monedaAFIP.getLastArgument());
-		
+
 		monedaAFIP.addArgument(nombre);
 		monedaAFIP.getLastArgument().setRequired(false);
 		monedaAFIP.addArgumentSBX(monedaAFIP.getLastArgument());
 
 		monedaAFIP.addOrder(codigo);
 		monedaAFIP.addOrder(nombre);
-		
-		monedaAFIP.setToString("\t\treturn this.getCodigo() + \" - \" + this.getNombre();");
 
 		return monedaAFIP;
 	}
@@ -217,7 +230,7 @@ public class Builder {
 
 		Att numero = new Att("numero", "Nº moneda");
 		numero.setDataTypeInteger(1, null);
-		((DataTypeInteger)numero.getDataType()).setNextValueProposed(true);
+		((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
 		numero.setRequired(true);
 		numero.setUnique(true);
 		moneda.addAtt(numero);
@@ -236,15 +249,15 @@ public class Builder {
 		moneda.addAtt(abreviatura);
 
 		Att cotizacion = new Att("cotizacion", "Cotización");
-		cotizacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 9, 4);
-		((DataTypeBigDecimal)cotizacion.getDataType()).setDefValueInsert(new BigDecimal("1"));
+		cotizacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
+		((DataTypeBigDecimal) cotizacion.getDataType()).setDefValueInsert(new BigDecimal("1"));
 		cotizacion.setRequired(true);
-		cotizacion.setReadOnlyGUI(true);		
+		cotizacion.setReadOnlyGUI(true);
 		moneda.addAtt(cotizacion);
 
 		Att cotizacionFecha = new Att("cotizacionFecha", "Fecha cotización");
 		cotizacionFecha.setDataTypeTimestamp();
-		((DataTypeTimestamp)cotizacionFecha.getDataType()).setDefNowInsert(true);
+		((DataTypeTimestamp) cotizacionFecha.getDataType()).setDefNowInsert(true);
 		cotizacionFecha.setRequired(true);
 		cotizacionFecha.setReadOnlyGUI(true);
 		moneda.addAtt(cotizacionFecha);
@@ -261,22 +274,15 @@ public class Builder {
 		moneda.addArgument(numero, true);
 		moneda.getLastArgument().setRequired(false);
 		moneda.addArgumentSBX(moneda.getLastArgument());
-		
+
 		moneda.addArgument(nombre);
 		moneda.getLastArgument().setRequired(false);
 		moneda.addArgumentSBX(moneda.getLastArgument());
-		
+
 		moneda.addArgument(abreviatura);
 		moneda.getLastArgument().setRequired(false);
 
-		moneda.addOrder(numero);
-		moneda.addOrder(nombre);
-		moneda.addOrder(abreviatura);
-		moneda.addOrder(cotizacion);
-		moneda.addOrder(controlActualizacion);
-		moneda.addOrder(monedaAFIP);
-		
-		moneda.setToString("\t\treturn this.getNumero() + \" - \" + this.getNombre();");
+		moneda.addOrderAllAtts();
 
 		return moneda;
 	}

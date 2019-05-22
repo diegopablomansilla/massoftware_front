@@ -1,31 +1,15 @@
 package com.massoftware.dao.monedas;
 
 import com.massoftware.backend.annotation.FieldConfAnont;
-import com.massoftware.model.Entity;
+import com.massoftware.dao.AbstractFilter;
 
-public class MonedaFiltro extends Entity {
+public class MonedaFiltro extends AbstractFilter {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	private int _levelDefault = 1;
-
-	@FieldConfAnont(label = "Unlimited")
-	private Boolean unlimited = false;
-
-	@FieldConfAnont(label = "Limit")
-	private Long limit;
-
-	@FieldConfAnont(label = "Offset")
-	private Long offset;
-
-	@FieldConfAnont(label = "Order by att")
-	private String orderBy;
-
-	@FieldConfAnont(label = "Order by desc")
-	private Boolean orderByDesc = false;
-
-	@FieldConfAnont(label = "Level")
-	private Integer level = _levelDefault;
+	public MonedaFiltro() {
+		_levelDefault = 1;
+	}
 
 	// Nº moneda (desde)
 	@FieldConfAnont(label = "Nº moneda (desde)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
@@ -45,72 +29,6 @@ public class MonedaFiltro extends Entity {
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-
-	// GET Unlimited
-	public Boolean getUnlimited() {
-		return this.unlimited;
-	}
-
-	// SET Unlimited
-	public void setUnlimited(Boolean unlimited){
-		unlimited = (unlimited == null) ? false : unlimited;
-		this.unlimited = unlimited;
-	}
-
-	// GET Limit
-	public Long getLimit() {
-		return this.limit;
-	}
-
-	// SET Limit
-	public void setLimit(Long limit){
-		limit = (limit == null || limit < 1) ? 100 : limit;
-		this.limit = limit;
-	}
-
-	// GET Offset
-	public Long getOffset() {
-		return this.offset;
-	}
-
-	// SET Offset
-	public void setOffset(Long offset){
-		offset = (offset == null || offset < 0) ? 0 : offset;
-		this.offset = offset;
-	}
-
-	// GET Order by att
-	public String getOrderBy() {
-		return this.orderBy;
-	}
-
-	// SET Order by att
-	public void setOrderBy(String orderBy){
-		this.orderBy = orderBy;
-	}
-
-	// GET Order by desc
-	public Boolean getOrderByDesc() {
-		return this.orderByDesc;
-	}
-
-	// SET Order by desc
-	public void setOrderByDesc(Boolean orderByDesc){
-		orderByDesc = (orderByDesc == null) ? false : orderByDesc;
-		this.orderByDesc = orderByDesc;
-	}
-
-	// GET Level
-	public Integer getLevel() {
-		return this.level;
-	}
-
-	// SET Level
-	public void setLevel(Integer level){
-		level = (level == null || level < 0) ? _levelDefault : level;
-		level = (level != null && level > 3) ? _levelDefault : level;
-		this.level = level;
-	}
 
 	// GET Nº moneda (desde)
 	public Integer getNumeroFrom() {
@@ -150,6 +68,98 @@ public class MonedaFiltro extends Entity {
 	// SET Abreviatura
 	public void setAbreviatura(String abreviatura ){
 		this.abreviatura = (abreviatura != null && abreviatura.trim().length() == 0) ? null : abreviatura;
+	}
+		
+	public boolean equals(Object obj) {
+		
+		if (super.equals(obj) == false) {
+			return false;
+		}
+		
+		if (obj == this) {
+			return true;
+		}
+		
+		MonedaFiltro other = (MonedaFiltro) obj;
+		
+		
+		// -------------------------------------------------------------------
+		
+		if (other.getNumeroFrom() == null && this.getNumeroFrom() != null) {
+			return false;
+		}
+		
+		if (other.getNumeroFrom() != null && this.getNumeroFrom() == null) {
+			return false;
+		}
+		
+		if (other.getNumeroFrom() != null && this.getNumeroFrom() != null) {
+		
+			if (other.getNumeroFrom().equals(this.getNumeroFrom()) == false) {
+				return false;
+			}
+		
+		}
+		
+		// -------------------------------------------------------------------
+		
+		if (other.getNumeroTo() == null && this.getNumeroTo() != null) {
+			return false;
+		}
+		
+		if (other.getNumeroTo() != null && this.getNumeroTo() == null) {
+			return false;
+		}
+		
+		if (other.getNumeroTo() != null && this.getNumeroTo() != null) {
+		
+			if (other.getNumeroTo().equals(this.getNumeroTo()) == false) {
+				return false;
+			}
+		
+		}
+		
+		// -------------------------------------------------------------------
+		
+		if (other.getNombre() == null && this.getNombre() != null) {
+			return false;
+		}
+		
+		if (other.getNombre() != null && this.getNombre() == null) {
+			return false;
+		}
+		
+		if (other.getNombre() != null && this.getNombre() != null) {
+		
+			if (other.getNombre().equals(this.getNombre()) == false) {
+				return false;
+			}
+		
+		}
+		
+		// -------------------------------------------------------------------
+		
+		if (other.getAbreviatura() == null && this.getAbreviatura() != null) {
+			return false;
+		}
+		
+		if (other.getAbreviatura() != null && this.getAbreviatura() == null) {
+			return false;
+		}
+		
+		if (other.getAbreviatura() != null && this.getAbreviatura() != null) {
+		
+			if (other.getAbreviatura().equals(this.getAbreviatura()) == false) {
+				return false;
+			}
+		
+		}
+		
+		// -------------------------------------------------------------------
+		
+		return true;
+		
+		// -------------------------------------------------------------------
 	}
 
 } // END CLASS ----------------------------------------------------------------------------------------------------------
