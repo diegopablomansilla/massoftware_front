@@ -1,4 +1,5 @@
-package com.massoftware.x.NOMBRE_PAQUETE;
+
+package com.massoftware.x.geo;
 
 
 import java.util.ArrayList;
@@ -9,8 +10,8 @@ import java.util.List;
 //import com.vaadin.ui.renderers.DateRenderer;
 //import com.vaadin.ui.renderers.HtmlRenderer;
 
-@REDERBOOLEAN@
-@REDERDATE@
+
+
 
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
@@ -30,44 +31,49 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.NOMBRE_PAQUETE.NOMBRE_CLASE;
-import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEFiltro;
-import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEDAO;
-@OTROSFILTROS@
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisFiltro;
+import com.massoftware.dao.geo.PaisDAO;
+
 
 @SuppressWarnings("serial")
-public class WLNOMBRE_CLASE extends WindowListado {
+public class WLPais extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<NOMBRE_CLASEFiltro> filterBI;
-	protected BeanItemContainer<NOMBRE_CLASE> itemsBIC;
+	BeanItem<PaisFiltro> filterBI;
+	protected BeanItemContainer<Pais> itemsBIC;
 	
-	private NOMBRE_CLASEDAO dao;
+	private PaisDAO dao;
 
 	// -------------------------------------------------------------
 
-	CONTROLES
+	
+	protected TextFieldBox numeroFromTXTB;
+	protected TextFieldBox numeroToTXTB;
+	protected TextFieldBox nombreTXTB;
+	protected TextFieldBox abreviaturaTXTB;
+
 
 	// -------------------------------------------------------------
 
-	public WLNOMBRE_CLASE() {
+	public WLPais() {
 		super();		
-		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(new NOMBRE_CLASEFiltro());
+		filterBI = new BeanItem<PaisFiltro>(new PaisFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLNOMBRE_CLASE(NOMBRE_CLASEFiltro filtro) {
+	public WLPais(PaisFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<NOMBRE_CLASEFiltro>(filtro);
+		filterBI = new BeanItem<PaisFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected NOMBRE_CLASEDAO getDAO() {
+	protected PaisDAO getDAO() {
 		if(dao == null){
-			dao = new NOMBRE_CLASEDAO();
+			dao = new PaisDAO();
 		}
 		
 		return dao;
@@ -75,7 +81,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new NOMBRE_CLASE().labelPlural());
+		confWinList(this, new Pais().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -108,7 +114,24 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	}
 
 	private Component buildFiltros() throws Exception {		
-		INSTANCE				
+		
+
+		// ------------------------------------------------------------------
+
+		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
+
+		// ------------------------------------------------------------------
+
+		numeroToTXTB = new TextFieldBox(this, filterBI, "numeroTo");
+
+		// ------------------------------------------------------------------
+
+		nombreTXTB = new TextFieldBox(this, filterBI, "nombre", "contiene las palabras ..");
+
+		// ------------------------------------------------------------------
+
+		abreviaturaTXTB = new TextFieldBox(this, filterBI, "abreviatura", "contiene las palabras ..");
+				
 
 		return buildFiltrosLayout();
 	}
@@ -122,7 +145,19 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		
 		Button buscarBTN = buildButtonBuscar();		
 
-		filaFiltroHL.addComponents(ADD, buscarBTN);
+		filaFiltroHL.addComponents(
+		if (numeroFromTXTB != null) {
+			filaFiltroHL.addComponent(numeroFromTXTB);
+		}
+		if (numeroToTXTB != null) {
+			filaFiltroHL.addComponent(numeroToTXTB);
+		}
+		if (nombreTXTB != null) {
+			filaFiltroHL.addComponent(nombreTXTB);
+		}
+		if (abreviaturaTXTB != null) {
+			filaFiltroHL.addComponent(abreviaturaTXTB);
+		}, buscarBTN);
 		filaFiltroHL.setComponentAlignment(buscarBTN, Alignment.MIDDLE_RIGHT);
 
 		// ------------------------------------------------------------------
@@ -174,15 +209,21 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { COLUMNAS });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "abreviatura" });
 
 		// ------------------------------------------------------------------
 		
-		ANCHOS
+		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
+
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
+
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		NOMBRE_CLASE dto = new NOMBRE_CLASE();
+		Pais dto = new Pais();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -193,21 +234,21 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		// SI UNA COLUMNA ES DE TIPO BOOLEAN HACER LO QUE SIGUE
 		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
-		LOGICO
+		
 
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
-		FECHA
+		
 
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
-		TIEMPO
+		
 
 		// ------------------------------------------------------------------
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("@ORDERDEFAULT@", SortDirection.@ORDERDDIRECTIONEFAULT@));
+		order.add(new SortOrder("numero", SortDirection.DESCENDING));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -216,7 +257,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<NOMBRE_CLASE> getItemsBIC() {
+	protected BeanItemContainer<Pais> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -224,7 +265,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<NOMBRE_CLASE>(NOMBRE_CLASE.class, new ArrayList<NOMBRE_CLASE>());
+			itemsBIC = new BeanItemContainer<Pais>(Pais.class, new ArrayList<Pais>());
 		}
 
 		return itemsBIC;
@@ -240,7 +281,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<NOMBRE_CLASE> items = new NOMBRE_CLASE().find(limit, offset, buildOrderBy(),
+			// List<Pais> items = new Pais().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -250,16 +291,16 @@ public class WLNOMBRE_CLASE extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {
 			
-				lastFilter = (NOMBRE_CLASEFiltro) filterBI.getBean().clone();
+				lastFilter = (PaisFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
 				}						 
 			
-				List<NOMBRE_CLASE> items = getDAO().find(filterBI.getBean());
+				List<Pais> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (NOMBRE_CLASE item : items) {
+				for (Pais item : items) {
 					getItemsBIC().addBean(item);
 				}
 			
@@ -282,7 +323,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WFNOMBRE_CLASE(mode, id);
+		return new WFPais(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -300,4 +341,4 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL @HH:SS@
+// GENERATED BY ANTHILL 2019-05-22T21:05:07.771-03:00[America/Buenos_Aires]

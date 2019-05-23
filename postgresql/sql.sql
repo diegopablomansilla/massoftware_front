@@ -3,6 +3,9204 @@
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: Usuario                                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Usuario
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Usuario CASCADE;
+
+CREATE TABLE massoftware.Usuario
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº usuario
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Usuario_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Usuario_nombre ON massoftware.Usuario (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatUsuario() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatUsuario() RETURNS TRIGGER AS $formatUsuario$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatUsuario$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatUsuario ON massoftware.Usuario CASCADE;
+
+CREATE TRIGGER tgFormatUsuario BEFORE INSERT OR UPDATE
+	ON massoftware.Usuario FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatUsuario();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Usuario;
+
+-- SELECT * FROM massoftware.Usuario LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Usuario;
+
+-- SELECT * FROM massoftware.Usuario WHERE id = 'xxx';
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_UsuarioById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_UsuarioById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Usuario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Usuario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Usuario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_UsuarioById('xxx');
+
+-- SELECT * FROM massoftware.d_UsuarioById((SELECT Usuario.id FROM massoftware.Usuario LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Usuario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Usuario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.Usuario(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Usuario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Usuario(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_Usuario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_Usuario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	UPDATE massoftware.Usuario SET 
+		  numero = numeroArg
+		, nombre = nombreArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Usuario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_Usuario(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Usuario_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Usuario_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Usuario
+	WHERE	(numeroArg IS NULL OR Usuario.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Usuario_numero(null::INTEGER);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Usuario
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Usuario.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Usuario_nombre(null::VARCHAR);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Usuario_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Usuario_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
+	FROM	massoftware.Usuario;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Usuario_numero();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_UsuarioById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_UsuarioById(idArg VARCHAR(36)) RETURNS
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Usuario.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_UsuarioById('xxx');
+
+-- SELECT * FROM massoftware.f_UsuarioById((SELECT Usuario.id FROM massoftware.Usuario LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.id;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario(
+		 null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.id
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario(
+		100
+		, 0
+		, null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.numero ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Numero(
+		100
+		, 0
+		, null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.numero DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Numero(
+		100
+		, 0
+		, null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.numero ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Numero(
+		 null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.numero DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Numero(
+		 null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.nombre ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.nombre DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.nombre ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Nombre(
+		 null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Usuario_id VARCHAR(36)   	-- 0
+		,Usuario_numero INTEGER   	-- 1
+		,Usuario_nombre VARCHAR(50)	-- 2
+	) AS $$
+
+	SELECT
+		 Usuario.id AS Usuario_id       	-- 0
+		,Usuario.numero AS Usuario_numero	-- 1
+		,Usuario.nombre AS Usuario_nombre	-- 2
+
+	FROM	massoftware.Usuario
+
+	WHERE	(numeroFromArg0 IS NULL OR Usuario.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Usuario.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Usuario.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+
+	ORDER BY Usuario.nombre DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Nombre(
+		 null::INTEGER -- Usuario_numeroFromArg0
+		, null::INTEGER -- Usuario_numeroToArg1
+		, null::VARCHAR -- Usuario_nombreWord0Arg2
+		, null::VARCHAR -- Usuario_nombreWord1Arg3
+		, null::VARCHAR -- Usuario_nombreWord2Arg4
+		, null::VARCHAR -- Usuario_nombreWord3Arg5
+		, null::VARCHAR -- Usuario_nombreWord4Arg6
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Pais                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Pais
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Pais CASCADE;
+
+CREATE TABLE massoftware.Pais
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº país
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Pais_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Abreviatura
+	abreviatura VARCHAR(5) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Pais_nombre ON massoftware.Pais (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_Pais_abreviatura ON massoftware.Pais (TRANSLATE(LOWER(TRIM(abreviatura))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatPais() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatPais() RETURNS TRIGGER AS $formatPais$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);
+
+	RETURN NEW;
+END;
+$formatPais$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatPais ON massoftware.Pais CASCADE;
+
+CREATE TRIGGER tgFormatPais BEFORE INSERT OR UPDATE
+	ON massoftware.Pais FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatPais();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Pais;
+
+-- SELECT * FROM massoftware.Pais LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Pais;
+
+-- SELECT * FROM massoftware.Pais WHERE id = 'xxx';
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_PaisById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_PaisById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Pais WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Pais WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Pais WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_PaisById('xxx');
+
+-- SELECT * FROM massoftware.d_PaisById((SELECT Pais.id FROM massoftware.Pais LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Pais(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Pais(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.Pais(id, numero, nombre, abreviatura) VALUES (idArg, numeroArg, nombreArg, abreviaturaArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Pais WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Pais(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+		, null::VARCHAR
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_Pais(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_Pais(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	UPDATE massoftware.Pais SET 
+		  numero = numeroArg
+		, nombre = nombreArg
+		, abreviatura = abreviaturaArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Pais WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_Pais(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+		, null::VARCHAR
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Pais
+	WHERE	(numeroArg IS NULL OR Pais.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Pais_numero(null::INTEGER);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_nombre(nombreArg VARCHAR) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Pais
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Pais.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Pais_nombre(null::VARCHAR);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Pais
+	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Pais.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Pais_abreviatura(null::VARCHAR);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Pais_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Pais_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
+	FROM	massoftware.Pais;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Pais_numero();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_PaisById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_PaisById(idArg VARCHAR(36)) RETURNS
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Pais.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_PaisById('xxx');
+
+-- SELECT * FROM massoftware.f_PaisById((SELECT Pais.id FROM massoftware.Pais LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.id;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.id
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.numero ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Numero(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.numero DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Numero(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.numero ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Numero(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.numero DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Numero(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.nombre ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.nombre DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.nombre ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Nombre(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.nombre DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Nombre(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.abreviatura ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Abreviatura(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.abreviatura DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Abreviatura(
+		100
+		, 0
+		, null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.abreviatura ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_asc_Pais_Abreviatura(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+) RETURNS
+
+	TABLE(
+		 Pais_id VARCHAR(36)       	-- 0
+		,Pais_numero INTEGER       	-- 1
+		,Pais_nombre VARCHAR(50)   	-- 2
+		,Pais_abreviatura VARCHAR(5)	-- 3
+	) AS $$
+
+	SELECT
+		 Pais.id AS Pais_id                 	-- 0
+		,Pais.numero AS Pais_numero         	-- 1
+		,Pais.nombre AS Pais_nombre         	-- 2
+		,Pais.abreviatura AS Pais_abreviatura	-- 3
+
+	FROM	massoftware.Pais
+
+	WHERE	(numeroFromArg0 IS NULL OR Pais.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Pais.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Pais.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+
+	ORDER BY Pais.abreviatura DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Pais_des_Pais_Abreviatura(
+		 null::INTEGER -- Pais_numeroFromArg0
+		, null::INTEGER -- Pais_numeroToArg1
+		, null::VARCHAR -- Pais_nombreWord0Arg2
+		, null::VARCHAR -- Pais_nombreWord1Arg3
+		, null::VARCHAR -- Pais_nombreWord2Arg4
+		, null::VARCHAR -- Pais_nombreWord3Arg5
+		, null::VARCHAR -- Pais_nombreWord4Arg6
+		, null::VARCHAR -- Pais_abreviaturaWord0Arg7
+		, null::VARCHAR -- Pais_abreviaturaWord1Arg8
+		, null::VARCHAR -- Pais_abreviaturaWord2Arg9
+		, null::VARCHAR -- Pais_abreviaturaWord3Arg10
+		, null::VARCHAR -- Pais_abreviaturaWord4Arg11
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Provincia                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Provincia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Provincia CASCADE;
+
+CREATE TABLE massoftware.Provincia
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº provincia
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Provincia_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Abreviatura
+	abreviatura VARCHAR(5) NOT NULL, 
+	
+	-- Nº provincia AFIP
+	numeroAFIP INTEGER CONSTRAINT Provincia_numeroAFIP_chk CHECK ( numeroAFIP >= 1  ), 
+	
+	-- Nº provincia ingresos brutos
+	numeroIngresosBrutos INTEGER CONSTRAINT Provincia_numeroIngresosBrutos_chk CHECK ( numeroIngresosBrutos >= 1  ), 
+	
+	-- Nº provincia RENATEA
+	numeroRENATEA INTEGER CONSTRAINT Provincia_numeroRENATEA_chk CHECK ( numeroRENATEA >= 1  ), 
+	
+	-- País
+	pais VARCHAR(36)  NOT NULL  REFERENCES massoftware.Pais (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Provincia_nombre ON massoftware.Provincia (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_Provincia_abreviatura ON massoftware.Provincia (TRANSLATE(LOWER(TRIM(abreviatura))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatProvincia() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatProvincia() RETURNS TRIGGER AS $formatProvincia$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);
+	 NEW.pais := massoftware.white_is_null(NEW.pais);
+
+	RETURN NEW;
+END;
+$formatProvincia$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatProvincia ON massoftware.Provincia CASCADE;
+
+CREATE TRIGGER tgFormatProvincia BEFORE INSERT OR UPDATE
+	ON massoftware.Provincia FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatProvincia();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Provincia;
+
+-- SELECT * FROM massoftware.Provincia LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Provincia;
+
+-- SELECT * FROM massoftware.Provincia WHERE id = 'xxx';
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_ProvinciaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_ProvinciaById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Provincia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Provincia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Provincia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_ProvinciaById('xxx');
+
+-- SELECT * FROM massoftware.d_ProvinciaById((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Provincia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, numeroAFIPArg INTEGER
+		, numeroIngresosBrutosArg INTEGER
+		, numeroRENATEAArg INTEGER
+		, paisArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Provincia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, numeroAFIPArg INTEGER
+		, numeroIngresosBrutosArg INTEGER
+		, numeroRENATEAArg INTEGER
+		, paisArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.Provincia(id, numero, nombre, abreviatura, numeroAFIP, numeroIngresosBrutos, numeroRENATEA, pais) VALUES (idArg, numeroArg, nombreArg, abreviaturaArg, numeroAFIPArg, numeroIngresosBrutosArg, numeroRENATEAArg, paisArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Provincia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Provincia(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+		, null::VARCHAR
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::VARCHAR(36)
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_Provincia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, numeroAFIPArg INTEGER
+		, numeroIngresosBrutosArg INTEGER
+		, numeroRENATEAArg INTEGER
+		, paisArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_Provincia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, numeroAFIPArg INTEGER
+		, numeroIngresosBrutosArg INTEGER
+		, numeroRENATEAArg INTEGER
+		, paisArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	UPDATE massoftware.Provincia SET 
+		  numero = numeroArg
+		, nombre = nombreArg
+		, abreviatura = abreviaturaArg
+		, numeroAFIP = numeroAFIPArg
+		, numeroIngresosBrutos = numeroIngresosBrutosArg
+		, numeroRENATEA = numeroRENATEAArg
+		, pais = paisArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Provincia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_Provincia(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR
+		, null::VARCHAR
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::VARCHAR(36)
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Provincia
+	WHERE	(numeroArg IS NULL OR Provincia.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Provincia_numero(null::INTEGER);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Provincia
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Provincia_nombre(null::VARCHAR);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN
+	FROM	massoftware.Provincia
+	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_exists_Provincia_abreviatura(null::VARCHAR);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Provincia_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Provincia_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
+	FROM	massoftware.Provincia;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Provincia_numero();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Provincia_numeroAFIP() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Provincia_numeroAFIP() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroAFIP),0) + 1)::INTEGER
+	FROM	massoftware.Provincia;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Provincia_numeroAFIP();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Provincia_numeroIngresosBrutos() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Provincia_numeroIngresosBrutos() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroIngresosBrutos),0) + 1)::INTEGER
+	FROM	massoftware.Provincia;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Provincia_numeroIngresosBrutos();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Provincia_numeroRENATEA() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Provincia_numeroRENATEA() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroRENATEA),0) + 1)::INTEGER
+	FROM	massoftware.Provincia;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_next_Provincia_numeroRENATEA();
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById(idArg VARCHAR(36)) RETURNS
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_ProvinciaById('xxx');
+
+-- SELECT * FROM massoftware.f_ProvinciaById((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) RETURNS
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Provincia.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_ProvinciaById_1('xxx');
+
+-- SELECT * FROM massoftware.f_ProvinciaById_1((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.id;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.id
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+
+	FROM	massoftware.Provincia
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.id;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.id
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numero DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.nombre DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.abreviatura DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroAFIP DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroIngresosBrutos DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.numeroRENATEA DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais ASC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(
+		limitArg BIGINT
+		, offsetArg BIGINT
+
+		, numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais DESC
+
+	LIMIT limitArg OFFSET offsetArg;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais_1(
+		100
+		, 0
+		, null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais ASC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(
+
+		  numeroFromArg0 INTEGER
+		, numeroToArg1 INTEGER
+		, nombreWord0Arg2 VARCHAR(15)
+		, nombreWord1Arg3 VARCHAR(15)
+		, nombreWord2Arg4 VARCHAR(15)
+		, nombreWord3Arg5 VARCHAR(15)
+		, nombreWord4Arg6 VARCHAR(15)
+		, abreviaturaWord0Arg7 VARCHAR(15)
+		, abreviaturaWord1Arg8 VARCHAR(15)
+		, abreviaturaWord2Arg9 VARCHAR(15)
+		, abreviaturaWord3Arg10 VARCHAR(15)
+		, abreviaturaWord4Arg11 VARCHAR(15)
+		, paisArg12 VARCHAR(36)
+) RETURNS
+
+	TABLE(
+		 Provincia_id VARCHAR(36)             	-- 0
+		,Provincia_numero INTEGER             	-- 1
+		,Provincia_nombre VARCHAR(50)         	-- 2
+		,Provincia_abreviatura VARCHAR(5)     	-- 3
+		,Provincia_numeroAFIP INTEGER         	-- 4
+		,Provincia_numeroIngresosBrutos INTEGER	-- 5
+		,Provincia_numeroRENATEA INTEGER      	-- 6
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+	) AS $$
+
+	SELECT
+		 Provincia.id AS Provincia_id                                   	-- 0
+		,Provincia.numero AS Provincia_numero                           	-- 1
+		,Provincia.nombre AS Provincia_nombre                           	-- 2
+		,Provincia.abreviatura AS Provincia_abreviatura                 	-- 3
+		,Provincia.numeroAFIP AS Provincia_numeroAFIP                   	-- 4
+		,Provincia.numeroIngresosBrutos AS Provincia_numeroIngresosBrutos	-- 5
+		,Provincia.numeroRENATEA AS Provincia_numeroRENATEA             	-- 6
+		,Pais.id AS Pais_id                                             	-- 7
+		,Pais.numero AS Pais_numero                                     	-- 8
+		,Pais.nombre AS Pais_nombre                                     	-- 9
+		,Pais.abreviatura AS Pais_abreviatura                           	-- 10
+
+	FROM	massoftware.Provincia
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id	-- 7
+
+	WHERE	(numeroFromArg0 IS NULL OR Provincia.numero >= numeroFromArg0)
+		 AND (numeroToArg1 IS NULL OR Provincia.numero <= numeroToArg1)
+		 AND (nombreWord0Arg2 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord0Arg2)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord0Arg2)) || '%')::VARCHAR))
+		 AND (nombreWord1Arg3 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord1Arg3)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord1Arg3)) || '%')::VARCHAR))
+		 AND (nombreWord2Arg4 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord2Arg4)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord2Arg4)) || '%')::VARCHAR))
+		 AND (nombreWord3Arg5 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord3Arg5)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord3Arg5)) || '%')::VARCHAR))
+		 AND (nombreWord4Arg6 IS NULL OR (CHAR_LENGTH(TRIM(nombreWord4Arg6)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.nombre))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(nombreWord4Arg6)) || '%')::VARCHAR))
+		 AND (abreviaturaWord0Arg7 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord0Arg7)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord0Arg7)) || '%')::VARCHAR))
+		 AND (abreviaturaWord1Arg8 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord1Arg8)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord1Arg8)) || '%')::VARCHAR))
+		 AND (abreviaturaWord2Arg9 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord2Arg9)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord2Arg9)) || '%')::VARCHAR))
+		 AND (abreviaturaWord3Arg10 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord3Arg10)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord3Arg10)) || '%')::VARCHAR))
+		 AND (abreviaturaWord4Arg11 IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaWord4Arg11)) > 0 AND TRIM(massoftware.TRANSLATE(Provincia.abreviatura))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(abreviaturaWord4Arg11)) || '%')::VARCHAR))
+		 AND (paisArg12 IS NULL OR (CHAR_LENGTH(TRIM(paisArg12)) > 0 AND Provincia.pais = TRIM(paisArg12)::VARCHAR))
+
+	ORDER BY Provincia.pais DESC;
+
+$$ LANGUAGE SQL;
+
+/*
+
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais_1(
+		 null::INTEGER -- Provincia_numeroFromArg0
+		, null::INTEGER -- Provincia_numeroToArg1
+		, null::VARCHAR -- Provincia_nombreWord0Arg2
+		, null::VARCHAR -- Provincia_nombreWord1Arg3
+		, null::VARCHAR -- Provincia_nombreWord2Arg4
+		, null::VARCHAR -- Provincia_nombreWord3Arg5
+		, null::VARCHAR -- Provincia_nombreWord4Arg6
+		, null::VARCHAR -- Provincia_abreviaturaWord0Arg7
+		, null::VARCHAR -- Provincia_abreviaturaWord1Arg8
+		, null::VARCHAR -- Provincia_abreviaturaWord2Arg9
+		, null::VARCHAR -- Provincia_abreviaturaWord3Arg10
+		, null::VARCHAR -- Provincia_abreviaturaWord4Arg11
+		, null::VARCHAR -- Provincia_paisArg12
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: MonedaAFIP                                                                                             //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

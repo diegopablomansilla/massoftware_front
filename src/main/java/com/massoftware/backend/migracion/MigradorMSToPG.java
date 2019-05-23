@@ -14,8 +14,6 @@ import com.massoftware.model.EjercicioContable;
 import com.massoftware.model.Firmante;
 import com.massoftware.model.JuridiccionConvnioMultilateral;
 import com.massoftware.model.MarcaTicket;
-import com.massoftware.model.Moneda;
-import com.massoftware.model.MonedaAFIP2;
 import com.massoftware.model.MonedaCotizacion;
 import com.massoftware.model.PuntoEquilibrio;
 import com.massoftware.model.SeguridadModulo;
@@ -25,6 +23,8 @@ import com.massoftware.model.Talonario;
 import com.massoftware.model.TipoDocumentoAFIP;
 import com.massoftware.model.Usuario;
 import com.massoftware.model.Zona;
+import com.massoftware.model.monedas.Moneda;
+import com.massoftware.model.monedas.MonedaAFIP;
 
 public class MigradorMSToPG {
 
@@ -805,7 +805,7 @@ public class MigradorMSToPG {
 
 		for (int i = 0; i < table.length; i++) {
 
-			MonedaAFIP2 item = new MonedaAFIP2();
+			MonedaAFIP item = new MonedaAFIP();
 			item.setter(table[i], 0);
 			item.setterTrim();
 			item.insert();

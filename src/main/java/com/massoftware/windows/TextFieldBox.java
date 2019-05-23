@@ -77,6 +77,7 @@ public class TextFieldBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN.addClickListener(e -> {
 			try {
 				valueTXT.setValue(null);
+				valueTXT.focus();
 				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);

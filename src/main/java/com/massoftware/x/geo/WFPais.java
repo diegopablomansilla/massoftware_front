@@ -1,5 +1,5 @@
 
-package com.massoftware.x.monedas;
+package com.massoftware.x.geo;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -13,34 +13,35 @@ import com.massoftware.model.EntityId;
 
 
 
-import com.massoftware.model.monedas.MonedaAFIP;
-import com.massoftware.dao.monedas.MonedaAFIPDAO;
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisDAO;
 
 @SuppressWarnings("serial")
-public class WFMonedaAFIP2 extends WindowForm {
+public class WFPais extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<MonedaAFIP> itemBI;
+	private BeanItem<Pais> itemBI;
 	
-	private MonedaAFIPDAO dao;
+	private PaisDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	private TextFieldEntity codigoTXT;
-	private TextFieldEntity nombreTXT;
+	protected TextFieldEntity numeroTXT;
+	protected TextFieldEntity nombreTXT;
+	protected TextFieldEntity abreviaturaTXT;
 
 
 	// -------------------------------------------------------------
 
-	public WFMonedaAFIP2(String mode, String id) {
+	public WFPais(String mode, String id) {
 		super(mode, id);					
 	}
 
-	protected MonedaAFIPDAO getDAO() {
+	protected PaisDAO getDAO() {
 		if(dao == null){
-			dao = new MonedaAFIPDAO();
+			dao = new PaisDAO();
 		}
 		
 		return dao;
@@ -79,19 +80,27 @@ public class WFMonedaAFIP2 extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
+		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCodigo((String)arg);
+				return getDAO().isExistsNumero((Integer)arg);
 			}
-		};	
-		
-		codigoTXT.focus();
-		
+		};
+
+		numeroTXT.focus();
+
 		// ------------------------------------------------------------------
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
 				return getDAO().isExistsNombre((String)arg);
+			}
+		};
+
+		// ------------------------------------------------------------------
+
+		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
+			protected boolean ifExists(Object arg) throws Exception {
+				return getDAO().isExistsAbreviatura((String)arg);
 			}
 		};
 
@@ -110,11 +119,14 @@ public class WFMonedaAFIP2 extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (codigoTXT != null) {
-			generalVL.addComponent(codigoTXT);
+		if (numeroTXT != null) {
+			generalVL.addComponent(numeroTXT);
 		}
 		if (nombreTXT != null) {
 			generalVL.addComponent(nombreTXT);
+		}
+		if (abreviaturaTXT != null) {
+			generalVL.addComponent(abreviaturaTXT);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -136,6 +148,7 @@ public class WFMonedaAFIP2 extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
+		((Pais) item).setNumero(getDAO().nextValueNumero());
 
 	}
 
@@ -143,10 +156,10 @@ public class WFMonedaAFIP2 extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((MonedaAFIP) obj);
+		itemBI.setBean((Pais) obj);
 	}
 
-	protected BeanItem<MonedaAFIP> getItemBIC() throws Exception {
+	protected BeanItem<Pais> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -155,7 +168,7 @@ public class WFMonedaAFIP2 extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<MonedaAFIP>(new MonedaAFIP());
+			itemBI = new BeanItem<Pais>(new Pais());
 		}
 		return itemBI;
 	}
@@ -203,7 +216,7 @@ public class WFMonedaAFIP2 extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			MonedaAFIP item = getDAO().findById(id);
+			Pais item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

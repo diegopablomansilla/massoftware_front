@@ -16,6 +16,7 @@ public class UtilJavaPOJOFilter {
 
 		java += "\n\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\nimport com.massoftware.dao.AbstractFilter;";
+		java += buildImports(clazzX);
 
 		java += "\n\npublic class " + clazzX.getName() + "Filtro extends AbstractFilter {";
 
@@ -193,6 +194,21 @@ public class UtilJavaPOJOFilter {
 
 		java += "\n\n} // END CLASS ----------------------------------------------------------------------------------------------------------";
 
+		return java;
+	}
+	
+	private static String buildImports(Clazz clazz) {
+		String java = "";
+
+		for(Argument arg : clazz.getArgs()) {
+			if(arg.isSimple() == false) {
+				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
+				
+				java += "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+			}
+		}
+		
+		
 		return java;
 	}
 

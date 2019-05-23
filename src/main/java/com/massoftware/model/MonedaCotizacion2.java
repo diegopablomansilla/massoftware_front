@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.model.monedas.Moneda;
 
 @ClassLabelAnont(singular = "Cotización de moneda", plural = "Cotizaciones de monedas", singularPre = "la cotización de moneda", pluralPre = "las cotizaciones de monedas")
 public class MonedaCotizacion2 extends EntityId {

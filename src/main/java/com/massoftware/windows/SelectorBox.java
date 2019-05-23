@@ -9,6 +9,8 @@ import java.util.UUID;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.event.ShortcutListener;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -224,6 +226,30 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 				} catch (Exception ex) {
 					LogAndNotification.print(ex);
+				}
+			});
+			
+			windowPopup.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void handleAction(Object sender, Object target) {
+
+					try {
+
+						if (windowPopup.itemsGRD.getSelectedRow() != null) {
+
+							setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+
+							windowPopup.close();
+
+						}
+
+					} catch (Exception ex) {
+						LogAndNotification.print(ex);
+					}
+
 				}
 			});
 

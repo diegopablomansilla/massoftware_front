@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.vaadin.patrik.FastNavigation;
 
-import com.massoftware.model.Moneda;
+import com.massoftware.dao.monedas.MonedaDAO;
+import com.massoftware.dao.monedas.MonedaFiltro;
 import com.massoftware.model.MonedaCotizacion;
 import com.massoftware.model.MonedasCotizacionFiltro;
 import com.massoftware.model.Usuario;
@@ -95,7 +96,9 @@ public class WMonedasCotizacion extends WindowListado {
 
 		// --------------------------------------------------------
 
-		monedaCB = new ComboBoxBox(this, filterBI, "moneda", new Moneda().find());
+		MonedaFiltro filtro = new MonedaFiltro();
+		filtro.setUnlimited(true);
+		monedaCB = new ComboBoxBox(this, filterBI, "moneda", new MonedaDAO().find(filtro));
 
 		// --------------------------------------------------------
 

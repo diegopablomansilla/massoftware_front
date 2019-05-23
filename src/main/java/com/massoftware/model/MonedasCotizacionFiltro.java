@@ -1,6 +1,7 @@
 package com.massoftware.model;
 
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.model.monedas.Moneda;
 
 public class MonedasCotizacionFiltro extends Entity {
 

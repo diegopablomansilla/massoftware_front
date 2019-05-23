@@ -47,6 +47,8 @@ public abstract class WindowListado extends Window {
 
 	public Button seleccionarBTN;
 
+	protected boolean selectionMode = false;
+
 	public WindowListado() {
 		super();
 	}
@@ -54,6 +56,8 @@ public abstract class WindowListado extends Window {
 	public void init(boolean selectionMode) {
 
 		try {
+
+			this.selectionMode = selectionMode;
 
 			// =======================================================
 			// LAYOUT CONTROLs
@@ -108,14 +112,15 @@ public abstract class WindowListado extends Window {
 	}
 
 	public void loadDataResetPaged() {
-		offset = 0;		
+		offset = 0;
 		loadData();
 	}
-	
+
 	public void loadDataResetPagedFull() {
 		offset = 0;
 		lastFilter = null;
 		loadData();
+		this.itemsGRD.focus();
 	}
 
 	protected void loadData() {
@@ -127,9 +132,9 @@ public abstract class WindowListado extends Window {
 
 			validateFilterSection();
 
-//			if (removeAllItems) {
-				// getItemsBIC().removeAllItems();
-//			}
+			// if (removeAllItems) {
+			// getItemsBIC().removeAllItems();
+			// }
 
 			// --------------------------------------
 
@@ -156,8 +161,6 @@ public abstract class WindowListado extends Window {
 			modificarBTN.setEnabled(enabled);
 			eliminarBTN.setEnabled(enabled);
 			copiarBTN.setEnabled(enabled);
-			
-			
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -191,7 +194,7 @@ public abstract class WindowListado extends Window {
 	}
 
 	protected void addBeansToItemsBIC() {
-		
+
 	}
 
 	protected void addBeansToItemsBIC(boolean removeAllItems) {
@@ -279,19 +282,25 @@ public abstract class WindowListado extends Window {
 
 	protected void addKeyEvents() {
 
-		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+		if (selectionMode == false) {
 
-			private static final long serialVersionUID = 1L;
+			this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
 
-			@Override
-			public void handleAction(Object sender, Object target) {
-				if (target.equals(itemsGRD)) {
-					modificarBTNClick();
-				} else if (target instanceof TextField) {
-					loadDataResetPaged();
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void handleAction(Object sender, Object target) {
+
+					if (target.equals(itemsGRD)) {
+						modificarBTNClick();
+					} else if (target instanceof TextField) {
+						loadDataResetPaged();
+					}
+
 				}
-			}
-		});
+			});
+
+		}
 
 		// --------------------------------------------------
 
@@ -472,7 +481,5 @@ public abstract class WindowListado extends Window {
 		}
 
 	}
-	
-
 
 }

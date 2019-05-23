@@ -1,5 +1,5 @@
 
-package com.massoftware.x.monedas;
+package com.massoftware.x.geo;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -13,21 +13,21 @@ import com.massoftware.model.EntityId;
 
 
 import java.util.List;
-import com.massoftware.model.monedas.MonedaAFIP;
-import com.massoftware.dao.monedas.MonedaAFIPFiltro;
-import com.massoftware.dao.monedas.MonedaAFIPDAO;
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisFiltro;
+import com.massoftware.dao.geo.PaisDAO;
 
-import com.massoftware.model.monedas.Moneda;
-import com.massoftware.dao.monedas.MonedaDAO;
+import com.massoftware.model.geo.Provincia;
+import com.massoftware.dao.geo.ProvinciaDAO;
 
 @SuppressWarnings("serial")
-public class WFMoneda extends WindowForm {
+public class WFProvincia extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<Moneda> itemBI;
+	private BeanItem<Provincia> itemBI;
 	
-	private MonedaDAO dao;
+	private ProvinciaDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -35,22 +35,22 @@ public class WFMoneda extends WindowForm {
 	protected TextFieldEntity numeroTXT;
 	protected TextFieldEntity nombreTXT;
 	protected TextFieldEntity abreviaturaTXT;
-	protected TextFieldEntity cotizacionTXT;
-	protected DateFieldEntity cotizacionFechaDAF;
-	protected CheckBoxEntity controlActualizacionCHK;
-	protected ComboBoxEntity monedaAFIPCBX;
-	protected SelectorBox monedaAFIPSBX;
+	protected TextFieldEntity numeroAFIPTXT;
+	protected TextFieldEntity numeroIngresosBrutosTXT;
+	protected TextFieldEntity numeroRENATEATXT;
+	protected ComboBoxEntity paisCBX;
+	protected SelectorBox paisSBX;
 
 
 	// -------------------------------------------------------------
 
-	public WFMoneda(String mode, String id) {
+	public WFProvincia(String mode, String id) {
 		super(mode, id);					
 	}
 
-	protected MonedaDAO getDAO() {
+	protected ProvinciaDAO getDAO() {
 		if(dao == null){
-			dao = new MonedaDAO();
+			dao = new ProvinciaDAO();
 		}
 		
 		return dao;
@@ -115,46 +115,46 @@ public class WFMoneda extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		cotizacionTXT = new TextFieldEntity(itemBI, "cotizacion", this.mode);
+		numeroAFIPTXT = new TextFieldEntity(itemBI, "numeroAFIP", this.mode);
 
 		// ------------------------------------------------------------------
 
-		cotizacionFechaDAF = new DateFieldEntity(itemBI, "cotizacionFecha", this.mode, true);
+		numeroIngresosBrutosTXT = new TextFieldEntity(itemBI, "numeroIngresosBrutos", this.mode);
 
 		// ------------------------------------------------------------------
 
-		controlActualizacionCHK = new CheckBoxEntity(itemBI, "controlActualizacion");
+		numeroRENATEATXT = new TextFieldEntity(itemBI, "numeroRENATEA", this.mode);
 
-		MonedaAFIPDAO monedaAFIPDAO = new MonedaAFIPDAO();
+		PaisDAO paisDAO = new PaisDAO();
 
-		long items = monedaAFIPDAO.count();
+		long items = paisDAO.count();
 
 		if (items < 300) {
 
-			MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
+			PaisFiltro paisFiltro = new PaisFiltro();
 
-			monedaAFIPFiltro.setUnlimited(true);
+			paisFiltro.setUnlimited(true);
 
-			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
+			List<Pais> paisLista = paisDAO.find(paisFiltro);
 
-			monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);
+			paisCBX = new ComboBoxEntity(itemBI, "pais", this.mode, paisLista);
 
 		} else {
 
-			monedaAFIPSBX = new SelectorBox(WLMonedaAFIP.class, itemBI, "monedaAFIP") {
+			paisSBX = new SelectorBox(WLPais.class, itemBI, "pais") {
 
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					MonedaAFIPDAO dao = new MonedaAFIPDAO();
+					PaisDAO dao = new PaisDAO();
 
-					return dao.findByCodigoOrNombre(value);
+					return dao.findByNumeroOrNombre(value);
 
 				}
 
 				protected WindowListado getPopup(boolean filter) {
 
-					MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
+					PaisFiltro filtro = new PaisFiltro();
 
 					if (filter) {
 
@@ -162,7 +162,7 @@ public class WFMoneda extends WindowForm {
 
 					}
 
-					return new WLMonedaAFIP(filtro);
+					return new WLPais(filtro);
 
 				}
 
@@ -194,20 +194,20 @@ public class WFMoneda extends WindowForm {
 		if (abreviaturaTXT != null) {
 			generalVL.addComponent(abreviaturaTXT);
 		}
-		if (cotizacionTXT != null) {
-			generalVL.addComponent(cotizacionTXT);
+		if (numeroAFIPTXT != null) {
+			generalVL.addComponent(numeroAFIPTXT);
 		}
-		if (cotizacionFechaDAF != null) {
-			generalVL.addComponent(cotizacionFechaDAF);
+		if (numeroIngresosBrutosTXT != null) {
+			generalVL.addComponent(numeroIngresosBrutosTXT);
 		}
-		if (controlActualizacionCHK != null) {
-			generalVL.addComponent(controlActualizacionCHK);
+		if (numeroRENATEATXT != null) {
+			generalVL.addComponent(numeroRENATEATXT);
 		}
-		if (monedaAFIPCBX != null) {
-			generalVL.addComponent(monedaAFIPCBX);
+		if (paisCBX != null) {
+			generalVL.addComponent(paisCBX);
 		}
-		if (monedaAFIPSBX != null) {
-			generalVL.addComponent(monedaAFIPSBX);
+		if (paisSBX != null) {
+			generalVL.addComponent(paisSBX);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ public class WFMoneda extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Moneda) item).setNumero(getDAO().nextValueNumero());
+		((Provincia) item).setNumero(getDAO().nextValueNumero());
 
 	}
 
@@ -237,10 +237,10 @@ public class WFMoneda extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((Moneda) obj);
+		itemBI.setBean((Provincia) obj);
 	}
 
-	protected BeanItem<Moneda> getItemBIC() throws Exception {
+	protected BeanItem<Provincia> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -249,7 +249,7 @@ public class WFMoneda extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<Moneda>(new Moneda());
+			itemBI = new BeanItem<Provincia>(new Provincia());
 		}
 		return itemBI;
 	}
@@ -297,7 +297,7 @@ public class WFMoneda extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Moneda item = getDAO().findById(id);
+			Provincia item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

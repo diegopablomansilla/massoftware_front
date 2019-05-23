@@ -28,8 +28,8 @@ public class WFMonedaAFIP extends WindowForm {
 	// -------------------------------------------------------------
 
 	
-	private TextFieldEntity codigoTXT;
-	private TextFieldEntity nombreTXT;
+	protected TextFieldEntity codigoTXT;
+	protected TextFieldEntity nombreTXT;
 
 
 	// -------------------------------------------------------------

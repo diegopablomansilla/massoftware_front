@@ -2,6 +2,15 @@ package com.massoftware.populate;
 import java.util.List;
 import java.util.Random;
 
+import com.massoftware.model.seguridad.Usuario;
+import com.massoftware.dao.seguridad.UsuarioFiltro;
+import com.massoftware.dao.seguridad.UsuarioDAO;
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisFiltro;
+import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.model.geo.Provincia;
+import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.dao.geo.ProvinciaDAO;
 import com.massoftware.model.monedas.MonedaAFIP;
 import com.massoftware.dao.monedas.MonedaAFIPFiltro;
 import com.massoftware.dao.monedas.MonedaAFIPDAO;
@@ -11,9 +20,18 @@ import com.massoftware.dao.monedas.MonedaDAO;
 
 public class Populate {
 
-	static int maxRows = 10000;
+	static int maxRows = 1000;
 
 	public static void main(String[] args) {
+		try {
+			insertUsuario();
+		} catch (Exception e) {}
+		try {
+			insertPais();
+		} catch (Exception e) {}
+		try {
+			insertProvincia();
+		} catch (Exception e) {}
 		try {
 			insertMonedaAFIP();
 		} catch (Exception e) {}
@@ -21,6 +39,97 @@ public class Populate {
 			insertMoneda();
 		} catch (Exception e) {}
 	}
+
+
+	public static void insertUsuario() throws Exception {
+
+		UsuarioDAO dao = new UsuarioDAO();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Usuario obj = new Usuario();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
+
+
+	public static void insertPais() throws Exception {
+
+		PaisDAO dao = new PaisDAO();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Pais obj = new Pais();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
+
+
+	public static void insertProvincia() throws Exception {
+
+		ProvinciaDAO dao = new ProvinciaDAO();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Provincia obj = new Provincia();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
+
+				obj.setNumeroAFIP(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setNumeroIngresosBrutos(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setNumeroRENATEA(UtilPopulate.getIntegerRandom(1, null, false));
+
+				PaisDAO daoPais = new PaisDAO();
+				PaisFiltro filtro = new PaisFiltro();
+				Long count = daoPais.count();
+				long index = UtilPopulate.getLongRandom(0L, count-1);
+				filtro.setOffset(index);
+				filtro.setLimit(index);
+				List<Pais> listado = daoPais.find(filtro);
+				obj.setPais(listado.get(0));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
 
 
 	public static void insertMonedaAFIP() throws Exception {

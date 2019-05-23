@@ -25,7 +25,7 @@ public class AbstractFilter extends Entity {
 	private Boolean orderByDesc = false;
 
 	@FieldConfAnont(label = "Level")
-	private Integer level = _levelDefault;
+	private Integer level;
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
@@ -85,6 +85,8 @@ public class AbstractFilter extends Entity {
 
 	// GET Level
 	public Integer getLevel() {
+		level = (level == null || level < 0) ? _levelDefault : level;
+		level = (level != null && level > 3) ? _levelDefault : level;
 		return this.level;
 	}
 

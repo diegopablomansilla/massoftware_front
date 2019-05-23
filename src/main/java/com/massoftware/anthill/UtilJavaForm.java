@@ -92,28 +92,28 @@ public class UtilJavaForm {
 
 			if (att.isNumber()) {
 
-				java += sc + "private TextFieldEntity " + att.getName() + "TXT;";
+				java += sc + "protected TextFieldEntity " + att.getName() + "TXT;";
 
 			} else if (att.isString()) {
 
-				java += sc + "private TextFieldEntity " + att.getName() + "TXT;";
+				java += sc + "protected TextFieldEntity " + att.getName() + "TXT;";
 
 			} else if (att.isBoolean()) {
 
-				java += sc + "private CheckBoxEntity " + att.getName() + "CHK;";
+				java += sc + "protected CheckBoxEntity " + att.getName() + "CHK;";
 
 			} else if (att.isDate()) {
 
-				java += sc + "private DateFieldEntity " + att.getName() + "DAF;";
+				java += sc + "protected DateFieldEntity " + att.getName() + "DAF;";
 
 			} else if (att.isTimestamp()) {
 
-				java += sc + "private DateFieldEntity " + att.getName() + "DAF;";
+				java += sc + "protected DateFieldEntity " + att.getName() + "DAF;";
 
 			} else if (att.isSimple() == false) {
 
-				java += sc + "private ComboBoxEntity " + att.getName() + "CBX;";
-				java += sc + "private SelectorBox " + att.getName() + "SBX;";
+				java += sc + "protected ComboBoxEntity " + att.getName() + "CBX;";
+				java += sc + "protected SelectorBox " + att.getName() + "SBX;";
 			}
 		}
 
