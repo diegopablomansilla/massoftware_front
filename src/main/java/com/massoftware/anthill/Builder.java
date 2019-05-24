@@ -56,7 +56,7 @@ public class Builder {
 		File folderSQL = new File(massoftware_front + File.separatorChar + "postgresql");
 		folderSQL.mkdirs();
 
-		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware\\populate");
+		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware\\backend\\populate");
 		folderPopulate.mkdirs();
 
 		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
@@ -119,7 +119,7 @@ public class Builder {
 
 		}
 
-		String javaPopulate = "package com.massoftware.populate;\n";
+		String javaPopulate = "package com.massoftware.backend.populate;\n";
 
 		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.Random;\n";

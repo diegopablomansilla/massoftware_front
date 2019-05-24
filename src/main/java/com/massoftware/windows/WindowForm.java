@@ -88,7 +88,7 @@ public abstract class WindowForm extends Window {
 			// =======================================================
 			// ACTUALIZAR TITULO
 
-			actualizarTitulo();						
+			actualizarTitulo();
 
 			// =======================================================
 
@@ -115,7 +115,7 @@ public abstract class WindowForm extends Window {
 		} else if (COPY_MODE.equalsIgnoreCase(mode)) {
 			this.setCaption("Copiar " + getCaption() + " : " + getItemBIC().getBean());
 		}
-		
+
 		this.setDescription(this.getCaption());
 	}
 
@@ -127,7 +127,7 @@ public abstract class WindowForm extends Window {
 		filaBotoneraHL.setSpacing(true);
 
 		agregarBTN = UtilUI.buildButtonAgregar();
-		agregarBTN.setDescription(agregarBTN.getCaption() + " (Ctrl+S)");		
+		agregarBTN.setDescription(agregarBTN.getCaption() + " (Ctrl+S)");
 		agregarBTN.addClickListener(e -> {
 			save();
 		});
@@ -151,7 +151,39 @@ public abstract class WindowForm extends Window {
 		return filaBotoneraHL;
 	}
 
+	protected void enterListener(Object target) {
+
+		if (target instanceof TextField) {
+
+			TextField txt = (TextField) target;
+
+			if (txt.getValue() != null && txt.getValue().trim().length() > 0
+					&& txt.getParent() instanceof SelectorBox) {
+				
+				SelectorBox sbc = (SelectorBox) txt.getParent();
+				sbc.blur();
+				
+			}
+
+		}
+
+	}
+
 	protected void addKeyEvents() {
+
+		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handleAction(Object sender, Object target) {
+
+				enterListener(target);
+
+			}
+		});
+
+		// --------------------------------------------------
 
 		this.addShortcutListener(new ShortcutListener("CTRL+S", KeyCode.S, new int[] { ModifierKey.CTRL }) {
 
@@ -163,6 +195,8 @@ public abstract class WindowForm extends Window {
 			}
 		});
 
+		// --------------------------------------------------
+
 		this.addShortcutListener(new ShortcutListener("DELETE", KeyCode.DELETE, new int[] {}) {
 
 			private static final long serialVersionUID = 1L;
@@ -171,7 +205,21 @@ public abstract class WindowForm extends Window {
 			public void handleAction(Object sender, Object target) {
 				if (target instanceof TextField && ((TextField) target).isEnabled()
 						&& ((TextField) target).isReadOnly() == false) {
-					((TextField) target).setValue(null);
+
+					TextField txt = (TextField) target;
+
+					if (txt.getValue() != null && txt.getValue().trim().length() > 0
+							&& txt.getParent() instanceof SelectorBox) {
+
+						SelectorBox sbc = (SelectorBox) txt.getParent();
+						sbc.setSelectedItem(null);
+
+					} else {
+
+						txt.setValue(null);
+
+					}
+
 				} else if (target instanceof DateField && ((DateField) target).isEnabled()
 						&& ((DateField) target).isReadOnly() == false) {
 					((DateField) target).setValue(null);

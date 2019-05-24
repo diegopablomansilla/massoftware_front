@@ -1,4 +1,4 @@
-package com.massoftware.populate;
+package com.massoftware.backend.populate;
 import java.util.List;
 import java.util.Random;
 

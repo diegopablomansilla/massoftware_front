@@ -6,11 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.massoftware.model.Entity;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.event.ShortcutListener;
-import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -18,8 +17,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-
-import com.massoftware.model.Entity;
 
 public class SelectorBox extends HorizontalLayout implements Validatable {
 
@@ -29,7 +26,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	private static final long serialVersionUID = 2869082571369904793L;
 
 	private Button openSelectorBTN;
-	private TextField valueTXT;
+	public TextField valueTXT;
 	private Button removeFilterBTN;
 
 	protected String uuid;
@@ -104,9 +101,9 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN.setIcon(FontAwesome.TIMES);
 		removeFilterBTN.setDescription("Borrar valor");
 
-		removeFilterBTN.addClickListener(e -> {
-			valueTXT.setValue(null);
-		});
+//		removeFilterBTN.addClickListener(e -> {
+//			valueTXT.setValue(null);
+//		});
 
 		this.addComponent(removeFilterBTN);
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
@@ -129,11 +126,11 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		// }
 		// });
 
-		valueTXT.addBlurListener(e -> {
+		valueTXT.addBlurListener(e -> {			
 			blur();
 		});
 
-		openSelectorBTN.addClickListener(e -> {
+		openSelectorBTN.addClickListener(e -> {			
 			open(false);
 		});
 		removeFilterBTN.addClickListener(e -> {
@@ -141,6 +138,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 				valueTXT.setValue(null);
 				setSelectedItem(null);
+				valueTXT.focus();
 
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);
@@ -157,8 +155,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	///////////////////////////////////////////////////////////////////////
 
 	@SuppressWarnings({ "rawtypes" })
-	private void blur() {
+	public void blur() {
 		try {
+			
+			sourceLoadDataResetPaged();
 
 			String value = getValue();
 
@@ -168,10 +168,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 				if (items.size() == 1) {
 
-					setSelectedItem(items.get(0));
+					setSelectedItem(items.get(0));					
 
 				} else {
-
+					
 					open(items.size() > 0);
 
 				}
@@ -191,11 +191,19 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings("rawtypes")
 	private void open(boolean filter) {
 		try {
+			
+			sourceLoadDataResetPaged();
 
 			Iterator it = getUI().getWindows().iterator();
+
 			while (it.hasNext()) {
 				Window w = (Window) it.next();
-				if (w.getClass() == classWindow && w.getId().equals(uuid)) {
+
+				// if (w.getClass() == classWindow && w.getId().equals(uuid)) {
+				// return;
+				// }
+
+				if (w.getId() != null && w.getId().equals(uuid)) {
 					return;
 				}
 			}
@@ -206,7 +214,18 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 			windowPopup.addCloseListener(e -> {
 				try {
 
-					setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+					if (windowPopup.itemsGRD.getSelectedRow() != null) {
+
+						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+
+					} else {
+						
+						setSelectedItem(null);
+						
+					}
+					
+					this.valueTXT.focus();
+										
 
 				} catch (Exception ex) {
 					LogAndNotification.print(ex);
@@ -219,7 +238,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 					if (windowPopup.itemsGRD.getSelectedRow() != null) {
 
 						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
-
+						this.valueTXT.focus();
 						windowPopup.close();
 
 					}
@@ -228,30 +247,31 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 					LogAndNotification.print(ex);
 				}
 			});
-			
-			windowPopup.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
 
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void handleAction(Object sender, Object target) {
-
-					try {
-
-						if (windowPopup.itemsGRD.getSelectedRow() != null) {
-
-							setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
-
-							windowPopup.close();
-
-						}
-
-					} catch (Exception ex) {
-						LogAndNotification.print(ex);
-					}
-
-				}
-			});
+			// windowPopup.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER,
+			// new int[] {}) {
+			//
+			// private static final long serialVersionUID = 1L;
+			//
+			// @Override
+			// public void handleAction(Object sender, Object target) {
+			//
+			// try {
+			//
+			// if (windowPopup.itemsGRD.getSelectedRow() != null) {
+			//
+			// setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+			//
+			// windowPopup.close();
+			//
+			// }
+			//
+			// } catch (Exception ex) {
+			// LogAndNotification.print(ex);
+			// }
+			//
+			// }
+			// });
 
 			getUI().addWindow(windowPopup);
 
@@ -271,7 +291,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		}
 	}
 
-	protected void setSelectedItem(Object item) {
+	public void setSelectedItem(Object item) {
 
 		if (item != null) {
 			valueTXT.setValue(item.toString());
@@ -280,6 +300,8 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		}
 
 		setSelectedItemBean(item);
+		
+		sourceLoadDataResetPaged();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -306,6 +328,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	}
 
 	// --------------------------------------------------------
+	
+	protected void sourceLoadDataResetPaged() {
+
+	}
 
 	protected WindowListado getPopup(boolean filter) {
 
@@ -329,8 +355,6 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		return new ArrayList();
 	}
-	
-	
 
 	///////////////////////////////////////////////////////////////////////
 

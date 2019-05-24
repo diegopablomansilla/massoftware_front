@@ -29,7 +29,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	private String abreviatura;
 
 	// País
-	@FieldConfAnont(label = "País", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
+	@FieldConfAnont(label = "País", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
 	private Pais pais;
 
 	// ---------------------------------------------------------------------------------------------------------------------------

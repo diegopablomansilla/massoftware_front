@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 
+import com.massoftware.x.geo.WLPais;
+
 public class UtilJavaList {
 	
 	private static String toCamelStart(String text) {
@@ -176,8 +178,9 @@ public class UtilJavaList {
 				String sc4 = sc3 + "\t";
 				String sc5 = sc4 + "\t";
 				String sc6 = sc5 + "\t";
+				String sc7 = sc6 + "\t";
 
-				java += sc2 + arg.getDataType().getName() + "DAO " + arg.getName() + "DAO = new "
+				java += sc + arg.getDataType().getName() + "DAO " + arg.getName() + "DAO = new "
 						+ arg.getDataType().getName() + "DAO();";
 
 				java += sc2 + "long items = " + arg.getName() + "DAO.count();";
@@ -236,7 +239,19 @@ public class UtilJavaList {
 				}
 
 				java += sc5 + "}";
-				java += sc5 + "return new WL" + arg.getDataType().getName() + "(filtro);";
+				
+				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName() + "(filtro) {";
+				java += sc6 + "protected void setSelectedItem() {";
+				
+				java += sc7 + arg.getName() + "SBX.setSelectedItem(itemsGRD.getSelectedRow());";
+				
+				java += sc6 + "}";
+				java += sc5 + "};";
+				
+				
+				
+				
+				java += sc5 + "return windowPoPup;";
 
 				java += sc4 + "}";
 
@@ -249,6 +264,14 @@ public class UtilJavaList {
 				java += sc2 + "}";
 
 				
+//				WLPais windowPoPup = new WLPais(filtro) { 
+//					
+//					protected void setSelectedItem() {
+//						paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
+//					}
+//				
+//				};
+				
 				
 			}
 		}
@@ -258,49 +281,49 @@ public class UtilJavaList {
 		return java;
 	}
 
-	private static String buildWLControlsInstanceAddx(Clazz clazzX) {
-		String java = "";
-
-		for (int i = 0; i < clazzX.getArgs().size(); i++) {
-
-			Argument arg = clazzX.getArgs().get(i);
-
-			String sc = (i == 0) ? "" : ", ";
-
-			if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
-
-				if (arg.getRange() == false) {
-
-					java += sc + arg.getName() + "TXTB";
-
-				} else {
-
-					java += sc + arg.getName() + "FromTXTB";
-					sc = ", ";
-					java += sc + arg.getName() + "ToTXTB";
-
-				}
-
-			} else if (arg.isString()) {
-
-				java += sc + arg.getName() + "TXTB";
-
-			} else if (arg.isBoolean()) {
-
-				java += sc + arg.getName() + "OPT";
-
-			} else if (arg.isSimple() == false) {
-
-				java += sc + arg.getName() + "CBXB";
-			}
-		}
-
-		return java;
-	}
+//	private static String buildWLControlsInstanceAddx(Clazz clazzX) {
+//		String java = "";
+//
+//		for (int i = 0; i < clazzX.getArgs().size(); i++) {
+//
+//			Argument arg = clazzX.getArgs().get(i);
+//
+//			String sc = (i == 0) ? "" : ", ";
+//
+//			if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
+//
+//				if (arg.getRange() == false) {
+//
+//					java += sc + arg.getName() + "TXTB";
+//
+//				} else {
+//
+//					java += sc + arg.getName() + "FromTXTB";
+//					sc = ", ";
+//					java += sc + arg.getName() + "ToTXTB";
+//
+//				}
+//
+//			} else if (arg.isString()) {
+//
+//				java += sc + arg.getName() + "TXTB";
+//
+//			} else if (arg.isBoolean()) {
+//
+//				java += sc + arg.getName() + "OPT";
+//
+//			} else if (arg.isSimple() == false) {
+//
+//				java += sc + arg.getName() + "CBXB";
+//			}
+//		}
+//
+//		return java;
+//	}
 	
 	private static String buildWLControlsInstanceAdd(Clazz clazzX) {
 
-		String java = "";666
+		String java = "";
 
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
@@ -326,9 +349,7 @@ public class UtilJavaList {
 					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "ToTXTB);";
 					java += "\n\t\t}";
 
-				}
-
-				
+				}				
 
 			} else if (att.isString()) {
 

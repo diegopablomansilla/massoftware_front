@@ -115,12 +115,18 @@ public abstract class WindowListado extends Window {
 		offset = 0;
 		loadData();
 	}
-
+	
 	public void loadDataResetPagedFull() {
+		loadDataResetPagedFull(true);
+	}
+
+	public void loadDataResetPagedFull(boolean focus) {
 		offset = 0;
 		lastFilter = null;
 		loadData();
-		this.itemsGRD.focus();
+		if(focus) {
+			this.itemsGRD.focus();	
+		}		
 	}
 
 	protected void loadData() {
@@ -280,27 +286,52 @@ public abstract class WindowListado extends Window {
 
 	}
 
+	protected void enterListener(Object target) {
+
+		if (selectionMode == false && target.equals(itemsGRD)) {
+
+			modificarBTNClick();
+
+		} else if (selectionMode == true && target.equals(itemsGRD)) {
+
+			if (itemsGRD.getSelectedRow() != null) {
+				setSelectedItem();
+				close();
+			}
+
+		} else if (target instanceof TextField) {
+			
+			TextField txt = (TextField) target;
+			
+			if (txt.getValue() != null && txt.getValue().trim().length() > 0 && txt.getParent() instanceof SelectorBox) {
+				SelectorBox sbc = (SelectorBox) txt.getParent();
+				sbc.blur();	
+			} else {
+				loadDataResetPaged();	
+			}			
+
+		} 
+		
+		
+	}
+	
+	protected void setSelectedItem() {
+		// setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+	}
+
 	protected void addKeyEvents() {
 
-		if (selectionMode == false) {
+		this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
 
-			this.addShortcutListener(new ShortcutListener("ENTER", KeyCode.ENTER, new int[] {}) {
+			private static final long serialVersionUID = 1L;
 
-				private static final long serialVersionUID = 1L;
+			@Override
+			public void handleAction(Object sender, Object target) {
 
-				@Override
-				public void handleAction(Object sender, Object target) {
+				enterListener(target);
 
-					if (target.equals(itemsGRD)) {
-						modificarBTNClick();
-					} else if (target instanceof TextField) {
-						loadDataResetPaged();
-					}
-
-				}
-			});
-
-		}
+			}
+		});
 
 		// --------------------------------------------------
 
@@ -359,18 +390,30 @@ public abstract class WindowListado extends Window {
 			public void handleAction(Object sender, Object target) {
 
 				if (target instanceof TextField && ((TextField) target).isEnabled()
-						&& ((TextField) target).isReadOnly() == false) {
-
-					((TextField) target).setValue(null);
-
-					loadDataResetPaged();
+						&& ((TextField) target).isReadOnly() == false) {					
+					
+					
+					TextField txt = (TextField) target;
+					
+					if (txt.getValue() != null && txt.getValue().trim().length() > 0 && txt.getParent() instanceof SelectorBox) {
+						
+						SelectorBox sbc = (SelectorBox) txt.getParent();
+						sbc.setSelectedItem(null);
+						
+					} else {
+						
+						txt.setValue(null);						
+						loadDataResetPagedFull(false);	
+					}	
+					
+					
 
 				} else if (target instanceof DateField && ((DateField) target).isEnabled()
 						&& ((DateField) target).isReadOnly() == false) {
 
 					((DateField) target).setValue(null);
 
-					loadDataResetPaged();
+					loadDataResetPagedFull(false);
 				}
 			}
 		});
