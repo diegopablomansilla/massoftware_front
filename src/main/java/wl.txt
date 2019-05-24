@@ -107,8 +107,10 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		this.setContent(content);
 	}
 
-	private Component buildFiltros() throws Exception {		
+	protected Component buildFiltros() throws Exception {		
 		INSTANCE				
+	
+		// ------------------------------------------------------------------
 
 		return buildFiltrosLayout();
 	}

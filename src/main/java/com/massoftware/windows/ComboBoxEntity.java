@@ -17,6 +17,12 @@ public class ComboBoxEntity extends ComboBox {
 	 */
 	private static final long serialVersionUID = -1040125093311821579L;
 
+//	@SuppressWarnings("rawtypes")
+//	private BeanItem dtoBI;
+//	private String attName;
+	@SuppressWarnings("rawtypes")
+	private BeanItemContainer optionsBIC;
+
 	@SuppressWarnings("rawtypes")
 	public ComboBoxEntity(BeanItem dtoBI, String attName, String mode, List options) throws Exception {
 		init(dtoBI, attName, mode, options, null);
@@ -30,6 +36,9 @@ public class ComboBoxEntity extends ComboBox {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void init(BeanItem dtoBI, String attName, String mode, List options, Object selectItem) throws Exception {
+
+//		this.dtoBI = dtoBI;
+//		this.attName = attName;
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
 		String labelError = ((Entity) dtoBI.getBean()).labelError(attName);
@@ -76,7 +85,7 @@ public class ComboBoxEntity extends ComboBox {
 
 		// ----------------------------------------------------------------------------
 
-		BeanItemContainer optionsBIC = new BeanItemContainer(dtoBI.getItemProperty(attName).getType(), new ArrayList());
+		optionsBIC = new BeanItemContainer(dtoBI.getItemProperty(attName).getType(), new ArrayList());
 
 		for (Object option : options) {
 			optionsBIC.addBean(option);
@@ -102,9 +111,31 @@ public class ComboBoxEntity extends ComboBox {
 		// ----------------------------------------------------------------------------
 
 		setReadOnly(readOnly);
-		
-		
 
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setValues(List options, Object selectItem) {
+
+		optionsBIC.removeAllItems();
+
+		// ----------------------------------------------------------------------------
+
+		for (Object option : options) {
+			optionsBIC.addBean(option);
+		}
+
+		// ----------------------------------------------------------------------------
+
+		if (selectItem != null && optionsBIC.size() > 0) {
+
+			setValue(selectItem);
+
+		} else if (isRequired() && optionsBIC.size() > 0) {
+
+			// setValue(optionsBIC.getIdByIndex(0));
+			select(getItemIds().toArray()[0]);
+		}
 	}
 
 }

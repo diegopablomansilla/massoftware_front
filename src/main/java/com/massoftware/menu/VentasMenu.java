@@ -4,6 +4,7 @@ import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.a.tipos_documento_afip.WTiposDocumentoAFIP;
 import com.massoftware.windows.a.zonas.WZonas;
+import com.massoftware.x.geo.WLCiudadCustom;
 import com.massoftware.x.geo.WLPaisCustom;
 import com.massoftware.x.geo.WLProvinciaCustom;
 import com.vaadin.ui.MenuBar;
@@ -63,7 +64,7 @@ public class VentasMenu extends AbstractMenu {
 		// a11.addItem("Ciudades ...", openWindowCmd(Ciudad.class));
 		// a11.addItem("Provincias ...", openWindowCmd(Provincia.class));
 		// a11.addItem("Paises ...", openWindowCmd(Pais.class));
-		a11.addItem("Ciudades ...", null).setEnabled(false);
+		a11.addItem("Ciudades ...", openCiudadCmd());
 		a11.addItem("Provincias ...", openProvinciaCmd());
 		a11.addItem("Paises ...", openPaisCmd());
 
@@ -188,6 +189,23 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				Window window = new WLProvinciaCustom();
+				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openCiudadCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				Window window = new WLCiudadCustom();
 				getUI().addWindow(window);
 			}
 		};

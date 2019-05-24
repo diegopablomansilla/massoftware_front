@@ -70,9 +70,16 @@ public class UtilJavaList {
 			if(arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
 				
-				java += "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
-				java += "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "Filtro;";
-				java += "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "DAO;";
+				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+				String java2 = "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "Filtro;";
+				String java3 = "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "DAO;";
+				
+				if(java.contains(java1) == false) {
+					java += java1;
+					java += java2;
+					java += java3;	
+				}
+				
 				
 			}
 		}
@@ -181,19 +188,22 @@ public class UtilJavaList {
 				java += sc + arg.getDataType().getName() + "DAO " + arg.getName() + "DAO = new "
 						+ arg.getDataType().getName() + "DAO();";
 
-				java += sc2 + "long items = " + arg.getName() + "DAO.count();";
+				java += sc2 + "long " + arg.getName() + "Items = " + arg.getName() + "DAO.count();";
 
-				java += sc2 + "if (items < 300) {";
+				java += sc2 + "if (" + arg.getName() + "Items < 300) {";
 
 				java += sc3 + arg.getDataType().getName() + "Filtro " + arg.getName() + "Filtro = new "
 						+ arg.getDataType().getName() + "Filtro();";
+				
 				java += sc3 + arg.getName() + "Filtro.setUnlimited(true);";
+				
+				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + clazzX.getAtts().get(0).getName() + "\");";
 
 				java += sc3 + "List<" + arg.getDataType().getName().replaceAll("java.lang", "") + "> " + arg.getName()
 						+ "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";
 
 				java += sc3 + arg.getName() + "CBXB = new ComboBoxBox(this, filterBI, \"" + arg.getName() + "\", "
-						+ arg.getName() + "Lista" + ");";
+						+ arg.getName() + "Lista" + ", filterBI.getBean().get" + toCamelStart(arg.getName()) + "());";
 				
 				if(i == 0) {
 					java += "\n\n\t\t" + arg.getName() + "CBX.focus();";

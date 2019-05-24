@@ -28,38 +28,36 @@ public class WLProvinciaCustom extends WLProvincia {
 		// ------------------------------------------------------------------
 
 		itemsGRD.setWidth("100%");
-		 itemsGRD.setWidth(59.5f, Unit.EM);
+		itemsGRD.setWidth(59.5f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(new Object[] { "id", "pais", "numero", "nombre", "abreviatura", "numeroAFIP",
-				"numeroIngresosBrutos", "numeroRENATEA"  });
+				"numeroIngresosBrutos", "numeroRENATEA" });
 
 		// ------------------------------------------------------------------
 
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
 		UtilUI.confColumn(itemsGRD.getColumn("pais"), true, 225);
-		
+
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 225);
 
 		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 80);
-		
-		
-//		UtilUI.confColumn(itemsGRD.getColumn("numeroAFIP"), true, true, true, -1);
-//		
-//		UtilUI.confColumn(itemsGRD.getColumn("numeroIngresosBrutos"), true, true, true, -1);
-//		
-//		UtilUI.confColumn(itemsGRD.getColumn("numeroRENATEA"), true, true, true, -1);
+
+		// UtilUI.confColumn(itemsGRD.getColumn("numeroAFIP"), true, true, true, -1);
+		//
+		// UtilUI.confColumn(itemsGRD.getColumn("numeroIngresosBrutos"), true, true,
+		// true, -1);
+		//
+		// UtilUI.confColumn(itemsGRD.getColumn("numeroRENATEA"), true, true, true, -1);
 
 		UtilUI.confColumn(itemsGRD.getColumn("numeroAFIP"), true, 100);
 
 		UtilUI.confColumn(itemsGRD.getColumn("numeroIngresosBrutos"), true, 100);
 
 		UtilUI.confColumn(itemsGRD.getColumn("numeroRENATEA"), true, 100);
-
-		
 
 		// ------------------------------------------------------------------
 
@@ -80,11 +78,9 @@ public class WLProvinciaCustom extends WLProvincia {
 
 		// ------------------------------------------------------------------
 	}
-	
+
 	protected WindowForm buildWinddowForm(String mode, String id) {
 		return new WFProvinciaCustom(mode, id);
 	}
-	
-	
 
 } // END CLASS

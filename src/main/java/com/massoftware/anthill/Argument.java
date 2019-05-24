@@ -74,6 +74,7 @@ public class Argument extends Att {
 	private Att att;
 	private Boolean range = false;
 	private String searchOption = CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE;
+	private Boolean onlyVisual = false;
 
 	public Argument(Att att) throws CloneNotSupportedException {
 		super();
@@ -97,6 +98,14 @@ public class Argument extends Att {
 		super();
 		this.att = (Att) att.clone();
 		this.range = range;
+	}
+
+	public Boolean getOnlyVisual() {
+		return onlyVisual;
+	}
+
+	public void setOnlyVisual(Boolean onlyVisual) {
+		this.onlyVisual = onlyVisual;
 	}
 
 	public Clazz getClazz() {
@@ -167,13 +176,13 @@ public class Argument extends Att {
 		att.setLabelError(labelError);
 	}
 
-//	public boolean isUnique() {
-//		return att.isUnique();
-//	}
-//
-//	public void setUnique(boolean unique) {
-//		att.setUnique(unique);
-//	}
+	// public boolean isUnique() {
+	// return att.isUnique();
+	// }
+	//
+	// public void setUnique(boolean unique) {
+	// att.setUnique(unique);
+	// }
 
 	public boolean isReadOnlyGUI() {
 		return att.isReadOnlyGUI();

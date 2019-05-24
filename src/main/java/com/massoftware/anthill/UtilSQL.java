@@ -919,6 +919,10 @@ public class UtilSQL {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
+			
+			if(arg.getOnlyVisual() == true) {
+				continue;
+			}
 
 			String sc = "\n\t\t, ";
 
@@ -1093,6 +1097,10 @@ public class UtilSQL {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
+			
+			if(arg.getOnlyVisual() == true) {
+				continue;
+			}
 
 			String sc = " AND ";
 
@@ -1440,6 +1448,10 @@ public class UtilSQL {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
+			
+			if(arg.getOnlyVisual() == true) {
+				continue;
+			}
 
 			String sc = "\n\t\t, ";
 

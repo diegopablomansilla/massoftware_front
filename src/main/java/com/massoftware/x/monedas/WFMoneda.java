@@ -135,6 +135,8 @@ public class WFMoneda extends WindowForm {
 
 			monedaAFIPFiltro.setUnlimited(true);
 
+			monedaAFIPFiltro.setOrderBy("numero");
+
 			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
 
 			monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);

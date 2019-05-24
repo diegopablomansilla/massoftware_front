@@ -22,11 +22,10 @@ public class ComboBoxBox extends HorizontalLayout implements Validatable {
 	public Button removeFilterBTN;
 
 	@SuppressWarnings("rawtypes")
-	public ComboBoxBox(WindowListado window, BeanItem dtoBI, String attName, List options)
-			throws Exception {
+	public ComboBoxBox(WindowListado window, BeanItem dtoBI, String attName, List options) throws Exception {
 		init(window, dtoBI, attName, options, null);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public ComboBoxBox(WindowListado window, BeanItem dtoBI, String attName, List options, Object selectItem)
 			throws Exception {
@@ -130,6 +129,12 @@ public class ComboBoxBox extends HorizontalLayout implements Validatable {
 	public void setInvalidAllowed(boolean invalidValueAllowed) throws UnsupportedOperationException {
 		valueCBX.setInvalidAllowed(invalidValueAllowed);
 
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public void setValues(List options, Object selectItem) {
+
+		valueCBX.setValues(options, selectItem);
 	}
 
 }

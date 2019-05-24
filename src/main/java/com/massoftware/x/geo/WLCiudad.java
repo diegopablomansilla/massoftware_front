@@ -1,5 +1,5 @@
 
-package com.massoftware.x.monedas;
+package com.massoftware.x.geo;
 
 
 import java.util.ArrayList;
@@ -11,12 +11,7 @@ import java.util.List;
 //import com.vaadin.ui.renderers.HtmlRenderer;
 
 
-import com.vaadin.data.util.converter.StringToBooleanConverter;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.renderers.HtmlRenderer;
 
-import com.vaadin.ui.renderers.DateRenderer;
-import java.text.SimpleDateFormat;
 
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
@@ -36,20 +31,26 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.monedas.Moneda;
-import com.massoftware.dao.monedas.MonedaFiltro;
-import com.massoftware.dao.monedas.MonedaDAO;
+import com.massoftware.model.geo.Ciudad;
+import com.massoftware.dao.geo.CiudadFiltro;
+import com.massoftware.dao.geo.CiudadDAO;
 
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisFiltro;
+import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.model.geo.Provincia;
+import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.dao.geo.ProvinciaDAO;
 
 @SuppressWarnings("serial")
-public class WLMoneda extends WindowListado {
+public class WLCiudad extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MonedaFiltro> filterBI;
-	protected BeanItemContainer<Moneda> itemsBIC;
+	BeanItem<CiudadFiltro> filterBI;
+	protected BeanItemContainer<Ciudad> itemsBIC;
 	
-	private MonedaDAO dao;
+	private CiudadDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -57,28 +58,31 @@ public class WLMoneda extends WindowListado {
 	protected TextFieldBox numeroFromTXTB;
 	protected TextFieldBox numeroToTXTB;
 	protected TextFieldBox nombreTXTB;
-	protected TextFieldBox abreviaturaTXTB;
+	protected ComboBoxBox paisCBXB;
+	protected SelectorBox paisSBX;
+	protected ComboBoxBox provinciaCBXB;
+	protected SelectorBox provinciaSBX;
 
 
 	// -------------------------------------------------------------
 
-	public WLMoneda() {
+	public WLCiudad() {
 		super();		
-		filterBI = new BeanItem<MonedaFiltro>(new MonedaFiltro());
+		filterBI = new BeanItem<CiudadFiltro>(new CiudadFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLMoneda(MonedaFiltro filtro) {
+	public WLCiudad(CiudadFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<MonedaFiltro>(filtro);
+		filterBI = new BeanItem<CiudadFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected MonedaDAO getDAO() {
+	protected CiudadDAO getDAO() {
 		if(dao == null){
-			dao = new MonedaDAO();
+			dao = new CiudadDAO();
 		}
 		
 		return dao;
@@ -86,7 +90,7 @@ public class WLMoneda extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Moneda().labelPlural());
+		confWinList(this, new Ciudad().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -135,7 +139,133 @@ public class WLMoneda extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		abreviaturaTXTB = new TextFieldBox(this, filterBI, "abreviatura", "contiene las palabras ..");
+		PaisDAO paisDAO = new PaisDAO();
+
+		long paisItems = paisDAO.count();
+
+		if (paisItems < 300) {
+
+			PaisFiltro paisFiltro = new PaisFiltro();
+
+			paisFiltro.setUnlimited(true);
+
+			paisFiltro.setOrderBy("numero");
+
+			List<Pais> paisLista = paisDAO.find(paisFiltro);
+
+			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
+
+		} else {
+
+			paisSBX = new SelectorBox(filterBI, "pais") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					PaisDAO dao = new PaisDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) {
+
+					PaisFiltro filtro = new PaisFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLPais windowPoPup = new WLPais(filtro) {
+
+						protected void setSelectedItem() {
+
+							paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+		}
+
+		// ------------------------------------------------------------------
+
+		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+
+		long provinciaItems = provinciaDAO.count();
+
+		if (provinciaItems < 300) {
+
+			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
+
+			provinciaFiltro.setUnlimited(true);
+
+			provinciaFiltro.setOrderBy("numero");
+
+			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+
+			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista, filterBI.getBean().getProvincia());
+
+		} else {
+
+			provinciaSBX = new SelectorBox(filterBI, "provincia") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					ProvinciaDAO dao = new ProvinciaDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) {
+
+					ProvinciaFiltro filtro = new ProvinciaFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLProvincia windowPoPup = new WLProvincia(filtro) {
+
+						protected void setSelectedItem() {
+
+							provinciaSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+		}
 				
 	
 		// ------------------------------------------------------------------
@@ -162,8 +292,17 @@ public class WLMoneda extends WindowListado {
 		if (nombreTXTB != null) {
 			filaFiltroHL.addComponent(nombreTXTB);
 		}
-		if (abreviaturaTXTB != null) {
-			filaFiltroHL.addComponent(abreviaturaTXTB);
+		if (paisCBXB != null) {
+			filaFiltroHL.addComponent(paisCBXB);
+		}
+		if (paisSBX != null) {
+			filaFiltroHL.addComponent(paisSBX);
+		}
+		if (provinciaCBXB != null) {
+			filaFiltroHL.addComponent(provinciaCBXB);
+		}
+		if (provinciaSBX != null) {
+			filaFiltroHL.addComponent(provinciaSBX);
 		}
 		
 		filaFiltroHL.addComponent(buscarBTN);
@@ -218,7 +357,7 @@ public class WLMoneda extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "abreviatura", "cotizacion", "cotizacionFecha", "controlActualizacion", "monedaAFIP" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "departamento", "numeroAFIP", "provincia" });
 
 		// ------------------------------------------------------------------
 		
@@ -228,19 +367,15 @@ public class WLMoneda extends WindowListado {
 
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
 
-		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 60);
+		UtilUI.confColumn(itemsGRD.getColumn("departamento"), true, 240);
 
-		UtilUI.confColumn(itemsGRD.getColumn("cotizacion"), true, 120);
+		UtilUI.confColumn(itemsGRD.getColumn("numeroAFIP"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("cotizacionFecha"), true, 120);
-
-		UtilUI.confColumn(itemsGRD.getColumn("controlActualizacion"), true, 70);
-
-		UtilUI.confColumn(itemsGRD.getColumn("monedaAFIP"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("provincia"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		Moneda dto = new Moneda();
+		Ciudad dto = new Ciudad();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -253,8 +388,6 @@ public class WLMoneda extends WindowListado {
 		// itemsGRD.getColumn("bloqueado").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(), FontAwesome.SQUARE_O.getHtml()));
 		
 
-		itemsGRD.getColumn("controlActualizacion").setRenderer(new HtmlRenderer(), new StringToBooleanConverter(FontAwesome.CHECK_SQUARE_O.getHtml(),FontAwesome.SQUARE_O.getHtml()));
-
 		// SI UNA COLUMNA ES DE TIPO DATE HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy")));
 		
@@ -262,8 +395,6 @@ public class WLMoneda extends WindowListado {
 		// SI UNA COLUMNA ES DE TIPO TIMESTAMP HACER LO QUE SIGUE
 		// itemsGRD.getColumn("attName").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 		
-
-		itemsGRD.getColumn("cotizacionFecha").setRenderer(new DateRenderer(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")));
 
 		// ------------------------------------------------------------------
 
@@ -278,7 +409,7 @@ public class WLMoneda extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Moneda> getItemsBIC() {
+	protected BeanItemContainer<Ciudad> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -286,7 +417,7 @@ public class WLMoneda extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<Moneda>(Moneda.class, new ArrayList<Moneda>());
+			itemsBIC = new BeanItemContainer<Ciudad>(Ciudad.class, new ArrayList<Ciudad>());
 		}
 
 		return itemsBIC;
@@ -302,7 +433,7 @@ public class WLMoneda extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<Moneda> items = new Moneda().find(limit, offset, buildOrderBy(),
+			// List<Ciudad> items = new Ciudad().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -312,16 +443,16 @@ public class WLMoneda extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {
 			
-				lastFilter = (MonedaFiltro) filterBI.getBean().clone();
+				lastFilter = (CiudadFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
 				}						 
 			
-				List<Moneda> items = getDAO().find(filterBI.getBean());
+				List<Ciudad> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (Moneda item : items) {
+				for (Ciudad item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -353,7 +484,7 @@ public class WLMoneda extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WFMoneda(mode, id);
+		return new WFCiudad(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -371,4 +502,4 @@ public class WLMoneda extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-24T19:18:12.757-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-24T19:18:12.655-03:00[America/Buenos_Aires]

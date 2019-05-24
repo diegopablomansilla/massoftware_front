@@ -35,6 +35,8 @@ public class Builder {
 		clazzList.add(pais);
 		Clazz provincia = buildProvincia(pais);
 		clazzList.add(provincia);
+		Clazz ciudad = buildCiudad(pais, provincia);
+		clazzList.add(ciudad);
 
 		Clazz monedaAFIP = buildMonedaAFIP();
 		clazzList.add(monedaAFIP);
@@ -78,7 +80,7 @@ public class Builder {
 
 			String sqlItem = clazz.toSQL();
 
-			write(folderSQL.getAbsolutePath() + File.separatorChar +  clazz.getName() + ".sql", sqlItem);
+			write(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName() + ".sql", sqlItem);
 
 			sql += "\n\n";
 			sql += sqlItem;
@@ -336,6 +338,85 @@ public class Builder {
 		provincia.getOrderDefault().setDesc(true);
 
 		return provincia;
+	}
+
+	public static Clazz buildCiudad(Clazz paisClazz, Clazz provinciaClazz) throws CloneNotSupportedException {
+
+		// SELECT A.CIUDAD, A.PAIS, A.PROVINCIA, A.NOMBRE, B.PAIS, B.PROVINCIA,
+		// B.NOMBRE, C.PAIS, C.NOMBRE, C.ABREVIATURA FROM {oj Ciudades A LEFT OUTER JOIN
+		// Provincias B ON A.PAIS= B.PAIS AND A.PROVINCIA= B.PROVINCIA LEFT OUTER JOIN
+		// Paises C ON B.PAIS= C.PAIS } ORDER BY A.NOMBRE, A.CIUDAD
+
+		Clazz ciudad = new Clazz();
+		ciudad.setNamePackage("geo");
+		ciudad.setSingular("Ciudad");
+		ciudad.setPlural("Ciudades");
+		ciudad.setSingularPre("la ciudad");
+		ciudad.setPluralPre("las ciudades");
+
+		ciudad.setName("Ciudad");
+
+		Att numero = new Att("numero", "Nº ciudad");
+		numero.setDataTypeInteger(1, null);
+		((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
+		numero.setRequired(true);
+		numero.setUnique(true);
+		ciudad.addAtt(numero);
+
+		Att nombre = new Att("nombre", "Nombre");
+		nombre.setRequired(true);
+		nombre.setUnique(true);
+		nombre.setLength(null, 50);
+		ciudad.addAtt(nombre);
+
+		Att departamento = new Att("departamento", "Departamento");
+		departamento.setRequired(false);
+		departamento.setUnique(false);
+		departamento.setLength(null, 50);
+		// departamento.setColumns((float) 5);
+		ciudad.addAtt(departamento);
+
+		Att numeroAFIP = new Att("numeroAFIP", "Nº provincia AFIP");
+		numeroAFIP.setDataTypeInteger(1, null);
+		// ((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
+		// numero.setRequired(true);
+		// numero.setUnique(true);
+		ciudad.addAtt(numeroAFIP);
+
+		Att provincia = new Att("provincia", "Provincia");
+		provincia.setDataTypeClazz(provinciaClazz);
+		provincia.setRequired(true);
+		ciudad.addAtt(provincia);
+
+		// -------------------------------------------------
+
+		Att pais = new Att("pais", "País");
+		pais.setDataTypeClazz(paisClazz);
+		pais.setRequired(true);
+		// provincia.addAtt(pais);
+
+		// -------------------------------------------------
+
+		ciudad.addArgument(numero, true);
+		ciudad.getLastArgument().setRequired(false);
+		ciudad.addArgumentSBX(ciudad.getLastArgument());
+
+		ciudad.addArgument(nombre);
+		ciudad.getLastArgument().setRequired(false);
+		ciudad.addArgumentSBX(ciudad.getLastArgument());
+
+		ciudad.addArgument(pais);
+		ciudad.getLastArgument().setRequired(true);
+		ciudad.getLastArgument().setOnlyVisual(true);
+		
+		ciudad.addArgument(provincia);
+		ciudad.getLastArgument().setRequired(true);
+
+		ciudad.addOrderAllAtts();
+
+		ciudad.getOrderDefault().setDesc(true);
+
+		return ciudad;
 	}
 
 	public static Clazz buildMonedaAFIP() throws CloneNotSupportedException {

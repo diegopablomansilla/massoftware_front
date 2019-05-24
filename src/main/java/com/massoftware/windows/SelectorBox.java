@@ -417,5 +417,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		valueTXT.setInvalidAllowed(invalidValueAllowed);
 
 	}
+	
+	
 
 }

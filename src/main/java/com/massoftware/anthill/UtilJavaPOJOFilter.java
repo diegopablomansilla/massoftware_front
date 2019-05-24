@@ -204,7 +204,10 @@ public class UtilJavaPOJOFilter {
 			if(arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
 				
-				java += "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+				if(java.contains(java1) == false) {
+					java += java1;
+				}
 			}
 		}
 		

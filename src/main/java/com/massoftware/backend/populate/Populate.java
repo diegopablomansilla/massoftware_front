@@ -11,6 +11,9 @@ import com.massoftware.dao.geo.PaisDAO;
 import com.massoftware.model.geo.Provincia;
 import com.massoftware.dao.geo.ProvinciaFiltro;
 import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.model.geo.Ciudad;
+import com.massoftware.dao.geo.CiudadFiltro;
+import com.massoftware.dao.geo.CiudadDAO;
 import com.massoftware.model.monedas.MonedaAFIP;
 import com.massoftware.dao.monedas.MonedaAFIPFiltro;
 import com.massoftware.dao.monedas.MonedaAFIPDAO;
@@ -31,6 +34,9 @@ public class Populate {
 		} catch (Exception e) {}
 		try {
 			insertProvincia();
+		} catch (Exception e) {}
+		try {
+			insertCiudad();
 		} catch (Exception e) {}
 		try {
 			insertMonedaAFIP();
@@ -121,6 +127,43 @@ public class Populate {
 				filtro.setLimit(index);
 				List<Pais> listado = daoPais.find(filtro);
 				obj.setPais(listado.get(0));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
+
+
+	public static void insertCiudad() throws Exception {
+
+		CiudadDAO dao = new CiudadDAO();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Ciudad obj = new Ciudad();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setDepartamento(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setNumeroAFIP(UtilPopulate.getIntegerRandom(1, null, false));
+
+				ProvinciaDAO daoProvincia = new ProvinciaDAO();
+				ProvinciaFiltro filtro = new ProvinciaFiltro();
+				Long count = daoProvincia.count();
+				long index = UtilPopulate.getLongRandom(0L, count-1);
+				filtro.setOffset(index);
+				filtro.setLimit(index);
+				List<Provincia> listado = daoProvincia.find(filtro);
+				obj.setProvincia(listado.get(0));
 
 				dao.insert(obj);
 
