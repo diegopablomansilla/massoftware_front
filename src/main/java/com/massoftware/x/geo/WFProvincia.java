@@ -141,7 +141,7 @@ public class WFProvincia extends WindowForm {
 
 		} else {
 
-			paisSBX = new SelectorBox(WLPais.class, itemBI, "pais") {
+			paisSBX = new SelectorBox(itemBI, "pais") {
 
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {

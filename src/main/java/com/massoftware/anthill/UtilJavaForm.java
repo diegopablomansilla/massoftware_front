@@ -234,8 +234,7 @@ public class UtilJavaForm {
 
 				java += sc2 + "} else {";
 
-				java += sc3 + att.getName() + "SBX = new SelectorBox(WL" + att.getDataType().getName()
-						+ ".class, itemBI, \"" + att.getName() + "\") {";
+				java += sc3 + att.getName() + "SBX = new SelectorBox(itemBI, \"" + att.getName() + "\") {";
 
 				java += sc4 + "@SuppressWarnings(\"rawtypes\")" + "\n\t\t\t\t"
 						+ "protected List findBean(String value) throws Exception {";

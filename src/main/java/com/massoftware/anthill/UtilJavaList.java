@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 
-import com.massoftware.x.geo.WLPais;
-
 public class UtilJavaList {
 	
 	private static String toCamelStart(String text) {
@@ -203,8 +201,15 @@ public class UtilJavaList {
 
 				java += sc2 + "} else {";
 
-				java += sc3 + arg.getName() + "SBX = new SelectorBox(WL" + arg.getDataType().getName()
-						+ ".class, filterBI, \"" + arg.getName() + "\") {";
+				java += sc3 + arg.getName() + "SBX = new SelectorBox(filterBI, \"" + arg.getName() + "\") {";
+				
+				java += sc4 + "protected void sourceLoadDataResetPaged() {";
+				
+				java += sc5 + "loadDataResetPaged();";
+				
+				java += sc4 + "}";
+				
+				
 
 				java += sc4 + "@SuppressWarnings(\"rawtypes\")" + "\n\t\t\t\t"
 						+ "protected List findBean(String value) throws Exception {";

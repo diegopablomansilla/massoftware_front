@@ -30,12 +30,12 @@ public class Builder {
 		// Clazz banco = buildBanco();
 		Clazz usuario = buildUsuario();
 		clazzList.add(usuario);
-		
+
 		Clazz pais = buildPais();
 		clazzList.add(pais);
 		Clazz provincia = buildProvincia(pais);
 		clazzList.add(provincia);
-		
+
 		Clazz monedaAFIP = buildMonedaAFIP();
 		clazzList.add(monedaAFIP);
 		Clazz moneda = buildMoneda(monedaAFIP);
@@ -53,7 +53,7 @@ public class Builder {
 
 		String src_java = massoftware_front + File.separatorChar + "src\\main\\java";
 
-		File folderSQL = new File(massoftware_front + File.separatorChar + "postgresql");
+		File folderSQL = new File(massoftware_front + File.separatorChar + "postgresql" + File.separatorChar + "pp");
 		folderSQL.mkdirs();
 
 		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware\\backend\\populate");
@@ -76,8 +76,12 @@ public class Builder {
 
 		for (Clazz clazz : clazzList) {
 
+			String sqlItem = clazz.toSQL();
+
+			write(folderSQL.getAbsolutePath() + File.separatorChar +  clazz.getName() + ".sql", sqlItem);
+
 			sql += "\n\n";
-			sql += clazz.toSQL();
+			sql += sqlItem;
 
 			javaPopulateInsert += "\n\t\ttry {";
 			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
@@ -138,7 +142,7 @@ public class Builder {
 
 		write(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
 
-		write(folderSQL.getAbsolutePath() + File.separatorChar + "sql.sql", sql);
+		write(folderSQL.getAbsolutePath() + File.separatorChar + "pp.sql", sql);
 
 	}
 
@@ -230,7 +234,7 @@ public class Builder {
 		abreviatura.setLength(null, 5);
 		abreviatura.setColumns((float) 5);
 		pais.addAtt(abreviatura);
-		
+
 		// -------------------------------------------------
 
 		pais.addArgument(numero, true);
@@ -250,10 +254,11 @@ public class Builder {
 
 		return pais;
 	}
-	
+
 	public static Clazz buildProvincia(Clazz paisClazz) throws CloneNotSupportedException {
 
-		// SELECT  A.PAIS, A.PROVINCIA, A.NOMBRE, A.ABREVIATURA FROM Provincias A WHERE (  A.PAIS = 1 AND  A.NOMBRE LIKE ''%'' )  ORDER BY  A.PAIS,  A.NOMBRE,  A.PROVINCIA
+		// SELECT A.PAIS, A.PROVINCIA, A.NOMBRE, A.ABREVIATURA FROM Provincias A WHERE (
+		// A.PAIS = 1 AND A.NOMBRE LIKE ''%'' ) ORDER BY A.PAIS, A.NOMBRE, A.PROVINCIA
 
 		Clazz provincia = new Clazz();
 		provincia.setNamePackage("geo");
@@ -283,33 +288,33 @@ public class Builder {
 		abreviatura.setLength(null, 5);
 		abreviatura.setColumns((float) 5);
 		provincia.addAtt(abreviatura);
-		
+
 		Att numeroAFIP = new Att("numeroAFIP", "Nº provincia AFIP");
 		numeroAFIP.setDataTypeInteger(1, null);
-		//((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
-		//numero.setRequired(true);
-		//numero.setUnique(true);
+		// ((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
+		// numero.setRequired(true);
+		// numero.setUnique(true);
 		provincia.addAtt(numeroAFIP);
-		
+
 		Att numeroIngresosBrutos = new Att("numeroIngresosBrutos", "Nº provincia ingresos brutos");
 		numeroIngresosBrutos.setDataTypeInteger(1, null);
-		//((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
-		//numero.setRequired(true);
-		//numero.setUnique(true);
+		// ((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
+		// numero.setRequired(true);
+		// numero.setUnique(true);
 		provincia.addAtt(numeroIngresosBrutos);
-		
+
 		Att numeroRENATEA = new Att("numeroRENATEA", "Nº provincia RENATEA");
 		numeroRENATEA.setDataTypeInteger(1, null);
-		//((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
-		//numero.setRequired(true);
-		//numero.setUnique(true);
+		// ((DataTypeInteger) numero.getDataType()).setNextValueProposed(true);
+		// numero.setRequired(true);
+		// numero.setUnique(true);
 		provincia.addAtt(numeroRENATEA);
-		
+
 		Att pais = new Att("pais", "País");
 		pais.setDataTypeClazz(paisClazz);
 		pais.setRequired(true);
-		provincia.addAtt(pais);	
-		
+		provincia.addAtt(pais);
+
 		// -------------------------------------------------
 
 		provincia.addArgument(numero, true);
@@ -322,9 +327,9 @@ public class Builder {
 
 		provincia.addArgument(abreviatura);
 		provincia.getLastArgument().setRequired(false);
-		
+
 		provincia.addArgument(pais);
-		//provincia.getLastArgument().setRequired(true);
+		// provincia.getLastArgument().setRequired(true);
 
 		provincia.addOrderAllAtts();
 

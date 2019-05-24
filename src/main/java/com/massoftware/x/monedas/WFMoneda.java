@@ -141,7 +141,7 @@ public class WFMoneda extends WindowForm {
 
 		} else {
 
-			monedaAFIPSBX = new SelectorBox(WLMonedaAFIP.class, itemBI, "monedaAFIP") {
+			monedaAFIPSBX = new SelectorBox(itemBI, "monedaAFIP") {
 
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {

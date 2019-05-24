@@ -34,27 +34,27 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings({ "rawtypes" })
 	private BeanItem itemBI;
 
-	@SuppressWarnings({ "rawtypes" })
-	private Class classWindow;
+//	@SuppressWarnings({ "rawtypes" })
+//	private Class classWindow;
 
 	private String attName;
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(Class classWindow, BeanItem itemBI, String attName) throws Exception {
-		init(classWindow, itemBI, attName, null);
+	public SelectorBox(BeanItem itemBI, String attName) throws Exception {
+		init(itemBI, attName, null);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public SelectorBox(Class classWindow, BeanItem itemBI, String attName, String label2) throws Exception {
-		init(classWindow, itemBI, attName, label2);
+	public SelectorBox(BeanItem itemBI, String attName, String label2) throws Exception {
+		init(itemBI, attName, label2);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void init(Class classWindow, BeanItem itemBI, String attName, String label2) throws Exception {
+	private void init(BeanItem itemBI, String attName, String label2) throws Exception {
 
 		uuid = UUID.randomUUID().toString();
 
-		this.classWindow = classWindow;
+//		this.classWindow = classWindow;
 		this.itemBI = itemBI;
 		this.attName = attName;
 
