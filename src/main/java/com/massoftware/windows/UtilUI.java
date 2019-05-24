@@ -58,7 +58,7 @@ public class UtilUI {
 		grd.addStyleName("small");
 		grd.addStyleName("compact");
 		grd.setWidth("100%");
-		grd.setSelectionMode(SelectionMode.SINGLE);
+		grd.setSelectionMode(SelectionMode.SINGLE);		
 		grd.setImmediate(true);
 
 		return grd;
@@ -332,6 +332,7 @@ public class UtilUI {
 		eliminarBTN.addStyleName(ValoTheme.BUTTON_TINY);
 		eliminarBTN.setIcon(FontAwesome.TRASH);
 		eliminarBTN.setCaption("Eliminar");
+		eliminarBTN.setDescription(eliminarBTN.getCaption() + " (Ctrl+E)");
 
 		// eliminarBTN.addClickListener(e -> {
 		// // eliminarBTNClick();

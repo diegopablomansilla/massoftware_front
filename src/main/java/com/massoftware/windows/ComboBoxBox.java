@@ -60,6 +60,7 @@ public class ComboBoxBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN.addClickListener(e -> {
 			try {
 				valueCBX.setValue(null);
+				valueCBX.focus();
 				window.loadDataResetPaged();
 			} catch (Exception ex) {
 				LogAndNotification.print(ex);

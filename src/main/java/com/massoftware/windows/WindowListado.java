@@ -414,6 +414,13 @@ public abstract class WindowListado extends Window {
 					((DateField) target).setValue(null);
 
 					loadDataResetPagedFull(false);
+					
+				} else if (target instanceof ComboBoxEntity && ((ComboBoxEntity) target).isEnabled()
+						&& ((ComboBoxEntity) target).isReadOnly() == false) {
+
+//					((ComboBoxEntity) target).setValue(null);
+//
+//					loadDataResetPagedFull(false);
 				}
 			}
 		});

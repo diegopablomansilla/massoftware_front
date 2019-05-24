@@ -4,8 +4,8 @@ import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.a.tipos_documento_afip.WTiposDocumentoAFIP;
 import com.massoftware.windows.a.zonas.WZonas;
-import com.massoftware.x.geo.WLPais;
-import com.massoftware.x.geo.WLProvincia;
+import com.massoftware.x.geo.WLPaisCustom;
+import com.massoftware.x.geo.WLProvinciaCustom;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -170,7 +170,7 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WLPais();
+				Window window = new WLPaisCustom();
 				getUI().addWindow(window);
 			}
 		};
@@ -187,7 +187,7 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WLProvincia();
+				Window window = new WLProvinciaCustom();
 				getUI().addWindow(window);
 			}
 		};
