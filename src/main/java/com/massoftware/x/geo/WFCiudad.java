@@ -25,7 +25,7 @@ public class WFCiudad extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<Ciudad> itemBI;
+	protected BeanItem<Ciudad> itemBI;
 	
 	private CiudadDAO dao;
 
@@ -81,7 +81,7 @@ public class WFCiudad extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		
 

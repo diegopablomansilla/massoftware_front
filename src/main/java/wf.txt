@@ -19,7 +19,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 	// -------------------------------------------------------------
 
-	private BeanItem<NOMBRE_CLASE> itemBI;
+	protected BeanItem<NOMBRE_CLASE> itemBI;
 	
 	private NOMBRE_CLASEDAO dao;
 
@@ -68,7 +68,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		INSTANCE
 		

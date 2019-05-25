@@ -186,7 +186,7 @@ public class WLCiudad extends WindowListado {
 
 					WLPais windowPoPup = new WLPais(filtro) {
 
-						protected void setSelectedItem() {
+						protected void setSelectedItem() throws Exception {
 
 							paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
 
@@ -251,7 +251,7 @@ public class WLCiudad extends WindowListado {
 
 					WLProvincia windowPoPup = new WLProvincia(filtro) {
 
-						protected void setSelectedItem() {
+						protected void setSelectedItem() throws Exception {
 
 							provinciaSBX.setSelectedItem(itemsGRD.getSelectedRow());
 
@@ -483,7 +483,7 @@ public class WLCiudad extends WindowListado {
 
 	}
 
-	protected WindowForm buildWinddowForm(String mode, String id) {
+	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
 		return new WFCiudad(mode, id);
 	}
 	

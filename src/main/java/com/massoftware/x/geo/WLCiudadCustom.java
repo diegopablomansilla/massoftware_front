@@ -58,12 +58,12 @@ public class WLCiudadCustom extends WLCiudad {
 
 		long paisItems = paisDAO.count();
 
-		if (paisItems < 30000) {
+		if (paisItems < 300) {
 
 			PaisFiltro paisFiltro = new PaisFiltro();
 
 			paisFiltro.setUnlimited(true);
-			
+
 			paisFiltro.setOrderBy("numero");
 
 			List<Pais> paisLista = paisDAO.find(paisFiltro);
@@ -76,31 +76,30 @@ public class WLCiudadCustom extends WLCiudad {
 				try {
 
 					// *************************************
-					if(provinciaSBX != null) {
-						provinciaSBX.setSelectedItem(null);	
-					} else if(provinciaCBXB != null) {
-						
-						ProvinciaDAO provinciaDAO = new ProvinciaDAO();						
-						
+					if (provinciaSBX != null) {
+						provinciaSBX.setSelectedItem(null);
+					} else if (provinciaCBXB != null) {
+
+						ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+
 						ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
-						
+
 						// *************************************
 						provinciaFiltro.setPais(this.filterBI.getBean().getPais());
 						// *************************************
 
 						provinciaFiltro.setUnlimited(true);
-						
+
 						provinciaFiltro.setOrderBy("numero");
 
 						List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
-						
+
 						provinciaCBXB.valueCBX.setValues(provinciaLista, null);
-						
-						if(provinciaLista.size() == 0) {
+
+						if (provinciaLista.size() == 0) {
 							provinciaCBXB.valueCBX.setValue(null);
 						}
-						
-						
+
 					}
 					// *************************************
 
@@ -142,7 +141,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 					WLPais windowPoPup = new WLPais(filtro) {
 
-						protected void setSelectedItem() {
+						protected void setSelectedItem() throws Exception {
 
 							paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
 
@@ -156,7 +155,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 				// *************************************
 
-				public void setSelectedItem(Object item) {
+				public void setSelectedItem(Object item) throws Exception {
 
 					if (item != null) {
 						valueTXT.setValue(item.toString());
@@ -187,12 +186,12 @@ public class WLCiudadCustom extends WLCiudad {
 
 		long provinciaItems = provinciaDAO.count();
 
-		if (provinciaItems < 300000) {
+		if (provinciaItems < 300) {
 
 			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
 			provinciaFiltro.setUnlimited(true);
-			
+
 			provinciaFiltro.setOrderBy("numero");
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
@@ -236,7 +235,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 					WLProvinciaCustom windowPoPup = new WLProvinciaCustom(filtro) {
 
-						protected void setSelectedItem() {
+						protected void setSelectedItem() throws Exception {
 
 							provinciaSBX.setSelectedItem(itemsGRD.getSelectedRow());
 
@@ -295,7 +294,7 @@ public class WLCiudadCustom extends WLCiudad {
 		// ------------------------------------------------------------------
 
 		itemsGRD.setWidth("100%");
-		// itemsGRD.setWidth(25f, Unit.EM);
+		itemsGRD.setWidth(70f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
 		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "departamento", "numeroAFIP", "provincia" });
@@ -306,13 +305,13 @@ public class WLCiudadCustom extends WLCiudad {
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 300);
 
-		UtilUI.confColumn(itemsGRD.getColumn("departamento"), true, 240);
+		UtilUI.confColumn(itemsGRD.getColumn("departamento"), true, 300);
 
 		UtilUI.confColumn(itemsGRD.getColumn("numeroAFIP"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("provincia"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("provincia"), true, 300);
 
 		// ------------------------------------------------------------------
 
@@ -336,8 +335,8 @@ public class WLCiudadCustom extends WLCiudad {
 
 	// =================================================================================
 
-	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WFCiudad(mode, id);
+	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
+		return new WFCiudadCustom(mode, id, this.filterBI.getBean().getPais());
 	}
 
 	// =================================================================================

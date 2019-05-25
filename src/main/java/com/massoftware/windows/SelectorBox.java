@@ -291,7 +291,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		}
 	}
 
-	public void setSelectedItem(Object item) {
+	public void setSelectedItem(Object item) throws Exception {
 
 		if (item != null) {
 			valueTXT.setValue(item.toString());
@@ -333,7 +333,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 	}
 
-	protected WindowListado getPopup(boolean filter) {
+	protected WindowListado getPopup(boolean filter) throws Exception {
 
 		// MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
 		//

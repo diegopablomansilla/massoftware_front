@@ -159,10 +159,10 @@ public abstract class WindowForm extends Window {
 
 			if (txt.getValue() != null && txt.getValue().trim().length() > 0
 					&& txt.getParent() instanceof SelectorBox) {
-				
+
 				SelectorBox sbc = (SelectorBox) txt.getParent();
 				sbc.blur();
-				
+
 			}
 
 		}
@@ -203,27 +203,35 @@ public abstract class WindowForm extends Window {
 
 			@Override
 			public void handleAction(Object sender, Object target) {
-				if (target instanceof TextField && ((TextField) target).isEnabled()
-						&& ((TextField) target).isReadOnly() == false) {
 
-					TextField txt = (TextField) target;
+				try {
 
-					if (txt.getValue() != null && txt.getValue().trim().length() > 0
-							&& txt.getParent() instanceof SelectorBox) {
+					if (target instanceof TextField && ((TextField) target).isEnabled()
+							&& ((TextField) target).isReadOnly() == false) {
 
-						SelectorBox sbc = (SelectorBox) txt.getParent();
-						sbc.setSelectedItem(null);
+						TextField txt = (TextField) target;
 
-					} else {
+						if (txt.getValue() != null && txt.getValue().trim().length() > 0
+								&& txt.getParent() instanceof SelectorBox) {
 
-						txt.setValue(null);
+							SelectorBox sbc = (SelectorBox) txt.getParent();
+							sbc.setSelectedItem(null);
 
+						} else {
+
+							txt.setValue(null);
+
+						}
+
+					} else if (target instanceof DateField && ((DateField) target).isEnabled()
+							&& ((DateField) target).isReadOnly() == false) {
+						((DateField) target).setValue(null);
 					}
 
-				} else if (target instanceof DateField && ((DateField) target).isEnabled()
-						&& ((DateField) target).isReadOnly() == false) {
-					((DateField) target).setValue(null);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
 				}
+
 			}
 		});
 	}

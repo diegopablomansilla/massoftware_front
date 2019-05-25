@@ -186,7 +186,7 @@ public class WLProvincia extends WindowListado {
 
 					WLPais windowPoPup = new WLPais(filtro) {
 
-						protected void setSelectedItem() {
+						protected void setSelectedItem() throws Exception {
 
 							paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
 

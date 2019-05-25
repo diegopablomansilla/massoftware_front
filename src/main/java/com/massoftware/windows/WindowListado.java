@@ -115,7 +115,7 @@ public abstract class WindowListado extends Window {
 		offset = 0;
 		loadData();
 	}
-	
+
 	public void loadDataResetPagedFull() {
 		loadDataResetPagedFull(true);
 	}
@@ -124,9 +124,9 @@ public abstract class WindowListado extends Window {
 		offset = 0;
 		lastFilter = null;
 		loadData();
-		if(focus) {
-			this.itemsGRD.focus();	
-		}		
+		if (focus) {
+			this.itemsGRD.focus();
+		}
 	}
 
 	protected void loadData() {
@@ -286,7 +286,7 @@ public abstract class WindowListado extends Window {
 
 	}
 
-	protected void enterListener(Object target) {
+	protected void enterListener(Object target) throws Exception {
 
 		if (selectionMode == false && target.equals(itemsGRD)) {
 
@@ -300,22 +300,22 @@ public abstract class WindowListado extends Window {
 			}
 
 		} else if (target instanceof TextField) {
-			
-			TextField txt = (TextField) target;
-			
-			if (txt.getValue() != null && txt.getValue().trim().length() > 0 && txt.getParent() instanceof SelectorBox) {
-				SelectorBox sbc = (SelectorBox) txt.getParent();
-				sbc.blur();	
-			} else {
-				loadDataResetPaged();	
-			}			
 
-		} 
-		
-		
+			TextField txt = (TextField) target;
+
+			if (txt.getValue() != null && txt.getValue().trim().length() > 0
+					&& txt.getParent() instanceof SelectorBox) {
+				SelectorBox sbc = (SelectorBox) txt.getParent();
+				sbc.blur();
+			} else {
+				loadDataResetPaged();
+			}
+
+		}
+
 	}
-	
-	protected void setSelectedItem() {
+
+	protected void setSelectedItem() throws Exception {
 		// setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
 	}
 
@@ -328,7 +328,11 @@ public abstract class WindowListado extends Window {
 			@Override
 			public void handleAction(Object sender, Object target) {
 
-				enterListener(target);
+				try {
+					enterListener(target);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
 
 			}
 		});
@@ -388,40 +392,44 @@ public abstract class WindowListado extends Window {
 
 			@Override
 			public void handleAction(Object sender, Object target) {
+				try {
 
-				if (target instanceof TextField && ((TextField) target).isEnabled()
-						&& ((TextField) target).isReadOnly() == false) {					
-					
-					
-					TextField txt = (TextField) target;
-					
-					if (txt.getValue() != null && txt.getValue().trim().length() > 0 && txt.getParent() instanceof SelectorBox) {
-						
-						SelectorBox sbc = (SelectorBox) txt.getParent();
-						sbc.setSelectedItem(null);
-						
-					} else {
-						
-						txt.setValue(null);						
-						loadDataResetPagedFull(false);	
-					}	
-					
-					
+					if (target instanceof TextField && ((TextField) target).isEnabled()
+							&& ((TextField) target).isReadOnly() == false) {
 
-				} else if (target instanceof DateField && ((DateField) target).isEnabled()
-						&& ((DateField) target).isReadOnly() == false) {
+						TextField txt = (TextField) target;
 
-					((DateField) target).setValue(null);
+						if (txt.getValue() != null && txt.getValue().trim().length() > 0
+								&& txt.getParent() instanceof SelectorBox) {
 
-					loadDataResetPagedFull(false);
-					
-				} else if (target instanceof ComboBoxEntity && ((ComboBoxEntity) target).isEnabled()
-						&& ((ComboBoxEntity) target).isReadOnly() == false) {
+							SelectorBox sbc = (SelectorBox) txt.getParent();
+							sbc.setSelectedItem(null);
 
-//					((ComboBoxEntity) target).setValue(null);
-//
-//					loadDataResetPagedFull(false);
+						} else {
+
+							txt.setValue(null);
+							loadDataResetPagedFull(false);
+						}
+
+					} else if (target instanceof DateField && ((DateField) target).isEnabled()
+							&& ((DateField) target).isReadOnly() == false) {
+
+						((DateField) target).setValue(null);
+
+						loadDataResetPagedFull(false);
+
+					} else if (target instanceof ComboBoxEntity && ((ComboBoxEntity) target).isEnabled()
+							&& ((ComboBoxEntity) target).isReadOnly() == false) {
+
+						// ((ComboBoxEntity) target).setValue(null);
+						//
+						// loadDataResetPagedFull(false);
+					}
+
+				} catch (Exception e) {
+					LogAndNotification.print(e);
 				}
+
 			}
 		});
 

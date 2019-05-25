@@ -38,11 +38,11 @@ public class WLProvinciaCustom extends WLProvincia {
 
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
-		UtilUI.confColumn(itemsGRD.getColumn("pais"), true, 225);
+		UtilUI.confColumn(itemsGRD.getColumn("pais"), true, 224);
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 225);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 224);
 
 		UtilUI.confColumn(itemsGRD.getColumn("abreviatura"), true, 80);
 

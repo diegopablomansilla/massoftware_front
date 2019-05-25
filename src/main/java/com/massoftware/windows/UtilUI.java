@@ -1486,6 +1486,10 @@ public class UtilUI {
 		return df;
 	}
 
+	public static Label buildLbl(String label) {
+		return buildLbl(label, -1);
+	}
+	
 	public static Label buildLbl(String label, float widthEM) {
 		Label lbl = new Label();
 
@@ -1494,6 +1498,16 @@ public class UtilUI {
 		if (widthEM > 0) {
 			lbl.setWidth(widthEM, Unit.EM);
 		}
+
+		return lbl;
+
+	}
+	
+	public static Label buildLbl(String label, String value) {
+		Label lbl = new Label(value);
+		lbl.setCaption(label);		
+		
+		lbl.addStyleName(ValoTheme.LABEL_TINY);
 
 		return lbl;
 
