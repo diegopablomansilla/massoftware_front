@@ -23,9 +23,10 @@ import com.massoftware.dao.geo.ProvinciaDAO;
 @SuppressWarnings("serial")
 public class WFProvincia extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
-	private BeanItem<Provincia> itemBI;
+	protected BeanItem<Provincia> itemBI;
 	
 	private ProvinciaDAO dao;
 
@@ -83,7 +84,7 @@ public class WFProvincia extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		
 
@@ -154,7 +155,7 @@ public class WFProvincia extends WindowForm {
 
 				}
 
-				protected WindowListado getPopup(boolean filter) {
+				protected WindowListado getPopup(boolean filter) throws Exception {
 
 					PaisFiltro filtro = new PaisFiltro();
 
@@ -164,7 +165,7 @@ public class WFProvincia extends WindowForm {
 
 					}
 
-					return new WLPais(filtro);
+					return windowBuilder.buildWLPais(filtro);
 
 				}
 

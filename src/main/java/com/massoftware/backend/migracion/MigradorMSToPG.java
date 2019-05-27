@@ -20,11 +20,11 @@ import com.massoftware.model.SeguridadModulo;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.Sucursal;
 import com.massoftware.model.Talonario;
-import com.massoftware.model.TipoDocumentoAFIP;
-import com.massoftware.model.Usuario;
-import com.massoftware.model.Zona;
+import com.massoftware.model.afip.TipoDocumentoAFIP;
+import com.massoftware.model.afip.monedas.MonedaAFIP;
+import com.massoftware.model.geo.Zona;
 import com.massoftware.model.monedas.Moneda;
-import com.massoftware.model.monedas.MonedaAFIP;
+import com.massoftware.model.seguridad.Usuario;
 
 public class MigradorMSToPG {
 

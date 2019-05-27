@@ -10,7 +10,7 @@ import com.massoftware.dao.monedas.MonedaDAO;
 import com.massoftware.dao.monedas.MonedaFiltro;
 import com.massoftware.model.MonedaCotizacion;
 import com.massoftware.model.MonedasCotizacionFiltro;
-import com.massoftware.model.Usuario;
+import com.massoftware.model.seguridad.Usuario;
 import com.massoftware.windows.ComboBoxBox;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.UtilUI;

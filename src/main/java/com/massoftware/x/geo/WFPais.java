@@ -19,9 +19,10 @@ import com.massoftware.dao.geo.PaisDAO;
 @SuppressWarnings("serial")
 public class WFPais extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
-	private BeanItem<Pais> itemBI;
+	protected BeanItem<Pais> itemBI;
 	
 	private PaisDAO dao;
 
@@ -74,7 +75,7 @@ public class WFPais extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		
 

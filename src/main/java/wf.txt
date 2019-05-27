@@ -17,6 +17,7 @@ import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEDAO;
 @SuppressWarnings("serial")
 public class WFNOMBRE_CLASE extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
 	protected BeanItem<NOMBRE_CLASE> itemBI;

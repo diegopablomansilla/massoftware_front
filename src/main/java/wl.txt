@@ -295,7 +295,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return new WFNOMBRE_CLASE(mode, id);
+		return windowBuilder.buildWFNOMBRE_CLASE(mode, id);
 	}
 	
 	public void setFocusGrid() {			

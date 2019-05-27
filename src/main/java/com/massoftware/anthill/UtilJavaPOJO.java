@@ -24,6 +24,8 @@ public class UtilJavaPOJO {
 		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
 		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\nimport com.massoftware.model.EntityId;";
+		
+		java += buildImportAtts(clazzX);
 
 		java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\", plural = \"" + clazzX.getPlural()
 				+ "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" + clazzX.getPluralPre()
@@ -319,6 +321,27 @@ public class UtilJavaPOJO {
 		java += "\n\n} // END CLASS ----------------------------------------------------------------------------------------------------------";
 
 		return java;
+	}
+
+	private static String buildImportAtts(Clazz clazz) {
+
+		String java = "";
+
+		for (int i = 0; i < clazz.getAtts().size(); i++) {
+
+			Att att = clazz.getAtts().get(i);
+
+			if (att.isSimple() == false) {
+				
+				DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
+
+				java += "\nimport com.massoftware.model." + dataTypeClazz.getClazz().getNamePackage() + "." + dataTypeClazz.getClazz().getName() + ";";
+
+			}
+		}
+		
+		return java;
+
 	}
 
 	private static String buildConstructorAtts(Clazz clazzX) {

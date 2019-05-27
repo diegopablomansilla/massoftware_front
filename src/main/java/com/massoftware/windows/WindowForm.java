@@ -3,6 +3,7 @@ package com.massoftware.windows;
 import java.util.Iterator;
 
 import com.massoftware.model.EntityId;
+import com.massoftware.x.WindowBuilder;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -36,6 +37,10 @@ public abstract class WindowForm extends Window {
 	public final static String COPY_MODE = "COPY_MODE";
 
 	protected String mode;
+	
+	// -------------------------------------------------------------
+	
+	protected WindowBuilder windowBuilder;
 
 	// -------------------------------------------------------------
 
@@ -56,6 +61,8 @@ public abstract class WindowForm extends Window {
 
 	protected void init(String mode, String id) {
 		try {
+			
+			windowBuilder = new WindowBuilder();
 
 			this.id = id;
 			this.mode = mode;

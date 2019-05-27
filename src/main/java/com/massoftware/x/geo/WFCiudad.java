@@ -23,6 +23,7 @@ import com.massoftware.dao.geo.CiudadDAO;
 @SuppressWarnings("serial")
 public class WFCiudad extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
 	protected BeanItem<Ciudad> itemBI;
@@ -140,7 +141,7 @@ public class WFCiudad extends WindowForm {
 
 				}
 
-				protected WindowListado getPopup(boolean filter) {
+				protected WindowListado getPopup(boolean filter) throws Exception {
 
 					ProvinciaFiltro filtro = new ProvinciaFiltro();
 
@@ -150,7 +151,7 @@ public class WFCiudad extends WindowForm {
 
 					}
 
-					return new WLProvincia(filtro);
+					return windowBuilder.buildWLProvincia(filtro);
 
 				}
 

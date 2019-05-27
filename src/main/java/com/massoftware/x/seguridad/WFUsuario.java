@@ -19,9 +19,10 @@ import com.massoftware.dao.seguridad.UsuarioDAO;
 @SuppressWarnings("serial")
 public class WFUsuario extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
-	private BeanItem<Usuario> itemBI;
+	protected BeanItem<Usuario> itemBI;
 	
 	private UsuarioDAO dao;
 
@@ -73,7 +74,7 @@ public class WFUsuario extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		
 

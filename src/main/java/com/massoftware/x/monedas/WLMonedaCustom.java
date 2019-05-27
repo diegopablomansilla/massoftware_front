@@ -9,6 +9,7 @@ import com.massoftware.dao.monedas.MonedaFiltro;
 import com.massoftware.model.monedas.Moneda;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
+import com.massoftware.x.afip.monedas.WFMonedaCustom;
 import com.vaadin.data.sort.SortOrder;
 
 //import com.vaadin.data.util.converter.StringToBooleanConverter;

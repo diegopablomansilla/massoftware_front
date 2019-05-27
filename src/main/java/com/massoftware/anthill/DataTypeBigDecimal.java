@@ -2,7 +2,7 @@ package com.massoftware.anthill;
 
 import java.math.BigDecimal;
 
-class DataTypeBigDecimal extends DataType {
+public class DataTypeBigDecimal extends DataType {
 
 	private BigDecimal minValue;
 	private BigDecimal maxValue;

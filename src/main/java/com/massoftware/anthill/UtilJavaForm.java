@@ -69,6 +69,7 @@ public class UtilJavaForm {
 				java += sc + "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
 				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
 				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
+//				java += sc + "import com.massoftware.x." + clazz.getNamePackage() + ".WL" + clazz.getName() + ";";
 			}
 		}
 
@@ -259,7 +260,7 @@ public class UtilJavaForm {
 
 				java += sc4 + "}";
 
-				java += sc4 + "protected WindowListado getPopup(boolean filter) {";
+				java += sc4 + "protected WindowListado getPopup(boolean filter) throws Exception {";
 
 				java += sc5 + att.getDataType().getName() + "Filtro filtro = new " + att.getDataType().getName()
 						+ "Filtro();";
@@ -272,7 +273,7 @@ public class UtilJavaForm {
 				}
 
 				java += sc5 + "}";
-				java += sc5 + "return new WL" + att.getDataType().getName() + "(filtro);";
+				java += sc5 + "return windowBuilder.buildWL" + att.getDataType().getName() + "(filtro);";
 
 				java += sc4 + "}";
 

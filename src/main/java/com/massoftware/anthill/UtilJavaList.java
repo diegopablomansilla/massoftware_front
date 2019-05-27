@@ -241,7 +241,7 @@ public class UtilJavaList {
 
 				java += sc4 + "}";
 
-				java += sc4 + "protected WindowListado getPopup(boolean filter) {";
+				java += sc4 + "protected WindowListado getPopup(boolean filter) throws Exception {";
 
 				java += sc5 + arg.getDataType().getName() + "Filtro filtro = new " + arg.getDataType().getName()
 						+ "Filtro();";
@@ -256,7 +256,7 @@ public class UtilJavaList {
 				java += sc5 + "}";
 				
 				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName() + "(filtro) {";
-				java += sc6 + "protected void setSelectedItem() {";
+				java += sc6 + "protected void setSelectedItem() throws Exception {";
 				
 				java += sc7 + arg.getName() + "SBX.setSelectedItem(itemsGRD.getSelectedRow());";
 				

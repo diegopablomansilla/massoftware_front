@@ -3,7 +3,7 @@ package com.massoftware.menu;
 import java.io.File;
 
 import com.massoftware.backend.BackendContextPG;
-import com.massoftware.model.Usuario;
+import com.massoftware.model.seguridad.Usuario;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
@@ -13,7 +13,6 @@ import com.massoftware.windows.a.marcas_ticket.WMarcasTicket;
 import com.massoftware.windows.a.monedas_cotizaciones.WMonedasCotizacion;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
-import com.massoftware.windows.a.zonas.WZonas;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
 import com.massoftware.windows.captura_lotes_tickets.WCapturaLotesTickets;
 import com.massoftware.windows.chequeras.WChequeras;
@@ -29,7 +28,8 @@ import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.massoftware.windows.valores_propios.WValoresPropios;
 import com.massoftware.windows.valores_terceros.WValoresTerceros;
-import com.massoftware.x.monedas.WLMonedaAFIPCustom;
+import com.massoftware.x.afip.monedas.WLMonedaAFIPCustom;
+import com.massoftware.x.geo.WLZonaCustom;
 import com.massoftware.x.monedas.WLMonedaCustom;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
@@ -100,7 +100,7 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Firmantes (cheques propios) ...", openFirmantesCmd());
 		a1.addItem("Cajas", openCajasCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
-		a1.addItem("Monedas ...", openMonedasCmd());			
+		a1.addItem("Monedas ...", openMonedasCmd());
 		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
@@ -255,7 +255,7 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
 	protected Command openMonedasAFIPCmd() {
 
 		return new Command() {
@@ -290,7 +290,6 @@ public class FondosMenu extends AbstractMenu {
 		};
 	}
 
-
 	protected Command openMonedasCotizacionesCmd() {
 
 		return new Command() {
@@ -302,10 +301,16 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Usuario usuario = new Usuario();
+				Usuario usuario = null;
+				try {
+					usuario = new Usuario();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				usuario.setId("1");
 				usuario.setNombre("Administrador");
-				
+
 				Window window = new WMonedasCotizacion(usuario);
 				getUI().addWindow(window);
 			}
@@ -663,7 +668,7 @@ public class FondosMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WZonas();
+				Window window = new WLZonaCustom();
 				getUI().addWindow(window);
 			}
 		};
@@ -685,7 +690,7 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
 	protected Command openWMarcasTicketModeloCmd() {
 
 		return new Command() {

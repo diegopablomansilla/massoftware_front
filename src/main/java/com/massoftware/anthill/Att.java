@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-class Att {
+public class Att {
 
 	private Clazz clazz;
 	private String name;

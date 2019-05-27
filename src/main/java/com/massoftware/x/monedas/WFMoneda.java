@@ -13,9 +13,9 @@ import com.massoftware.model.EntityId;
 
 
 import java.util.List;
-import com.massoftware.model.monedas.MonedaAFIP;
-import com.massoftware.dao.monedas.MonedaAFIPFiltro;
-import com.massoftware.dao.monedas.MonedaAFIPDAO;
+import com.massoftware.model.afip.monedas.MonedaAFIP;
+import com.massoftware.dao.afip.monedas.MonedaAFIPFiltro;
+import com.massoftware.dao.afip.monedas.MonedaAFIPDAO;
 
 import com.massoftware.model.monedas.Moneda;
 import com.massoftware.dao.monedas.MonedaDAO;
@@ -23,9 +23,10 @@ import com.massoftware.dao.monedas.MonedaDAO;
 @SuppressWarnings("serial")
 public class WFMoneda extends WindowForm {
 
+
 	// -------------------------------------------------------------
 
-	private BeanItem<Moneda> itemBI;
+	protected BeanItem<Moneda> itemBI;
 	
 	private MonedaDAO dao;
 
@@ -83,7 +84,7 @@ public class WFMoneda extends WindowForm {
 		this.setContent(content);
 	}
 
-	private Component buildCuerpo() throws Exception {
+	protected Component buildCuerpo() throws Exception {
 
 		
 
@@ -154,7 +155,7 @@ public class WFMoneda extends WindowForm {
 
 				}
 
-				protected WindowListado getPopup(boolean filter) {
+				protected WindowListado getPopup(boolean filter) throws Exception {
 
 					MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
 
@@ -164,7 +165,7 @@ public class WFMoneda extends WindowForm {
 
 					}
 
-					return new WLMonedaAFIP(filtro);
+					return windowBuilder.buildWLMonedaAFIP(filtro);
 
 				}
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.massoftware.dao.AbstractFilter;
 import com.massoftware.model.EntityId;
+import com.massoftware.x.WindowBuilder;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
@@ -35,9 +36,13 @@ public abstract class WindowListado extends Window {
 	 */
 	private static final long serialVersionUID = 3743382045012748994L;
 
+	// -------------------------------------------------------------
+
 	protected int limit = 10;
 	protected int offset = 0;
 	protected AbstractFilter lastFilter;
+
+	// -------------------------------------------------------------
 
 	public Grid itemsGRD;
 	protected Button agregarBTN;
@@ -47,7 +52,15 @@ public abstract class WindowListado extends Window {
 
 	public Button seleccionarBTN;
 
+	// -------------------------------------------------------------
+
 	protected boolean selectionMode = false;
+
+	// -------------------------------------------------------------
+
+	protected WindowBuilder windowBuilder;
+
+	// -------------------------------------------------------------
 
 	public WindowListado() {
 		super();
@@ -56,6 +69,8 @@ public abstract class WindowListado extends Window {
 	public void init(boolean selectionMode) {
 
 		try {
+			
+			windowBuilder = new WindowBuilder();
 
 			this.selectionMode = selectionMode;
 

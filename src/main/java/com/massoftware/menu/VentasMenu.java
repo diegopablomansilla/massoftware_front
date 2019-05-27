@@ -1,12 +1,8 @@
 package com.massoftware.menu;
 
+import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
-import com.massoftware.windows.a.tipos_documento_afip.WTiposDocumentoAFIP;
-import com.massoftware.windows.a.zonas.WZonas;
-import com.massoftware.x.geo.WLCiudadCustom;
-import com.massoftware.x.geo.WLPaisCustom;
-import com.massoftware.x.geo.WLProvinciaCustom;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -68,18 +64,18 @@ public class VentasMenu extends AbstractMenu {
 		a11.addItem("Provincias ...", openProvinciaCmd());
 		a11.addItem("Paises ...", openPaisCmd());
 
-		a1.addItem("Tipos de clientes ...", null).setEnabled(false);
+		a1.addItem("Tipos de clientes ...", openTipoClienteCmd());
 		a1.addItem("Sub ctas. ctes. ...", null).setEnabled(false);
 		a1.addItem("Clasificación de clientes (cta. cte.) ...", null).setEnabled(false);
 		a1.addItem("Bloqueo de clientes ...", null).setEnabled(false);
 		a1.addItem("Alícuotas ...", null).setEnabled(false);
 		a1.addItem("Cargas ...", null).setEnabled(false);
-		a1.addItem("Depósitos ...", null).setEnabled(false);		
+		a1.addItem("Depósitos ...", null).setEnabled(false);
 		a1.addItem("Sucursales ...", openSucursalesCmd());
-		a1.addItem("Tipos de documentos AFIP ...", openTiposDocumentoAFIPCmd());
+		a1.addItem("Tipos de documentos AFIP ...", openTipoDocumentoAFIPCmd());
 		a11.addItem("Motivos notas de creditos", null).setEnabled(false);
-		a1.addItem("Motivos comentarios", null).setEnabled(false);
-		a1.addItem("Motivos notas de crédito", null).setEnabled(false);
+		a1.addItem("Motivos comentarios", openMotivoComentarioCmd());
+		a1.addItem("Motivos notas de crédito", openNotaCreditoMotivoCmd());
 		a1.addItem("Perfil de facturación ...", null).setEnabled(false);
 		a1.addItem("Parámetros generales", null).setEnabled(false);
 		a1.addItem("AFIP ...", null).setEnabled(false);
@@ -91,7 +87,7 @@ public class VentasMenu extends AbstractMenu {
 
 		return menubar;
 	}
-	
+
 	protected Command openSucursalesCmd() {
 
 		return new Command() {
@@ -108,7 +104,7 @@ public class VentasMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
 	protected Command openTalonariosCmd() {
 
 		return new Command() {
@@ -125,7 +121,7 @@ public class VentasMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
 	protected Command openZonasCmd() {
 
 		return new Command() {
@@ -135,15 +131,19 @@ public class VentasMenu extends AbstractMenu {
 			private static final long serialVersionUID = 4645387020070455569L;
 
 			@Override
-			public void menuSelected(MenuItem selectedItem) {
-
-				Window window = new WZonas();
-				getUI().addWindow(window);
+			public void menuSelected(MenuItem selectedItem) {				
+				
+				try {
+					Window window = windowBuilder.buildWLZona();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
 			}
 		};
 	}
-	
-	protected Command openTiposDocumentoAFIPCmd() {
+
+	protected Command openTipoDocumentoAFIPCmd() {
 
 		return new Command() {
 			/**
@@ -154,12 +154,17 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WTiposDocumentoAFIP();
-				getUI().addWindow(window);
+				try {
+					Window window = windowBuilder.buildWLTipoDocumentoAFIP();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
 			}
 		};
 	}
-	
+
 	protected Command openPaisCmd() {
 
 		return new Command() {
@@ -171,12 +176,16 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WLPaisCustom();
-				getUI().addWindow(window);
+				try {
+					Window window = windowBuilder.buildWLPais();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
 			}
 		};
 	}
-	
+
 	protected Command openProvinciaCmd() {
 
 		return new Command() {
@@ -188,12 +197,16 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WLProvinciaCustom();
-				getUI().addWindow(window);
+				try {
+					Window window = windowBuilder.buildWLProvincia();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
 			}
 		};
 	}
-	
+
 	protected Command openCiudadCmd() {
 
 		return new Command() {
@@ -205,8 +218,77 @@ public class VentasMenu extends AbstractMenu {
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 
-				Window window = new WLCiudadCustom();
-				getUI().addWindow(window);
+				try {
+					Window window = windowBuilder.buildWLCiudad();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openTipoClienteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLTipoCliente();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openNotaCreditoMotivoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLNotaCreditoMotivo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+
+	protected Command openMotivoComentarioCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLMotivoComentario();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
 			}
 		};
 	}

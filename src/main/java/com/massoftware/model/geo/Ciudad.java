@@ -3,6 +3,7 @@ package com.massoftware.model.geo;
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 import com.massoftware.model.EntityId;
+import com.massoftware.model.geo.Provincia;
 
 @ClassLabelAnont(singular = "Ciudad", plural = "Ciudades", singularPre = "la ciudad", pluralPre = "las ciudades")
 public class Ciudad extends EntityId {

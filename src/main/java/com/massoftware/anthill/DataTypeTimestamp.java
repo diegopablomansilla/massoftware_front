@@ -2,7 +2,7 @@ package com.massoftware.anthill;
 
 import java.sql.Timestamp;
 
-class DataTypeTimestamp extends DataType {
+public class DataTypeTimestamp extends DataType {
 
 	private Boolean defNowInsert = false;
 	private Boolean defNowUpdate = false;
