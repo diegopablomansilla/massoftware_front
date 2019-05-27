@@ -252,13 +252,15 @@ public class WLNOMBRE_CLASE extends WindowListado {
 			filterBI.getBean().setOrderBy(itemsGRD.getSortOrder().get(0).getPropertyId().toString());
 			filterBI.getBean().setOrderByDesc(itemsGRD.getSortOrder().get(0).getDirection().toString().equals("ASCENDING") == false);
 			
-			if (filterBI.getBean().equals(lastFilter) == false) {
+			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
 				lastFilter = (NOMBRE_CLASEFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
-				}						 
+				}
+				
+				validateFilterSection();						 
 			
 				List<NOMBRE_CLASE> items = getDAO().find(filterBI.getBean());
 				

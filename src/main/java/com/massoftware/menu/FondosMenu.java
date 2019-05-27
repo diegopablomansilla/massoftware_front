@@ -28,7 +28,7 @@ import com.massoftware.windows.modelos_cbtes_fondos.WModelosCbtesFondos;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
 import com.massoftware.windows.valores_propios.WValoresPropios;
 import com.massoftware.windows.valores_terceros.WValoresTerceros;
-import com.massoftware.x.afip.monedas.WLMonedaAFIPCustom;
+import com.massoftware.x.afip.WLMonedaAFIPCustom;
 import com.massoftware.x.geo.WLZonaCustom;
 import com.massoftware.x.monedas.WLMonedaCustom;
 import com.vaadin.event.ShortcutAction.KeyCode;

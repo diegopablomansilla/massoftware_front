@@ -23,7 +23,7 @@ public class MonedaAFIPAnt extends Ant {
 
 		c.setName("MonedaAFIP");
 
-		c.setNamePackage("afip.monedas");
+		c.setNamePackage("afip");
 		c.setSingular("Moneda AFIP");
 		c.setPlural("Monedas AFIP");
 		c.setSingularPre("la moneda AFIP");

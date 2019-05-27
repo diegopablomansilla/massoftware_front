@@ -1,11 +1,11 @@
-package com.massoftware.dao.afip.monedas;
+package com.massoftware.dao.afip;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
-import com.massoftware.model.afip.monedas.MonedaAFIP;
+import com.massoftware.model.afip.MonedaAFIP;
 
 public class MonedaAFIPDAO {
 

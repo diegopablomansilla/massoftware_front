@@ -1,4 +1,4 @@
-package com.massoftware.model.afip.monedas;
+package com.massoftware.model.afip;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;

@@ -52,36 +52,38 @@ public class VentasMenu extends AbstractMenu {
 		a1.addItem("Vendedores y zonas de ventas ...", null).setEnabled(false);
 		a1.addItem("Zonas ...", openZonasCmd());
 		a1.addItem("Canales de comercialización ...", null).setEnabled(false);
-		a1.addItem("Transportes", null).setEnabled(false);
+		MenuBar.MenuItem a12 = a1.addItem("Transportes", null);
+		
+		a12.addItem("Transportes ...", openTransporteCmd());
+		
+		
 		a1.addItem("Convenios de elaboración ...", null).setEnabled(false);
 
 		MenuBar.MenuItem a11 = a1.addItem("Ciudades ...", null);
 
-		// a11.addItem("Ciudades ...", openWindowCmd(Ciudad.class));
-		// a11.addItem("Provincias ...", openWindowCmd(Provincia.class));
-		// a11.addItem("Paises ...", openWindowCmd(Pais.class));
-		a11.addItem("Ciudades ...", openCiudadCmd());
-		a11.addItem("Provincias ...", openProvinciaCmd());
 		a11.addItem("Paises ...", openPaisCmd());
+		a11.addItem("Provincias ...", openProvinciaCmd());
+		a11.addItem("Ciudades ...", openCiudadCmd());
+		a11.addItem("Códigos postales ...", openCodigoPostalCmd());			
+		 
 
 		a1.addItem("Tipos de clientes ...", openTipoClienteCmd());
 		a1.addItem("Sub ctas. ctes. ...", null).setEnabled(false);
-		a1.addItem("Clasificación de clientes (cta. cte.) ...", null).setEnabled(false);
-		a1.addItem("Bloqueo de clientes ...", null).setEnabled(false);
+		a1.addItem("Clasificación de clientes (cta. cte.) ...", openClasificacionClienteCmd());
+		a1.addItem("Bloqueo de clientes ...", openMotivoBloqueoClienteCmd());
 		a1.addItem("Alícuotas ...", null).setEnabled(false);
 		a1.addItem("Cargas ...", null).setEnabled(false);
 		a1.addItem("Depósitos ...", null).setEnabled(false);
-		a1.addItem("Sucursales ...", openSucursalesCmd());
-		a1.addItem("Tipos de documentos AFIP ...", openTipoDocumentoAFIPCmd());
-		a11.addItem("Motivos notas de creditos", null).setEnabled(false);
-		a1.addItem("Motivos comentarios", openMotivoComentarioCmd());
+		a1.addItem("+++++++++Sucursales ...", openSucursalesCmd());
+		a1.addItem("Tipos de documentos AFIP ...", openTipoDocumentoAFIPCmd());		
+		a1.addItem("Motivos comentarios", openMotivoComentarioCmd());		
 		a1.addItem("Motivos notas de crédito", openNotaCreditoMotivoCmd());
 		a1.addItem("Perfil de facturación ...", null).setEnabled(false);
 		a1.addItem("Parámetros generales", null).setEnabled(false);
 		a1.addItem("AFIP ...", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Tipos de comprobante", null).setEnabled(false);
-		a1.addItem("Talonarios ...", openTalonariosCmd());
+		a1.addItem("+++++++++Talonarios ...", openTalonariosCmd());
 		a1.addSeparator();
 		a1.addItem("Configurar impresora ...", null).setEnabled(false);
 
@@ -284,6 +286,94 @@ public class VentasMenu extends AbstractMenu {
 
 				try {
 					Window window = windowBuilder.buildWLMotivoComentario();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openCodigoPostalCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLCodigoPostal();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openClasificacionClienteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLClasificacionCliente();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openMotivoBloqueoClienteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLMotivoBloqueoCliente();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openTransporteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLTransporte();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

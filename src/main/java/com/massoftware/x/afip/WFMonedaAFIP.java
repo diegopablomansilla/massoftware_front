@@ -1,5 +1,5 @@
 
-package com.massoftware.x.afip.monedas;
+package com.massoftware.x.afip;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -13,8 +13,8 @@ import com.massoftware.model.EntityId;
 
 
 
-import com.massoftware.model.afip.monedas.MonedaAFIP;
-import com.massoftware.dao.afip.monedas.MonedaAFIPDAO;
+import com.massoftware.model.afip.MonedaAFIP;
+import com.massoftware.dao.afip.MonedaAFIPDAO;
 
 @SuppressWarnings("serial")
 public class WFMonedaAFIP extends WindowForm {

@@ -1,5 +1,5 @@
 
-package com.massoftware.x.seguridad;
+package com.massoftware.x.geo;
 
 
 import java.util.ArrayList;
@@ -31,48 +31,63 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.dao.seguridad.UsuarioFiltro;
-import com.massoftware.dao.seguridad.UsuarioDAO;
+import com.massoftware.model.geo.CodigoPostal;
+import com.massoftware.dao.geo.CodigoPostalFiltro;
+import com.massoftware.dao.geo.CodigoPostalDAO;
 
+import com.massoftware.model.geo.Pais;
+import com.massoftware.dao.geo.PaisFiltro;
+import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.model.geo.Provincia;
+import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.model.geo.Ciudad;
+import com.massoftware.dao.geo.CiudadFiltro;
+import com.massoftware.dao.geo.CiudadDAO;
 
 @SuppressWarnings("serial")
-public class WLUsuario extends WindowListado {
+public class WLCodigoPostal extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<UsuarioFiltro> filterBI;
-	protected BeanItemContainer<Usuario> itemsBIC;
+	BeanItem<CodigoPostalFiltro> filterBI;
+	protected BeanItemContainer<CodigoPostal> itemsBIC;
 	
-	private UsuarioDAO dao;
+	private CodigoPostalDAO dao;
 
 	// -------------------------------------------------------------
 
 	
+	protected TextFieldBox codigoTXTB;
 	protected TextFieldBox numeroFromTXTB;
 	protected TextFieldBox numeroToTXTB;
-	protected TextFieldBox nombreTXTB;
+	protected ComboBoxBox paisCBXB;
+	protected SelectorBox paisSBX;
+	protected ComboBoxBox provinciaCBXB;
+	protected SelectorBox provinciaSBX;
+	protected ComboBoxBox ciudadCBXB;
+	protected SelectorBox ciudadSBX;
 
 
 	// -------------------------------------------------------------
 
-	public WLUsuario() {
+	public WLCodigoPostal() {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(new UsuarioFiltro());
+		filterBI = new BeanItem<CodigoPostalFiltro>(new CodigoPostalFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLUsuario(UsuarioFiltro filtro) {
+	public WLCodigoPostal(CodigoPostalFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(filtro);
+		filterBI = new BeanItem<CodigoPostalFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected UsuarioDAO getDAO() {
+	protected CodigoPostalDAO getDAO() {
 		if(dao == null){
-			dao = new UsuarioDAO();
+			dao = new CodigoPostalDAO();
 		}
 		
 		return dao;
@@ -80,7 +95,7 @@ public class WLUsuario extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Usuario().labelPlural());
+		confWinList(this, new CodigoPostal().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -117,6 +132,10 @@ public class WLUsuario extends WindowListado {
 
 		// ------------------------------------------------------------------
 
+		codigoTXTB = new TextFieldBox(this, filterBI, "codigo", "igual a ..");
+
+		// ------------------------------------------------------------------
+
 		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
 
 		// ------------------------------------------------------------------
@@ -125,7 +144,198 @@ public class WLUsuario extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		nombreTXTB = new TextFieldBox(this, filterBI, "nombre", "contiene las palabras ..");
+		PaisDAO paisDAO = new PaisDAO();
+
+		long paisItems = paisDAO.count();
+
+		if (paisItems < 300) {
+
+			PaisFiltro paisFiltro = new PaisFiltro();
+
+			paisFiltro.setUnlimited(true);
+
+			paisFiltro.setOrderBy("numero");
+
+			List<Pais> paisLista = paisDAO.find(paisFiltro);
+
+			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
+
+		} else {
+
+			paisSBX = new SelectorBox(filterBI, "pais") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					PaisDAO dao = new PaisDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) throws Exception {
+
+					PaisFiltro filtro = new PaisFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLPais windowPoPup = new WLPais(filtro) {
+
+						protected void setSelectedItem() throws Exception {
+
+							paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+		}
+
+		// ------------------------------------------------------------------
+
+		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+
+		long provinciaItems = provinciaDAO.count();
+
+		if (provinciaItems < 300) {
+
+			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
+
+			provinciaFiltro.setUnlimited(true);
+
+			provinciaFiltro.setOrderBy("numero");
+
+			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+
+			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista, filterBI.getBean().getProvincia());
+
+		} else {
+
+			provinciaSBX = new SelectorBox(filterBI, "provincia") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					ProvinciaDAO dao = new ProvinciaDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) throws Exception {
+
+					ProvinciaFiltro filtro = new ProvinciaFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLProvincia windowPoPup = new WLProvincia(filtro) {
+
+						protected void setSelectedItem() throws Exception {
+
+							provinciaSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+		}
+
+		// ------------------------------------------------------------------
+
+		CiudadDAO ciudadDAO = new CiudadDAO();
+
+		long ciudadItems = ciudadDAO.count();
+
+		if (ciudadItems < 300) {
+
+			CiudadFiltro ciudadFiltro = new CiudadFiltro();
+
+			ciudadFiltro.setUnlimited(true);
+
+			ciudadFiltro.setOrderBy("numero");
+
+			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+
+			ciudadCBXB = new ComboBoxBox(this, filterBI, "ciudad", ciudadLista, filterBI.getBean().getCiudad());
+
+		} else {
+
+			ciudadSBX = new SelectorBox(filterBI, "ciudad") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					CiudadDAO dao = new CiudadDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) throws Exception {
+
+					CiudadFiltro filtro = new CiudadFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLCiudad windowPoPup = new WLCiudad(filtro) {
+
+						protected void setSelectedItem() throws Exception {
+
+							ciudadSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+		}
 				
 	
 		// ------------------------------------------------------------------
@@ -143,14 +353,32 @@ public class WLUsuario extends WindowListado {
 		Button buscarBTN = buildButtonBuscar();		
 
 		
+		if (codigoTXTB != null) {
+			filaFiltroHL.addComponent(codigoTXTB);
+		}
 		if (numeroFromTXTB != null) {
 			filaFiltroHL.addComponent(numeroFromTXTB);
 		}
 		if (numeroToTXTB != null) {
 			filaFiltroHL.addComponent(numeroToTXTB);
 		}
-		if (nombreTXTB != null) {
-			filaFiltroHL.addComponent(nombreTXTB);
+		if (paisCBXB != null) {
+			filaFiltroHL.addComponent(paisCBXB);
+		}
+		if (paisSBX != null) {
+			filaFiltroHL.addComponent(paisSBX);
+		}
+		if (provinciaCBXB != null) {
+			filaFiltroHL.addComponent(provinciaCBXB);
+		}
+		if (provinciaSBX != null) {
+			filaFiltroHL.addComponent(provinciaSBX);
+		}
+		if (ciudadCBXB != null) {
+			filaFiltroHL.addComponent(ciudadCBXB);
+		}
+		if (ciudadSBX != null) {
+			filaFiltroHL.addComponent(ciudadSBX);
 		}
 		
 		filaFiltroHL.addComponent(buscarBTN);
@@ -205,19 +433,25 @@ public class WLUsuario extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "codigo", "numero", "nombreCalle", "numeroCalle", "ciudad" });
 
 		// ------------------------------------------------------------------
 		
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
+		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 240);
+
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombreCalle"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("numeroCalle"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("ciudad"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		Usuario dto = new Usuario();
+		CodigoPostal dto = new CodigoPostal();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -242,7 +476,7 @@ public class WLUsuario extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("numero", SortDirection.DESCENDING));
+		order.add(new SortOrder("codigo", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -251,7 +485,7 @@ public class WLUsuario extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Usuario> getItemsBIC() {
+	protected BeanItemContainer<CodigoPostal> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -259,7 +493,7 @@ public class WLUsuario extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<Usuario>(Usuario.class, new ArrayList<Usuario>());
+			itemsBIC = new BeanItemContainer<CodigoPostal>(CodigoPostal.class, new ArrayList<CodigoPostal>());
 		}
 
 		return itemsBIC;
@@ -275,7 +509,7 @@ public class WLUsuario extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<Usuario> items = new Usuario().find(limit, offset, buildOrderBy(),
+			// List<CodigoPostal> items = new CodigoPostal().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -285,7 +519,7 @@ public class WLUsuario extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (UsuarioFiltro) filterBI.getBean().clone();
+				lastFilter = (CodigoPostalFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -293,10 +527,10 @@ public class WLUsuario extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<Usuario> items = getDAO().find(filterBI.getBean());
+				List<CodigoPostal> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (Usuario item : items) {
+				for (CodigoPostal item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -328,7 +562,7 @@ public class WLUsuario extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFUsuario(mode, id);
+		return windowBuilder.buildWFCodigoPostal(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -346,4 +580,4 @@ public class WLUsuario extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-27T19:20:26.925-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-27T19:20:27.333-03:00[America/Buenos_Aires]

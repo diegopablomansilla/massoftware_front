@@ -1,5 +1,5 @@
 
-package com.massoftware.x.seguridad;
+package com.massoftware.x.logistica;
 
 
 import java.util.ArrayList;
@@ -31,20 +31,20 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.dao.seguridad.UsuarioFiltro;
-import com.massoftware.dao.seguridad.UsuarioDAO;
+import com.massoftware.model.logistica.Transporte;
+import com.massoftware.dao.logistica.TransporteFiltro;
+import com.massoftware.dao.logistica.TransporteDAO;
 
 
 @SuppressWarnings("serial")
-public class WLUsuario extends WindowListado {
+public class WLTransporte extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<UsuarioFiltro> filterBI;
-	protected BeanItemContainer<Usuario> itemsBIC;
+	BeanItem<TransporteFiltro> filterBI;
+	protected BeanItemContainer<Transporte> itemsBIC;
 	
-	private UsuarioDAO dao;
+	private TransporteDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -56,23 +56,23 @@ public class WLUsuario extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	public WLUsuario() {
+	public WLTransporte() {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(new UsuarioFiltro());
+		filterBI = new BeanItem<TransporteFiltro>(new TransporteFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLUsuario(UsuarioFiltro filtro) {
+	public WLTransporte(TransporteFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(filtro);
+		filterBI = new BeanItem<TransporteFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected UsuarioDAO getDAO() {
+	protected TransporteDAO getDAO() {
 		if(dao == null){
-			dao = new UsuarioDAO();
+			dao = new TransporteDAO();
 		}
 		
 		return dao;
@@ -80,7 +80,7 @@ public class WLUsuario extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Usuario().labelPlural());
+		confWinList(this, new Transporte().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -205,7 +205,7 @@ public class WLUsuario extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "cuit", "ingresosBrutos", "telefono", "fax", "codigoPostal", "domicilio", "comentario" });
 
 		// ------------------------------------------------------------------
 		
@@ -213,11 +213,25 @@ public class WLUsuario extends WindowListado {
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("cuit"), true, 132);
+
+		UtilUI.confColumn(itemsGRD.getColumn("ingresosBrutos"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("telefono"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("fax"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("codigoPostal"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("domicilio"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("comentario"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		Usuario dto = new Usuario();
+		Transporte dto = new Transporte();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -242,7 +256,7 @@ public class WLUsuario extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("numero", SortDirection.DESCENDING));
+		order.add(new SortOrder("numero", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -251,7 +265,7 @@ public class WLUsuario extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Usuario> getItemsBIC() {
+	protected BeanItemContainer<Transporte> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -259,7 +273,7 @@ public class WLUsuario extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<Usuario>(Usuario.class, new ArrayList<Usuario>());
+			itemsBIC = new BeanItemContainer<Transporte>(Transporte.class, new ArrayList<Transporte>());
 		}
 
 		return itemsBIC;
@@ -275,7 +289,7 @@ public class WLUsuario extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<Usuario> items = new Usuario().find(limit, offset, buildOrderBy(),
+			// List<Transporte> items = new Transporte().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -285,7 +299,7 @@ public class WLUsuario extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (UsuarioFiltro) filterBI.getBean().clone();
+				lastFilter = (TransporteFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -293,10 +307,10 @@ public class WLUsuario extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<Usuario> items = getDAO().find(filterBI.getBean());
+				List<Transporte> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (Usuario item : items) {
+				for (Transporte item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -328,7 +342,7 @@ public class WLUsuario extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFUsuario(mode, id);
+		return windowBuilder.buildWFTransporte(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -346,4 +360,4 @@ public class WLUsuario extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-27T19:20:26.925-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-27T19:20:27.641-03:00[America/Buenos_Aires]

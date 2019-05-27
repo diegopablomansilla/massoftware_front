@@ -1,11 +1,11 @@
 
-package com.massoftware.x.afip.monedas;
+package com.massoftware.x.afip;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.afip.monedas.MonedaAFIPFiltro;
-import com.massoftware.model.afip.monedas.MonedaAFIP;
+import com.massoftware.dao.afip.MonedaAFIPFiltro;
+import com.massoftware.model.afip.MonedaAFIP;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

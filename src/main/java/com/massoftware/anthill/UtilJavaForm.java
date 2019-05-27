@@ -69,7 +69,8 @@ public class UtilJavaForm {
 				java += sc + "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
 				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
 				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
-//				java += sc + "import com.massoftware.x." + clazz.getNamePackage() + ".WL" + clazz.getName() + ";";
+				// java += sc + "import com.massoftware.x." + clazz.getNamePackage() + ".WL" +
+				// clazz.getName() + ";";
 			}
 		}
 
@@ -97,7 +98,11 @@ public class UtilJavaForm {
 
 			} else if (att.isString()) {
 
-				java += sc + "protected TextFieldEntity " + att.getName() + "TXT;";
+				if (att.getMaxLength() > 200) {
+					java += sc + "protected TextAreaEntity " + att.getName() + "TXA;";
+				} else {
+					java += sc + "protected TextFieldEntity " + att.getName() + "TXT;";
+				}
 
 			} else if (att.isBoolean()) {
 
@@ -141,7 +146,7 @@ public class UtilJavaForm {
 							+ "\", this.mode) {";
 
 					java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
-					
+
 					java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
 							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
 					java += "\n\t\t\t}";
@@ -151,38 +156,50 @@ public class UtilJavaForm {
 					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
 							+ "\", this.mode);";
 				}
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "TXT.focus();";
 				}
 
 			} else if (att.isString()) {
-
-				if (att.isUnique()) {
-					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
-							+ "\", this.mode) {";
-
-					java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
-					
-					java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
-							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
-					java += "\n\t\t\t}";
-					java += "\n\t\t};";
-
-				} else {
-					java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
-							+ "\", this.mode);";
-				}
 				
-				if(i == 0) {
-					java += "\n\n\t\t" + att.getName() + "TXT.focus();";
+				if (att.getMaxLength() > 200) {
+					java += sc + att.getName() + "TXA = new TextAreaEntity(itemBI, \"" + att.getName()
+					+ "\", this.mode);";
+					
+					if (i == 0) {
+						java += "\n\n\t\t" + att.getName() + "TXA.focus();";
+					}
+					
+				} else {
+					if (att.isUnique()) {
+						java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+								+ "\", this.mode) {";
+
+						java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
+
+						java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
+								+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
+						java += "\n\t\t\t}";
+						java += "\n\t\t};";
+
+					} else {
+						java += sc + att.getName() + "TXT = new TextFieldEntity(itemBI, \"" + att.getName()
+								+ "\", this.mode);";
+					}
+
+					if (i == 0) {
+						java += "\n\n\t\t" + att.getName() + "TXT.focus();";
+					}
 				}
+
+				
 
 			} else if (att.isBoolean()) {
 
 				java += sc + att.getName() + "CHK = new CheckBoxEntity(itemBI, \"" + att.getName() + "\");";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "CHK.focus();";
 				}
 
@@ -190,8 +207,8 @@ public class UtilJavaForm {
 
 				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
 						+ "\", this.mode, true);";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "DAF.focus();";
 				}
 
@@ -199,8 +216,8 @@ public class UtilJavaForm {
 
 				java += sc + att.getName() + "DAF = new DateFieldEntity(itemBI, \"" + att.getName()
 						+ "\", this.mode, false);";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "DAF.focus();";
 				}
 
@@ -221,9 +238,9 @@ public class UtilJavaForm {
 
 				java += sc3 + att.getDataType().getName() + "Filtro " + att.getName() + "Filtro = new "
 						+ att.getDataType().getName() + "Filtro();";
-				
+
 				java += sc3 + att.getName() + "Filtro.setUnlimited(true);";
-				
+
 				java += sc3 + att.getName() + "Filtro.setOrderBy(\"" + clazzX.getAtts().get(0).getName() + "\");";
 
 				java += sc3 + "List<" + att.getDataType().getName().replaceAll("java.lang", "") + "> " + att.getName()
@@ -231,8 +248,8 @@ public class UtilJavaForm {
 
 				java += sc3 + att.getName() + "CBX = new ComboBoxEntity(itemBI, \"" + att.getName() + "\", this.mode, "
 						+ att.getName() + "Lista" + ");";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "CBX.focus();";
 				}
 
@@ -266,7 +283,7 @@ public class UtilJavaForm {
 						+ "Filtro();";
 				java += sc5 + "if (filter) {";
 
-				if (clazzAtt.getArgsSBX().size() > 1) {
+				if (clazzAtt.getArgsSBX().size() > 1 && clazzAtt.getArgsSBX().get(1).isString()) {
 					java += sc6 + "filtro.set" + toCamelStart(clazzAtt.getArgsSBX().get(1).getName()) + "(getValue());";
 				} else {
 					java += sc6 + "filtro.set" + toCamelStart(clazzAtt.getArgsSBX().get(0).getName()) + "(getValue());";
@@ -278,8 +295,8 @@ public class UtilJavaForm {
 				java += sc4 + "}";
 
 				java += sc3 + "};";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t" + att.getName() + "SBX.focus();";
 				}
 
@@ -340,7 +357,7 @@ public class UtilJavaForm {
 
 			Att att = clazzX.getAtts().get(i);
 
-//			String sc = (i == 0) ? "" : ", ";
+			// String sc = (i == 0) ? "" : ", ";
 
 			if (att.isNumber()) {
 
@@ -349,16 +366,24 @@ public class UtilJavaForm {
 				java += "\n\t\t}";
 
 			} else if (att.isString()) {
+				
+				if (att.getMaxLength() > 200) {
+					java += "\n\t\tif (" + att.getName() + "TXA != null) {";
+					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXA);";
+					java += "\n\t\t}";
+				} else {
+					java += "\n\t\tif (" + att.getName() + "TXT != null) {";
+					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
+					java += "\n\t\t}";
+				}
 
-				java += "\n\t\tif (" + att.getName() + "TXT != null) {";
-				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
-				java += "\n\t\t}";
+				
 
 			} else if (att.isBoolean()) {
 
 				java += "\n\t\tif (" + att.getName() + "CHK != null) {";
 				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "CHK);";
-				java += "\n\t\t}";								
+				java += "\n\t\t}";
 
 			} else if (att.isTimestamp()) {
 
@@ -372,12 +397,12 @@ public class UtilJavaForm {
 				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
 				java += "\n\t\t}";
 
-			} else if (att.isSimple() == false) {				
-				
+			} else if (att.isSimple() == false) {
+
 				java += "\n\t\tif (" + att.getName() + "CBX != null) {";
 				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "CBX);";
 				java += "\n\t\t}";
-				
+
 				java += "\n\t\tif (" + att.getName() + "SBX != null) {";
 				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "SBX);";
 				java += "\n\t\t}";

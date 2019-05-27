@@ -1,5 +1,5 @@
 
-package com.massoftware.x.monedas;
+package com.massoftware.x.logistica;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -13,45 +13,47 @@ import com.massoftware.model.EntityId;
 
 
 import java.util.List;
-import com.massoftware.model.afip.MonedaAFIP;
-import com.massoftware.dao.afip.MonedaAFIPFiltro;
-import com.massoftware.dao.afip.MonedaAFIPDAO;
+import com.massoftware.model.geo.CodigoPostal;
+import com.massoftware.dao.geo.CodigoPostalFiltro;
+import com.massoftware.dao.geo.CodigoPostalDAO;
 
-import com.massoftware.model.monedas.Moneda;
-import com.massoftware.dao.monedas.MonedaDAO;
+import com.massoftware.model.logistica.Transporte;
+import com.massoftware.dao.logistica.TransporteDAO;
 
 @SuppressWarnings("serial")
-public class WFMoneda extends WindowForm {
+public class WFTransporte extends WindowForm {
 
 
 	// -------------------------------------------------------------
 
-	protected BeanItem<Moneda> itemBI;
+	protected BeanItem<Transporte> itemBI;
 	
-	private MonedaDAO dao;
+	private TransporteDAO dao;
 
 	// -------------------------------------------------------------
 
 	
 	protected TextFieldEntity numeroTXT;
 	protected TextFieldEntity nombreTXT;
-	protected TextFieldEntity abreviaturaTXT;
-	protected TextFieldEntity cotizacionTXT;
-	protected DateFieldEntity cotizacionFechaDAF;
-	protected CheckBoxEntity controlActualizacionCHK;
-	protected ComboBoxEntity monedaAFIPCBX;
-	protected SelectorBox monedaAFIPSBX;
+	protected TextFieldEntity cuitTXT;
+	protected TextFieldEntity ingresosBrutosTXT;
+	protected TextFieldEntity telefonoTXT;
+	protected TextFieldEntity faxTXT;
+	protected ComboBoxEntity codigoPostalCBX;
+	protected SelectorBox codigoPostalSBX;
+	protected TextFieldEntity domicilioTXT;
+	protected TextAreaEntity comentarioTXA;
 
 
 	// -------------------------------------------------------------
 
-	public WFMoneda(String mode, String id) {
+	public WFTransporte(String mode, String id) {
 		super(mode, id);					
 	}
 
-	protected MonedaDAO getDAO() {
+	protected TransporteDAO getDAO() {
 		if(dao == null){
-			dao = new MonedaDAO();
+			dao = new TransporteDAO();
 		}
 		
 		return dao;
@@ -108,70 +110,78 @@ public class WFMoneda extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
+		cuitTXT = new TextFieldEntity(itemBI, "cuit", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsAbreviatura((String)arg);
+				return getDAO().isExistsCuit((Long)arg);
 			}
 		};
 
 		// ------------------------------------------------------------------
 
-		cotizacionTXT = new TextFieldEntity(itemBI, "cotizacion", this.mode);
+		ingresosBrutosTXT = new TextFieldEntity(itemBI, "ingresosBrutos", this.mode);
 
 		// ------------------------------------------------------------------
 
-		cotizacionFechaDAF = new DateFieldEntity(itemBI, "cotizacionFecha", this.mode, true);
+		telefonoTXT = new TextFieldEntity(itemBI, "telefono", this.mode);
 
 		// ------------------------------------------------------------------
 
-		controlActualizacionCHK = new CheckBoxEntity(itemBI, "controlActualizacion");
+		faxTXT = new TextFieldEntity(itemBI, "fax", this.mode);
 
-		MonedaAFIPDAO monedaAFIPDAO = new MonedaAFIPDAO();
+		CodigoPostalDAO codigoPostalDAO = new CodigoPostalDAO();
 
-		long items = monedaAFIPDAO.count();
+		long items = codigoPostalDAO.count();
 
 		if (items < 300) {
 
-			MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
+			CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
 
-			monedaAFIPFiltro.setUnlimited(true);
+			codigoPostalFiltro.setUnlimited(true);
 
-			monedaAFIPFiltro.setOrderBy("numero");
+			codigoPostalFiltro.setOrderBy("numero");
 
-			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
+			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
 
-			monedaAFIPCBX = new ComboBoxEntity(itemBI, "monedaAFIP", this.mode, monedaAFIPLista);
+			codigoPostalCBX = new ComboBoxEntity(itemBI, "codigoPostal", this.mode, codigoPostalLista);
 
 		} else {
 
-			monedaAFIPSBX = new SelectorBox(itemBI, "monedaAFIP") {
+			codigoPostalSBX = new SelectorBox(itemBI, "codigoPostal") {
 
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					MonedaAFIPDAO dao = new MonedaAFIPDAO();
+					CodigoPostalDAO dao = new CodigoPostalDAO();
 
-					return dao.findByCodigoOrNombre(value);
+					return dao.findByCodigoOrNumero(value);
 
 				}
 
 				protected WindowListado getPopup(boolean filter) throws Exception {
 
-					MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
+					CodigoPostalFiltro filtro = new CodigoPostalFiltro();
 
 					if (filter) {
 
-						filtro.setNombre(getValue());
+						filtro.setCodigo(getValue());
 
 					}
 
-					return windowBuilder.buildWLMonedaAFIP(filtro);
+					return windowBuilder.buildWLCodigoPostal(filtro);
 
 				}
 
 			};
 
 		}
+
+		// ------------------------------------------------------------------
+
+		domicilioTXT = new TextFieldEntity(itemBI, "domicilio", this.mode);
+
+		// ------------------------------------------------------------------
+
+		comentarioTXA = new TextAreaEntity(itemBI, "comentario", this.mode);
 
 		
 		// ---------------------------------------------------------------------------------------------------------
@@ -194,23 +204,29 @@ public class WFMoneda extends WindowForm {
 		if (nombreTXT != null) {
 			generalVL.addComponent(nombreTXT);
 		}
-		if (abreviaturaTXT != null) {
-			generalVL.addComponent(abreviaturaTXT);
+		if (cuitTXT != null) {
+			generalVL.addComponent(cuitTXT);
 		}
-		if (cotizacionTXT != null) {
-			generalVL.addComponent(cotizacionTXT);
+		if (ingresosBrutosTXT != null) {
+			generalVL.addComponent(ingresosBrutosTXT);
 		}
-		if (cotizacionFechaDAF != null) {
-			generalVL.addComponent(cotizacionFechaDAF);
+		if (telefonoTXT != null) {
+			generalVL.addComponent(telefonoTXT);
 		}
-		if (controlActualizacionCHK != null) {
-			generalVL.addComponent(controlActualizacionCHK);
+		if (faxTXT != null) {
+			generalVL.addComponent(faxTXT);
 		}
-		if (monedaAFIPCBX != null) {
-			generalVL.addComponent(monedaAFIPCBX);
+		if (codigoPostalCBX != null) {
+			generalVL.addComponent(codigoPostalCBX);
 		}
-		if (monedaAFIPSBX != null) {
-			generalVL.addComponent(monedaAFIPSBX);
+		if (codigoPostalSBX != null) {
+			generalVL.addComponent(codigoPostalSBX);
+		}
+		if (domicilioTXT != null) {
+			generalVL.addComponent(domicilioTXT);
+		}
+		if (comentarioTXA != null) {
+			generalVL.addComponent(comentarioTXA);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -232,7 +248,7 @@ public class WFMoneda extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Moneda) item).setNumero(getDAO().nextValueNumero());
+		((Transporte) item).setNumero(getDAO().nextValueNumero());
 
 	}
 
@@ -240,10 +256,10 @@ public class WFMoneda extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((Moneda) obj);
+		itemBI.setBean((Transporte) obj);
 	}
 
-	protected BeanItem<Moneda> getItemBIC() throws Exception {
+	protected BeanItem<Transporte> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -252,7 +268,7 @@ public class WFMoneda extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<Moneda>(new Moneda());
+			itemBI = new BeanItem<Transporte>(new Transporte());
 		}
 		return itemBI;
 	}
@@ -300,7 +316,7 @@ public class WFMoneda extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Moneda item = getDAO().findById(id);
+			Transporte item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

@@ -68,7 +68,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 			List<Pais> paisLista = paisDAO.find(paisFiltro);
 
-			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista);
+			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
 
 			// *************************************
 
@@ -196,7 +196,8 @@ public class WLCiudadCustom extends WLCiudad {
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 
-			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista);
+			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista,
+					filterBI.getBean().getProvincia());
 
 		} else {
 

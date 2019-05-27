@@ -13,6 +13,12 @@ public class TextAreaEntity extends TextArea {
 	private static final long serialVersionUID = -5847859604515789175L;
 
 	@SuppressWarnings("rawtypes")
+	public TextAreaEntity(BeanItem dtoBI, String attName, String mode) throws Exception {
+		init(dtoBI, attName, mode, 5);
+	}
+
+	
+	@SuppressWarnings("rawtypes")
 	public TextAreaEntity(BeanItem dtoBI, String attName, String mode, int rows) throws Exception {
 		init(dtoBI, attName, mode, rows);
 	}

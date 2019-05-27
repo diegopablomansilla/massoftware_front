@@ -1,5 +1,5 @@
 
-package com.massoftware.x.afip.monedas;
+package com.massoftware.x.clientes;
 
 
 import java.util.ArrayList;
@@ -31,47 +31,48 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.afip.monedas.MonedaAFIP;
-import com.massoftware.dao.afip.monedas.MonedaAFIPFiltro;
-import com.massoftware.dao.afip.monedas.MonedaAFIPDAO;
+import com.massoftware.model.clientes.ClasificacionCliente;
+import com.massoftware.dao.clientes.ClasificacionClienteFiltro;
+import com.massoftware.dao.clientes.ClasificacionClienteDAO;
 
 
 @SuppressWarnings("serial")
-public class WLMonedaAFIP extends WindowListado {
+public class WLClasificacionCliente extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MonedaAFIPFiltro> filterBI;
-	protected BeanItemContainer<MonedaAFIP> itemsBIC;
+	BeanItem<ClasificacionClienteFiltro> filterBI;
+	protected BeanItemContainer<ClasificacionCliente> itemsBIC;
 	
-	private MonedaAFIPDAO dao;
+	private ClasificacionClienteDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	protected TextFieldBox codigoTXTB;
+	protected TextFieldBox numeroFromTXTB;
+	protected TextFieldBox numeroToTXTB;
 	protected TextFieldBox nombreTXTB;
 
 
 	// -------------------------------------------------------------
 
-	public WLMonedaAFIP() {
+	public WLClasificacionCliente() {
 		super();		
-		filterBI = new BeanItem<MonedaAFIPFiltro>(new MonedaAFIPFiltro());
+		filterBI = new BeanItem<ClasificacionClienteFiltro>(new ClasificacionClienteFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLMonedaAFIP(MonedaAFIPFiltro filtro) {
+	public WLClasificacionCliente(ClasificacionClienteFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<MonedaAFIPFiltro>(filtro);
+		filterBI = new BeanItem<ClasificacionClienteFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected MonedaAFIPDAO getDAO() {
+	protected ClasificacionClienteDAO getDAO() {
 		if(dao == null){
-			dao = new MonedaAFIPDAO();
+			dao = new ClasificacionClienteDAO();
 		}
 		
 		return dao;
@@ -79,7 +80,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new MonedaAFIP().labelPlural());
+		confWinList(this, new ClasificacionCliente().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -116,7 +117,11 @@ public class WLMonedaAFIP extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		codigoTXTB = new TextFieldBox(this, filterBI, "codigo", "igual a ..");
+		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
+
+		// ------------------------------------------------------------------
+
+		numeroToTXTB = new TextFieldBox(this, filterBI, "numeroTo");
 
 		// ------------------------------------------------------------------
 
@@ -138,8 +143,11 @@ public class WLMonedaAFIP extends WindowListado {
 		Button buscarBTN = buildButtonBuscar();		
 
 		
-		if (codigoTXTB != null) {
-			filaFiltroHL.addComponent(codigoTXTB);
+		if (numeroFromTXTB != null) {
+			filaFiltroHL.addComponent(numeroFromTXTB);
+		}
+		if (numeroToTXTB != null) {
+			filaFiltroHL.addComponent(numeroToTXTB);
 		}
 		if (nombreTXTB != null) {
 			filaFiltroHL.addComponent(nombreTXTB);
@@ -197,19 +205,21 @@ public class WLMonedaAFIP extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "codigo", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "color" });
 
 		// ------------------------------------------------------------------
 		
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
-		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 72);
+		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("color"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		MonedaAFIP dto = new MonedaAFIP();
+		ClasificacionCliente dto = new ClasificacionCliente();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -234,7 +244,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("codigo", SortDirection.ASCENDING));
+		order.add(new SortOrder("numero", SortDirection.DESCENDING));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -243,7 +253,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<MonedaAFIP> getItemsBIC() {
+	protected BeanItemContainer<ClasificacionCliente> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -251,7 +261,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<MonedaAFIP>(MonedaAFIP.class, new ArrayList<MonedaAFIP>());
+			itemsBIC = new BeanItemContainer<ClasificacionCliente>(ClasificacionCliente.class, new ArrayList<ClasificacionCliente>());
 		}
 
 		return itemsBIC;
@@ -267,7 +277,7 @@ public class WLMonedaAFIP extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<MonedaAFIP> items = new MonedaAFIP().find(limit, offset, buildOrderBy(),
+			// List<ClasificacionCliente> items = new ClasificacionCliente().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -275,18 +285,20 @@ public class WLMonedaAFIP extends WindowListado {
 			filterBI.getBean().setOrderBy(itemsGRD.getSortOrder().get(0).getPropertyId().toString());
 			filterBI.getBean().setOrderByDesc(itemsGRD.getSortOrder().get(0).getDirection().toString().equals("ASCENDING") == false);
 			
-			if (filterBI.getBean().equals(lastFilter) == false) {
+			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (MonedaAFIPFiltro) filterBI.getBean().clone();
+				lastFilter = (ClasificacionClienteFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
-				}						 
+				}
+				
+				validateFilterSection();						 
 			
-				List<MonedaAFIP> items = getDAO().find(filterBI.getBean());
+				List<ClasificacionCliente> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (MonedaAFIP item : items) {
+				for (ClasificacionCliente item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -318,7 +330,7 @@ public class WLMonedaAFIP extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFMonedaAFIP(mode, id);
+		return windowBuilder.buildWFClasificacionCliente(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -336,4 +348,4 @@ public class WLMonedaAFIP extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-27T13:47:08.349-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-27T19:20:27.820-03:00[America/Buenos_Aires]

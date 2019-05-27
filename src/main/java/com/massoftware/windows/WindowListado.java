@@ -151,7 +151,7 @@ public abstract class WindowListado extends Window {
 	private void loadData(boolean removeAllItems) {
 		try {
 
-			validateFilterSection();
+//			validateFilterSection();
 
 			// if (removeAllItems) {
 			// getItemsBIC().removeAllItems();

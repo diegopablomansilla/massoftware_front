@@ -97,7 +97,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "obj.set" + toCamelStart(att.getName()) + "(UtilPopulate.getLongRandom(" + td.getMinValue()
-						+ ", " + td.getMaxValue() + ", " + att.isRequired() + "));";
+						+ "L, " + td.getMaxValue() + "L, " + att.isRequired() + "));";
 
 			} else if (att.isInteger()) {
 

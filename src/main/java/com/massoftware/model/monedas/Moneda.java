@@ -3,7 +3,7 @@ package com.massoftware.model.monedas;
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
 import com.massoftware.model.EntityId;
-import com.massoftware.model.afip.monedas.MonedaAFIP;
+import com.massoftware.model.afip.MonedaAFIP;
 
 @ClassLabelAnont(singular = "Moneda", plural = "Monedas", singularPre = "la moneda", pluralPre = "las monedas")
 public class Moneda extends EntityId {

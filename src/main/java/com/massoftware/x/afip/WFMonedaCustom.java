@@ -1,5 +1,5 @@
 
-package com.massoftware.x.afip.monedas;
+package com.massoftware.x.afip;
 
 import com.massoftware.windows.UtilUI;
 import com.massoftware.x.monedas.WFMoneda;

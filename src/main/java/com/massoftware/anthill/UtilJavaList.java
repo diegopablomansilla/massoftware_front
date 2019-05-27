@@ -197,7 +197,9 @@ public class UtilJavaList {
 				
 				java += sc3 + arg.getName() + "Filtro.setUnlimited(true);";
 				
-				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + clazzX.getAtts().get(0).getName() + "\");";
+				DataTypeClazz dtArg = (DataTypeClazz) arg.getDataType();
+				
+				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + dtArg.getClazz().getAtts().get(0).getName() + "\");";
 
 				java += sc3 + "List<" + arg.getDataType().getName().replaceAll("java.lang", "") + "> " + arg.getName()
 						+ "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";

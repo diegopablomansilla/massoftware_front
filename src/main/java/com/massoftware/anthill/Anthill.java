@@ -8,14 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.massoftware.anthill.ant.CiudadAnt;
+import com.massoftware.anthill.ant.ClasificacionClienteAnt;
+import com.massoftware.anthill.ant.CodigoPostalAnt;
 import com.massoftware.anthill.ant.MonedaAFIPAnt;
 import com.massoftware.anthill.ant.MonedaAnt;
+import com.massoftware.anthill.ant.MotivoBloqueoClienteAnt;
 import com.massoftware.anthill.ant.MotivoComentarioAnt;
 import com.massoftware.anthill.ant.NotaCreditoMotivoAnt;
 import com.massoftware.anthill.ant.PaisAnt;
 import com.massoftware.anthill.ant.ProvinciaAnt;
 import com.massoftware.anthill.ant.TipoClienteAnt;
 import com.massoftware.anthill.ant.TipoDocumentoAFIPAnt;
+import com.massoftware.anthill.ant.TransporteAnt;
 import com.massoftware.anthill.ant.UsuarioAnt;
 import com.massoftware.anthill.ant.ZonaAnt;
 
@@ -58,19 +62,40 @@ public class Anthill {
 		///////////////////////////////////////////////////////////////////
 
 		new UsuarioAnt(anthill);
-		
-		new NotaCreditoMotivoAnt(anthill);
-		new MotivoComentarioAnt(anthill);
-		new TipoClienteAnt(anthill);
-		new TipoDocumentoAFIPAnt(anthill);
-		
+
+		// ---------------------------------------------
+
 		new ZonaAnt(anthill);
 		PaisAnt pais = new PaisAnt(anthill);
 		ProvinciaAnt provincia = new ProvinciaAnt(anthill, pais);
-		new CiudadAnt(anthill, pais, provincia);
+		CiudadAnt ciudad = new CiudadAnt(anthill, pais, provincia);
+		CodigoPostalAnt codigoPostal = new CodigoPostalAnt(anthill, pais, provincia, ciudad);
 		
+		// ---------------------------------------------
+		
+		new TransporteAnt(anthill, codigoPostal);		
+		
+		// ---------------------------------------------
+
+		new TipoDocumentoAFIPAnt(anthill);
 		MonedaAFIPAnt monedaAFIP = new MonedaAFIPAnt(anthill);
+
+		// ---------------------------------------------
+
 		MonedaAnt moneda = new MonedaAnt(anthill, monedaAFIP);
+
+		// ---------------------------------------------
+
+		new NotaCreditoMotivoAnt(anthill);
+		
+		// ---------------------------------------------
+
+		new MotivoComentarioAnt(anthill);
+		new TipoClienteAnt(anthill);
+		ClasificacionClienteAnt clasificacionCliente = new ClasificacionClienteAnt(anthill);
+		new MotivoBloqueoClienteAnt(anthill, clasificacionCliente);
+
+		// ---------------------------------------------
 
 		///////////////////////////////////////////////////////////////////
 

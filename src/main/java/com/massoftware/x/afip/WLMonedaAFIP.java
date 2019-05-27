@@ -1,5 +1,5 @@
 
-package com.massoftware.x.seguridad;
+package com.massoftware.x.afip;
 
 
 import java.util.ArrayList;
@@ -31,48 +31,47 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.dao.seguridad.UsuarioFiltro;
-import com.massoftware.dao.seguridad.UsuarioDAO;
+import com.massoftware.model.afip.MonedaAFIP;
+import com.massoftware.dao.afip.MonedaAFIPFiltro;
+import com.massoftware.dao.afip.MonedaAFIPDAO;
 
 
 @SuppressWarnings("serial")
-public class WLUsuario extends WindowListado {
+public class WLMonedaAFIP extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<UsuarioFiltro> filterBI;
-	protected BeanItemContainer<Usuario> itemsBIC;
+	BeanItem<MonedaAFIPFiltro> filterBI;
+	protected BeanItemContainer<MonedaAFIP> itemsBIC;
 	
-	private UsuarioDAO dao;
+	private MonedaAFIPDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	protected TextFieldBox numeroFromTXTB;
-	protected TextFieldBox numeroToTXTB;
+	protected TextFieldBox codigoTXTB;
 	protected TextFieldBox nombreTXTB;
 
 
 	// -------------------------------------------------------------
 
-	public WLUsuario() {
+	public WLMonedaAFIP() {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(new UsuarioFiltro());
+		filterBI = new BeanItem<MonedaAFIPFiltro>(new MonedaAFIPFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLUsuario(UsuarioFiltro filtro) {
+	public WLMonedaAFIP(MonedaAFIPFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<UsuarioFiltro>(filtro);
+		filterBI = new BeanItem<MonedaAFIPFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected UsuarioDAO getDAO() {
+	protected MonedaAFIPDAO getDAO() {
 		if(dao == null){
-			dao = new UsuarioDAO();
+			dao = new MonedaAFIPDAO();
 		}
 		
 		return dao;
@@ -80,7 +79,7 @@ public class WLUsuario extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Usuario().labelPlural());
+		confWinList(this, new MonedaAFIP().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -117,11 +116,7 @@ public class WLUsuario extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
-
-		// ------------------------------------------------------------------
-
-		numeroToTXTB = new TextFieldBox(this, filterBI, "numeroTo");
+		codigoTXTB = new TextFieldBox(this, filterBI, "codigo", "igual a ..");
 
 		// ------------------------------------------------------------------
 
@@ -143,11 +138,8 @@ public class WLUsuario extends WindowListado {
 		Button buscarBTN = buildButtonBuscar();		
 
 		
-		if (numeroFromTXTB != null) {
-			filaFiltroHL.addComponent(numeroFromTXTB);
-		}
-		if (numeroToTXTB != null) {
-			filaFiltroHL.addComponent(numeroToTXTB);
+		if (codigoTXTB != null) {
+			filaFiltroHL.addComponent(codigoTXTB);
 		}
 		if (nombreTXTB != null) {
 			filaFiltroHL.addComponent(nombreTXTB);
@@ -205,19 +197,19 @@ public class WLUsuario extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "codigo", "nombre" });
 
 		// ------------------------------------------------------------------
 		
 		UtilUI.confColumn(itemsGRD.getColumn("id"), true, true, true, -1);
 
-		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
+		UtilUI.confColumn(itemsGRD.getColumn("codigo"), true, 72);
 
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		Usuario dto = new Usuario();
+		MonedaAFIP dto = new MonedaAFIP();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -242,7 +234,7 @@ public class WLUsuario extends WindowListado {
 
 		List<SortOrder> order = new ArrayList<SortOrder>();
 
-		order.add(new SortOrder("numero", SortDirection.DESCENDING));
+		order.add(new SortOrder("codigo", SortDirection.ASCENDING));
 
 		itemsGRD.setSortOrder(order);			
 		
@@ -251,7 +243,7 @@ public class WLUsuario extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Usuario> getItemsBIC() {
+	protected BeanItemContainer<MonedaAFIP> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -259,7 +251,7 @@ public class WLUsuario extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<Usuario>(Usuario.class, new ArrayList<Usuario>());
+			itemsBIC = new BeanItemContainer<MonedaAFIP>(MonedaAFIP.class, new ArrayList<MonedaAFIP>());
 		}
 
 		return itemsBIC;
@@ -275,7 +267,7 @@ public class WLUsuario extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<Usuario> items = new Usuario().find(limit, offset, buildOrderBy(),
+			// List<MonedaAFIP> items = new MonedaAFIP().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -285,7 +277,7 @@ public class WLUsuario extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (UsuarioFiltro) filterBI.getBean().clone();
+				lastFilter = (MonedaAFIPFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -293,10 +285,10 @@ public class WLUsuario extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<Usuario> items = getDAO().find(filterBI.getBean());
+				List<MonedaAFIP> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (Usuario item : items) {
+				for (MonedaAFIP item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -328,7 +320,7 @@ public class WLUsuario extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFUsuario(mode, id);
+		return windowBuilder.buildWFMonedaAFIP(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -346,4 +338,4 @@ public class WLUsuario extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-27T19:20:26.925-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-27T19:20:27.676-03:00[America/Buenos_Aires]
