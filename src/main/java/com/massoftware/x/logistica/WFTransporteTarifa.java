@@ -1,5 +1,5 @@
 
-package com.massoftware.x.geo;
+package com.massoftware.x.logistica;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -13,45 +13,51 @@ import com.massoftware.model.EntityId;
 
 
 import java.util.List;
-import com.massoftware.model.geo.Pais;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.model.logistica.Carga;
+import com.massoftware.dao.logistica.CargaFiltro;
+import com.massoftware.dao.logistica.CargaDAO;
+import com.massoftware.model.geo.Ciudad;
+import com.massoftware.dao.geo.CiudadFiltro;
+import com.massoftware.dao.geo.CiudadDAO;
 
-import com.massoftware.model.geo.Provincia;
-import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.model.logistica.TransporteTarifa;
+import com.massoftware.dao.logistica.TransporteTarifaDAO;
 
 @SuppressWarnings("serial")
-public class WFProvincia extends WindowForm {
+public class WFTransporteTarifa extends WindowForm {
 
 
 	// -------------------------------------------------------------
 
-	protected BeanItem<Provincia> itemBI;
+	protected BeanItem<TransporteTarifa> itemBI;
 	
-	private ProvinciaDAO dao;
+	private TransporteTarifaDAO dao;
 
 	// -------------------------------------------------------------
 
 	
 	protected TextFieldEntity numeroTXT;
-	protected TextFieldEntity nombreTXT;
-	protected TextFieldEntity abreviaturaTXT;
-	protected TextFieldEntity numeroAFIPTXT;
-	protected TextFieldEntity numeroIngresosBrutosTXT;
-	protected TextFieldEntity numeroRENATEATXT;
-	protected ComboBoxEntity paisCBX;
-	protected SelectorBox paisSBX;
+	protected ComboBoxEntity cargaCBX;
+	protected SelectorBox cargaSBX;
+	protected ComboBoxEntity ciudadCBX;
+	protected SelectorBox ciudadSBX;
+	protected TextFieldEntity precioFleteTXT;
+	protected TextFieldEntity precioUnidadFacturacionTXT;
+	protected TextFieldEntity precioUnidadStockTXT;
+	protected TextFieldEntity precioBultosTXT;
+	protected TextFieldEntity importeMinimoEntregaTXT;
+	protected TextFieldEntity importeMinimoCargaTXT;
 
 
 	// -------------------------------------------------------------
 
-	public WFProvincia(String mode, String id) {
+	public WFTransporteTarifa(String mode, String id) {
 		super(mode, id);					
 	}
 
-	protected ProvinciaDAO getDAO() {
+	protected TransporteTarifaDAO getDAO() {
 		if(dao == null){
-			dao = new ProvinciaDAO();
+			dao = new TransporteTarifaDAO();
 		}
 		
 		return dao;
@@ -90,66 +96,34 @@ public class WFProvincia extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
-			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
-			}
-		};
+		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode);
 
 		numeroTXT.focus();
 
-		// ------------------------------------------------------------------
+		CargaDAO cargaDAO = new CargaDAO();
 
-		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
-			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
-			}
-		};
+		long cargaItems = cargaDAO.count();
 
-		// ------------------------------------------------------------------
+		if (cargaItems < MAX_ROWS_FOR_CBX) {
 
-		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
-			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsAbreviatura((String)arg);
-			}
-		};
+			CargaFiltro cargaFiltro = new CargaFiltro();
 
-		// ------------------------------------------------------------------
+			cargaFiltro.setUnlimited(true);
 
-		numeroAFIPTXT = new TextFieldEntity(itemBI, "numeroAFIP", this.mode);
+			cargaFiltro.setOrderBy("numero");
 
-		// ------------------------------------------------------------------
+			List<Carga> cargaLista = cargaDAO.find(cargaFiltro);
 
-		numeroIngresosBrutosTXT = new TextFieldEntity(itemBI, "numeroIngresosBrutos", this.mode);
-
-		// ------------------------------------------------------------------
-
-		numeroRENATEATXT = new TextFieldEntity(itemBI, "numeroRENATEA", this.mode);
-
-		PaisDAO paisDAO = new PaisDAO();
-
-		long paisItems = paisDAO.count();
-
-		if (paisItems < MAX_ROWS_FOR_CBX) {
-
-			PaisFiltro paisFiltro = new PaisFiltro();
-
-			paisFiltro.setUnlimited(true);
-
-			paisFiltro.setOrderBy("numero");
-
-			List<Pais> paisLista = paisDAO.find(paisFiltro);
-
-			paisCBX = new ComboBoxEntity(itemBI, "pais", this.mode, paisLista);
+			cargaCBX = new ComboBoxEntity(itemBI, "carga", this.mode, cargaLista);
 
 		} else {
 
-			paisSBX = new SelectorBox(itemBI, "pais") {
+			cargaSBX = new SelectorBox(itemBI, "carga") {
 
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					PaisDAO dao = new PaisDAO();
+					CargaDAO dao = new CargaDAO();
 
 					return dao.findByNumeroOrNombre(value);
 
@@ -157,7 +131,7 @@ public class WFProvincia extends WindowForm {
 
 				protected WindowListado getPopup(boolean filter) throws Exception {
 
-					PaisFiltro filtro = new PaisFiltro();
+					CargaFiltro filtro = new CargaFiltro();
 
 					if (filter) {
 
@@ -165,13 +139,84 @@ public class WFProvincia extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLPais(filtro);
+					return windowBuilder.buildWLCarga(filtro);
 
 				}
 
 			};
 
 		}
+
+		CiudadDAO ciudadDAO = new CiudadDAO();
+
+		long ciudadItems = ciudadDAO.count();
+
+		if (ciudadItems < MAX_ROWS_FOR_CBX) {
+
+			CiudadFiltro ciudadFiltro = new CiudadFiltro();
+
+			ciudadFiltro.setUnlimited(true);
+
+			ciudadFiltro.setOrderBy("numero");
+
+			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+
+			ciudadCBX = new ComboBoxEntity(itemBI, "ciudad", this.mode, ciudadLista);
+
+		} else {
+
+			ciudadSBX = new SelectorBox(itemBI, "ciudad") {
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					CiudadDAO dao = new CiudadDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) throws Exception {
+
+					CiudadFiltro filtro = new CiudadFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					return windowBuilder.buildWLCiudad(filtro);
+
+				}
+
+			};
+
+		}
+
+		// ------------------------------------------------------------------
+
+		precioFleteTXT = new TextFieldEntity(itemBI, "precioFlete", this.mode);
+
+		// ------------------------------------------------------------------
+
+		precioUnidadFacturacionTXT = new TextFieldEntity(itemBI, "precioUnidadFacturacion", this.mode);
+
+		// ------------------------------------------------------------------
+
+		precioUnidadStockTXT = new TextFieldEntity(itemBI, "precioUnidadStock", this.mode);
+
+		// ------------------------------------------------------------------
+
+		precioBultosTXT = new TextFieldEntity(itemBI, "precioBultos", this.mode);
+
+		// ------------------------------------------------------------------
+
+		importeMinimoEntregaTXT = new TextFieldEntity(itemBI, "importeMinimoEntrega", this.mode);
+
+		// ------------------------------------------------------------------
+
+		importeMinimoCargaTXT = new TextFieldEntity(itemBI, "importeMinimoCarga", this.mode);
 
 		
 		// ---------------------------------------------------------------------------------------------------------
@@ -191,26 +236,35 @@ public class WFProvincia extends WindowForm {
 		if (numeroTXT != null) {
 			generalVL.addComponent(numeroTXT);
 		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
+		if (cargaCBX != null) {
+			generalVL.addComponent(cargaCBX);
 		}
-		if (abreviaturaTXT != null) {
-			generalVL.addComponent(abreviaturaTXT);
+		if (cargaSBX != null) {
+			generalVL.addComponent(cargaSBX);
 		}
-		if (numeroAFIPTXT != null) {
-			generalVL.addComponent(numeroAFIPTXT);
+		if (ciudadCBX != null) {
+			generalVL.addComponent(ciudadCBX);
 		}
-		if (numeroIngresosBrutosTXT != null) {
-			generalVL.addComponent(numeroIngresosBrutosTXT);
+		if (ciudadSBX != null) {
+			generalVL.addComponent(ciudadSBX);
 		}
-		if (numeroRENATEATXT != null) {
-			generalVL.addComponent(numeroRENATEATXT);
+		if (precioFleteTXT != null) {
+			generalVL.addComponent(precioFleteTXT);
 		}
-		if (paisCBX != null) {
-			generalVL.addComponent(paisCBX);
+		if (precioUnidadFacturacionTXT != null) {
+			generalVL.addComponent(precioUnidadFacturacionTXT);
 		}
-		if (paisSBX != null) {
-			generalVL.addComponent(paisSBX);
+		if (precioUnidadStockTXT != null) {
+			generalVL.addComponent(precioUnidadStockTXT);
+		}
+		if (precioBultosTXT != null) {
+			generalVL.addComponent(precioBultosTXT);
+		}
+		if (importeMinimoEntregaTXT != null) {
+			generalVL.addComponent(importeMinimoEntregaTXT);
+		}
+		if (importeMinimoCargaTXT != null) {
+			generalVL.addComponent(importeMinimoCargaTXT);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------
@@ -232,7 +286,7 @@ public class WFProvincia extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Provincia) item).setNumero(getDAO().nextValueNumero());
+		((TransporteTarifa) item).setNumero(getDAO().nextValueNumero());
 
 	}
 
@@ -240,10 +294,10 @@ public class WFProvincia extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((Provincia) obj);
+		itemBI.setBean((TransporteTarifa) obj);
 	}
 
-	protected BeanItem<Provincia> getItemBIC() throws Exception {
+	protected BeanItem<TransporteTarifa> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -252,7 +306,7 @@ public class WFProvincia extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<Provincia>(new Provincia());
+			itemBI = new BeanItem<TransporteTarifa>(new TransporteTarifa());
 		}
 		return itemBI;
 	}
@@ -300,7 +354,7 @@ public class WFProvincia extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Provincia item = getDAO().findById(id);
+			TransporteTarifa item = getDAO().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

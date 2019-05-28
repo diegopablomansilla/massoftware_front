@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.massoftware.dao.AbstractFilter;
 import com.massoftware.model.EntityId;
-import com.massoftware.x.WindowBuilder;
+import com.massoftware.x.WindowFactory;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
@@ -58,7 +58,7 @@ public abstract class WindowListado extends Window {
 
 	// -------------------------------------------------------------
 
-	protected WindowBuilder windowBuilder;
+	protected WindowFactory windowBuilder;
 
 	// -------------------------------------------------------------
 
@@ -70,7 +70,7 @@ public abstract class WindowListado extends Window {
 
 		try {
 			
-			windowBuilder = new WindowBuilder();
+			windowBuilder = new WindowFactory();
 
 			this.selectionMode = selectionMode;
 

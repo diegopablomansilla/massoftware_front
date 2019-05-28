@@ -1,5 +1,5 @@
 
-package com.massoftware.x.clientes;
+package com.massoftware.x.logistica;
 
 
 import java.util.ArrayList;
@@ -31,48 +31,50 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.clientes.MotivoComentario;
-import com.massoftware.dao.clientes.MotivoComentarioFiltro;
-import com.massoftware.dao.clientes.MotivoComentarioDAO;
+import com.massoftware.model.logistica.TransporteTarifa;
+import com.massoftware.dao.logistica.TransporteTarifaFiltro;
+import com.massoftware.dao.logistica.TransporteTarifaDAO;
 
+import com.massoftware.model.logistica.Transporte;
+import com.massoftware.dao.logistica.TransporteFiltro;
+import com.massoftware.dao.logistica.TransporteDAO;
 
 @SuppressWarnings("serial")
-public class WLMotivoComentario extends WindowListado {
+public class WLTransporteTarifa extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MotivoComentarioFiltro> filterBI;
-	protected BeanItemContainer<MotivoComentario> itemsBIC;
+	BeanItem<TransporteTarifaFiltro> filterBI;
+	protected BeanItemContainer<TransporteTarifa> itemsBIC;
 	
-	private MotivoComentarioDAO dao;
+	private TransporteTarifaDAO dao;
 
 	// -------------------------------------------------------------
 
 	
-	protected TextFieldBox numeroFromTXTB;
-	protected TextFieldBox numeroToTXTB;
-	protected TextFieldBox nombreTXTB;
+	protected ComboBoxBox transporteCBXB;
+	protected SelectorBox transporteSBX;
 
 
 	// -------------------------------------------------------------
 
-	public WLMotivoComentario() {
+	public WLTransporteTarifa() {
 		super();		
-		filterBI = new BeanItem<MotivoComentarioFiltro>(new MotivoComentarioFiltro());
+		filterBI = new BeanItem<TransporteTarifaFiltro>(new TransporteTarifaFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLMotivoComentario(MotivoComentarioFiltro filtro) {
+	public WLTransporteTarifa(TransporteTarifaFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<MotivoComentarioFiltro>(filtro);
+		filterBI = new BeanItem<TransporteTarifaFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected MotivoComentarioDAO getDAO() {
+	protected TransporteTarifaDAO getDAO() {
 		if(dao == null){
-			dao = new MotivoComentarioDAO();
+			dao = new TransporteTarifaDAO();
 		}
 		
 		return dao;
@@ -80,7 +82,7 @@ public class WLMotivoComentario extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new MotivoComentario().labelPlural());
+		confWinList(this, new TransporteTarifa().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -117,15 +119,72 @@ public class WLMotivoComentario extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		numeroFromTXTB = new TextFieldBox(this, filterBI, "numeroFrom");
+		TransporteDAO transporteDAO = new TransporteDAO();
 
-		// ------------------------------------------------------------------
+		long transporteItems = transporteDAO.count();
 
-		numeroToTXTB = new TextFieldBox(this, filterBI, "numeroTo");
+		if (transporteItems < 300) {
 
-		// ------------------------------------------------------------------
+			TransporteFiltro transporteFiltro = new TransporteFiltro();
 
-		nombreTXTB = new TextFieldBox(this, filterBI, "nombre", "contiene las palabras ..");
+			transporteFiltro.setUnlimited(true);
+
+			transporteFiltro.setOrderBy("numero");
+
+			List<Transporte> transporteLista = transporteDAO.find(transporteFiltro);
+
+			transporteCBXB = new ComboBoxBox(this, filterBI, "transporte", transporteLista, filterBI.getBean().getTransporte());
+
+			transporteCBXB.focus();
+
+		} else {
+
+			transporteSBX = new SelectorBox(filterBI, "transporte") {
+
+				protected void sourceLoadDataResetPaged() {
+
+					loadDataResetPaged();
+
+				}
+
+				@SuppressWarnings("rawtypes")
+				protected List findBean(String value) throws Exception {
+
+					TransporteDAO dao = new TransporteDAO();
+
+					return dao.findByNumeroOrNombre(value);
+
+				}
+
+				protected WindowListado getPopup(boolean filter) throws Exception {
+
+					TransporteFiltro filtro = new TransporteFiltro();
+
+					if (filter) {
+
+						filtro.setNombre(getValue());
+
+					}
+
+					WLTransporte windowPoPup = new WLTransporte(filtro) {
+
+						protected void setSelectedItem() throws Exception {
+
+							transporteSBX.setSelectedItem(itemsGRD.getSelectedRow());
+
+						}
+
+					};
+
+					return windowPoPup;
+
+				}
+
+			};
+
+			transporteSBX.focus();
+
+		}
 				
 	
 		// ------------------------------------------------------------------
@@ -143,14 +202,11 @@ public class WLMotivoComentario extends WindowListado {
 		Button buscarBTN = buildButtonBuscar();		
 
 		
-		if (numeroFromTXTB != null) {
-			filaFiltroHL.addComponent(numeroFromTXTB);
+		if (transporteCBXB != null) {
+			filaFiltroHL.addComponent(transporteCBXB);
 		}
-		if (numeroToTXTB != null) {
-			filaFiltroHL.addComponent(numeroToTXTB);
-		}
-		if (nombreTXTB != null) {
-			filaFiltroHL.addComponent(nombreTXTB);
+		if (transporteSBX != null) {
+			filaFiltroHL.addComponent(transporteSBX);
 		}
 		
 		filaFiltroHL.addComponent(buscarBTN);
@@ -205,7 +261,7 @@ public class WLMotivoComentario extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "carga", "ciudad", "precioFlete", "precioUnidadFacturacion", "precioUnidadStock", "precioBultos", "importeMinimoEntrega", "importeMinimoCarga" });
 
 		// ------------------------------------------------------------------
 		
@@ -213,11 +269,25 @@ public class WLMotivoComentario extends WindowListado {
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("carga"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("ciudad"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("precioFlete"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("precioUnidadFacturacion"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("precioUnidadStock"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("precioBultos"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("importeMinimoEntrega"), true, 120);
+
+		UtilUI.confColumn(itemsGRD.getColumn("importeMinimoCarga"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		MotivoComentario dto = new MotivoComentario();
+		TransporteTarifa dto = new TransporteTarifa();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -251,7 +321,7 @@ public class WLMotivoComentario extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<MotivoComentario> getItemsBIC() {
+	protected BeanItemContainer<TransporteTarifa> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -259,7 +329,7 @@ public class WLMotivoComentario extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<MotivoComentario>(MotivoComentario.class, new ArrayList<MotivoComentario>());
+			itemsBIC = new BeanItemContainer<TransporteTarifa>(TransporteTarifa.class, new ArrayList<TransporteTarifa>());
 		}
 
 		return itemsBIC;
@@ -275,7 +345,7 @@ public class WLMotivoComentario extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<MotivoComentario> items = new MotivoComentario().find(limit, offset, buildOrderBy(),
+			// List<TransporteTarifa> items = new TransporteTarifa().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -285,7 +355,7 @@ public class WLMotivoComentario extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (MotivoComentarioFiltro) filterBI.getBean().clone();
+				lastFilter = (TransporteTarifaFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -293,10 +363,10 @@ public class WLMotivoComentario extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<MotivoComentario> items = getDAO().find(filterBI.getBean());
+				List<TransporteTarifa> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (MotivoComentario item : items) {
+				for (TransporteTarifa item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -328,7 +398,7 @@ public class WLMotivoComentario extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFMotivoComentario(mode, id);
+		return windowBuilder.buildWFTransporteTarifa(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -346,4 +416,4 @@ public class WLMotivoComentario extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-28T17:42:35.682-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-28T17:42:35.537-03:00[America/Buenos_Aires]

@@ -1,5 +1,5 @@
 
-package com.massoftware.x.clientes;
+package com.massoftware.x.logistica;
 
 
 import java.util.ArrayList;
@@ -31,20 +31,20 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.clientes.MotivoComentario;
-import com.massoftware.dao.clientes.MotivoComentarioFiltro;
-import com.massoftware.dao.clientes.MotivoComentarioDAO;
+import com.massoftware.model.logistica.Carga;
+import com.massoftware.dao.logistica.CargaFiltro;
+import com.massoftware.dao.logistica.CargaDAO;
 
 
 @SuppressWarnings("serial")
-public class WLMotivoComentario extends WindowListado {
+public class WLCarga extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<MotivoComentarioFiltro> filterBI;
-	protected BeanItemContainer<MotivoComentario> itemsBIC;
+	BeanItem<CargaFiltro> filterBI;
+	protected BeanItemContainer<Carga> itemsBIC;
 	
-	private MotivoComentarioDAO dao;
+	private CargaDAO dao;
 
 	// -------------------------------------------------------------
 
@@ -56,23 +56,23 @@ public class WLMotivoComentario extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	public WLMotivoComentario() {
+	public WLCarga() {
 		super();		
-		filterBI = new BeanItem<MotivoComentarioFiltro>(new MotivoComentarioFiltro());
+		filterBI = new BeanItem<CargaFiltro>(new CargaFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLMotivoComentario(MotivoComentarioFiltro filtro) {
+	public WLCarga(CargaFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<MotivoComentarioFiltro>(filtro);
+		filterBI = new BeanItem<CargaFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected MotivoComentarioDAO getDAO() {
+	protected CargaDAO getDAO() {
 		if(dao == null){
-			dao = new MotivoComentarioDAO();
+			dao = new CargaDAO();
 		}
 		
 		return dao;
@@ -80,7 +80,7 @@ public class WLMotivoComentario extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new MotivoComentario().labelPlural());
+		confWinList(this, new Carga().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -205,7 +205,7 @@ public class WLMotivoComentario extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "transporte" });
 
 		// ------------------------------------------------------------------
 		
@@ -213,11 +213,13 @@ public class WLMotivoComentario extends WindowListado {
 
 		UtilUI.confColumn(itemsGRD.getColumn("numero"), true, 100);
 
-		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
+
+		UtilUI.confColumn(itemsGRD.getColumn("transporte"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		MotivoComentario dto = new MotivoComentario();
+		Carga dto = new Carga();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -251,7 +253,7 @@ public class WLMotivoComentario extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<MotivoComentario> getItemsBIC() {
+	protected BeanItemContainer<Carga> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -259,7 +261,7 @@ public class WLMotivoComentario extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<MotivoComentario>(MotivoComentario.class, new ArrayList<MotivoComentario>());
+			itemsBIC = new BeanItemContainer<Carga>(Carga.class, new ArrayList<Carga>());
 		}
 
 		return itemsBIC;
@@ -275,7 +277,7 @@ public class WLMotivoComentario extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<MotivoComentario> items = new MotivoComentario().find(limit, offset, buildOrderBy(),
+			// List<Carga> items = new Carga().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -285,7 +287,7 @@ public class WLMotivoComentario extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (MotivoComentarioFiltro) filterBI.getBean().clone();
+				lastFilter = (CargaFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -293,10 +295,10 @@ public class WLMotivoComentario extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<MotivoComentario> items = getDAO().find(filterBI.getBean());
+				List<Carga> items = getDAO().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (MotivoComentario item : items) {
+				for (Carga item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -328,7 +330,7 @@ public class WLMotivoComentario extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFMotivoComentario(mode, id);
+		return windowBuilder.buildWFCarga(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -346,4 +348,4 @@ public class WLMotivoComentario extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-05-28T17:42:35.682-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-05-28T17:42:34.889-03:00[America/Buenos_Aires]

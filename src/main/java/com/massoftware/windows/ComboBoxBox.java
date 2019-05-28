@@ -137,4 +137,10 @@ public class ComboBoxBox extends HorizontalLayout implements Validatable {
 		valueCBX.setValues(options, selectItem);
 	}
 
+	public void focus() {
+		valueCBX.focus();
+	}
+	
+	
+
 }

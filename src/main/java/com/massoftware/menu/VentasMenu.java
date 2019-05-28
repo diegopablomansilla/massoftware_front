@@ -55,6 +55,7 @@ public class VentasMenu extends AbstractMenu {
 		MenuBar.MenuItem a12 = a1.addItem("Transportes", null);
 		
 		a12.addItem("Transportes ...", openTransporteCmd());
+		a12.addItem("Tarifas de transportes ...", openTransporteTarifaCmd());
 		
 		
 		a1.addItem("Convenios de elaboración ...", null).setEnabled(false);
@@ -72,7 +73,7 @@ public class VentasMenu extends AbstractMenu {
 		a1.addItem("Clasificación de clientes (cta. cte.) ...", openClasificacionClienteCmd());
 		a1.addItem("Bloqueo de clientes ...", openMotivoBloqueoClienteCmd());
 		a1.addItem("Alícuotas ...", null).setEnabled(false);
-		a1.addItem("Cargas ...", null).setEnabled(false);
+		a1.addItem("Cargas ...",  openCargaCmd());
 		a1.addItem("Depósitos ...", null).setEnabled(false);
 		a1.addItem("+++++++++Sucursales ...", openSucursalesCmd());
 		a1.addItem("Tipos de documentos AFIP ...", openTipoDocumentoAFIPCmd());		
@@ -374,6 +375,50 @@ public class VentasMenu extends AbstractMenu {
 
 				try {
 					Window window = windowBuilder.buildWLTransporte();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openCargaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLCarga();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openTransporteTarifaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = windowBuilder.buildWLTransporteTarifa();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

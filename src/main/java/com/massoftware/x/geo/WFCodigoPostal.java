@@ -114,9 +114,9 @@ public class WFCodigoPostal extends WindowForm {
 
 		CiudadDAO ciudadDAO = new CiudadDAO();
 
-		long items = ciudadDAO.count();
+		long ciudadItems = ciudadDAO.count();
 
-		if (items < 300) {
+		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
 			CiudadFiltro ciudadFiltro = new CiudadFiltro();
 

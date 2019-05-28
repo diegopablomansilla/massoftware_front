@@ -114,9 +114,9 @@ public class WFCiudad extends WindowForm {
 
 		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
 
-		long items = provinciaDAO.count();
+		long provinciaItems = provinciaDAO.count();
 
-		if (items < 300) {
+		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
 			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 

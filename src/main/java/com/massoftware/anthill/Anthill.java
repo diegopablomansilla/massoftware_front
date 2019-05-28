@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.massoftware.anthill.ant.CargaAnt;
 import com.massoftware.anthill.ant.CiudadAnt;
 import com.massoftware.anthill.ant.ClasificacionClienteAnt;
 import com.massoftware.anthill.ant.CodigoPostalAnt;
@@ -20,6 +21,7 @@ import com.massoftware.anthill.ant.ProvinciaAnt;
 import com.massoftware.anthill.ant.TipoClienteAnt;
 import com.massoftware.anthill.ant.TipoDocumentoAFIPAnt;
 import com.massoftware.anthill.ant.TransporteAnt;
+import com.massoftware.anthill.ant.TransporteTarifaAnt;
 import com.massoftware.anthill.ant.UsuarioAnt;
 import com.massoftware.anthill.ant.ZonaAnt;
 
@@ -73,7 +75,9 @@ public class Anthill {
 		
 		// ---------------------------------------------
 		
-		new TransporteAnt(anthill, codigoPostal);		
+		TransporteAnt transporte = new TransporteAnt(anthill, codigoPostal);		
+		CargaAnt carga = new CargaAnt(anthill, transporte);
+		new TransporteTarifaAnt(anthill, transporte, carga, ciudad);
 		
 		// ---------------------------------------------
 

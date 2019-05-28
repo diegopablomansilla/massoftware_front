@@ -208,7 +208,7 @@ public class UtilJavaList {
 						+ arg.getName() + "Lista" + ", filterBI.getBean().get" + toCamelStart(arg.getName()) + "());";
 				
 				if(i == 0) {
-					java += "\n\n\t\t" + arg.getName() + "CBX.focus();";
+					java += "\n\n\t\t\t" + arg.getName() + "CBXB.focus();";
 				}
 
 				java += sc2 + "} else {";
@@ -275,7 +275,7 @@ public class UtilJavaList {
 				java += sc3 + "};";
 				
 				if(i == 0) {
-					java += "\n\n\t\t" + arg.getName() + "SBX.focus();";
+					java += "\n\n\t\t\t" + arg.getName() + "SBX.focus();";
 				}
 
 				java += sc2 + "}";

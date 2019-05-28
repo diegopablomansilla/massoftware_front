@@ -232,9 +232,9 @@ public class UtilJavaForm {
 				java += sc2 + att.getDataType().getName() + "DAO " + att.getName() + "DAO = new "
 						+ att.getDataType().getName() + "DAO();";
 
-				java += sc2 + "long items = " + att.getName() + "DAO.count();";
+				java += sc2 + "long " + att.getName() + "Items = " + att.getName() + "DAO.count();";
 
-				java += sc2 + "if (items < 300) {";
+				java += sc2 + "if (" + att.getName() +"Items < MAX_ROWS_FOR_CBX) {";
 
 				java += sc3 + att.getDataType().getName() + "Filtro " + att.getName() + "Filtro = new "
 						+ att.getDataType().getName() + "Filtro();";
@@ -250,7 +250,7 @@ public class UtilJavaForm {
 						+ att.getName() + "Lista" + ");";
 
 				if (i == 0) {
-					java += "\n\n\t\t" + att.getName() + "CBX.focus();";
+					java += "\n\n\t\t\t" + att.getName() + "CBX.focus();";
 				}
 
 				java += sc2 + "} else {";
@@ -297,7 +297,7 @@ public class UtilJavaForm {
 				java += sc3 + "};";
 
 				if (i == 0) {
-					java += "\n\n\t\t" + att.getName() + "SBX.focus();";
+					java += "\n\n\t\t\t" + att.getName() + "SBX.focus();";
 				}
 
 				java += sc2 + "}";

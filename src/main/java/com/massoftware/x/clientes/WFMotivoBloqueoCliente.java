@@ -104,9 +104,9 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 		ClasificacionClienteDAO clasificacionClienteDAO = new ClasificacionClienteDAO();
 
-		long items = clasificacionClienteDAO.count();
+		long clasificacionClienteItems = clasificacionClienteDAO.count();
 
-		if (items < 300) {
+		if (clasificacionClienteItems < MAX_ROWS_FOR_CBX) {
 
 			ClasificacionClienteFiltro clasificacionClienteFiltro = new ClasificacionClienteFiltro();
 

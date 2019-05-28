@@ -7,7 +7,9 @@ import com.massoftware.dao.geo.CiudadFiltro;
 import com.massoftware.dao.geo.CodigoPostalFiltro;
 import com.massoftware.dao.geo.PaisFiltro;
 import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.dao.logistica.CargaFiltro;
 import com.massoftware.dao.logistica.TransporteFiltro;
+import com.massoftware.dao.logistica.TransporteTarifaFiltro;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.x.afip.WFMonedaAFIP;
 import com.massoftware.x.afip.WFTipoDocumentoAFIP;
@@ -34,25 +36,57 @@ import com.massoftware.x.geo.WLCodigoPostalCustom;
 import com.massoftware.x.geo.WLPaisCustom;
 import com.massoftware.x.geo.WLProvinciaCustom;
 import com.massoftware.x.geo.WLZonaCustom;
-import com.massoftware.x.logistica.WFTransporte;
-import com.massoftware.x.logistica.WLTransporte;
+import com.massoftware.x.logistica.WFCarga;
+import com.massoftware.x.logistica.WFTransporteCustom;
+import com.massoftware.x.logistica.WFTransporteTarifa;
+import com.massoftware.x.logistica.WLCargaCustom;
+import com.massoftware.x.logistica.WLTransporteCustom;
+import com.massoftware.x.logistica.WLTransporteTarifa;
 import com.massoftware.x.monedas.WFMoneda;
 import com.massoftware.x.seguridad.WFUsuario;
 
-public class WindowBuilder {
+public class WindowFactory {
 
 	// ------------------------------------------
 
-	public WFTransporte buildWFTransporte(String mode, String id) throws Exception {
-		return new WFTransporte(mode, id);
+	public WFTransporteTarifa buildWFTransporteTarifa(String mode, String id) throws Exception {
+		return new WFTransporteTarifa(mode, id);
 	}
 
-	public WLTransporte buildWLTransporte() throws Exception {
-		return new WLTransporte();
+	public WLTransporteTarifa buildWLTransporteTarifa() throws Exception {
+		return new WLTransporteTarifa();
 	}
 
-	public WLTransporte buildWLTransporte(TransporteFiltro filtro) throws Exception {
-		return new WLTransporte(filtro);
+	public WLTransporteTarifa buildWLTransporteTarifa(TransporteTarifaFiltro filtro) throws Exception {
+		return new WLTransporteTarifa(filtro);
+	}
+
+	// ------------------------------------------
+
+	public WFCarga buildWFCarga(String mode, String id) throws Exception {
+		return new WFCarga(mode, id);
+	}
+
+	public WLCargaCustom buildWLCarga() throws Exception {
+		return new WLCargaCustom();
+	}
+
+	public WLCargaCustom buildWLCarga(CargaFiltro filtro) throws Exception {
+		return new WLCargaCustom(filtro);
+	}
+
+	// ------------------------------------------
+
+	public WFTransporteCustom buildWFTransporte(String mode, String id) throws Exception {
+		return new WFTransporteCustom(mode, id);
+	}
+
+	public WLTransporteCustom buildWLTransporte() throws Exception {
+		return new WLTransporteCustom();
+	}
+
+	public WLTransporteCustom buildWLTransporte(TransporteFiltro filtro) throws Exception {
+		return new WLTransporteCustom(filtro);
 	}
 
 	// ------------------------------------------

@@ -23,6 +23,12 @@ import com.massoftware.dao.geo.CodigoPostalDAO;
 import com.massoftware.model.logistica.Transporte;
 import com.massoftware.dao.logistica.TransporteFiltro;
 import com.massoftware.dao.logistica.TransporteDAO;
+import com.massoftware.model.logistica.Carga;
+import com.massoftware.dao.logistica.CargaFiltro;
+import com.massoftware.dao.logistica.CargaDAO;
+import com.massoftware.model.logistica.TransporteTarifa;
+import com.massoftware.dao.logistica.TransporteTarifaFiltro;
+import com.massoftware.dao.logistica.TransporteTarifaDAO;
 import com.massoftware.model.afip.TipoDocumentoAFIP;
 import com.massoftware.dao.afip.TipoDocumentoAFIPFiltro;
 import com.massoftware.dao.afip.TipoDocumentoAFIPDAO;
@@ -73,6 +79,12 @@ public class Populate {
 		} catch (Exception e) {}
 		try {
 			insertTransporte();
+		} catch (Exception e) {}
+		try {
+			insertCarga();
+		} catch (Exception e) {}
+		try {
+			insertTransporteTarifa();
 		} catch (Exception e) {}
 		try {
 			insertTipoDocumentoAFIP();
@@ -182,6 +194,8 @@ public class Populate {
 	public static void insertProvincia() throws Exception {
 
 		ProvinciaDAO dao = new ProvinciaDAO();
+		PaisDAO daoPais = new PaisDAO();
+		Long paisCount = daoPais.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -201,14 +215,12 @@ public class Populate {
 
 				obj.setNumeroRENATEA(UtilPopulate.getIntegerRandom(1, null, false));
 
-				PaisDAO daoPais = new PaisDAO();
-				PaisFiltro filtro = new PaisFiltro();
-				Long count = daoPais.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<Pais> listado = daoPais.find(filtro);
-				obj.setPais(listado.get(0));
+				PaisFiltro paisFiltro = new PaisFiltro();
+				long paisIndex = UtilPopulate.getLongRandom(0L, paisCount-1);
+				paisFiltro.setOffset(paisIndex);
+				paisFiltro.setLimit(paisIndex);
+				List<Pais> paisListado = daoPais.find(paisFiltro);
+				obj.setPais(paisListado.get(0));
 
 				dao.insert(obj);
 
@@ -223,6 +235,8 @@ public class Populate {
 	public static void insertCiudad() throws Exception {
 
 		CiudadDAO dao = new CiudadDAO();
+		ProvinciaDAO daoProvincia = new ProvinciaDAO();
+		Long provinciaCount = daoProvincia.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -238,14 +252,12 @@ public class Populate {
 
 				obj.setNumeroAFIP(UtilPopulate.getIntegerRandom(1, null, false));
 
-				ProvinciaDAO daoProvincia = new ProvinciaDAO();
-				ProvinciaFiltro filtro = new ProvinciaFiltro();
-				Long count = daoProvincia.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<Provincia> listado = daoProvincia.find(filtro);
-				obj.setProvincia(listado.get(0));
+				ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
+				long provinciaIndex = UtilPopulate.getLongRandom(0L, provinciaCount-1);
+				provinciaFiltro.setOffset(provinciaIndex);
+				provinciaFiltro.setLimit(provinciaIndex);
+				List<Provincia> provinciaListado = daoProvincia.find(provinciaFiltro);
+				obj.setProvincia(provinciaListado.get(0));
 
 				dao.insert(obj);
 
@@ -260,6 +272,8 @@ public class Populate {
 	public static void insertCodigoPostal() throws Exception {
 
 		CodigoPostalDAO dao = new CodigoPostalDAO();
+		CiudadDAO daoCiudad = new CiudadDAO();
+		Long ciudadCount = daoCiudad.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -275,14 +289,12 @@ public class Populate {
 
 				obj.setNumeroCalle(UtilPopulate.getStringRandom(null, 20, true));
 
-				CiudadDAO daoCiudad = new CiudadDAO();
-				CiudadFiltro filtro = new CiudadFiltro();
-				Long count = daoCiudad.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<Ciudad> listado = daoCiudad.find(filtro);
-				obj.setCiudad(listado.get(0));
+				CiudadFiltro ciudadFiltro = new CiudadFiltro();
+				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
+				ciudadFiltro.setOffset(ciudadIndex);
+				ciudadFiltro.setLimit(ciudadIndex);
+				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
+				obj.setCiudad(ciudadListado.get(0));
 
 				dao.insert(obj);
 
@@ -297,6 +309,8 @@ public class Populate {
 	public static void insertTransporte() throws Exception {
 
 		TransporteDAO dao = new TransporteDAO();
+		CodigoPostalDAO daoCodigoPostal = new CodigoPostalDAO();
+		Long codigoPostalCount = daoCodigoPostal.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -316,18 +330,101 @@ public class Populate {
 
 				obj.setFax(UtilPopulate.getStringRandom(null, 50, false));
 
-				CodigoPostalDAO daoCodigoPostal = new CodigoPostalDAO();
-				CodigoPostalFiltro filtro = new CodigoPostalFiltro();
-				Long count = daoCodigoPostal.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<CodigoPostal> listado = daoCodigoPostal.find(filtro);
-				obj.setCodigoPostal(listado.get(0));
+				CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
+				long codigoPostalIndex = UtilPopulate.getLongRandom(0L, codigoPostalCount-1);
+				codigoPostalFiltro.setOffset(codigoPostalIndex);
+				codigoPostalFiltro.setLimit(codigoPostalIndex);
+				List<CodigoPostal> codigoPostalListado = daoCodigoPostal.find(codigoPostalFiltro);
+				obj.setCodigoPostal(codigoPostalListado.get(0));
 
 				obj.setDomicilio(UtilPopulate.getStringRandom(null, 150, false));
 
 				obj.setComentario(UtilPopulate.getStringRandom(null, 300, false));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
+
+
+	public static void insertCarga() throws Exception {
+
+		CargaDAO dao = new CargaDAO();
+		TransporteDAO daoTransporte = new TransporteDAO();
+		Long transporteCount = daoTransporte.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Carga obj = new Carga();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				TransporteFiltro transporteFiltro = new TransporteFiltro();
+				long transporteIndex = UtilPopulate.getLongRandom(0L, transporteCount-1);
+				transporteFiltro.setOffset(transporteIndex);
+				transporteFiltro.setLimit(transporteIndex);
+				List<Transporte> transporteListado = daoTransporte.find(transporteFiltro);
+				obj.setTransporte(transporteListado.get(0));
+
+				dao.insert(obj);
+
+			} catch (Exception e) {}
+
+		}
+
+	}
+
+
+
+	public static void insertTransporteTarifa() throws Exception {
+
+		TransporteTarifaDAO dao = new TransporteTarifaDAO();
+		CargaDAO daoCarga = new CargaDAO();
+		Long cargaCount = daoCarga.count();
+		CiudadDAO daoCiudad = new CiudadDAO();
+		Long ciudadCount = daoCiudad.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TransporteTarifa obj = new TransporteTarifa();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				CargaFiltro cargaFiltro = new CargaFiltro();
+				long cargaIndex = UtilPopulate.getLongRandom(0L, cargaCount-1);
+				cargaFiltro.setOffset(cargaIndex);
+				cargaFiltro.setLimit(cargaIndex);
+				List<Carga> cargaListado = daoCarga.find(cargaFiltro);
+				obj.setCarga(cargaListado.get(0));
+
+				CiudadFiltro ciudadFiltro = new CiudadFiltro();
+				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
+				ciudadFiltro.setOffset(ciudadIndex);
+				ciudadFiltro.setLimit(ciudadIndex);
+				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
+				obj.setCiudad(ciudadListado.get(0));
+
+				obj.setPrecioFlete(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setPrecioUnidadFacturacion(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setPrecioUnidadStock(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setPrecioBultos(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setImporteMinimoEntrega(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setImporteMinimoCarga(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
 
 				dao.insert(obj);
 
@@ -390,6 +487,8 @@ public class Populate {
 	public static void insertMoneda() throws Exception {
 
 		MonedaDAO dao = new MonedaDAO();
+		MonedaAFIPDAO daoMonedaAFIP = new MonedaAFIPDAO();
+		Long monedaAFIPCount = daoMonedaAFIP.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -409,14 +508,12 @@ public class Populate {
 
 				obj.setControlActualizacion(new Random().nextBoolean());
 
-				MonedaAFIPDAO daoMonedaAFIP = new MonedaAFIPDAO();
-				MonedaAFIPFiltro filtro = new MonedaAFIPFiltro();
-				Long count = daoMonedaAFIP.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<MonedaAFIP> listado = daoMonedaAFIP.find(filtro);
-				obj.setMonedaAFIP(listado.get(0));
+				MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
+				long monedaAFIPIndex = UtilPopulate.getLongRandom(0L, monedaAFIPCount-1);
+				monedaAFIPFiltro.setOffset(monedaAFIPIndex);
+				monedaAFIPFiltro.setLimit(monedaAFIPIndex);
+				List<MonedaAFIP> monedaAFIPListado = daoMonedaAFIP.find(monedaAFIPFiltro);
+				obj.setMonedaAFIP(monedaAFIPListado.get(0));
 
 				dao.insert(obj);
 
@@ -529,6 +626,8 @@ public class Populate {
 	public static void insertMotivoBloqueoCliente() throws Exception {
 
 		MotivoBloqueoClienteDAO dao = new MotivoBloqueoClienteDAO();
+		ClasificacionClienteDAO daoClasificacionCliente = new ClasificacionClienteDAO();
+		Long clasificacionClienteCount = daoClasificacionCliente.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -540,14 +639,12 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				ClasificacionClienteDAO daoClasificacionCliente = new ClasificacionClienteDAO();
-				ClasificacionClienteFiltro filtro = new ClasificacionClienteFiltro();
-				Long count = daoClasificacionCliente.count();
-				long index = UtilPopulate.getLongRandom(0L, count-1);
-				filtro.setOffset(index);
-				filtro.setLimit(index);
-				List<ClasificacionCliente> listado = daoClasificacionCliente.find(filtro);
-				obj.setClasificacionCliente(listado.get(0));
+				ClasificacionClienteFiltro clasificacionClienteFiltro = new ClasificacionClienteFiltro();
+				long clasificacionClienteIndex = UtilPopulate.getLongRandom(0L, clasificacionClienteCount-1);
+				clasificacionClienteFiltro.setOffset(clasificacionClienteIndex);
+				clasificacionClienteFiltro.setLimit(clasificacionClienteIndex);
+				List<ClasificacionCliente> clasificacionClienteListado = daoClasificacionCliente.find(clasificacionClienteFiltro);
+				obj.setClasificacionCliente(clasificacionClienteListado.get(0));
 
 				dao.insert(obj);
 

@@ -3,7 +3,7 @@ package com.massoftware.windows;
 import java.util.Iterator;
 
 import com.massoftware.model.EntityId;
-import com.massoftware.x.WindowBuilder;
+import com.massoftware.x.WindowFactory;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -27,6 +27,10 @@ public abstract class WindowForm extends Window {
 	private static final long serialVersionUID = -9181246374126971713L;
 
 	// -------------------------------------------------------------
+	
+	protected final int MAX_ROWS_FOR_CBX = 300;
+	
+	// -------------------------------------------------------------
 
 	protected String id;
 
@@ -40,7 +44,7 @@ public abstract class WindowForm extends Window {
 	
 	// -------------------------------------------------------------
 	
-	protected WindowBuilder windowBuilder;
+	protected WindowFactory windowBuilder;
 
 	// -------------------------------------------------------------
 
@@ -62,7 +66,7 @@ public abstract class WindowForm extends Window {
 	protected void init(String mode, String id) {
 		try {
 			
-			windowBuilder = new WindowBuilder();
+			windowBuilder = new WindowFactory();
 
 			this.id = id;
 			this.mode = mode;

@@ -34,8 +34,8 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings({ "rawtypes" })
 	private BeanItem itemBI;
 
-//	@SuppressWarnings({ "rawtypes" })
-//	private Class classWindow;
+	// @SuppressWarnings({ "rawtypes" })
+	// private Class classWindow;
 
 	private String attName;
 
@@ -54,7 +54,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 		uuid = UUID.randomUUID().toString();
 
-//		this.classWindow = classWindow;
+		// this.classWindow = classWindow;
 		this.itemBI = itemBI;
 		this.attName = attName;
 
@@ -101,9 +101,9 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		removeFilterBTN.setIcon(FontAwesome.TIMES);
 		removeFilterBTN.setDescription("Borrar valor");
 
-//		removeFilterBTN.addClickListener(e -> {
-//			valueTXT.setValue(null);
-//		});
+		// removeFilterBTN.addClickListener(e -> {
+		// valueTXT.setValue(null);
+		// });
 
 		this.addComponent(removeFilterBTN);
 		this.setComponentAlignment(removeFilterBTN, Alignment.BOTTOM_LEFT);
@@ -126,11 +126,11 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		// }
 		// });
 
-		valueTXT.addBlurListener(e -> {			
+		valueTXT.addBlurListener(e -> {
 			blur();
 		});
 
-		openSelectorBTN.addClickListener(e -> {			
+		openSelectorBTN.addClickListener(e -> {
 			open(false);
 		});
 		removeFilterBTN.addClickListener(e -> {
@@ -157,7 +157,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings({ "rawtypes" })
 	public void blur() {
 		try {
-			
+
 			sourceLoadDataResetPaged();
 
 			String value = getValue();
@@ -168,10 +168,10 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 
 				if (items.size() == 1) {
 
-					setSelectedItem(items.get(0));					
+					setSelectedItem(items.get(0));
 
 				} else {
-					
+
 					open(items.size() > 0);
 
 				}
@@ -191,7 +191,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	@SuppressWarnings("rawtypes")
 	private void open(boolean filter) {
 		try {
-			
+
 			sourceLoadDataResetPaged();
 
 			Iterator it = getUI().getWindows().iterator();
@@ -219,13 +219,12 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
 
 					} else {
-						
+
 						setSelectedItem(null);
-						
+
 					}
-					
+
 					this.valueTXT.focus();
-										
 
 				} catch (Exception ex) {
 					LogAndNotification.print(ex);
@@ -300,7 +299,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		}
 
 		setSelectedItemBean(item);
-		
+
 		sourceLoadDataResetPaged();
 	}
 
@@ -328,7 +327,7 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 	}
 
 	// --------------------------------------------------------
-	
+
 	protected void sourceLoadDataResetPaged() {
 
 	}
@@ -417,7 +416,9 @@ public class SelectorBox extends HorizontalLayout implements Validatable {
 		valueTXT.setInvalidAllowed(invalidValueAllowed);
 
 	}
-	
-	
+
+	public void focus() {
+		valueTXT.focus();
+	}
 
 }

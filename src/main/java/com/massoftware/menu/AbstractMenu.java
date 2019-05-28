@@ -1,7 +1,7 @@
 package com.massoftware.menu;
 
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.x.WindowBuilder;
+import com.massoftware.x.WindowFactory;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.HorizontalLayout;
@@ -17,13 +17,13 @@ public abstract class AbstractMenu extends VerticalLayout implements View {
 	 */
 	private static final long serialVersionUID = 1980557664437735354L;
 	
-	protected WindowBuilder windowBuilder;
+	protected WindowFactory windowBuilder;
 
 	public AbstractMenu(String title) {
 
 		try {
 			
-			windowBuilder = new WindowBuilder();
+			windowBuilder = new WindowFactory();
 
 			preinit();
 

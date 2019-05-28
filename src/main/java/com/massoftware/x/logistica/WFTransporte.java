@@ -130,9 +130,9 @@ public class WFTransporte extends WindowForm {
 
 		CodigoPostalDAO codigoPostalDAO = new CodigoPostalDAO();
 
-		long items = codigoPostalDAO.count();
+		long codigoPostalItems = codigoPostalDAO.count();
 
-		if (items < 300) {
+		if (codigoPostalItems < MAX_ROWS_FOR_CBX) {
 
 			CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
 

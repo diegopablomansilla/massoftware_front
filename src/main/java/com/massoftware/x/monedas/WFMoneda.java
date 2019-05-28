@@ -128,9 +128,9 @@ public class WFMoneda extends WindowForm {
 
 		MonedaAFIPDAO monedaAFIPDAO = new MonedaAFIPDAO();
 
-		long items = monedaAFIPDAO.count();
+		long monedaAFIPItems = monedaAFIPDAO.count();
 
-		if (items < 300) {
+		if (monedaAFIPItems < MAX_ROWS_FOR_CBX) {
 
 			MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
 

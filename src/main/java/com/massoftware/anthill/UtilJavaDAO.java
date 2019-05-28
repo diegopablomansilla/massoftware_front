@@ -61,6 +61,9 @@ public class UtilJavaDAO {
 				return "\nimport com.massoftware.UtilNumeric;";
 			} else if (argument.isBigDecimal()) {
 				return "\nimport com.massoftware.UtilNumeric;";
+			} else if (argument.isSimple() == false) {
+				DataTypeClazz dt = (DataTypeClazz) argument.getDataType();								
+				return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
 			}
 
 			if (clazz.getArgsSBX().size() > 1) {
@@ -75,6 +78,9 @@ public class UtilJavaDAO {
 					return "\nimport com.massoftware.UtilNumeric;";
 				} else if (argument.isBigDecimal()) {
 					return "\nimport com.massoftware.UtilNumeric;";
+				} else if (argument.isSimple() == false) {
+					DataTypeClazz dt = (DataTypeClazz) argument.getDataType();								
+					return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
 				}
 
 			}
@@ -148,13 +154,19 @@ public class UtilJavaDAO {
 			java += l + "filtro" + argName + ".setUnlimited(true);";
 
 			if (argument.isSimple() == false) {
-				java += l + argument.getDataType().getName() + "obj = new " + argument.getDataType().getName() + "();";
+				
+				java += l + argument.getDataType().getName() + " obj = new " + argument.getDataType().getName() + "();";
 				java += l + "obj.setId(arg);";
 				java += l + "filtro" + argName + ".set" + argName + "(obj);";
+				
 			} else if (argument.isString()) {
+				
 				java += l + "filtro" + argName + ".set" + argName + "(arg);";
+				
 			} else if (argument.isBoolean()) {
+				
 				java += l + "filtro" + argName + ".set" + argName + "(new Boolean(arg));";
+				
 			} else if (argument.isInteger()) {
 
 				if (argument.getRange() == false) {
