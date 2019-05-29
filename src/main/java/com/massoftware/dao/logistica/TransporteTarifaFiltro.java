@@ -13,7 +13,7 @@ public class TransporteTarifaFiltro extends AbstractFilter {
 	}
 
 	// Transporte
-	@FieldConfAnont(label = "Transporte", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
+	@FieldConfAnont(label = "Transporte", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
 	private Transporte transporte;
 
 	// ---------------------------------------------------------------------------------------------------------------------------

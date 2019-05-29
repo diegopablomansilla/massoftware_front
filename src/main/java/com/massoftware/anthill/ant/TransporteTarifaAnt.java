@@ -72,50 +72,44 @@ public class TransporteTarifaAnt extends Ant {
 		Att precioFlete = new Att("precioFlete", "Precio flete");
 		precioFlete.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioFlete.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioFlete.setRequired(true);
-		precioFlete.setReadOnlyGUI(true);
+		precioFlete.setRequired(true);		
 		c.addAtt(precioFlete);
 
 		Att precioUnidadFacturacion = new Att("precioUnidadFacturacion", "Precio unidad facturación");
 		precioUnidadFacturacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13,
 				5);
 		((DataTypeBigDecimal) precioUnidadFacturacion.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioUnidadFacturacion.setRequired(true);
-		precioUnidadFacturacion.setReadOnlyGUI(true);
+		precioUnidadFacturacion.setRequired(false);		
 		c.addAtt(precioUnidadFacturacion);
 
 		Att precioUnidadStock = new Att("precioUnidadStock", "Precio unidad stock");
 		precioUnidadStock.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioUnidadStock.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioUnidadStock.setRequired(true);
-		precioUnidadStock.setReadOnlyGUI(true);
+		precioUnidadStock.setRequired(false);		
 		c.addAtt(precioUnidadStock);
 
 		Att precioBultos = new Att("precioBultos", "Precio bultos");
 		precioBultos.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioBultos.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioBultos.setRequired(true);
-		precioBultos.setReadOnlyGUI(true);
+		precioBultos.setRequired(false);		
 		c.addAtt(precioBultos);
 
 		Att importeMinimoEntrega = new Att("importeMinimoEntrega", "Importe mínimo por entrega");
 		importeMinimoEntrega.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) importeMinimoEntrega.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		importeMinimoEntrega.setRequired(true);
-		importeMinimoEntrega.setReadOnlyGUI(true);
+		importeMinimoEntrega.setRequired(false);		
 		c.addAtt(importeMinimoEntrega);
 
 		Att importeMinimoCarga = new Att("importeMinimoCarga", "Importe mínimo por carga");
 		importeMinimoCarga.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) importeMinimoCarga.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		importeMinimoCarga.setRequired(true);
-		importeMinimoCarga.setReadOnlyGUI(true);
+		importeMinimoCarga.setRequired(false);
 		c.addAtt(importeMinimoCarga);
 
 		// -------- SBX Args
 
 		c.addArgument(transporte, true);
-		c.getLastArgument().setRequired(false);
+		c.getLastArgument().setRequired(true);
 		c.getLastArgument().setOnlyVisual(true);
 		c.addArgumentSBX(c.getLastArgument());
 

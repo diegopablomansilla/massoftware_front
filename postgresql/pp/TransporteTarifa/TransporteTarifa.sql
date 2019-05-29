@@ -30,19 +30,19 @@ CREATE TABLE massoftware.TransporteTarifa
 	precioFlete DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioFlete_chk CHECK ( precioFlete >= -9999.9999 AND precioFlete <= 99999.9999  ), 
 	
 	-- Precio unidad facturación
-	precioUnidadFacturacion DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
+	precioUnidadFacturacion DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
 	
 	-- Precio unidad stock
-	precioUnidadStock DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
+	precioUnidadStock DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
 	
 	-- Precio bultos
-	precioBultos DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
+	precioBultos DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
 	
 	-- Importe mínimo por entrega
-	importeMinimoEntrega DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
+	importeMinimoEntrega DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
 	
 	-- Importe mínimo por carga
-	importeMinimoCarga DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
+	importeMinimoCarga DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------

@@ -164,12 +164,8 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
 		if (clasificacionClienteCBX != null) {
 			generalVL.addComponent(clasificacionClienteCBX);
 		}

@@ -188,24 +188,12 @@ public class WFMoneda extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (abreviaturaTXT != null) {
-			generalVL.addComponent(abreviaturaTXT);
-		}
-		if (cotizacionTXT != null) {
-			generalVL.addComponent(cotizacionTXT);
-		}
-		if (cotizacionFechaDAF != null) {
-			generalVL.addComponent(cotizacionFechaDAF);
-		}
-		if (controlActualizacionCHK != null) {
-			generalVL.addComponent(controlActualizacionCHK);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(abreviaturaTXT);
+		generalVL.addComponent(cotizacionTXT);
+		generalVL.addComponent(cotizacionFechaDAF);
+		generalVL.addComponent(controlActualizacionCHK);
 		if (monedaAFIPCBX != null) {
 			generalVL.addComponent(monedaAFIPCBX);
 		}

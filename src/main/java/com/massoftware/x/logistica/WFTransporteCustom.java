@@ -37,7 +37,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 		long items = codigoPostalDAO.count();
 
-		if (items < 300) {
+		if (items < this.MAX_ROWS_FOR_CBX) {
 
 			CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
 
@@ -101,7 +101,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 		long items = codigoPostalDAO.count();
 
-		if (items < 300) {
+		if (items < this.MAX_ROWS_FOR_CBX) {
 
 			CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
 

@@ -146,8 +146,24 @@ public class Anthill {
 					"---------------------------------------------------------------------------------------------------------------------------------------------");
 
 			String sqlItem = clazz.toSQL();
+			
+			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName());
+			folderSQLItem.mkdirs();
 
-			writeFile(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName() + ".sql", sqlItem);
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_PP.sql", clazz.toSQL());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_CREATE_TABLE.sql", clazz.toSQLTable());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_EXISTS_FUCNTIONS.sql", clazz.toSQLFindExists());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_NEXT_VALUE_FUCNTIONS.sql", clazz.toSQLFindNextValue());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_UPDATE_FUCNTIONS.sql", clazz.toSQLIUD());
+			
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_TYPE_RETURN.sql", clazz.toSQLFindTypeReturn());
+			
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_BY_ID_FUCNTIONS.sql", clazz.toSQLFindById());
+			
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_0.sql", clazz.toSQLFind0());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_1.sql", clazz.toSQLFind1());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_2.sql", clazz.toSQLFind2());
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3());
 
 			sql += "\n\n";
 			sql += sqlItem;

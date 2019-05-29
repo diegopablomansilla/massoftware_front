@@ -121,18 +121,10 @@ public class WFZona extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (codigoTXT != null) {
-			generalVL.addComponent(codigoTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (bonificacionTXT != null) {
-			generalVL.addComponent(bonificacionTXT);
-		}
-		if (recargoTXT != null) {
-			generalVL.addComponent(recargoTXT);
-		}
+		generalVL.addComponent(codigoTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(bonificacionTXT);
+		generalVL.addComponent(recargoTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 

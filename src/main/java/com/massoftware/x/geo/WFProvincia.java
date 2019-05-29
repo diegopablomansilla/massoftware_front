@@ -188,24 +188,12 @@ public class WFProvincia extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (abreviaturaTXT != null) {
-			generalVL.addComponent(abreviaturaTXT);
-		}
-		if (numeroAFIPTXT != null) {
-			generalVL.addComponent(numeroAFIPTXT);
-		}
-		if (numeroIngresosBrutosTXT != null) {
-			generalVL.addComponent(numeroIngresosBrutosTXT);
-		}
-		if (numeroRENATEATXT != null) {
-			generalVL.addComponent(numeroRENATEATXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(abreviaturaTXT);
+		generalVL.addComponent(numeroAFIPTXT);
+		generalVL.addComponent(numeroIngresosBrutosTXT);
+		generalVL.addComponent(numeroRENATEATXT);
 		if (paisCBX != null) {
 			generalVL.addComponent(paisCBX);
 		}

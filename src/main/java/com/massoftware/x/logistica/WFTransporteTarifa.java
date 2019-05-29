@@ -233,9 +233,7 @@ public class WFTransporteTarifa extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
+		generalVL.addComponent(numeroTXT);
 		if (cargaCBX != null) {
 			generalVL.addComponent(cargaCBX);
 		}
@@ -248,24 +246,12 @@ public class WFTransporteTarifa extends WindowForm {
 		if (ciudadSBX != null) {
 			generalVL.addComponent(ciudadSBX);
 		}
-		if (precioFleteTXT != null) {
-			generalVL.addComponent(precioFleteTXT);
-		}
-		if (precioUnidadFacturacionTXT != null) {
-			generalVL.addComponent(precioUnidadFacturacionTXT);
-		}
-		if (precioUnidadStockTXT != null) {
-			generalVL.addComponent(precioUnidadStockTXT);
-		}
-		if (precioBultosTXT != null) {
-			generalVL.addComponent(precioBultosTXT);
-		}
-		if (importeMinimoEntregaTXT != null) {
-			generalVL.addComponent(importeMinimoEntregaTXT);
-		}
-		if (importeMinimoCargaTXT != null) {
-			generalVL.addComponent(importeMinimoCargaTXT);
-		}
+		generalVL.addComponent(precioFleteTXT);
+		generalVL.addComponent(precioUnidadFacturacionTXT);
+		generalVL.addComponent(precioUnidadStockTXT);
+		generalVL.addComponent(precioBultosTXT);
+		generalVL.addComponent(importeMinimoEntregaTXT);
+		generalVL.addComponent(importeMinimoCargaTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 

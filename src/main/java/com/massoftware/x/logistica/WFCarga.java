@@ -164,12 +164,8 @@ public class WFCarga extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
 		if (transporteCBX != null) {
 			generalVL.addComponent(transporteCBX);
 		}

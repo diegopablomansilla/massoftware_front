@@ -174,18 +174,10 @@ public class WFCiudad extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (departamentoTXT != null) {
-			generalVL.addComponent(departamentoTXT);
-		}
-		if (numeroAFIPTXT != null) {
-			generalVL.addComponent(numeroAFIPTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(departamentoTXT);
+		generalVL.addComponent(numeroAFIPTXT);
 		if (provinciaCBX != null) {
 			generalVL.addComponent(provinciaCBX);
 		}

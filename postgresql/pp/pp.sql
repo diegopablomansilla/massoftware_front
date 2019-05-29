@@ -235,12 +235,7 @@ SELECT * FROM massoftware.f_next_Usuario_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_UsuarioById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_UsuarioById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_UsuarioById(idArg VARCHAR(36)) RETURNS massoftware.Usuario AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -1215,14 +1210,7 @@ SELECT * FROM massoftware.f_next_Zona_recargo();
 
 DROP FUNCTION IF EXISTS massoftware.f_ZonaById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ZonaById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_ZonaById(idArg VARCHAR(36)) RETURNS massoftware.Zona AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -2734,13 +2722,7 @@ SELECT * FROM massoftware.f_next_Pais_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_PaisById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_PaisById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_PaisById(idArg VARCHAR(36)) RETURNS massoftware.Pais AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -4380,10 +4362,10 @@ SELECT * FROM massoftware.f_next_Provincia_numeroRENATEA();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_Provincia_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_Provincia_level_1(
+
 		 Provincia_id VARCHAR(36)             	-- 0
 		,Provincia_numero INTEGER             	-- 1
 		,Provincia_nombre VARCHAR(50)         	-- 2
@@ -4391,7 +4373,18 @@ CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById(idArg VARCHAR(36)) RETURN
 		,Provincia_numeroAFIP INTEGER         	-- 4
 		,Provincia_numeroIngresosBrutos INTEGER	-- 5
 		,Provincia_numeroRENATEA INTEGER      	-- 6
-	) AS $$
+		,Pais_id VARCHAR(36)                  	-- 7
+		,Pais_numero INTEGER                  	-- 8
+		,Pais_nombre VARCHAR(50)              	-- 9
+		,Pais_abreviatura VARCHAR(5)          	-- 10
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById(idArg VARCHAR(36)) RETURNS massoftware.Provincia AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -4415,22 +4408,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Provincia_level_1 AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -4452,9 +4432,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) RETU
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_ProvinciaById_1('xxx');
+-- SELECT * FROM massoftware.f_ProvinciaById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_ProvinciaById_1((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_ProvinciaById_level_1((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -11009,16 +10989,55 @@ SELECT * FROM massoftware.f_next_Ciudad_numeroAFIP();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
+DROP TYPE IF EXISTS massoftware.type_Ciudad_level_1 CASCADE;
+
+CREATE TYPE massoftware.type_Ciudad_level_1(
+
+		 Ciudad_id VARCHAR(36)                	-- 0
+		,Ciudad_numero INTEGER                	-- 1
+		,Ciudad_nombre VARCHAR(50)            	-- 2
+		,Ciudad_departamento VARCHAR(50)      	-- 3
+		,Ciudad_numeroAFIP INTEGER            	-- 4
+		,Provincia_id VARCHAR(36)             	-- 5
+		,Provincia_numero INTEGER             	-- 6
+		,Provincia_nombre VARCHAR(50)         	-- 7
+		,Provincia_abreviatura VARCHAR(5)     	-- 8
+		,Provincia_numeroAFIP INTEGER         	-- 9
+		,Provincia_numeroIngresosBrutos INTEGER	-- 10
+		,Provincia_numeroRENATEA INTEGER      	-- 11
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_Ciudad_level_2 CASCADE;
+
+CREATE TYPE massoftware.type_Ciudad_level_2(
+
+		 Ciudad_id VARCHAR(36)                	-- 0
+		,Ciudad_numero INTEGER                	-- 1
+		,Ciudad_nombre VARCHAR(50)            	-- 2
+		,Ciudad_departamento VARCHAR(50)      	-- 3
+		,Ciudad_numeroAFIP INTEGER            	-- 4
+		,Provincia_id VARCHAR(36)             	-- 5
+		,Provincia_numero INTEGER             	-- 6
+		,Provincia_nombre VARCHAR(50)         	-- 7
+		,Provincia_abreviatura VARCHAR(5)     	-- 8
+		,Provincia_numeroAFIP INTEGER         	-- 9
+		,Provincia_numeroIngresosBrutos INTEGER	-- 10
+		,Provincia_numeroRENATEA INTEGER      	-- 11
+		,Pais_id VARCHAR(36)                  	-- 12
+		,Pais_numero INTEGER                  	-- 13
+		,Pais_nombre VARCHAR(50)              	-- 14
+		,Pais_abreviatura VARCHAR(5)          	-- 15
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
 DROP FUNCTION IF EXISTS massoftware.f_CiudadById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CiudadById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Ciudad_id VARCHAR(36)         	-- 0
-		,Ciudad_numero INTEGER         	-- 1
-		,Ciudad_nombre VARCHAR(50)     	-- 2
-		,Ciudad_departamento VARCHAR(50)	-- 3
-		,Ciudad_numeroAFIP INTEGER     	-- 4
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById(idArg VARCHAR(36)) RETURNS massoftware.Ciudad AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                   	-- 0
@@ -11040,23 +11059,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CiudadById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Ciudad_level_1 AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -11079,34 +11084,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_1(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CiudadById_1('xxx');
+-- SELECT * FROM massoftware.f_CiudadById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_CiudadById_1((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CiudadById_level_1((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CiudadById_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_level_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_2(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Ciudad_level_2 AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -11134,9 +11121,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_2(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CiudadById_2('xxx');
+-- SELECT * FROM massoftware.f_CiudadById_level_2('xxx');
 
--- SELECT * FROM massoftware.f_CiudadById_2((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CiudadById_level_2((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -17278,16 +17265,84 @@ SELECT * FROM massoftware.f_next_CodigoPostal_numero();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_CodigoPostal_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_CodigoPostal_level_1(
+
 		 CodigoPostal_id VARCHAR(36)         	-- 0
 		,CodigoPostal_codigo VARCHAR(12)     	-- 1
 		,CodigoPostal_numero INTEGER         	-- 2
 		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
 		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		,Ciudad_id VARCHAR(36)               	-- 5
+		,Ciudad_numero INTEGER               	-- 6
+		,Ciudad_nombre VARCHAR(50)           	-- 7
+		,Ciudad_departamento VARCHAR(50)     	-- 8
+		,Ciudad_numeroAFIP INTEGER           	-- 9
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_CodigoPostal_level_2 CASCADE;
+
+CREATE TYPE massoftware.type_CodigoPostal_level_2(
+
+		 CodigoPostal_id VARCHAR(36)          	-- 0
+		,CodigoPostal_codigo VARCHAR(12)      	-- 1
+		,CodigoPostal_numero INTEGER          	-- 2
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
+		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 4
+		,Ciudad_id VARCHAR(36)                	-- 5
+		,Ciudad_numero INTEGER                	-- 6
+		,Ciudad_nombre VARCHAR(50)            	-- 7
+		,Ciudad_departamento VARCHAR(50)      	-- 8
+		,Ciudad_numeroAFIP INTEGER            	-- 9
+		,Provincia_id VARCHAR(36)             	-- 10
+		,Provincia_numero INTEGER             	-- 11
+		,Provincia_nombre VARCHAR(50)         	-- 12
+		,Provincia_abreviatura VARCHAR(5)     	-- 13
+		,Provincia_numeroAFIP INTEGER         	-- 14
+		,Provincia_numeroIngresosBrutos INTEGER	-- 15
+		,Provincia_numeroRENATEA INTEGER      	-- 16
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_CodigoPostal_level_3 CASCADE;
+
+CREATE TYPE massoftware.type_CodigoPostal_level_3(
+
+		 CodigoPostal_id VARCHAR(36)          	-- 0
+		,CodigoPostal_codigo VARCHAR(12)      	-- 1
+		,CodigoPostal_numero INTEGER          	-- 2
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
+		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 4
+		,Ciudad_id VARCHAR(36)                	-- 5
+		,Ciudad_numero INTEGER                	-- 6
+		,Ciudad_nombre VARCHAR(50)            	-- 7
+		,Ciudad_departamento VARCHAR(50)      	-- 8
+		,Ciudad_numeroAFIP INTEGER            	-- 9
+		,Provincia_id VARCHAR(36)             	-- 10
+		,Provincia_numero INTEGER             	-- 11
+		,Provincia_nombre VARCHAR(50)         	-- 12
+		,Provincia_abreviatura VARCHAR(5)     	-- 13
+		,Provincia_numeroAFIP INTEGER         	-- 14
+		,Provincia_numeroIngresosBrutos INTEGER	-- 15
+		,Provincia_numeroRENATEA INTEGER      	-- 16
+		,Pais_id VARCHAR(36)                  	-- 17
+		,Pais_numero INTEGER                  	-- 18
+		,Pais_nombre VARCHAR(50)              	-- 19
+		,Pais_abreviatura VARCHAR(5)          	-- 20
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -17309,21 +17364,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-		,Ciudad_id VARCHAR(36)               	-- 5
-		,Ciudad_numero INTEGER               	-- 6
-		,Ciudad_nombre VARCHAR(50)           	-- 7
-		,Ciudad_departamento VARCHAR(50)     	-- 8
-		,Ciudad_numeroAFIP INTEGER           	-- 9
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_1(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_1 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -17344,35 +17387,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_1(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_1('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_1((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_1((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_2(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)          	-- 0
-		,CodigoPostal_codigo VARCHAR(12)      	-- 1
-		,CodigoPostal_numero INTEGER          	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 4
-		,Ciudad_id VARCHAR(36)                	-- 5
-		,Ciudad_numero INTEGER                	-- 6
-		,Ciudad_nombre VARCHAR(50)            	-- 7
-		,Ciudad_departamento VARCHAR(50)      	-- 8
-		,Ciudad_numeroAFIP INTEGER            	-- 9
-		,Provincia_id VARCHAR(36)             	-- 10
-		,Provincia_numero INTEGER             	-- 11
-		,Provincia_nombre VARCHAR(50)         	-- 12
-		,Provincia_abreviatura VARCHAR(5)     	-- 13
-		,Provincia_numeroAFIP INTEGER         	-- 14
-		,Provincia_numeroIngresosBrutos INTEGER	-- 15
-		,Provincia_numeroRENATEA INTEGER      	-- 16
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_2(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_2 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                             	-- 0
@@ -17401,39 +17425,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_2(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_2('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_2('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_2((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_2((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_3(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)          	-- 0
-		,CodigoPostal_codigo VARCHAR(12)      	-- 1
-		,CodigoPostal_numero INTEGER          	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 4
-		,Ciudad_id VARCHAR(36)                	-- 5
-		,Ciudad_numero INTEGER                	-- 6
-		,Ciudad_nombre VARCHAR(50)            	-- 7
-		,Ciudad_departamento VARCHAR(50)      	-- 8
-		,Ciudad_numeroAFIP INTEGER            	-- 9
-		,Provincia_id VARCHAR(36)             	-- 10
-		,Provincia_numero INTEGER             	-- 11
-		,Provincia_nombre VARCHAR(50)         	-- 12
-		,Provincia_abreviatura VARCHAR(5)     	-- 13
-		,Provincia_numeroAFIP INTEGER         	-- 14
-		,Provincia_numeroIngresosBrutos INTEGER	-- 15
-		,Provincia_numeroRENATEA INTEGER      	-- 16
-		,Pais_id VARCHAR(36)                  	-- 17
-		,Pais_numero INTEGER                  	-- 18
-		,Pais_nombre VARCHAR(50)              	-- 19
-		,Pais_abreviatura VARCHAR(5)          	-- 20
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_3(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_3 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                             	-- 0
@@ -17467,9 +17468,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_3(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_3('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_3('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_3((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_level_3((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -24681,10 +24682,10 @@ SELECT * FROM massoftware.f_next_Transporte_cuit();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_Transporte_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_Transporte_level_1(
+
 		 Transporte_id VARCHAR(36)           	-- 0
 		,Transporte_numero INTEGER           	-- 1
 		,Transporte_nombre VARCHAR(50)       	-- 2
@@ -24692,9 +24693,84 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById(idArg VARCHAR(36)) RETUR
 		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
 		,Transporte_telefono VARCHAR(50)     	-- 5
 		,Transporte_fax VARCHAR(50)          	-- 6
-		,Transporte_domicilio VARCHAR(150)   	-- 7
-		,Transporte_comentario VARCHAR(300)  	-- 8
-	) AS $$
+		,CodigoPostal_id VARCHAR(36)         	-- 7
+		,CodigoPostal_codigo VARCHAR(12)     	-- 8
+		,CodigoPostal_numero INTEGER         	-- 9
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
+		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
+		,Transporte_domicilio VARCHAR(150)   	-- 12
+		,Transporte_comentario VARCHAR(300)  	-- 13
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_Transporte_level_2 CASCADE;
+
+CREATE TYPE massoftware.type_Transporte_level_2(
+
+		 Transporte_id VARCHAR(36)           	-- 0
+		,Transporte_numero INTEGER           	-- 1
+		,Transporte_nombre VARCHAR(50)       	-- 2
+		,Transporte_cuit BIGINT              	-- 3
+		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
+		,Transporte_telefono VARCHAR(50)     	-- 5
+		,Transporte_fax VARCHAR(50)          	-- 6
+		,CodigoPostal_id VARCHAR(36)         	-- 7
+		,CodigoPostal_codigo VARCHAR(12)     	-- 8
+		,CodigoPostal_numero INTEGER         	-- 9
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
+		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
+		,Ciudad_id VARCHAR(36)               	-- 12
+		,Ciudad_numero INTEGER               	-- 13
+		,Ciudad_nombre VARCHAR(50)           	-- 14
+		,Ciudad_departamento VARCHAR(50)     	-- 15
+		,Ciudad_numeroAFIP INTEGER           	-- 16
+		,Transporte_domicilio VARCHAR(150)   	-- 17
+		,Transporte_comentario VARCHAR(300)  	-- 18
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_Transporte_level_3 CASCADE;
+
+CREATE TYPE massoftware.type_Transporte_level_3(
+
+		 Transporte_id VARCHAR(36)            	-- 0
+		,Transporte_numero INTEGER            	-- 1
+		,Transporte_nombre VARCHAR(50)        	-- 2
+		,Transporte_cuit BIGINT               	-- 3
+		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
+		,Transporte_telefono VARCHAR(50)      	-- 5
+		,Transporte_fax VARCHAR(50)           	-- 6
+		,CodigoPostal_id VARCHAR(36)          	-- 7
+		,CodigoPostal_codigo VARCHAR(12)      	-- 8
+		,CodigoPostal_numero INTEGER          	-- 9
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
+		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 11
+		,Ciudad_id VARCHAR(36)                	-- 12
+		,Ciudad_numero INTEGER                	-- 13
+		,Ciudad_nombre VARCHAR(50)            	-- 14
+		,Ciudad_departamento VARCHAR(50)      	-- 15
+		,Ciudad_numeroAFIP INTEGER            	-- 16
+		,Provincia_id VARCHAR(36)             	-- 17
+		,Provincia_numero INTEGER             	-- 18
+		,Provincia_nombre VARCHAR(50)         	-- 19
+		,Provincia_abreviatura VARCHAR(5)     	-- 20
+		,Provincia_numeroAFIP INTEGER         	-- 21
+		,Provincia_numeroIngresosBrutos INTEGER	-- 22
+		,Provincia_numeroRENATEA INTEGER      	-- 23
+		,Transporte_domicilio VARCHAR(150)    	-- 24
+		,Transporte_comentario VARCHAR(300)   	-- 25
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById(idArg VARCHAR(36)) RETURNS massoftware.Transporte AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -24720,25 +24796,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Transporte_domicilio VARCHAR(150)   	-- 12
-		,Transporte_comentario VARCHAR(300)  	-- 13
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_1 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -24763,37 +24823,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_1(idArg VARCHAR(36)) RET
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_1('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_1((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_level_1((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_2(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_2 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -24824,44 +24863,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_2(idArg VARCHAR(36)) RET
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_2('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_level_2('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_2((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_level_2((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_3(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Transporte_id VARCHAR(36)            	-- 0
-		,Transporte_numero INTEGER            	-- 1
-		,Transporte_nombre VARCHAR(50)        	-- 2
-		,Transporte_cuit BIGINT               	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)      	-- 5
-		,Transporte_fax VARCHAR(50)           	-- 6
-		,CodigoPostal_id VARCHAR(36)          	-- 7
-		,CodigoPostal_codigo VARCHAR(12)      	-- 8
-		,CodigoPostal_numero INTEGER          	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20) 	-- 11
-		,Ciudad_id VARCHAR(36)                	-- 12
-		,Ciudad_numero INTEGER                	-- 13
-		,Ciudad_nombre VARCHAR(50)            	-- 14
-		,Ciudad_departamento VARCHAR(50)      	-- 15
-		,Ciudad_numeroAFIP INTEGER            	-- 16
-		,Provincia_id VARCHAR(36)             	-- 17
-		,Provincia_numero INTEGER             	-- 18
-		,Provincia_nombre VARCHAR(50)         	-- 19
-		,Provincia_abreviatura VARCHAR(5)     	-- 20
-		,Provincia_numeroAFIP INTEGER         	-- 21
-		,Provincia_numeroIngresosBrutos INTEGER	-- 22
-		,Provincia_numeroRENATEA INTEGER      	-- 23
-		,Transporte_domicilio VARCHAR(150)    	-- 24
-		,Transporte_comentario VARCHAR(300)   	-- 25
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_3(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_3 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                                 	-- 0
@@ -24900,9 +24911,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_3(idArg VARCHAR(36)) RET
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_3('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_level_3('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_3((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_level_3((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -39968,14 +39979,87 @@ SELECT * FROM massoftware.f_next_Carga_numero();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
+DROP TYPE IF EXISTS massoftware.type_Carga_level_1 CASCADE;
+
+CREATE TYPE massoftware.type_Carga_level_1(
+
+		 Carga_id VARCHAR(36)                	-- 0
+		,Carga_numero INTEGER                	-- 1
+		,Carga_nombre VARCHAR(50)            	-- 2
+		,Transporte_id VARCHAR(36)           	-- 3
+		,Transporte_numero INTEGER           	-- 4
+		,Transporte_nombre VARCHAR(50)       	-- 5
+		,Transporte_cuit BIGINT              	-- 6
+		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
+		,Transporte_telefono VARCHAR(50)     	-- 8
+		,Transporte_fax VARCHAR(50)          	-- 9
+		,Transporte_domicilio VARCHAR(150)   	-- 10
+		,Transporte_comentario VARCHAR(300)  	-- 11
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_Carga_level_2 CASCADE;
+
+CREATE TYPE massoftware.type_Carga_level_2(
+
+		 Carga_id VARCHAR(36)                	-- 0
+		,Carga_numero INTEGER                	-- 1
+		,Carga_nombre VARCHAR(50)            	-- 2
+		,Transporte_id VARCHAR(36)           	-- 3
+		,Transporte_numero INTEGER           	-- 4
+		,Transporte_nombre VARCHAR(50)       	-- 5
+		,Transporte_cuit BIGINT              	-- 6
+		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
+		,Transporte_telefono VARCHAR(50)     	-- 8
+		,Transporte_fax VARCHAR(50)          	-- 9
+		,CodigoPostal_id VARCHAR(36)         	-- 10
+		,CodigoPostal_codigo VARCHAR(12)     	-- 11
+		,CodigoPostal_numero INTEGER         	-- 12
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 13
+		,CodigoPostal_numeroCalle VARCHAR(20)	-- 14
+		,Transporte_domicilio VARCHAR(150)   	-- 15
+		,Transporte_comentario VARCHAR(300)  	-- 16
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_Carga_level_3 CASCADE;
+
+CREATE TYPE massoftware.type_Carga_level_3(
+
+		 Carga_id VARCHAR(36)                	-- 0
+		,Carga_numero INTEGER                	-- 1
+		,Carga_nombre VARCHAR(50)            	-- 2
+		,Transporte_id VARCHAR(36)           	-- 3
+		,Transporte_numero INTEGER           	-- 4
+		,Transporte_nombre VARCHAR(50)       	-- 5
+		,Transporte_cuit BIGINT              	-- 6
+		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
+		,Transporte_telefono VARCHAR(50)     	-- 8
+		,Transporte_fax VARCHAR(50)          	-- 9
+		,CodigoPostal_id VARCHAR(36)         	-- 10
+		,CodigoPostal_codigo VARCHAR(12)     	-- 11
+		,CodigoPostal_numero INTEGER         	-- 12
+		,CodigoPostal_nombreCalle VARCHAR(200)	-- 13
+		,CodigoPostal_numeroCalle VARCHAR(20)	-- 14
+		,Ciudad_id VARCHAR(36)               	-- 15
+		,Ciudad_numero INTEGER               	-- 16
+		,Ciudad_nombre VARCHAR(50)           	-- 17
+		,Ciudad_departamento VARCHAR(50)     	-- 18
+		,Ciudad_numeroAFIP INTEGER           	-- 19
+		,Transporte_domicilio VARCHAR(150)   	-- 20
+		,Transporte_comentario VARCHAR(300)  	-- 21
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
 DROP FUNCTION IF EXISTS massoftware.f_CargaById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById(idArg VARCHAR(36)) RETURNS massoftware.Carga AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -39995,23 +40079,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Carga_id VARCHAR(36)                	-- 0
-		,Carga_numero INTEGER                	-- 1
-		,Carga_nombre VARCHAR(50)            	-- 2
-		,Transporte_id VARCHAR(36)           	-- 3
-		,Transporte_numero INTEGER           	-- 4
-		,Transporte_nombre VARCHAR(50)       	-- 5
-		,Transporte_cuit BIGINT              	-- 6
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
-		,Transporte_telefono VARCHAR(50)     	-- 8
-		,Transporte_fax VARCHAR(50)          	-- 9
-		,Transporte_domicilio VARCHAR(150)   	-- 10
-		,Transporte_comentario VARCHAR(300)  	-- 11
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_1 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -40034,35 +40104,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_1(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_1('xxx');
+-- SELECT * FROM massoftware.f_CargaById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_1((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_level_1((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_2(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Carga_id VARCHAR(36)                	-- 0
-		,Carga_numero INTEGER                	-- 1
-		,Carga_nombre VARCHAR(50)            	-- 2
-		,Transporte_id VARCHAR(36)           	-- 3
-		,Transporte_numero INTEGER           	-- 4
-		,Transporte_nombre VARCHAR(50)       	-- 5
-		,Transporte_cuit BIGINT              	-- 6
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
-		,Transporte_telefono VARCHAR(50)     	-- 8
-		,Transporte_fax VARCHAR(50)          	-- 9
-		,CodigoPostal_id VARCHAR(36)         	-- 10
-		,CodigoPostal_codigo VARCHAR(12)     	-- 11
-		,CodigoPostal_numero INTEGER         	-- 12
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 13
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 14
-		,Transporte_domicilio VARCHAR(150)   	-- 15
-		,Transporte_comentario VARCHAR(300)  	-- 16
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_2 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -40091,40 +40142,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_2(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_2('xxx');
+-- SELECT * FROM massoftware.f_CargaById_level_2('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_2((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_level_2((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_3(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Carga_id VARCHAR(36)                	-- 0
-		,Carga_numero INTEGER                	-- 1
-		,Carga_nombre VARCHAR(50)            	-- 2
-		,Transporte_id VARCHAR(36)           	-- 3
-		,Transporte_numero INTEGER           	-- 4
-		,Transporte_nombre VARCHAR(50)       	-- 5
-		,Transporte_cuit BIGINT              	-- 6
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 7
-		,Transporte_telefono VARCHAR(50)     	-- 8
-		,Transporte_fax VARCHAR(50)          	-- 9
-		,CodigoPostal_id VARCHAR(36)         	-- 10
-		,CodigoPostal_codigo VARCHAR(12)     	-- 11
-		,CodigoPostal_numero INTEGER         	-- 12
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 13
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 14
-		,Ciudad_id VARCHAR(36)               	-- 15
-		,Ciudad_numero INTEGER               	-- 16
-		,Ciudad_nombre VARCHAR(50)           	-- 17
-		,Ciudad_departamento VARCHAR(50)     	-- 18
-		,Ciudad_numeroAFIP INTEGER           	-- 19
-		,Transporte_domicilio VARCHAR(150)   	-- 20
-		,Transporte_comentario VARCHAR(300)  	-- 21
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_3(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_3 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -40159,9 +40186,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_3(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_3('xxx');
+-- SELECT * FROM massoftware.f_CargaById_level_3('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_3((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_level_3((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -45263,19 +45290,19 @@ CREATE TABLE massoftware.TransporteTarifa
 	precioFlete DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioFlete_chk CHECK ( precioFlete >= -9999.9999 AND precioFlete <= 99999.9999  ), 
 	
 	-- Precio unidad facturación
-	precioUnidadFacturacion DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
+	precioUnidadFacturacion DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
 	
 	-- Precio unidad stock
-	precioUnidadStock DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
+	precioUnidadStock DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
 	
 	-- Precio bultos
-	precioBultos DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
+	precioBultos DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
 	
 	-- Importe mínimo por entrega
-	importeMinimoEntrega DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
+	importeMinimoEntrega DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
 	
 	-- Importe mínimo por carga
-	importeMinimoCarga DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
+	importeMinimoCarga DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -45637,47 +45664,10 @@ SELECT * FROM massoftware.f_next_TransporteTarifa_importeMinimoCarga();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_TransporteTarifa_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE TYPE massoftware.type_TransporteTarifa_level_1(
 
-	SELECT
-		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
-		,TransporteTarifa.numero AS TransporteTarifa_numero                                 	-- 1
-		,TransporteTarifa.precioFlete AS TransporteTarifa_precioFlete                       	-- 2
-		,TransporteTarifa.precioUnidadFacturacion AS TransporteTarifa_precioUnidadFacturacion	-- 3
-		,TransporteTarifa.precioUnidadStock AS TransporteTarifa_precioUnidadStock           	-- 4
-		,TransporteTarifa.precioBultos AS TransporteTarifa_precioBultos                     	-- 5
-		,TransporteTarifa.importeMinimoEntrega AS TransporteTarifa_importeMinimoEntrega     	-- 6
-		,TransporteTarifa.importeMinimoCarga AS TransporteTarifa_importeMinimoCarga         	-- 7
-
-	FROM	massoftware.TransporteTarifa
-
-	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TransporteTarifa.id = TRIM(idArg)::VARCHAR;
-
-$$ LANGUAGE SQL;
-
--- SELECT * FROM massoftware.f_TransporteTarifaById('xxx');
-
--- SELECT * FROM massoftware.f_TransporteTarifaById((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_1(idArg VARCHAR(36)) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
 		 TransporteTarifa_id VARCHAR(36)                       	-- 0
 		,TransporteTarifa_numero INTEGER                       	-- 1
 		,Carga_id VARCHAR(36)                                  	-- 2
@@ -45694,45 +45684,15 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_1(idArg VARCHAR(36
 		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 13
 		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 14
 		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 15
-	) AS $$
-
-	SELECT
-		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
-		,TransporteTarifa.numero AS TransporteTarifa_numero                                 	-- 1
-		,Carga.id AS Carga_id                                                               	-- 2
-		,Carga.numero AS Carga_numero                                                       	-- 3
-		,Carga.nombre AS Carga_nombre                                                       	-- 4
-		,Ciudad.id AS Ciudad_id                                                             	-- 5
-		,Ciudad.numero AS Ciudad_numero                                                     	-- 6
-		,Ciudad.nombre AS Ciudad_nombre                                                     	-- 7
-		,Ciudad.departamento AS Ciudad_departamento                                         	-- 8
-		,Ciudad.numeroAFIP AS Ciudad_numeroAFIP                                             	-- 9
-		,TransporteTarifa.precioFlete AS TransporteTarifa_precioFlete                       	-- 10
-		,TransporteTarifa.precioUnidadFacturacion AS TransporteTarifa_precioUnidadFacturacion	-- 11
-		,TransporteTarifa.precioUnidadStock AS TransporteTarifa_precioUnidadStock           	-- 12
-		,TransporteTarifa.precioBultos AS TransporteTarifa_precioBultos                     	-- 13
-		,TransporteTarifa.importeMinimoEntrega AS TransporteTarifa_importeMinimoEntrega     	-- 14
-		,TransporteTarifa.importeMinimoCarga AS TransporteTarifa_importeMinimoCarga         	-- 15
-
-	FROM	massoftware.TransporteTarifa
-		LEFT JOIN massoftware.Carga ON TransporteTarifa.carga = Carga.id  	-- 2
-		LEFT JOIN massoftware.Ciudad ON TransporteTarifa.ciudad = Ciudad.id	-- 5
-
-	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TransporteTarifa.id = TRIM(idArg)::VARCHAR;
-
-$$ LANGUAGE SQL;
-
--- SELECT * FROM massoftware.f_TransporteTarifaById_1('xxx');
-
--- SELECT * FROM massoftware.f_TransporteTarifaById_1((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_TransporteTarifa_level_2 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_TransporteTarifa_level_2(
+
 		 TransporteTarifa_id VARCHAR(36)                       	-- 0
 		,TransporteTarifa_numero INTEGER                       	-- 1
 		,Carga_id VARCHAR(36)                                  	-- 2
@@ -45765,7 +45725,128 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36
 		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 29
 		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 30
 		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 31
-	) AS $$
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TYPE IF EXISTS massoftware.type_TransporteTarifa_level_3 CASCADE;
+
+CREATE TYPE massoftware.type_TransporteTarifa_level_3(
+
+		 TransporteTarifa_id VARCHAR(36)                       	-- 0
+		,TransporteTarifa_numero INTEGER                       	-- 1
+		,Carga_id VARCHAR(36)                                  	-- 2
+		,Carga_numero INTEGER                                  	-- 3
+		,Carga_nombre VARCHAR(50)                              	-- 4
+		,Transporte_id VARCHAR(36)                             	-- 5
+		,Transporte_numero INTEGER                             	-- 6
+		,Transporte_nombre VARCHAR(50)                         	-- 7
+		,Transporte_cuit BIGINT                                	-- 8
+		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
+		,Transporte_telefono VARCHAR(50)                       	-- 10
+		,Transporte_fax VARCHAR(50)                            	-- 11
+		,CodigoPostal_id VARCHAR(36)                           	-- 12
+		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
+		,CodigoPostal_numero INTEGER                           	-- 14
+		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
+		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
+		,Transporte_domicilio VARCHAR(150)                     	-- 17
+		,Transporte_comentario VARCHAR(300)                    	-- 18
+		,Ciudad_id VARCHAR(36)                                 	-- 19
+		,Ciudad_numero INTEGER                                 	-- 20
+		,Ciudad_nombre VARCHAR(50)                             	-- 21
+		,Ciudad_departamento VARCHAR(50)                       	-- 22
+		,Ciudad_numeroAFIP INTEGER                             	-- 23
+		,Provincia_id VARCHAR(36)                              	-- 24
+		,Provincia_numero INTEGER                              	-- 25
+		,Provincia_nombre VARCHAR(50)                          	-- 26
+		,Provincia_abreviatura VARCHAR(5)                      	-- 27
+		,Provincia_numeroAFIP INTEGER                          	-- 28
+		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
+		,Provincia_numeroRENATEA INTEGER                       	-- 30
+		,Pais_id VARCHAR(36)                                   	-- 31
+		,Pais_numero INTEGER                                   	-- 32
+		,Pais_nombre VARCHAR(50)                               	-- 33
+		,Pais_abreviatura VARCHAR(5)                           	-- 34
+		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
+		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
+		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
+		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
+		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
+		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa AS $$
+
+	SELECT
+		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
+		,TransporteTarifa.numero AS TransporteTarifa_numero                                 	-- 1
+		,TransporteTarifa.precioFlete AS TransporteTarifa_precioFlete                       	-- 2
+		,TransporteTarifa.precioUnidadFacturacion AS TransporteTarifa_precioUnidadFacturacion	-- 3
+		,TransporteTarifa.precioUnidadStock AS TransporteTarifa_precioUnidadStock           	-- 4
+		,TransporteTarifa.precioBultos AS TransporteTarifa_precioBultos                     	-- 5
+		,TransporteTarifa.importeMinimoEntrega AS TransporteTarifa_importeMinimoEntrega     	-- 6
+		,TransporteTarifa.importeMinimoCarga AS TransporteTarifa_importeMinimoCarga         	-- 7
+
+	FROM	massoftware.TransporteTarifa
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TransporteTarifa.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById('xxx');
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_1(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_1 AS $$
+
+	SELECT
+		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
+		,TransporteTarifa.numero AS TransporteTarifa_numero                                 	-- 1
+		,Carga.id AS Carga_id                                                               	-- 2
+		,Carga.numero AS Carga_numero                                                       	-- 3
+		,Carga.nombre AS Carga_nombre                                                       	-- 4
+		,Ciudad.id AS Ciudad_id                                                             	-- 5
+		,Ciudad.numero AS Ciudad_numero                                                     	-- 6
+		,Ciudad.nombre AS Ciudad_nombre                                                     	-- 7
+		,Ciudad.departamento AS Ciudad_departamento                                         	-- 8
+		,Ciudad.numeroAFIP AS Ciudad_numeroAFIP                                             	-- 9
+		,TransporteTarifa.precioFlete AS TransporteTarifa_precioFlete                       	-- 10
+		,TransporteTarifa.precioUnidadFacturacion AS TransporteTarifa_precioUnidadFacturacion	-- 11
+		,TransporteTarifa.precioUnidadStock AS TransporteTarifa_precioUnidadStock           	-- 12
+		,TransporteTarifa.precioBultos AS TransporteTarifa_precioBultos                     	-- 13
+		,TransporteTarifa.importeMinimoEntrega AS TransporteTarifa_importeMinimoEntrega     	-- 14
+		,TransporteTarifa.importeMinimoCarga AS TransporteTarifa_importeMinimoCarga         	-- 15
+
+	FROM	massoftware.TransporteTarifa
+		LEFT JOIN massoftware.Carga ON TransporteTarifa.carga = Carga.id  	-- 2
+		LEFT JOIN massoftware.Ciudad ON TransporteTarifa.ciudad = Ciudad.id	-- 5
+
+	WHERE 	idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TransporteTarifa.id = TRIM(idArg)::VARCHAR;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_1('xxx');
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_1((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_2(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_2(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_2 AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -45811,59 +45892,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_2('xxx');
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_2('xxx');
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_2((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_2((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_3(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_3(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_3 AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -45920,9 +45958,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_3(idArg VARCHAR(36
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_3('xxx');
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_3('xxx');
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_3((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteTarifaById_level_3((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -59003,12 +59041,7 @@ SELECT * FROM massoftware.f_next_TipoDocumentoAFIP_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIPById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIPById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIPById(idArg VARCHAR(36)) RETURNS massoftware.TipoDocumentoAFIP AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -59927,12 +59960,7 @@ SELECT * FROM massoftware.f_exists_MonedaAFIP_nombre(null::VARCHAR);
 
 DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIPById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIPById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIPById(idArg VARCHAR(36)) RETURNS massoftware.MonedaAFIP AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -60939,10 +60967,10 @@ SELECT * FROM massoftware.f_next_Moneda_cotizacion();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_Moneda_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaById(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_Moneda_level_1(
+
 		 Moneda_id VARCHAR(36)             	-- 0
 		,Moneda_numero INTEGER             	-- 1
 		,Moneda_nombre VARCHAR(50)         	-- 2
@@ -60950,7 +60978,17 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaById(idArg VARCHAR(36)) RETURNS
 		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
 		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
 		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		,MonedaAFIP_id VARCHAR(36)         	-- 7
+		,MonedaAFIP_codigo VARCHAR(3)      	-- 8
+		,MonedaAFIP_nombre VARCHAR(50)     	-- 9
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById(idArg VARCHAR(36)) RETURNS massoftware.Moneda AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -60974,21 +61012,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-		,MonedaAFIP_id VARCHAR(36)         	-- 7
-		,MonedaAFIP_codigo VARCHAR(3)      	-- 8
-		,MonedaAFIP_nombre VARCHAR(50)     	-- 9
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Moneda_level_1 AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -61009,9 +61035,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1(idArg VARCHAR(36)) RETURNS
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_MonedaById_1('xxx');
+-- SELECT * FROM massoftware.f_MonedaById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_MonedaById_1((SELECT Moneda.id FROM massoftware.Moneda LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_MonedaById_level_1((SELECT Moneda.id FROM massoftware.Moneda LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -67218,12 +67244,7 @@ SELECT * FROM massoftware.f_next_NotaCreditoMotivo_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_NotaCreditoMotivoById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_NotaCreditoMotivoById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 NotaCreditoMotivo_id VARCHAR(36)   	-- 0
-		,NotaCreditoMotivo_numero INTEGER   	-- 1
-		,NotaCreditoMotivo_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_NotaCreditoMotivoById(idArg VARCHAR(36)) RETURNS massoftware.NotaCreditoMotivo AS $$
 
 	SELECT
 		 NotaCreditoMotivo.id AS NotaCreditoMotivo_id       	-- 0
@@ -68155,12 +68176,7 @@ SELECT * FROM massoftware.f_next_MotivoComentario_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_MotivoComentarioById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentarioById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentarioById(idArg VARCHAR(36)) RETURNS massoftware.MotivoComentario AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -69092,12 +69108,7 @@ SELECT * FROM massoftware.f_next_TipoCliente_numero();
 
 DROP FUNCTION IF EXISTS massoftware.f_TipoClienteById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoClienteById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TipoClienteById(idArg VARCHAR(36)) RETURNS massoftware.TipoCliente AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -70057,13 +70068,7 @@ SELECT * FROM massoftware.f_next_ClasificacionCliente_color();
 
 DROP FUNCTION IF EXISTS massoftware.f_ClasificacionClienteById(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionClienteById(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionClienteById(idArg VARCHAR(36)) RETURNS massoftware.ClasificacionCliente AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -71305,14 +71310,25 @@ SELECT * FROM massoftware.f_next_MotivoBloqueoCliente_numero();
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById(idArg VARCHAR(36)) CASCADE;
+DROP TYPE IF EXISTS massoftware.type_MotivoBloqueoCliente_level_1 CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById(idArg VARCHAR(36)) RETURNS
-	TABLE(
+CREATE TYPE massoftware.type_MotivoBloqueoCliente_level_1(
+
 		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
 		,MotivoBloqueoCliente_numero INTEGER   	-- 1
 		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		,ClasificacionCliente_id VARCHAR(36)   	-- 3
+		,ClasificacionCliente_numero INTEGER   	-- 4
+		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
+		,ClasificacionCliente_color INTEGER    	-- 6
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById(idArg VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -71332,18 +71348,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) RETURNS
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente_level_1 AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -71361,9 +71368,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHA
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1('xxx');
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1('xxx');
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 

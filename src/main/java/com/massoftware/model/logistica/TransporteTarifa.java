@@ -28,27 +28,27 @@ public class TransporteTarifa extends EntityId {
 	private Ciudad ciudad;
 
 	// Precio flete
-	@FieldConfAnont(label = "Precio flete", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Precio flete", labelError = "", unique = false, readOnly = false, required = true, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal precioFlete;
 
 	// Precio unidad facturación
-	@FieldConfAnont(label = "Precio unidad facturación", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Precio unidad facturación", labelError = "", unique = false, readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal precioUnidadFacturacion;
 
 	// Precio unidad stock
-	@FieldConfAnont(label = "Precio unidad stock", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Precio unidad stock", labelError = "", unique = false, readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal precioUnidadStock;
 
 	// Precio bultos
-	@FieldConfAnont(label = "Precio bultos", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Precio bultos", labelError = "", unique = false, readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal precioBultos;
 
 	// Importe mínimo por entrega
-	@FieldConfAnont(label = "Importe mínimo por entrega", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Importe mínimo por entrega", labelError = "", unique = false, readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal importeMinimoEntrega;
 
 	// Importe mínimo por carga
-	@FieldConfAnont(label = "Importe mínimo por carga", labelError = "", unique = false, readOnly = true, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
+	@FieldConfAnont(label = "Importe mínimo por carga", labelError = "", unique = false, readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "-9999.9999", maxValue = "99999.9999", mask = "")
 	private java.math.BigDecimal importeMinimoCarga;
 
 	// ---------------------------------------------------------------------------------------------------------------------------

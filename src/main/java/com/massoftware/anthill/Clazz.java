@@ -202,5 +202,45 @@ public class Clazz {
 	public String toSQL() {
 		return UtilSQL.toSQL(this);
 	}
+	
+	public String toSQLTable() {
+		return UtilSQL.toSQLTable(this);
+	}
+	
+	public String toSQLIUD() {
+		return UtilSQL.toSQLIUD(this);
+	}
+	
+	public String toSQLFindExists() {
+		return UtilSQL.toSQLFindExists(this);
+	}
+	
+	public String toSQLFindNextValue() {
+		return UtilSQL.toSQLFindNextValue(this);
+	}
+	
+	public String toSQLFindById() {
+		return UtilSQL.toSQLFindById(this);
+	}
+	
+	public String toSQLFind0() {
+		return UtilSQL.toSQLFind0(this);
+	}
+	
+	public String toSQLFind1() {
+		return UtilSQL.toSQLFind1(this);
+	}
+	
+	public String toSQLFind2() {
+		return UtilSQL.toSQLFind2(this);
+	}
+	
+	public String toSQLFind3() {
+		return UtilSQL.toSQLFind3(this);
+	}
+	
+	public String toSQLFindTypeReturn() {
+		return UtilSQL.toSQLFindTypeReturn(this);
+	}
 
 } //////////////////////////////////////////////////////////////////////////////////////////////

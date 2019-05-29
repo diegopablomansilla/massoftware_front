@@ -116,15 +116,9 @@ public class WFClasificacionCliente extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (colorTXT != null) {
-			generalVL.addComponent(colorTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(colorTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 

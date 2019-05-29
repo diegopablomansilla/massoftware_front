@@ -361,41 +361,54 @@ public class UtilJavaForm {
 
 			if (att.isNumber()) {
 
-				java += "\n\t\tif (" + att.getName() + "TXT != null) {";
-				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
-				java += "\n\t\t}";
+//				java += "\n\t\tif (" + att.getName() + "TXT != null) {";
+//				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
+//				java += "\n\t\t}";
+				
+				java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
 
 			} else if (att.isString()) {
 				
 				if (att.getMaxLength() > 200) {
-					java += "\n\t\tif (" + att.getName() + "TXA != null) {";
-					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXA);";
-					java += "\n\t\t}";
+//					java += "\n\t\tif (" + att.getName() + "TXA != null) {";
+//					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXA);";
+//					java += "\n\t\t}";
+					
+					java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "TXA);";
+					
 				} else {
-					java += "\n\t\tif (" + att.getName() + "TXT != null) {";
-					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
-					java += "\n\t\t}";
+//					java += "\n\t\tif (" + att.getName() + "TXT != null) {";
+//					java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
+//					java += "\n\t\t}";
+					
+					java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "TXT);";
 				}
 
 				
 
 			} else if (att.isBoolean()) {
 
-				java += "\n\t\tif (" + att.getName() + "CHK != null) {";
-				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "CHK);";
-				java += "\n\t\t}";
+//				java += "\n\t\tif (" + att.getName() + "CHK != null) {";
+//				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "CHK);";
+//				java += "\n\t\t}";
+				
+				java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "CHK);";
 
 			} else if (att.isTimestamp()) {
 
-				java += "\n\t\tif (" + att.getName() + "DAF != null) {";
-				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
-				java += "\n\t\t}";
+//				java += "\n\t\tif (" + att.getName() + "DAF != null) {";
+//				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
+//				java += "\n\t\t}";
+				
+				java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
 
 			} else if (att.isDate()) {
 
-				java += "\n\t\tif (" + att.getName() + "DAF != null) {";
-				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
-				java += "\n\t\t}";
+//				java += "\n\t\tif (" + att.getName() + "DAF != null) {";
+//				java += "\n\t\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
+//				java += "\n\t\t}";
+				
+				java += "\n\t\tgeneralVL.addComponent(" + att.getName() + "DAF);";
 
 			} else if (att.isSimple() == false) {
 

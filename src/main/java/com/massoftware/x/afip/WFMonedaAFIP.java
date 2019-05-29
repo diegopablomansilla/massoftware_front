@@ -111,12 +111,8 @@ public class WFMonedaAFIP extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (codigoTXT != null) {
-			generalVL.addComponent(codigoTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
+		generalVL.addComponent(codigoTXT);
+		generalVL.addComponent(nombreTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 

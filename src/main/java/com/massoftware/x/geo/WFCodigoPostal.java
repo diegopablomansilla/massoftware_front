@@ -174,18 +174,10 @@ public class WFCodigoPostal extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (codigoTXT != null) {
-			generalVL.addComponent(codigoTXT);
-		}
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreCalleTXT != null) {
-			generalVL.addComponent(nombreCalleTXT);
-		}
-		if (numeroCalleTXT != null) {
-			generalVL.addComponent(numeroCalleTXT);
-		}
+		generalVL.addComponent(codigoTXT);
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreCalleTXT);
+		generalVL.addComponent(numeroCalleTXT);
 		if (ciudadCBX != null) {
 			generalVL.addComponent(ciudadCBX);
 		}

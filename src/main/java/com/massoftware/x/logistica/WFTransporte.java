@@ -198,36 +198,20 @@ public class WFTransporte extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (cuitTXT != null) {
-			generalVL.addComponent(cuitTXT);
-		}
-		if (ingresosBrutosTXT != null) {
-			generalVL.addComponent(ingresosBrutosTXT);
-		}
-		if (telefonoTXT != null) {
-			generalVL.addComponent(telefonoTXT);
-		}
-		if (faxTXT != null) {
-			generalVL.addComponent(faxTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(cuitTXT);
+		generalVL.addComponent(ingresosBrutosTXT);
+		generalVL.addComponent(telefonoTXT);
+		generalVL.addComponent(faxTXT);
 		if (codigoPostalCBX != null) {
 			generalVL.addComponent(codigoPostalCBX);
 		}
 		if (codigoPostalSBX != null) {
 			generalVL.addComponent(codigoPostalSBX);
 		}
-		if (domicilioTXT != null) {
-			generalVL.addComponent(domicilioTXT);
-		}
-		if (comentarioTXA != null) {
-			generalVL.addComponent(comentarioTXA);
-		}
+		generalVL.addComponent(domicilioTXT);
+		generalVL.addComponent(comentarioTXA);
 
 		// ---------------------------------------------------------------------------------------------------------
 

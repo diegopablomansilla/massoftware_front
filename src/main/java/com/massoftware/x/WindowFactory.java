@@ -38,10 +38,11 @@ import com.massoftware.x.geo.WLProvinciaCustom;
 import com.massoftware.x.geo.WLZonaCustom;
 import com.massoftware.x.logistica.WFCarga;
 import com.massoftware.x.logistica.WFTransporteCustom;
-import com.massoftware.x.logistica.WFTransporteTarifa;
+import com.massoftware.x.logistica.WFTransporteTarifaCustom;
 import com.massoftware.x.logistica.WLCargaCustom;
 import com.massoftware.x.logistica.WLTransporteCustom;
 import com.massoftware.x.logistica.WLTransporteTarifa;
+import com.massoftware.x.logistica.WLTransporteTarifaCustom;
 import com.massoftware.x.monedas.WFMoneda;
 import com.massoftware.x.seguridad.WFUsuario;
 
@@ -49,12 +50,12 @@ public class WindowFactory {
 
 	// ------------------------------------------
 
-	public WFTransporteTarifa buildWFTransporteTarifa(String mode, String id) throws Exception {
-		return new WFTransporteTarifa(mode, id);
+	public WFTransporteTarifaCustom buildWFTransporteTarifa(String mode, String id) throws Exception {
+		return new WFTransporteTarifaCustom(mode, id);
 	}
 
-	public WLTransporteTarifa buildWLTransporteTarifa() throws Exception {
-		return new WLTransporteTarifa();
+	public WLTransporteTarifaCustom buildWLTransporteTarifa() throws Exception {
+		return new WLTransporteTarifaCustom();
 	}
 
 	public WLTransporteTarifa buildWLTransporteTarifa(TransporteTarifaFiltro filtro) throws Exception {

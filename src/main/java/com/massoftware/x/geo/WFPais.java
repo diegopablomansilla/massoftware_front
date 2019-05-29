@@ -120,15 +120,9 @@ public class WFPais extends WindowForm {
 		// ------------------------------------------------------------------		
 		
 		
-		if (numeroTXT != null) {
-			generalVL.addComponent(numeroTXT);
-		}
-		if (nombreTXT != null) {
-			generalVL.addComponent(nombreTXT);
-		}
-		if (abreviaturaTXT != null) {
-			generalVL.addComponent(abreviaturaTXT);
-		}
+		generalVL.addComponent(numeroTXT);
+		generalVL.addComponent(nombreTXT);
+		generalVL.addComponent(abreviaturaTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 

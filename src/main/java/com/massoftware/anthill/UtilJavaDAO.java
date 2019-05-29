@@ -880,7 +880,29 @@ public class UtilJavaDAO {
 //		java += "\n\t\t";
 		
 
-		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?, \";";
+//		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?, \";";	
+		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?";
+		
+		boolean paramsCount = false;
+		
+		for (int i = 0; i < clazzX.getArgs().size(); i++) {
+
+			Argument arg = clazzX.getArgs().get(i);
+			
+			if(arg.getOnlyVisual() == true) {
+				continue;
+			}
+			
+			paramsCount = true;
+			
+			break;
+		}
+		
+		if(paramsCount) {
+			java += ", \";";	
+		} else {
+			java += "\";";	
+		}
 
 		java += "\n";
 
@@ -1456,8 +1478,17 @@ public class UtilJavaDAO {
 		java += "\n\t\t\targs = new Object[] {" + javaArgs + "};";
 
 		java += "\n\t\t} else {";
+		
+//		java += "\n\t\t\targs = new Object[] {filtro.getLimit(), filtro.getOffset(), " + javaArgs + "};";
+		java += "\n\t\t\targs = new Object[] {filtro.getLimit(), filtro.getOffset()";
+		
+		if(paramsCount) {
+			java += ", " + javaArgs + "};";	
+		} else {
+			java += javaArgs + "};";	
+		}
 
-		java += "\n\t\t\targs = new Object[] {filtro.getLimit(), filtro.getOffset(), " + javaArgs + "};";
+		
 
 		java += "\n\t\t}";
 

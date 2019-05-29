@@ -511,16 +511,16 @@ public class TransporteTarifaDAO {
 			}
 			orderByString = orderByASCString + orderByString;
 		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
+		String params = (filtro.getUnlimited() == true) ? "" : "?, ?";
 
 		String sql = "SELECT * FROM massoftware.f_TransporteTarifa" + orderByString + levelString + "(" + params + ")";
-66
+
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
 			args = new Object[] {};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), };
+			args = new Object[] {filtro.getLimit(), filtro.getOffset()};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
