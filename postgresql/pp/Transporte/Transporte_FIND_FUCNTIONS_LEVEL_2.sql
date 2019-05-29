@@ -31,29 +31,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -109,9 +87,7 @@ SELECT * FROM massoftware.f_Transporte_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -122,9 +98,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -133,29 +107,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -198,9 +150,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -215,9 +165,7 @@ SELECT * FROM massoftware.f_Transporte_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -228,9 +176,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Numero_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -239,29 +185,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Numero_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -304,9 +228,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Numero_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Numero_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -321,9 +243,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Numero_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -334,9 +254,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Numero_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -345,29 +263,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Numero_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -410,9 +306,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Numero_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Numero_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -447,29 +341,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Numero_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -545,29 +417,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Numero_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -623,9 +473,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Numero_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -636,9 +484,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Nombre_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -647,29 +493,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Nombre_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -712,9 +536,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Nombre_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Nombre_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -729,9 +551,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Nombre_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -742,9 +562,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Nombre_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -753,29 +571,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Nombre_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -818,9 +614,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Nombre_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Nombre_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -855,29 +649,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Nombre_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -953,29 +725,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Nombre_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1031,9 +781,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Nombre_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Cuit_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Cuit_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1044,9 +792,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Cuit_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Cuit_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Cuit_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1055,29 +801,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Cuit_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1120,9 +844,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Cuit_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Cuit_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -1137,9 +859,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Cuit_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Cuit_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Cuit_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1150,9 +870,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Cuit_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Cuit_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Cuit_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1161,29 +879,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Cuit_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1226,9 +922,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Cuit_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Cuit_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -1263,29 +957,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Cuit_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1361,29 +1033,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Cuit_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1439,9 +1089,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Cuit_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1452,9 +1100,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1463,29 +1109,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_IngresosBruto
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1528,9 +1152,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -1545,9 +1167,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_IngresosBrutos_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1558,9 +1178,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_IngresosBrutos_2
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1569,29 +1187,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_IngresosBruto
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1634,9 +1230,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -1671,29 +1265,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_IngresosBruto
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1769,29 +1341,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_IngresosBruto
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1847,9 +1397,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_IngresosBrutos_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Telefono_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Telefono_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1860,9 +1408,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Telefono_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Telefono_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Telefono_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1871,29 +1417,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Telefono_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -1936,9 +1460,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Telefono_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Telefono_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -1953,9 +1475,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Telefono_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Telefono_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Telefono_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1966,9 +1486,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Telefono_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Telefono_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Telefono_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1977,29 +1495,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Telefono_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2042,9 +1538,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Telefono_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Telefono_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -2079,29 +1573,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Telefono_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2177,29 +1649,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Telefono_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2255,9 +1705,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Telefono_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Fax_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Fax_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2268,9 +1716,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Fax_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Fax_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Fax_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2279,29 +1725,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Fax_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2344,9 +1768,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Fax_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Fax_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -2361,9 +1783,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Fax_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Fax_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Fax_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2374,9 +1794,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Fax_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Fax_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Fax_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2385,29 +1803,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Fax_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2450,9 +1846,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Fax_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Fax_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -2487,29 +1881,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Fax_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2585,29 +1957,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Fax_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2663,9 +2013,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Fax_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2676,9 +2024,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2687,29 +2033,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_CodigoPostal_
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2752,9 +2076,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -2769,9 +2091,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_CodigoPostal_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_CodigoPostal_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_CodigoPostal_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2782,9 +2102,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_CodigoPostal_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_CodigoPostal_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_CodigoPostal_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2793,29 +2111,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_CodigoPostal_
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2858,9 +2154,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_CodigoPostal_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_CodigoPostal_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -2895,29 +2189,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_CodigoPostal_
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -2993,29 +2265,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_CodigoPostal_
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3071,9 +2321,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_CodigoPostal_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Domicilio_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Domicilio_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3084,9 +2332,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Domicilio_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Domicilio_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Domicilio_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3095,29 +2341,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Domicilio_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3160,9 +2384,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Domicilio_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Domicilio_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -3177,9 +2399,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Domicilio_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Domicilio_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Domicilio_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3190,9 +2410,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Domicilio_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Domicilio_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Domicilio_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3201,29 +2419,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Domicilio_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3266,9 +2462,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Domicilio_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Domicilio_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -3303,29 +2497,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Domicilio_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3401,29 +2573,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Domicilio_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3479,9 +2629,7 @@ SELECT * FROM massoftware.f_Transporte_des_Transporte_Domicilio_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Comentario_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Comentario_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3492,9 +2640,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_asc_Transporte_Comentario_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Comentario_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Comentario_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3503,29 +2649,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Comentario_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3568,9 +2692,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_asc_Transporte_Comentario_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_asc_Transporte_Comentario_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -3585,9 +2707,7 @@ SELECT * FROM massoftware.f_Transporte_asc_Transporte_Comentario_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Comentario_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Comentario_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3598,9 +2718,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Transporte_des_Transporte_Comentario_2(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Comentario_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Comentario_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -3609,29 +2727,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Comentario_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3674,9 +2770,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Transporte_des_Transporte_Comentario_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Transporte_des_Transporte_Comentario_2(100, 0
 		, null::INTEGER -- Transporte_numeroFromArg0
 		, null::INTEGER -- Transporte_numeroToArg1
 		, null::VARCHAR -- Transporte_nombreWord0Arg2
@@ -3711,29 +2805,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_asc_Transporte_Comentario_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -3809,29 +2881,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Transporte_des_Transporte_Comentario_2(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Transporte_id VARCHAR(36)           	-- 0
-		,Transporte_numero INTEGER           	-- 1
-		,Transporte_nombre VARCHAR(50)       	-- 2
-		,Transporte_cuit BIGINT              	-- 3
-		,Transporte_ingresosBrutos VARCHAR(13)	-- 4
-		,Transporte_telefono VARCHAR(50)     	-- 5
-		,Transporte_fax VARCHAR(50)          	-- 6
-		,CodigoPostal_id VARCHAR(36)         	-- 7
-		,CodigoPostal_codigo VARCHAR(12)     	-- 8
-		,CodigoPostal_numero INTEGER         	-- 9
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 10
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 11
-		,Ciudad_id VARCHAR(36)               	-- 12
-		,Ciudad_numero INTEGER               	-- 13
-		,Ciudad_nombre VARCHAR(50)           	-- 14
-		,Ciudad_departamento VARCHAR(50)     	-- 15
-		,Ciudad_numeroAFIP INTEGER           	-- 16
-		,Transporte_domicilio VARCHAR(150)   	-- 17
-		,Transporte_comentario VARCHAR(300)  	-- 18
-	) AS $$
+) RETURNS massoftware.type_Transporte_level_2  AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0

@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCH
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.CodigoPostal
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CodigoPostal
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CodigoPostal.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_CodigoPostal_numero(numeroArg INTEG
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_CodigoPostal_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.CodigoPostal
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CodigoPostal
 	WHERE	(numeroArg IS NULL OR CodigoPostal.numero = numeroArg);
 
 $$ LANGUAGE SQL;

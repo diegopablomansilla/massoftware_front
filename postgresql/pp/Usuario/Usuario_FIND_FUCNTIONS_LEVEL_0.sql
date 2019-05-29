@@ -31,13 +31,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -75,9 +69,7 @@ SELECT * FROM massoftware.f_Usuario(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Usuario(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Usuario(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -88,9 +80,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Usuario(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Usuario(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -98,14 +88,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -130,9 +113,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Usuario(
-		100
-		, 0
+SELECT * FROM massoftware.f_Usuario(100, 0
 		, null::INTEGER -- Usuario_numeroFromArg0
 		, null::INTEGER -- Usuario_numeroToArg1
 		, null::VARCHAR -- Usuario_nombreWord0Arg2
@@ -147,9 +128,7 @@ SELECT * FROM massoftware.f_Usuario(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -160,9 +139,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -170,14 +147,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -202,9 +172,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Usuario_asc_Usuario_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Numero(100, 0
 		, null::INTEGER -- Usuario_numeroFromArg0
 		, null::INTEGER -- Usuario_numeroToArg1
 		, null::VARCHAR -- Usuario_nombreWord0Arg2
@@ -219,9 +187,7 @@ SELECT * FROM massoftware.f_Usuario_asc_Usuario_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -232,9 +198,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -242,14 +206,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -274,9 +231,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Usuario_des_Usuario_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Numero(100, 0
 		, null::INTEGER -- Usuario_numeroFromArg0
 		, null::INTEGER -- Usuario_numeroToArg1
 		, null::VARCHAR -- Usuario_nombreWord0Arg2
@@ -311,13 +266,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -375,13 +324,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -419,9 +362,7 @@ SELECT * FROM massoftware.f_Usuario_des_Usuario_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -432,9 +373,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Usuario_asc_Usuario_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -442,14 +381,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -474,9 +406,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Usuario_asc_Usuario_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Usuario_asc_Usuario_Nombre(100, 0
 		, null::INTEGER -- Usuario_numeroFromArg0
 		, null::INTEGER -- Usuario_numeroToArg1
 		, null::VARCHAR -- Usuario_nombreWord0Arg2
@@ -491,9 +421,7 @@ SELECT * FROM massoftware.f_Usuario_asc_Usuario_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -504,9 +432,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Usuario_des_Usuario_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -514,14 +440,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -546,9 +465,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Usuario_des_Usuario_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Usuario_des_Usuario_Nombre(100, 0
 		, null::INTEGER -- Usuario_numeroFromArg0
 		, null::INTEGER -- Usuario_numeroToArg1
 		, null::VARCHAR -- Usuario_nombreWord0Arg2
@@ -583,13 +500,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_asc_Usuario_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0
@@ -647,13 +558,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Usuario_des_Usuario_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Usuario_id VARCHAR(36)   	-- 0
-		,Usuario_numero INTEGER   	-- 1
-		,Usuario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Usuario  AS $$
 
 	SELECT
 		 Usuario.id AS Usuario_id       	-- 0

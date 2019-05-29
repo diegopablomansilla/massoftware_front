@@ -35,9 +35,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_1(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_1(idArg VARCHAR(36)) RETURNS massoftware.type_CodigoPostal_level_1 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -58,16 +58,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_1(idArg VARCHAR(
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_1('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_1('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_1((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_1((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_2(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_2 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_2(idArg VARCHAR(36)) RETURNS massoftware.type_CodigoPostal_level_2 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                             	-- 0
@@ -96,16 +96,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_2(idArg VARCHAR(
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_2('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_2('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_2((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_2((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_level_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_3(idArg VARCHAR(36)) RETURNS massoftware.CodigoPostal_level_3 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_3(idArg VARCHAR(36)) RETURNS massoftware.type_CodigoPostal_level_3 AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                             	-- 0
@@ -139,6 +139,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_level_3(idArg VARCHAR(
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_3('xxx');
+-- SELECT * FROM massoftware.f_CodigoPostalById_3('xxx');
 
--- SELECT * FROM massoftware.f_CodigoPostalById_level_3((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CodigoPostalById_3((SELECT CodigoPostal.id FROM massoftware.CodigoPostal LIMIT 1)::VARCHAR);

@@ -35,9 +35,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CiudadById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Ciudad_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_1(idArg VARCHAR(36)) RETURNS massoftware.type_Ciudad_level_1 AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -60,16 +60,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_1(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CiudadById_level_1('xxx');
+-- SELECT * FROM massoftware.f_CiudadById_1('xxx');
 
--- SELECT * FROM massoftware.f_CiudadById_level_1((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CiudadById_1((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CiudadById_level_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Ciudad_level_2 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_2(idArg VARCHAR(36)) RETURNS massoftware.type_Ciudad_level_2 AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -97,6 +97,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_level_2(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CiudadById_level_2('xxx');
+-- SELECT * FROM massoftware.f_CiudadById_2('xxx');
 
--- SELECT * FROM massoftware.f_CiudadById_level_2((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CiudadById_2((SELECT Ciudad.id FROM massoftware.Ciudad LIMIT 1)::VARCHAR);

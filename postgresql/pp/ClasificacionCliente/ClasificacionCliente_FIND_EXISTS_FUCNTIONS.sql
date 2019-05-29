@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_numero(numeroA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.ClasificacionCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClasificacionCliente
 	WHERE	(numeroArg IS NULL OR ClasificacionCliente.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_nombre(nombreA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.ClasificacionCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClasificacionCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ClasificacionCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;

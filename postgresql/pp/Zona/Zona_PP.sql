@@ -204,8 +204,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_codigo(codigoArg VARCHAR) CASC
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Zona
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Zona
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Zona.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -223,8 +222,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_nombre(nombreArg VARCHAR) CASC
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Zona
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Zona
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Zona.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -242,8 +240,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_Zona_bonificacion() CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_bonificacion() RETURNS DECIMAL AS $$
 
-	SELECT (COALESCE(MAX(bonificacion),0) + 1)::DECIMAL
-	FROM	massoftware.Zona;
+	SELECT (COALESCE(MAX(bonificacion),0) + 1)::DECIMAL FROM massoftware.Zona;
 
 $$ LANGUAGE SQL;
 
@@ -260,8 +257,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_Zona_recargo() CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_recargo() RETURNS DECIMAL AS $$
 
-	SELECT (COALESCE(MAX(recargo),0) + 1)::DECIMAL
-	FROM	massoftware.Zona;
+	SELECT (COALESCE(MAX(recargo),0) + 1)::DECIMAL FROM massoftware.Zona;
 
 $$ LANGUAGE SQL;
 
@@ -316,15 +312,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -362,9 +350,7 @@ SELECT * FROM massoftware.f_Zona(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -374,25 +360,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -418,9 +393,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -434,9 +407,7 @@ SELECT * FROM massoftware.f_Zona(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -446,25 +417,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Codigo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -490,9 +450,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_asc_Zona_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_asc_Zona_Codigo(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -506,9 +464,7 @@ SELECT * FROM massoftware.f_Zona_asc_Zona_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -518,25 +474,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Codigo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -562,9 +507,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_des_Zona_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_des_Zona_Codigo(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -596,15 +539,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Codigo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -660,15 +595,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Codigo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -706,9 +633,7 @@ SELECT * FROM massoftware.f_Zona_des_Zona_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -718,25 +643,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Nombre(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -762,9 +676,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_asc_Zona_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_asc_Zona_Nombre(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -778,9 +690,7 @@ SELECT * FROM massoftware.f_Zona_asc_Zona_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -790,25 +700,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Nombre(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -834,9 +733,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_des_Zona_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_des_Zona_Nombre(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -868,15 +765,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Nombre(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -932,15 +821,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Nombre(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -978,9 +859,7 @@ SELECT * FROM massoftware.f_Zona_des_Zona_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Bonificacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Bonificacion(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -990,25 +869,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Bonificacion(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Bonificacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Bonificacion(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1034,9 +902,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_asc_Zona_Bonificacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_asc_Zona_Bonificacion(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -1050,9 +916,7 @@ SELECT * FROM massoftware.f_Zona_asc_Zona_Bonificacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Bonificacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Bonificacion(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -1062,25 +926,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Bonificacion(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Bonificacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Bonificacion(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1106,9 +959,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_des_Zona_Bonificacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_des_Zona_Bonificacion(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -1140,15 +991,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Bonificacion(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1204,15 +1047,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Bonificacion(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1250,9 +1085,7 @@ SELECT * FROM massoftware.f_Zona_des_Zona_Bonificacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Recargo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Recargo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -1262,25 +1095,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_asc_Zona_Recargo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Recargo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Recargo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1306,9 +1128,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_asc_Zona_Recargo(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_asc_Zona_Recargo(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -1322,9 +1142,7 @@ SELECT * FROM massoftware.f_Zona_asc_Zona_Recargo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Recargo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Recargo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -1334,25 +1152,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Zona_des_Zona_Recargo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Recargo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Recargo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1378,9 +1185,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Zona_des_Zona_Recargo(
-		100
-		, 0
+SELECT * FROM massoftware.f_Zona_des_Zona_Recargo(100, 0
 		, null::VARCHAR -- Zona_codigoArg0
 		, null::VARCHAR -- Zona_nombreWord0Arg1
 		, null::VARCHAR -- Zona_nombreWord1Arg2
@@ -1412,15 +1217,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_asc_Zona_Recargo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0
@@ -1476,15 +1273,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Zona_des_Zona_Recargo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Zona_id VARCHAR(36)            	-- 0
-		,Zona_codigo VARCHAR(3)         	-- 1
-		,Zona_nombre VARCHAR(50)        	-- 2
-		,Zona_bonificacion DECIMAL(13, 5)	-- 3
-		,Zona_recargo DECIMAL(13, 5)    	-- 4
-	) AS $$
+) RETURNS massoftware.Zona  AS $$
 
 	SELECT
 		 Zona.id AS Zona_id                   	-- 0

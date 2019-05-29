@@ -179,8 +179,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_numero(numeroArg I
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoComentario
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoComentario
 	WHERE	(numeroArg IS NULL OR MotivoComentario.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -198,8 +197,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_nombre(nombreArg V
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoComentario
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoComentario
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MotivoComentario.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -217,8 +215,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_MotivoComentario_numero() CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_MotivoComentario_numero() RETURNS INTEGER AS $$
 
-	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
-	FROM	massoftware.MotivoComentario;
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.MotivoComentario;
 
 $$ LANGUAGE SQL;
 
@@ -273,13 +270,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -317,9 +308,7 @@ SELECT * FROM massoftware.f_MotivoComentario(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -330,9 +319,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -340,14 +327,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -372,9 +352,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoComentario(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoComentario(100, 0
 		, null::INTEGER -- MotivoComentario_numeroFromArg0
 		, null::INTEGER -- MotivoComentario_numeroToArg1
 		, null::VARCHAR -- MotivoComentario_nombreWord0Arg2
@@ -389,9 +367,7 @@ SELECT * FROM massoftware.f_MotivoComentario(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -402,9 +378,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Nume
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -412,14 +386,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_N
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -444,9 +411,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(100, 0
 		, null::INTEGER -- MotivoComentario_numeroFromArg0
 		, null::INTEGER -- MotivoComentario_numeroToArg1
 		, null::VARCHAR -- MotivoComentario_nombreWord0Arg2
@@ -461,9 +426,7 @@ SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -474,9 +437,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Nume
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -484,14 +445,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_N
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -516,9 +470,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoComentario_des_MotivoComentario_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoComentario_des_MotivoComentario_Numero(100, 0
 		, null::INTEGER -- MotivoComentario_numeroFromArg0
 		, null::INTEGER -- MotivoComentario_numeroToArg1
 		, null::VARCHAR -- MotivoComentario_nombreWord0Arg2
@@ -553,13 +505,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_N
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -617,13 +563,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_N
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -661,9 +601,7 @@ SELECT * FROM massoftware.f_MotivoComentario_des_MotivoComentario_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -674,9 +612,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_asc_MotivoComentario_Nomb
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -684,14 +620,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_N
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -716,9 +645,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(100, 0
 		, null::INTEGER -- MotivoComentario_numeroFromArg0
 		, null::INTEGER -- MotivoComentario_numeroToArg1
 		, null::VARCHAR -- MotivoComentario_nombreWord0Arg2
@@ -733,9 +660,7 @@ SELECT * FROM massoftware.f_MotivoComentario_asc_MotivoComentario_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -746,9 +671,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario_des_MotivoComentario_Nomb
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -756,14 +679,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_N
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -788,9 +704,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoComentario_des_MotivoComentario_Nombre(100, 0
 		, null::INTEGER -- MotivoComentario_numeroFromArg0
 		, null::INTEGER -- MotivoComentario_numeroToArg1
 		, null::VARCHAR -- MotivoComentario_nombreWord0Arg2
@@ -825,13 +739,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_asc_MotivoComentario_N
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0
@@ -889,13 +797,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario_des_MotivoComentario_N
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MotivoComentario_id VARCHAR(36)   	-- 0
-		,MotivoComentario_numero INTEGER   	-- 1
-		,MotivoComentario_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoComentario  AS $$
 
 	SELECT
 		 MotivoComentario.id AS MotivoComentario_id       	-- 0

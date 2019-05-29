@@ -41,14 +41,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -97,9 +90,7 @@ SELECT * FROM massoftware.f_Pais(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -115,9 +106,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -130,15 +119,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -169,9 +150,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -191,9 +170,7 @@ SELECT * FROM massoftware.f_Pais(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -209,9 +186,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Numero(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -224,15 +199,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -263,9 +230,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_asc_Pais_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_asc_Pais_Numero(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -285,9 +250,7 @@ SELECT * FROM massoftware.f_Pais_asc_Pais_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -303,9 +266,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Numero(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -318,15 +279,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -357,9 +310,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_des_Pais_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_des_Pais_Numero(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -409,14 +360,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Numero(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -495,14 +439,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Numero(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -551,9 +488,7 @@ SELECT * FROM massoftware.f_Pais_des_Pais_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -569,9 +504,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Nombre(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -584,15 +517,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -623,9 +548,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_asc_Pais_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_asc_Pais_Nombre(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -645,9 +568,7 @@ SELECT * FROM massoftware.f_Pais_asc_Pais_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -663,9 +584,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Nombre(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -678,15 +597,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -717,9 +628,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_des_Pais_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_des_Pais_Nombre(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -769,14 +678,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Nombre(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -855,14 +757,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Nombre(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -911,9 +806,7 @@ SELECT * FROM massoftware.f_Pais_des_Pais_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -929,9 +822,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_asc_Pais_Abreviatura(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -944,15 +835,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -983,9 +866,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_asc_Pais_Abreviatura(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_asc_Pais_Abreviatura(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -1005,9 +886,7 @@ SELECT * FROM massoftware.f_Pais_asc_Pais_Abreviatura(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1023,9 +902,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais_des_Pais_Abreviatura(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1038,15 +915,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -1077,9 +946,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Pais_des_Pais_Abreviatura(
-		100
-		, 0
+SELECT * FROM massoftware.f_Pais_des_Pais_Abreviatura(100, 0
 		, null::INTEGER -- Pais_numeroFromArg0
 		, null::INTEGER -- Pais_numeroToArg1
 		, null::VARCHAR -- Pais_nombreWord0Arg2
@@ -1129,14 +996,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_asc_Pais_Abreviatura(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0
@@ -1215,14 +1075,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais_des_Pais_Abreviatura(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Pais_id VARCHAR(36)       	-- 0
-		,Pais_numero INTEGER       	-- 1
-		,Pais_nombre VARCHAR(50)   	-- 2
-		,Pais_abreviatura VARCHAR(5)	-- 3
-	) AS $$
+) RETURNS massoftware.Pais  AS $$
 
 	SELECT
 		 Pais.id AS Pais_id                 	-- 0

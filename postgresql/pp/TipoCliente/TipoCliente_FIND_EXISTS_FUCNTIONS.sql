@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_TipoCliente_numero(numeroArg INTEGE
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoCliente_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.TipoCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoCliente
 	WHERE	(numeroArg IS NULL OR TipoCliente.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.TipoCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;

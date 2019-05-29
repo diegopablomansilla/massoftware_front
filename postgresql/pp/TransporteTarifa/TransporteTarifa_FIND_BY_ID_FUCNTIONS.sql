@@ -38,9 +38,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_1(idArg VARCHAR(36)) RETURNS massoftware.type_TransporteTarifa_level_1 AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -68,16 +68,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_1(idArg VARC
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_1('xxx');
+-- SELECT * FROM massoftware.f_TransporteTarifaById_1('xxx');
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_1((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteTarifaById_1((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_2(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_2 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_2(idArg VARCHAR(36)) RETURNS massoftware.type_TransporteTarifa_level_2 AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -123,16 +123,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_2(idArg VARC
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_2('xxx');
+-- SELECT * FROM massoftware.f_TransporteTarifaById_2('xxx');
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_2((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteTarifaById_2((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_level_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_3(idArg VARCHAR(36)) RETURNS massoftware.TransporteTarifa_level_3 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_3(idArg VARCHAR(36)) RETURNS massoftware.type_TransporteTarifa_level_3 AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -189,6 +189,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_level_3(idArg VARC
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_3('xxx');
+-- SELECT * FROM massoftware.f_TransporteTarifaById_3('xxx');
 
--- SELECT * FROM massoftware.f_TransporteTarifaById_level_3((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteTarifaById_3((SELECT TransporteTarifa.id FROM massoftware.TransporteTarifa LIMIT 1)::VARCHAR);

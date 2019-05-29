@@ -41,17 +41,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -103,9 +93,7 @@ SELECT * FROM massoftware.f_Moneda(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -121,9 +109,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -136,18 +122,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -181,9 +156,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -203,9 +176,7 @@ SELECT * FROM massoftware.f_Moneda(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -221,9 +192,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Numero(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -236,18 +205,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Numero(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -281,9 +239,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_Numero(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -303,9 +259,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -321,9 +275,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Numero(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -336,18 +288,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Numero(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -381,9 +322,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_Numero(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -433,17 +372,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Numero(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -525,17 +454,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Numero(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -587,9 +506,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -605,9 +522,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Nombre(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -620,18 +535,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Nombre(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -665,9 +569,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_Nombre(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -687,9 +589,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -705,9 +605,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Nombre(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -720,18 +618,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Nombre(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -765,9 +652,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_Nombre(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -817,17 +702,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Nombre(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -909,17 +784,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Nombre(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -971,9 +836,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -989,9 +852,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Abreviatura(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1004,18 +865,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Abreviatura(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1049,9 +899,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_Abreviatura(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_Abreviatura(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1071,9 +919,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_Abreviatura(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1089,9 +935,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Abreviatura(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Abreviatura(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Abreviatura(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1104,18 +948,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Abreviatura(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1149,9 +982,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_Abreviatura(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_Abreviatura(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1201,17 +1032,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Abreviatura(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1293,17 +1114,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Abreviatura(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1355,9 +1166,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_Abreviatura(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Cotizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Cotizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1373,9 +1182,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_Cotizacion(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Cotizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Cotizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1388,18 +1195,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Cotizacion(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1433,9 +1229,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_Cotizacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_Cotizacion(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1455,9 +1249,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_Cotizacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Cotizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Cotizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1473,9 +1265,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_Cotizacion(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Cotizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Cotizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1488,18 +1278,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Cotizacion(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1533,9 +1312,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_Cotizacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_Cotizacion(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1585,17 +1362,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_Cotizacion(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1677,17 +1444,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_Cotizacion(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1739,9 +1496,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_Cotizacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_CotizacionFecha(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1757,9 +1512,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_CotizacionFecha(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1772,18 +1525,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1817,9 +1559,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_CotizacionFecha(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1839,9 +1579,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_CotizacionFecha(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_CotizacionFecha(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1857,9 +1595,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_CotizacionFecha(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_CotizacionFecha(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_CotizacionFecha(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1872,18 +1608,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_CotizacionFecha(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -1917,9 +1642,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_CotizacionFecha(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_CotizacionFecha(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -1969,17 +1692,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_CotizacionFecha(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2061,17 +1774,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_CotizacionFecha(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2123,9 +1826,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_CotizacionFecha(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_ControlActualizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2141,9 +1842,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_ControlActualizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2156,18 +1855,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2201,9 +1889,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_ControlActualizacion(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -2223,9 +1909,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_ControlActualizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_ControlActualizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2241,9 +1925,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_ControlActualizacion(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_ControlActualizacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_ControlActualizacion(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2256,18 +1938,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_ControlActualizacion(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2301,9 +1972,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_ControlActualizacion(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_ControlActualizacion(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -2353,17 +2022,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_ControlActualizacion(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2445,17 +2104,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_ControlActualizacion(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2507,9 +2156,7 @@ SELECT * FROM massoftware.f_Moneda_des_Moneda_ControlActualizacion(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2525,9 +2172,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2540,18 +2185,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2585,9 +2219,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_asc_Moneda_MonedaAFIP(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -2607,9 +2239,7 @@ SELECT * FROM massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2625,9 +2255,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda_des_Moneda_MonedaAFIP(
 		, abreviaturaWord4Arg11 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2640,18 +2268,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_MonedaAFIP(
 		, abreviaturaWord1Arg8 VARCHAR(15)
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
-		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+		, abreviaturaWord4Arg11 VARCHAR(15)) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2685,9 +2302,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Moneda_des_Moneda_MonedaAFIP(
-		100
-		, 0
+SELECT * FROM massoftware.f_Moneda_des_Moneda_MonedaAFIP(100, 0
 		, null::INTEGER -- Moneda_numeroFromArg0
 		, null::INTEGER -- Moneda_numeroToArg1
 		, null::VARCHAR -- Moneda_nombreWord0Arg2
@@ -2737,17 +2352,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_asc_Moneda_MonedaAFIP(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -2829,17 +2434,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_des_Moneda_MonedaAFIP(
 		, abreviaturaWord2Arg9 VARCHAR(15)
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Moneda_id VARCHAR(36)             	-- 0
-		,Moneda_numero INTEGER             	-- 1
-		,Moneda_nombre VARCHAR(50)         	-- 2
-		,Moneda_abreviatura VARCHAR(5)     	-- 3
-		,Moneda_cotizacion DECIMAL(13, 5)  	-- 4
-		,Moneda_cotizacionFecha TIMESTAMP  	-- 5
-		,Moneda_controlActualizacion BOOLEAN	-- 6
-	) AS $$
+) RETURNS massoftware.Moneda  AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0

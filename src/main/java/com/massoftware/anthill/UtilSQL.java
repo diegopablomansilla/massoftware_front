@@ -49,7 +49,7 @@ public class UtilSQL {
 		sql += UtilSQL.buildSQLFindNextValue(clazz);
 
 		// buildSelect();
-		
+
 		sql += buildSQLFindType(clazz);
 
 		sql += UtilSQL.buildSQLFindById(clazz);
@@ -740,7 +740,7 @@ public class UtilSQL {
 				+ "(" + att.getName() + "Arg " + att.getNameSQL() + ") RETURNS BOOLEAN ";
 		sql += " AS $$";
 
-		sql += "\n\n\tSELECT (COUNT(*) > 0)::BOOLEAN\n\tFROM\tmassoftware." + clazz.getName() + "\n\tWHERE";
+		sql += "\n\n\tSELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware." + clazz.getName() + "\n\tWHERE";
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
@@ -844,7 +844,7 @@ public class UtilSQL {
 		sql += " AS $$";
 
 		sql += "\n\n\tSELECT (COALESCE(MAX(" + att.getName() + "),0) + 1)::" + att.getNameSQL()
-				+ "\n\tFROM\tmassoftware." + clazz.getName() + ";";
+				+ " FROM massoftware." + clazz.getName() + ";";
 
 		/////////////////////////////////////////////////////////////////////////////////////
 
@@ -879,7 +879,7 @@ public class UtilSQL {
 		String ml = "";
 
 		if (maxLevel > 0) {
-			ml = "_level_" + maxLevel;
+			ml = "_" + maxLevel;
 		}
 
 		String sql = "";
@@ -889,51 +889,43 @@ public class UtilSQL {
 		sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_" + clazz.getName() + "ById" + ml
 				+ "(idArg VARCHAR(36)) CASCADE;";
 
-		if(level > 0) {
-			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() + "ById" + ml + "(idArg VARCHAR(36)) RETURNS massoftware.type_" + clazz.getName() + ml + " AS $$";	
+		if (maxLevel > 0) {
+			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() + "ById" + ml
+					+ "(idArg VARCHAR(36)) RETURNS massoftware.type_" + clazz.getName() + "_level_" + maxLevel + " AS $$";
 		} else {
-			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() + "ById" + ml + "(idArg VARCHAR(36)) RETURNS massoftware." + clazz.getName() + ml + " AS $$";
-		}
-		
-
-/*		
-		sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() + "ById" + ml
-				+ "(idArg VARCHAR(36)) RETURNS\n\tTABLE(";
-
-		List<String> fieldsSQL = new ArrayList<String>();
-
-		buildFunctionReturnSelectAtts(maxLevel, level, clazz, fieldsSQL);
-
-		int lengthMaxFieldsSQL = 0;
-
-		for (String fieldSQL : fieldsSQL) {
-			if (fieldSQL.length() > lengthMaxFieldsSQL) {
-				lengthMaxFieldsSQL = fieldSQL.length();
-			}
+			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() + "ById" + ml
+					+ "(idArg VARCHAR(36)) RETURNS massoftware." + clazz.getName() + " AS $$";
 		}
 
-		for (int i = 0; i < fieldsSQL.size(); i++) {
-			String sc = " ";
+		/*
+		 * sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazz.getName() +
+		 * "ById" + ml + "(idArg VARCHAR(36)) RETURNS\n\tTABLE(";
+		 * 
+		 * List<String> fieldsSQL = new ArrayList<String>();
+		 * 
+		 * buildFunctionReturnSelectAtts(maxLevel, level, clazz, fieldsSQL);
+		 * 
+		 * int lengthMaxFieldsSQL = 0;
+		 * 
+		 * for (String fieldSQL : fieldsSQL) { if (fieldSQL.length() >
+		 * lengthMaxFieldsSQL) { lengthMaxFieldsSQL = fieldSQL.length(); } }
+		 * 
+		 * for (int i = 0; i < fieldsSQL.size(); i++) { String sc = " ";
+		 * 
+		 * if (i != 0) { sc = ","; }
+		 * 
+		 * sql += "\n\t\t" + sc + fieldsSQL.get(i);
+		 * 
+		 * for (int j = 0; j < lengthMaxFieldsSQL - fieldsSQL.get(i).length() - 1; j++)
+		 * { sql += " "; }
+		 * 
+		 * sql += "\t-- " + i; }
+		 * 
+		 * sql += "\n\t) AS $$";
+		 * 
+		 * 
+		 */
 
-			if (i != 0) {
-				sc = ",";
-			}
-
-			sql += "\n\t\t" + sc + fieldsSQL.get(i);
-
-			for (int j = 0; j < lengthMaxFieldsSQL - fieldsSQL.get(i).length() - 1; j++) {
-				sql += " ";
-			}
-
-			sql += "\t-- " + i;
-		}
-
-		sql += "\n\t) AS $$";
-		
-		
-*/
-		
-		
 		sql += "\n\n\tSELECT";
 
 		List<String> fieldsSQL = new ArrayList<String>();
@@ -1157,10 +1149,18 @@ public class UtilSQL {
 		}
 
 		String sql = "";
-
+		
 		sql += buildSQLFind(clazz, false, maxLevel, level, ml, clazz.getName() + ".id");
 
 		sql += buildSQLFind(clazz, true, maxLevel, level, ml, clazz.getName() + ".id");
+
+//		sql += buildSQLFind(clazz, false, maxLevel, level, "_asc_" + clazz.getName() + "_id" + ml, clazz.getName() + ".id");
+//
+//		sql += buildSQLFind(clazz, true, maxLevel, level, "_asc_" + clazz.getName() + "_id" +  ml, clazz.getName() + ".id");
+//		
+//		sql += buildSQLFind(clazz, false, maxLevel, level, "_des_" + clazz.getName() + "_id" + ml, clazz.getName() + ".id DESC");
+//
+//		sql += buildSQLFind(clazz, true, maxLevel, level, "_des_" + clazz.getName() + "_id" + ml, clazz.getName() + ".id DESC");
 
 		for (int i = 0; i < clazz.getOrderAtts().size(); i++) {
 
@@ -1273,56 +1273,100 @@ public class UtilSQL {
 		}
 
 		if (limit) {
+
+			String n = "";
+
+			if (argsSQL.trim().length() != 0) {
+				n = "\n";
+			}
+
 			sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_" + clazzX.getName() + orderByName
-					+ "(\n\t\tlimitArg BIGINT\n\t\t, offsetArg BIGINT\n" + argsSQL + "\n) CASCADE;";
+					+ "(limitArg BIGINT, offsetArg BIGINT" + n + argsSQL + n + ") CASCADE;";
 
-			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName
-					+ "(\n\t\tlimitArg BIGINT\n\t\t, offsetArg BIGINT\n" + argsSQL + "\n) RETURNS\n\n\tTABLE(";
+			if (maxLevel > 0) {
+
+				sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName
+						+ "(limitArg BIGINT, offsetArg BIGINT" + n + argsSQL + n + ") RETURNS massoftware.type_"
+						+ clazzX.getName() + "_level_" + maxLevel + "  AS $$";
+
+			} else {
+				sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName
+						+ "(limitArg BIGINT, offsetArg BIGINT" + n + argsSQL + ") RETURNS massoftware."
+						+ clazzX.getName() + "  AS $$";
+			}
+
 		} else {
-			sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_" + clazzX.getName() + orderByName + "(\n"
-					+ argsSQL.replaceFirst(",", " ") + "\n) CASCADE;";
 
-			sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName + "(\n"
-					+ argsSQL.replaceFirst(",", " ") + "\n) RETURNS\n\n\tTABLE(";
-		}
+			String n = "";
 
-		List<String> fieldsSQL = new ArrayList<String>();
-
-		buildFunctionReturnSelectAtts(maxLevel, level, clazzX, fieldsSQL);
-
-		int lengthMaxFieldsSQL = 0;
-
-		for (String fieldSQL : fieldsSQL) {
-			if (fieldSQL.length() > lengthMaxFieldsSQL) {
-				lengthMaxFieldsSQL = fieldSQL.length();
-			}
-		}
-
-		for (int i = 0; i < fieldsSQL.size(); i++) {
-			String sc = " ";
-
-			if (i != 0) {
-				sc = ",";
+			if (argsSQL.trim().length() != 0) {
+				n = "\n";
 			}
 
-			sql += "\n\t\t" + sc + fieldsSQL.get(i);
+			sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_" + clazzX.getName() + orderByName + "(" + n
+					+ argsSQL.replaceFirst(",", " ") + n + ") CASCADE;";
 
-			for (int j = 0; j < lengthMaxFieldsSQL - fieldsSQL.get(i).length() - 1; j++) {
-				sql += " ";
+			if (maxLevel > 0) {
+
+				sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName + "(" + n
+						+ argsSQL.replaceFirst(",", " ") + n + ") RETURNS massoftware.type_" + clazzX.getName()
+						+ "_level_" + maxLevel + "  AS $$";
+
+			} else {
+				sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName + "(" + n
+						+ argsSQL.replaceFirst(",", " ") + n +") RETURNS massoftware." + clazzX.getName() + "  AS $$";
 			}
 
-			sql += "\t-- " + i;
 		}
 
-		sql += "\n\t) AS $$";
+		/*
+		 * 
+		 * if (limit) { sql += "\n\nDROP FUNCTION IF EXISTS massoftware.f_" +
+		 * clazzX.getName() + orderByName +
+		 * "(\n\t\tlimitArg BIGINT\n\t\t, offsetArg BIGINT\n" + argsSQL +
+		 * "\n) CASCADE;";
+		 * 
+		 * sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() +
+		 * orderByName + "(\n\t\tlimitArg BIGINT\n\t\t, offsetArg BIGINT\n" + argsSQL +
+		 * "\n) RETURNS\n\n\tTABLE("; } else { sql +=
+		 * "\n\nDROP FUNCTION IF EXISTS massoftware.f_" + clazzX.getName() + orderByName
+		 * + "(\n" + argsSQL.replaceFirst(",", " ") + "\n) CASCADE;";
+		 * 
+		 * sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() +
+		 * orderByName + "(\n" + argsSQL.replaceFirst(",", " ") +
+		 * "\n) RETURNS\n\n\tTABLE("; }
+		 * 
+		 * List<String> fieldsSQL = new ArrayList<String>();
+		 * 
+		 * buildFunctionReturnSelectAtts(maxLevel, level, clazzX, fieldsSQL);
+		 * 
+		 * int lengthMaxFieldsSQL = 0;
+		 * 
+		 * for (String fieldSQL : fieldsSQL) { if (fieldSQL.length() >
+		 * lengthMaxFieldsSQL) { lengthMaxFieldsSQL = fieldSQL.length(); } }
+		 * 
+		 * for (int i = 0; i < fieldsSQL.size(); i++) { String sc = " ";
+		 * 
+		 * if (i != 0) { sc = ","; }
+		 * 
+		 * sql += "\n\t\t" + sc + fieldsSQL.get(i);
+		 * 
+		 * for (int j = 0; j < lengthMaxFieldsSQL - fieldsSQL.get(i).length() - 1; j++)
+		 * { sql += " "; }
+		 * 
+		 * sql += "\t-- " + i; }
+		 * 
+		 * sql += "\n\t) AS $$";
+		 * 
+		 */
 
 		sql += "\n\n\tSELECT";
 
-		fieldsSQL = new ArrayList<String>();
+		List<String> fieldsSQL = new ArrayList<String>();
 
 		buildSelectAtts(maxLevel, level, clazzX, fieldsSQL);
 
-		lengthMaxFieldsSQL = 0;
+		int lengthMaxFieldsSQL = 0;
 
 		for (String fieldSQL : fieldsSQL) {
 			if (fieldSQL.length() > lengthMaxFieldsSQL) {
@@ -1832,12 +1876,19 @@ public class UtilSQL {
 		}
 
 		sql += "\n\n/*";
+		
+		String n = "";
+
+		if (argsSQL.trim().length() != 0) {
+			n = "\n";
+		}
+		
 		if (limit) {
-			sql += "\n\nSELECT * FROM massoftware.f_" + clazzX.getName() + orderByName + "(\n\t\t100\n\t\t, 0" + argsSQL
-					+ "\n);";
+			sql += "\n\nSELECT * FROM massoftware.f_" + clazzX.getName() + orderByName + "(100, 0" + argsSQL
+					+ n + ");";
 		} else {
 			sql += "\n\nSELECT * FROM massoftware.f_" + clazzX.getName() + orderByName + "("
-					+ argsSQL.replaceFirst(",", "") + "\n);";
+					+ argsSQL.replaceFirst(",", "") + n + ");";
 		}
 
 		sql += "\n\n*/";
@@ -1854,10 +1905,10 @@ public class UtilSQL {
 		String sql = "";
 
 		for (int i = 0; i <= maxLevel; i++) {
-			if(i != 0) {
-				sql += buildSQLFindType(clazz, i, level);	
+			if (i != 0) {
+				sql += buildSQLFindType(clazz, i, level);
 			}
-			
+
 		}
 
 		return sql;

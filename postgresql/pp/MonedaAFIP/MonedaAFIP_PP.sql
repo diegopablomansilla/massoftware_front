@@ -184,8 +184,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MonedaAFIP
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MonedaAFIP
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MonedaAFIP.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -203,8 +202,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MonedaAFIP
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MonedaAFIP
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MonedaAFIP.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -258,13 +256,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -300,9 +292,7 @@ SELECT * FROM massoftware.f_MonedaAFIP(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -312,23 +302,14 @@ DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -352,9 +333,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MonedaAFIP(
-		100
-		, 0
+SELECT * FROM massoftware.f_MonedaAFIP(100, 0
 		, null::VARCHAR -- MonedaAFIP_codigoArg0
 		, null::VARCHAR -- MonedaAFIP_nombreWord0Arg1
 		, null::VARCHAR -- MonedaAFIP_nombreWord1Arg2
@@ -368,9 +347,7 @@ SELECT * FROM massoftware.f_MonedaAFIP(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -380,23 +357,14 @@ DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -420,9 +388,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(100, 0
 		, null::VARCHAR -- MonedaAFIP_codigoArg0
 		, null::VARCHAR -- MonedaAFIP_nombreWord0Arg1
 		, null::VARCHAR -- MonedaAFIP_nombreWord1Arg2
@@ -436,9 +402,7 @@ SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -448,23 +412,14 @@ DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -488,9 +443,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(100, 0
 		, null::VARCHAR -- MonedaAFIP_codigoArg0
 		, null::VARCHAR -- MonedaAFIP_nombreWord0Arg1
 		, null::VARCHAR -- MonedaAFIP_nombreWord1Arg2
@@ -522,13 +475,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Codigo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -582,13 +529,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -624,9 +565,7 @@ SELECT * FROM massoftware.f_MonedaAFIP_des_MonedaAFIP_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -636,23 +575,14 @@ DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -676,9 +606,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(100, 0
 		, null::VARCHAR -- MonedaAFIP_codigoArg0
 		, null::VARCHAR -- MonedaAFIP_nombreWord0Arg1
 		, null::VARCHAR -- MonedaAFIP_nombreWord1Arg2
@@ -692,9 +620,7 @@ SELECT * FROM massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
@@ -704,23 +630,14 @@ DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(
 		, nombreWord4Arg5 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(3)
 		, nombreWord0Arg1 VARCHAR(15)
 		, nombreWord1Arg2 VARCHAR(15)
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
-		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg5 VARCHAR(15)) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -744,9 +661,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(100, 0
 		, null::VARCHAR -- MonedaAFIP_codigoArg0
 		, null::VARCHAR -- MonedaAFIP_nombreWord0Arg1
 		, null::VARCHAR -- MonedaAFIP_nombreWord1Arg2
@@ -778,13 +693,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_asc_MonedaAFIP_Nombre(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0
@@ -838,13 +747,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP_des_MonedaAFIP_Nombre(
 		, nombreWord2Arg3 VARCHAR(15)
 		, nombreWord3Arg4 VARCHAR(15)
 		, nombreWord4Arg5 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 MonedaAFIP_id VARCHAR(36)   	-- 0
-		,MonedaAFIP_codigo VARCHAR(3)	-- 1
-		,MonedaAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MonedaAFIP  AS $$
 
 	SELECT
 		 MonedaAFIP.id AS MonedaAFIP_id       	-- 0

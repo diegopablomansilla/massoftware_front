@@ -189,8 +189,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_numero(numeroA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.ClasificacionCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClasificacionCliente
 	WHERE	(numeroArg IS NULL OR ClasificacionCliente.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -208,8 +207,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_nombre(nombreA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.ClasificacionCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClasificacionCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ClasificacionCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -227,8 +225,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_ClasificacionCliente_numero() CASCADE
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_ClasificacionCliente_numero() RETURNS INTEGER AS $$
 
-	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
-	FROM	massoftware.ClasificacionCliente;
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.ClasificacionCliente;
 
 $$ LANGUAGE SQL;
 
@@ -245,8 +242,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_ClasificacionCliente_color() CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_ClasificacionCliente_color() RETURNS INTEGER AS $$
 
-	SELECT (COALESCE(MAX(color),0) + 1)::INTEGER
-	FROM	massoftware.ClasificacionCliente;
+	SELECT (COALESCE(MAX(color),0) + 1)::INTEGER FROM massoftware.ClasificacionCliente;
 
 $$ LANGUAGE SQL;
 
@@ -302,14 +298,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -348,9 +337,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -361,9 +348,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -371,15 +356,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -405,9 +382,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -422,9 +397,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -435,9 +408,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -445,15 +416,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -479,9 +442,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -496,9 +457,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -509,9 +468,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -519,15 +476,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -553,9 +502,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -590,14 +537,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -656,14 +596,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -702,9 +635,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -715,9 +646,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -725,15 +654,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -759,9 +680,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -776,9 +695,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -789,9 +706,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -799,15 +714,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -833,9 +740,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -870,14 +775,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -936,14 +834,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -982,9 +873,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -995,9 +884,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_asc_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1005,15 +892,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -1039,9 +918,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -1056,9 +933,7 @@ SELECT * FROM massoftware.f_ClasificacionCliente_asc_ClasificacionCliente_Color(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1069,9 +944,7 @@ DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente_des_ClasificacionClie
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1079,15 +952,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -1113,9 +978,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(
-		100
-		, 0
+SELECT * FROM massoftware.f_ClasificacionCliente_des_ClasificacionCliente_Color(100, 0
 		, null::INTEGER -- ClasificacionCliente_numeroFromArg0
 		, null::INTEGER -- ClasificacionCliente_numeroToArg1
 		, null::VARCHAR -- ClasificacionCliente_nombreWord0Arg2
@@ -1150,14 +1013,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_asc_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0
@@ -1216,14 +1072,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente_des_ClasificacionC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 ClasificacionCliente_id VARCHAR(36)   	-- 0
-		,ClasificacionCliente_numero INTEGER   	-- 1
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_color INTEGER    	-- 3
-	) AS $$
+) RETURNS massoftware.ClasificacionCliente  AS $$
 
 	SELECT
 		 ClasificacionCliente.id AS ClasificacionCliente_id       	-- 0

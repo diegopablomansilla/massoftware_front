@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_numero(numeroArg INTEGER)
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Provincia
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Provincia
 	WHERE	(numeroArg IS NULL OR Provincia.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR)
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Provincia
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Provincia
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -65,8 +63,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_abreviatura(abreviaturaAr
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Provincia
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Provincia
 	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;

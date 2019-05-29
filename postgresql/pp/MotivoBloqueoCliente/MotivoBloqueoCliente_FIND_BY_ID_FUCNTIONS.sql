@@ -33,9 +33,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) RETURNS massoftware.type_MotivoBloqueoCliente_level_1 AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -53,6 +53,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_level_1(idArg 
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1('xxx');
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1('xxx');
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);

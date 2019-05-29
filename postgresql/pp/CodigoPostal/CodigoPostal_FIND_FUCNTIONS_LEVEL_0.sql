@@ -25,15 +25,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -67,9 +59,7 @@ SELECT * FROM massoftware.f_CodigoPostal(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -77,23 +67,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -117,9 +96,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -131,9 +108,7 @@ SELECT * FROM massoftware.f_CodigoPostal(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -141,23 +116,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -181,9 +145,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -195,9 +157,7 @@ SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -205,23 +165,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -245,9 +194,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -273,15 +220,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Codigo(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -329,15 +268,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -371,9 +302,7 @@ SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Codigo(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -381,23 +310,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -421,9 +339,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -435,9 +351,7 @@ SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -445,23 +359,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -485,9 +388,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Numero(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -513,15 +414,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Numero(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -569,15 +462,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -611,9 +496,7 @@ SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -621,23 +504,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -661,9 +533,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -675,9 +545,7 @@ SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCalle(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -685,23 +553,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -725,9 +582,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -753,15 +608,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NombreCal
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -809,15 +656,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NombreCal
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -851,9 +690,7 @@ SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NombreCalle(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -861,23 +698,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -901,9 +727,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -915,9 +739,7 @@ SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCalle(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -925,23 +747,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -965,9 +776,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -993,15 +802,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_NumeroCal
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -1049,15 +850,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCal
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -1091,9 +884,7 @@ SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_NumeroCalle(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -1101,23 +892,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -1141,9 +921,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -1155,9 +933,7 @@ SELECT * FROM massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
@@ -1165,23 +941,12 @@ DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(
 		, ciudadArg3 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(limitArg BIGINT, offsetArg BIGINT
 
 		, codigoArg0 VARCHAR(12)
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
-		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+		, ciudadArg3 VARCHAR(36)) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -1205,9 +970,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(
-		100
-		, 0
+SELECT * FROM massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(100, 0
 		, null::VARCHAR -- CodigoPostal_codigoArg0
 		, null::INTEGER -- CodigoPostal_numeroFromArg1
 		, null::INTEGER -- CodigoPostal_numeroToArg2
@@ -1233,15 +996,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_asc_CodigoPostal_Ciudad(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0
@@ -1289,15 +1044,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_des_CodigoPostal_Ciudad(
 		, numeroFromArg1 INTEGER
 		, numeroToArg2 INTEGER
 		, ciudadArg3 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 CodigoPostal_id VARCHAR(36)         	-- 0
-		,CodigoPostal_codigo VARCHAR(12)     	-- 1
-		,CodigoPostal_numero INTEGER         	-- 2
-		,CodigoPostal_nombreCalle VARCHAR(200)	-- 3
-		,CodigoPostal_numeroCalle VARCHAR(20)	-- 4
-	) AS $$
+) RETURNS massoftware.CodigoPostal  AS $$
 
 	SELECT
 		 CodigoPostal.id AS CodigoPostal_id                 	-- 0

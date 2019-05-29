@@ -31,13 +31,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -75,9 +69,7 @@ SELECT * FROM massoftware.f_Carga(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -88,9 +80,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -98,14 +88,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -130,9 +113,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -147,9 +128,7 @@ SELECT * FROM massoftware.f_Carga(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -160,9 +139,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -170,14 +147,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -202,9 +172,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_asc_Carga_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_asc_Carga_Numero(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -219,9 +187,7 @@ SELECT * FROM massoftware.f_Carga_asc_Carga_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -232,9 +198,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -242,14 +206,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -274,9 +231,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_des_Carga_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_des_Carga_Numero(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -311,13 +266,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -375,13 +324,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -419,9 +362,7 @@ SELECT * FROM massoftware.f_Carga_des_Carga_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -432,9 +373,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -442,14 +381,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -474,9 +406,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_asc_Carga_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_asc_Carga_Nombre(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -491,9 +421,7 @@ SELECT * FROM massoftware.f_Carga_asc_Carga_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -504,9 +432,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -514,14 +440,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -546,9 +465,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_des_Carga_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_des_Carga_Nombre(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -583,13 +500,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -647,13 +558,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -691,9 +596,7 @@ SELECT * FROM massoftware.f_Carga_des_Carga_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Transporte(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Transporte(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -704,9 +607,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_asc_Carga_Transporte(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Transporte(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Transporte(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -714,14 +615,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Transporte(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -746,9 +640,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_asc_Carga_Transporte(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_asc_Carga_Transporte(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -763,9 +655,7 @@ SELECT * FROM massoftware.f_Carga_asc_Carga_Transporte(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Transporte(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Transporte(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -776,9 +666,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Carga_des_Carga_Transporte(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Transporte(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Transporte(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -786,14 +674,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Transporte(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -818,9 +699,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Carga_des_Carga_Transporte(
-		100
-		, 0
+SELECT * FROM massoftware.f_Carga_des_Carga_Transporte(100, 0
 		, null::INTEGER -- Carga_numeroFromArg0
 		, null::INTEGER -- Carga_numeroToArg1
 		, null::VARCHAR -- Carga_nombreWord0Arg2
@@ -855,13 +734,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_asc_Carga_Transporte(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0
@@ -919,13 +792,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Carga_des_Carga_Transporte(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 Carga_id VARCHAR(36)   	-- 0
-		,Carga_numero INTEGER   	-- 1
-		,Carga_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.Carga  AS $$
 
 	SELECT
 		 Carga.id AS Carga_id       	-- 0

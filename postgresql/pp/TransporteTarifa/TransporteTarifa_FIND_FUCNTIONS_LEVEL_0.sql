@@ -11,24 +11,9 @@
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -48,36 +33,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa(
-);
+SELECT * FROM massoftware.f_TransporteTarifa();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -99,38 +64,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -152,38 +95,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -205,34 +126,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -252,32 +155,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -297,36 +184,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -348,38 +215,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -401,34 +246,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -448,32 +275,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -493,36 +304,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -544,38 +335,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -597,34 +366,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -644,32 +395,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -689,36 +424,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -740,38 +455,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -793,34 +486,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -840,32 +515,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -885,36 +544,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -936,38 +575,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -989,34 +606,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1036,32 +635,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1081,36 +664,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1132,38 +695,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1185,34 +726,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1232,32 +755,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1277,36 +784,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1328,38 +815,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1381,34 +846,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1428,32 +875,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1473,36 +904,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1524,38 +935,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1577,34 +966,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1624,32 +995,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1669,36 +1024,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1720,38 +1055,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1773,34 +1086,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1820,32 +1115,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 2
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 3
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 4
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 5
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 6
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 7
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga() RETURNS massoftware.TransporteTarifa  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1865,7 +1144,6 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga();
 
 */

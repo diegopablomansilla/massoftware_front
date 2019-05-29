@@ -37,9 +37,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Provincia_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_1(idArg VARCHAR(36)) RETURNS massoftware.type_Provincia_level_1 AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -61,6 +61,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_level_1(idArg VARCHAR(36)
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_ProvinciaById_level_1('xxx');
+-- SELECT * FROM massoftware.f_ProvinciaById_1('xxx');
 
--- SELECT * FROM massoftware.f_ProvinciaById_level_1((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_ProvinciaById_1((SELECT Provincia.id FROM massoftware.Provincia LIMIT 1)::VARCHAR);

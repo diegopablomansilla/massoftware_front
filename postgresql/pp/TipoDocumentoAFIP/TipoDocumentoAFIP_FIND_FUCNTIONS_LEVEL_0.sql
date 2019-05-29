@@ -31,13 +31,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -75,9 +69,7 @@ SELECT * FROM massoftware.f_TipoDocumentoAFIP(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -88,9 +80,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -98,14 +88,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -130,9 +113,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoDocumentoAFIP(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoDocumentoAFIP(100, 0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroFromArg0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroToArg1
 		, null::VARCHAR -- TipoDocumentoAFIP_nombreWord0Arg2
@@ -147,9 +128,7 @@ SELECT * FROM massoftware.f_TipoDocumentoAFIP(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -160,9 +139,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nu
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -170,14 +147,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -202,9 +172,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(100, 0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroFromArg0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroToArg1
 		, null::VARCHAR -- TipoDocumentoAFIP_nombreWord0Arg2
@@ -219,9 +187,7 @@ SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -232,9 +198,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nu
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -242,14 +206,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -274,9 +231,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(100, 0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroFromArg0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroToArg1
 		, null::VARCHAR -- TipoDocumentoAFIP_nombreWord0Arg2
@@ -311,13 +266,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -375,13 +324,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -419,9 +362,7 @@ SELECT * FROM massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -432,9 +373,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_No
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -442,14 +381,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -474,9 +406,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(100, 0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroFromArg0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroToArg1
 		, null::VARCHAR -- TipoDocumentoAFIP_nombreWord0Arg2
@@ -491,9 +421,7 @@ SELECT * FROM massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -504,9 +432,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_No
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -514,14 +440,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -546,9 +465,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP_Nombre(100, 0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroFromArg0
 		, null::INTEGER -- TipoDocumentoAFIP_numeroToArg1
 		, null::VARCHAR -- TipoDocumentoAFIP_nombreWord0Arg2
@@ -583,13 +500,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_asc_TipoDocumentoAFIP
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0
@@ -647,13 +558,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP_des_TipoDocumentoAFIP
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoDocumentoAFIP_id VARCHAR(36)   	-- 0
-		,TipoDocumentoAFIP_numero INTEGER   	-- 1
-		,TipoDocumentoAFIP_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoDocumentoAFIP  AS $$
 
 	SELECT
 		 TipoDocumentoAFIP.id AS TipoDocumentoAFIP_id       	-- 0

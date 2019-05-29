@@ -37,9 +37,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MonedaById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Moneda_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1(idArg VARCHAR(36)) RETURNS massoftware.type_Moneda_level_1 AS $$
 
 	SELECT
 		 Moneda.id AS Moneda_id                                   	-- 0
@@ -60,6 +60,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_level_1(idArg VARCHAR(36)) R
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_MonedaById_level_1('xxx');
+-- SELECT * FROM massoftware.f_MonedaById_1('xxx');
 
--- SELECT * FROM massoftware.f_MonedaById_level_1((SELECT Moneda.id FROM massoftware.Moneda LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_MonedaById_1((SELECT Moneda.id FROM massoftware.Moneda LIMIT 1)::VARCHAR);

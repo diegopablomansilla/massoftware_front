@@ -11,57 +11,9 @@
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -120,69 +72,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -243,71 +142,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -368,71 +212,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -493,67 +282,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -612,65 +350,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Numero_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -729,69 +418,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Numero_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -852,71 +488,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -977,67 +558,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1096,65 +626,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Carga_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1213,69 +694,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Carga_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1336,71 +764,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1461,67 +834,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1580,65 +902,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_Ciudad_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1697,69 +970,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_Ciudad_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1820,71 +1040,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -1945,67 +1110,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2064,65 +1178,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioFlete_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2181,69 +1246,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioFlete_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2304,71 +1316,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2429,67 +1386,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2548,65 +1454,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadFacturacion_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2665,69 +1522,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadFacturacion_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2788,71 +1592,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -2913,67 +1662,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3032,65 +1730,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioUnidadStock_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3149,69 +1798,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioUnidadStock_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3272,71 +1868,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3397,67 +1938,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3516,65 +2006,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_PrecioBultos_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3633,69 +2074,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_PrecioBultos_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3756,71 +2144,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -3881,67 +2214,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4000,65 +2282,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoEntrega_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4117,69 +2350,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoEntrega_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4240,71 +2420,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(limitArg BIGINT, offsetArg BIGINT) CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
-		limitArg BIGINT
-		, offsetArg BIGINT
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(limitArg BIGINT, offsetArg BIGINT) RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4365,67 +2490,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
-		100
-		, 0
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(100, 0);
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4484,65 +2558,16 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_asc_TransporteTarifa_ImporteMinimoCarga_3();
 
 */
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3() CASCADE;
 
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
-
-) RETURNS
-
-	TABLE(
-		 TransporteTarifa_id VARCHAR(36)                       	-- 0
-		,TransporteTarifa_numero INTEGER                       	-- 1
-		,Carga_id VARCHAR(36)                                  	-- 2
-		,Carga_numero INTEGER                                  	-- 3
-		,Carga_nombre VARCHAR(50)                              	-- 4
-		,Transporte_id VARCHAR(36)                             	-- 5
-		,Transporte_numero INTEGER                             	-- 6
-		,Transporte_nombre VARCHAR(50)                         	-- 7
-		,Transporte_cuit BIGINT                                	-- 8
-		,Transporte_ingresosBrutos VARCHAR(13)                 	-- 9
-		,Transporte_telefono VARCHAR(50)                       	-- 10
-		,Transporte_fax VARCHAR(50)                            	-- 11
-		,CodigoPostal_id VARCHAR(36)                           	-- 12
-		,CodigoPostal_codigo VARCHAR(12)                       	-- 13
-		,CodigoPostal_numero INTEGER                           	-- 14
-		,CodigoPostal_nombreCalle VARCHAR(200)                 	-- 15
-		,CodigoPostal_numeroCalle VARCHAR(20)                  	-- 16
-		,Transporte_domicilio VARCHAR(150)                     	-- 17
-		,Transporte_comentario VARCHAR(300)                    	-- 18
-		,Ciudad_id VARCHAR(36)                                 	-- 19
-		,Ciudad_numero INTEGER                                 	-- 20
-		,Ciudad_nombre VARCHAR(50)                             	-- 21
-		,Ciudad_departamento VARCHAR(50)                       	-- 22
-		,Ciudad_numeroAFIP INTEGER                             	-- 23
-		,Provincia_id VARCHAR(36)                              	-- 24
-		,Provincia_numero INTEGER                              	-- 25
-		,Provincia_nombre VARCHAR(50)                          	-- 26
-		,Provincia_abreviatura VARCHAR(5)                      	-- 27
-		,Provincia_numeroAFIP INTEGER                          	-- 28
-		,Provincia_numeroIngresosBrutos INTEGER                	-- 29
-		,Provincia_numeroRENATEA INTEGER                       	-- 30
-		,Pais_id VARCHAR(36)                                   	-- 31
-		,Pais_numero INTEGER                                   	-- 32
-		,Pais_nombre VARCHAR(50)                               	-- 33
-		,Pais_abreviatura VARCHAR(5)                           	-- 34
-		,TransporteTarifa_precioFlete DECIMAL(13, 5)           	-- 35
-		,TransporteTarifa_precioUnidadFacturacion DECIMAL(13, 5)	-- 36
-		,TransporteTarifa_precioUnidadStock DECIMAL(13, 5)     	-- 37
-		,TransporteTarifa_precioBultos DECIMAL(13, 5)          	-- 38
-		,TransporteTarifa_importeMinimoEntrega DECIMAL(13, 5)  	-- 39
-		,TransporteTarifa_importeMinimoCarga DECIMAL(13, 5)    	-- 40
-	) AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3() RETURNS massoftware.type_TransporteTarifa_level_3  AS $$
 
 	SELECT
 		 TransporteTarifa.id AS TransporteTarifa_id                                         	-- 0
@@ -4601,7 +2626,6 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3(
-);
+SELECT * FROM massoftware.f_TransporteTarifa_des_TransporteTarifa_ImporteMinimoCarga_3();
 
 */

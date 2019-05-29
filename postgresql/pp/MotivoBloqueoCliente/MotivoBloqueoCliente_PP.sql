@@ -190,8 +190,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoBloqueoCliente_numero(numeroA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoBloqueoCliente_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoBloqueoCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoBloqueoCliente
 	WHERE	(numeroArg IS NULL OR MotivoBloqueoCliente.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -209,8 +208,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreA
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoBloqueoCliente
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoBloqueoCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MotivoBloqueoCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -228,8 +226,7 @@ DROP FUNCTION IF EXISTS massoftware.f_next_MotivoBloqueoCliente_numero() CASCADE
 
 CREATE OR REPLACE FUNCTION massoftware.f_next_MotivoBloqueoCliente_numero() RETURNS INTEGER AS $$
 
-	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER
-	FROM	massoftware.MotivoBloqueoCliente;
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.MotivoBloqueoCliente;
 
 $$ LANGUAGE SQL;
 
@@ -280,9 +277,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_level_1(idArg VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_1(idArg VARCHAR(36)) RETURNS massoftware.type_MotivoBloqueoCliente_level_1 AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -300,9 +297,9 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_level_1(idArg 
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1('xxx');
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1('xxx');
 
--- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_level_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1((SELECT MotivoBloqueoCliente.id FROM massoftware.MotivoBloqueoCliente LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -329,13 +326,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -375,9 +366,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -389,9 +378,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente(
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -400,14 +387,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -433,9 +413,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -451,9 +429,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -465,9 +441,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -476,14 +450,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -509,9 +476,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -527,9 +492,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -541,9 +504,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -552,14 +513,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -585,9 +539,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -625,13 +577,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -693,13 +639,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -739,9 +679,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -753,9 +691,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -764,14 +700,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -797,9 +726,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -815,9 +742,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -829,9 +754,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -840,14 +763,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -873,9 +789,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -913,13 +827,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -981,13 +889,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1027,9 +929,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1041,9 +941,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1052,14 +950,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1085,9 +976,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1103,9 +992,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Clasif
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1117,9 +1004,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1128,14 +1013,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, clasificacionClienteArg7 VARCHAR(36)) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1161,9 +1039,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1201,13 +1077,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1269,13 +1139,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.MotivoBloqueoCliente  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1337,17 +1201,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_1(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1392,9 +1246,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1406,9 +1258,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_1(
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1418,17 +1268,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_1(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1459,9 +1299,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1477,9 +1315,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1491,9 +1327,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1503,17 +1337,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1544,9 +1368,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1562,9 +1384,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1576,9 +1396,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1588,17 +1406,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1629,9 +1437,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1669,17 +1475,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1746,17 +1542,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1801,9 +1587,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Numero
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1815,9 +1599,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1827,17 +1609,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1868,9 +1640,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1886,9 +1656,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1900,9 +1668,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1912,17 +1678,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -1953,9 +1709,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -1993,17 +1747,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -2070,17 +1814,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -2125,9 +1859,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_Nombre
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2139,9 +1871,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2151,17 +1881,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -2192,9 +1912,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_ClasificacionCliente_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -2210,9 +1928,7 @@ SELECT * FROM massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoCliente_Clasif
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2224,9 +1940,7 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoClie
 		, clasificacionClienteArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2236,17 +1950,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -2277,9 +1981,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoCliente_ClasificacionCliente_1(100, 0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroFromArg0
 		, null::INTEGER -- MotivoBloqueoCliente_numeroToArg1
 		, null::VARCHAR -- MotivoBloqueoCliente_nombreWord0Arg2
@@ -2317,17 +2019,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_asc_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0
@@ -2394,17 +2086,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_des_MotivoBloqueoC
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, clasificacionClienteArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 MotivoBloqueoCliente_id VARCHAR(36)   	-- 0
-		,MotivoBloqueoCliente_numero INTEGER   	-- 1
-		,MotivoBloqueoCliente_nombre VARCHAR(50)	-- 2
-		,ClasificacionCliente_id VARCHAR(36)   	-- 3
-		,ClasificacionCliente_numero INTEGER   	-- 4
-		,ClasificacionCliente_nombre VARCHAR(50)	-- 5
-		,ClasificacionCliente_color INTEGER    	-- 6
-	) AS $$
+) RETURNS massoftware.type_MotivoBloqueoCliente_level_1  AS $$
 
 	SELECT
 		 MotivoBloqueoCliente.id AS MotivoBloqueoCliente_id       	-- 0

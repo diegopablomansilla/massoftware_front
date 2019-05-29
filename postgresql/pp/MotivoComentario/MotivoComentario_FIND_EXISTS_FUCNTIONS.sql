@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_numero(numeroArg I
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoComentario
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoComentario
 	WHERE	(numeroArg IS NULL OR MotivoComentario.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_nombre(nombreArg V
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.MotivoComentario
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoComentario
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MotivoComentario.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;

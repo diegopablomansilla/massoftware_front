@@ -31,13 +31,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -75,9 +69,7 @@ SELECT * FROM massoftware.f_TipoCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -88,9 +80,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoCliente(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -98,14 +88,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -130,9 +113,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoCliente(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoCliente(100, 0
 		, null::INTEGER -- TipoCliente_numeroFromArg0
 		, null::INTEGER -- TipoCliente_numeroToArg1
 		, null::VARCHAR -- TipoCliente_nombreWord0Arg2
@@ -147,9 +128,7 @@ SELECT * FROM massoftware.f_TipoCliente(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -160,9 +139,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -170,14 +147,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -202,9 +172,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Numero(100, 0
 		, null::INTEGER -- TipoCliente_numeroFromArg0
 		, null::INTEGER -- TipoCliente_numeroToArg1
 		, null::VARCHAR -- TipoCliente_nombreWord0Arg2
@@ -219,9 +187,7 @@ SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -232,9 +198,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Numero(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Numero(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Numero(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -242,14 +206,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Numero(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -274,9 +231,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoCliente_des_TipoCliente_Numero(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoCliente_des_TipoCliente_Numero(100, 0
 		, null::INTEGER -- TipoCliente_numeroFromArg0
 		, null::INTEGER -- TipoCliente_numeroToArg1
 		, null::VARCHAR -- TipoCliente_nombreWord0Arg2
@@ -311,13 +266,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -375,13 +324,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Numero(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -419,9 +362,7 @@ SELECT * FROM massoftware.f_TipoCliente_des_TipoCliente_Numero(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -432,9 +373,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -442,14 +381,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -474,9 +406,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Nombre(100, 0
 		, null::INTEGER -- TipoCliente_numeroFromArg0
 		, null::INTEGER -- TipoCliente_numeroToArg1
 		, null::VARCHAR -- TipoCliente_nombreWord0Arg2
@@ -491,9 +421,7 @@ SELECT * FROM massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -504,9 +432,7 @@ DROP FUNCTION IF EXISTS massoftware.f_TipoCliente_des_TipoCliente_Nombre(
 		, nombreWord4Arg6 VARCHAR(15)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Nombre(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Nombre(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -514,14 +440,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Nombre(
 		, nombreWord1Arg3 VARCHAR(15)
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
-		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+		, nombreWord4Arg6 VARCHAR(15)) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -546,9 +465,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_TipoCliente_des_TipoCliente_Nombre(
-		100
-		, 0
+SELECT * FROM massoftware.f_TipoCliente_des_TipoCliente_Nombre(100, 0
 		, null::INTEGER -- TipoCliente_numeroFromArg0
 		, null::INTEGER -- TipoCliente_numeroToArg1
 		, null::VARCHAR -- TipoCliente_nombreWord0Arg2
@@ -583,13 +500,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_asc_TipoCliente_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0
@@ -647,13 +558,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente_des_TipoCliente_Nombre(
 		, nombreWord2Arg4 VARCHAR(15)
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
-) RETURNS
-
-	TABLE(
-		 TipoCliente_id VARCHAR(36)   	-- 0
-		,TipoCliente_numero INTEGER   	-- 1
-		,TipoCliente_nombre VARCHAR(50)	-- 2
-	) AS $$
+) RETURNS massoftware.TipoCliente  AS $$
 
 	SELECT
 		 TipoCliente.id AS TipoCliente_id       	-- 0

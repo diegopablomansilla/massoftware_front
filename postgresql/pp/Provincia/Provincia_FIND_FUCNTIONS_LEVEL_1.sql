@@ -43,21 +43,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -116,9 +102,7 @@ SELECT * FROM massoftware.f_Provincia_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -135,9 +119,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -152,21 +134,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -206,9 +174,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -229,9 +195,7 @@ SELECT * FROM massoftware.f_Provincia_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -248,9 +212,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Numero_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -265,21 +227,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -319,9 +267,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -342,9 +288,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_Numero_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -361,9 +305,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Numero_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -378,21 +320,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -432,9 +360,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -487,21 +413,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Numero_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -592,21 +504,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Numero_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -665,9 +563,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_Numero_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -684,9 +580,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Nombre_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -701,21 +595,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -755,9 +635,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -778,9 +656,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_Nombre_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -797,9 +673,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Nombre_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -814,21 +688,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -868,9 +728,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -923,21 +781,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Nombre_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1028,21 +872,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Nombre_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1101,9 +931,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_Nombre_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1120,9 +948,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1137,21 +963,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1191,9 +1003,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -1214,9 +1024,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1233,9 +1041,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Abreviatura_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1250,21 +1056,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1304,9 +1096,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -1359,21 +1149,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Abreviatura_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1464,21 +1240,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Abreviatura_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1537,9 +1299,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_Abreviatura_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1556,9 +1316,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1573,21 +1331,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1627,9 +1371,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -1650,9 +1392,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1669,9 +1409,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1686,21 +1424,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1740,9 +1464,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -1795,21 +1517,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroAFIP_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1900,21 +1608,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -1973,9 +1667,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroAFIP_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1992,9 +1684,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrut
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2009,21 +1699,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosB
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2063,9 +1739,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -2086,9 +1760,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroIngresosBrutos_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2105,9 +1777,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroIngresosBrut
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2122,21 +1792,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosB
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2176,9 +1832,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -2231,21 +1885,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroIngresosB
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2336,21 +1976,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroIngresosB
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2409,9 +2035,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroIngresosBrutos_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2428,9 +2052,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2445,21 +2067,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2499,9 +2107,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -2522,9 +2128,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2541,9 +2145,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2558,21 +2160,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2612,9 +2200,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -2667,21 +2253,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_NumeroRENATEA_1
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2772,21 +2344,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2845,9 +2403,7 @@ SELECT * FROM massoftware.f_Provincia_des_Provincia_NumeroRENATEA_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2864,9 +2420,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_asc_Provincia_Pais_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2881,21 +2435,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -2935,9 +2475,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -2958,9 +2496,7 @@ SELECT * FROM massoftware.f_Provincia_asc_Provincia_Pais_1(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2977,9 +2513,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia_des_Provincia_Pais_1(
 		, paisArg12 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -2994,21 +2528,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -3048,9 +2568,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais_1(
-		100
-		, 0
+SELECT * FROM massoftware.f_Provincia_des_Provincia_Pais_1(100, 0
 		, null::INTEGER -- Provincia_numeroFromArg0
 		, null::INTEGER -- Provincia_numeroToArg1
 		, null::VARCHAR -- Provincia_nombreWord0Arg2
@@ -3103,21 +2621,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_asc_Provincia_Pais_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0
@@ -3208,21 +2712,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_des_Provincia_Pais_1(
 		, abreviaturaWord3Arg10 VARCHAR(15)
 		, abreviaturaWord4Arg11 VARCHAR(15)
 		, paisArg12 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Provincia_id VARCHAR(36)             	-- 0
-		,Provincia_numero INTEGER             	-- 1
-		,Provincia_nombre VARCHAR(50)         	-- 2
-		,Provincia_abreviatura VARCHAR(5)     	-- 3
-		,Provincia_numeroAFIP INTEGER         	-- 4
-		,Provincia_numeroIngresosBrutos INTEGER	-- 5
-		,Provincia_numeroRENATEA INTEGER      	-- 6
-		,Pais_id VARCHAR(36)                  	-- 7
-		,Pais_numero INTEGER                  	-- 8
-		,Pais_nombre VARCHAR(50)              	-- 9
-		,Pais_abreviatura VARCHAR(5)          	-- 10
-	) AS $$
+) RETURNS massoftware.type_Provincia_level_1  AS $$
 
 	SELECT
 		 Provincia.id AS Provincia_id                                   	-- 0

@@ -33,9 +33,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_1(idArg VARCHAR(36)) RETURNS massoftware.type_Carga_level_1 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -58,16 +58,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_1(idArg VARCHAR(36)) RE
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_level_1('xxx');
+-- SELECT * FROM massoftware.f_CargaById_1('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_level_1((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_1((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_2 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_2(idArg VARCHAR(36)) RETURNS massoftware.type_Carga_level_2 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -96,16 +96,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_2(idArg VARCHAR(36)) RE
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_level_2('xxx');
+-- SELECT * FROM massoftware.f_CargaById_2('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_level_2((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_2((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_CargaById_level_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_3(idArg VARCHAR(36)) RETURNS massoftware.Carga_level_3 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_3(idArg VARCHAR(36)) RETURNS massoftware.type_Carga_level_3 AS $$
 
 	SELECT
 		 Carga.id AS Carga_id                                 	-- 0
@@ -140,6 +140,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_CargaById_level_3(idArg VARCHAR(36)) RE
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_CargaById_level_3('xxx');
+-- SELECT * FROM massoftware.f_CargaById_3('xxx');
 
--- SELECT * FROM massoftware.f_CargaById_level_3((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_CargaById_3((SELECT Carga.id FROM massoftware.Carga LIMIT 1)::VARCHAR);

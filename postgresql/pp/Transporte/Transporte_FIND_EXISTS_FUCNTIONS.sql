@@ -27,8 +27,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Transporte_numero(numeroArg INTEGER
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Transporte_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Transporte
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Transporte
 	WHERE	(numeroArg IS NULL OR Transporte.numero = numeroArg);
 
 $$ LANGUAGE SQL;
@@ -46,8 +45,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Transporte
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Transporte
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Transporte.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
@@ -65,8 +63,7 @@ DROP FUNCTION IF EXISTS massoftware.f_exists_Transporte_cuit(cuitArg BIGINT) CAS
 
 CREATE OR REPLACE FUNCTION massoftware.f_exists_Transporte_cuit(cuitArg BIGINT) RETURNS BOOLEAN  AS $$
 
-	SELECT (COUNT(*) > 0)::BOOLEAN
-	FROM	massoftware.Transporte
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Transporte
 	WHERE	(cuitArg IS NULL OR Transporte.cuit = cuitArg);
 
 $$ LANGUAGE SQL;

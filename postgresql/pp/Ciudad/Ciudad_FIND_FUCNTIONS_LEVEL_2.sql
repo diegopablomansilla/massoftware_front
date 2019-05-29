@@ -33,26 +33,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -107,9 +88,7 @@ SELECT * FROM massoftware.f_Ciudad_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -121,9 +100,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -133,26 +110,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -193,9 +151,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -211,9 +167,7 @@ SELECT * FROM massoftware.f_Ciudad_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -225,9 +179,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Numero_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -237,26 +189,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Numero_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -297,9 +230,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Numero_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Numero_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -315,9 +246,7 @@ SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Numero_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -329,9 +258,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Numero_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Numero_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Numero_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -341,26 +268,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Numero_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -401,9 +309,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Numero_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Numero_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -441,26 +347,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Numero_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -537,26 +424,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Numero_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -611,9 +479,7 @@ SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Numero_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -625,9 +491,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -637,26 +501,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -697,9 +542,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Nombre_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -715,9 +558,7 @@ SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -729,9 +570,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Nombre_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Nombre_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Nombre_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -741,26 +580,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Nombre_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -801,9 +621,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Nombre_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Nombre_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -841,26 +659,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Nombre_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -937,26 +736,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Nombre_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1011,9 +791,7 @@ SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Nombre_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Departamento_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1025,9 +803,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Departamento_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1037,26 +813,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1097,9 +854,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Departamento_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -1115,9 +870,7 @@ SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Departamento_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Departamento_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1129,9 +882,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Departamento_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Departamento_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Departamento_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1141,26 +892,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Departamento_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1201,9 +933,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Departamento_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Departamento_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -1241,26 +971,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Departamento_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1337,26 +1048,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Departamento_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1411,9 +1103,7 @@ SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Departamento_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1425,9 +1115,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1437,26 +1125,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1497,9 +1166,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -1515,9 +1182,7 @@ SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1529,9 +1194,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1541,26 +1204,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1601,9 +1245,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -1641,26 +1283,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_NumeroAFIP_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1737,26 +1360,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1811,9 +1415,7 @@ SELECT * FROM massoftware.f_Ciudad_des_Ciudad_NumeroAFIP_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Provincia_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1825,9 +1427,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Provincia_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1837,26 +1437,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -1897,9 +1478,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Provincia_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -1915,9 +1494,7 @@ SELECT * FROM massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Provincia_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Provincia_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1929,9 +1506,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Ciudad_des_Ciudad_Provincia_2(
 		, provinciaArg7 VARCHAR(36)
 ) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Provincia_2(
-		limitArg BIGINT
-		, offsetArg BIGINT
+CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Provincia_2(limitArg BIGINT, offsetArg BIGINT
 
 		, numeroFromArg0 INTEGER
 		, numeroToArg1 INTEGER
@@ -1941,26 +1516,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Provincia_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -2001,9 +1557,7 @@ $$ LANGUAGE SQL;
 
 /*
 
-SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Provincia_2(
-		100
-		, 0
+SELECT * FROM massoftware.f_Ciudad_des_Ciudad_Provincia_2(100, 0
 		, null::INTEGER -- Ciudad_numeroFromArg0
 		, null::INTEGER -- Ciudad_numeroToArg1
 		, null::VARCHAR -- Ciudad_nombreWord0Arg2
@@ -2041,26 +1595,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_asc_Ciudad_Provincia_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0
@@ -2137,26 +1672,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_des_Ciudad_Provincia_2(
 		, nombreWord3Arg5 VARCHAR(15)
 		, nombreWord4Arg6 VARCHAR(15)
 		, provinciaArg7 VARCHAR(36)
-) RETURNS
-
-	TABLE(
-		 Ciudad_id VARCHAR(36)                	-- 0
-		,Ciudad_numero INTEGER                	-- 1
-		,Ciudad_nombre VARCHAR(50)            	-- 2
-		,Ciudad_departamento VARCHAR(50)      	-- 3
-		,Ciudad_numeroAFIP INTEGER            	-- 4
-		,Provincia_id VARCHAR(36)             	-- 5
-		,Provincia_numero INTEGER             	-- 6
-		,Provincia_nombre VARCHAR(50)         	-- 7
-		,Provincia_abreviatura VARCHAR(5)     	-- 8
-		,Provincia_numeroAFIP INTEGER         	-- 9
-		,Provincia_numeroIngresosBrutos INTEGER	-- 10
-		,Provincia_numeroRENATEA INTEGER      	-- 11
-		,Pais_id VARCHAR(36)                  	-- 12
-		,Pais_numero INTEGER                  	-- 13
-		,Pais_nombre VARCHAR(50)              	-- 14
-		,Pais_abreviatura VARCHAR(5)          	-- 15
-	) AS $$
+) RETURNS massoftware.type_Ciudad_level_2  AS $$
 
 	SELECT
 		 Ciudad.id AS Ciudad_id                                         	-- 0

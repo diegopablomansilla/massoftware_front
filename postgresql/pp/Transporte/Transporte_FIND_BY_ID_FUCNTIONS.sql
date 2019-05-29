@@ -39,9 +39,9 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_1(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_1(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_1(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_1 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_1(idArg VARCHAR(36)) RETURNS massoftware.type_Transporte_level_1 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -66,16 +66,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_1(idArg VARCHAR(36
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_level_1('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_1('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_level_1((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_1((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_2(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_2(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_2(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_2 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_2(idArg VARCHAR(36)) RETURNS massoftware.type_Transporte_level_2 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                       	-- 0
@@ -106,16 +106,16 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_2(idArg VARCHAR(36
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_level_2('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_2('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_level_2((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_2((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_TransporteById_level_3(idArg VARCHAR(36)) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_3(idArg VARCHAR(36)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_3(idArg VARCHAR(36)) RETURNS massoftware.Transporte_level_3 AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_3(idArg VARCHAR(36)) RETURNS massoftware.type_Transporte_level_3 AS $$
 
 	SELECT
 		 Transporte.id AS Transporte_id                                 	-- 0
@@ -154,6 +154,6 @@ CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_level_3(idArg VARCHAR(36
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_TransporteById_level_3('xxx');
+-- SELECT * FROM massoftware.f_TransporteById_3('xxx');
 
--- SELECT * FROM massoftware.f_TransporteById_level_3((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
+-- SELECT * FROM massoftware.f_TransporteById_3((SELECT Transporte.id FROM massoftware.Transporte LIMIT 1)::VARCHAR);
