@@ -17,7 +17,7 @@ public class Clazz {
 	private List<Order> orderAtts = new ArrayList<Order>();
 	private List<Uniques> uniques = new ArrayList<Uniques>();
 	private List<Argument> argsSBX = new ArrayList<Argument>();
-	private Order orderDefault;	
+	private Order orderDefault;
 
 	public String getNamePackage() {
 		return namePackage;
@@ -163,7 +163,7 @@ public class Clazz {
 	}
 
 	public Order getOrderDefault() {
-		if(orderDefault == null) {
+		if (orderDefault == null) {
 			orderDefault = this.getOrderAtts().get(0);
 		}
 		return orderDefault;
@@ -200,47 +200,121 @@ public class Clazz {
 	}
 
 	public String toSQL() {
-		return UtilSQL.toSQL(this);
+		String sql = "";
+
+		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
+		sql += "\n-- //                                                                                                                        //";
+		sql += "\n-- //          TABLA: ";
+		sql += this.getName();
+		int c = 25 + this.getName().length();
+		int l = 128 - c;
+		for (int i = 0; i < l; i++) {
+			sql += " ";
+		}
+		sql += "//";
+		sql += "\n-- //                                                                                                                        //";
+		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
+
+		sql += "\n\n\n-- Table: massoftware." + this.getName();
+
+		sql += UtilSQLTable.buildSQLTabla(this);
+
+		// buildInsert();
+
+		sql += buildSQLSelects(this);
+
+		sql += UtilSQLDelete.buildSQLDeleteById(this);
+
+		sql += UtilSQLInsert.buildSQLInsert(this);
+
+		sql += UtilSQLUpdate.buildSQLUpdate(this);
+
+		sql += UtilSQLFindExists.buildSQLFindExists(this);
+
+		sql += UtilSQLFindNextValue.buildSQLFindNextValue(this);
+
+		// buildSelect();
+
+		sql += UtilSQLView.buildSQLView(this);
+
+		sql += UtilSQLType.buildSQLType(this);
+
+		sql += UtilSQLFindById.buildSQLFindById(this, true);
+
+		sql += UtilSQL.buildSQLFind(this, true);
+
+		return sql;
 	}
 	
+	private static String buildSQLSelects(Clazz clazz) {
+
+		String sql = "";
+
+		sql += "\n\n-- ---------------------------------------------------------------------------------------------------------------------------\n";
+
+		sql += "\n\n\n-- SELECT COUNT(*) FROM massoftware." + clazz.getName() + ";";
+		sql += "\n\n-- SELECT * FROM massoftware." + clazz.getName() + " LIMIT 100 OFFSET 0;";
+		sql += "\n\n-- SELECT * FROM massoftware." + clazz.getName() + ";";
+		sql += "\n\n-- SELECT * FROM massoftware." + clazz.getName() + " WHERE id = 'xxx';";
+
+		return sql;
+	}
+
 	public String toSQLTable() {
-		return UtilSQL.toSQLTable(this);
+		return UtilSQLTable.toSQLTable(this);
 	}
-	
-	public String toSQLIUD() {
-		return UtilSQL.toSQLIUD(this);
-	}
-	
+
 	public String toSQLFindExists() {
-		return UtilSQL.toSQLFindExists(this);
+		return UtilSQLFindExists.toSQLFindExists(this);
 	}
-	
+
 	public String toSQLFindNextValue() {
-		return UtilSQL.toSQLFindNextValue(this);
+		return UtilSQLFindNextValue.toSQLFindNextValue(this);
+	}
+
+	public String toSQLFindById(boolean view) {
+		return UtilSQLFindById.toSQLFindById(this, view);
 	}
 	
-	public String toSQLFindById() {
-		return UtilSQL.toSQLFindById(this);
+	public String toSQLFind(boolean view) {
+		return UtilSQL.toSQLFind(this, view);
 	}
-	
-	public String toSQLFind0() {
-		return UtilSQL.toSQLFind0(this);
+
+
+//	public String toSQLFind0(boolean view) {
+//		return UtilSQL.toSQLFind0(this, view);
+//	}
+//
+//	public String toSQLFind1(boolean view) {
+//		return UtilSQL.toSQLFind1(this, view);
+//	}
+//
+//	public String toSQLFind2(boolean view) {
+//		return UtilSQL.toSQLFind2(this, view);
+//	}
+//
+//	public String toSQLFind3(boolean view) {
+//		return UtilSQL.toSQLFind3(this, view);
+//	}
+
+	public String toSQLType() {
+		return UtilSQLType.toSQLType(this);
 	}
-	
-	public String toSQLFind1() {
-		return UtilSQL.toSQLFind1(this);
+
+	public String toSQLView() {
+		return UtilSQLView.toSQLView(this);
 	}
-	
-	public String toSQLFind2() {
-		return UtilSQL.toSQLFind2(this);
+
+	public String toSQLInsert() {
+		return UtilSQLInsert.toSQLInsert(this);
 	}
-	
-	public String toSQLFind3() {
-		return UtilSQL.toSQLFind3(this);
+
+	public String toSQLUpdate() {
+		return UtilSQLUpdate.toSQLUpdate(this);
 	}
-	
-	public String toSQLFindTypeReturn() {
-		return UtilSQL.toSQLFindTypeReturn(this);
+
+	public String toSQLDeleteById() {
+		return UtilSQLDelete.toSQLDeleteById(this);
 	}
 
 } //////////////////////////////////////////////////////////////////////////////////////////////

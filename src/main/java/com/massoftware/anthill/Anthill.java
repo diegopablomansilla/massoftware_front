@@ -129,6 +129,14 @@ public class Anthill {
 		folderWindows.mkdirs();
 
 		String sql = "";
+		String sqlTable = "";
+		String sqlView = "";
+		String sqlType = "";
+		String sqlFindNextValue = "";
+		String sqlFindExists = "";
+		String sqlFindByIdFull = "";
+		String sqlFindByIdView = "";
+		String sqlFindView = "";
 
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
@@ -145,26 +153,77 @@ public class Anthill {
 			System.out.println(
 					"---------------------------------------------------------------------------------------------------------------------------------------------");
 
+			String sqlTableItem = clazz.toSQLTable();
+			String sqlViewItem = clazz.toSQLView();
+			String sqlTypeItem = clazz.toSQLType();
+			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
+			String sqlFindExistsItem = clazz.toSQLFindExists();
+			String sqlFindByIdFullItem = clazz.toSQLFindById(false);
+			String sqlFindByIdViewItem = clazz.toSQLFindById(true);
+			
+			String sqlFindViewItem = clazz.toSQLFind(true);
+			
 			String sqlItem = clazz.toSQL();
 			
 			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName());
-			folderSQLItem.mkdirs();
+//			folderSQLItem.mkdirs();
 
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_PP.sql", clazz.toSQL());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_CREATE_TABLE.sql", clazz.toSQLTable());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_EXISTS_FUCNTIONS.sql", clazz.toSQLFindExists());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_NEXT_VALUE_FUCNTIONS.sql", clazz.toSQLFindNextValue());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_UPDATE_FUCNTIONS.sql", clazz.toSQLIUD());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_PP_CREATE_TABLE.sql", clazz.toSQLTable());
 			
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_TYPE_RETURN.sql", clazz.toSQLFindTypeReturn());
-			
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_BY_ID_FUCNTIONS.sql", clazz.toSQLFindById());
-			
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_0.sql", clazz.toSQLFind0());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_1.sql", clazz.toSQLFind1());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_2.sql", clazz.toSQLFind2());
-			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_PP.sql", clazz.toSQL());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_CREATE_TABLE.sql", clazz.toSQLTable());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_EXISTS_FUCNTIONS.sql", clazz.toSQLFindExists());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_NEXT_VALUE_FUCNTIONS.sql", clazz.toSQLFindNextValue());
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_UPDATE_FUCNTIONS.sql", clazz.toSQLIUD());
+//			
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_TYPE_RETURN.sql", clazz.toSQLFindTypeReturn());
+//			
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_BY_ID_FUCNTIONS.sql", clazz.toSQLFindById());
+//			
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_0.sql", clazz.toSQLFind0(false));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_1.sql", clazz.toSQLFind1(false));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_2.sql", clazz.toSQLFind2(false));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3(false));
+//			
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_0.sql", clazz.toSQLFind0(true));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_1.sql", clazz.toSQLFind1(true));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_2.sql", clazz.toSQLFind2(true));
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3(true));
+//			
+//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_VIEWS.sql", clazz.toSQLView());
 
+			sqlTable += "\n\n";
+			sqlTable += sqlTableItem;
+			
+			sqlView += "\n\n";
+			sqlView += sqlViewItem;
+			
+			
+			if(sqlTypeItem != null && sqlTypeItem.trim().length() > 0) {
+				sqlType += "\n\n";
+				sqlType += sqlTypeItem;	
+			}
+			
+			if(sqlFindNextValueItem != null && sqlFindNextValueItem.trim().length() > 0) {
+				sqlFindNextValue += "\n\n";
+				sqlFindNextValue += sqlFindNextValueItem;	
+			}
+			
+			if(sqlFindExistsItem != null && sqlFindExistsItem.trim().length() > 0) {
+				sqlFindExists += "\n\n";
+				sqlFindExists += sqlFindExistsItem;	
+			}
+			
+			sqlFindByIdFull += "\n\n";
+			sqlFindByIdFull += sqlFindByIdFullItem;
+			
+			sqlFindByIdView += "\n\n";
+			sqlFindByIdView += sqlFindByIdViewItem;
+			
+			sqlFindView += "\n\n";
+			sqlFindView += sqlFindViewItem;
+			
+			
 			sql += "\n\n";
 			sql += sqlItem;
 
@@ -236,7 +295,18 @@ public class Anthill {
 
 		writeFile(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
 
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp.sql", sql);
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp.sql", sql);
+		
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_tables.sql", sqlTable);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_views.sql", sqlView);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_types.sql", sqlType);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_next_value.sql", sqlFindNextValue);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_exists.sql", sqlFindExists);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_full.sql", sqlFindByIdFull);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_view.sql", sqlFindByIdView);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_view.sql", sqlFindView);
+		
+		
 
 	}
 
