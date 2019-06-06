@@ -1,6 +1,6 @@
-package com.massoftware.anthill.sql;
+package com.massoftware.anthill.sql.type;
 
-public class FunctionFindArg {
+public class TypeArg {
 
 	private String name;
 	private String dataType;

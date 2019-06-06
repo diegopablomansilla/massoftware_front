@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.massoftware.anthill.sql.find.FunctionFind;
+import com.massoftware.anthill.sql.type.Type;
+
 public class Clazz {
 
 	private String namePackage;
@@ -278,8 +281,14 @@ public class Clazz {
 		return UtilSQLFindById.toSQLFindById(this, view);
 	}
 	
-	public String toSQLFind(boolean view) {
-		return UtilSQL3.toSQLFind(this, view);
+	public String toSQLFind() {
+		String sql = "";
+		
+		sql += UtilAnthill.toSQLHeaderTable(this);
+		
+		sql += new FunctionFind().toSQL(this);
+		
+		return sql;
 	}
 
 
@@ -300,7 +309,19 @@ public class Clazz {
 //	}
 
 	public String toSQLType() {
-		return UtilSQLType.toSQLType(this);
+		String sql = "";
+
+		String sqlTmp = new Type().toSQL(this);
+
+		if (sqlTmp == null || sqlTmp.trim().length() == 0) {
+			return "";
+		}
+
+		sql += UtilAnthill.toSQLHeaderTable(this);
+
+		sql += sqlTmp;
+
+		return sql;
 	}
 
 	public String toSQLView() {

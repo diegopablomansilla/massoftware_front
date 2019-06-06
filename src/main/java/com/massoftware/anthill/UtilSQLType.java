@@ -3,32 +3,21 @@ package com.massoftware.anthill;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.massoftware.anthill.sql.type.Type;
+
 public class UtilSQLType {
 
-	public static String toSQLType(Clazz clazz) {
+	public static String toSQLTypex(Clazz clazz) {
 
 		String sql = "";
 
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += clazz.getName();
-		int c = 25 + clazz.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
-
-		String sqlTmp = buildSQLType(clazz);
+		String sqlTmp = new Type().toSQL(clazz);
 
 		if (sqlTmp == null || sqlTmp.trim().length() == 0) {
 			return "";
 		}
+
+		sql += UtilAnthill.toSQLHeaderTable(clazz);
 
 		sql += sqlTmp;
 

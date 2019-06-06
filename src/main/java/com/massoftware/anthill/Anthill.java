@@ -130,13 +130,15 @@ public class Anthill {
 
 		String sql = "";
 		String sqlTable = "";
-		String sqlView = "";
 		String sqlType = "";
-		String sqlFindNextValue = "";
-		String sqlFindExists = "";
-		String sqlFindByIdFull = "";
-		String sqlFindByIdView = "";
-		String sqlFindView = "";
+		String sqlFind = "";
+		
+//		String sqlView = "";		
+//		String sqlFindNextValue = "";
+//		String sqlFindExists = "";
+//		String sqlFindByIdFull = "";
+//		String sqlFindByIdView = "";
+		
 
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
@@ -153,17 +155,20 @@ public class Anthill {
 			System.out.println(
 					"---------------------------------------------------------------------------------------------------------------------------------------------");
 
-			String sqlTableItem = clazz.toSQLTable();
-			String sqlViewItem = clazz.toSQLView();
-			String sqlTypeItem = clazz.toSQLType();
-			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
-			String sqlFindExistsItem = clazz.toSQLFindExists();
-			String sqlFindByIdFullItem = clazz.toSQLFindById(false);
-			String sqlFindByIdViewItem = clazz.toSQLFindById(true);
 			
-			String sqlFindViewItem = clazz.toSQLFind(true);
+//			String sqlViewItem = clazz.toSQLView();			
+//			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
+//			String sqlFindExistsItem = clazz.toSQLFindExists();
+//			String sqlFindByIdFullItem = clazz.toSQLFindById(false);
+//			String sqlFindByIdViewItem = clazz.toSQLFindById(true);
+			
+			String sqlTypeItem = clazz.toSQLType();
+			String sqlTableItem = clazz.toSQLTable();
+			String sqlFindItem = clazz.toSQLFind();
 			
 			String sqlItem = clazz.toSQL();
+			
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName());
 //			folderSQLItem.mkdirs();
@@ -191,41 +196,46 @@ public class Anthill {
 //			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3(true));
 //			
 //			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + "_VIEWS.sql", clazz.toSQLView());
+			
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+			sql += "\n\n";
+			sql += sqlItem;
+			
 			sqlTable += "\n\n";
-			sqlTable += sqlTableItem;
-			
-			sqlView += "\n\n";
-			sqlView += sqlViewItem;
-			
+			sqlTable += sqlTableItem;								
 			
 			if(sqlTypeItem != null && sqlTypeItem.trim().length() > 0) {
 				sqlType += "\n\n";
 				sqlType += sqlTypeItem;	
 			}
 			
-			if(sqlFindNextValueItem != null && sqlFindNextValueItem.trim().length() > 0) {
-				sqlFindNextValue += "\n\n";
-				sqlFindNextValue += sqlFindNextValueItem;	
-			}
+			sqlFind += "\n\n";
+			sqlFind += sqlFindItem;			
 			
-			if(sqlFindExistsItem != null && sqlFindExistsItem.trim().length() > 0) {
-				sqlFindExists += "\n\n";
-				sqlFindExists += sqlFindExistsItem;	
-			}
-			
-			sqlFindByIdFull += "\n\n";
-			sqlFindByIdFull += sqlFindByIdFullItem;
-			
-			sqlFindByIdView += "\n\n";
-			sqlFindByIdView += sqlFindByIdViewItem;
-			
-			sqlFindView += "\n\n";
-			sqlFindView += sqlFindViewItem;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			
-			sql += "\n\n";
-			sql += sqlItem;
+//			sqlView += "\n\n";
+//			sqlView += sqlViewItem;
+//			
+//			if(sqlFindNextValueItem != null && sqlFindNextValueItem.trim().length() > 0) {
+//				sqlFindNextValue += "\n\n";
+//				sqlFindNextValue += sqlFindNextValueItem;	
+//			}
+//			
+//			if(sqlFindExistsItem != null && sqlFindExistsItem.trim().length() > 0) {
+//				sqlFindExists += "\n\n";
+//				sqlFindExists += sqlFindExistsItem;	
+//			}
+//			
+//			sqlFindByIdFull += "\n\n";
+//			sqlFindByIdFull += sqlFindByIdFullItem;
+//			
+//			sqlFindByIdView += "\n\n";
+//			sqlFindByIdView += sqlFindByIdViewItem;
+			
+			
 
 			javaPopulateInsert += "\n\t\ttry {";
 			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
@@ -298,13 +308,14 @@ public class Anthill {
 //		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp.sql", sql);
 		
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_tables.sql", sqlTable);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_views.sql", sqlView);
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_types.sql", sqlType);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_next_value.sql", sqlFindNextValue);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_exists.sql", sqlFindExists);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_full.sql", sqlFindByIdFull);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_view.sql", sqlFindByIdView);
-		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_view.sql", sqlFindView);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find.sql", sqlFind);
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_views.sql", sqlView);		
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_next_value.sql", sqlFindNextValue);
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_exists.sql", sqlFindExists);
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_full.sql", sqlFindByIdFull);
+//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find_by_id_view.sql", sqlFindByIdView);
+		
 		
 		
 

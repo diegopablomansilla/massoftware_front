@@ -249,14 +249,14 @@ public class Att {
 
 			if (this.isString() && this.getMaxLength() != null) {
 
-				sql += "(" + this.getMaxLength() + ")";
+				//sql += "(" + this.getMaxLength() + ")";
 
 			}
 
 			if (this.isBigDecimal()) {
 
-				sql += "(" + ((DataTypeBigDecimal) this.getDataType()).getPrecision() + ", "
-						+ ((DataTypeBigDecimal) this.getDataType()).getScale() + ")";
+//				sql += "(" + ((DataTypeBigDecimal) this.getDataType()).getPrecision() + ", "
+//						+ ((DataTypeBigDecimal) this.getDataType()).getScale() + ")";
 
 			}			
 

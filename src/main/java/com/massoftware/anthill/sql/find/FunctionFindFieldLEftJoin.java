@@ -1,4 +1,4 @@
-package com.massoftware.anthill.sql;
+package com.massoftware.anthill.sql.find;
 
 public class FunctionFindFieldLEftJoin {
 

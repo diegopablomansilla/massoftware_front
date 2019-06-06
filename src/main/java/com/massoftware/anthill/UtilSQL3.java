@@ -3,19 +3,11 @@ package com.massoftware.anthill;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.anthill.sql.FunctionFind;
+import com.massoftware.anthill.sql.find.FunctionFind;
 
 public class UtilSQL3 {
 
-	private static String toCamelStart(String text) {
-		if (text == null || text.isEmpty()) {
-			return text;
-		}
-
-		return text.substring(0, 1).toUpperCase() + text.substring(1, text.length());
-	}
-
-	public static String toSQLFind(Clazz clazz, boolean view) {
+	public static String toSQLFindx(Clazz clazz, boolean view) {
 
 		String sql = "";
 
@@ -34,12 +26,15 @@ public class UtilSQL3 {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += new FunctionFind(clazz).toSQL();
-		
-//		sql += UtilSQL3.buildSQLFind(clazz, view);
+		sql += "\n";
+		sql += "\n";
+
+		sql += new FunctionFind().toSQL(clazz);
+
+		// sql += UtilSQL3.buildSQLFind(clazz, view);
 
 		return sql;
-	}	
+	}
 
 	public static String buildSQLFind(Clazz clazz, boolean view) {
 
@@ -67,7 +62,7 @@ public class UtilSQL3 {
 		String sql = "";
 
 		sql += buildSQLFind(clazz, false, maxLevel, level, ml, clazz.getName() + ".id", view);
-		
+
 		return sql;
 
 	}

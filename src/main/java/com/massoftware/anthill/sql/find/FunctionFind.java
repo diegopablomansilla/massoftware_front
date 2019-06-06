@@ -1,4 +1,4 @@
-package com.massoftware.anthill.sql;
+package com.massoftware.anthill.sql.find;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,10 @@ import com.massoftware.anthill.Argument;
 import com.massoftware.anthill.Att;
 import com.massoftware.anthill.Clazz;
 import com.massoftware.anthill.DataTypeClazz;
+import com.massoftware.anthill.UtilAnthill;
 import com.massoftware.anthill.UtilJavaPOJO;
 
 public class FunctionFind {
-
-	private static String ID_DATA_TYPE = "VARCHAR(36)";
 
 	private String schemaName;
 	private String name;
@@ -20,31 +19,8 @@ public class FunctionFind {
 	private List<FunctionFindField> fields = new ArrayList<FunctionFindField>();
 	private List<FunctionFindFieldLEftJoin> fieldsLeftJoin = new ArrayList<FunctionFindFieldLEftJoin>();
 	private List<FunctionFindArg> args = new ArrayList<FunctionFindArg>();
-	
-	
-	private int maxLevel = 0;
-	
 
-	public FunctionFind(Clazz clazz) {
-
-		// clazz._index = 0;
-
-		schemaName = "massoftware";
-		name = "f_" + clazz.getName();
-		table = clazz.getName();
-		returnName = clazz.getName();
-
-		buildArgs(clazz);
-
-		maxLevel = UtilJavaPOJO.buildMapperDefaultLevel(clazz);
-		int level = 0;
-
-//		buildFields(maxLevel, level, clazz, 0, clazz.getName());
-		buildFields(maxLevel, level, clazz, 0, "");
-
-		buildFieldsLeftJoin(maxLevel, level, clazz, 0);
-
-	}
+	// -----------------------------------------------------------------------------------------------
 
 	public String getSchemaName() {
 		return schemaName;
@@ -106,26 +82,32 @@ public class FunctionFind {
 		this.fieldsLeftJoin = fieldsLeftJoin;
 	}
 
+	// -----------------------------------------------------------------------------------------------
+
 	private void buildArgs(Clazz clazz) {
 
 		FunctionFindArg functionFindArg = new FunctionFindArg();
 		functionFindArg.setName("id");
-		functionFindArg.setDataType(ID_DATA_TYPE);
+		functionFindArg.setDataType(UtilAnthill.ID_DATA_TYPE);
+		functionFindArg.setCustom(false);
 		args.add(functionFindArg);
 
 		functionFindArg = new FunctionFindArg();
 		functionFindArg.setName("orderBy");
 		functionFindArg.setDataType("INTEGER");
+		functionFindArg.setCustom(false);
 		args.add(functionFindArg);
 
 		functionFindArg = new FunctionFindArg();
 		functionFindArg.setName("limit");
 		functionFindArg.setDataType("BIGINT");
+		functionFindArg.setCustom(false);
 		args.add(functionFindArg);
 
 		functionFindArg = new FunctionFindArg();
 		functionFindArg.setName("offSet");
 		functionFindArg.setDataType("BIGINT");
+		functionFindArg.setCustom(false);
 		args.add(functionFindArg);
 
 		for (int i = 0; i < clazz.getArgs().size(); i++) {
@@ -170,25 +152,35 @@ public class FunctionFind {
 						|| arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE)
 						|| arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
 
+//					functionFindArg = new FunctionFindArg();
+//					functionFindArg.setName(arg.getName() + "Word" + 0);
+//					functionFindArg.setDataType(arg.getNameSQL());
+//					functionFindArg.setString(true);
+//					args.add(functionFindArg);
+//
+//					for (int j = 0; j < 4; j++) {
+//
+//						functionFindArg = new FunctionFindArg();
+//						functionFindArg.setName(arg.getName() + "Word" + (j + 1));
+//						functionFindArg.setDataType(arg.getNameSQL());
+//						functionFindArg.setString(true);
+//						args.add(functionFindArg);
+//
+//					}
+					
 					functionFindArg = new FunctionFindArg();
-					functionFindArg.setName(arg.getName() + "Word" + 0);
-					functionFindArg.setDataType(arg.getNameSQL() + "(15)");
+					functionFindArg.setName(arg.getName());
+					functionFindArg.setDataType(arg.getNameSQL());
+					functionFindArg.setString(true);
+					functionFindArg.setStringSplit(true);
 					args.add(functionFindArg);
-
-					for (int j = 0; j < 4; j++) {
-
-						functionFindArg = new FunctionFindArg();
-						functionFindArg.setName(arg.getName() + "Word" + (j + 1));
-						functionFindArg.setDataType(arg.getNameSQL() + "(15)");
-						args.add(functionFindArg);
-
-					}
 
 				} else {
 
 					functionFindArg = new FunctionFindArg();
 					functionFindArg.setName(arg.getName());
 					functionFindArg.setDataType(arg.getNameSQL());
+					functionFindArg.setString(true);
 					args.add(functionFindArg);
 				}
 
@@ -203,7 +195,8 @@ public class FunctionFind {
 
 				functionFindArg = new FunctionFindArg();
 				functionFindArg.setName(arg.getName());
-				functionFindArg.setDataType(ID_DATA_TYPE);
+				functionFindArg.setDataType(UtilAnthill.ID_DATA_TYPE);
+				functionFindArg.setString(true);
 				args.add(functionFindArg);
 
 			}
@@ -218,14 +211,14 @@ public class FunctionFind {
 
 		FunctionFindField field = new FunctionFindField();
 		// field.setTable(clazz.getName());
-		if(clazz._index == 0) {
+		if (clazz._index == 0) {
 			field.setTable(clazz.getName());
 		} else {
-			field.setTable(clazz.getName() + "_" + clazz._index);	
+			field.setTable(clazz.getName() + "_" + clazz._index);
 		}
-		
+
 		field.setName("id");
-		field.setDataType(ID_DATA_TYPE);
+		field.setDataType(UtilAnthill.ID_DATA_TYPE);
 		field.setLevel(levelCount);
 		field.setPath(prefix + "." + "id");
 		fields.add(field);
@@ -238,13 +231,13 @@ public class FunctionFind {
 
 				field = new FunctionFindField();
 				// field.setTable(clazz.getName());
-				
-				if(clazz._index == 0) {
+
+				if (clazz._index == 0) {
 					field.setTable(clazz.getName());
 				} else {
-					field.setTable(clazz.getName() + "_" + clazz._index);	
-				}				
-				
+					field.setTable(clazz.getName() + "_" + clazz._index);
+				}
+
 				field.setName(att.getName());
 				field.setDataType(att.getDataType().getNameSQL());
 				field.setLevel(levelCount);
@@ -266,15 +259,15 @@ public class FunctionFind {
 
 					field = new FunctionFindField();
 					// field.setTable(clazz.getName());
-					
-					if(clazz._index == 0) {
+
+					if (clazz._index == 0) {
 						field.setTable(clazz.getName());
 					} else {
-						field.setTable(clazz.getName() + "_" + clazz._index);	
+						field.setTable(clazz.getName() + "_" + clazz._index);
 					}
-					
+
 					field.setName(att.getName());
-					field.setDataType(ID_DATA_TYPE + "\t" + att.getDataType().getNameSQL() + ".id ");
+					field.setDataType(UtilAnthill.ID_DATA_TYPE + "\t" + att.getDataType().getNameSQL() + ".id ");
 					field.setLevel(levelCount);
 					field.setPath(prefix + "." + att.getName());
 					fields.add(field);
@@ -352,7 +345,41 @@ public class FunctionFind {
 
 	}
 
-	public String toSQL() {
+	// =============================================================================================================
+
+	public String toSQL(Clazz clazz) {
+
+		// clazz._index = 0;
+
+		schemaName = "massoftware";
+		name = "f_" + clazz.getName();
+		table = clazz.getName();
+		returnName = clazz.getName();
+
+		int maxLevel = UtilJavaPOJO.buildMapperDefaultLevel(clazz);
+		int level = 0;
+
+		String sql = "";
+
+		for (int i = 0; i <= maxLevel; i++) {
+
+			fields = new ArrayList<FunctionFindField>();
+			fieldsLeftJoin = new ArrayList<FunctionFindFieldLEftJoin>();
+			args = new ArrayList<FunctionFindArg>();
+
+			buildArgs(clazz);
+			buildFields(i, level, clazz, 0, "");
+			buildFieldsLeftJoin(i, level, clazz, 0);
+
+			sql += "\n" + toSQL(i, level);
+
+		}
+
+		return sql;
+
+	}
+
+	private String toSQL(int maxLevel, int level) {
 		String sql = "";
 
 		String s = "";
@@ -385,7 +412,11 @@ public class FunctionFind {
 		// -------------------------------------------------------------------------
 
 		sql += "\n";
-		sql += "DROP FUNCTION IF EXISTS " + this.getSchemaName() + "." + this.getName() + "(";
+		sql += "DROP FUNCTION IF EXISTS " + this.getSchemaName() + "." + this.getName();
+		if (maxLevel > 0) {
+			sql += "_" + maxLevel;
+		}
+		sql += " (";
 		sql += "\n";
 
 		// ----
@@ -410,7 +441,11 @@ public class FunctionFind {
 		// -------------------------------------------------------------------------
 
 		sql += "\n\n";
-		sql += "CREATE OR REPLACE FUNCTION " + this.getSchemaName() + "." + this.getName() + "(";
+		sql += "CREATE OR REPLACE FUNCTION " + this.getSchemaName() + "." + this.getName();
+		if (maxLevel > 0) {
+			sql += "_" + maxLevel;
+		}
+		sql += " (";
 		sql += "\n";
 
 		for (int i = 0; i < this.args.size(); i++) {
@@ -426,12 +461,12 @@ public class FunctionFind {
 		}
 
 		sql += "\n\n";
-		if(maxLevel == 0) {
+		if (maxLevel == 0) {
 			sql += ") RETURNS SETOF " + this.getSchemaName() + "." + this.getReturnName() + " AS $$";
 		} else {
-			sql += ") RETURNS SETOF " + this.getSchemaName() + ".type_" + this.getReturnName() + "_" + maxLevel + " AS $$";	
+			sql += ") RETURNS SETOF " + this.getSchemaName() + ".t_" + this.getReturnName() + "_" + maxLevel + " AS $$";
 		}
-		
+
 		sql += "\n\n";
 		sql += "DECLARE";
 
@@ -480,6 +515,9 @@ public class FunctionFind {
 		}
 
 		sql += "\n\n\t";
+		sql += "sqlSrc = '";
+
+		sql += "\n\n\t\t";
 		sql += "SELECT";
 
 		String maxPath = "";
@@ -511,7 +549,7 @@ public class FunctionFind {
 			// 1) + " " + field.getDataType();
 			nameArg += "\t\t" + field.getDataType();
 
-			sql += "\n\t\t\t";
+			sql += "\n\t\t\t\t";
 
 			if (field.getLevel() > 0) {
 
@@ -524,7 +562,7 @@ public class FunctionFind {
 
 		}
 
-		sql += "\n\n\t";
+		sql += "\n\n\t\t";
 		sql += "FROM";
 		sql += "\t";
 		sql += this.getSchemaName() + "." + this.getTable();
@@ -609,6 +647,47 @@ public class FunctionFind {
 						+ ".id \t-- " + field.getIndex() + " LEFT LEVEL: " + (field.getLevel() + 1);
 
 				sql += nameArg;
+
+			}
+
+		}
+
+		sql += "\n\n\t";
+		sql += "';";
+
+		// ----
+
+		for (int i = 0; i < this.args.size(); i++) {
+
+			FunctionFindArg arg = this.args.get(i);
+
+			String nameArg = arg.getName() + "Arg" + i;
+
+			// nameArg += " " + s.substring(nameArg.length() - 1, s.length() - 1) +
+			// arg.getDataType()
+			// + t.substring(arg.getDataType().length() - 1, t.length() - 1) + "\t-- " + i;
+
+			if (arg.getCustom() == true) {
+
+				sql += "\n\n\t";
+
+				sql += "IF " + nameArg + " IS NOT NULL";
+
+				if (arg.getString() == true) {
+					sql += " AND CHAR_LENGTH(TRIM(" + nameArg + ")) > 0";
+				}
+
+				sql += " THEN";
+				
+				sql += "\n\n\t\t";
+				sql += "IF sqlSrcWhereCount > 0 THEN";
+				sql += "\n\t\t\t";
+				sql += "sqlSrcWhere = sqlSrcWhere || ' AND ';";				
+				sql += "\n\t\t";
+				sql += "END IF;";
+
+				sql += "\n\t";
+				sql += "END IF;";
 
 			}
 
