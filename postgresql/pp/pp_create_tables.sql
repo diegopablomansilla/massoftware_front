@@ -23,7 +23,7 @@ CREATE TABLE massoftware.Usuario
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Usuario_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -87,16 +87,16 @@ CREATE TABLE massoftware.Zona
 	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
 	
 	-- Código
-	codigo VARCHAR(3) NOT NULL, 
+	codigo VARCHAR(3)(3) NOT NULL, 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Bonificación
-	bonificacion DECIMAL(13, 5) CONSTRAINT Zona_bonificacion_chk CHECK ( bonificacion >= 0 AND bonificacion <= 99999.9999  ), 
+	bonificacion DECIMAL(13,5)(13, 5) CONSTRAINT Zona_bonificacion_chk CHECK ( bonificacion >= 0 AND bonificacion <= 99999.9999  ), 
 	
 	-- Recargo
-	recargo DECIMAL(13, 5) CONSTRAINT Zona_recargo_chk CHECK ( recargo >= 0 AND recargo <= 99999.9999  )
+	recargo DECIMAL(13,5)(13, 5) CONSTRAINT Zona_recargo_chk CHECK ( recargo >= 0 AND recargo <= 99999.9999  )
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -168,10 +168,10 @@ CREATE TABLE massoftware.Pais
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Pais_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Abreviatura
-	abreviatura VARCHAR(5) NOT NULL
+	abreviatura VARCHAR(5)(5) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -243,10 +243,10 @@ CREATE TABLE massoftware.Provincia
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Provincia_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Abreviatura
-	abreviatura VARCHAR(5) NOT NULL, 
+	abreviatura VARCHAR(5)(5) NOT NULL, 
 	
 	-- Nº provincia AFIP
 	numeroAFIP INTEGER CONSTRAINT Provincia_numeroAFIP_chk CHECK ( numeroAFIP >= 1  ), 
@@ -331,10 +331,10 @@ CREATE TABLE massoftware.Ciudad
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Ciudad_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Departamento
-	departamento VARCHAR(50), 
+	departamento VARCHAR(50)(50), 
 	
 	-- Nº provincia AFIP
 	numeroAFIP INTEGER CONSTRAINT Ciudad_numeroAFIP_chk CHECK ( numeroAFIP >= 1  ), 
@@ -406,16 +406,16 @@ CREATE TABLE massoftware.CodigoPostal
 	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
 	
 	-- Código
-	codigo VARCHAR(12) NOT NULL, 
+	codigo VARCHAR(12)(12) NOT NULL, 
 	
 	-- Secuencia
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CodigoPostal_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Calle
-	nombreCalle VARCHAR(200) NOT NULL, 
+	nombreCalle VARCHAR(200)(200) NOT NULL, 
 	
 	-- Número calle
-	numeroCalle VARCHAR(20) NOT NULL, 
+	numeroCalle VARCHAR(20)(20) NOT NULL, 
 	
 	-- Ciudad
 	ciudad VARCHAR(36)  NOT NULL  REFERENCES massoftware.Ciudad (id)
@@ -488,28 +488,28 @@ CREATE TABLE massoftware.Transporte
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Transporte_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- CUIT
 	cuit BIGINT NOT NULL  UNIQUE  CONSTRAINT Transporte_cuit_chk CHECK ( cuit >= 1 AND cuit <= 99999999999 AND char_length(cuit::VARCHAR) >= 11 AND char_length(cuit::VARCHAR) <= 11  ), 
 	
 	-- Ingresos brutos
-	ingresosBrutos VARCHAR(13), 
+	ingresosBrutos VARCHAR(13)(13), 
 	
 	-- Teléfono
-	telefono VARCHAR(50), 
+	telefono VARCHAR(50)(50), 
 	
 	-- Fax
-	fax VARCHAR(50), 
+	fax VARCHAR(50)(50), 
 	
 	-- Código postal
 	codigoPostal VARCHAR(36)  NOT NULL  REFERENCES massoftware.CodigoPostal (id), 
 	
 	-- Domicilio
-	domicilio VARCHAR(150), 
+	domicilio VARCHAR(150)(150), 
 	
 	-- Comentario
-	comentario VARCHAR(300)
+	comentario VARCHAR(300)(300)
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -582,7 +582,7 @@ CREATE TABLE massoftware.Carga
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Carga_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Transporte
 	transporte VARCHAR(36)  NOT NULL  REFERENCES massoftware.Transporte (id)
@@ -659,22 +659,22 @@ CREATE TABLE massoftware.TransporteTarifa
 	ciudad VARCHAR(36)  NOT NULL  REFERENCES massoftware.Ciudad (id), 
 	
 	-- Precio flete
-	precioFlete DECIMAL(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioFlete_chk CHECK ( precioFlete >= -9999.9999 AND precioFlete <= 99999.9999  ), 
+	precioFlete DECIMAL(13,5)(13, 5) NOT NULL  CONSTRAINT TransporteTarifa_precioFlete_chk CHECK ( precioFlete >= -9999.9999 AND precioFlete <= 99999.9999  ), 
 	
 	-- Precio unidad facturación
-	precioUnidadFacturacion DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
+	precioUnidadFacturacion DECIMAL(13,5)(13, 5) CONSTRAINT TransporteTarifa_precioUnidadFacturacion_chk CHECK ( precioUnidadFacturacion >= -9999.9999 AND precioUnidadFacturacion <= 99999.9999  ), 
 	
 	-- Precio unidad stock
-	precioUnidadStock DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
+	precioUnidadStock DECIMAL(13,5)(13, 5) CONSTRAINT TransporteTarifa_precioUnidadStock_chk CHECK ( precioUnidadStock >= -9999.9999 AND precioUnidadStock <= 99999.9999  ), 
 	
 	-- Precio bultos
-	precioBultos DECIMAL(13, 5) CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
+	precioBultos DECIMAL(13,5)(13, 5) CONSTRAINT TransporteTarifa_precioBultos_chk CHECK ( precioBultos >= -9999.9999 AND precioBultos <= 99999.9999  ), 
 	
 	-- Importe mínimo por entrega
-	importeMinimoEntrega DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
+	importeMinimoEntrega DECIMAL(13,5)(13, 5) CONSTRAINT TransporteTarifa_importeMinimoEntrega_chk CHECK ( importeMinimoEntrega >= -9999.9999 AND importeMinimoEntrega <= 99999.9999  ), 
 	
 	-- Importe mínimo por carga
-	importeMinimoCarga DECIMAL(13, 5) CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
+	importeMinimoCarga DECIMAL(13,5)(13, 5) CONSTRAINT TransporteTarifa_importeMinimoCarga_chk CHECK ( importeMinimoCarga >= -9999.9999 AND importeMinimoCarga <= 99999.9999  )
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -738,7 +738,7 @@ CREATE TABLE massoftware.TipoDocumentoAFIP
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TipoDocumentoAFIP_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -802,10 +802,10 @@ CREATE TABLE massoftware.MonedaAFIP
 	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
 	
 	-- Código
-	codigo VARCHAR(3) NOT NULL, 
+	codigo VARCHAR(3)(3) NOT NULL, 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -877,13 +877,13 @@ CREATE TABLE massoftware.Moneda
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Moneda_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Abreviatura
-	abreviatura VARCHAR(5) NOT NULL, 
+	abreviatura VARCHAR(5)(5) NOT NULL, 
 	
 	-- Cotización
-	cotizacion DECIMAL(13, 5) NOT NULL  CONSTRAINT Moneda_cotizacion_chk CHECK ( cotizacion >= -9999.9999 AND cotizacion <= 99999.9999  ), 
+	cotizacion DECIMAL(13,5)(13, 5) NOT NULL  CONSTRAINT Moneda_cotizacion_chk CHECK ( cotizacion >= -9999.9999 AND cotizacion <= 99999.9999  ), 
 	
 	-- Fecha cotización
 	cotizacionFecha TIMESTAMP NOT NULL, 
@@ -965,7 +965,7 @@ CREATE TABLE massoftware.NotaCreditoMotivo
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT NotaCreditoMotivo_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -1032,7 +1032,7 @@ CREATE TABLE massoftware.MotivoComentario
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT MotivoComentario_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -1099,7 +1099,7 @@ CREATE TABLE massoftware.TipoCliente
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TipoCliente_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL
+	nombre VARCHAR(50)(50) NOT NULL
 );
 
 -- ---------------------------------------------------------------------------------------------------------------------------
@@ -1166,7 +1166,7 @@ CREATE TABLE massoftware.ClasificacionCliente
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT ClasificacionCliente_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Color
 	color INTEGER NOT NULL  CONSTRAINT ClasificacionCliente_color_chk CHECK ( color >= 1  )
@@ -1236,7 +1236,7 @@ CREATE TABLE massoftware.MotivoBloqueoCliente
 	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT MotivoBloqueoCliente_numero_chk CHECK ( numero >= 1  ), 
 	
 	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
+	nombre VARCHAR(50)(50) NOT NULL, 
 	
 	-- Clasificación de cliente
 	clasificacionCliente VARCHAR(36)  NOT NULL  REFERENCES massoftware.ClasificacionCliente (id)

@@ -1,0 +1,100 @@
+-- RAISE WARNING 'information message %', now();
+-- RAISE NOTICE 'information message %', now();
+-- RAISE INFO 'information message %', now();
+
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_3(limitArg BIGINT, offsetArg BIGINT
+
+		, codigoArg0 VARCHAR(12)
+		, numeroFromArg1 INTEGER
+		, numeroToArg2 INTEGER
+		, ciudadArg3 VARCHAR(36)
+                                                     
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_3(limitArg BIGINT, offsetArg BIGINT
+
+		, codigoArg0 VARCHAR(12)
+		, numeroFromArg1 INTEGER
+		, numeroToArg2 INTEGER
+		, ciudadArg3 VARCHAR(36)
+                                                        
+) RETURNS SETOF massoftware.type_CodigoPostal_level_3  AS $$
+
+DECLARE
+	sqlSrc TEXT = '';
+  	sqlSrcWhere TEXT = '';
+  	sqlSrcWhereCount INTEGER = 0;
+
+BEGIN
+	-- SELECT * FROM massoftware.v_CodigoPostal_3 AS CodigoPostal
+--  RAISE EXCEPTION 'information messagess % xxx', sqlSrcWhereCount;
+	
+	sqlSrc = 'SELECT
+			  CodigoPostal.id AS CodigoPostal_id                             		-- 0
+			, CodigoPostal.codigo AS CodigoPostal_codigo                     		-- 1
+			, CodigoPostal.numero AS CodigoPostal_numero                     		-- 2
+			, CodigoPostal.nombreCalle AS CodigoPostal_nombreCalle           		-- 3
+			, CodigoPostal.numeroCalle AS CodigoPostal_numeroCalle           		-- 4
+			, Ciudad.id AS Ciudad_id                                         		-- 5
+			, Ciudad.numero AS Ciudad_numero                                 		-- 6
+			, Ciudad.nombre AS Ciudad_nombre                                 		-- 7
+			, Ciudad.departamento AS Ciudad_departamento                     		-- 8
+			
+			
+	FROM	massoftware.CodigoPostal
+		LEFT JOIN massoftware.Ciudad ON CodigoPostal.ciudad = Ciudad.id  	-- 5
+		LEFT JOIN massoftware.Provincia ON Ciudad.provincia = Provincia.id	-- 10
+		LEFT JOIN massoftware.Pais ON Provincia.pais = Pais.id           	-- 17
+    ';
+    
+  --  sqlSrcWhereCount = 0;
+    
+    IF  codigoArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg0)) > 0  THEN
+    	 IF sqlSrcWhereCount > 0 THEN	
+         	sqlSrcWhere = sqlSrcWhere || ' AND ';
+         END IF;
+    	 sqlSrcWhere = sqlSrcWhere || ' TRIM(LOWER(CodigoPostal.codigo))::VARCHAR = TRIM(LOWER(''' ||  REPLACE (codigoArg0, '''', '''''') || '''))::VARCHAR';                                           
+         sqlSrcWhereCount = sqlSrcWhereCount + 1;            
+    END IF;
+    
+    IF  ciudadArg3 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg3)) > 0  THEN    
+    	IF sqlSrcWhereCount > 0 THEN	
+         	sqlSrcWhere = sqlSrcWhere || ' AND ';                                                       
+         END IF;
+     	sqlSrcWhere = sqlSrcWhere || ' TRIM(LOWER(CodigoPostal.id))::VARCHAR = TRIM(LOWER(''' || ciudadArg3 || '''))::VARCHAR';                                           
+        sqlSrcWhereCount = sqlSrcWhereCount + 1;            
+    END IF;
+    
+   -- RAISE EXCEPTION 'information messagess % xxx', sqlSrcWhere;
+    
+    IF  sqlSrcWhereCount > 0  THEN     
+     	sqlSrc = sqlSrc  || ' WHERE ' || sqlSrcWhere;                                           
+    END IF;
+                                   
+
+/*
+	WHERE	(codigoArg0 IS NULL OR (CHAR_LENGTH(TRIM(codigoArg0)) > 0 AND TRIM(LOWER(CodigoPostal.codigo))::VARCHAR = TRIM(LOWER(codigoArg0))::VARCHAR))
+		 AND (numeroFromArg1 IS NULL OR CodigoPostal.numero >= numeroFromArg1)
+		 AND (numeroToArg2 IS NULL OR CodigoPostal.numero <= numeroToArg2)
+		 AND (ciudadArg3 IS NULL OR (CHAR_LENGTH(TRIM(ciudadArg3)) > 0 AND CodigoPostal.id = TRIM(ciudadArg3)::VARCHAR))
+
+	ORDER BY CodigoPostal.id
+
+	LIMIT limitArg OFFSET offsetArg;
+*/
+
+	 -- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	 EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT * FROM massoftware.f_CodigoPostal_3(100, 0
+		, 'a''a'::VARCHAR -- CodigoPostal_codigoArg0
+		, null::INTEGER -- CodigoPostal_numeroFromArg1
+		, null::INTEGER -- CodigoPostal_numeroToArg2
+		, 'x'::VARCHAR -- CodigoPostal_ciudadArg3
+);

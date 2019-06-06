@@ -19,7 +19,7 @@ public class DataTypeBigDecimal extends DataType {
 
 	@Override
 	public String getNameSQL() {
-		return "DECIMAL";
+		return "DECIMAL(" + precision + "," + scale + ")";
 	}
 
 	@Override

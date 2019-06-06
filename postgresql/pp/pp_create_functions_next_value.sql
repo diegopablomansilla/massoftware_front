@@ -38,9 +38,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_Zona_bonificacion() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_bonificacion() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_bonificacion() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(bonificacion),0) + 1)::DECIMAL FROM massoftware.Zona;
+	SELECT (COALESCE(MAX(bonificacion),0) + 1)::DECIMAL(13,5) FROM massoftware.Zona;
 
 $$ LANGUAGE SQL;
 
@@ -51,9 +51,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_Zona_recargo() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_recargo() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_Zona_recargo() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(recargo),0) + 1)::DECIMAL FROM massoftware.Zona;
+	SELECT (COALESCE(MAX(recargo),0) + 1)::DECIMAL(13,5) FROM massoftware.Zona;
 
 $$ LANGUAGE SQL;
 
@@ -290,9 +290,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_precioFlete() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioFlete() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioFlete() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(precioFlete),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(precioFlete),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -303,9 +303,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_precioUnidadFacturacion() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioUnidadFacturacion() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioUnidadFacturacion() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(precioUnidadFacturacion),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(precioUnidadFacturacion),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -316,9 +316,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_precioUnidadStock() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioUnidadStock() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioUnidadStock() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(precioUnidadStock),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(precioUnidadStock),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -329,9 +329,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_precioBultos() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioBultos() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_precioBultos() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(precioBultos),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(precioBultos),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -342,9 +342,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_importeMinimoEntrega() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_importeMinimoEntrega() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_importeMinimoEntrega() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(importeMinimoEntrega),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(importeMinimoEntrega),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -355,9 +355,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_TransporteTarifa_importeMinimoCarga() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_importeMinimoCarga() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_TransporteTarifa_importeMinimoCarga() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(importeMinimoCarga),0) + 1)::DECIMAL FROM massoftware.TransporteTarifa;
+	SELECT (COALESCE(MAX(importeMinimoCarga),0) + 1)::DECIMAL(13,5) FROM massoftware.TransporteTarifa;
 
 $$ LANGUAGE SQL;
 
@@ -424,9 +424,9 @@ $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS massoftware.f_next_Moneda_cotizacion() CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_cotizacion() RETURNS DECIMAL AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_cotizacion() RETURNS DECIMAL(13,5) AS $$
 
-	SELECT (COALESCE(MAX(cotizacion),0) + 1)::DECIMAL FROM massoftware.Moneda;
+	SELECT (COALESCE(MAX(cotizacion),0) + 1)::DECIMAL(13,5) FROM massoftware.Moneda;
 
 $$ LANGUAGE SQL;
 

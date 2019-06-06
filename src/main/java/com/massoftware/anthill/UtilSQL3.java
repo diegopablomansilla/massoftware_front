@@ -3,7 +3,9 @@ package com.massoftware.anthill;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilSQL {
+import com.massoftware.anthill.sql.FunctionFind;
+
+public class UtilSQL3 {
 
 	private static String toCamelStart(String text) {
 		if (text == null || text.isEmpty()) {
@@ -32,133 +34,14 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, view);
+		sql += new FunctionFind(clazz).toSQL();
+		
+//		sql += UtilSQL3.buildSQLFind(clazz, view);
 
 		return sql;
-	}
+	}	
 
-	// ***********************************************************************************
-
-	public static String toSQLFind0(Clazz clazz, boolean view) {
-
-		String sql = "";
-
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += clazz.getName();
-		int c = 25 + clazz.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
-
-		sql += UtilSQL.buildSQLFind(clazz, 0, view);
-
-		return sql;
-	}
-
-	public static String toSQLFind1(Clazz clazz, boolean view) {
-
-		String sql = "";
-
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += clazz.getName();
-		int c = 25 + clazz.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
-
-		sql += UtilSQL.buildSQLFind(clazz, 1, view);
-
-		return sql;
-	}
-
-	public static String toSQLFind2(Clazz clazz, boolean view) {
-
-		String sql = "";
-
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += clazz.getName();
-		int c = 25 + clazz.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
-
-		sql += UtilSQL.buildSQLFind(clazz, 2, view);
-
-		return sql;
-	}
-
-	public static String toSQLFind3(Clazz clazz, boolean view) {
-
-		String sql = "";
-
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += clazz.getName();
-		int c = 25 + clazz.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
-
-		sql += UtilSQL.buildSQLFind(clazz, 3, view);
-
-		return sql;
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	private static String buildSQLFind(Clazz clazz, int levelArg, boolean view) {
-
-		// int maxLevel = this.maxLevel;
-		int maxLevel = UtilJavaPOJO.buildMapperDefaultLevel(clazz);
-		int level = 0;
-
-		String sql = "";
-
-		for (int i = 0; i <= maxLevel; i++) {
-			String sqlLevel = buildSQLFind(clazz, i, level, view);
-
-			if (levelArg == i) {
-				return sqlLevel;
-			}
-
-			sql += sqlLevel;
-		}
-
-		return sql;
-	}
-
-	static String buildSQLFind(Clazz clazz, boolean view) {
+	public static String buildSQLFind(Clazz clazz, boolean view) {
 
 		// int maxLevel = this.maxLevel;
 		int maxLevel = UtilJavaPOJO.buildMapperDefaultLevel(clazz);
@@ -184,51 +67,7 @@ public class UtilSQL {
 		String sql = "";
 
 		sql += buildSQLFind(clazz, false, maxLevel, level, ml, clazz.getName() + ".id", view);
-
-		sql += buildSQLFind(clazz, true, maxLevel, level, ml, clazz.getName() + ".id", view);
-
-		// sql += buildSQLFind(clazz, false, maxLevel, level, "_asc_" + clazz.getName()
-		// + "_id" + ml, clazz.getName() + ".id");
-		//
-		// sql += buildSQLFind(clazz, true, maxLevel, level, "_asc_" + clazz.getName() +
-		// "_id" + ml, clazz.getName() + ".id");
-		//
-		// sql += buildSQLFind(clazz, false, maxLevel, level, "_des_" + clazz.getName()
-		// + "_id" + ml, clazz.getName() + ".id DESC");
-		//
-		// sql += buildSQLFind(clazz, true, maxLevel, level, "_des_" + clazz.getName() +
-		// "_id" + ml, clazz.getName() + ".id DESC");
-
-		for (int i = 0; i < clazz.getOrderAtts().size(); i++) {
-
-			String orderBy = null;
-
-			if (clazz.getOrderAtts().get(i).getDataType().isSimple() == false) {
-				DataTypeClazz dt = (DataTypeClazz) clazz.getOrderAtts().get(i).getDataType(); 
-				orderBy = dt.getClazz().getName() + ".id";
-			} else {
-				orderBy = clazz.getOrderAtts().get(i).getClazz().getName() + "."
-						+ clazz.getOrderAtts().get(i).getName();
-			}
-
-			sql += buildSQLFind(clazz, true, maxLevel, level, "_asc_" + clazz.getOrderAtts().get(i).getClazz().getName()
-					+ "_" + toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml, orderBy + " ASC", view);
-
-			sql += buildSQLFind(clazz, true, maxLevel, level, "_des_" + clazz.getOrderAtts().get(i).getClazz().getName()
-					+ "_" + toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml, orderBy + " DESC", view);
-
-			sql += buildSQLFind(clazz, false, maxLevel, level,
-					"_asc_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
-							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
-					orderBy + " ASC", view);
-
-			sql += buildSQLFind(clazz, false, maxLevel, level,
-					"_des_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
-							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
-					orderBy + " DESC", view);
-
-		}
-
+		
 		return sql;
 
 	}
@@ -353,7 +192,8 @@ public class UtilSQL {
 
 			} else {
 				sql += "\n\nCREATE OR REPLACE FUNCTION massoftware.f_" + clazzX.getName() + orderByName + "(" + n
-						+ argsSQL.replaceFirst(",", " ") + n + ") RETURNS SETOF massoftware." + clazzX.getName() + "  AS $$";
+						+ argsSQL.replaceFirst(",", " ") + n + ") RETURNS SETOF massoftware." + clazzX.getName()
+						+ "  AS $$";
 			}
 
 		}
@@ -403,12 +243,12 @@ public class UtilSQL {
 		if (view) {
 
 			sql += "\n\n\tSELECT *";
-			
+
 			if (maxLevel > 0) {
 				sql += " FROM massoftware.v_" + clazzX.getName() + "_" + maxLevel + " AS " + clazzX.getName();
 			} else {
-				sql += " FROM massoftware." + clazzX.getName();	
-			}			
+				sql += " FROM massoftware." + clazzX.getName();
+			}
 
 		} else {
 			sql += "\n\n\tSELECT";
@@ -475,9 +315,9 @@ public class UtilSQL {
 
 		// ****************************************************************************************************************
 		/////////////////////////////////////////////////////////////////////////////////////
-		
+
 		String x = ".";
-		
+
 		if (view && maxLevel > 0) {
 			x = "_";
 		}
@@ -524,8 +364,7 @@ public class UtilSQL {
 					w = "\n\t";
 
 					argsSQL += w + "\t" + sc + "(" + arg.getName() + "ToArg" + countArgs + " IS NULL OR "
-							+ clazzX.getName() + x + arg.getName() + " <= " + arg.getName() + "ToArg" + countArgs
-							+ ")";
+							+ clazzX.getName() + x + arg.getName() + " <= " + arg.getName() + "ToArg" + countArgs + ")";
 				}
 
 			} else if (arg.isString()) {
@@ -810,7 +649,7 @@ public class UtilSQL {
 
 			} else if (arg.isSimple() == false) {
 
-//				String attName = clazzX.getName() + x + arg.getName();
+				// String attName = clazzX.getName() + x + arg.getName();
 				String attName = clazzX.getName() + x + "id";
 				String argName = arg.getName() + "Arg" + countArgs;
 				String whereSQL = attName + " = TRIM(" + argName + ")::VARCHAR";
@@ -822,8 +661,6 @@ public class UtilSQL {
 
 		sql += argsSQL;
 
-		
-		
 		sql += "\n\n\tORDER BY " + orderBy.replace(".", x);
 
 		if (limit) {

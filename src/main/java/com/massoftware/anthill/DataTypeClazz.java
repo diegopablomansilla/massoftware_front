@@ -1,6 +1,6 @@
 package com.massoftware.anthill;
 
-class DataTypeClazz extends DataType {
+public class DataTypeClazz extends DataType {
 
 	private Clazz clazz;
 

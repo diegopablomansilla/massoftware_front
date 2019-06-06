@@ -18,6 +18,8 @@ public class Clazz {
 	private List<Uniques> uniques = new ArrayList<Uniques>();
 	private List<Argument> argsSBX = new ArrayList<Argument>();
 	private Order orderDefault;
+	
+	public Integer _index;
 
 	public String getNamePackage() {
 		return namePackage;
@@ -277,7 +279,7 @@ public class Clazz {
 	}
 	
 	public String toSQLFind(boolean view) {
-		return UtilSQL.toSQLFind(this, view);
+		return UtilSQL3.toSQLFind(this, view);
 	}
 
 

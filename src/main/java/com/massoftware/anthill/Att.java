@@ -171,6 +171,11 @@ public class Att {
 			throw new IllegalArgumentException("maxLength debe ser mayor a 0.");
 		}
 		this.maxLength = maxLength;
+		
+		if(this.getDataType() instanceof DataTypeString) {
+			((DataTypeString)this.getDataType()).setMaxLength(this.maxLength);
+		}		
+		 
 	}
 
 	public void setLength(Integer minLength, Integer maxLength) {

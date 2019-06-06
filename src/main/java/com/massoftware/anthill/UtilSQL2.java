@@ -3,7 +3,7 @@ package com.massoftware.anthill;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtilSQL {
+public class UtilSQL2 {
 
 	private static String toCamelStart(String text) {
 		if (text == null || text.isEmpty()) {
@@ -12,7 +12,7 @@ public class UtilSQL {
 
 		return text.substring(0, 1).toUpperCase() + text.substring(1, text.length());
 	}
-
+	
 	public static String toSQLFind(Clazz clazz, boolean view) {
 
 		String sql = "";
@@ -32,7 +32,7 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, view);
+		sql += UtilSQL2.buildSQLFind(clazz, view);
 
 		return sql;
 	}
@@ -58,7 +58,7 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, 0, view);
+		sql += UtilSQL2.buildSQLFind(clazz, 0, view);
 
 		return sql;
 	}
@@ -82,7 +82,7 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, 1, view);
+		sql += UtilSQL2.buildSQLFind(clazz, 1, view);
 
 		return sql;
 	}
@@ -106,7 +106,7 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, 2, view);
+		sql += UtilSQL2.buildSQLFind(clazz, 2, view);
 
 		return sql;
 	}
@@ -130,7 +130,7 @@ public class UtilSQL {
 
 		sql += "\n\n\n-- Table: massoftware." + clazz.getName();
 
-		sql += UtilSQL.buildSQLFind(clazz, 3, view);
+		sql += UtilSQL2.buildSQLFind(clazz, 3, view);
 
 		return sql;
 	}
@@ -201,31 +201,33 @@ public class UtilSQL {
 
 		for (int i = 0; i < clazz.getOrderAtts().size(); i++) {
 
-			String orderBy = null;
+			sql += buildSQLFind(clazz, true, maxLevel, level,
+					"_asc_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
+							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
+					clazz.getOrderAtts().get(i).getClazz().getName() + "." + clazz.getOrderAtts().get(i).getName()
+							+ " ASC",
+					view);
 
-			if (clazz.getOrderAtts().get(i).getDataType().isSimple() == false) {
-				DataTypeClazz dt = (DataTypeClazz) clazz.getOrderAtts().get(i).getDataType(); 
-				orderBy = dt.getClazz().getName() + ".id";
-			} else {
-				orderBy = clazz.getOrderAtts().get(i).getClazz().getName() + "."
-						+ clazz.getOrderAtts().get(i).getName();
-			}
-
-			sql += buildSQLFind(clazz, true, maxLevel, level, "_asc_" + clazz.getOrderAtts().get(i).getClazz().getName()
-					+ "_" + toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml, orderBy + " ASC", view);
-
-			sql += buildSQLFind(clazz, true, maxLevel, level, "_des_" + clazz.getOrderAtts().get(i).getClazz().getName()
-					+ "_" + toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml, orderBy + " DESC", view);
+			sql += buildSQLFind(clazz, true, maxLevel, level,
+					"_des_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
+							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
+					clazz.getOrderAtts().get(i).getClazz().getName() + "." + clazz.getOrderAtts().get(i).getName()
+							+ " DESC",
+					view);
 
 			sql += buildSQLFind(clazz, false, maxLevel, level,
 					"_asc_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
 							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
-					orderBy + " ASC", view);
+					clazz.getOrderAtts().get(i).getClazz().getName() + "." + clazz.getOrderAtts().get(i).getName()
+							+ " ASC",
+					view);
 
 			sql += buildSQLFind(clazz, false, maxLevel, level,
 					"_des_" + clazz.getOrderAtts().get(i).getClazz().getName() + "_"
 							+ toCamelStart(clazz.getOrderAtts().get(i).getName()) + ml,
-					orderBy + " DESC", view);
+					clazz.getOrderAtts().get(i).getClazz().getName() + "." + clazz.getOrderAtts().get(i).getName()
+							+ " DESC",
+					view);
 
 		}
 
@@ -822,8 +824,6 @@ public class UtilSQL {
 
 		sql += argsSQL;
 
-		
-		
 		sql += "\n\n\tORDER BY " + orderBy.replace(".", x);
 
 		if (limit) {

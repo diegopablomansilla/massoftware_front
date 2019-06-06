@@ -27,16 +27,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Usuario_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Usuario
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Usuario.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Usuario_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Usuario_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,30 +51,30 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_codigo(codigoArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_codigo(codigoArg VARCHAR(3)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_codigo(codigoArg VARCHAR(3)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Zona
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Zona.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Zona_codigo(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Zona_codigo(null::VARCHAR(3));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Zona_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Zona_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Zona
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Zona.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Zona_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Zona_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,30 +103,30 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Pais
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Pais.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Pais_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Pais_nombre(null::VARCHAR(50));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR(5)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Pais_abreviatura(abreviaturaArg VARCHAR(5)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Pais
 	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Pais.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Pais_abreviatura(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Pais_abreviatura(null::VARCHAR(5));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,30 +155,30 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Provincia
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Provincia_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Provincia_nombre(null::VARCHAR(50));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR(5)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Provincia_abreviatura(abreviaturaArg VARCHAR(5)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Provincia
 	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Provincia.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Provincia_abreviatura(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Provincia_abreviatura(null::VARCHAR(5));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,16 +207,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Ciudad_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Ciudad_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Ciudad_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Ciudad_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Ciudad
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Ciudad.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Ciudad_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Ciudad_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,16 +231,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCHAR(12)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CodigoPostal_codigo(codigoArg VARCHAR(12)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CodigoPostal
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CodigoPostal.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_CodigoPostal_codigo(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_CodigoPostal_codigo(null::VARCHAR(12));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -283,16 +283,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Transporte_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Transporte
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Transporte.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Transporte_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Transporte_nombre(null::VARCHAR(50));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
@@ -335,16 +335,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Carga_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Carga_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Carga_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Carga_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Carga
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Carga.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Carga_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Carga_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,16 +383,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_TipoDocumentoAFIP_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoDocumentoAFIP_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoDocumentoAFIP_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoDocumentoAFIP_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoDocumentoAFIP
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoDocumentoAFIP.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_TipoDocumentoAFIP_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_TipoDocumentoAFIP_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,30 +407,30 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR(3)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_codigo(codigoArg VARCHAR(3)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MonedaAFIP
 	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MonedaAFIP.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_MonedaAFIP_codigo(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_MonedaAFIP_codigo(null::VARCHAR(3));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_MonedaAFIP_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MonedaAFIP
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MonedaAFIP.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_MonedaAFIP_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_MonedaAFIP_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,30 +459,30 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Moneda_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Moneda_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Moneda_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Moneda_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Moneda
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Moneda.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Moneda_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Moneda_nombre(null::VARCHAR(50));
 
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_Moneda_abreviatura(abreviaturaArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_Moneda_abreviatura(abreviaturaArg VARCHAR(5)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_Moneda_abreviatura(abreviaturaArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Moneda_abreviatura(abreviaturaArg VARCHAR(5)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Moneda
 	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Moneda.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_Moneda_abreviatura(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_Moneda_abreviatura(null::VARCHAR(5));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -511,16 +511,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_NotaCreditoMotivo_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_NotaCreditoMotivo_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_NotaCreditoMotivo_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_NotaCreditoMotivo_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.NotaCreditoMotivo
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(NotaCreditoMotivo.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_NotaCreditoMotivo_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_NotaCreditoMotivo_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -549,16 +549,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoComentario_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoComentario
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MotivoComentario.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_MotivoComentario_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_MotivoComentario_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -587,16 +587,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoCliente_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_TipoCliente_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_TipoCliente_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -625,16 +625,16 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ClasificacionCliente_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClasificacionCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ClasificacionCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_ClasificacionCliente_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_ClasificacionCliente_nombre(null::VARCHAR(50));
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -663,13 +663,13 @@ $$ LANGUAGE SQL;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
 
-DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreArg VARCHAR) CASCADE;
+DROP FUNCTION IF EXISTS massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreArg VARCHAR(50)) CASCADE;
 
-CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreArg VARCHAR) RETURNS BOOLEAN  AS $$
+CREATE OR REPLACE FUNCTION massoftware.f_exists_MotivoBloqueoCliente_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
 
 	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.MotivoBloqueoCliente
 	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(MotivoBloqueoCliente.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
 
 $$ LANGUAGE SQL;
 
--- SELECT * FROM massoftware.f_exists_MotivoBloqueoCliente_nombre(null::VARCHAR);
+-- SELECT * FROM massoftware.f_exists_MotivoBloqueoCliente_nombre(null::VARCHAR(50));
