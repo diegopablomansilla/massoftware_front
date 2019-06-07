@@ -57,24 +57,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -137,17 +133,17 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' Zona.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
+		nombreArg5 = TRIM(nombreArg5);
+		sqlSrcWhere = sqlSrcWhere || ' Zona.nombre LIKE ' || '%' || nombreArg5 || '%';
 	END IF;
 
 END;
@@ -213,31 +209,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Pais.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Pais.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Pais.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
+		abreviaturaArg7 = TRIM(abreviaturaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Pais.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
 	END IF;
 
 END;
@@ -309,38 +301,34 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
+		abreviaturaArg7 = TRIM(abreviaturaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
 	END IF;
 
 	IF paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		paisArg8 = REPLACE(paisArg8, '''', '''''');
+		paisArg8 = TRIM(paisArg8);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.pais LIKE ' || '%' || paisArg8 || '%';
 	END IF;
 
 END;
@@ -404,38 +392,34 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
+		abreviaturaArg7 = TRIM(abreviaturaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
 	END IF;
 
 	IF paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		paisArg8 = REPLACE(paisArg8, '''', '''''');
+		paisArg8 = TRIM(paisArg8);
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.pais LIKE ' || '%' || paisArg8 || '%';
 	END IF;
 
 END;
@@ -503,31 +487,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
+		provinciaArg7 = TRIM(provinciaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
 	END IF;
 
 END;
@@ -591,31 +571,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
+		provinciaArg7 = TRIM(provinciaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
 	END IF;
 
 END;
@@ -683,31 +659,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
+		provinciaArg7 = TRIM(provinciaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
 	END IF;
 
 END;
@@ -775,31 +747,27 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF numeroFromArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
 	END IF;
 
 	IF numeroToArg6 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
 	END IF;
 
 	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
+		ciudadArg7 = TRIM(ciudadArg7);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
 	END IF;
 
 END;
@@ -861,31 +829,27 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF numeroFromArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
 	END IF;
 
 	IF numeroToArg6 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
 	END IF;
 
 	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
+		ciudadArg7 = TRIM(ciudadArg7);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
 	END IF;
 
 END;
@@ -955,31 +919,27 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF numeroFromArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
 	END IF;
 
 	IF numeroToArg6 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
 	END IF;
 
 	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
+		ciudadArg7 = TRIM(ciudadArg7);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
 	END IF;
 
 END;
@@ -1053,31 +1013,27 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF numeroFromArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
 	END IF;
 
 	IF numeroToArg6 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
 	END IF;
 
 	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
+		ciudadArg7 = TRIM(ciudadArg7);
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
 	END IF;
 
 END;
@@ -1147,24 +1103,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1228,24 +1180,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1315,24 +1263,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1410,24 +1354,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1491,24 +1431,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1570,24 +1506,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1655,24 +1587,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -1746,24 +1674,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2106,24 +2030,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2184,17 +2104,17 @@ BEGIN
 	';
 
 	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = TRIM(codigoArg4);
+		sqlSrcWhere = sqlSrcWhere || ' MonedaAFIP.codigo LIKE ' || '%' || codigoArg4 || '%';
 	END IF;
 
 	IF nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
+		nombreArg5 = TRIM(nombreArg5);
+		sqlSrcWhere = sqlSrcWhere || ' MonedaAFIP.nombre LIKE ' || '%' || nombreArg5 || '%';
 	END IF;
 
 END;
@@ -2264,31 +2184,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
+		abreviaturaArg7 = TRIM(abreviaturaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
 	END IF;
 
 END;
@@ -2349,31 +2265,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
+		abreviaturaArg7 = TRIM(abreviaturaArg7);
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
 	END IF;
 
 END;
@@ -2436,24 +2348,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2516,24 +2424,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2596,24 +2500,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2677,24 +2577,20 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 END;
@@ -2760,31 +2656,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
+		clasificacionClienteArg7 = TRIM(clasificacionClienteArg7);
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.clasificacionCliente LIKE ' || '%' || clasificacionClienteArg7 || '%';
 	END IF;
 
 END;
@@ -2842,31 +2734,27 @@ BEGIN
 	';
 
 	IF numeroFromArg4 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
 	END IF;
 
 	IF numeroToArg5 IS NOT NULL THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
 	END IF;
 
 	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = TRIM(nombreArg6);
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
 	END IF;
 
 	IF clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-
-		IF sqlSrcWhereCount > 0 THEN
-			sqlSrcWhere = sqlSrcWhere || ' AND ';
-		END IF;
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
+		clasificacionClienteArg7 = TRIM(clasificacionClienteArg7);
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.clasificacionCliente LIKE ' || '%' || clasificacionClienteArg7 || '%';
 	END IF;
 
 END;

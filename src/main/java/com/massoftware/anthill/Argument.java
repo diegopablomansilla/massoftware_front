@@ -3,6 +3,9 @@ package com.massoftware.anthill;
 import java.math.BigDecimal;
 
 public class Argument extends Att {
+	
+	public static String TRASLATE_A = "'/\\\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'";
+	public static String TRASLATE_B = "'         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'";
 
 	public static String EQUALS = "EQUALS";
 	public static String EQUALS_TRASLATE = "EQUALS_TRASLATE";
@@ -63,6 +66,12 @@ public class Argument extends Att {
 	// "CONTAINS_WORDS_OR_IGNORE_CASE";
 	// public static String CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE_VALUE =
 	// "CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE";
+	
+	public static String CONTAINS_WORDS_OR_VALUE = "contiene alguna de las palabras ..";
+	public static String CONTAINS_WORDS_OR_TRASLATE_VALUE = "contiene alguna de las palabras ..";
+	public static String CONTAINS_WORDS_OR_IGNORE_CASE_VALUE = "contiene alguna de las palabras ..";
+	public static String CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE_VALUE = "contiene alguna de las palabras ..";
+
 
 	public static String CONTAINS_WORDS_AND_VALUE = "contiene las palabras ..";
 	public static String CONTAINS_WORDS_AND_TRASLATE_VALUE = "contiene las palabras ..";
