@@ -41,6 +41,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -56,22 +60,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Usuario.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Usuario.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -115,6 +148,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -132,19 +169,47 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' Zona.codigo LIKE ' || '%' || codigoArg4 || '%';
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Zona.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
 	END IF;
 
-	IF nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
-		nombreArg5 = TRIM(nombreArg5);
-		sqlSrcWhere = sqlSrcWhere || ' Zona.nombre LIKE ' || '%' || nombreArg5 || '%';
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(Zona.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
+
+	IF searchById = false AND nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
+		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
+		nombreArg5 = LOWER(TRIM(nombreArg5));
+		nombreArg5 = TRANSLATE(nombreArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Zona.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -192,6 +257,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -208,29 +277,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Pais.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Pais.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Pais.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Pais.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Pais.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
 		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = TRIM(abreviaturaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Pais.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
+		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
+		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Pais.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -280,6 +391,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -300,36 +415,91 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
 		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = TRIM(abreviaturaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
+		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
+		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
 		paisArg8 = REPLACE(paisArg8, '''', '''''');
-		paisArg8 = TRIM(paisArg8);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.pais LIKE ' || '%' || paisArg8 || '%';
+		paisArg8 = LOWER(TRIM(paisArg8));
+		paisArg8 = TRANSLATE(paisArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(paisArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.pais),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -367,6 +537,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -391,36 +565,91 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
 		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = TRIM(abreviaturaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
+		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
+		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
 		paisArg8 = REPLACE(paisArg8, '''', '''''');
-		paisArg8 = TRIM(paisArg8);
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.pais LIKE ' || '%' || paisArg8 || '%';
+		paisArg8 = LOWER(TRIM(paisArg8));
+		paisArg8 = TRANSLATE(paisArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(paisArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Provincia.pais),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -468,6 +697,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -486,29 +719,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
 		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = TRIM(provinciaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
+		provinciaArg7 = LOWER(TRIM(provinciaArg7));
+		provinciaArg7 = TRANSLATE(provinciaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(provinciaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.provincia),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -544,6 +819,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -570,29 +849,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
 		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = TRIM(provinciaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
+		provinciaArg7 = LOWER(TRIM(provinciaArg7));
+		provinciaArg7 = TRANSLATE(provinciaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(provinciaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.provincia),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -628,6 +949,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -658,29 +983,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
 		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = TRIM(provinciaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.provincia LIKE ' || '%' || provinciaArg7 || '%';
+		provinciaArg7 = LOWER(TRIM(provinciaArg7));
+		provinciaArg7 = TRANSLATE(provinciaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(provinciaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Ciudad.provincia),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -728,6 +1095,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -746,29 +1117,59 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
 		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = TRIM(ciudadArg7);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
+		ciudadArg7 = LOWER(TRIM(ciudadArg7));
+		ciudadArg7 = TRANSLATE(ciudadArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ciudadArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CodigoPostal.ciudad),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -804,6 +1205,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -828,29 +1233,59 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
 		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = TRIM(ciudadArg7);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
+		ciudadArg7 = LOWER(TRIM(ciudadArg7));
+		ciudadArg7 = TRANSLATE(ciudadArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ciudadArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CodigoPostal.ciudad),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -886,6 +1321,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -918,29 +1357,59 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
 		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = TRIM(ciudadArg7);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
+		ciudadArg7 = LOWER(TRIM(ciudadArg7));
+		ciudadArg7 = TRANSLATE(ciudadArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ciudadArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CodigoPostal.ciudad),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -976,6 +1445,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1012,29 +1485,59 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.codigo LIKE ' || '%' || codigoArg4 || '%';
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
 		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = TRIM(ciudadArg7);
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.ciudad LIKE ' || '%' || ciudadArg7 || '%';
+		ciudadArg7 = LOWER(TRIM(ciudadArg7));
+		ciudadArg7 = TRANSLATE(ciudadArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ciudadArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CodigoPostal.ciudad),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1080,6 +1583,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1102,22 +1609,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Transporte.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1151,6 +1687,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1179,22 +1719,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Transporte.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1228,6 +1797,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1262,22 +1835,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Transporte.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1311,6 +1913,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1353,22 +1959,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Transporte.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1414,6 +2049,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1430,22 +2069,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Carga.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Carga.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1479,6 +2147,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1505,22 +2177,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Carga.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Carga.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1554,6 +2255,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1586,22 +2291,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Carga.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Carga.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1635,6 +2369,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1673,22 +2411,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Carga.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Carga.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Carga.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1728,6 +2495,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1749,6 +2520,20 @@ BEGIN
 		FROM	massoftware.TransporteTarifa
 
 	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TransporteTarifa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1776,6 +2561,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1808,6 +2597,20 @@ BEGIN
 
 	';
 
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TransporteTarifa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1834,6 +2637,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1884,6 +2691,20 @@ BEGIN
 
 	';
 
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TransporteTarifa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1910,6 +2731,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -1970,6 +2795,20 @@ BEGIN
 
 	';
 
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TransporteTarifa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -2014,6 +2853,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2029,22 +2872,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TipoDocumentoAFIP.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2088,6 +2960,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2103,19 +2979,47 @@ BEGIN
 
 	';
 
-	IF codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = TRIM(codigoArg4);
-		sqlSrcWhere = sqlSrcWhere || ' MonedaAFIP.codigo LIKE ' || '%' || codigoArg4 || '%';
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MonedaAFIP.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
 	END IF;
 
-	IF nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
+	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
-		nombreArg5 = TRIM(nombreArg5);
-		sqlSrcWhere = sqlSrcWhere || ' MonedaAFIP.nombre LIKE ' || '%' || nombreArg5 || '%';
+		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
+		codigoArg4 = LOWER(TRIM(codigoArg4));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(MonedaAFIP.codigo) = ''' || codigoArg4 || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
+
+	IF searchById = false AND nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
+		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
+		nombreArg5 = LOWER(TRIM(nombreArg5));
+		nombreArg5 = TRANSLATE(nombreArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MonedaAFIP.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2163,6 +3067,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2183,29 +3091,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
 		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = TRIM(abreviaturaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
+		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
+		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2241,6 +3191,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2264,29 +3218,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
 		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = TRIM(abreviaturaArg7);
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.abreviatura LIKE ' || '%' || abreviaturaArg7 || '%';
+		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
+		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2332,6 +3328,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2347,22 +3347,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(NotaCreditoMotivo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2408,6 +3437,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2423,22 +3456,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MotivoComentario.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2484,6 +3546,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2499,22 +3565,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TipoCliente.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2560,6 +3655,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2576,22 +3675,51 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(ClasificacionCliente.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2639,6 +3767,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2655,29 +3787,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MotivoBloqueoCliente.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
 		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
-		clasificacionClienteArg7 = TRIM(clasificacionClienteArg7);
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.clasificacionCliente LIKE ' || '%' || clasificacionClienteArg7 || '%';
+		clasificacionClienteArg7 = LOWER(TRIM(clasificacionClienteArg7));
+		clasificacionClienteArg7 = TRANSLATE(clasificacionClienteArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(clasificacionClienteArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MotivoBloqueoCliente.clasificacionCliente),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2713,6 +3887,10 @@ DECLARE
 	sqlSrc TEXT = '';
 	sqlSrcWhere TEXT = '';
 	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
 
 BEGIN
 
@@ -2733,29 +3911,71 @@ BEGIN
 
 	';
 
-	IF numeroFromArg4 IS NOT NULL THEN
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
 		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
 		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = TRIM(nombreArg6);
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.nombre LIKE ' || '%' || nombreArg6 || '%';
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MotivoBloqueoCliente.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
 
-	IF clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+	IF searchById = false AND clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
 		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
-		clasificacionClienteArg7 = TRIM(clasificacionClienteArg7);
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.clasificacionCliente LIKE ' || '%' || clasificacionClienteArg7 || '%';
+		clasificacionClienteArg7 = LOWER(TRIM(clasificacionClienteArg7));
+		clasificacionClienteArg7 = TRANSLATE(clasificacionClienteArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(clasificacionClienteArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MotivoBloqueoCliente.clasificacionCliente),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
 	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	EXECUTE sqlSrc;
 
 END;
 $$ LANGUAGE plpgsql;

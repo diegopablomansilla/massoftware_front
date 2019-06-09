@@ -496,6 +496,16 @@ public class FunctionFind {
 		sql += "sqlSrcWhere TEXT = '';";
 		sql += "\n\t";
 		sql += "sqlSrcWhereCount INTEGER = 0;";
+		sql += "\n\t";
+		sql += "sqlSrcWhereCountOR INTEGER = 0;";
+		sql += "\n\t";
+		sql += "searchById BOOLEAN = false;";
+		
+		sql += "\n\t";
+		sql += "words TEXT[];";
+		sql += "\n\t";
+		sql += "word TEXT = '';";
+		
 
 		sql += "\n\n";
 		sql += "BEGIN";
@@ -673,9 +683,25 @@ public class FunctionFind {
 		}
 
 		sql += "\n\n\t";
-		sql += "';";
+		sql += "';";		
 
 		// ----
+		
+		
+		sql += "\n\n\t";
+		sql += "IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN";
+		
+		sql += "\n\t\t";
+		sql += "sqlSrcWhere = sqlSrcWhere || ' " + this.getTable() + ".id = ''' || TRIM(idArg0) || '''';";								
+		
+		sql += "\n\t\t";
+		sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
+		
+		sql += "\n\t\t";
+		sql += "searchById = true;";
+		
+		sql += "\n\t";
+		sql += "END IF;";
 
 		for (int i = 0; i < this.args.size(); i++) {
 
@@ -691,7 +717,7 @@ public class FunctionFind {
 
 				sql += "\n\n\t";
 
-				sql += "IF " + nameArg + " IS NOT NULL";
+				sql += "IF searchById = false AND " + nameArg + " IS NOT NULL";
 
 				if (arg.getString() == true) {
 					sql += " AND CHAR_LENGTH(TRIM(" + nameArg + ")) > 0";
@@ -704,25 +730,43 @@ public class FunctionFind {
 				// sql += "\n\t\t\t";
 				// sql += "sqlSrcWhere = sqlSrcWhere || ' AND ';";
 				// sql += "\n\t\t";
-				// sql += "END IF;";
-
-				sql += "\n\t\t";
-				sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+				// sql += "END IF;";				
 
 				if (arg.getString() == true) {
 					sql += buildStringWhere(arg, nameArg);
 				} else {
 					sql += "\n\t\t";
+					sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+					sql += "\n\t\t";
 					sql += "sqlSrcWhere = sqlSrcWhere || ' " + this.getTable() + "." + arg.getNameAtt() + " "
 							+ arg.getOperator() + " ' || " + nameArg + ";";
+					sql += "\n\t\t";
+					sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 				}
 
 				sql += "\n\t";
 				sql += "END IF;";
 
-			}
+			}						
 
-		}
+		}		
+		
+		sql += "\n\n\t";
+		sql += "IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN";
+		
+		sql += "\n\t\t";
+		sql += "sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;";
+		
+		sql += "\n\t";
+		sql += "END IF;";
+		
+		
+		
+		sql += "\n\n\t";
+		sql += "-- RAISE EXCEPTION 'information messagess % ', sqlSrc;";
+		
+		sql += "\n\n\t";
+		sql += "EXECUTE sqlSrc;";
 
 		// ----
 
@@ -738,13 +782,11 @@ public class FunctionFind {
 
 	private String buildStringWhere(FunctionFindArg arg, String nameArg) {
 		String sql = "";
-
-		System.out.println(arg.getSearchOption());			
-	
-
-		arg.setSearchOption(Argument.CONTAINS);
-
+		
 		if (arg.getSearchOption().equalsIgnoreCase(Argument.EQUALS)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -757,15 +799,21 @@ public class FunctionFind {
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
-			sql += " = ' || ";
-			sql += nameArg;
+			sql += " = ''' || ";
+			sql += nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.EQUALS_TRASLATE)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -774,21 +822,27 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
-			sql += " = ' || ";
-			sql += nameArg;
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " = ''' || ";
+			sql += nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.EQUALS_IGNORE_CASE)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -799,11 +853,17 @@ public class FunctionFind {
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
-			sql += " = ' || ";
-			sql += nameArg;
+			sql += " = ''' || ";
+			sql += nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.EQUALS_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -814,21 +874,27 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
-			sql += " = ' || ";
-			sql += nameArg;
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " = ''' || ";
+			sql += nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.STARTS_WITCH)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -838,16 +904,23 @@ public class FunctionFind {
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
-			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
+			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";					
 			sql += " LIKE ' || ";
-			sql += nameArg + " || '%'";
+			//sql += "'''%' || " + nameArg + " || '%'''";	
+			sql += "'''' || " + nameArg + " || '%'''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.STARTS_WITCH_TRASLATE)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -856,21 +929,27 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += nameArg + " || '%'";
+			sql += "'''' || " + nameArg + " || '%'''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.STARTS_WITCH_IGNORE_CASE)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -882,10 +961,16 @@ public class FunctionFind {
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
 			sql += " LIKE ' || ";
-			sql += nameArg + " || '%'";
+			sql += "'''' || " + nameArg + " || '%'''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.STARTS_WITCH_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -896,17 +981,23 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += nameArg + " || '%'";
+			sql += "'''' || " + nameArg + " || '%'''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.ENDS_WITCH)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -920,14 +1011,20 @@ public class FunctionFind {
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg ;
+			sql += "'''%' || " + nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.ENDS_WITCH_TRASLATE)) {
 			
 			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
 			sql += ";";
 
@@ -936,19 +1033,25 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg ;
+			sql += "'''%' || " + nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.ENDS_WITCH_IGNORE_CASE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -962,10 +1065,16 @@ public class FunctionFind {
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg ;
+			sql += "'''%' || " + nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.ENDS_WITCH_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -976,17 +1085,23 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg ;
+			sql += "'''%' || " + nameArg + " || ''''";
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -1000,12 +1115,18 @@ public class FunctionFind {
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg + " || '%'";	
+			sql += "'''%' || " + nameArg + " || '%'''";	
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -1016,19 +1137,25 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg + " || '%'";		
+			sql += "'''%' || " + nameArg + " || '%'''";		
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_IGNORE_CASE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -1042,10 +1169,16 @@ public class FunctionFind {
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
 			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg + " || '%'";		
+			sql += "'''%' || " + nameArg + " || '%'''";		
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
 			
 			sql += "\n\t\t";
 			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
@@ -1056,31 +1189,450 @@ public class FunctionFind {
 			sql += ";";
 			
 			sql += "\n\t\t";
-			sql += nameArg + " = TRASLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
 			sql += ";";
 
 			sql += "\n\t\t";
 			sql += "sqlSrcWhere = sqlSrcWhere || ' ";			
-			sql += "TRASLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t'" + Argument.TRASLATE_B + "')";
 			sql += " LIKE ' || ";
-			sql += "'%' || " + nameArg + " || '%'";			
+			sql += "'''%' || " + nameArg + " || '%'''";			
 			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_OR)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = TRIM(" + nameArg + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";			
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || '('; ";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";			
+			
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCountOR > 0 THEN sqlSrcWhere = sqlSrcWhere || ' OR '; END IF;";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCountOR = sqlSrcWhereCountOR + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ')'; ";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCountOR = 0;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_OR_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = TRIM(" + nameArg + ")";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || '('; ";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCountOR > 0 THEN sqlSrcWhere = sqlSrcWhere || ' OR '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			//sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCountOR = sqlSrcWhereCountOR + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ')'; ";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCountOR = 0;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = LOWER(TRIM(" + nameArg + "))";
+			sql += ";";						
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || '('; ";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCountOR > 0 THEN sqlSrcWhere = sqlSrcWhere || ' OR '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
+			//sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCountOR = sqlSrcWhereCountOR + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ')'; ";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCountOR = 0;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = LOWER(TRIM(" + nameArg + "))";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || '('; ";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCountOR > 0 THEN sqlSrcWhere = sqlSrcWhere || ' OR '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCountOR = sqlSrcWhereCountOR + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ')'; ";
+			
+			sql += "\n\t\t";
+			sql += "sqlSrcWhereCountOR = 0;";
+
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_AND)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = TRIM(" + nameArg + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
+
+			return sql;
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_AND_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = TRIM(" + nameArg + ")";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			//sql += "" + this.getTable() + "." + arg.getNameAtt() + "";
+			sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_AND_IGNORE_CASE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = LOWER(TRIM(" + nameArg + "))";
+			sql += ";";						
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "LOWER(" + this.getTable() + "." + arg.getNameAtt() + ")";
+			//sql += "TRANSLATE(" + this.getTable() + "." + arg.getNameAtt() + ",\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
 
 		} else if (arg.getSearchOption().equalsIgnoreCase(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = REPLACE(" + nameArg + ", '''', '''''')";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += nameArg + " = LOWER(TRIM(" + nameArg + "))";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += nameArg + " = TRANSLATE(" + nameArg + ",\n\t\t\t" + Argument.TRASLATE_A + ",\n\t\t\t " + Argument.TRASLATE_B + ")";
+			sql += ";";
+
+			sql += "\n\t\t";
+			sql += "words = regexp_split_to_array(" + nameArg + ", ' ')";
+			sql += ";";
+			
+			sql += "\n\t\t";
+			sql += "FOREACH word IN ARRAY words";
+			sql += "\n\t\t";
+			sql += "LOOP";
+			
+			sql += "\n\t\t\t";
+			sql += "IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN";
+			
+			sql += "\n\t\t\t\t";
+			sql += "word = TRIM(word)";
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;";
+			
+			sql += "\n\t\t\t\t";			
+			sql += "sqlSrcWhere = sqlSrcWhere || ' ";
+			sql += "TRANSLATE(LOWER(" + this.getTable() + "." + arg.getNameAtt() + "),\n\t\t\t\t'" + Argument.TRASLATE_A + "',\n\t\t\t\t'" + Argument.TRASLATE_B + "')";
+			sql += " LIKE ' || ";
+			sql += "'''%' || word || '%'''";	
+			sql += ";";
+			
+			sql += "\n\t\t\t\t";
+			sql += "sqlSrcWhereCount = sqlSrcWhereCount + 1;";
+			
+			sql += "\n\t\t\t";
+			sql += "END IF;";
+			
+			sql += "\n\t\t";
+			sql += "END LOOP;";
 
 		}
 
