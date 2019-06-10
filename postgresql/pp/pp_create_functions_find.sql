@@ -14,25 +14,27 @@
 
 DROP FUNCTION IF EXISTS massoftware.f_Usuario (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Usuario (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.Usuario AS $$
 
@@ -66,25 +68,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Usuario.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -102,9 +104,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -122,10 +138,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Usuario ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Usuario ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Usuario ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_UsuarioById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,23 +162,25 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_Zona (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
-	, codigoArg4    VARCHAR(3) 	-- 4
-	, nombreArg5    VARCHAR(50)	-- 5
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(3) 	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Zona (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
-	, codigoArg4    VARCHAR(3) 	-- 4
-	, nombreArg5    VARCHAR(50)	-- 5
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(3) 	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
 
 ) RETURNS SETOF massoftware.Zona AS $$
 
@@ -193,21 +216,21 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(Zona.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(Zona.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
-		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
-		nombreArg5 = LOWER(TRIM(nombreArg5));
-		nombreArg5 = TRANSLATE(nombreArg5,
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg5, ' ');
+		words = regexp_split_to_array(nombreArg6, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -225,9 +248,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -245,10 +282,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Zona ( idArg , null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Zona ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Zona ( null , null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_ZonaById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,12 +308,13 @@ DROP FUNCTION IF EXISTS massoftware.f_Pais (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) CASCADE;
 
@@ -279,12 +322,13 @@ CREATE OR REPLACE FUNCTION massoftware.f_Pais (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) RETURNS SETOF massoftware.Pais AS $$
 
@@ -319,25 +363,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Pais.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Pais.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Pais.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Pais.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -351,13 +395,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
-		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -375,9 +419,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -395,10 +453,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Pais ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Pais ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Pais ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_PaisById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,13 +479,14 @@ DROP FUNCTION IF EXISTS massoftware.f_Provincia (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
-	, paisArg8          VARCHAR(36)	-- 8
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+	, paisArg9          VARCHAR(36)	-- 9
 
 ) CASCADE;
 
@@ -430,13 +494,14 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
-	, paisArg8          VARCHAR(36)	-- 8
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+	, paisArg9          VARCHAR(36)	-- 9
 
 ) RETURNS SETOF massoftware.Provincia AS $$
 
@@ -475,25 +540,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -507,13 +572,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
-		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -527,13 +592,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-		paisArg8 = REPLACE(paisArg8, '''', '''''');
-		paisArg8 = LOWER(TRIM(paisArg8));
-		paisArg8 = TRANSLATE(paisArg8,
+	IF searchById = false AND paisArg9 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg9)) > 0 THEN
+		paisArg9 = REPLACE(paisArg9, '''', '''''');
+		paisArg9 = LOWER(TRIM(paisArg9));
+		paisArg9 = TRANSLATE(paisArg9,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(paisArg8, ' ');
+		words = regexp_split_to_array(paisArg9, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -551,9 +616,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -571,22 +650,28 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Provincia ( idArg , null, null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Provincia ( idArg , null, null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Provincia ( null , null, null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_ProvinciaById ('xxx'); 
 
 DROP FUNCTION IF EXISTS massoftware.f_Provincia_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
-	, paisArg8          VARCHAR(36)	-- 8
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+	, paisArg9          VARCHAR(36)	-- 9
 
 ) CASCADE;
 
@@ -594,13 +679,14 @@ CREATE OR REPLACE FUNCTION massoftware.f_Provincia_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
-	, paisArg8          VARCHAR(36)	-- 8
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+	, paisArg9          VARCHAR(36)	-- 9
 
 ) RETURNS SETOF massoftware.t_Provincia_1 AS $$
 
@@ -643,25 +729,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Provincia.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -675,13 +761,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
-		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -695,13 +781,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND paisArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg8)) > 0 THEN
-		paisArg8 = REPLACE(paisArg8, '''', '''''');
-		paisArg8 = LOWER(TRIM(paisArg8));
-		paisArg8 = TRANSLATE(paisArg8,
+	IF searchById = false AND paisArg9 IS NOT NULL AND CHAR_LENGTH(TRIM(paisArg9)) > 0 THEN
+		paisArg9 = REPLACE(paisArg9, '''', '''''');
+		paisArg9 = LOWER(TRIM(paisArg9));
+		paisArg9 = TRANSLATE(paisArg9,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(paisArg8, ' ');
+		words = regexp_split_to_array(paisArg9, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -719,9 +805,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -739,10 +839,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Provincia_1 ( idArg , null, null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Provincia_1 ( idArg , null, null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Provincia_1 ( null , null, null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_ProvinciaById_1 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -758,27 +863,29 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_Ciudad (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Ciudad (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.Ciudad AS $$
 
@@ -815,25 +922,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -847,13 +954,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = LOWER(TRIM(provinciaArg7));
-		provinciaArg7 = TRANSLATE(provinciaArg7,
+	IF searchById = false AND provinciaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg8)) > 0 THEN
+		provinciaArg8 = REPLACE(provinciaArg8, '''', '''''');
+		provinciaArg8 = LOWER(TRIM(provinciaArg8));
+		provinciaArg8 = TRANSLATE(provinciaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(provinciaArg7, ' ');
+		words = regexp_split_to_array(provinciaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -871,9 +978,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -891,34 +1012,41 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Ciudad ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Ciudad ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CiudadById ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Ciudad_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_Ciudad_1 AS $$
 
@@ -963,25 +1091,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -995,13 +1123,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = LOWER(TRIM(provinciaArg7));
-		provinciaArg7 = TRANSLATE(provinciaArg7,
+	IF searchById = false AND provinciaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg8)) > 0 THEN
+		provinciaArg8 = REPLACE(provinciaArg8, '''', '''''');
+		provinciaArg8 = LOWER(TRIM(provinciaArg8));
+		provinciaArg8 = TRANSLATE(provinciaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(provinciaArg7, ' ');
+		words = regexp_split_to_array(provinciaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1019,9 +1147,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1039,34 +1181,41 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_1 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_1 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Ciudad_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CiudadById_1 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Ciudad_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Ciudad_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
-	, provinciaArg7    VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, provinciaArg8     VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_Ciudad_2 AS $$
 
@@ -1115,25 +1264,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Ciudad.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1147,13 +1296,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND provinciaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg7)) > 0 THEN
-		provinciaArg7 = REPLACE(provinciaArg7, '''', '''''');
-		provinciaArg7 = LOWER(TRIM(provinciaArg7));
-		provinciaArg7 = TRANSLATE(provinciaArg7,
+	IF searchById = false AND provinciaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(provinciaArg8)) > 0 THEN
+		provinciaArg8 = REPLACE(provinciaArg8, '''', '''''');
+		provinciaArg8 = LOWER(TRIM(provinciaArg8));
+		provinciaArg8 = TRANSLATE(provinciaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(provinciaArg7, ' ');
+		words = regexp_split_to_array(provinciaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1171,9 +1320,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1191,10 +1354,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_2 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_2 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Ciudad_2 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CiudadById_2 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1210,27 +1378,29 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.CodigoPostal AS $$
 
@@ -1267,33 +1437,33 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg7 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg7;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = LOWER(TRIM(ciudadArg7));
-		ciudadArg7 = TRANSLATE(ciudadArg7,
+	IF searchById = false AND ciudadArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg8)) > 0 THEN
+		ciudadArg8 = REPLACE(ciudadArg8, '''', '''''');
+		ciudadArg8 = LOWER(TRIM(ciudadArg8));
+		ciudadArg8 = TRANSLATE(ciudadArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(ciudadArg7, ' ');
+		words = regexp_split_to_array(ciudadArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1311,9 +1481,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1331,34 +1515,41 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_CodigoPostal ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CodigoPostalById ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_CodigoPostal_1 AS $$
 
@@ -1401,33 +1592,33 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg7 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg7;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = LOWER(TRIM(ciudadArg7));
-		ciudadArg7 = TRANSLATE(ciudadArg7,
+	IF searchById = false AND ciudadArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg8)) > 0 THEN
+		ciudadArg8 = REPLACE(ciudadArg8, '''', '''''');
+		ciudadArg8 = LOWER(TRIM(ciudadArg8));
+		ciudadArg8 = TRANSLATE(ciudadArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(ciudadArg7, ' ');
+		words = regexp_split_to_array(ciudadArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1445,9 +1636,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1465,34 +1670,41 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_1 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_1 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_CodigoPostal_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CodigoPostalById_1 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_CodigoPostal_2 AS $$
 
@@ -1543,33 +1755,33 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg7 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg7;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = LOWER(TRIM(ciudadArg7));
-		ciudadArg7 = TRANSLATE(ciudadArg7,
+	IF searchById = false AND ciudadArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg8)) > 0 THEN
+		ciudadArg8 = REPLACE(ciudadArg8, '''', '''''');
+		ciudadArg8 = LOWER(TRIM(ciudadArg8));
+		ciudadArg8 = TRANSLATE(ciudadArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(ciudadArg7, ' ');
+		words = regexp_split_to_array(ciudadArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1587,9 +1799,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1607,34 +1833,41 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_2 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_2 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_CodigoPostal_2 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CodigoPostalById_2 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostal_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, codigoArg4       VARCHAR(12)	-- 4
-	, numeroFromArg5   INTEGER    	-- 5
-	, numeroToArg6     INTEGER    	-- 6
-	, ciudadArg7       VARCHAR(36)	-- 7
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(12)	-- 5
+	, numeroFromArg6    INTEGER    	-- 6
+	, numeroToArg7      INTEGER    	-- 7
+	, ciudadArg8        VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_CodigoPostal_3 AS $$
 
@@ -1689,33 +1922,33 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(CodigoPostal.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg5;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero >= ' || numeroFromArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg7 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg6;
+		sqlSrcWhere = sqlSrcWhere || ' CodigoPostal.numero <= ' || numeroToArg7;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND ciudadArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg7)) > 0 THEN
-		ciudadArg7 = REPLACE(ciudadArg7, '''', '''''');
-		ciudadArg7 = LOWER(TRIM(ciudadArg7));
-		ciudadArg7 = TRANSLATE(ciudadArg7,
+	IF searchById = false AND ciudadArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ciudadArg8)) > 0 THEN
+		ciudadArg8 = REPLACE(ciudadArg8, '''', '''''');
+		ciudadArg8 = LOWER(TRIM(ciudadArg8));
+		ciudadArg8 = TRANSLATE(ciudadArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(ciudadArg7, ' ');
+		words = regexp_split_to_array(ciudadArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1733,9 +1966,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1753,10 +2000,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_3 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_3 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CodigoPostal_3 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CodigoPostalById_3 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1772,25 +2024,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_Transporte (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Transporte (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.Transporte AS $$
 
@@ -1831,25 +2085,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1867,9 +2121,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1887,32 +2155,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Transporte ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Transporte ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteById ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Transporte_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Transporte_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Transporte_1 AS $$
 
@@ -1959,25 +2234,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -1995,9 +2270,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2015,32 +2304,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Transporte_1 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_1 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Transporte_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteById_1 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Transporte_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Transporte_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Transporte_2 AS $$
 
@@ -2093,25 +2389,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2129,9 +2425,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2149,32 +2459,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Transporte_2 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_2 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Transporte_2 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteById_2 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Transporte_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Transporte_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Transporte_3 AS $$
 
@@ -2235,25 +2552,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Transporte.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2271,9 +2588,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2291,10 +2622,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Transporte_3 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_3 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Transporte_3 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteById_3 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2310,25 +2646,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_Carga (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Carga (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.Carga AS $$
 
@@ -2363,25 +2701,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2399,9 +2737,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2419,32 +2771,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Carga ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Carga ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Carga ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CargaById ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Carga_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Carga_1 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Carga_1 AS $$
 
@@ -2489,25 +2848,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2525,9 +2884,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2545,32 +2918,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Carga_1 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_1 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Carga_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CargaById_1 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Carga_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Carga_2 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Carga_2 AS $$
 
@@ -2621,25 +3001,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2657,9 +3037,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2677,32 +3071,39 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Carga_2 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_2 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_Carga_2 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CargaById_2 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_Carga_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_Carga_3 (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.t_Carga_3 AS $$
 
@@ -2759,25 +3160,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Carga.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -2795,9 +3196,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2815,10 +3230,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Carga_3 ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_3 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Carga_3 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CargaById_3 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2834,19 +3254,21 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) RETURNS SETOF massoftware.TransporteTarifa AS $$
 
@@ -2891,9 +3313,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2911,26 +3347,33 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa ( idArg , null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa ( idArg , null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_TransporteTarifa ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_1 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_1 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) RETURNS SETOF massoftware.t_TransporteTarifa_1 AS $$
 
@@ -2985,9 +3428,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3005,26 +3462,33 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_1 ( idArg , null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_1 ( idArg , null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_TransporteTarifa_1 ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById_1 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_2 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_2 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) RETURNS SETOF massoftware.t_TransporteTarifa_2 AS $$
 
@@ -3097,9 +3561,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3117,26 +3595,33 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_2 ( idArg , null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_2 ( idArg , null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- SELECT * FROM massoftware.f_TransporteTarifa_2 ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById_2 ('xxx'); 
+
 DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_3 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifa_3 (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
 
 ) RETURNS SETOF massoftware.t_TransporteTarifa_3 AS $$
 
@@ -3219,9 +3704,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3239,10 +3738,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_3 ( idArg , null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_3 ( idArg , null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TransporteTarifa_3 ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TransporteTarifaById_3 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3258,25 +3762,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIP (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIP (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.TipoDocumentoAFIP AS $$
 
@@ -3310,25 +3816,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' TipoDocumentoAFIP.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3346,9 +3852,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3366,10 +3886,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TipoDocumentoAFIP ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TipoDocumentoAFIP ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TipoDocumentoAFIP ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TipoDocumentoAFIPById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3385,23 +3910,25 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIP (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
-	, codigoArg4    VARCHAR(3) 	-- 4
-	, nombreArg5    VARCHAR(50)	-- 5
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(3) 	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIP (
 
-	  idArg0        VARCHAR(36)	-- 0
-	, orderByArg1   INTEGER    	-- 1
-	, limitArg2     BIGINT     	-- 2
-	, offSetArg3    BIGINT     	-- 3
-	, codigoArg4    VARCHAR(3) 	-- 4
-	, nombreArg5    VARCHAR(50)	-- 5
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(3) 	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
 
 ) RETURNS SETOF massoftware.MonedaAFIP AS $$
 
@@ -3435,21 +3962,21 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND codigoArg4 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg4)) > 0 THEN
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		codigoArg4 = REPLACE(codigoArg4, '''', '''''');
-		codigoArg4 = LOWER(TRIM(codigoArg4));
-		sqlSrcWhere = sqlSrcWhere || ' LOWER(MonedaAFIP.codigo) = ''' || codigoArg4 || '''';
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		sqlSrcWhere = sqlSrcWhere || ' LOWER(MonedaAFIP.codigo) = ''' || codigoArg5 || '''';
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
-		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
-		nombreArg5 = LOWER(TRIM(nombreArg5));
-		nombreArg5 = TRANSLATE(nombreArg5,
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg5, ' ');
+		words = regexp_split_to_array(nombreArg6, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3467,9 +3994,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3487,10 +4028,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_MonedaAFIP ( idArg , null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_MonedaAFIP ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MonedaAFIP ( null , null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaAFIPById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3508,12 +4054,13 @@ DROP FUNCTION IF EXISTS massoftware.f_Moneda (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) CASCADE;
 
@@ -3521,12 +4068,13 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) RETURNS SETOF massoftware.Moneda AS $$
 
@@ -3565,25 +4113,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3597,13 +4145,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
-		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3621,9 +4169,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3641,21 +4203,27 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Moneda ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Moneda ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaById ('xxx'); 
 
 DROP FUNCTION IF EXISTS massoftware.f_Moneda_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) CASCADE;
 
@@ -3663,12 +4231,13 @@ CREATE OR REPLACE FUNCTION massoftware.f_Moneda_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
 	, orderByArg1       INTEGER    	-- 1
-	, limitArg2         BIGINT     	-- 2
-	, offSetArg3        BIGINT     	-- 3
-	, numeroFromArg4    INTEGER    	-- 4
-	, numeroToArg5      INTEGER    	-- 5
-	, nombreArg6        VARCHAR(50)	-- 6
-	, abreviaturaArg7   VARCHAR(5) 	-- 7
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
 
 ) RETURNS SETOF massoftware.t_Moneda_1 AS $$
 
@@ -3710,25 +4279,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3742,13 +4311,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND abreviaturaArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg7)) > 0 THEN
-		abreviaturaArg7 = REPLACE(abreviaturaArg7, '''', '''''');
-		abreviaturaArg7 = LOWER(TRIM(abreviaturaArg7));
-		abreviaturaArg7 = TRANSLATE(abreviaturaArg7,
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg7, ' ');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3766,9 +4335,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3786,10 +4369,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Moneda_1 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda_1 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Moneda_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaById_1 ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3805,25 +4393,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_NotaCreditoMotivo (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_NotaCreditoMotivo (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.NotaCreditoMotivo AS $$
 
@@ -3857,25 +4447,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' NotaCreditoMotivo.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -3893,9 +4483,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3913,10 +4517,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_NotaCreditoMotivo ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_NotaCreditoMotivo ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_NotaCreditoMotivo ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_NotaCreditoMotivoById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3932,25 +4541,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_MotivoComentario (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentario (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.MotivoComentario AS $$
 
@@ -3984,25 +4595,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoComentario.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4020,9 +4631,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -4040,10 +4665,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_MotivoComentario ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoComentario ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MotivoComentario ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MotivoComentarioById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4059,25 +4689,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_TipoCliente (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_TipoCliente (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.TipoCliente AS $$
 
@@ -4111,25 +4743,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' TipoCliente.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4147,9 +4779,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -4167,10 +4813,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_TipoCliente ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_TipoCliente ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TipoCliente ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TipoClienteById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4186,25 +4837,27 @@ $$ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS massoftware.f_ClasificacionCliente (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) CASCADE;
 
 CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionCliente (
 
-	  idArg0           VARCHAR(36)	-- 0
-	, orderByArg1      INTEGER    	-- 1
-	, limitArg2        BIGINT     	-- 2
-	, offSetArg3       BIGINT     	-- 3
-	, numeroFromArg4   INTEGER    	-- 4
-	, numeroToArg5     INTEGER    	-- 5
-	, nombreArg6       VARCHAR(50)	-- 6
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
 
 ) RETURNS SETOF massoftware.ClasificacionCliente AS $$
 
@@ -4239,25 +4892,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' ClasificacionCliente.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4275,9 +4928,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -4295,10 +4962,15 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_ClasificacionCliente ( idArg , null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_ClasificacionCliente ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_ClasificacionCliente ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_ClasificacionClienteById ('xxx'); 
 
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4316,12 +4988,13 @@ DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente (
 
 	  idArg0                     VARCHAR(36)	-- 0
 	, orderByArg1                INTEGER    	-- 1
-	, limitArg2                  BIGINT     	-- 2
-	, offSetArg3                 BIGINT     	-- 3
-	, numeroFromArg4             INTEGER    	-- 4
-	, numeroToArg5               INTEGER    	-- 5
-	, nombreArg6                 VARCHAR(50)	-- 6
-	, clasificacionClienteArg7   VARCHAR(36)	-- 7
+	, orderByDescArg2            BOOLEAN    	-- 2
+	, limitArg3                  BIGINT     	-- 3
+	, offSetArg4                 BIGINT     	-- 4
+	, numeroFromArg5             INTEGER    	-- 5
+	, numeroToArg6               INTEGER    	-- 6
+	, nombreArg7                 VARCHAR(50)	-- 7
+	, clasificacionClienteArg8   VARCHAR(36)	-- 8
 
 ) CASCADE;
 
@@ -4329,12 +5002,13 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente (
 
 	  idArg0                     VARCHAR(36)	-- 0
 	, orderByArg1                INTEGER    	-- 1
-	, limitArg2                  BIGINT     	-- 2
-	, offSetArg3                 BIGINT     	-- 3
-	, numeroFromArg4             INTEGER    	-- 4
-	, numeroToArg5               INTEGER    	-- 5
-	, nombreArg6                 VARCHAR(50)	-- 6
-	, clasificacionClienteArg7   VARCHAR(36)	-- 7
+	, orderByDescArg2            BOOLEAN    	-- 2
+	, limitArg3                  BIGINT     	-- 3
+	, offSetArg4                 BIGINT     	-- 4
+	, numeroFromArg5             INTEGER    	-- 5
+	, numeroToArg6               INTEGER    	-- 6
+	, nombreArg7                 VARCHAR(50)	-- 7
+	, clasificacionClienteArg8   VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.MotivoBloqueoCliente AS $$
 
@@ -4369,25 +5043,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4401,13 +5075,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
-		clasificacionClienteArg7 = LOWER(TRIM(clasificacionClienteArg7));
-		clasificacionClienteArg7 = TRANSLATE(clasificacionClienteArg7,
+	IF searchById = false AND clasificacionClienteArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg8)) > 0 THEN
+		clasificacionClienteArg8 = REPLACE(clasificacionClienteArg8, '''', '''''');
+		clasificacionClienteArg8 = LOWER(TRIM(clasificacionClienteArg8));
+		clasificacionClienteArg8 = TRANSLATE(clasificacionClienteArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(clasificacionClienteArg7, ' ');
+		words = regexp_split_to_array(clasificacionClienteArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4425,9 +5099,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -4445,21 +5133,27 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MotivoBloqueoCliente ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById ('xxx'); 
 
 DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_1 (
 
 	  idArg0                     VARCHAR(36)	-- 0
 	, orderByArg1                INTEGER    	-- 1
-	, limitArg2                  BIGINT     	-- 2
-	, offSetArg3                 BIGINT     	-- 3
-	, numeroFromArg4             INTEGER    	-- 4
-	, numeroToArg5               INTEGER    	-- 5
-	, nombreArg6                 VARCHAR(50)	-- 6
-	, clasificacionClienteArg7   VARCHAR(36)	-- 7
+	, orderByDescArg2            BOOLEAN    	-- 2
+	, limitArg3                  BIGINT     	-- 3
+	, offSetArg4                 BIGINT     	-- 4
+	, numeroFromArg5             INTEGER    	-- 5
+	, numeroToArg6               INTEGER    	-- 6
+	, nombreArg7                 VARCHAR(50)	-- 7
+	, clasificacionClienteArg8   VARCHAR(36)	-- 8
 
 ) CASCADE;
 
@@ -4467,12 +5161,13 @@ CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoCliente_1 (
 
 	  idArg0                     VARCHAR(36)	-- 0
 	, orderByArg1                INTEGER    	-- 1
-	, limitArg2                  BIGINT     	-- 2
-	, offSetArg3                 BIGINT     	-- 3
-	, numeroFromArg4             INTEGER    	-- 4
-	, numeroToArg5               INTEGER    	-- 5
-	, nombreArg6                 VARCHAR(50)	-- 6
-	, clasificacionClienteArg7   VARCHAR(36)	-- 7
+	, orderByDescArg2            BOOLEAN    	-- 2
+	, limitArg3                  BIGINT     	-- 3
+	, offSetArg4                 BIGINT     	-- 4
+	, numeroFromArg5             INTEGER    	-- 5
+	, numeroToArg6               INTEGER    	-- 6
+	, nombreArg7                 VARCHAR(50)	-- 7
+	, clasificacionClienteArg8   VARCHAR(36)	-- 8
 
 ) RETURNS SETOF massoftware.t_MotivoBloqueoCliente_1 AS $$
 
@@ -4511,25 +5206,25 @@ BEGIN
 		searchById = true;
 	END IF;
 
-	IF searchById = false AND numeroFromArg4 IS NOT NULL THEN
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg4;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero >= ' || numeroFromArg5;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND numeroToArg5 IS NOT NULL THEN
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
 		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg5;
+		sqlSrcWhere = sqlSrcWhere || ' MotivoBloqueoCliente.numero <= ' || numeroToArg6;
 		sqlSrcWhereCount = sqlSrcWhereCount + 1;
 	END IF;
 
-	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
-		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
-		nombreArg6 = LOWER(TRIM(nombreArg6));
-		nombreArg6 = TRANSLATE(nombreArg6,
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg6, ' ');
+		words = regexp_split_to_array(nombreArg7, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4543,13 +5238,13 @@ BEGIN
 		END LOOP;
 	END IF;
 
-	IF searchById = false AND clasificacionClienteArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg7)) > 0 THEN
-		clasificacionClienteArg7 = REPLACE(clasificacionClienteArg7, '''', '''''');
-		clasificacionClienteArg7 = LOWER(TRIM(clasificacionClienteArg7));
-		clasificacionClienteArg7 = TRANSLATE(clasificacionClienteArg7,
+	IF searchById = false AND clasificacionClienteArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(clasificacionClienteArg8)) > 0 THEN
+		clasificacionClienteArg8 = REPLACE(clasificacionClienteArg8, '''', '''''');
+		clasificacionClienteArg8 = LOWER(TRIM(clasificacionClienteArg8));
+		clasificacionClienteArg8 = TRANSLATE(clasificacionClienteArg8,
 			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
 			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(clasificacionClienteArg7, ' ');
+		words = regexp_split_to_array(clasificacionClienteArg8, ' ');
 		FOREACH word IN ARRAY words
 		LOOP
 			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
@@ -4567,9 +5262,23 @@ BEGIN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
 
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
-	EXECUTE sqlSrc;
+	RETURN QUERY EXECUTE sqlSrc || ';';
 
 END;
 $$ LANGUAGE plpgsql;
@@ -4587,7 +5296,12 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente_1 ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente_1 ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MotivoBloqueoCliente_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1 ('xxx'); 

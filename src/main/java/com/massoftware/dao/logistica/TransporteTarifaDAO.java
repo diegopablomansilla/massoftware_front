@@ -444,33 +444,33 @@ public class TransporteTarifaDAO {
 
 			Object[] row = table[0];
 
-			if(row.length == 8) {
+			if(row.length == 10) {
 
-				obj = mapper8Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				return obj;
-
-			} else if(row.length == 16) {
-
-				obj = mapper16Fields(row);
+				obj = mapper10Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 32) {
+			} else if(row.length == 18) {
 
-				obj = mapper32Fields(row);
+				obj = mapper18Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 41) {
+			} else if(row.length == 34) {
 
-				obj = mapper41Fields(row);
+				obj = mapper34Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				return obj;
+
+			} else if(row.length == 42) {
+
+				obj = mapper42Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -500,27 +500,15 @@ public class TransporteTarifaDAO {
 		List<TransporteTarifa> listado = new ArrayList<TransporteTarifa>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "TransporteTarifa" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?";
-
-		String sql = "SELECT * FROM massoftware.f_TransporteTarifa" + orderByString + levelString + "(" + params + ")";
+		String sql = "SELECT * FROM massoftware.f_TransporteTarifa" + levelString + "(?, ?, ?, ?, ?, )";
 
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset()};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset()};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
@@ -529,33 +517,33 @@ public class TransporteTarifaDAO {
 
 			Object[] row = table[i];
 
-			if(row.length == 8) {
+			if(row.length == 10) {
 
-				TransporteTarifa obj = mapper8Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				listado.add(obj);
-
-			} else if(row.length == 16) {
-
-				TransporteTarifa obj = mapper16Fields(row);
+				TransporteTarifa obj = mapper10Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 32) {
+			} else if(row.length == 18) {
 
-				TransporteTarifa obj = mapper32Fields(row);
+				TransporteTarifa obj = mapper18Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 41) {
+			} else if(row.length == 34) {
 
-				TransporteTarifa obj = mapper41Fields(row);
+				TransporteTarifa obj = mapper34Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				listado.add(obj);
+
+			} else if(row.length == 42) {
+
+				TransporteTarifa obj = mapper42Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -576,20 +564,22 @@ public class TransporteTarifaDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private TransporteTarifa mapper8Fields(Object[] row) throws Exception {
+	private TransporteTarifa mapper10Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
 		String idTransporteTarifaArg0 = (String) row[++c];
 		Integer numeroTransporteTarifaArg1 = (Integer) row[++c];
-		java.math.BigDecimal precioFleteTransporteTarifaArg2 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg3 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadStockTransporteTarifaArg4 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioBultosTransporteTarifaArg5 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg6 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg7 = (java.math.BigDecimal) row[++c];
+		String cargaTransporteTarifaArg2 = (String) row[++c]; // Carga.id
+		String ciudadTransporteTarifaArg3 = (String) row[++c]; // Ciudad.id
+		java.math.BigDecimal precioFleteTransporteTarifaArg4 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg5 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadStockTransporteTarifaArg6 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioBultosTransporteTarifaArg7 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg8 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg9 = (java.math.BigDecimal) row[++c];
 
-		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, precioFleteTransporteTarifaArg2, precioUnidadFacturacionTransporteTarifaArg3, precioUnidadStockTransporteTarifaArg4, precioBultosTransporteTarifaArg5, importeMinimoEntregaTransporteTarifaArg6, importeMinimoCargaTransporteTarifaArg7);
+		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, cargaTransporteTarifaArg2, ciudadTransporteTarifaArg3, precioFleteTransporteTarifaArg4, precioUnidadFacturacionTransporteTarifaArg5, precioUnidadStockTransporteTarifaArg6, precioBultosTransporteTarifaArg7, importeMinimoEntregaTransporteTarifaArg8, importeMinimoCargaTransporteTarifaArg9);
 
 		return obj;
 
@@ -598,7 +588,7 @@ public class TransporteTarifaDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private TransporteTarifa mapper16Fields(Object[] row) throws Exception {
+	private TransporteTarifa mapper18Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -607,19 +597,21 @@ public class TransporteTarifaDAO {
 		String idCargaArg2 = (String) row[++c];
 		Integer numeroCargaArg3 = (Integer) row[++c];
 		String nombreCargaArg4 = (String) row[++c];
-		String idCiudadArg5 = (String) row[++c];
-		Integer numeroCiudadArg6 = (Integer) row[++c];
-		String nombreCiudadArg7 = (String) row[++c];
-		String departamentoCiudadArg8 = (String) row[++c];
-		Integer numeroAFIPCiudadArg9 = (Integer) row[++c];
-		java.math.BigDecimal precioFleteTransporteTarifaArg10 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg11 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadStockTransporteTarifaArg12 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioBultosTransporteTarifaArg13 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg14 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg15 = (java.math.BigDecimal) row[++c];
+		String transporteCargaArg5 = (String) row[++c]; // Transporte.id
+		String idCiudadArg6 = (String) row[++c];
+		Integer numeroCiudadArg7 = (Integer) row[++c];
+		String nombreCiudadArg8 = (String) row[++c];
+		String departamentoCiudadArg9 = (String) row[++c];
+		Integer numeroAFIPCiudadArg10 = (Integer) row[++c];
+		String provinciaCiudadArg11 = (String) row[++c]; // Provincia.id
+		java.math.BigDecimal precioFleteTransporteTarifaArg12 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg13 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadStockTransporteTarifaArg14 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioBultosTransporteTarifaArg15 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg16 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg17 = (java.math.BigDecimal) row[++c];
 
-		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, idCiudadArg5, numeroCiudadArg6, nombreCiudadArg7, departamentoCiudadArg8, numeroAFIPCiudadArg9, precioFleteTransporteTarifaArg10, precioUnidadFacturacionTransporteTarifaArg11, precioUnidadStockTransporteTarifaArg12, precioBultosTransporteTarifaArg13, importeMinimoEntregaTransporteTarifaArg14, importeMinimoCargaTransporteTarifaArg15);
+		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, transporteCargaArg5, idCiudadArg6, numeroCiudadArg7, nombreCiudadArg8, departamentoCiudadArg9, numeroAFIPCiudadArg10, provinciaCiudadArg11, precioFleteTransporteTarifaArg12, precioUnidadFacturacionTransporteTarifaArg13, precioUnidadStockTransporteTarifaArg14, precioBultosTransporteTarifaArg15, importeMinimoEntregaTransporteTarifaArg16, importeMinimoCargaTransporteTarifaArg17);
 
 		return obj;
 
@@ -628,7 +620,7 @@ public class TransporteTarifaDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private TransporteTarifa mapper32Fields(Object[] row) throws Exception {
+	private TransporteTarifa mapper34Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -644,28 +636,30 @@ public class TransporteTarifaDAO {
 		String ingresosBrutosTransporteArg9 = (String) row[++c];
 		String telefonoTransporteArg10 = (String) row[++c];
 		String faxTransporteArg11 = (String) row[++c];
-		String domicilioTransporteArg12 = (String) row[++c];
-		String comentarioTransporteArg13 = (String) row[++c];
-		String idCiudadArg14 = (String) row[++c];
-		Integer numeroCiudadArg15 = (Integer) row[++c];
-		String nombreCiudadArg16 = (String) row[++c];
-		String departamentoCiudadArg17 = (String) row[++c];
-		Integer numeroAFIPCiudadArg18 = (Integer) row[++c];
-		String idProvinciaArg19 = (String) row[++c];
-		Integer numeroProvinciaArg20 = (Integer) row[++c];
-		String nombreProvinciaArg21 = (String) row[++c];
-		String abreviaturaProvinciaArg22 = (String) row[++c];
-		Integer numeroAFIPProvinciaArg23 = (Integer) row[++c];
-		Integer numeroIngresosBrutosProvinciaArg24 = (Integer) row[++c];
-		Integer numeroRENATEAProvinciaArg25 = (Integer) row[++c];
-		java.math.BigDecimal precioFleteTransporteTarifaArg26 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg27 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadStockTransporteTarifaArg28 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioBultosTransporteTarifaArg29 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg30 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg31 = (java.math.BigDecimal) row[++c];
+		String codigoPostalTransporteArg12 = (String) row[++c]; // CodigoPostal.id
+		String domicilioTransporteArg13 = (String) row[++c];
+		String comentarioTransporteArg14 = (String) row[++c];
+		String idCiudadArg15 = (String) row[++c];
+		Integer numeroCiudadArg16 = (Integer) row[++c];
+		String nombreCiudadArg17 = (String) row[++c];
+		String departamentoCiudadArg18 = (String) row[++c];
+		Integer numeroAFIPCiudadArg19 = (Integer) row[++c];
+		String idProvinciaArg20 = (String) row[++c];
+		Integer numeroProvinciaArg21 = (Integer) row[++c];
+		String nombreProvinciaArg22 = (String) row[++c];
+		String abreviaturaProvinciaArg23 = (String) row[++c];
+		Integer numeroAFIPProvinciaArg24 = (Integer) row[++c];
+		Integer numeroIngresosBrutosProvinciaArg25 = (Integer) row[++c];
+		Integer numeroRENATEAProvinciaArg26 = (Integer) row[++c];
+		String paisProvinciaArg27 = (String) row[++c]; // Pais.id
+		java.math.BigDecimal precioFleteTransporteTarifaArg28 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg29 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadStockTransporteTarifaArg30 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioBultosTransporteTarifaArg31 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg32 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg33 = (java.math.BigDecimal) row[++c];
 
-		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, idTransporteArg5, numeroTransporteArg6, nombreTransporteArg7, cuitTransporteArg8, ingresosBrutosTransporteArg9, telefonoTransporteArg10, faxTransporteArg11, domicilioTransporteArg12, comentarioTransporteArg13, idCiudadArg14, numeroCiudadArg15, nombreCiudadArg16, departamentoCiudadArg17, numeroAFIPCiudadArg18, idProvinciaArg19, numeroProvinciaArg20, nombreProvinciaArg21, abreviaturaProvinciaArg22, numeroAFIPProvinciaArg23, numeroIngresosBrutosProvinciaArg24, numeroRENATEAProvinciaArg25, precioFleteTransporteTarifaArg26, precioUnidadFacturacionTransporteTarifaArg27, precioUnidadStockTransporteTarifaArg28, precioBultosTransporteTarifaArg29, importeMinimoEntregaTransporteTarifaArg30, importeMinimoCargaTransporteTarifaArg31);
+		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, idTransporteArg5, numeroTransporteArg6, nombreTransporteArg7, cuitTransporteArg8, ingresosBrutosTransporteArg9, telefonoTransporteArg10, faxTransporteArg11, codigoPostalTransporteArg12, domicilioTransporteArg13, comentarioTransporteArg14, idCiudadArg15, numeroCiudadArg16, nombreCiudadArg17, departamentoCiudadArg18, numeroAFIPCiudadArg19, idProvinciaArg20, numeroProvinciaArg21, nombreProvinciaArg22, abreviaturaProvinciaArg23, numeroAFIPProvinciaArg24, numeroIngresosBrutosProvinciaArg25, numeroRENATEAProvinciaArg26, paisProvinciaArg27, precioFleteTransporteTarifaArg28, precioUnidadFacturacionTransporteTarifaArg29, precioUnidadStockTransporteTarifaArg30, precioBultosTransporteTarifaArg31, importeMinimoEntregaTransporteTarifaArg32, importeMinimoCargaTransporteTarifaArg33);
 
 		return obj;
 
@@ -674,7 +668,7 @@ public class TransporteTarifaDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private TransporteTarifa mapper41Fields(Object[] row) throws Exception {
+	private TransporteTarifa mapper42Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -695,32 +689,33 @@ public class TransporteTarifaDAO {
 		Integer numeroCodigoPostalArg14 = (Integer) row[++c];
 		String nombreCalleCodigoPostalArg15 = (String) row[++c];
 		String numeroCalleCodigoPostalArg16 = (String) row[++c];
-		String domicilioTransporteArg17 = (String) row[++c];
-		String comentarioTransporteArg18 = (String) row[++c];
-		String idCiudadArg19 = (String) row[++c];
-		Integer numeroCiudadArg20 = (Integer) row[++c];
-		String nombreCiudadArg21 = (String) row[++c];
-		String departamentoCiudadArg22 = (String) row[++c];
-		Integer numeroAFIPCiudadArg23 = (Integer) row[++c];
-		String idProvinciaArg24 = (String) row[++c];
-		Integer numeroProvinciaArg25 = (Integer) row[++c];
-		String nombreProvinciaArg26 = (String) row[++c];
-		String abreviaturaProvinciaArg27 = (String) row[++c];
-		Integer numeroAFIPProvinciaArg28 = (Integer) row[++c];
-		Integer numeroIngresosBrutosProvinciaArg29 = (Integer) row[++c];
-		Integer numeroRENATEAProvinciaArg30 = (Integer) row[++c];
-		String idPaisArg31 = (String) row[++c];
-		Integer numeroPaisArg32 = (Integer) row[++c];
-		String nombrePaisArg33 = (String) row[++c];
-		String abreviaturaPaisArg34 = (String) row[++c];
-		java.math.BigDecimal precioFleteTransporteTarifaArg35 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg36 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioUnidadStockTransporteTarifaArg37 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal precioBultosTransporteTarifaArg38 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg39 = (java.math.BigDecimal) row[++c];
-		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg40 = (java.math.BigDecimal) row[++c];
+		String ciudadCodigoPostalArg17 = (String) row[++c]; // Ciudad.id
+		String domicilioTransporteArg18 = (String) row[++c];
+		String comentarioTransporteArg19 = (String) row[++c];
+		String idCiudadArg20 = (String) row[++c];
+		Integer numeroCiudadArg21 = (Integer) row[++c];
+		String nombreCiudadArg22 = (String) row[++c];
+		String departamentoCiudadArg23 = (String) row[++c];
+		Integer numeroAFIPCiudadArg24 = (Integer) row[++c];
+		String idProvinciaArg25 = (String) row[++c];
+		Integer numeroProvinciaArg26 = (Integer) row[++c];
+		String nombreProvinciaArg27 = (String) row[++c];
+		String abreviaturaProvinciaArg28 = (String) row[++c];
+		Integer numeroAFIPProvinciaArg29 = (Integer) row[++c];
+		Integer numeroIngresosBrutosProvinciaArg30 = (Integer) row[++c];
+		Integer numeroRENATEAProvinciaArg31 = (Integer) row[++c];
+		String idPaisArg32 = (String) row[++c];
+		Integer numeroPaisArg33 = (Integer) row[++c];
+		String nombrePaisArg34 = (String) row[++c];
+		String abreviaturaPaisArg35 = (String) row[++c];
+		java.math.BigDecimal precioFleteTransporteTarifaArg36 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadFacturacionTransporteTarifaArg37 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioUnidadStockTransporteTarifaArg38 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal precioBultosTransporteTarifaArg39 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoEntregaTransporteTarifaArg40 = (java.math.BigDecimal) row[++c];
+		java.math.BigDecimal importeMinimoCargaTransporteTarifaArg41 = (java.math.BigDecimal) row[++c];
 
-		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, idTransporteArg5, numeroTransporteArg6, nombreTransporteArg7, cuitTransporteArg8, ingresosBrutosTransporteArg9, telefonoTransporteArg10, faxTransporteArg11, idCodigoPostalArg12, codigoCodigoPostalArg13, numeroCodigoPostalArg14, nombreCalleCodigoPostalArg15, numeroCalleCodigoPostalArg16, domicilioTransporteArg17, comentarioTransporteArg18, idCiudadArg19, numeroCiudadArg20, nombreCiudadArg21, departamentoCiudadArg22, numeroAFIPCiudadArg23, idProvinciaArg24, numeroProvinciaArg25, nombreProvinciaArg26, abreviaturaProvinciaArg27, numeroAFIPProvinciaArg28, numeroIngresosBrutosProvinciaArg29, numeroRENATEAProvinciaArg30, idPaisArg31, numeroPaisArg32, nombrePaisArg33, abreviaturaPaisArg34, precioFleteTransporteTarifaArg35, precioUnidadFacturacionTransporteTarifaArg36, precioUnidadStockTransporteTarifaArg37, precioBultosTransporteTarifaArg38, importeMinimoEntregaTransporteTarifaArg39, importeMinimoCargaTransporteTarifaArg40);
+		TransporteTarifa obj = new TransporteTarifa(idTransporteTarifaArg0, numeroTransporteTarifaArg1, idCargaArg2, numeroCargaArg3, nombreCargaArg4, idTransporteArg5, numeroTransporteArg6, nombreTransporteArg7, cuitTransporteArg8, ingresosBrutosTransporteArg9, telefonoTransporteArg10, faxTransporteArg11, idCodigoPostalArg12, codigoCodigoPostalArg13, numeroCodigoPostalArg14, nombreCalleCodigoPostalArg15, numeroCalleCodigoPostalArg16, ciudadCodigoPostalArg17, domicilioTransporteArg18, comentarioTransporteArg19, idCiudadArg20, numeroCiudadArg21, nombreCiudadArg22, departamentoCiudadArg23, numeroAFIPCiudadArg24, idProvinciaArg25, numeroProvinciaArg26, nombreProvinciaArg27, abreviaturaProvinciaArg28, numeroAFIPProvinciaArg29, numeroIngresosBrutosProvinciaArg30, numeroRENATEAProvinciaArg31, idPaisArg32, numeroPaisArg33, nombrePaisArg34, abreviaturaPaisArg35, precioFleteTransporteTarifaArg36, precioUnidadFacturacionTransporteTarifaArg37, precioUnidadStockTransporteTarifaArg38, precioBultosTransporteTarifaArg39, importeMinimoEntregaTransporteTarifaArg40, importeMinimoCargaTransporteTarifaArg41);
 
 		return obj;
 

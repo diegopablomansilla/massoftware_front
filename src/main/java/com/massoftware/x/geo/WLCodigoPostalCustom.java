@@ -69,13 +69,13 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		long paisItems = paisDAO.count();
 
-		if (paisItems < 300000) {
+		if (paisItems < MAX_ROWS_FOR_CBX) {
 
 			PaisFiltro paisFiltro = new PaisFiltro();
 
 			paisFiltro.setUnlimited(true);
 
-			paisFiltro.setOrderBy("numero");
+			paisFiltro.setOrderBy(1);
 
 			List<Pais> paisLista = paisDAO.find(paisFiltro);
 
@@ -107,7 +107,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 							provinciaFiltro.setUnlimited(true);
 
-							provinciaFiltro.setOrderBy("numero");
+							provinciaFiltro.setOrderBy(1);
 
 							List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 
@@ -219,13 +219,13 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		long provinciaItems = provinciaDAO.count();
 
-		if (provinciaItems < 300000) {
+		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
 			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
 			provinciaFiltro.setUnlimited(true);
 
-			provinciaFiltro.setOrderBy("numero");
+			provinciaFiltro.setOrderBy(1);
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 
@@ -257,7 +257,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 							ciudadFiltro.setUnlimited(true);
 
-							ciudadFiltro.setOrderBy("numero");
+							ciudadFiltro.setOrderBy(1);
 
 							List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
 
@@ -379,13 +379,13 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		long ciudadItems = ciudadDAO.count();
 
-		if (ciudadItems < 300000) {
+		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
 			CiudadFiltro ciudadFiltro = new CiudadFiltro();
 
 			ciudadFiltro.setUnlimited(true);
 
-			ciudadFiltro.setOrderBy("numero");
+			ciudadFiltro.setOrderBy(1);
 
 			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
 

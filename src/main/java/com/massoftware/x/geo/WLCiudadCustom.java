@@ -58,13 +58,13 @@ public class WLCiudadCustom extends WLCiudad {
 
 		long paisItems = paisDAO.count();
 
-		if (paisItems < 300) {
+		if (paisItems < MAX_ROWS_FOR_CBX) {
 
 			PaisFiltro paisFiltro = new PaisFiltro();
 
 			paisFiltro.setUnlimited(true);
 
-			paisFiltro.setOrderBy("numero");
+			paisFiltro.setOrderBy(1);
 
 			List<Pais> paisLista = paisDAO.find(paisFiltro);
 
@@ -90,7 +90,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 						provinciaFiltro.setUnlimited(true);
 
-						provinciaFiltro.setOrderBy("numero");
+						provinciaFiltro.setOrderBy(1);
 
 						List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 
@@ -186,13 +186,13 @@ public class WLCiudadCustom extends WLCiudad {
 
 		long provinciaItems = provinciaDAO.count();
 
-		if (provinciaItems < 300) {
+		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
 			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
 			provinciaFiltro.setUnlimited(true);
 
-			provinciaFiltro.setOrderBy("numero");
+			provinciaFiltro.setOrderBy(1);
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 

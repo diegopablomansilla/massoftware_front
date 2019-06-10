@@ -24,7 +24,7 @@ public class UtilJavaPOJO {
 		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
 		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\nimport com.massoftware.model.EntityId;";
-		
+
 		java += buildImportAtts(clazzX);
 
 		java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\", plural = \"" + clazzX.getPlural()
@@ -332,14 +332,15 @@ public class UtilJavaPOJO {
 			Att att = clazz.getAtts().get(i);
 
 			if (att.isSimple() == false) {
-				
+
 				DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
-				java += "\nimport com.massoftware.model." + dataTypeClazz.getClazz().getNamePackage() + "." + dataTypeClazz.getClazz().getName() + ";";
+				java += "\nimport com.massoftware.model." + dataTypeClazz.getClazz().getNamePackage() + "."
+						+ dataTypeClazz.getClazz().getName() + ";";
 
 			}
 		}
-		
+
 		return java;
 
 	}
@@ -432,6 +433,14 @@ public class UtilJavaPOJO {
 				if (level < maxLevel) {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 					buildConstructorArgs(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
+				} else {
+
+					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
+
+					java = "String " + "id" + dataTypeClazz.getName() + "Arg";
+
+					fields.add(java);
+
 				}
 
 			}
@@ -462,6 +471,13 @@ public class UtilJavaPOJO {
 				if (level < maxLevel) {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 					buildSetterArgs(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
+				} else {
+
+					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
+
+					java = "id" + dataTypeClazz.getName() + "Arg";
+
+					fields.add(java);
 				}
 
 			}
@@ -527,7 +543,12 @@ public class UtilJavaPOJO {
 				if (j == 0) {
 					path += "this";
 				} else if (j == paths.length - 1) {
-					path += ".set" + toCamelStart(paths[j]) + "(" + paths[j] + "Arg" + i + ");";
+					if(fieldsSQL.get(i).endsWith("@@")) {
+						path += ".setId(id" + paths[j].replace("@@", "") + "Arg" + i + ");";
+					} else {
+						path += ".set" + toCamelStart(paths[j]) + "(" + paths[j] + "Arg" + i + ");";	
+					}
+					
 				} else {
 					path += ".build" + toCamelStart(paths[j]) + "()";
 				}
@@ -579,6 +600,18 @@ public class UtilJavaPOJO {
 					} else {
 						buildConstructorAtts(maxLevel, (level + 1), clazz.getName(), dataTypeClazz.getClazz(), fields);
 					}
+				} else {
+
+					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
+
+					if (source.length() > 0) {
+						java = source + "." + clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+					} else {
+						java = clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
+					}
+
+					fields.add(java);
+
 				}
 
 			}

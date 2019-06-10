@@ -23,7 +23,7 @@ public class UtilJavaDAO {
 		String tmp = toFindCodeOrDecsriptionImport(clazzX);
 		if (tmp != null) {
 			java += tmp;
-		}		
+		}
 		java += "\nimport com.massoftware.backend.BackendContextPG;";
 		java += "\nimport com.massoftware.model.EntityId;";
 		java += "\nimport com.massoftware.model." + clazzX.getNamePackage() + "." + clazzX.getName() + ";";
@@ -62,8 +62,9 @@ public class UtilJavaDAO {
 			} else if (argument.isBigDecimal()) {
 				return "\nimport com.massoftware.UtilNumeric;";
 			} else if (argument.isSimple() == false) {
-				DataTypeClazz dt = (DataTypeClazz) argument.getDataType();								
-				return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+				DataTypeClazz dt = (DataTypeClazz) argument.getDataType();
+				return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + ";";
 			}
 
 			if (clazz.getArgsSBX().size() > 1) {
@@ -79,8 +80,9 @@ public class UtilJavaDAO {
 				} else if (argument.isBigDecimal()) {
 					return "\nimport com.massoftware.UtilNumeric;";
 				} else if (argument.isSimple() == false) {
-					DataTypeClazz dt = (DataTypeClazz) argument.getDataType();								
-					return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
+					DataTypeClazz dt = (DataTypeClazz) argument.getDataType();
+					return "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "."
+							+ dt.getClazz().getName() + ";";
 				}
 
 			}
@@ -93,48 +95,159 @@ public class UtilJavaDAO {
 	private static String toFindCodeOrDecsription(Clazz clazz) {
 		String java = "";
 
-//		if (clazz.getArgsSBX().size() > 0) {
+		// if (clazz.getArgsSBX().size() > 0) {
 
-			java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-			String arg1 = toCamelStart(clazz.getArgsSBX().get(0).getName());
-			String arg2 = "";
-			if (clazz.getArgsSBX().size() > 1) {
-				arg2 = "Or" + toCamelStart(clazz.getArgsSBX().get(1).getName());
-			}
+		String arg1 = toCamelStart(clazz.getArgsSBX().get(0).getName());
+		String arg2 = "";
+		if (clazz.getArgsSBX().size() > 1) {
+			arg2 = "Or" + toCamelStart(clazz.getArgsSBX().get(1).getName());
+		}
 
-			String l1 = "\n\n\t\t";
-			String l2 = "\n\n\t\t\t";
+		String l1 = "\n\n\t\t";
+		String l2 = "\n\n\t\t\t";
 
-			java += "\n\n\t" + "public List<" + clazz.getName() + "> findBy" + arg1 + arg2
-					+ "(String arg) throws Exception {";
+		java += "\n\n\t" + "public List<" + clazz.getName() + "> findBy" + arg1 + arg2
+				+ "(String arg) throws Exception {";
 
-			arg2 = arg2.replaceFirst("Or", "");
+		arg2 = arg2.replaceFirst("Or", "");
 
-			java += "\n";
-			java += l1 + "if (arg == null || arg.trim().length() == 0) {";
+		java += "\n";
+		java += l1 + "if (arg == null || arg.trim().length() == 0) {";
 
-			if (clazz.getArgsSBX().size() > 1) {
-				java += l2 + "throw new IllegalArgumentException(\"Se esperaba un arg (" + clazz.getName() + "."
-						+ clazz.getArgsSBX().get(0).getName() + " o " + clazz.getName() + "."
-						+ clazz.getArgsSBX().get(1).getName() + ") no nulo/vacio.\");";
+		if (clazz.getArgsSBX().size() > 1) {
+			java += l2 + "throw new IllegalArgumentException(\"Se esperaba un arg (" + clazz.getName() + "."
+					+ clazz.getArgsSBX().get(0).getName() + " o " + clazz.getName() + "."
+					+ clazz.getArgsSBX().get(1).getName() + ") no nulo/vacio.\");";
+		} else {
+			java += l2 + "throw new IllegalArgumentException(\"Se esperaba un arg (" + clazz.getName() + "."
+					+ clazz.getArgsSBX().get(0).getName() + ") no nulo/vacio.\");";
+		}
+
+		java += l1 + "}";
+
+		java += "\n";
+		java += l1 + "arg = arg.trim();";
+
+		Argument argument = clazz.getArgsSBX().get(0);
+		String argName = arg1;
+
+		java += "\n";
+		java += l1 + "//------------ buscar por " + argument.getLabel();
+
+		String l = l1;
+
+		if (argument.isInteger()) {
+			java += l1 + "if(UtilNumeric.isInteger(arg)) {";
+			l = l2;
+		} else if (argument.isLong()) {
+			java += l1 + "if(UtilNumeric.isLong(arg)) {";
+			l = l2;
+		} else if (argument.isDouble()) {
+			java += l1 + "if(UtilNumeric.isDouble(arg)) {";
+			l = l2;
+		} else if (argument.isBigDecimal()) {
+			java += l1 + "if(UtilNumeric.isBigDecimal(arg)) {";
+			l = l2;
+		}
+
+		java += l + clazz.getName() + "Filtro filtro" + argName + " = new " + clazz.getName() + "Filtro();";
+		java += l + "filtro" + argName + ".setUnlimited(true);";
+
+		if (argument.isSimple() == false) {
+
+			java += l + argument.getDataType().getName() + " obj = new " + argument.getDataType().getName() + "();";
+			java += l + "obj.setId(arg);";
+			java += l + "filtro" + argName + ".set" + argName + "(obj);";
+
+		} else if (argument.isString()) {
+
+			java += l + "filtro" + argName + ".set" + argName + "(arg);";
+
+		} else if (argument.isBoolean()) {
+
+			java += l + "filtro" + argName + ".set" + argName + "(new Boolean(arg));";
+
+		} else if (argument.isInteger()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new Integer(arg));";
 			} else {
-				java += l2 + "throw new IllegalArgumentException(\"Se esperaba un arg (" + clazz.getName() + "."
-						+ clazz.getArgsSBX().get(0).getName() + ") no nulo/vacio.\");";
+				java += l + "filtro" + argName + ".set" + argName + "From(new Integer(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new Integer(arg));";
 			}
 
+		} else if (argument.isLong()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new Long(arg));";
+			} else {
+				java += l + "filtro" + argName + ".set" + argName + "From(new Long(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new Long(arg));";
+			}
+
+		} else if (argument.isDouble()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new Double(arg));";
+			} else {
+				java += l + "filtro" + argName + ".set" + argName + "From(new Double(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new Double(arg));";
+			}
+
+		} else if (argument.isBigDecimal()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new java.math.BigDecimal(arg));";
+			} else {
+				java += l + "filtro" + argName + ".set" + argName + "From(new java.math.BigDecimal(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new java.math.BigDecimal(arg));";
+			}
+
+		} else if (argument.isDate()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new java.util.Date(arg));";
+			} else {
+				java += l + "filtro" + argName + ".set" + argName + "From(new java.util.Date(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new java.util.Date(arg));";
+			}
+
+		} else if (argument.isTimestamp()) {
+
+			if (argument.getRange() == false) {
+				java += l + "filtro" + argName + ".set" + argName + "(new java.sql.Timestamp(arg));";
+			} else {
+				java += l + "filtro" + argName + ".set" + argName + "From(new java.sql.Timestamp(arg));";
+				java += l + "filtro" + argName + ".set" + argName + "To(new java.sql.Timestamp(arg));";
+			}
+		}
+
+		java += l + "List<" + clazz.getName() + "> listado" + argName + " = find(filtro" + argName + ");";
+		java += l + "if(listado" + argName + ".size() > 0) {";
+		java += l + "\t" + "return listado" + argName + ";";
+		java += l + "}";
+
+		if (argument.isInteger()) {
 			java += l1 + "}";
+		} else if (argument.isLong()) {
+			java += l1 + "}";
+		} else if (argument.isDouble()) {
+			java += l1 + "}";
+		} else if (argument.isBigDecimal()) {
+			java += l1 + "}";
+		}
 
-			java += "\n";
-			java += l1 + "arg = arg.trim();";
+		if (clazz.getArgsSBX().size() > 1) {
 
-			Argument argument = clazz.getArgsSBX().get(0);
-			String argName = arg1;
+			argument = clazz.getArgsSBX().get(1);
+			argName = arg2;
 
 			java += "\n";
 			java += l1 + "//------------ buscar por " + argument.getLabel();
 
-			String l = l1;
+			l = l1;
 
 			if (argument.isInteger()) {
 				java += l1 + "if(UtilNumeric.isInteger(arg)) {";
@@ -154,19 +267,13 @@ public class UtilJavaDAO {
 			java += l + "filtro" + argName + ".setUnlimited(true);";
 
 			if (argument.isSimple() == false) {
-				
-				java += l + argument.getDataType().getName() + " obj = new " + argument.getDataType().getName() + "();";
+				java += l + argument.getDataType().getName() + "obj = new " + argument.getDataType().getName() + "();";
 				java += l + "obj.setId(arg);";
 				java += l + "filtro" + argName + ".set" + argName + "(obj);";
-				
 			} else if (argument.isString()) {
-				
 				java += l + "filtro" + argName + ".set" + argName + "(arg);";
-				
 			} else if (argument.isBoolean()) {
-				
 				java += l + "filtro" + argName + ".set" + argName + "(new Boolean(arg));";
-				
 			} else if (argument.isInteger()) {
 
 				if (argument.getRange() == false) {
@@ -237,119 +344,13 @@ public class UtilJavaDAO {
 				java += l1 + "}";
 			}
 
-			if (clazz.getArgsSBX().size() > 1) {
+		}
 
-				argument = clazz.getArgsSBX().get(1);
-				argName = arg2;
+		java += "\n";
+		java += l1 + "return new ArrayList<" + clazz.getName() + ">();";
+		java += "\n\n\t" + "}";
 
-				java += "\n";
-				java += l1 + "//------------ buscar por " + argument.getLabel();
-
-				l = l1;
-
-				if (argument.isInteger()) {
-					java += l1 + "if(UtilNumeric.isInteger(arg)) {";
-					l = l2;
-				} else if (argument.isLong()) {
-					java += l1 + "if(UtilNumeric.isLong(arg)) {";
-					l = l2;
-				} else if (argument.isDouble()) {
-					java += l1 + "if(UtilNumeric.isDouble(arg)) {";
-					l = l2;
-				} else if (argument.isBigDecimal()) {
-					java += l1 + "if(UtilNumeric.isBigDecimal(arg)) {";
-					l = l2;
-				}
-
-				java += l + clazz.getName() + "Filtro filtro" + argName + " = new " + clazz.getName() + "Filtro();";
-				java += l + "filtro" + argName + ".setUnlimited(true);";
-
-				if (argument.isSimple() == false) {
-					java += l + argument.getDataType().getName() + "obj = new " + argument.getDataType().getName()
-							+ "();";
-					java += l + "obj.setId(arg);";
-					java += l + "filtro" + argName + ".set" + argName + "(obj);";
-				} else if (argument.isString()) {
-					java += l + "filtro" + argName + ".set" + argName + "(arg);";
-				} else if (argument.isBoolean()) {
-					java += l + "filtro" + argName + ".set" + argName + "(new Boolean(arg));";
-				} else if (argument.isInteger()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new Integer(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new Integer(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new Integer(arg));";
-					}
-
-				} else if (argument.isLong()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new Long(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new Long(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new Long(arg));";
-					}
-
-				} else if (argument.isDouble()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new Double(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new Double(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new Double(arg));";
-					}
-
-				} else if (argument.isBigDecimal()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new java.math.BigDecimal(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new java.math.BigDecimal(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new java.math.BigDecimal(arg));";
-					}
-
-				} else if (argument.isDate()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new java.util.Date(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new java.util.Date(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new java.util.Date(arg));";
-					}
-
-				} else if (argument.isTimestamp()) {
-
-					if (argument.getRange() == false) {
-						java += l + "filtro" + argName + ".set" + argName + "(new java.sql.Timestamp(arg));";
-					} else {
-						java += l + "filtro" + argName + ".set" + argName + "From(new java.sql.Timestamp(arg));";
-						java += l + "filtro" + argName + ".set" + argName + "To(new java.sql.Timestamp(arg));";
-					}
-				}
-
-				java += l + "List<" + clazz.getName() + "> listado" + argName + " = find(filtro" + argName + ");";
-				java += l + "if(listado" + argName + ".size() > 0) {";
-				java += l + "\t" + "return listado" + argName + ";";
-				java += l + "}";
-
-				if (argument.isInteger()) {
-					java += l1 + "}";
-				} else if (argument.isLong()) {
-					java += l1 + "}";
-				} else if (argument.isDouble()) {
-					java += l1 + "}";
-				} else if (argument.isBigDecimal()) {
-					java += l1 + "}";
-				}
-
-			}
-
-			java += "\n";
-			java += l1 + "return new ArrayList<" + clazz.getName() + ">();";
-			java += "\n\n\t" + "}";
-
-//		}
+		// }
 
 		return java;
 	}
@@ -644,10 +645,10 @@ public class UtilJavaDAO {
 						+ att.getName() + ") no nulo/vacio.\");";
 
 				java += "\n\n\t\t}";
-				
-				if(att.isString()) {
-					java += "\n\n\t\targ = arg.trim();";	
-				} 				
+
+				if (att.isString()) {
+					java += "\n\n\t\targ = arg.trim();";
+				}
 
 				java += "\n";
 
@@ -662,17 +663,17 @@ public class UtilJavaDAO {
 
 				java += "\n\n\t\tif(table.length == 1){";
 
-				java += "\n\n\t\t\tObject[] row = table[0];";							
+				java += "\n\n\t\t\tObject[] row = table[0];";
 
 				java += "\n\n\t\t\tif(row.length == 1){";
 
 				// java += "\n\n\t\t\treturn (Long) row[0] > 0;";
 
 				java += "\n\n\t\t\t\treturn (Boolean) row[0];";
-				
+
 				java += "\n\n\t\t\t} else { ";
 
-				java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";				
+				java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
 
 				java += "\n\n\t\t\t}";
 
@@ -812,7 +813,7 @@ public class UtilJavaDAO {
 
 		java += "\n\t\tlevel = (level == null || level < 0 || level > 3) ? levelDefault : level;";
 		// java += "\n\t\tlevel = (level == null || level < 0) ? 4 : level;";
-//		java += "\n\t\tlevel = (level != null && level > 3) ? levelDefault : level;";
+		// java += "\n\t\tlevel = (level != null && level > 3) ? levelDefault : level;";
 
 		java += "\n";
 
@@ -863,57 +864,60 @@ public class UtilJavaDAO {
 
 		java += "\n\t\tString levelString = (filtro.getLevel() > 0) ? \"_\" + filtro.getLevel() : \"\";";
 
-//		java += "\n\t\tString orderByString = (filtro.getOrderBy() == null) ? \"\" : \"_\" + filtro.getOrderBy();";		
-		java += "\n\t\tString orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals(\"id\")) ? \"\" : \"_\" + filtro.getOrderBy();";
-		
-		java += "\n\t\tString orderByASCString = \"\";";
-		java += "\n\t\tif(orderByString != null && orderByString.trim().length() > 0) {";
-		java += "\n";
-		java += "\n\t\t\torderByString = \"" + clazzX.getName() + "\" + orderByString;";
-		java += "\n\t\t\torderByASCString = \"_asc_\";";
-		java += "\n\t\t\tif(filtro.getOrderByDesc() == true) {";
-		java += "\n\t\t\t\torderByASCString = \"_des_\";";
-		java += "\n\t\t\t}";
-		java += "\n\t\t\torderByString = orderByASCString + orderByString;";		
-		java += "\n\t\t}";
-		
-//		java += "\n\t\t";
-		
+		/*
+		 * // java += "\n\t\tString orderByString = (filtro.getOrderBy() == null) ? \"\"
+		 * : // \"_\" + filtro.getOrderBy();"; java +=
+		 * "\n\t\tString orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals(\"id\")) ? \"\" : \"_\" + filtro.getOrderBy();"
+		 * ;
+		 * 
+		 * java += "\n\t\tString orderByASCString = \"\";"; java +=
+		 * "\n\t\tif(orderByString != null && orderByString.trim().length() > 0) {";
+		 * java += "\n"; java += "\n\t\t\torderByString = \"" + clazzX.getName() +
+		 * "\" + orderByString;"; java += "\n\t\t\torderByASCString = \"_asc_\";"; java
+		 * += "\n\t\t\tif(filtro.getOrderByDesc() == true) {"; java +=
+		 * "\n\t\t\t\torderByASCString = \"_des_\";"; java += "\n\t\t\t}"; java +=
+		 * "\n\t\t\torderByString = orderByASCString + orderByString;"; java +=
+		 * "\n\t\t}";
+		 */
 
-//		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?, \";";	
-		java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?, ?";
-		
-		boolean paramsCount = false;
-		
-		for (int i = 0; i < clazzX.getArgs().size(); i++) {
+		// java += "\n\t\t";
 
-			Argument arg = clazzX.getArgs().get(i);
-			
-			if(arg.getOnlyVisual() == true) {
-				continue;
-			}
-			
-			paramsCount = true;
-			
-			break;
-		}
-		
-		if(paramsCount) {
-			java += ", \";";	
-		} else {
-			java += "\";";	
-		}
+		// java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?,
+		// ?, \";";
+		// java += "\n\t\tString params = (filtro.getUnlimited() == true) ? \"\" : \"?,
+		// ?";
+
+		// boolean paramsCount = false;
+
+		// for (int i = 0; i < clazzX.getArgs().size(); i++) {
+		//
+		// Argument arg = clazzX.getArgs().get(i);
+		//
+		// if (arg.getOnlyVisual() == true) {
+		// continue;
+		// }
+		//
+		// paramsCount = true;
+		//
+		// break;
+		// }
+
+		// if (paramsCount) {
+		// java += ", \";";
+		// } else {
+		// java += "\";";
+		// }
 
 		java += "\n";
 
 		java += "\n\t\tString sql = \"SELECT * FROM massoftware.f_" + clazzX.getName()
-				+ "\" + orderByString + levelString + \"(\" + params + \"";
+				+ "\" + levelString + \"(?, ?, ?, ?, ?, ";
 
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
-			
-			if(arg.getOnlyVisual() == true) {
+
+			if (arg.getOnlyVisual() == true) {
 				continue;
 			}
 
@@ -995,17 +999,21 @@ public class UtilJavaDAO {
 
 					java += (i == 0) ? "?" : ", ?";
 
-					// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
-					//
-					// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE))
-					// {
-					//
-					// } else if
-					// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
-					//
-					// } else if
-					// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE))
-					// {
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
+
+					java += (i == 0) ? "?" : ", ?";
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE)) {
+
+					java += (i == 0) ? "?" : ", ?";
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
+
+					java += (i == 0) ? "?" : ", ?";
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE)) {
+
+					java += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND)) {
 
@@ -1013,7 +1021,7 @@ public class UtilJavaDAO {
 
 					for (int j = 0; j < 4; j++) {
 
-						java += (i == 0) ? "?" : ", ?";
+						// java += (i == 0) ? "?" : ", ?";
 					}
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_TRASLATE)) {
@@ -1031,7 +1039,7 @@ public class UtilJavaDAO {
 
 					for (int j = 0; j < 4; j++) {
 
-						java += (i == 0) ? "?" : ", ?";
+						// java += (i == 0) ? "?" : ", ?";
 					}
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
@@ -1040,7 +1048,7 @@ public class UtilJavaDAO {
 
 					for (int j = 0; j < 4; j++) {
 
-						java += (i == 0) ? "?" : ", ?";
+						// java += (i == 0) ? "?" : ", ?";
 					}
 
 				}
@@ -1058,8 +1066,8 @@ public class UtilJavaDAO {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
-			
-			if(arg.getOnlyVisual() == true) {
+
+			if (arg.getOnlyVisual() == true) {
 				continue;
 			}
 
@@ -1205,77 +1213,113 @@ public class UtilJavaDAO {
 						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
 								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
-						// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
-						//
-						// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE))
-						// {
-						//
-						// } else if
-						// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
-						//
-						// } else if
-						// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE))
-						// {
+					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
+
+						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+
+					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE)) {
+
+						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+
+					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
+
+						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+
+					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE)) {
+
+						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
 					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND)) {
 
 						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
 
-						args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
-								+ " == null ) ? new String[0] : " + n + ".split(\" \");";
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
-						for (int j = 0; j < 5; j++) {
-
-							args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
-									+ "Words.length > " + j + " && " + arg.getName() + "Words[" + j
-									+ "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
-									+ arg.getDataType().getName().replace("java.lang.", "") + ".class;";
-						}
+						// String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+						//
+						// args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
+						// + " == null ) ? new String[0] : " + n + ".split(\" \");";
+						//
+						// for (int j = 0; j < 5; j++) {
+						//
+						// args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
+						// + "Words.length > " + j + " && " + arg.getName() + "Words[" + j
+						// + "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
+						// + arg.getDataType().getName().replace("java.lang.", "") + ".class;";
+						// }
 
 					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_TRASLATE)) {
 
 						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
 
-						args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
-								+ " == null ) ? new String[0] : " + n + ".split(\" \");";
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
-						for (int j = 0; j < 5; j++) {
-
-							args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
-									+ "Words.length > " + j + " && " + arg.getName() + "Words[" + j
-									+ "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
-									+ arg.getDataType().getName().replace("java.lang.", "") + ".class;";
-						}
+						// String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+						//
+						// args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
+						// + " == null ) ? new String[0] : " + n + ".split(\" \");";
+						//
+						// for (int j = 0; j < 5; j++) {
+						//
+						// args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
+						// + "Words.length > " + j + " && " + arg.getName() + "Words[" + j
+						// + "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
+						// + arg.getDataType().getName().replace("java.lang.", "") + ".class;";
+						// }
 
 					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE)) {
 
 						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
 
-						args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
-								+ " == null ) ? new String[0] : " + n + ".split(\" \");";
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
-						for (int j = 0; j < 5; j++) {
-
-							args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
-									+ "Words.length > " + j + " && " + arg.getName() + "Words[" + j
-									+ "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
-									+ arg.getDataType().getName().replace("java.lang.", "") + ".class;";
-						}
+						// String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+						//
+						// args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
+						// + " == null ) ? new String[0] : " + n + ".split(\" \");";
+						//
+						// for (int j = 0; j < 5; j++) {
+						//
+						// args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
+						// + "Words.length > " + j + " && " + arg.getName() + "Words[" + j
+						// + "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
+						// + arg.getDataType().getName().replace("java.lang.", "") + ".class;";
+						// }
 
 					} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
 
 						String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
 
-						args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
-								+ " == null ) ? new String[0] : " + n + ".split(\" \");";
+						args += sc + "Object " + arg.getName() + " = ( " + n + " == null ) ? "
+								+ arg.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
 
-						for (int j = 0; j < 5; j++) {
-
-							args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
-									+ "Words.length > " + j + " && " + arg.getName() + "Words[" + j
-									+ "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
-									+ arg.getDataType().getName().replace("java.lang.", "") + ".class;";
-						}
+						// String n = "filtro.get" + toCamelStart(arg.getName()) + "()";
+						//
+						// args += "\n" + sc + "String[] " + arg.getName() + "Words = ( " + n
+						// + " == null ) ? new String[0] : " + n + ".split(\" \");";
+						//
+						// for (int j = 0; j < 5; j++) {
+						//
+						// args += sc + "Object " + arg.getName() + "Word" + j + " = ( " + arg.getName()
+						// + "Words.length > " + j + " && " + arg.getName() + "Words[" + j
+						// + "].trim().length() > 0) ? " + arg.getName() + "Words[" + j + "].trim() : "
+						// + arg.getDataType().getName().replace("java.lang.", "") + ".class;";
+						// }
 
 					}
 
@@ -1309,8 +1353,8 @@ public class UtilJavaDAO {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
 			Argument arg = clazzX.getArgs().get(i);
-			
-			if(arg.getOnlyVisual() == true) {
+
+			if (arg.getOnlyVisual() == true) {
 				continue;
 			}
 
@@ -1413,49 +1457,69 @@ public class UtilJavaDAO {
 					javaArgs += (i == 0) ? "" : ", ";
 					javaArgs += arg.getName();
 
-					// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
-					//
-					// } else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE))
-					// {
-					//
-					// } else if
-					// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
-					//
-					// } else if
-					// (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE))
-					// {
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
+
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE)) {
+
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
+
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
+
+				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE)) {
+
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND)) {
 
-					for (int j = 0; j < 5; j++) {
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
 
-						javaArgs += (i == 0) ? "" : ", ";
-						javaArgs += arg.getName() + "Word" + j;
-					}
+					// for (int j = 0; j < 5; j++) {
+					//
+					// javaArgs += (i == 0) ? "" : ", ";
+					// javaArgs += arg.getName() + "Word" + j;
+					// }
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_TRASLATE)) {
 
-					for (int j = 0; j < 5; j++) {
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
 
-						javaArgs += (i == 0) ? "" : ", ";
-						javaArgs += arg.getName() + "Word" + j;
-					}
+					// for (int j = 0; j < 5; j++) {
+					//
+					// javaArgs += (i == 0) ? "" : ", ";
+					// javaArgs += arg.getName() + "Word" + j;
+					// }
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE)) {
 
-					for (int j = 0; j < 5; j++) {
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
 
-						javaArgs += (i == 0) ? "" : ", ";
-						javaArgs += arg.getName() + "Word" + j;
-					}
+					// for (int j = 0; j < 5; j++) {
+					//
+					// javaArgs += (i == 0) ? "" : ", ";
+					// javaArgs += arg.getName() + "Word" + j;
+					// }
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
 
-					for (int j = 0; j < 5; j++) {
+					javaArgs += (i == 0) ? "" : ", ";
+					javaArgs += arg.getName();
 
-						javaArgs += (i == 0) ? "" : ", ";
-						javaArgs += arg.getName() + "Word" + j;
-					}
+					// for (int j = 0; j < 5; j++) {
+					//
+					// javaArgs += (i == 0) ? "" : ", ";
+					// javaArgs += arg.getName() + "Word" + j;
+					// }
 
 				}
 
@@ -1475,20 +1539,29 @@ public class UtilJavaDAO {
 
 		java += "\n\t\tif(filtro.getUnlimited()){";
 
-		java += "\n\t\t\targs = new Object[] {" + javaArgs + "};";
+		java += "\n\t\t\targs = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null";
 
-		java += "\n\t\t} else {";
-		
-//		java += "\n\t\t\targs = new Object[] {filtro.getLimit(), filtro.getOffset(), " + javaArgs + "};";
-		java += "\n\t\t\targs = new Object[] {filtro.getLimit(), filtro.getOffset()";
-		
-		if(paramsCount) {
-			java += ", " + javaArgs + "};";	
+		if (javaArgs != null && javaArgs.trim().length() > 0) {
+			java += ", " + javaArgs + "};";
 		} else {
-			java += javaArgs + "};";	
+			java += "};";
 		}
 
-		
+		java += "\n\t\t} else {";
+
+		java += "\n\t\t\targs = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset()";
+
+		if (javaArgs != null && javaArgs.trim().length() > 0) {
+			java += ", " + javaArgs + "};";
+		} else {
+			java += "};";
+		}
+
+		// if (paramsCount) {
+		// java += ", " + javaArgs + "};";
+		// } else {
+		// java += javaArgs + "};";
+		// }
 
 		java += "\n\t\t}";
 
@@ -1585,6 +1658,11 @@ public class UtilJavaDAO {
 				if (level < maxLevel) {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 					buildMapper(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
+				} else {
+					java = "String " + att.getName()
+							+ att.getClazz().getName() + "Arg" + fields.size() + " = (String) row[++c]; // " + att.getDataType().getName().replace("java.lang.", "") + ".id";
+
+					fields.add(java);
 				}
 
 			}
@@ -1631,7 +1709,7 @@ public class UtilJavaDAO {
 
 		buildMapper(maxLevel, level, clazzX, fieldsSQL);
 
-		java += "\n\n\t\t\tif(row.length == " + fieldsSQL.size() + ") {";
+		java += "\n\n\t\t\tif(row.length == " + (fieldsSQL.size() + 0) + ") {";
 
 		java += "\n\n\t\t\t\t" + clazzX.getName() + " obj = mapper" + fieldsSQL.size() + "Fields(row);";
 		java += "\n\n\t\t\t\tobj._originalDTO = (EntityId) obj.clone();";
@@ -1729,6 +1807,12 @@ public class UtilJavaDAO {
 				if (level < maxLevel) {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 					buildMapperArgs(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
+				} else {
+
+					 java = att.getName() + att.getClazz().getName() + "Arg" + fields.size();
+
+					 fields.add(java);
+
 				}
 
 			}

@@ -241,7 +241,8 @@ public class UtilJavaForm {
 
 				java += sc3 + att.getName() + "Filtro.setUnlimited(true);";
 
-				java += sc3 + att.getName() + "Filtro.setOrderBy(\"" + clazzX.getAtts().get(0).getName() + "\");";
+//				java += sc3 + att.getName() + "Filtro.setOrderBy(\"" + clazzX.getAtts().get(0).getName() + "\");";
+				java += sc3 + att.getName() + "Filtro.setOrderBy(1);";
 
 				java += sc3 + "List<" + att.getDataType().getName().replaceAll("java.lang", "") + "> " + att.getName()
 						+ "Lista = " + att.getName() + "DAO.find(" + att.getName() + "Filtro);";

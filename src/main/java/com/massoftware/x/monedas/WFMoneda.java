@@ -136,7 +136,7 @@ public class WFMoneda extends WindowForm {
 
 			monedaAFIPFiltro.setUnlimited(true);
 
-			monedaAFIPFiltro.setOrderBy("numero");
+			monedaAFIPFiltro.setOrderBy(1);
 
 			List<MonedaAFIP> monedaAFIPLista = monedaAFIPDAO.find(monedaAFIPFiltro);
 

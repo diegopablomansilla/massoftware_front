@@ -112,7 +112,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 			clasificacionClienteFiltro.setUnlimited(true);
 
-			clasificacionClienteFiltro.setOrderBy("numero");
+			clasificacionClienteFiltro.setOrderBy(1);
 
 			List<ClasificacionCliente> clasificacionClienteLista = clasificacionClienteDAO.find(clasificacionClienteFiltro);
 

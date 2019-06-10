@@ -32,27 +32,27 @@ public class Carga extends EntityId {
 	public Carga() throws Exception {
 	}
 
-	public Carga(String idArg0, Integer numeroArg1, String nombreArg2) throws Exception {
+	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idTransporteArg3) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2);
-
-	}
-
-	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String domicilioArg10, String comentarioArg11) throws Exception {
-
-		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, domicilioArg10, comentarioArg11);
+		setter(idArg0, numeroArg1, nombreArg2, idTransporteArg3);
 
 	}
 
-	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String domicilioArg15, String comentarioArg16) throws Exception {
+	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idCodigoPostalArg10, String domicilioArg11, String comentarioArg12) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, idArg10, codigoArg11, numeroArg12, nombreCalleArg13, numeroCalleArg14, domicilioArg15, comentarioArg16);
+		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, idCodigoPostalArg10, domicilioArg11, comentarioArg12);
 
 	}
 
-	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String domicilioArg20, String comentarioArg21) throws Exception {
+	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idCiudadArg15, String domicilioArg16, String comentarioArg17) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, idArg10, codigoArg11, numeroArg12, nombreCalleArg13, numeroCalleArg14, idArg15, numeroArg16, nombreArg17, departamentoArg18, numeroAFIPArg19, domicilioArg20, comentarioArg21);
+		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, idArg10, codigoArg11, numeroArg12, nombreCalleArg13, numeroCalleArg14, idCiudadArg15, domicilioArg16, comentarioArg17);
+
+	}
+
+	public Carga(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String idProvinciaArg20, String domicilioArg21, String comentarioArg22) throws Exception {
+
+		setter(idArg0, numeroArg1, nombreArg2, idArg3, numeroArg4, nombreArg5, cuitArg6, ingresosBrutosArg7, telefonoArg8, faxArg9, idArg10, codigoArg11, numeroArg12, nombreCalleArg13, numeroCalleArg14, idArg15, numeroArg16, nombreArg17, departamentoArg18, numeroAFIPArg19, idProvinciaArg20, domicilioArg21, comentarioArg22);
 
 	}
 
@@ -110,18 +110,19 @@ public class Carga extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idTransporteArg3) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
 		this.setNombre(nombreArg2);
+		this.buildTransporte().setId(idTransporteArg3);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String domicilioArg10, String comentarioArg11) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idCodigoPostalArg10, String domicilioArg11, String comentarioArg12) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -133,15 +134,16 @@ public class Carga extends EntityId {
 		this.buildTransporte().setIngresosBrutos(ingresosBrutosArg7);
 		this.buildTransporte().setTelefono(telefonoArg8);
 		this.buildTransporte().setFax(faxArg9);
-		this.buildTransporte().setDomicilio(domicilioArg10);
-		this.buildTransporte().setComentario(comentarioArg11);
+		this.buildTransporte().buildCodigoPostal().setId(idCodigoPostalArg10);
+		this.buildTransporte().setDomicilio(domicilioArg11);
+		this.buildTransporte().setComentario(comentarioArg12);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String domicilioArg15, String comentarioArg16) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idCiudadArg15, String domicilioArg16, String comentarioArg17) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -158,15 +160,16 @@ public class Carga extends EntityId {
 		this.buildTransporte().buildCodigoPostal().setNumero(numeroArg12);
 		this.buildTransporte().buildCodigoPostal().setNombreCalle(nombreCalleArg13);
 		this.buildTransporte().buildCodigoPostal().setNumeroCalle(numeroCalleArg14);
-		this.buildTransporte().setDomicilio(domicilioArg15);
-		this.buildTransporte().setComentario(comentarioArg16);
+		this.buildTransporte().buildCodigoPostal().buildCiudad().setId(idCiudadArg15);
+		this.buildTransporte().setDomicilio(domicilioArg16);
+		this.buildTransporte().setComentario(comentarioArg17);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String domicilioArg20, String comentarioArg21) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idArg3, Integer numeroArg4, String nombreArg5, Long cuitArg6, String ingresosBrutosArg7, String telefonoArg8, String faxArg9, String idArg10, String codigoArg11, Integer numeroArg12, String nombreCalleArg13, String numeroCalleArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String idProvinciaArg20, String domicilioArg21, String comentarioArg22) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -188,8 +191,9 @@ public class Carga extends EntityId {
 		this.buildTransporte().buildCodigoPostal().buildCiudad().setNombre(nombreArg17);
 		this.buildTransporte().buildCodigoPostal().buildCiudad().setDepartamento(departamentoArg18);
 		this.buildTransporte().buildCodigoPostal().buildCiudad().setNumeroAFIP(numeroAFIPArg19);
-		this.buildTransporte().setDomicilio(domicilioArg20);
-		this.buildTransporte().setComentario(comentarioArg21);
+		this.buildTransporte().buildCodigoPostal().buildCiudad().buildProvincia().setId(idProvinciaArg20);
+		this.buildTransporte().setDomicilio(domicilioArg21);
+		this.buildTransporte().setComentario(comentarioArg22);
 
 	}
 

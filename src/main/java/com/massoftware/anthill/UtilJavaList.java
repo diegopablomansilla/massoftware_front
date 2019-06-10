@@ -190,7 +190,7 @@ public class UtilJavaList {
 
 				java += sc2 + "long " + arg.getName() + "Items = " + arg.getName() + "DAO.count();";
 
-				java += sc2 + "if (" + arg.getName() + "Items < 300) {";
+				java += sc2 + "if (" + arg.getName() + "Items < MAX_ROWS_FOR_CBX) {";
 
 				java += sc3 + arg.getDataType().getName() + "Filtro " + arg.getName() + "Filtro = new "
 						+ arg.getDataType().getName() + "Filtro();";
@@ -199,7 +199,8 @@ public class UtilJavaList {
 				
 				DataTypeClazz dtArg = (DataTypeClazz) arg.getDataType();
 				
-				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + dtArg.getClazz().getAtts().get(0).getName() + "\");";
+//				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + dtArg.getClazz().getAtts().get(0).getName() + "\");";
+				java += sc3 + arg.getName() + "Filtro.setOrderBy(1);";
 
 				java += sc3 + "List<" + arg.getDataType().getName().replaceAll("java.lang", "") + "> " + arg.getName()
 						+ "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";

@@ -76,13 +76,13 @@ public class WFCiudadCustom extends WFCiudad {
 
 		long items = provinciaDAO.count();
 
-		if (items < 300) {
+		if (items < this.MAX_ROWS_FOR_CBX) {
 
 			ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
 			provinciaFiltro.setUnlimited(true);
 
-			provinciaFiltro.setOrderBy("numero");
+			provinciaFiltro.setOrderBy(1);
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 

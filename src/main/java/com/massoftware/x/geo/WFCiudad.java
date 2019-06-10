@@ -122,7 +122,7 @@ public class WFCiudad extends WindowForm {
 
 			provinciaFiltro.setUnlimited(true);
 
-			provinciaFiltro.setOrderBy("numero");
+			provinciaFiltro.setOrderBy(1);
 
 			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
 

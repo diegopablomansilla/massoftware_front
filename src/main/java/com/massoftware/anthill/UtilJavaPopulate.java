@@ -282,7 +282,8 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += att.getName() + "Filtro.setLimit(" + att.getName() + "Index);";
+//				java += att.getName() + "Filtro.setLimit(" + att.getName() + "Index);";
+				java += att.getName() + "Filtro.setLimit(1L);";
 
 				java += "\n";
 				java += "\t";
@@ -326,7 +327,50 @@ public class UtilJavaPopulate {
 		java += "\t";
 		java += "\t";
 		java += "\t";
-		java += "} catch (Exception e) {}";
+		java += "} catch (org.cendra.jdbc.SQLExceptionWrapper e) {";
+		
+		
+//		System.out.println(e.getSQLState());
+//		
+//		if("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) ) {					
+//				
+//		} else {
+//			throw e;
+//		}
+		
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "if((\"23505\".equals(e.getSQLState()) || \"23502\".equals(e.getSQLState()) || \"23514\".equals(e.getSQLState()) ) == false ) {	";
+		
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "throw e;";
+		
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "}";
+		
+		java += "\n";
+		java += "\n";
+		java += "\t";
+		java += "\t";
+		java += "\t";
+		java += "}";
+		
+		
 
 		java += "\n";
 		java += "\n";

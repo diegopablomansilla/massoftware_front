@@ -19,7 +19,7 @@ public class AbstractFilter extends Entity {
 	private Long offset;
 
 	@FieldConfAnont(label = "Order by att")
-	private String orderBy;
+	private Integer orderBy = 1;
 
 	@FieldConfAnont(label = "Order by desc")
 	private Boolean orderByDesc = false;
@@ -63,13 +63,13 @@ public class AbstractFilter extends Entity {
 	}
 
 	// GET Order by att
-	public String getOrderBy() {
+	public Integer getOrderBy() {
 		return this.orderBy;
 	}
 
 	// SET Order by att
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
+	public void setOrderBy(Integer orderBy) {		
+		this.orderBy = (orderBy == null) ? 1 : orderBy;
 	}
 
 	// GET Order by desc

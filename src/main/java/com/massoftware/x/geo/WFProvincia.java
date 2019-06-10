@@ -136,7 +136,7 @@ public class WFProvincia extends WindowForm {
 
 			paisFiltro.setUnlimited(true);
 
-			paisFiltro.setOrderBy("numero");
+			paisFiltro.setOrderBy(1);
 
 			List<Pais> paisLista = paisDAO.find(paisFiltro);
 

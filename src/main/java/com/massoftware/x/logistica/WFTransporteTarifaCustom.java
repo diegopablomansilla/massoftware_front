@@ -56,7 +56,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 			cargaFiltro.setUnlimited(true);
 
-			cargaFiltro.setOrderBy("numero");
+			cargaFiltro.setOrderBy(1);
 
 			List<Carga> cargaLista = cargaDAO.find(cargaFiltro);
 
@@ -143,7 +143,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 			ciudadFiltro.setUnlimited(true);
 
-			ciudadFiltro.setOrderBy("numero");
+			ciudadFiltro.setOrderBy(1);
 
 			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
 

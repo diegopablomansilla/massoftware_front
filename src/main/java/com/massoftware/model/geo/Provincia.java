@@ -48,9 +48,9 @@ public class Provincia extends EntityId {
 	public Provincia() throws Exception {
 	}
 
-	public Provincia(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, Integer numeroAFIPArg4, Integer numeroIngresosBrutosArg5, Integer numeroRENATEAArg6) throws Exception {
+	public Provincia(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, Integer numeroAFIPArg4, Integer numeroIngresosBrutosArg5, Integer numeroRENATEAArg6, String idPaisArg7) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, abreviaturaArg3, numeroAFIPArg4, numeroIngresosBrutosArg5, numeroRENATEAArg6);
+		setter(idArg0, numeroArg1, nombreArg2, abreviaturaArg3, numeroAFIPArg4, numeroIngresosBrutosArg5, numeroRENATEAArg6, idPaisArg7);
 
 	}
 
@@ -155,7 +155,7 @@ public class Provincia extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, Integer numeroAFIPArg4, Integer numeroIngresosBrutosArg5, Integer numeroRENATEAArg6) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, Integer numeroAFIPArg4, Integer numeroIngresosBrutosArg5, Integer numeroRENATEAArg6, String idPaisArg7) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -164,6 +164,7 @@ public class Provincia extends EntityId {
 		this.setNumeroAFIP(numeroAFIPArg4);
 		this.setNumeroIngresosBrutos(numeroIngresosBrutosArg5);
 		this.setNumeroRENATEA(numeroRENATEAArg6);
+		this.buildPais().setId(idPaisArg7);
 
 	}
 

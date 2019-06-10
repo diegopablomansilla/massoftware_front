@@ -40,15 +40,15 @@ public class Ciudad extends EntityId {
 	public Ciudad() throws Exception {
 	}
 
-	public Ciudad(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4) throws Exception {
+	public Ciudad(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idProvinciaArg5) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, departamentoArg3, numeroAFIPArg4);
+		setter(idArg0, numeroArg1, nombreArg2, departamentoArg3, numeroAFIPArg4, idProvinciaArg5);
 
 	}
 
-	public Ciudad(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idArg5, Integer numeroArg6, String nombreArg7, String abreviaturaArg8, Integer numeroAFIPArg9, Integer numeroIngresosBrutosArg10, Integer numeroRENATEAArg11) throws Exception {
+	public Ciudad(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idArg5, Integer numeroArg6, String nombreArg7, String abreviaturaArg8, Integer numeroAFIPArg9, Integer numeroIngresosBrutosArg10, Integer numeroRENATEAArg11, String idPaisArg12) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, departamentoArg3, numeroAFIPArg4, idArg5, numeroArg6, nombreArg7, abreviaturaArg8, numeroAFIPArg9, numeroIngresosBrutosArg10, numeroRENATEAArg11);
+		setter(idArg0, numeroArg1, nombreArg2, departamentoArg3, numeroAFIPArg4, idArg5, numeroArg6, nombreArg7, abreviaturaArg8, numeroAFIPArg9, numeroIngresosBrutosArg10, numeroRENATEAArg11, idPaisArg12);
 
 	}
 
@@ -133,20 +133,21 @@ public class Ciudad extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idProvinciaArg5) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
 		this.setNombre(nombreArg2);
 		this.setDepartamento(departamentoArg3);
 		this.setNumeroAFIP(numeroAFIPArg4);
+		this.buildProvincia().setId(idProvinciaArg5);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idArg5, Integer numeroArg6, String nombreArg7, String abreviaturaArg8, Integer numeroAFIPArg9, Integer numeroIngresosBrutosArg10, Integer numeroRENATEAArg11) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String departamentoArg3, Integer numeroAFIPArg4, String idArg5, Integer numeroArg6, String nombreArg7, String abreviaturaArg8, Integer numeroAFIPArg9, Integer numeroIngresosBrutosArg10, Integer numeroRENATEAArg11, String idPaisArg12) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -160,6 +161,7 @@ public class Ciudad extends EntityId {
 		this.buildProvincia().setNumeroAFIP(numeroAFIPArg9);
 		this.buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg10);
 		this.buildProvincia().setNumeroRENATEA(numeroRENATEAArg11);
+		this.buildProvincia().buildPais().setId(idPaisArg12);
 
 	}
 

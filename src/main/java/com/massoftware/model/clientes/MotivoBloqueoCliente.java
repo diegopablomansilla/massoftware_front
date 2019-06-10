@@ -32,9 +32,9 @@ public class MotivoBloqueoCliente extends EntityId {
 	public MotivoBloqueoCliente() throws Exception {
 	}
 
-	public MotivoBloqueoCliente(String idArg0, Integer numeroArg1, String nombreArg2) throws Exception {
+	public MotivoBloqueoCliente(String idArg0, Integer numeroArg1, String nombreArg2, String idClasificacionClienteArg3) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2);
+		setter(idArg0, numeroArg1, nombreArg2, idClasificacionClienteArg3);
 
 	}
 
@@ -98,11 +98,12 @@ public class MotivoBloqueoCliente extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String idClasificacionClienteArg3) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
 		this.setNombre(nombreArg2);
+		this.buildClasificacionCliente().setId(idClasificacionClienteArg3);
 
 	}
 

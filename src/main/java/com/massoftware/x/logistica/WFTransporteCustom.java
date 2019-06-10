@@ -43,7 +43,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 			codigoPostalFiltro.setUnlimited(true);
 
-			codigoPostalFiltro.setOrderBy("numero");
+			codigoPostalFiltro.setOrderBy(1);
 
 			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
 			codigoPostalCBX.setValues(codigoPostalLista, null);
@@ -107,7 +107,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 			codigoPostalFiltro.setUnlimited(true);
 
-			codigoPostalFiltro.setOrderBy("numero");
+			codigoPostalFiltro.setOrderBy(1);
 
 			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
 

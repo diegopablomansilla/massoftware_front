@@ -464,9 +464,9 @@ public class MonedaDAO {
 
 			Object[] row = table[0];
 
-			if(row.length == 7) {
+			if(row.length == 8) {
 
-				obj = mapper7Fields(row);
+				obj = mapper8Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -504,43 +504,19 @@ public class MonedaDAO {
 		List<Moneda> listado = new ArrayList<Moneda>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "Moneda" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
-
-		String sql = "SELECT * FROM massoftware.f_Moneda" + orderByString + levelString + "(" + params + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_Moneda" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();
-
-		String[] nombreWords = ( filtro.getNombre() == null ) ? new String[0] : filtro.getNombre().split(" ");
-		Object nombreWord0 = ( nombreWords.length > 0 && nombreWords[0].trim().length() > 0) ? nombreWords[0].trim() : String.class;
-		Object nombreWord1 = ( nombreWords.length > 1 && nombreWords[1].trim().length() > 0) ? nombreWords[1].trim() : String.class;
-		Object nombreWord2 = ( nombreWords.length > 2 && nombreWords[2].trim().length() > 0) ? nombreWords[2].trim() : String.class;
-		Object nombreWord3 = ( nombreWords.length > 3 && nombreWords[3].trim().length() > 0) ? nombreWords[3].trim() : String.class;
-		Object nombreWord4 = ( nombreWords.length > 4 && nombreWords[4].trim().length() > 0) ? nombreWords[4].trim() : String.class;
-
-		String[] abreviaturaWords = ( filtro.getAbreviatura() == null ) ? new String[0] : filtro.getAbreviatura().split(" ");
-		Object abreviaturaWord0 = ( abreviaturaWords.length > 0 && abreviaturaWords[0].trim().length() > 0) ? abreviaturaWords[0].trim() : String.class;
-		Object abreviaturaWord1 = ( abreviaturaWords.length > 1 && abreviaturaWords[1].trim().length() > 0) ? abreviaturaWords[1].trim() : String.class;
-		Object abreviaturaWord2 = ( abreviaturaWords.length > 2 && abreviaturaWords[2].trim().length() > 0) ? abreviaturaWords[2].trim() : String.class;
-		Object abreviaturaWord3 = ( abreviaturaWords.length > 3 && abreviaturaWords[3].trim().length() > 0) ? abreviaturaWords[3].trim() : String.class;
-		Object abreviaturaWord4 = ( abreviaturaWords.length > 4 && abreviaturaWords[4].trim().length() > 0) ? abreviaturaWords[4].trim() : String.class;
+		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();
+		Object abreviatura = ( filtro.getAbreviatura() == null ) ? String.class : filtro.getAbreviatura();
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4, abreviaturaWord0, abreviaturaWord1, abreviaturaWord2, abreviaturaWord3, abreviaturaWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null, numeroFrom, numeroTo, nombre, abreviatura};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4, abreviaturaWord0, abreviaturaWord1, abreviaturaWord2, abreviaturaWord3, abreviaturaWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombre, abreviatura};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
@@ -549,9 +525,9 @@ public class MonedaDAO {
 
 			Object[] row = table[i];
 
-			if(row.length == 7) {
+			if(row.length == 8) {
 
-				Moneda obj = mapper7Fields(row);
+				Moneda obj = mapper8Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -580,7 +556,7 @@ public class MonedaDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Moneda mapper7Fields(Object[] row) throws Exception {
+	private Moneda mapper8Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -591,8 +567,9 @@ public class MonedaDAO {
 		java.math.BigDecimal cotizacionMonedaArg4 = (java.math.BigDecimal) row[++c];
 		java.sql.Timestamp cotizacionFechaMonedaArg5 = (java.sql.Timestamp) row[++c];
 		Boolean controlActualizacionMonedaArg6 = (Boolean) row[++c];
+		String monedaAFIPMonedaArg7 = (String) row[++c]; // MonedaAFIP.id
 
-		Moneda obj = new Moneda(idMonedaArg0, numeroMonedaArg1, nombreMonedaArg2, abreviaturaMonedaArg3, cotizacionMonedaArg4, cotizacionFechaMonedaArg5, controlActualizacionMonedaArg6);
+		Moneda obj = new Moneda(idMonedaArg0, numeroMonedaArg1, nombreMonedaArg2, abreviaturaMonedaArg3, cotizacionMonedaArg4, cotizacionFechaMonedaArg5, controlActualizacionMonedaArg6, monedaAFIPMonedaArg7);
 
 		return obj;
 

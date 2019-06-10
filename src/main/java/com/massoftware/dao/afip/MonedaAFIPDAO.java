@@ -398,35 +398,17 @@ public class MonedaAFIPDAO {
 		List<MonedaAFIP> listado = new ArrayList<MonedaAFIP>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "MonedaAFIP" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
-
-		String sql = "SELECT * FROM massoftware.f_MonedaAFIP" + orderByString + levelString + "(" + params + "?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_MonedaAFIP" + levelString + "(?, ?, ?, ?, ?, ?, ?)";
 
 		Object codigo = ( filtro.getCodigo() == null ) ? String.class : filtro.getCodigo();
-
-		String[] nombreWords = ( filtro.getNombre() == null ) ? new String[0] : filtro.getNombre().split(" ");
-		Object nombreWord0 = ( nombreWords.length > 0 && nombreWords[0].trim().length() > 0) ? nombreWords[0].trim() : String.class;
-		Object nombreWord1 = ( nombreWords.length > 1 && nombreWords[1].trim().length() > 0) ? nombreWords[1].trim() : String.class;
-		Object nombreWord2 = ( nombreWords.length > 2 && nombreWords[2].trim().length() > 0) ? nombreWords[2].trim() : String.class;
-		Object nombreWord3 = ( nombreWords.length > 3 && nombreWords[3].trim().length() > 0) ? nombreWords[3].trim() : String.class;
-		Object nombreWord4 = ( nombreWords.length > 4 && nombreWords[4].trim().length() > 0) ? nombreWords[4].trim() : String.class;
+		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {codigo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null, codigo, nombre};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), codigo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset(), codigo, nombre};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);

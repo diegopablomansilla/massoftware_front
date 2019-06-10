@@ -421,17 +421,17 @@ public class CiudadDAO {
 
 			Object[] row = table[0];
 
-			if(row.length == 5) {
+			if(row.length == 6) {
 
-				obj = mapper5Fields(row);
+				obj = mapper6Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 12) {
+			} else if(row.length == 13) {
 
-				obj = mapper12Fields(row);
+				obj = mapper13Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -469,37 +469,19 @@ public class CiudadDAO {
 		List<Ciudad> listado = new ArrayList<Ciudad>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "Ciudad" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
-
-		String sql = "SELECT * FROM massoftware.f_Ciudad" + orderByString + levelString + "(" + params + "?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_Ciudad" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();
-
-		String[] nombreWords = ( filtro.getNombre() == null ) ? new String[0] : filtro.getNombre().split(" ");
-		Object nombreWord0 = ( nombreWords.length > 0 && nombreWords[0].trim().length() > 0) ? nombreWords[0].trim() : String.class;
-		Object nombreWord1 = ( nombreWords.length > 1 && nombreWords[1].trim().length() > 0) ? nombreWords[1].trim() : String.class;
-		Object nombreWord2 = ( nombreWords.length > 2 && nombreWords[2].trim().length() > 0) ? nombreWords[2].trim() : String.class;
-		Object nombreWord3 = ( nombreWords.length > 3 && nombreWords[3].trim().length() > 0) ? nombreWords[3].trim() : String.class;
-		Object nombreWord4 = ( nombreWords.length > 4 && nombreWords[4].trim().length() > 0) ? nombreWords[4].trim() : String.class;
+		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();
 		Object provincia = ( filtro.getProvincia() != null && filtro.getProvincia().getId() != null) ? filtro.getProvincia().getId() : String.class;
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4, provincia};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null, numeroFrom, numeroTo, nombre, provincia};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4, provincia};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombre, provincia};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
@@ -508,17 +490,17 @@ public class CiudadDAO {
 
 			Object[] row = table[i];
 
-			if(row.length == 5) {
+			if(row.length == 6) {
 
-				Ciudad obj = mapper5Fields(row);
+				Ciudad obj = mapper6Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 12) {
+			} else if(row.length == 13) {
 
-				Ciudad obj = mapper12Fields(row);
+				Ciudad obj = mapper13Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -547,7 +529,7 @@ public class CiudadDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Ciudad mapper5Fields(Object[] row) throws Exception {
+	private Ciudad mapper6Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -556,8 +538,9 @@ public class CiudadDAO {
 		String nombreCiudadArg2 = (String) row[++c];
 		String departamentoCiudadArg3 = (String) row[++c];
 		Integer numeroAFIPCiudadArg4 = (Integer) row[++c];
+		String provinciaCiudadArg5 = (String) row[++c]; // Provincia.id
 
-		Ciudad obj = new Ciudad(idCiudadArg0, numeroCiudadArg1, nombreCiudadArg2, departamentoCiudadArg3, numeroAFIPCiudadArg4);
+		Ciudad obj = new Ciudad(idCiudadArg0, numeroCiudadArg1, nombreCiudadArg2, departamentoCiudadArg3, numeroAFIPCiudadArg4, provinciaCiudadArg5);
 
 		return obj;
 
@@ -566,7 +549,7 @@ public class CiudadDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Ciudad mapper12Fields(Object[] row) throws Exception {
+	private Ciudad mapper13Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -582,8 +565,9 @@ public class CiudadDAO {
 		Integer numeroAFIPProvinciaArg9 = (Integer) row[++c];
 		Integer numeroIngresosBrutosProvinciaArg10 = (Integer) row[++c];
 		Integer numeroRENATEAProvinciaArg11 = (Integer) row[++c];
+		String paisProvinciaArg12 = (String) row[++c]; // Pais.id
 
-		Ciudad obj = new Ciudad(idCiudadArg0, numeroCiudadArg1, nombreCiudadArg2, departamentoCiudadArg3, numeroAFIPCiudadArg4, idProvinciaArg5, numeroProvinciaArg6, nombreProvinciaArg7, abreviaturaProvinciaArg8, numeroAFIPProvinciaArg9, numeroIngresosBrutosProvinciaArg10, numeroRENATEAProvinciaArg11);
+		Ciudad obj = new Ciudad(idCiudadArg0, numeroCiudadArg1, nombreCiudadArg2, departamentoCiudadArg3, numeroAFIPCiudadArg4, idProvinciaArg5, numeroProvinciaArg6, nombreProvinciaArg7, abreviaturaProvinciaArg8, numeroAFIPProvinciaArg9, numeroIngresosBrutosProvinciaArg10, numeroRENATEAProvinciaArg11, paisProvinciaArg12);
 
 		return obj;
 

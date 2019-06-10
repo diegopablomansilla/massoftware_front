@@ -58,58 +58,24 @@ public class Populate {
 
 	static int maxRows = 1000;
 
-	public static void main(String[] args) {
-		try {
+	public static void main(String[] args) throws Exception {
 			insertUsuario();
-		} catch (Exception e) {}
-		try {
 			insertZona();
-		} catch (Exception e) {}
-		try {
 			insertPais();
-		} catch (Exception e) {}
-		try {
 			insertProvincia();
-		} catch (Exception e) {}
-		try {
 			insertCiudad();
-		} catch (Exception e) {}
-		try {
 			insertCodigoPostal();
-		} catch (Exception e) {}
-		try {
 			insertTransporte();
-		} catch (Exception e) {}
-		try {
 			insertCarga();
-		} catch (Exception e) {}
-		try {
 			insertTransporteTarifa();
-		} catch (Exception e) {}
-		try {
 			insertTipoDocumentoAFIP();
-		} catch (Exception e) {}
-		try {
 			insertMonedaAFIP();
-		} catch (Exception e) {}
-		try {
 			insertMoneda();
-		} catch (Exception e) {}
-		try {
 			insertNotaCreditoMotivo();
-		} catch (Exception e) {}
-		try {
 			insertMotivoComentario();
-		} catch (Exception e) {}
-		try {
 			insertTipoCliente();
-		} catch (Exception e) {}
-		try {
 			insertClasificacionCliente();
-		} catch (Exception e) {}
-		try {
 			insertMotivoBloqueoCliente();
-		} catch (Exception e) {}
 	}
 
 
@@ -129,7 +95,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -157,7 +131,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -183,7 +165,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -218,13 +208,21 @@ public class Populate {
 				PaisFiltro paisFiltro = new PaisFiltro();
 				long paisIndex = UtilPopulate.getLongRandom(0L, paisCount-1);
 				paisFiltro.setOffset(paisIndex);
-				paisFiltro.setLimit(paisIndex);
+				paisFiltro.setLimit(1L);
 				List<Pais> paisListado = daoPais.find(paisFiltro);
 				obj.setPais(paisListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -255,13 +253,21 @@ public class Populate {
 				ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 				long provinciaIndex = UtilPopulate.getLongRandom(0L, provinciaCount-1);
 				provinciaFiltro.setOffset(provinciaIndex);
-				provinciaFiltro.setLimit(provinciaIndex);
+				provinciaFiltro.setLimit(1L);
 				List<Provincia> provinciaListado = daoProvincia.find(provinciaFiltro);
 				obj.setProvincia(provinciaListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -292,13 +298,21 @@ public class Populate {
 				CiudadFiltro ciudadFiltro = new CiudadFiltro();
 				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
 				ciudadFiltro.setOffset(ciudadIndex);
-				ciudadFiltro.setLimit(ciudadIndex);
+				ciudadFiltro.setLimit(1L);
 				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
 				obj.setCiudad(ciudadListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -333,7 +347,7 @@ public class Populate {
 				CodigoPostalFiltro codigoPostalFiltro = new CodigoPostalFiltro();
 				long codigoPostalIndex = UtilPopulate.getLongRandom(0L, codigoPostalCount-1);
 				codigoPostalFiltro.setOffset(codigoPostalIndex);
-				codigoPostalFiltro.setLimit(codigoPostalIndex);
+				codigoPostalFiltro.setLimit(1L);
 				List<CodigoPostal> codigoPostalListado = daoCodigoPostal.find(codigoPostalFiltro);
 				obj.setCodigoPostal(codigoPostalListado.get(0));
 
@@ -343,7 +357,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -370,13 +392,21 @@ public class Populate {
 				TransporteFiltro transporteFiltro = new TransporteFiltro();
 				long transporteIndex = UtilPopulate.getLongRandom(0L, transporteCount-1);
 				transporteFiltro.setOffset(transporteIndex);
-				transporteFiltro.setLimit(transporteIndex);
+				transporteFiltro.setLimit(1L);
 				List<Transporte> transporteListado = daoTransporte.find(transporteFiltro);
 				obj.setTransporte(transporteListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -403,14 +433,14 @@ public class Populate {
 				CargaFiltro cargaFiltro = new CargaFiltro();
 				long cargaIndex = UtilPopulate.getLongRandom(0L, cargaCount-1);
 				cargaFiltro.setOffset(cargaIndex);
-				cargaFiltro.setLimit(cargaIndex);
+				cargaFiltro.setLimit(1L);
 				List<Carga> cargaListado = daoCarga.find(cargaFiltro);
 				obj.setCarga(cargaListado.get(0));
 
 				CiudadFiltro ciudadFiltro = new CiudadFiltro();
 				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
 				ciudadFiltro.setOffset(ciudadIndex);
-				ciudadFiltro.setLimit(ciudadIndex);
+				ciudadFiltro.setLimit(1L);
 				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
 				obj.setCiudad(ciudadListado.get(0));
 
@@ -428,7 +458,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -452,7 +490,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -476,7 +522,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -511,13 +565,21 @@ public class Populate {
 				MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
 				long monedaAFIPIndex = UtilPopulate.getLongRandom(0L, monedaAFIPCount-1);
 				monedaAFIPFiltro.setOffset(monedaAFIPIndex);
-				monedaAFIPFiltro.setLimit(monedaAFIPIndex);
+				monedaAFIPFiltro.setLimit(1L);
 				List<MonedaAFIP> monedaAFIPListado = daoMonedaAFIP.find(monedaAFIPFiltro);
 				obj.setMonedaAFIP(monedaAFIPListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -541,7 +603,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -565,7 +635,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -589,7 +667,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -615,7 +701,15 @@ public class Populate {
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 
@@ -642,13 +736,21 @@ public class Populate {
 				ClasificacionClienteFiltro clasificacionClienteFiltro = new ClasificacionClienteFiltro();
 				long clasificacionClienteIndex = UtilPopulate.getLongRandom(0L, clasificacionClienteCount-1);
 				clasificacionClienteFiltro.setOffset(clasificacionClienteIndex);
-				clasificacionClienteFiltro.setLimit(clasificacionClienteIndex);
+				clasificacionClienteFiltro.setLimit(1L);
 				List<ClasificacionCliente> clasificacionClienteListado = daoClasificacionCliente.find(clasificacionClienteFiltro);
 				obj.setClasificacionCliente(clasificacionClienteListado.get(0));
 
 				dao.insert(obj);
 
-			} catch (Exception e) {}
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
 
 		}
 

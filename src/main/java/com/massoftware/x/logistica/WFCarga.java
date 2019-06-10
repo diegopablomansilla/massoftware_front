@@ -112,7 +112,7 @@ public class WFCarga extends WindowForm {
 
 			transporteFiltro.setUnlimited(true);
 
-			transporteFiltro.setOrderBy("numero");
+			transporteFiltro.setOrderBy(1);
 
 			List<Transporte> transporteLista = transporteDAO.find(transporteFiltro);
 

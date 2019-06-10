@@ -466,33 +466,33 @@ public class TransporteDAO {
 
 			Object[] row = table[0];
 
-			if(row.length == 9) {
+			if(row.length == 10) {
 
-				obj = mapper9Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				return obj;
-
-			} else if(row.length == 14) {
-
-				obj = mapper14Fields(row);
+				obj = mapper10Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 19) {
+			} else if(row.length == 15) {
 
-				obj = mapper19Fields(row);
+				obj = mapper15Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 26) {
+			} else if(row.length == 20) {
 
-				obj = mapper26Fields(row);
+				obj = mapper20Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				return obj;
+
+			} else if(row.length == 27) {
+
+				obj = mapper27Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -522,36 +522,18 @@ public class TransporteDAO {
 		List<Transporte> listado = new ArrayList<Transporte>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "Transporte" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
-
-		String sql = "SELECT * FROM massoftware.f_Transporte" + orderByString + levelString + "(" + params + "?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_Transporte" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();
-
-		String[] nombreWords = ( filtro.getNombre() == null ) ? new String[0] : filtro.getNombre().split(" ");
-		Object nombreWord0 = ( nombreWords.length > 0 && nombreWords[0].trim().length() > 0) ? nombreWords[0].trim() : String.class;
-		Object nombreWord1 = ( nombreWords.length > 1 && nombreWords[1].trim().length() > 0) ? nombreWords[1].trim() : String.class;
-		Object nombreWord2 = ( nombreWords.length > 2 && nombreWords[2].trim().length() > 0) ? nombreWords[2].trim() : String.class;
-		Object nombreWord3 = ( nombreWords.length > 3 && nombreWords[3].trim().length() > 0) ? nombreWords[3].trim() : String.class;
-		Object nombreWord4 = ( nombreWords.length > 4 && nombreWords[4].trim().length() > 0) ? nombreWords[4].trim() : String.class;
+		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null, numeroFrom, numeroTo, nombre};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombreWord0, nombreWord1, nombreWord2, nombreWord3, nombreWord4};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset(), numeroFrom, numeroTo, nombre};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
@@ -560,33 +542,33 @@ public class TransporteDAO {
 
 			Object[] row = table[i];
 
-			if(row.length == 9) {
+			if(row.length == 10) {
 
-				Transporte obj = mapper9Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				listado.add(obj);
-
-			} else if(row.length == 14) {
-
-				Transporte obj = mapper14Fields(row);
+				Transporte obj = mapper10Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 19) {
+			} else if(row.length == 15) {
 
-				Transporte obj = mapper19Fields(row);
+				Transporte obj = mapper15Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 26) {
+			} else if(row.length == 20) {
 
-				Transporte obj = mapper26Fields(row);
+				Transporte obj = mapper20Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				listado.add(obj);
+
+			} else if(row.length == 27) {
+
+				Transporte obj = mapper27Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -607,7 +589,7 @@ public class TransporteDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Transporte mapper9Fields(Object[] row) throws Exception {
+	private Transporte mapper10Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -618,10 +600,11 @@ public class TransporteDAO {
 		String ingresosBrutosTransporteArg4 = (String) row[++c];
 		String telefonoTransporteArg5 = (String) row[++c];
 		String faxTransporteArg6 = (String) row[++c];
-		String domicilioTransporteArg7 = (String) row[++c];
-		String comentarioTransporteArg8 = (String) row[++c];
+		String codigoPostalTransporteArg7 = (String) row[++c]; // CodigoPostal.id
+		String domicilioTransporteArg8 = (String) row[++c];
+		String comentarioTransporteArg9 = (String) row[++c];
 
-		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, domicilioTransporteArg7, comentarioTransporteArg8);
+		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, codigoPostalTransporteArg7, domicilioTransporteArg8, comentarioTransporteArg9);
 
 		return obj;
 
@@ -630,7 +613,7 @@ public class TransporteDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Transporte mapper14Fields(Object[] row) throws Exception {
+	private Transporte mapper15Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -646,10 +629,11 @@ public class TransporteDAO {
 		Integer numeroCodigoPostalArg9 = (Integer) row[++c];
 		String nombreCalleCodigoPostalArg10 = (String) row[++c];
 		String numeroCalleCodigoPostalArg11 = (String) row[++c];
-		String domicilioTransporteArg12 = (String) row[++c];
-		String comentarioTransporteArg13 = (String) row[++c];
+		String ciudadCodigoPostalArg12 = (String) row[++c]; // Ciudad.id
+		String domicilioTransporteArg13 = (String) row[++c];
+		String comentarioTransporteArg14 = (String) row[++c];
 
-		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, domicilioTransporteArg12, comentarioTransporteArg13);
+		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, ciudadCodigoPostalArg12, domicilioTransporteArg13, comentarioTransporteArg14);
 
 		return obj;
 
@@ -658,7 +642,7 @@ public class TransporteDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Transporte mapper19Fields(Object[] row) throws Exception {
+	private Transporte mapper20Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -679,10 +663,11 @@ public class TransporteDAO {
 		String nombreCiudadArg14 = (String) row[++c];
 		String departamentoCiudadArg15 = (String) row[++c];
 		Integer numeroAFIPCiudadArg16 = (Integer) row[++c];
-		String domicilioTransporteArg17 = (String) row[++c];
-		String comentarioTransporteArg18 = (String) row[++c];
+		String provinciaCiudadArg17 = (String) row[++c]; // Provincia.id
+		String domicilioTransporteArg18 = (String) row[++c];
+		String comentarioTransporteArg19 = (String) row[++c];
 
-		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, idCiudadArg12, numeroCiudadArg13, nombreCiudadArg14, departamentoCiudadArg15, numeroAFIPCiudadArg16, domicilioTransporteArg17, comentarioTransporteArg18);
+		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, idCiudadArg12, numeroCiudadArg13, nombreCiudadArg14, departamentoCiudadArg15, numeroAFIPCiudadArg16, provinciaCiudadArg17, domicilioTransporteArg18, comentarioTransporteArg19);
 
 		return obj;
 
@@ -691,7 +676,7 @@ public class TransporteDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private Transporte mapper26Fields(Object[] row) throws Exception {
+	private Transporte mapper27Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -719,10 +704,11 @@ public class TransporteDAO {
 		Integer numeroAFIPProvinciaArg21 = (Integer) row[++c];
 		Integer numeroIngresosBrutosProvinciaArg22 = (Integer) row[++c];
 		Integer numeroRENATEAProvinciaArg23 = (Integer) row[++c];
-		String domicilioTransporteArg24 = (String) row[++c];
-		String comentarioTransporteArg25 = (String) row[++c];
+		String paisProvinciaArg24 = (String) row[++c]; // Pais.id
+		String domicilioTransporteArg25 = (String) row[++c];
+		String comentarioTransporteArg26 = (String) row[++c];
 
-		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, idCiudadArg12, numeroCiudadArg13, nombreCiudadArg14, departamentoCiudadArg15, numeroAFIPCiudadArg16, idProvinciaArg17, numeroProvinciaArg18, nombreProvinciaArg19, abreviaturaProvinciaArg20, numeroAFIPProvinciaArg21, numeroIngresosBrutosProvinciaArg22, numeroRENATEAProvinciaArg23, domicilioTransporteArg24, comentarioTransporteArg25);
+		Transporte obj = new Transporte(idTransporteArg0, numeroTransporteArg1, nombreTransporteArg2, cuitTransporteArg3, ingresosBrutosTransporteArg4, telefonoTransporteArg5, faxTransporteArg6, idCodigoPostalArg7, codigoCodigoPostalArg8, numeroCodigoPostalArg9, nombreCalleCodigoPostalArg10, numeroCalleCodigoPostalArg11, idCiudadArg12, numeroCiudadArg13, nombreCiudadArg14, departamentoCiudadArg15, numeroAFIPCiudadArg16, idProvinciaArg17, numeroProvinciaArg18, nombreProvinciaArg19, abreviaturaProvinciaArg20, numeroAFIPProvinciaArg21, numeroIngresosBrutosProvinciaArg22, numeroRENATEAProvinciaArg23, paisProvinciaArg24, domicilioTransporteArg25, comentarioTransporteArg26);
 
 		return obj;
 

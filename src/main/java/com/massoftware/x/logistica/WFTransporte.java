@@ -138,7 +138,7 @@ public class WFTransporte extends WindowForm {
 
 			codigoPostalFiltro.setUnlimited(true);
 
-			codigoPostalFiltro.setOrderBy("numero");
+			codigoPostalFiltro.setOrderBy(1);
 
 			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
 

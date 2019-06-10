@@ -48,9 +48,9 @@ public class Moneda extends EntityId {
 	public Moneda() throws Exception {
 	}
 
-	public Moneda(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, java.math.BigDecimal cotizacionArg4, java.sql.Timestamp cotizacionFechaArg5, Boolean controlActualizacionArg6) throws Exception {
+	public Moneda(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, java.math.BigDecimal cotizacionArg4, java.sql.Timestamp cotizacionFechaArg5, Boolean controlActualizacionArg6, String idMonedaAFIPArg7) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, abreviaturaArg3, cotizacionArg4, cotizacionFechaArg5, controlActualizacionArg6);
+		setter(idArg0, numeroArg1, nombreArg2, abreviaturaArg3, cotizacionArg4, cotizacionFechaArg5, controlActualizacionArg6, idMonedaAFIPArg7);
 
 	}
 
@@ -155,7 +155,7 @@ public class Moneda extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, java.math.BigDecimal cotizacionArg4, java.sql.Timestamp cotizacionFechaArg5, Boolean controlActualizacionArg6) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, String abreviaturaArg3, java.math.BigDecimal cotizacionArg4, java.sql.Timestamp cotizacionFechaArg5, Boolean controlActualizacionArg6, String idMonedaAFIPArg7) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -164,6 +164,7 @@ public class Moneda extends EntityId {
 		this.setCotizacion(cotizacionArg4);
 		this.setCotizacionFecha(cotizacionFechaArg5);
 		this.setControlActualizacion(controlActualizacionArg6);
+		this.buildMonedaAFIP().setId(idMonedaAFIPArg7);
 
 	}
 

@@ -57,27 +57,27 @@ public class TransporteTarifa extends EntityId {
 	public TransporteTarifa() throws Exception {
 	}
 
-	public TransporteTarifa(String idArg0, Integer numeroArg1, java.math.BigDecimal precioFleteArg2, java.math.BigDecimal precioUnidadFacturacionArg3, java.math.BigDecimal precioUnidadStockArg4, java.math.BigDecimal precioBultosArg5, java.math.BigDecimal importeMinimoEntregaArg6, java.math.BigDecimal importeMinimoCargaArg7) throws Exception {
+	public TransporteTarifa(String idArg0, Integer numeroArg1, String idCargaArg2, String idCiudadArg3, java.math.BigDecimal precioFleteArg4, java.math.BigDecimal precioUnidadFacturacionArg5, java.math.BigDecimal precioUnidadStockArg6, java.math.BigDecimal precioBultosArg7, java.math.BigDecimal importeMinimoEntregaArg8, java.math.BigDecimal importeMinimoCargaArg9) throws Exception {
 
-		setter(idArg0, numeroArg1, precioFleteArg2, precioUnidadFacturacionArg3, precioUnidadStockArg4, precioBultosArg5, importeMinimoEntregaArg6, importeMinimoCargaArg7);
-
-	}
-
-	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, String departamentoArg8, Integer numeroAFIPArg9, java.math.BigDecimal precioFleteArg10, java.math.BigDecimal precioUnidadFacturacionArg11, java.math.BigDecimal precioUnidadStockArg12, java.math.BigDecimal precioBultosArg13, java.math.BigDecimal importeMinimoEntregaArg14, java.math.BigDecimal importeMinimoCargaArg15) throws Exception {
-
-		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idArg5, numeroArg6, nombreArg7, departamentoArg8, numeroAFIPArg9, precioFleteArg10, precioUnidadFacturacionArg11, precioUnidadStockArg12, precioBultosArg13, importeMinimoEntregaArg14, importeMinimoCargaArg15);
+		setter(idArg0, numeroArg1, idCargaArg2, idCiudadArg3, precioFleteArg4, precioUnidadFacturacionArg5, precioUnidadStockArg6, precioBultosArg7, importeMinimoEntregaArg8, importeMinimoCargaArg9);
 
 	}
 
-	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String domicilioArg12, String comentarioArg13, String idArg14, Integer numeroArg15, String nombreArg16, String departamentoArg17, Integer numeroAFIPArg18, String idArg19, Integer numeroArg20, String nombreArg21, String abreviaturaArg22, Integer numeroAFIPArg23, Integer numeroIngresosBrutosArg24, Integer numeroRENATEAArg25, java.math.BigDecimal precioFleteArg26, java.math.BigDecimal precioUnidadFacturacionArg27, java.math.BigDecimal precioUnidadStockArg28, java.math.BigDecimal precioBultosArg29, java.math.BigDecimal importeMinimoEntregaArg30, java.math.BigDecimal importeMinimoCargaArg31) throws Exception {
+	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idTransporteArg5, String idArg6, Integer numeroArg7, String nombreArg8, String departamentoArg9, Integer numeroAFIPArg10, String idProvinciaArg11, java.math.BigDecimal precioFleteArg12, java.math.BigDecimal precioUnidadFacturacionArg13, java.math.BigDecimal precioUnidadStockArg14, java.math.BigDecimal precioBultosArg15, java.math.BigDecimal importeMinimoEntregaArg16, java.math.BigDecimal importeMinimoCargaArg17) throws Exception {
 
-		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idArg5, numeroArg6, nombreArg7, cuitArg8, ingresosBrutosArg9, telefonoArg10, faxArg11, domicilioArg12, comentarioArg13, idArg14, numeroArg15, nombreArg16, departamentoArg17, numeroAFIPArg18, idArg19, numeroArg20, nombreArg21, abreviaturaArg22, numeroAFIPArg23, numeroIngresosBrutosArg24, numeroRENATEAArg25, precioFleteArg26, precioUnidadFacturacionArg27, precioUnidadStockArg28, precioBultosArg29, importeMinimoEntregaArg30, importeMinimoCargaArg31);
+		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idTransporteArg5, idArg6, numeroArg7, nombreArg8, departamentoArg9, numeroAFIPArg10, idProvinciaArg11, precioFleteArg12, precioUnidadFacturacionArg13, precioUnidadStockArg14, precioBultosArg15, importeMinimoEntregaArg16, importeMinimoCargaArg17);
 
 	}
 
-	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idArg12, String codigoArg13, Integer numeroArg14, String nombreCalleArg15, String numeroCalleArg16, String domicilioArg17, String comentarioArg18, String idArg19, Integer numeroArg20, String nombreArg21, String departamentoArg22, Integer numeroAFIPArg23, String idArg24, Integer numeroArg25, String nombreArg26, String abreviaturaArg27, Integer numeroAFIPArg28, Integer numeroIngresosBrutosArg29, Integer numeroRENATEAArg30, String idArg31, Integer numeroArg32, String nombreArg33, String abreviaturaArg34, java.math.BigDecimal precioFleteArg35, java.math.BigDecimal precioUnidadFacturacionArg36, java.math.BigDecimal precioUnidadStockArg37, java.math.BigDecimal precioBultosArg38, java.math.BigDecimal importeMinimoEntregaArg39, java.math.BigDecimal importeMinimoCargaArg40) throws Exception {
+	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idCodigoPostalArg12, String domicilioArg13, String comentarioArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String idArg20, Integer numeroArg21, String nombreArg22, String abreviaturaArg23, Integer numeroAFIPArg24, Integer numeroIngresosBrutosArg25, Integer numeroRENATEAArg26, String idPaisArg27, java.math.BigDecimal precioFleteArg28, java.math.BigDecimal precioUnidadFacturacionArg29, java.math.BigDecimal precioUnidadStockArg30, java.math.BigDecimal precioBultosArg31, java.math.BigDecimal importeMinimoEntregaArg32, java.math.BigDecimal importeMinimoCargaArg33) throws Exception {
 
-		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idArg5, numeroArg6, nombreArg7, cuitArg8, ingresosBrutosArg9, telefonoArg10, faxArg11, idArg12, codigoArg13, numeroArg14, nombreCalleArg15, numeroCalleArg16, domicilioArg17, comentarioArg18, idArg19, numeroArg20, nombreArg21, departamentoArg22, numeroAFIPArg23, idArg24, numeroArg25, nombreArg26, abreviaturaArg27, numeroAFIPArg28, numeroIngresosBrutosArg29, numeroRENATEAArg30, idArg31, numeroArg32, nombreArg33, abreviaturaArg34, precioFleteArg35, precioUnidadFacturacionArg36, precioUnidadStockArg37, precioBultosArg38, importeMinimoEntregaArg39, importeMinimoCargaArg40);
+		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idArg5, numeroArg6, nombreArg7, cuitArg8, ingresosBrutosArg9, telefonoArg10, faxArg11, idCodigoPostalArg12, domicilioArg13, comentarioArg14, idArg15, numeroArg16, nombreArg17, departamentoArg18, numeroAFIPArg19, idArg20, numeroArg21, nombreArg22, abreviaturaArg23, numeroAFIPArg24, numeroIngresosBrutosArg25, numeroRENATEAArg26, idPaisArg27, precioFleteArg28, precioUnidadFacturacionArg29, precioUnidadStockArg30, precioBultosArg31, importeMinimoEntregaArg32, importeMinimoCargaArg33);
+
+	}
+
+	public TransporteTarifa(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idArg12, String codigoArg13, Integer numeroArg14, String nombreCalleArg15, String numeroCalleArg16, String idCiudadArg17, String domicilioArg18, String comentarioArg19, String idArg20, Integer numeroArg21, String nombreArg22, String departamentoArg23, Integer numeroAFIPArg24, String idArg25, Integer numeroArg26, String nombreArg27, String abreviaturaArg28, Integer numeroAFIPArg29, Integer numeroIngresosBrutosArg30, Integer numeroRENATEAArg31, String idArg32, Integer numeroArg33, String nombreArg34, String abreviaturaArg35, java.math.BigDecimal precioFleteArg36, java.math.BigDecimal precioUnidadFacturacionArg37, java.math.BigDecimal precioUnidadStockArg38, java.math.BigDecimal precioBultosArg39, java.math.BigDecimal importeMinimoEntregaArg40, java.math.BigDecimal importeMinimoCargaArg41) throws Exception {
+
+		setter(idArg0, numeroArg1, idArg2, numeroArg3, nombreArg4, idArg5, numeroArg6, nombreArg7, cuitArg8, ingresosBrutosArg9, telefonoArg10, faxArg11, idArg12, codigoArg13, numeroArg14, nombreCalleArg15, numeroCalleArg16, idCiudadArg17, domicilioArg18, comentarioArg19, idArg20, numeroArg21, nombreArg22, departamentoArg23, numeroAFIPArg24, idArg25, numeroArg26, nombreArg27, abreviaturaArg28, numeroAFIPArg29, numeroIngresosBrutosArg30, numeroRENATEAArg31, idArg32, numeroArg33, nombreArg34, abreviaturaArg35, precioFleteArg36, precioUnidadFacturacionArg37, precioUnidadStockArg38, precioBultosArg39, importeMinimoEntregaArg40, importeMinimoCargaArg41);
 
 	}
 
@@ -201,47 +201,51 @@ public class TransporteTarifa extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, java.math.BigDecimal precioFleteArg2, java.math.BigDecimal precioUnidadFacturacionArg3, java.math.BigDecimal precioUnidadStockArg4, java.math.BigDecimal precioBultosArg5, java.math.BigDecimal importeMinimoEntregaArg6, java.math.BigDecimal importeMinimoCargaArg7) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String idCargaArg2, String idCiudadArg3, java.math.BigDecimal precioFleteArg4, java.math.BigDecimal precioUnidadFacturacionArg5, java.math.BigDecimal precioUnidadStockArg6, java.math.BigDecimal precioBultosArg7, java.math.BigDecimal importeMinimoEntregaArg8, java.math.BigDecimal importeMinimoCargaArg9) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
-		this.setPrecioFlete(precioFleteArg2);
-		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg3);
-		this.setPrecioUnidadStock(precioUnidadStockArg4);
-		this.setPrecioBultos(precioBultosArg5);
-		this.setImporteMinimoEntrega(importeMinimoEntregaArg6);
-		this.setImporteMinimoCarga(importeMinimoCargaArg7);
+		this.buildCarga().setId(idCargaArg2);
+		this.buildCiudad().setId(idCiudadArg3);
+		this.setPrecioFlete(precioFleteArg4);
+		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg5);
+		this.setPrecioUnidadStock(precioUnidadStockArg6);
+		this.setPrecioBultos(precioBultosArg7);
+		this.setImporteMinimoEntrega(importeMinimoEntregaArg8);
+		this.setImporteMinimoCarga(importeMinimoCargaArg9);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, String departamentoArg8, Integer numeroAFIPArg9, java.math.BigDecimal precioFleteArg10, java.math.BigDecimal precioUnidadFacturacionArg11, java.math.BigDecimal precioUnidadStockArg12, java.math.BigDecimal precioBultosArg13, java.math.BigDecimal importeMinimoEntregaArg14, java.math.BigDecimal importeMinimoCargaArg15) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idTransporteArg5, String idArg6, Integer numeroArg7, String nombreArg8, String departamentoArg9, Integer numeroAFIPArg10, String idProvinciaArg11, java.math.BigDecimal precioFleteArg12, java.math.BigDecimal precioUnidadFacturacionArg13, java.math.BigDecimal precioUnidadStockArg14, java.math.BigDecimal precioBultosArg15, java.math.BigDecimal importeMinimoEntregaArg16, java.math.BigDecimal importeMinimoCargaArg17) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
 		this.buildCarga().setId(idArg2);
 		this.buildCarga().setNumero(numeroArg3);
 		this.buildCarga().setNombre(nombreArg4);
-		this.buildCiudad().setId(idArg5);
-		this.buildCiudad().setNumero(numeroArg6);
-		this.buildCiudad().setNombre(nombreArg7);
-		this.buildCiudad().setDepartamento(departamentoArg8);
-		this.buildCiudad().setNumeroAFIP(numeroAFIPArg9);
-		this.setPrecioFlete(precioFleteArg10);
-		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg11);
-		this.setPrecioUnidadStock(precioUnidadStockArg12);
-		this.setPrecioBultos(precioBultosArg13);
-		this.setImporteMinimoEntrega(importeMinimoEntregaArg14);
-		this.setImporteMinimoCarga(importeMinimoCargaArg15);
+		this.buildCarga().buildTransporte().setId(idTransporteArg5);
+		this.buildCiudad().setId(idArg6);
+		this.buildCiudad().setNumero(numeroArg7);
+		this.buildCiudad().setNombre(nombreArg8);
+		this.buildCiudad().setDepartamento(departamentoArg9);
+		this.buildCiudad().setNumeroAFIP(numeroAFIPArg10);
+		this.buildCiudad().buildProvincia().setId(idProvinciaArg11);
+		this.setPrecioFlete(precioFleteArg12);
+		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg13);
+		this.setPrecioUnidadStock(precioUnidadStockArg14);
+		this.setPrecioBultos(precioBultosArg15);
+		this.setImporteMinimoEntrega(importeMinimoEntregaArg16);
+		this.setImporteMinimoCarga(importeMinimoCargaArg17);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String domicilioArg12, String comentarioArg13, String idArg14, Integer numeroArg15, String nombreArg16, String departamentoArg17, Integer numeroAFIPArg18, String idArg19, Integer numeroArg20, String nombreArg21, String abreviaturaArg22, Integer numeroAFIPArg23, Integer numeroIngresosBrutosArg24, Integer numeroRENATEAArg25, java.math.BigDecimal precioFleteArg26, java.math.BigDecimal precioUnidadFacturacionArg27, java.math.BigDecimal precioUnidadStockArg28, java.math.BigDecimal precioBultosArg29, java.math.BigDecimal importeMinimoEntregaArg30, java.math.BigDecimal importeMinimoCargaArg31) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idCodigoPostalArg12, String domicilioArg13, String comentarioArg14, String idArg15, Integer numeroArg16, String nombreArg17, String departamentoArg18, Integer numeroAFIPArg19, String idArg20, Integer numeroArg21, String nombreArg22, String abreviaturaArg23, Integer numeroAFIPArg24, Integer numeroIngresosBrutosArg25, Integer numeroRENATEAArg26, String idPaisArg27, java.math.BigDecimal precioFleteArg28, java.math.BigDecimal precioUnidadFacturacionArg29, java.math.BigDecimal precioUnidadStockArg30, java.math.BigDecimal precioBultosArg31, java.math.BigDecimal importeMinimoEntregaArg32, java.math.BigDecimal importeMinimoCargaArg33) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -255,33 +259,35 @@ public class TransporteTarifa extends EntityId {
 		this.buildCarga().buildTransporte().setIngresosBrutos(ingresosBrutosArg9);
 		this.buildCarga().buildTransporte().setTelefono(telefonoArg10);
 		this.buildCarga().buildTransporte().setFax(faxArg11);
-		this.buildCarga().buildTransporte().setDomicilio(domicilioArg12);
-		this.buildCarga().buildTransporte().setComentario(comentarioArg13);
-		this.buildCiudad().setId(idArg14);
-		this.buildCiudad().setNumero(numeroArg15);
-		this.buildCiudad().setNombre(nombreArg16);
-		this.buildCiudad().setDepartamento(departamentoArg17);
-		this.buildCiudad().setNumeroAFIP(numeroAFIPArg18);
-		this.buildCiudad().buildProvincia().setId(idArg19);
-		this.buildCiudad().buildProvincia().setNumero(numeroArg20);
-		this.buildCiudad().buildProvincia().setNombre(nombreArg21);
-		this.buildCiudad().buildProvincia().setAbreviatura(abreviaturaArg22);
-		this.buildCiudad().buildProvincia().setNumeroAFIP(numeroAFIPArg23);
-		this.buildCiudad().buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg24);
-		this.buildCiudad().buildProvincia().setNumeroRENATEA(numeroRENATEAArg25);
-		this.setPrecioFlete(precioFleteArg26);
-		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg27);
-		this.setPrecioUnidadStock(precioUnidadStockArg28);
-		this.setPrecioBultos(precioBultosArg29);
-		this.setImporteMinimoEntrega(importeMinimoEntregaArg30);
-		this.setImporteMinimoCarga(importeMinimoCargaArg31);
+		this.buildCarga().buildTransporte().buildCodigoPostal().setId(idCodigoPostalArg12);
+		this.buildCarga().buildTransporte().setDomicilio(domicilioArg13);
+		this.buildCarga().buildTransporte().setComentario(comentarioArg14);
+		this.buildCiudad().setId(idArg15);
+		this.buildCiudad().setNumero(numeroArg16);
+		this.buildCiudad().setNombre(nombreArg17);
+		this.buildCiudad().setDepartamento(departamentoArg18);
+		this.buildCiudad().setNumeroAFIP(numeroAFIPArg19);
+		this.buildCiudad().buildProvincia().setId(idArg20);
+		this.buildCiudad().buildProvincia().setNumero(numeroArg21);
+		this.buildCiudad().buildProvincia().setNombre(nombreArg22);
+		this.buildCiudad().buildProvincia().setAbreviatura(abreviaturaArg23);
+		this.buildCiudad().buildProvincia().setNumeroAFIP(numeroAFIPArg24);
+		this.buildCiudad().buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg25);
+		this.buildCiudad().buildProvincia().setNumeroRENATEA(numeroRENATEAArg26);
+		this.buildCiudad().buildProvincia().buildPais().setId(idPaisArg27);
+		this.setPrecioFlete(precioFleteArg28);
+		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg29);
+		this.setPrecioUnidadStock(precioUnidadStockArg30);
+		this.setPrecioBultos(precioBultosArg31);
+		this.setImporteMinimoEntrega(importeMinimoEntregaArg32);
+		this.setImporteMinimoCarga(importeMinimoCargaArg33);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idArg12, String codigoArg13, Integer numeroArg14, String nombreCalleArg15, String numeroCalleArg16, String domicilioArg17, String comentarioArg18, String idArg19, Integer numeroArg20, String nombreArg21, String departamentoArg22, Integer numeroAFIPArg23, String idArg24, Integer numeroArg25, String nombreArg26, String abreviaturaArg27, Integer numeroAFIPArg28, Integer numeroIngresosBrutosArg29, Integer numeroRENATEAArg30, String idArg31, Integer numeroArg32, String nombreArg33, String abreviaturaArg34, java.math.BigDecimal precioFleteArg35, java.math.BigDecimal precioUnidadFacturacionArg36, java.math.BigDecimal precioUnidadStockArg37, java.math.BigDecimal precioBultosArg38, java.math.BigDecimal importeMinimoEntregaArg39, java.math.BigDecimal importeMinimoCargaArg40) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String idArg2, Integer numeroArg3, String nombreArg4, String idArg5, Integer numeroArg6, String nombreArg7, Long cuitArg8, String ingresosBrutosArg9, String telefonoArg10, String faxArg11, String idArg12, String codigoArg13, Integer numeroArg14, String nombreCalleArg15, String numeroCalleArg16, String idCiudadArg17, String domicilioArg18, String comentarioArg19, String idArg20, Integer numeroArg21, String nombreArg22, String departamentoArg23, Integer numeroAFIPArg24, String idArg25, Integer numeroArg26, String nombreArg27, String abreviaturaArg28, Integer numeroAFIPArg29, Integer numeroIngresosBrutosArg30, Integer numeroRENATEAArg31, String idArg32, Integer numeroArg33, String nombreArg34, String abreviaturaArg35, java.math.BigDecimal precioFleteArg36, java.math.BigDecimal precioUnidadFacturacionArg37, java.math.BigDecimal precioUnidadStockArg38, java.math.BigDecimal precioBultosArg39, java.math.BigDecimal importeMinimoEntregaArg40, java.math.BigDecimal importeMinimoCargaArg41) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -300,30 +306,31 @@ public class TransporteTarifa extends EntityId {
 		this.buildCarga().buildTransporte().buildCodigoPostal().setNumero(numeroArg14);
 		this.buildCarga().buildTransporte().buildCodigoPostal().setNombreCalle(nombreCalleArg15);
 		this.buildCarga().buildTransporte().buildCodigoPostal().setNumeroCalle(numeroCalleArg16);
-		this.buildCarga().buildTransporte().setDomicilio(domicilioArg17);
-		this.buildCarga().buildTransporte().setComentario(comentarioArg18);
-		this.buildCiudad().setId(idArg19);
-		this.buildCiudad().setNumero(numeroArg20);
-		this.buildCiudad().setNombre(nombreArg21);
-		this.buildCiudad().setDepartamento(departamentoArg22);
-		this.buildCiudad().setNumeroAFIP(numeroAFIPArg23);
-		this.buildCiudad().buildProvincia().setId(idArg24);
-		this.buildCiudad().buildProvincia().setNumero(numeroArg25);
-		this.buildCiudad().buildProvincia().setNombre(nombreArg26);
-		this.buildCiudad().buildProvincia().setAbreviatura(abreviaturaArg27);
-		this.buildCiudad().buildProvincia().setNumeroAFIP(numeroAFIPArg28);
-		this.buildCiudad().buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg29);
-		this.buildCiudad().buildProvincia().setNumeroRENATEA(numeroRENATEAArg30);
-		this.buildCiudad().buildProvincia().buildPais().setId(idArg31);
-		this.buildCiudad().buildProvincia().buildPais().setNumero(numeroArg32);
-		this.buildCiudad().buildProvincia().buildPais().setNombre(nombreArg33);
-		this.buildCiudad().buildProvincia().buildPais().setAbreviatura(abreviaturaArg34);
-		this.setPrecioFlete(precioFleteArg35);
-		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg36);
-		this.setPrecioUnidadStock(precioUnidadStockArg37);
-		this.setPrecioBultos(precioBultosArg38);
-		this.setImporteMinimoEntrega(importeMinimoEntregaArg39);
-		this.setImporteMinimoCarga(importeMinimoCargaArg40);
+		this.buildCarga().buildTransporte().buildCodigoPostal().buildCiudad().setId(idCiudadArg17);
+		this.buildCarga().buildTransporte().setDomicilio(domicilioArg18);
+		this.buildCarga().buildTransporte().setComentario(comentarioArg19);
+		this.buildCiudad().setId(idArg20);
+		this.buildCiudad().setNumero(numeroArg21);
+		this.buildCiudad().setNombre(nombreArg22);
+		this.buildCiudad().setDepartamento(departamentoArg23);
+		this.buildCiudad().setNumeroAFIP(numeroAFIPArg24);
+		this.buildCiudad().buildProvincia().setId(idArg25);
+		this.buildCiudad().buildProvincia().setNumero(numeroArg26);
+		this.buildCiudad().buildProvincia().setNombre(nombreArg27);
+		this.buildCiudad().buildProvincia().setAbreviatura(abreviaturaArg28);
+		this.buildCiudad().buildProvincia().setNumeroAFIP(numeroAFIPArg29);
+		this.buildCiudad().buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg30);
+		this.buildCiudad().buildProvincia().setNumeroRENATEA(numeroRENATEAArg31);
+		this.buildCiudad().buildProvincia().buildPais().setId(idArg32);
+		this.buildCiudad().buildProvincia().buildPais().setNumero(numeroArg33);
+		this.buildCiudad().buildProvincia().buildPais().setNombre(nombreArg34);
+		this.buildCiudad().buildProvincia().buildPais().setAbreviatura(abreviaturaArg35);
+		this.setPrecioFlete(precioFleteArg36);
+		this.setPrecioUnidadFacturacion(precioUnidadFacturacionArg37);
+		this.setPrecioUnidadStock(precioUnidadStockArg38);
+		this.setPrecioBultos(precioBultosArg39);
+		this.setImporteMinimoEntrega(importeMinimoEntregaArg40);
+		this.setImporteMinimoCarga(importeMinimoCargaArg41);
 
 	}
 

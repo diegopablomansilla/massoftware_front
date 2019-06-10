@@ -399,25 +399,25 @@ public class CodigoPostalDAO {
 
 			Object[] row = table[0];
 
-			if(row.length == 5) {
+			if(row.length == 6) {
 
-				obj = mapper5Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				return obj;
-
-			} else if(row.length == 10) {
-
-				obj = mapper10Fields(row);
+				obj = mapper6Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				return obj;
 
-			} else if(row.length == 17) {
+			} else if(row.length == 11) {
 
-				obj = mapper17Fields(row);
+				obj = mapper11Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				return obj;
+
+			} else if(row.length == 18) {
+
+				obj = mapper18Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -455,20 +455,8 @@ public class CodigoPostalDAO {
 		List<CodigoPostal> listado = new ArrayList<CodigoPostal>();
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
-		String orderByString = (filtro.getOrderBy() == null || filtro.getOrderBy().equals("id")) ? "" : "_" + filtro.getOrderBy();
-		String orderByASCString = "";
-		if(orderByString != null && orderByString.trim().length() > 0) {
 
-			orderByString = "CodigoPostal" + orderByString;
-			orderByASCString = "_asc_";
-			if(filtro.getOrderByDesc() == true) {
-				orderByASCString = "_des_";
-			}
-			orderByString = orderByASCString + orderByString;
-		}
-		String params = (filtro.getUnlimited() == true) ? "" : "?, ?, ";
-
-		String sql = "SELECT * FROM massoftware.f_CodigoPostal" + orderByString + levelString + "(" + params + "?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_CodigoPostal" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Object codigo = ( filtro.getCodigo() == null ) ? String.class : filtro.getCodigo();
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
@@ -477,9 +465,9 @@ public class CodigoPostalDAO {
 
 		Object[] args = null;
 		if(filtro.getUnlimited()){
-			args = new Object[] {codigo, numeroFrom, numeroTo, ciudad};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), null, null, codigo, numeroFrom, numeroTo, ciudad};
 		} else {
-			args = new Object[] {filtro.getLimit(), filtro.getOffset(), codigo, numeroFrom, numeroTo, ciudad};
+			args = new Object[] {String.class, filtro.getOrderBy(), filtro.getOrderByDesc(), filtro.getLimit(), filtro.getOffset(), codigo, numeroFrom, numeroTo, ciudad};
 		}
 
 		Object[][] table = BackendContextPG.get().find(sql, args);
@@ -488,25 +476,25 @@ public class CodigoPostalDAO {
 
 			Object[] row = table[i];
 
-			if(row.length == 5) {
+			if(row.length == 6) {
 
-				CodigoPostal obj = mapper5Fields(row);
-
-				obj._originalDTO = (EntityId) obj.clone();
-
-				listado.add(obj);
-
-			} else if(row.length == 10) {
-
-				CodigoPostal obj = mapper10Fields(row);
+				CodigoPostal obj = mapper6Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
 				listado.add(obj);
 
-			} else if(row.length == 17) {
+			} else if(row.length == 11) {
 
-				CodigoPostal obj = mapper17Fields(row);
+				CodigoPostal obj = mapper11Fields(row);
+
+				obj._originalDTO = (EntityId) obj.clone();
+
+				listado.add(obj);
+
+			} else if(row.length == 18) {
+
+				CodigoPostal obj = mapper18Fields(row);
 
 				obj._originalDTO = (EntityId) obj.clone();
 
@@ -535,7 +523,7 @@ public class CodigoPostalDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private CodigoPostal mapper5Fields(Object[] row) throws Exception {
+	private CodigoPostal mapper6Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -544,8 +532,9 @@ public class CodigoPostalDAO {
 		Integer numeroCodigoPostalArg2 = (Integer) row[++c];
 		String nombreCalleCodigoPostalArg3 = (String) row[++c];
 		String numeroCalleCodigoPostalArg4 = (String) row[++c];
+		String ciudadCodigoPostalArg5 = (String) row[++c]; // Ciudad.id
 
-		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4);
+		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4, ciudadCodigoPostalArg5);
 
 		return obj;
 
@@ -554,7 +543,7 @@ public class CodigoPostalDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private CodigoPostal mapper10Fields(Object[] row) throws Exception {
+	private CodigoPostal mapper11Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -568,8 +557,9 @@ public class CodigoPostalDAO {
 		String nombreCiudadArg7 = (String) row[++c];
 		String departamentoCiudadArg8 = (String) row[++c];
 		Integer numeroAFIPCiudadArg9 = (Integer) row[++c];
+		String provinciaCiudadArg10 = (String) row[++c]; // Provincia.id
 
-		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4, idCiudadArg5, numeroCiudadArg6, nombreCiudadArg7, departamentoCiudadArg8, numeroAFIPCiudadArg9);
+		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4, idCiudadArg5, numeroCiudadArg6, nombreCiudadArg7, departamentoCiudadArg8, numeroAFIPCiudadArg9, provinciaCiudadArg10);
 
 		return obj;
 
@@ -578,7 +568,7 @@ public class CodigoPostalDAO {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	private CodigoPostal mapper17Fields(Object[] row) throws Exception {
+	private CodigoPostal mapper18Fields(Object[] row) throws Exception {
 
 		int c = -1;
 
@@ -599,8 +589,9 @@ public class CodigoPostalDAO {
 		Integer numeroAFIPProvinciaArg14 = (Integer) row[++c];
 		Integer numeroIngresosBrutosProvinciaArg15 = (Integer) row[++c];
 		Integer numeroRENATEAProvinciaArg16 = (Integer) row[++c];
+		String paisProvinciaArg17 = (String) row[++c]; // Pais.id
 
-		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4, idCiudadArg5, numeroCiudadArg6, nombreCiudadArg7, departamentoCiudadArg8, numeroAFIPCiudadArg9, idProvinciaArg10, numeroProvinciaArg11, nombreProvinciaArg12, abreviaturaProvinciaArg13, numeroAFIPProvinciaArg14, numeroIngresosBrutosProvinciaArg15, numeroRENATEAProvinciaArg16);
+		CodigoPostal obj = new CodigoPostal(idCodigoPostalArg0, codigoCodigoPostalArg1, numeroCodigoPostalArg2, nombreCalleCodigoPostalArg3, numeroCalleCodigoPostalArg4, idCiudadArg5, numeroCiudadArg6, nombreCiudadArg7, departamentoCiudadArg8, numeroAFIPCiudadArg9, idProvinciaArg10, numeroProvinciaArg11, nombreProvinciaArg12, abreviaturaProvinciaArg13, numeroAFIPProvinciaArg14, numeroIngresosBrutosProvinciaArg15, numeroRENATEAProvinciaArg16, paisProvinciaArg17);
 
 		return obj;
 

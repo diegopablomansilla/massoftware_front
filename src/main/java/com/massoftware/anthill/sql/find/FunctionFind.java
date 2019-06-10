@@ -99,6 +99,12 @@ public class FunctionFind {
 		args.add(functionFindArg);
 
 		functionFindArg = new FunctionFindArg();
+		functionFindArg.setName("orderByDesc");
+		functionFindArg.setDataType("BOOLEAN");
+		functionFindArg.setCustom(false);
+		args.add(functionFindArg);
+
+		functionFindArg = new FunctionFindArg();
 		functionFindArg.setName("limit");
 		functionFindArg.setDataType("BIGINT");
 		functionFindArg.setCustom(false);
@@ -408,38 +414,16 @@ public class FunctionFind {
 
 		sql += toSQLFindById(maxLevel, level);
 
+		sql += "\n";
+
+		sql += toSQLFindExecute(maxLevel, level);
+
 		return sql;
 	}
 
 	private String toSQLFindById(int maxLevel, int level) {
+
 		String sql = "";
-
-		String s = "";
-		String t = "";
-
-		int cs = 0;
-		int ct = 0;
-
-		for (int i = 0; i < this.args.size(); i++) {
-			FunctionFindArg arg = this.args.get(i);
-
-			String nameArg = "  " + arg.getName() + "Arg" + i;
-
-			if (cs < nameArg.length()) {
-				cs = nameArg.length();
-			}
-
-			if (ct < arg.getDataType().length()) {
-				ct = arg.getDataType().length();
-			}
-		}
-
-		for (int i = 0; i < cs; i++) {
-			s += " ";
-		}
-		for (int i = 0; i < ct; i++) {
-			t += " ";
-		}
 
 		// -------------------------------------------------------------------------
 
@@ -865,10 +849,73 @@ public class FunctionFind {
 		sql += "END IF;";
 
 		sql += "\n\n\t";
+		sql += "IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN";
+
+		sql += "\n\t\t";
+		sql += "sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;";
+
+		sql += "\n\t";
+		sql += "ELSEIF searchById = false THEN ";
+
+		sql += "\n\t\t";
+		sql += "sqlSrc = sqlSrc || ' ORDER BY 1 ';";
+
+		sql += "\n\t";
+		sql += "END IF;";
+
+		sql += "\n\n\t";
+		sql += "IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN";
+
+		sql += "\n\t\t";
+		sql += "sqlSrc = sqlSrc || ' DESC ';";
+
+		sql += "\n\t";
+		sql += "END IF;";
+
+		// ------------------------
+
+		// sql += "\n\n\t";
+		// sql += "IF searchById = false AND limitArg2 IS NOT NULL AND (limitArg2 < 1 OR
+		// limitArg2 > 100) THEN";
+		//
+		// sql += "\n\t\t";
+		// sql += "limitArg2 = 100;";
+		//
+		// sql += "\n\t";
+		// sql += "END IF;";
+		//
+		// sql += "\n\n\t";
+		// sql += "IF searchById = false AND offSetArg3 IS NOT NULL AND offSetArg3 < 0
+		// THEN";
+		//
+		// sql += "\n\t\t";
+		// sql += "offSetArg3 = 0;";
+		//
+		// sql += "\n\t";
+		// sql += "END IF;";
+
+		sql += "\n\n\t";
+		sql += "IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN";
+
+		sql += "\n\t\t";
+		sql += "sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;";
+
+		// sql += "\n\t";
+		// sql += "ELSE IF searchById = false THEN ";
+		//
+		// sql += "\n\t\t";
+		// sql += "sqlSrc = sqlSrc || ' LIMIT limitArg2 OFFSET offSetArg3 ';";
+
+		sql += "\n\t";
+		sql += "END IF;";
+
+		// --------------------------
+
+		sql += "\n\n\t";
 		sql += "-- RAISE EXCEPTION 'information messagess % ', sqlSrc;";
 
 		sql += "\n\n\t";
-		sql += "EXECUTE sqlSrc;";
+		sql += "RETURN QUERY EXECUTE sqlSrc || ';';";
 
 		// ----
 
@@ -877,6 +924,42 @@ public class FunctionFind {
 
 		sql += "\n";
 		sql += "$$ LANGUAGE plpgsql;";
+
+		return sql;
+
+	}
+
+	private String toSQLFindExecute(int maxLevel, int level) {
+
+		String sql = "";
+
+		// -------------------------------------------------------------------------
+
+		// ----
+
+		sql += "\n\n";
+		sql += "-- ";
+		sql += "SELECT * FROM " + this.getSchemaName() + "." + this.getName() + "";
+		if (maxLevel > 0) {
+			sql += "_" + maxLevel;
+		}
+		sql += " (";
+		for (int i = 0; i < this.args.size(); i++) {
+			sql += (i == 0) ? " null " : ", null";
+		}
+		sql += "); ";		
+
+		// ----
+
+		sql += "\n\n";
+		sql += "-- ";
+		sql += "SELECT * FROM " + this.getSchemaName() + "." + this.getName() + "ById";
+		if (maxLevel > 0) {
+			sql += "_" + maxLevel;
+		}
+		sql += " ('xxx'); ";
+
+		// ----
 
 		return sql;
 

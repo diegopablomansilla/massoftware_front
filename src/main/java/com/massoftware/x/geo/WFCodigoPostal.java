@@ -122,7 +122,7 @@ public class WFCodigoPostal extends WindowForm {
 
 			ciudadFiltro.setUnlimited(true);
 
-			ciudadFiltro.setOrderBy("codigo");
+			ciudadFiltro.setOrderBy(1);
 
 			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
 

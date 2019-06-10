@@ -56,27 +56,27 @@ public class Transporte extends EntityId {
 	public Transporte() throws Exception {
 	}
 
-	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String domicilioArg7, String comentarioArg8) throws Exception {
+	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idCodigoPostalArg7, String domicilioArg8, String comentarioArg9) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, domicilioArg7, comentarioArg8);
-
-	}
-
-	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String domicilioArg12, String comentarioArg13) throws Exception {
-
-		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, domicilioArg12, comentarioArg13);
+		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idCodigoPostalArg7, domicilioArg8, comentarioArg9);
 
 	}
 
-	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String domicilioArg17, String comentarioArg18) throws Exception {
+	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idCiudadArg12, String domicilioArg13, String comentarioArg14) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, idArg12, numeroArg13, nombreArg14, departamentoArg15, numeroAFIPArg16, domicilioArg17, comentarioArg18);
+		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, idCiudadArg12, domicilioArg13, comentarioArg14);
 
 	}
 
-	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idArg17, Integer numeroArg18, String nombreArg19, String abreviaturaArg20, Integer numeroAFIPArg21, Integer numeroIngresosBrutosArg22, Integer numeroRENATEAArg23, String domicilioArg24, String comentarioArg25) throws Exception {
+	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idProvinciaArg17, String domicilioArg18, String comentarioArg19) throws Exception {
 
-		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, idArg12, numeroArg13, nombreArg14, departamentoArg15, numeroAFIPArg16, idArg17, numeroArg18, nombreArg19, abreviaturaArg20, numeroAFIPArg21, numeroIngresosBrutosArg22, numeroRENATEAArg23, domicilioArg24, comentarioArg25);
+		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, idArg12, numeroArg13, nombreArg14, departamentoArg15, numeroAFIPArg16, idProvinciaArg17, domicilioArg18, comentarioArg19);
+
+	}
+
+	public Transporte(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idArg17, Integer numeroArg18, String nombreArg19, String abreviaturaArg20, Integer numeroAFIPArg21, Integer numeroIngresosBrutosArg22, Integer numeroRENATEAArg23, String idPaisArg24, String domicilioArg25, String comentarioArg26) throws Exception {
+
+		setter(idArg0, numeroArg1, nombreArg2, cuitArg3, ingresosBrutosArg4, telefonoArg5, faxArg6, idArg7, codigoArg8, numeroArg9, nombreCalleArg10, numeroCalleArg11, idArg12, numeroArg13, nombreArg14, departamentoArg15, numeroAFIPArg16, idArg17, numeroArg18, nombreArg19, abreviaturaArg20, numeroAFIPArg21, numeroIngresosBrutosArg22, numeroRENATEAArg23, idPaisArg24, domicilioArg25, comentarioArg26);
 
 	}
 
@@ -199,7 +199,7 @@ public class Transporte extends EntityId {
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String domicilioArg7, String comentarioArg8) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idCodigoPostalArg7, String domicilioArg8, String comentarioArg9) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -208,15 +208,16 @@ public class Transporte extends EntityId {
 		this.setIngresosBrutos(ingresosBrutosArg4);
 		this.setTelefono(telefonoArg5);
 		this.setFax(faxArg6);
-		this.setDomicilio(domicilioArg7);
-		this.setComentario(comentarioArg8);
+		this.buildCodigoPostal().setId(idCodigoPostalArg7);
+		this.setDomicilio(domicilioArg8);
+		this.setComentario(comentarioArg9);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String domicilioArg12, String comentarioArg13) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idCiudadArg12, String domicilioArg13, String comentarioArg14) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -230,15 +231,16 @@ public class Transporte extends EntityId {
 		this.buildCodigoPostal().setNumero(numeroArg9);
 		this.buildCodigoPostal().setNombreCalle(nombreCalleArg10);
 		this.buildCodigoPostal().setNumeroCalle(numeroCalleArg11);
-		this.setDomicilio(domicilioArg12);
-		this.setComentario(comentarioArg13);
+		this.buildCodigoPostal().buildCiudad().setId(idCiudadArg12);
+		this.setDomicilio(domicilioArg13);
+		this.setComentario(comentarioArg14);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String domicilioArg17, String comentarioArg18) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idProvinciaArg17, String domicilioArg18, String comentarioArg19) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -257,15 +259,16 @@ public class Transporte extends EntityId {
 		this.buildCodigoPostal().buildCiudad().setNombre(nombreArg14);
 		this.buildCodigoPostal().buildCiudad().setDepartamento(departamentoArg15);
 		this.buildCodigoPostal().buildCiudad().setNumeroAFIP(numeroAFIPArg16);
-		this.setDomicilio(domicilioArg17);
-		this.setComentario(comentarioArg18);
+		this.buildCodigoPostal().buildCiudad().buildProvincia().setId(idProvinciaArg17);
+		this.setDomicilio(domicilioArg18);
+		this.setComentario(comentarioArg19);
 
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
-	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idArg17, Integer numeroArg18, String nombreArg19, String abreviaturaArg20, Integer numeroAFIPArg21, Integer numeroIngresosBrutosArg22, Integer numeroRENATEAArg23, String domicilioArg24, String comentarioArg25) throws Exception {
+	public void setter(String idArg0, Integer numeroArg1, String nombreArg2, Long cuitArg3, String ingresosBrutosArg4, String telefonoArg5, String faxArg6, String idArg7, String codigoArg8, Integer numeroArg9, String nombreCalleArg10, String numeroCalleArg11, String idArg12, Integer numeroArg13, String nombreArg14, String departamentoArg15, Integer numeroAFIPArg16, String idArg17, Integer numeroArg18, String nombreArg19, String abreviaturaArg20, Integer numeroAFIPArg21, Integer numeroIngresosBrutosArg22, Integer numeroRENATEAArg23, String idPaisArg24, String domicilioArg25, String comentarioArg26) throws Exception {
 
 		this.setId(idArg0);
 		this.setNumero(numeroArg1);
@@ -291,8 +294,9 @@ public class Transporte extends EntityId {
 		this.buildCodigoPostal().buildCiudad().buildProvincia().setNumeroAFIP(numeroAFIPArg21);
 		this.buildCodigoPostal().buildCiudad().buildProvincia().setNumeroIngresosBrutos(numeroIngresosBrutosArg22);
 		this.buildCodigoPostal().buildCiudad().buildProvincia().setNumeroRENATEA(numeroRENATEAArg23);
-		this.setDomicilio(domicilioArg24);
-		this.setComentario(comentarioArg25);
+		this.buildCodigoPostal().buildCiudad().buildProvincia().buildPais().setId(idPaisArg24);
+		this.setDomicilio(domicilioArg25);
+		this.setComentario(comentarioArg26);
 
 	}
 

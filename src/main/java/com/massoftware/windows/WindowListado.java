@@ -2,6 +2,7 @@ package com.massoftware.windows;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import com.massoftware.dao.AbstractFilter;
@@ -27,6 +28,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.themes.ValoTheme;
 
 public abstract class WindowListado extends Window {
@@ -35,6 +37,10 @@ public abstract class WindowListado extends Window {
 	 * 
 	 */
 	private static final long serialVersionUID = 3743382045012748994L;
+
+	// -------------------------------------------------------------
+
+	protected final int MAX_ROWS_FOR_CBX = 300;
 
 	// -------------------------------------------------------------
 
@@ -69,7 +75,7 @@ public abstract class WindowListado extends Window {
 	public void init(boolean selectionMode) {
 
 		try {
-			
+
 			windowBuilder = new WindowFactory();
 
 			this.selectionMode = selectionMode;
@@ -151,7 +157,7 @@ public abstract class WindowListado extends Window {
 	private void loadData(boolean removeAllItems) {
 		try {
 
-//			validateFilterSection();
+			// validateFilterSection();
 
 			// if (removeAllItems) {
 			// getItemsBIC().removeAllItems();
@@ -553,6 +559,17 @@ public abstract class WindowListado extends Window {
 			LogAndNotification.print(e);
 		}
 
+	}
+
+	protected int getNumbercolumn(String propertyId) {
+		List<Column> columns = itemsGRD.getColumns();
+		for (int i = 0; i < columns.size(); i++) {
+			if (columns.get(i).getPropertyId().toString().equals(propertyId)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 }
