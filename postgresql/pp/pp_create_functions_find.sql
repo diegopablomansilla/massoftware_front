@@ -109,6 +109,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_UsuarioById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_UsuarioById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Usuario AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Usuario ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -210,6 +228,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_ZonaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ZonaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Zona AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Zona ( idArg , null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -342,6 +378,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_PaisById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_PaisById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Pais AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Pais ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -504,6 +558,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Provincia AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Provincia ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_Provincia_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
@@ -654,6 +726,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_ProvinciaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ProvinciaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Provincia_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Provincia_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -788,6 +878,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Ciudad AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_Ciudad_1 (
 
 	  idArg0           VARCHAR(36)	-- 0
@@ -914,6 +1022,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Ciudad_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_1 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1052,6 +1178,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CiudadById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CiudadById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Ciudad_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Ciudad_2 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -1174,6 +1318,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CodigoPostal AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_CodigoPostal_1 (
 
 	  idArg0           VARCHAR(36)	-- 0
@@ -1286,6 +1448,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CodigoPostal_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_1 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1410,6 +1590,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CodigoPostal_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_2 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1542,6 +1740,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CodigoPostalById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CodigoPostalById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CodigoPostal_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CodigoPostal_3 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -1658,6 +1874,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Transporte AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_Transporte_1 (
 
 	  idArg0           VARCHAR(36)	-- 0
@@ -1764,6 +1998,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Transporte_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_1 ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -1880,6 +2132,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Transporte_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_2 ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2008,6 +2278,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_TransporteById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Transporte_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Transporte_3 ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -2118,6 +2406,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CargaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Carga AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Carga ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_Carga_1 (
 
 	  idArg0           VARCHAR(36)	-- 0
@@ -2222,6 +2528,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Carga_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_1 ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2336,6 +2660,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Carga_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_2 ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2460,6 +2802,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_CargaById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CargaById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Carga_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Carga_3 ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -2538,6 +2898,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TransporteTarifa AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa ( idArg , null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifa_1 (
 
 	  idArg0        VARCHAR(36)	-- 0
@@ -2610,6 +2988,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_TransporteTarifa_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_1 ( idArg , null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2704,6 +3100,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_TransporteTarifa_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_2 ( idArg , null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2808,6 +3222,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TransporteTarifaById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TransporteTarifaById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_TransporteTarifa_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TransporteTarifa_3 ( idArg , null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -2921,6 +3353,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_TipoDocumentoAFIPById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TipoDocumentoAFIPById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TipoDocumentoAFIP AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TipoDocumentoAFIP ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -3020,6 +3470,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaAFIPById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaAFIPById (idArg VARCHAR(36)) RETURNS SETOF massoftware.MonedaAFIP AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MonedaAFIP ( idArg , null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3160,6 +3628,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Moneda AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_Moneda_1 (
 
 	  idArg0            VARCHAR(36)	-- 0
@@ -3287,6 +3773,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Moneda_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -3392,6 +3896,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_NotaCreditoMotivoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_NotaCreditoMotivoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.NotaCreditoMotivo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_NotaCreditoMotivo ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3505,6 +4027,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_MotivoComentarioById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoComentarioById (idArg VARCHAR(36)) RETURNS SETOF massoftware.MotivoComentario AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoComentario ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
@@ -3610,6 +4150,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TipoClienteById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TipoClienteById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TipoCliente AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TipoCliente ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3720,6 +4278,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_ClasificacionClienteById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_ClasificacionClienteById (idArg VARCHAR(36)) RETURNS SETOF massoftware.ClasificacionCliente AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_ClasificacionCliente ( idArg , null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
@@ -3856,6 +4432,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById (idArg VARCHAR(36)) RETURNS SETOF massoftware.MotivoBloqueoCliente AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
 DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoCliente_1 (
 
 	  idArg0                     VARCHAR(36)	-- 0
@@ -3976,6 +4570,24 @@ BEGIN
 	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
 
 	EXECUTE sqlSrc;
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MotivoBloqueoClienteById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MotivoBloqueoClienteById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_MotivoBloqueoCliente_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MotivoBloqueoCliente_1 ( idArg , null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;

@@ -159,8 +159,8 @@ public class Anthill {
 //			String sqlViewItem = clazz.toSQLView();			
 //			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
 //			String sqlFindExistsItem = clazz.toSQLFindExists();
-			String sqlFindByIdFullItem = clazz.toSQLFindById(false);
-			System.out.println(sqlFindByIdFullItem);
+//			String sqlFindByIdFullItem = clazz.toSQLFindById(false);
+//			System.out.println(sqlFindByIdFullItem);
 //			String sqlFindByIdViewItem = clazz.toSQLFindById(true);
 			
 			String sqlTypeItem = clazz.toSQLType();
