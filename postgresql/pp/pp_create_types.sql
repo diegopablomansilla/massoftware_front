@@ -3,6 +3,32 @@
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: SeguridadPuerta                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadPuerta
+
+
+
+DROP TYPE IF EXISTS massoftware.t_SeguridadPuerta_1 CASCADE;
+
+CREATE TYPE massoftware.t_SeguridadPuerta_1 AS (
+
+	  SeguridadPuerta_id      	VARCHAR(36)		-- 0	SeguridadPuerta.id
+	, SeguridadPuerta_numero  	INTEGER    		-- 1	SeguridadPuerta.numero
+	, SeguridadPuerta_nombre  	VARCHAR(50)		-- 2	SeguridadPuerta.nombre
+	, SeguridadPuerta_equate  	VARCHAR(30)		-- 3	SeguridadPuerta.equate
+	, SeguridadModulo_4_id    	VARCHAR(36)		-- 4	SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_4_numero	INTEGER    		-- 5	SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_4_nombre	VARCHAR(50)		-- 6	SeguridadPuerta.SeguridadModulo.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Provincia                                                                                              //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -529,5 +555,149 @@ CREATE TYPE massoftware.t_MotivoBloqueoCliente_1 AS (
 	, ClasificacionCliente_3_numero	INTEGER    		-- 4	MotivoBloqueoCliente.ClasificacionCliente.numero
 	, ClasificacionCliente_3_nombre	VARCHAR(50)		-- 5	MotivoBloqueoCliente.ClasificacionCliente.nombre
 	, ClasificacionCliente_3_color 	INTEGER    		-- 6	MotivoBloqueoCliente.ClasificacionCliente.color
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Sucursal                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Sucursal
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Sucursal_1 CASCADE;
+
+CREATE TYPE massoftware.t_Sucursal_1 AS (
+
+	  Sucursal_id                               	VARCHAR(36)		-- 0	Sucursal.id
+	, Sucursal_numero                           	INTEGER    		-- 1	Sucursal.numero
+	, Sucursal_nombre                           	VARCHAR(50)		-- 2	Sucursal.nombre
+	, Sucursal_abreviatura                      	VARCHAR(5) 		-- 3	Sucursal.abreviatura
+	, TipoSucursal_4_id                         	VARCHAR(36)		-- 4	Sucursal.TipoSucursal.id
+	, TipoSucursal_4_numero                     	INTEGER    		-- 5	Sucursal.TipoSucursal.numero
+	, TipoSucursal_4_nombre                     	VARCHAR(50)		-- 6	Sucursal.TipoSucursal.nombre
+	, Sucursal_cuentaClientesDesde              	VARCHAR(7) 		-- 7	Sucursal.cuentaClientesDesde
+	, Sucursal_cuentaClientesHasta              	VARCHAR(7) 		-- 8	Sucursal.cuentaClientesHasta
+	, Sucursal_cantidadCaracteresClientes       	INTEGER    		-- 9	Sucursal.cantidadCaracteresClientes
+	, Sucursal_identificacionNumericaClientes   	BOOLEAN    		-- 10	Sucursal.identificacionNumericaClientes
+	, Sucursal_permiteCambiarClientes           	BOOLEAN    		-- 11	Sucursal.permiteCambiarClientes
+	, Sucursal_cuentaProveedoresDesde           	VARCHAR(6) 		-- 12	Sucursal.cuentaProveedoresDesde
+	, Sucursal_cuentaProveedoresHasta           	VARCHAR(6) 		-- 13	Sucursal.cuentaProveedoresHasta
+	, Sucursal_cantidadCaracteresProveedores    	INTEGER    		-- 14	Sucursal.cantidadCaracteresProveedores
+	, Sucursal_identificacionNumericaProveedores	BOOLEAN    		-- 15	Sucursal.identificacionNumericaProveedores
+	, Sucursal_permiteCambiarProveedores        	BOOLEAN    		-- 16	Sucursal.permiteCambiarProveedores
+	, Sucursal_clientesOcacionalesDesde         	INTEGER    		-- 17	Sucursal.clientesOcacionalesDesde
+	, Sucursal_clientesOcacionalesHasta         	INTEGER    		-- 18	Sucursal.clientesOcacionalesHasta
+	, Sucursal_numeroCobranzaDesde              	INTEGER    		-- 19	Sucursal.numeroCobranzaDesde
+	, Sucursal_numeroCobranzaHasta              	INTEGER    		-- 20	Sucursal.numeroCobranzaHasta
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Deposito                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Deposito
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Deposito_1 CASCADE;
+
+CREATE TYPE massoftware.t_Deposito_1 AS (
+
+	  Deposito_id                                 	VARCHAR(36)		-- 0	Deposito.id
+	, Deposito_numero                             	INTEGER    		-- 1	Deposito.numero
+	, Deposito_nombre                             	VARCHAR(50)		-- 2	Deposito.nombre
+	, Deposito_abreviatura                        	VARCHAR(5) 		-- 3	Deposito.abreviatura
+	, Sucursal_4_id                               	VARCHAR(36)		-- 4	Deposito.Sucursal.id
+	, Sucursal_4_numero                           	INTEGER    		-- 5	Deposito.Sucursal.numero
+	, Sucursal_4_nombre                           	VARCHAR(50)		-- 6	Deposito.Sucursal.nombre
+	, Sucursal_4_abreviatura                      	VARCHAR(5) 		-- 7	Deposito.Sucursal.abreviatura
+	, Sucursal_4_tipoSucursal                     	VARCHAR(36)		-- 8	Deposito.Sucursal.tipoSucursal
+	, Sucursal_4_cuentaClientesDesde              	VARCHAR(7) 		-- 9	Deposito.Sucursal.cuentaClientesDesde
+	, Sucursal_4_cuentaClientesHasta              	VARCHAR(7) 		-- 10	Deposito.Sucursal.cuentaClientesHasta
+	, Sucursal_4_cantidadCaracteresClientes       	INTEGER    		-- 11	Deposito.Sucursal.cantidadCaracteresClientes
+	, Sucursal_4_identificacionNumericaClientes   	BOOLEAN    		-- 12	Deposito.Sucursal.identificacionNumericaClientes
+	, Sucursal_4_permiteCambiarClientes           	BOOLEAN    		-- 13	Deposito.Sucursal.permiteCambiarClientes
+	, Sucursal_4_cuentaProveedoresDesde           	VARCHAR(6) 		-- 14	Deposito.Sucursal.cuentaProveedoresDesde
+	, Sucursal_4_cuentaProveedoresHasta           	VARCHAR(6) 		-- 15	Deposito.Sucursal.cuentaProveedoresHasta
+	, Sucursal_4_cantidadCaracteresProveedores    	INTEGER    		-- 16	Deposito.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_4_identificacionNumericaProveedores	BOOLEAN    		-- 17	Deposito.Sucursal.identificacionNumericaProveedores
+	, Sucursal_4_permiteCambiarProveedores        	BOOLEAN    		-- 18	Deposito.Sucursal.permiteCambiarProveedores
+	, Sucursal_4_clientesOcacionalesDesde         	INTEGER    		-- 19	Deposito.Sucursal.clientesOcacionalesDesde
+	, Sucursal_4_clientesOcacionalesHasta         	INTEGER    		-- 20	Deposito.Sucursal.clientesOcacionalesHasta
+	, Sucursal_4_numeroCobranzaDesde              	INTEGER    		-- 21	Deposito.Sucursal.numeroCobranzaDesde
+	, Sucursal_4_numeroCobranzaHasta              	INTEGER    		-- 22	Deposito.Sucursal.numeroCobranzaHasta
+	, DepositoModulo_23_id                        	VARCHAR(36)		-- 23	Deposito.DepositoModulo.id
+	, DepositoModulo_23_numero                    	INTEGER    		-- 24	Deposito.DepositoModulo.numero
+	, DepositoModulo_23_nombre                    	VARCHAR(50)		-- 25	Deposito.DepositoModulo.nombre
+	, SeguridadPuerta_26_id                       	VARCHAR(36)		-- 26	Deposito.SeguridadPuerta.id
+	, SeguridadPuerta_26_numero                   	INTEGER    		-- 27	Deposito.SeguridadPuerta.numero
+	, SeguridadPuerta_26_nombre                   	VARCHAR(50)		-- 28	Deposito.SeguridadPuerta.nombre
+	, SeguridadPuerta_26_equate                   	VARCHAR(30)		-- 29	Deposito.SeguridadPuerta.equate
+	, SeguridadPuerta_26_seguridadModulo          	VARCHAR(36)		-- 30	Deposito.SeguridadPuerta.seguridadModulo
+	, SeguridadPuerta_31_id                       	VARCHAR(36)		-- 31	Deposito.SeguridadPuerta.id
+	, SeguridadPuerta_31_numero                   	INTEGER    		-- 32	Deposito.SeguridadPuerta.numero
+	, SeguridadPuerta_31_nombre                   	VARCHAR(50)		-- 33	Deposito.SeguridadPuerta.nombre
+	, SeguridadPuerta_31_equate                   	VARCHAR(30)		-- 34	Deposito.SeguridadPuerta.equate
+	, SeguridadPuerta_31_seguridadModulo          	VARCHAR(36)		-- 35	Deposito.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_Deposito_2 CASCADE;
+
+CREATE TYPE massoftware.t_Deposito_2 AS (
+
+	  Deposito_id                                 	VARCHAR(36)		-- 0	Deposito.id
+	, Deposito_numero                             	INTEGER    		-- 1	Deposito.numero
+	, Deposito_nombre                             	VARCHAR(50)		-- 2	Deposito.nombre
+	, Deposito_abreviatura                        	VARCHAR(5) 		-- 3	Deposito.abreviatura
+	, Sucursal_4_id                               	VARCHAR(36)		-- 4	Deposito.Sucursal.id
+	, Sucursal_4_numero                           	INTEGER    		-- 5	Deposito.Sucursal.numero
+	, Sucursal_4_nombre                           	VARCHAR(50)		-- 6	Deposito.Sucursal.nombre
+	, Sucursal_4_abreviatura                      	VARCHAR(5) 		-- 7	Deposito.Sucursal.abreviatura
+	, TipoSucursal_8_id                           	VARCHAR(36)		-- 8	Deposito.Sucursal.TipoSucursal.id
+	, TipoSucursal_8_numero                       	INTEGER    		-- 9	Deposito.Sucursal.TipoSucursal.numero
+	, TipoSucursal_8_nombre                       	VARCHAR(50)		-- 10	Deposito.Sucursal.TipoSucursal.nombre
+	, Sucursal_4_cuentaClientesDesde              	VARCHAR(7) 		-- 11	Deposito.Sucursal.cuentaClientesDesde
+	, Sucursal_4_cuentaClientesHasta              	VARCHAR(7) 		-- 12	Deposito.Sucursal.cuentaClientesHasta
+	, Sucursal_4_cantidadCaracteresClientes       	INTEGER    		-- 13	Deposito.Sucursal.cantidadCaracteresClientes
+	, Sucursal_4_identificacionNumericaClientes   	BOOLEAN    		-- 14	Deposito.Sucursal.identificacionNumericaClientes
+	, Sucursal_4_permiteCambiarClientes           	BOOLEAN    		-- 15	Deposito.Sucursal.permiteCambiarClientes
+	, Sucursal_4_cuentaProveedoresDesde           	VARCHAR(6) 		-- 16	Deposito.Sucursal.cuentaProveedoresDesde
+	, Sucursal_4_cuentaProveedoresHasta           	VARCHAR(6) 		-- 17	Deposito.Sucursal.cuentaProveedoresHasta
+	, Sucursal_4_cantidadCaracteresProveedores    	INTEGER    		-- 18	Deposito.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_4_identificacionNumericaProveedores	BOOLEAN    		-- 19	Deposito.Sucursal.identificacionNumericaProveedores
+	, Sucursal_4_permiteCambiarProveedores        	BOOLEAN    		-- 20	Deposito.Sucursal.permiteCambiarProveedores
+	, Sucursal_4_clientesOcacionalesDesde         	INTEGER    		-- 21	Deposito.Sucursal.clientesOcacionalesDesde
+	, Sucursal_4_clientesOcacionalesHasta         	INTEGER    		-- 22	Deposito.Sucursal.clientesOcacionalesHasta
+	, Sucursal_4_numeroCobranzaDesde              	INTEGER    		-- 23	Deposito.Sucursal.numeroCobranzaDesde
+	, Sucursal_4_numeroCobranzaHasta              	INTEGER    		-- 24	Deposito.Sucursal.numeroCobranzaHasta
+	, DepositoModulo_25_id                        	VARCHAR(36)		-- 25	Deposito.DepositoModulo.id
+	, DepositoModulo_25_numero                    	INTEGER    		-- 26	Deposito.DepositoModulo.numero
+	, DepositoModulo_25_nombre                    	VARCHAR(50)		-- 27	Deposito.DepositoModulo.nombre
+	, SeguridadPuerta_28_id                       	VARCHAR(36)		-- 28	Deposito.SeguridadPuerta.id
+	, SeguridadPuerta_28_numero                   	INTEGER    		-- 29	Deposito.SeguridadPuerta.numero
+	, SeguridadPuerta_28_nombre                   	VARCHAR(50)		-- 30	Deposito.SeguridadPuerta.nombre
+	, SeguridadPuerta_28_equate                   	VARCHAR(30)		-- 31	Deposito.SeguridadPuerta.equate
+	, SeguridadModulo_32_id                       	VARCHAR(36)		-- 32	Deposito.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_32_numero                   	INTEGER    		-- 33	Deposito.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_32_nombre                   	VARCHAR(50)		-- 34	Deposito.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_35_id                       	VARCHAR(36)		-- 35	Deposito.SeguridadPuerta.id
+	, SeguridadPuerta_35_numero                   	INTEGER    		-- 36	Deposito.SeguridadPuerta.numero
+	, SeguridadPuerta_35_nombre                   	VARCHAR(50)		-- 37	Deposito.SeguridadPuerta.nombre
+	, SeguridadPuerta_35_equate                   	VARCHAR(30)		-- 38	Deposito.SeguridadPuerta.equate
+	, SeguridadModulo_39_id                       	VARCHAR(36)		-- 39	Deposito.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_39_numero                   	INTEGER    		-- 40	Deposito.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_39_nombre                   	VARCHAR(50)		-- 41	Deposito.SeguridadPuerta.SeguridadModulo.nombre
 
 );

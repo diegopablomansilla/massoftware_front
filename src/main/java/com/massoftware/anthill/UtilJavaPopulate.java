@@ -35,13 +35,17 @@ public class UtilJavaPopulate {
 				java += "\n";
 				java += "\t";
 				java += "\t";				
-				java += dt.getClazz().getName() + "Service service" + dt.getClazz().getName() + " = AppCX.services().build"
+//				java += dt.getClazz().getName() + "Service service" + dt.getClazz().getName() + " = AppCX.services().build"
+//						+ dt.getClazz().getName() + "Service();";
+				
+				java += dt.getClazz().getName() + "Service service" + att.getName() + " = AppCX.services().build"
 						+ dt.getClazz().getName() + "Service();";
 
 				java += "\n";
 				java += "\t";
 				java += "\t";				
-				java += "Long " + att.getName() + "Count = service" + dt.getClazz().getName() + ".count();";
+//				java += "Long " + att.getName() + "Count = service" + dt.getClazz().getName() + ".count();";
+				java += "Long " + att.getName() + "Count = service" + att.getName() + ".count();";
 
 			}
 
@@ -290,8 +294,10 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
+//				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = service"
+//						+ dt.getClazz().getName() + ".find(" + att.getName() + "Filtro);";
 				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = service"
-						+ dt.getClazz().getName() + ".find(" + att.getName() + "Filtro);";
+						+ att.getName() + ".find(" + att.getName() + "Filtro);";
 
 				// java += "\n";
 				// java += "\t";

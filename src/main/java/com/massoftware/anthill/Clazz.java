@@ -21,7 +21,7 @@ public class Clazz {
 	private List<Uniques> uniques = new ArrayList<Uniques>();
 	private List<Argument> argsSBX = new ArrayList<Argument>();
 	private Order orderDefault;
-	
+
 	public Integer _index;
 
 	public String getNamePackage() {
@@ -207,26 +207,15 @@ public class Clazz {
 	public String toSQL() {
 		String sql = "";
 
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- //          TABLA: ";
-		sql += this.getName();
-		int c = 25 + this.getName().length();
-		int l = 128 - c;
-		for (int i = 0; i < l; i++) {
-			sql += " ";
-		}
-		sql += "//";
-		sql += "\n-- //                                                                                                                        //";
-		sql += "\n-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-
-		sql += "\n\n\n-- Table: massoftware." + this.getName();
+		sql += UtilAnthill.toSQLHeaderTable(this);
 
 		sql += UtilSQLTable.buildSQLTabla(this);
 
-		// buildInsert();
-
 		sql += buildSQLSelects(this);
+
+		sql += UtilSQLFindExists.buildSQLFindExists(this);
+
+		sql += UtilSQLFindNextValue.buildSQLFindNextValue(this);
 
 		sql += UtilSQLDelete.buildSQLDeleteById(this);
 
@@ -234,23 +223,13 @@ public class Clazz {
 
 		sql += UtilSQLUpdate.buildSQLUpdate(this);
 
-		sql += UtilSQLFindExists.buildSQLFindExists(this);
+		sql += toSQLType(false);
 
-		sql += UtilSQLFindNextValue.buildSQLFindNextValue(this);
-
-		// buildSelect();
-
-		sql += UtilSQLView.buildSQLView(this);
-
-		sql += UtilSQLType.buildSQLType(this);
-
-		sql += UtilSQLFindById.buildSQLFindById(this, true);
-
-		sql += UtilSQL.buildSQLFind(this, true);
+		sql += new FunctionFind().toSQL(this);
 
 		return sql;
 	}
-	
+
 	private static String buildSQLSelects(Clazz clazz) {
 
 		String sql = "";
@@ -277,38 +256,41 @@ public class Clazz {
 		return UtilSQLFindNextValue.toSQLFindNextValue(this);
 	}
 
-	public String toSQLFindById(boolean view) {
-		return UtilSQLFindById.toSQLFindById(this, view);
-	}
-	
+	// public String toSQLFindById(boolean view) {
+	// return UtilSQLFindById.toSQLFindById(this, view);
+	// }
+
 	public String toSQLFind() {
 		String sql = "";
-		
+
 		sql += UtilAnthill.toSQLHeaderTable(this);
-		
+
 		sql += new FunctionFind().toSQL(this);
-		
+
 		return sql;
 	}
 
-
-//	public String toSQLFind0(boolean view) {
-//		return UtilSQL.toSQLFind0(this, view);
-//	}
-//
-//	public String toSQLFind1(boolean view) {
-//		return UtilSQL.toSQLFind1(this, view);
-//	}
-//
-//	public String toSQLFind2(boolean view) {
-//		return UtilSQL.toSQLFind2(this, view);
-//	}
-//
-//	public String toSQLFind3(boolean view) {
-//		return UtilSQL.toSQLFind3(this, view);
-//	}
+	// public String toSQLFind0(boolean view) {
+	// return UtilSQL.toSQLFind0(this, view);
+	// }
+	//
+	// public String toSQLFind1(boolean view) {
+	// return UtilSQL.toSQLFind1(this, view);
+	// }
+	//
+	// public String toSQLFind2(boolean view) {
+	// return UtilSQL.toSQLFind2(this, view);
+	// }
+	//
+	// public String toSQLFind3(boolean view) {
+	// return UtilSQL.toSQLFind3(this, view);
+	// }
 
 	public String toSQLType() {
+		return toSQLType(true);
+	}
+
+	public String toSQLType(boolean header) {
 		String sql = "";
 
 		String sqlTmp = new Type().toSQL(this);
@@ -317,16 +299,18 @@ public class Clazz {
 			return "";
 		}
 
-		sql += UtilAnthill.toSQLHeaderTable(this);
+		if (header) {
+			sql += UtilAnthill.toSQLHeaderTable(this);
+		}
 
 		sql += sqlTmp;
 
 		return sql;
 	}
 
-	public String toSQLView() {
-		return UtilSQLView.toSQLView(this);
-	}
+	// public String toSQLView() {
+	// return UtilSQLView.toSQLView(this);
+	// }
 
 	public String toSQLInsert() {
 		return UtilSQLInsert.toSQLInsert(this);

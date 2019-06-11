@@ -151,6 +151,445 @@ $$ LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: SeguridadModulo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadModulo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.SeguridadModulo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  SeguridadModulo.id        AS SeguridadModulo_id    	-- 0	.id   		VARCHAR(36)
+				, SeguridadModulo.numero    AS SeguridadModulo_numero	-- 1	.numero		INTEGER
+				, SeguridadModulo.nombre    AS SeguridadModulo_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.SeguridadModulo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadModulo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadModulo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadModulo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(SeguridadModulo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadModuloById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadModuloById (idArg VARCHAR(36)) RETURNS SETOF massoftware.SeguridadModulo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_SeguridadModulo ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_SeguridadModulo ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_SeguridadModuloById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: SeguridadPuerta                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadPuerta
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadPuerta (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadPuerta (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.SeguridadPuerta AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  SeguridadPuerta.id                 AS SeguridadPuerta_id             	-- 0	.id            		VARCHAR(36)
+				, SeguridadPuerta.numero             AS SeguridadPuerta_numero         	-- 1	.numero        		INTEGER
+				, SeguridadPuerta.nombre             AS SeguridadPuerta_nombre         	-- 2	.nombre        		VARCHAR(50)
+				, SeguridadPuerta.equate             AS SeguridadPuerta_equate         	-- 3	.equate        		VARCHAR(30)
+				, SeguridadPuerta.seguridadModulo    AS SeguridadPuerta_seguridadModulo	-- 4	.seguridadModulo		VARCHAR(36)	SeguridadModulo.id
+
+		FROM	massoftware.SeguridadPuerta
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(SeguridadPuerta.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadPuertaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadPuertaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.SeguridadPuerta AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_SeguridadPuerta ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_SeguridadPuerta ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_SeguridadPuertaById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadPuerta_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadPuerta_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.t_SeguridadPuerta_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  SeguridadPuerta.id          AS SeguridadPuerta_id      	-- 0	.id                   		VARCHAR(36)
+				, SeguridadPuerta.numero      AS SeguridadPuerta_numero  	-- 1	.numero               		INTEGER
+				, SeguridadPuerta.nombre      AS SeguridadPuerta_nombre  	-- 2	.nombre               		VARCHAR(50)
+				, SeguridadPuerta.equate      AS SeguridadPuerta_equate  	-- 3	.equate               		VARCHAR(30)
+				, SeguridadModulo_4.id        AS SeguridadModulo_4_id    	-- 4	.SeguridadModulo.id   		VARCHAR(36)
+				, SeguridadModulo_4.numero    AS SeguridadModulo_4_numero	-- 5	.SeguridadModulo.numero		INTEGER
+				, SeguridadModulo_4.nombre    AS SeguridadModulo_4_nombre	-- 6	.SeguridadModulo.nombre		VARCHAR(50)
+
+		FROM	massoftware.SeguridadPuerta
+			LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_4        ON SeguridadPuerta.seguridadModulo = SeguridadModulo_4.id 	-- 4 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' SeguridadPuerta.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(SeguridadPuerta.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_SeguridadPuertaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SeguridadPuertaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_SeguridadPuerta_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_SeguridadPuerta_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_SeguridadPuerta_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_SeguridadPuertaById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Zona                                                                                                   //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -5305,3 +5744,1192 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.f_MotivoBloqueoCliente_1 ( null , null, null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_MotivoBloqueoClienteById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoSucursal                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoSucursal
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TipoSucursal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TipoSucursal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.TipoSucursal AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  TipoSucursal.id        AS TipoSucursal_id    	-- 0	.id   		VARCHAR(36)
+				, TipoSucursal.numero    AS TipoSucursal_numero	-- 1	.numero		INTEGER
+				, TipoSucursal.nombre    AS TipoSucursal_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.TipoSucursal
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TipoSucursal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoSucursal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' TipoSucursal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TipoSucursal.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TipoSucursalById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TipoSucursalById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TipoSucursal AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TipoSucursal ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TipoSucursal ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TipoSucursalById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Sucursal                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Sucursal
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Sucursal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Sucursal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.Sucursal AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Sucursal.id                                    AS Sucursal_id                               	-- 0	.id                              		VARCHAR(36)
+				, Sucursal.numero                                AS Sucursal_numero                           	-- 1	.numero                          		INTEGER
+				, Sucursal.nombre                                AS Sucursal_nombre                           	-- 2	.nombre                          		VARCHAR(50)
+				, Sucursal.abreviatura                           AS Sucursal_abreviatura                      	-- 3	.abreviatura                     		VARCHAR(5)
+				, Sucursal.tipoSucursal                          AS Sucursal_tipoSucursal                     	-- 4	.tipoSucursal                    		VARCHAR(36)	TipoSucursal.id
+				, Sucursal.cuentaClientesDesde                   AS Sucursal_cuentaClientesDesde              	-- 5	.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal.cuentaClientesHasta                   AS Sucursal_cuentaClientesHasta              	-- 6	.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal.cantidadCaracteresClientes            AS Sucursal_cantidadCaracteresClientes       	-- 7	.cantidadCaracteresClientes      		INTEGER
+				, Sucursal.identificacionNumericaClientes        AS Sucursal_identificacionNumericaClientes   	-- 8	.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal.permiteCambiarClientes                AS Sucursal_permiteCambiarClientes           	-- 9	.permiteCambiarClientes          		BOOLEAN
+				, Sucursal.cuentaProveedoresDesde                AS Sucursal_cuentaProveedoresDesde           	-- 10	.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal.cuentaProveedoresHasta                AS Sucursal_cuentaProveedoresHasta           	-- 11	.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal.cantidadCaracteresProveedores         AS Sucursal_cantidadCaracteresProveedores    	-- 12	.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal.identificacionNumericaProveedores     AS Sucursal_identificacionNumericaProveedores	-- 13	.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal.permiteCambiarProveedores             AS Sucursal_permiteCambiarProveedores        	-- 14	.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal.clientesOcacionalesDesde              AS Sucursal_clientesOcacionalesDesde         	-- 15	.clientesOcacionalesDesde        		INTEGER
+				, Sucursal.clientesOcacionalesHasta              AS Sucursal_clientesOcacionalesHasta         	-- 16	.clientesOcacionalesHasta        		INTEGER
+				, Sucursal.numeroCobranzaDesde                   AS Sucursal_numeroCobranzaDesde              	-- 17	.numeroCobranzaDesde             		INTEGER
+				, Sucursal.numeroCobranzaHasta                   AS Sucursal_numeroCobranzaHasta              	-- 18	.numeroCobranzaHasta             		INTEGER
+
+		FROM	massoftware.Sucursal
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Sucursal.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_SucursalById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SucursalById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Sucursal AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Sucursal ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Sucursal ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_SucursalById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Sucursal_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Sucursal_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.t_Sucursal_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Sucursal.id                                    AS Sucursal_id                               	-- 0	.id                              		VARCHAR(36)
+				, Sucursal.numero                                AS Sucursal_numero                           	-- 1	.numero                          		INTEGER
+				, Sucursal.nombre                                AS Sucursal_nombre                           	-- 2	.nombre                          		VARCHAR(50)
+				, Sucursal.abreviatura                           AS Sucursal_abreviatura                      	-- 3	.abreviatura                     		VARCHAR(5)
+				, TipoSucursal_4.id                              AS TipoSucursal_4_id                         	-- 4	.TipoSucursal.id                 		VARCHAR(36)
+				, TipoSucursal_4.numero                          AS TipoSucursal_4_numero                     	-- 5	.TipoSucursal.numero             		INTEGER
+				, TipoSucursal_4.nombre                          AS TipoSucursal_4_nombre                     	-- 6	.TipoSucursal.nombre             		VARCHAR(50)
+				, Sucursal.cuentaClientesDesde                   AS Sucursal_cuentaClientesDesde              	-- 7	.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal.cuentaClientesHasta                   AS Sucursal_cuentaClientesHasta              	-- 8	.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal.cantidadCaracteresClientes            AS Sucursal_cantidadCaracteresClientes       	-- 9	.cantidadCaracteresClientes      		INTEGER
+				, Sucursal.identificacionNumericaClientes        AS Sucursal_identificacionNumericaClientes   	-- 10	.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal.permiteCambiarClientes                AS Sucursal_permiteCambiarClientes           	-- 11	.permiteCambiarClientes          		BOOLEAN
+				, Sucursal.cuentaProveedoresDesde                AS Sucursal_cuentaProveedoresDesde           	-- 12	.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal.cuentaProveedoresHasta                AS Sucursal_cuentaProveedoresHasta           	-- 13	.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal.cantidadCaracteresProveedores         AS Sucursal_cantidadCaracteresProveedores    	-- 14	.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal.identificacionNumericaProveedores     AS Sucursal_identificacionNumericaProveedores	-- 15	.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal.permiteCambiarProveedores             AS Sucursal_permiteCambiarProveedores        	-- 16	.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal.clientesOcacionalesDesde              AS Sucursal_clientesOcacionalesDesde         	-- 17	.clientesOcacionalesDesde        		INTEGER
+				, Sucursal.clientesOcacionalesHasta              AS Sucursal_clientesOcacionalesHasta         	-- 18	.clientesOcacionalesHasta        		INTEGER
+				, Sucursal.numeroCobranzaDesde                   AS Sucursal_numeroCobranzaDesde              	-- 19	.numeroCobranzaDesde             		INTEGER
+				, Sucursal.numeroCobranzaHasta                   AS Sucursal_numeroCobranzaHasta              	-- 20	.numeroCobranzaHasta             		INTEGER
+
+		FROM	massoftware.Sucursal
+			LEFT JOIN massoftware.TipoSucursal AS TipoSucursal_4        ON Sucursal.tipoSucursal = TipoSucursal_4.id 	-- 4 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Sucursal.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Sucursal.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_SucursalById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_SucursalById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Sucursal_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Sucursal_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Sucursal_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_SucursalById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: DepositoModulo                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.DepositoModulo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_DepositoModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_DepositoModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.DepositoModulo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  DepositoModulo.id        AS DepositoModulo_id    	-- 0	.id   		VARCHAR(36)
+				, DepositoModulo.numero    AS DepositoModulo_numero	-- 1	.numero		INTEGER
+				, DepositoModulo.nombre    AS DepositoModulo_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.DepositoModulo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' DepositoModulo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' DepositoModulo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' DepositoModulo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(DepositoModulo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_DepositoModuloById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_DepositoModuloById (idArg VARCHAR(36)) RETURNS SETOF massoftware.DepositoModulo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_DepositoModulo ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_DepositoModulo ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_DepositoModuloById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Deposito                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Deposito
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Deposito (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Deposito (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.Deposito AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Deposito.id                 AS Deposito_id             	-- 0	.id            		VARCHAR(36)
+				, Deposito.numero             AS Deposito_numero         	-- 1	.numero        		INTEGER
+				, Deposito.nombre             AS Deposito_nombre         	-- 2	.nombre        		VARCHAR(50)
+				, Deposito.abreviatura        AS Deposito_abreviatura    	-- 3	.abreviatura   		VARCHAR(5)
+				, Deposito.sucursal           AS Deposito_sucursal       	-- 4	.sucursal      		VARCHAR(36)	Sucursal.id
+				, Deposito.depositoModulo     AS Deposito_depositoModulo 	-- 5	.depositoModulo		VARCHAR(36)	DepositoModulo.id
+				, Deposito.puertaOperativo    AS Deposito_puertaOperativo	-- 6	.puertaOperativo		VARCHAR(36)	SeguridadPuerta.id
+				, Deposito.puertaConsulta     AS Deposito_puertaConsulta 	-- 7	.puertaConsulta		VARCHAR(36)	SeguridadPuerta.id
+
+		FROM	massoftware.Deposito
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg8)) > 0 THEN
+		sucursalArg8 = REPLACE(sucursalArg8, '''', '''''');
+		sucursalArg8 = LOWER(TRIM(sucursalArg8));
+		sucursalArg8 = TRANSLATE(sucursalArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_DepositoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_DepositoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Deposito AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Deposito ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Deposito ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_DepositoById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Deposito_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Deposito_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_Deposito_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Deposito.id                                      AS Deposito_id                                 	-- 0	.id                                       		VARCHAR(36)
+				, Deposito.numero                                  AS Deposito_numero                             	-- 1	.numero                                   		INTEGER
+				, Deposito.nombre                                  AS Deposito_nombre                             	-- 2	.nombre                                   		VARCHAR(50)
+				, Deposito.abreviatura                             AS Deposito_abreviatura                        	-- 3	.abreviatura                              		VARCHAR(5)
+				, Sucursal_4.id                                    AS Sucursal_4_id                               	-- 4	.Sucursal.id                              		VARCHAR(36)
+				, Sucursal_4.numero                                AS Sucursal_4_numero                           	-- 5	.Sucursal.numero                          		INTEGER
+				, Sucursal_4.nombre                                AS Sucursal_4_nombre                           	-- 6	.Sucursal.nombre                          		VARCHAR(50)
+				, Sucursal_4.abreviatura                           AS Sucursal_4_abreviatura                      	-- 7	.Sucursal.abreviatura                     		VARCHAR(5)
+				, Sucursal_4.tipoSucursal                          AS Sucursal_4_tipoSucursal                     	-- 8	.Sucursal.tipoSucursal                    		VARCHAR(36)	TipoSucursal.id
+				, Sucursal_4.cuentaClientesDesde                   AS Sucursal_4_cuentaClientesDesde              	-- 9	.Sucursal.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal_4.cuentaClientesHasta                   AS Sucursal_4_cuentaClientesHasta              	-- 10	.Sucursal.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal_4.cantidadCaracteresClientes            AS Sucursal_4_cantidadCaracteresClientes       	-- 11	.Sucursal.cantidadCaracteresClientes      		INTEGER
+				, Sucursal_4.identificacionNumericaClientes        AS Sucursal_4_identificacionNumericaClientes   	-- 12	.Sucursal.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal_4.permiteCambiarClientes                AS Sucursal_4_permiteCambiarClientes           	-- 13	.Sucursal.permiteCambiarClientes          		BOOLEAN
+				, Sucursal_4.cuentaProveedoresDesde                AS Sucursal_4_cuentaProveedoresDesde           	-- 14	.Sucursal.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal_4.cuentaProveedoresHasta                AS Sucursal_4_cuentaProveedoresHasta           	-- 15	.Sucursal.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal_4.cantidadCaracteresProveedores         AS Sucursal_4_cantidadCaracteresProveedores    	-- 16	.Sucursal.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal_4.identificacionNumericaProveedores     AS Sucursal_4_identificacionNumericaProveedores	-- 17	.Sucursal.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal_4.permiteCambiarProveedores             AS Sucursal_4_permiteCambiarProveedores        	-- 18	.Sucursal.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal_4.clientesOcacionalesDesde              AS Sucursal_4_clientesOcacionalesDesde         	-- 19	.Sucursal.clientesOcacionalesDesde        		INTEGER
+				, Sucursal_4.clientesOcacionalesHasta              AS Sucursal_4_clientesOcacionalesHasta         	-- 20	.Sucursal.clientesOcacionalesHasta        		INTEGER
+				, Sucursal_4.numeroCobranzaDesde                   AS Sucursal_4_numeroCobranzaDesde              	-- 21	.Sucursal.numeroCobranzaDesde             		INTEGER
+				, Sucursal_4.numeroCobranzaHasta                   AS Sucursal_4_numeroCobranzaHasta              	-- 22	.Sucursal.numeroCobranzaHasta             		INTEGER
+				, DepositoModulo_23.id                             AS DepositoModulo_23_id                        	-- 23	.DepositoModulo.id                        		VARCHAR(36)
+				, DepositoModulo_23.numero                         AS DepositoModulo_23_numero                    	-- 24	.DepositoModulo.numero                    		INTEGER
+				, DepositoModulo_23.nombre                         AS DepositoModulo_23_nombre                    	-- 25	.DepositoModulo.nombre                    		VARCHAR(50)
+				, SeguridadPuerta_26.id                            AS SeguridadPuerta_26_id                       	-- 26	.SeguridadPuerta.id                       		VARCHAR(36)
+				, SeguridadPuerta_26.numero                        AS SeguridadPuerta_26_numero                   	-- 27	.SeguridadPuerta.numero                   		INTEGER
+				, SeguridadPuerta_26.nombre                        AS SeguridadPuerta_26_nombre                   	-- 28	.SeguridadPuerta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_26.equate                        AS SeguridadPuerta_26_equate                   	-- 29	.SeguridadPuerta.equate                   		VARCHAR(30)
+				, SeguridadPuerta_26.seguridadModulo               AS SeguridadPuerta_26_seguridadModulo          	-- 30	.SeguridadPuerta.seguridadModulo          		VARCHAR(36)	SeguridadModulo.id
+				, SeguridadPuerta_31.id                            AS SeguridadPuerta_31_id                       	-- 31	.SeguridadPuerta.id                       		VARCHAR(36)
+				, SeguridadPuerta_31.numero                        AS SeguridadPuerta_31_numero                   	-- 32	.SeguridadPuerta.numero                   		INTEGER
+				, SeguridadPuerta_31.nombre                        AS SeguridadPuerta_31_nombre                   	-- 33	.SeguridadPuerta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_31.equate                        AS SeguridadPuerta_31_equate                   	-- 34	.SeguridadPuerta.equate                   		VARCHAR(30)
+				, SeguridadPuerta_31.seguridadModulo               AS SeguridadPuerta_31_seguridadModulo          	-- 35	.SeguridadPuerta.seguridadModulo          		VARCHAR(36)	SeguridadModulo.id
+
+		FROM	massoftware.Deposito
+			LEFT JOIN massoftware.Sucursal AS Sucursal_4                ON Deposito.sucursal = Sucursal_4.id 	-- 4 LEFT LEVEL: 1
+			LEFT JOIN massoftware.DepositoModulo AS DepositoModulo_23         ON Deposito.depositoModulo = DepositoModulo_23.id 	-- 23 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_26        ON Deposito.puertaOperativo = SeguridadPuerta_26.id 	-- 26 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_31        ON Deposito.puertaConsulta = SeguridadPuerta_31.id 	-- 31 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg8)) > 0 THEN
+		sucursalArg8 = REPLACE(sucursalArg8, '''', '''''');
+		sucursalArg8 = LOWER(TRIM(sucursalArg8));
+		sucursalArg8 = TRANSLATE(sucursalArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_DepositoById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_DepositoById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Deposito_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Deposito_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Deposito_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_DepositoById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Deposito_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Deposito_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, sucursalArg8      VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_Deposito_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Deposito.id                                      AS Deposito_id                                 	-- 0	.id                                       		VARCHAR(36)
+				, Deposito.numero                                  AS Deposito_numero                             	-- 1	.numero                                   		INTEGER
+				, Deposito.nombre                                  AS Deposito_nombre                             	-- 2	.nombre                                   		VARCHAR(50)
+				, Deposito.abreviatura                             AS Deposito_abreviatura                        	-- 3	.abreviatura                              		VARCHAR(5)
+				, Sucursal_4.id                                    AS Sucursal_4_id                               	-- 4	.Sucursal.id                              		VARCHAR(36)
+				, Sucursal_4.numero                                AS Sucursal_4_numero                           	-- 5	.Sucursal.numero                          		INTEGER
+				, Sucursal_4.nombre                                AS Sucursal_4_nombre                           	-- 6	.Sucursal.nombre                          		VARCHAR(50)
+				, Sucursal_4.abreviatura                           AS Sucursal_4_abreviatura                      	-- 7	.Sucursal.abreviatura                     		VARCHAR(5)
+				, TipoSucursal_8.id                                AS TipoSucursal_8_id                           	-- 8	.Sucursal.TipoSucursal.id                 		VARCHAR(36)
+				, TipoSucursal_8.numero                            AS TipoSucursal_8_numero                       	-- 9	.Sucursal.TipoSucursal.numero             		INTEGER
+				, TipoSucursal_8.nombre                            AS TipoSucursal_8_nombre                       	-- 10	.Sucursal.TipoSucursal.nombre             		VARCHAR(50)
+				, Sucursal_4.cuentaClientesDesde                   AS Sucursal_4_cuentaClientesDesde              	-- 11	.Sucursal.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal_4.cuentaClientesHasta                   AS Sucursal_4_cuentaClientesHasta              	-- 12	.Sucursal.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal_4.cantidadCaracteresClientes            AS Sucursal_4_cantidadCaracteresClientes       	-- 13	.Sucursal.cantidadCaracteresClientes      		INTEGER
+				, Sucursal_4.identificacionNumericaClientes        AS Sucursal_4_identificacionNumericaClientes   	-- 14	.Sucursal.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal_4.permiteCambiarClientes                AS Sucursal_4_permiteCambiarClientes           	-- 15	.Sucursal.permiteCambiarClientes          		BOOLEAN
+				, Sucursal_4.cuentaProveedoresDesde                AS Sucursal_4_cuentaProveedoresDesde           	-- 16	.Sucursal.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal_4.cuentaProveedoresHasta                AS Sucursal_4_cuentaProveedoresHasta           	-- 17	.Sucursal.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal_4.cantidadCaracteresProveedores         AS Sucursal_4_cantidadCaracteresProveedores    	-- 18	.Sucursal.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal_4.identificacionNumericaProveedores     AS Sucursal_4_identificacionNumericaProveedores	-- 19	.Sucursal.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal_4.permiteCambiarProveedores             AS Sucursal_4_permiteCambiarProveedores        	-- 20	.Sucursal.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal_4.clientesOcacionalesDesde              AS Sucursal_4_clientesOcacionalesDesde         	-- 21	.Sucursal.clientesOcacionalesDesde        		INTEGER
+				, Sucursal_4.clientesOcacionalesHasta              AS Sucursal_4_clientesOcacionalesHasta         	-- 22	.Sucursal.clientesOcacionalesHasta        		INTEGER
+				, Sucursal_4.numeroCobranzaDesde                   AS Sucursal_4_numeroCobranzaDesde              	-- 23	.Sucursal.numeroCobranzaDesde             		INTEGER
+				, Sucursal_4.numeroCobranzaHasta                   AS Sucursal_4_numeroCobranzaHasta              	-- 24	.Sucursal.numeroCobranzaHasta             		INTEGER
+				, DepositoModulo_25.id                             AS DepositoModulo_25_id                        	-- 25	.DepositoModulo.id                        		VARCHAR(36)
+				, DepositoModulo_25.numero                         AS DepositoModulo_25_numero                    	-- 26	.DepositoModulo.numero                    		INTEGER
+				, DepositoModulo_25.nombre                         AS DepositoModulo_25_nombre                    	-- 27	.DepositoModulo.nombre                    		VARCHAR(50)
+				, SeguridadPuerta_28.id                            AS SeguridadPuerta_28_id                       	-- 28	.SeguridadPuerta.id                       		VARCHAR(36)
+				, SeguridadPuerta_28.numero                        AS SeguridadPuerta_28_numero                   	-- 29	.SeguridadPuerta.numero                   		INTEGER
+				, SeguridadPuerta_28.nombre                        AS SeguridadPuerta_28_nombre                   	-- 30	.SeguridadPuerta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_28.equate                        AS SeguridadPuerta_28_equate                   	-- 31	.SeguridadPuerta.equate                   		VARCHAR(30)
+				, SeguridadModulo_32.id                            AS SeguridadModulo_32_id                       	-- 32	.SeguridadPuerta.SeguridadModulo.id       		VARCHAR(36)
+				, SeguridadModulo_32.numero                        AS SeguridadModulo_32_numero                   	-- 33	.SeguridadPuerta.SeguridadModulo.numero   		INTEGER
+				, SeguridadModulo_32.nombre                        AS SeguridadModulo_32_nombre                   	-- 34	.SeguridadPuerta.SeguridadModulo.nombre   		VARCHAR(50)
+				, SeguridadPuerta_35.id                            AS SeguridadPuerta_35_id                       	-- 35	.SeguridadPuerta.id                       		VARCHAR(36)
+				, SeguridadPuerta_35.numero                        AS SeguridadPuerta_35_numero                   	-- 36	.SeguridadPuerta.numero                   		INTEGER
+				, SeguridadPuerta_35.nombre                        AS SeguridadPuerta_35_nombre                   	-- 37	.SeguridadPuerta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_35.equate                        AS SeguridadPuerta_35_equate                   	-- 38	.SeguridadPuerta.equate                   		VARCHAR(30)
+				, SeguridadModulo_39.id                            AS SeguridadModulo_39_id                       	-- 39	.SeguridadPuerta.SeguridadModulo.id       		VARCHAR(36)
+				, SeguridadModulo_39.numero                        AS SeguridadModulo_39_numero                   	-- 40	.SeguridadPuerta.SeguridadModulo.numero   		INTEGER
+				, SeguridadModulo_39.nombre                        AS SeguridadModulo_39_nombre                   	-- 41	.SeguridadPuerta.SeguridadModulo.nombre   		VARCHAR(50)
+
+		FROM	massoftware.Deposito
+			LEFT JOIN massoftware.Sucursal AS Sucursal_4                   ON Deposito.sucursal = Sucursal_4.id 	-- 4 LEFT LEVEL: 1
+				LEFT JOIN massoftware.TipoSucursal AS TipoSucursal_8              ON Sucursal_4.tipoSucursal = TipoSucursal_8.id 	-- 8 LEFT LEVEL: 2
+			LEFT JOIN massoftware.DepositoModulo AS DepositoModulo_25            ON Deposito.depositoModulo = DepositoModulo_25.id 	-- 25 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_28           ON Deposito.puertaOperativo = SeguridadPuerta_28.id 	-- 28 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_32           ON SeguridadPuerta_28.seguridadModulo = SeguridadModulo_32.id 	-- 32 LEFT LEVEL: 2
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_35           ON Deposito.puertaConsulta = SeguridadPuerta_35.id 	-- 35 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_39           ON SeguridadPuerta_35.seguridadModulo = SeguridadModulo_39.id 	-- 39 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Deposito.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg8)) > 0 THEN
+		sucursalArg8 = REPLACE(sucursalArg8, '''', '''''');
+		sucursalArg8 = LOWER(TRIM(sucursalArg8));
+		sucursalArg8 = TRANSLATE(sucursalArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Deposito.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_DepositoById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_DepositoById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Deposito_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Deposito_2 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Deposito_2 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_DepositoById_2 ('xxx'); 

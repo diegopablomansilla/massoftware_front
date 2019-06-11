@@ -7,23 +7,29 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.anthill.ant.CargaAnt;
-import com.massoftware.anthill.ant.CiudadAnt;
-import com.massoftware.anthill.ant.ClasificacionClienteAnt;
-import com.massoftware.anthill.ant.CodigoPostalAnt;
-import com.massoftware.anthill.ant.MonedaAFIPAnt;
-import com.massoftware.anthill.ant.MonedaAnt;
-import com.massoftware.anthill.ant.MotivoBloqueoClienteAnt;
-import com.massoftware.anthill.ant.MotivoComentarioAnt;
-import com.massoftware.anthill.ant.NotaCreditoMotivoAnt;
-import com.massoftware.anthill.ant.PaisAnt;
-import com.massoftware.anthill.ant.ProvinciaAnt;
-import com.massoftware.anthill.ant.TipoClienteAnt;
-import com.massoftware.anthill.ant.TipoDocumentoAFIPAnt;
-import com.massoftware.anthill.ant.TransporteAnt;
-import com.massoftware.anthill.ant.TransporteTarifaAnt;
-import com.massoftware.anthill.ant.UsuarioAnt;
-import com.massoftware.anthill.ant.ZonaAnt;
+import com.massoftware.anthill.ant.afip.MonedaAFIPAnt;
+import com.massoftware.anthill.ant.afip.TipoDocumentoAFIPAnt;
+import com.massoftware.anthill.ant.clientes.ClasificacionClienteAnt;
+import com.massoftware.anthill.ant.clientes.MotivoBloqueoClienteAnt;
+import com.massoftware.anthill.ant.clientes.MotivoComentarioAnt;
+import com.massoftware.anthill.ant.clientes.TipoClienteAnt;
+import com.massoftware.anthill.ant.contabilidad.ventas.NotaCreditoMotivoAnt;
+import com.massoftware.anthill.ant.empresa.DepositoAnt;
+import com.massoftware.anthill.ant.empresa.DepositoModuloAnt;
+import com.massoftware.anthill.ant.empresa.SucursalAnt;
+import com.massoftware.anthill.ant.empresa.TipoSucursalAnt;
+import com.massoftware.anthill.ant.geo.CiudadAnt;
+import com.massoftware.anthill.ant.geo.CodigoPostalAnt;
+import com.massoftware.anthill.ant.geo.PaisAnt;
+import com.massoftware.anthill.ant.geo.ProvinciaAnt;
+import com.massoftware.anthill.ant.geo.ZonaAnt;
+import com.massoftware.anthill.ant.logistica.CargaAnt;
+import com.massoftware.anthill.ant.logistica.TransporteAnt;
+import com.massoftware.anthill.ant.logistica.TransporteTarifaAnt;
+import com.massoftware.anthill.ant.monedas.MonedaAnt;
+import com.massoftware.anthill.ant.seguridad.SeguridadModuloAnt;
+import com.massoftware.anthill.ant.seguridad.SeguridadPuertaAnt;
+import com.massoftware.anthill.ant.seguridad.UsuarioAnt;
 
 //https://github.com/javierarce/palabras/blob/master/listado-general.txt
 // http://www.listapalabras.com/
@@ -64,7 +70,9 @@ public class Anthill {
 		///////////////////////////////////////////////////////////////////
 
 		new UsuarioAnt(anthill);
-
+		SeguridadModuloAnt seguridadModuloAnt = new SeguridadModuloAnt(anthill);
+		SeguridadPuertaAnt seguridadPuertaAnt = new SeguridadPuertaAnt(anthill, seguridadModuloAnt);
+		
 		// ---------------------------------------------
 
 		new ZonaAnt(anthill);
@@ -101,6 +109,14 @@ public class Anthill {
 
 		// ---------------------------------------------
 
+		TipoSucursalAnt tipoSucursalAnt = new TipoSucursalAnt(anthill);
+		SucursalAnt sucursalAnt = new SucursalAnt(anthill, tipoSucursalAnt);
+		
+		DepositoModuloAnt depositoModuloAnt = new DepositoModuloAnt(anthill);
+		new DepositoAnt(anthill, sucursalAnt, depositoModuloAnt, seguridadPuertaAnt);
+
+		// ---------------------------------------------
+
 		///////////////////////////////////////////////////////////////////
 
 		anthill.build();
@@ -116,7 +132,7 @@ public class Anthill {
 		File folderSQL = new File(massoftware_front + File.separatorChar + "postgresql" + File.separatorChar + "pp");
 		folderSQL.mkdirs();
 
-		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware\\backend\\populate");
+		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware");
 		folderPopulate.mkdirs();
 
 		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
@@ -143,7 +159,7 @@ public class Anthill {
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
 		String javaPopulateInsert = "";
-		
+
 		List<Clazz> clazzList = new ArrayList<Clazz>();
 
 		for (Ant ant : ants) {
@@ -192,10 +208,16 @@ public class Anthill {
 				sqlFindExists += sqlFindExistsItem;
 			}
 
+			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar
+					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
+			folderSQLItem.mkdirs();
+
+			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + ".sql", sqlItem);
+
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			// javaPopulateInsert += "\n\t\ttry {";
-			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
+			javaPopulateInsert += "\n\t\t\t//insert" + clazz.getName() + "();";
 			// javaPopulateInsert += "\n\t\t} catch (Exception e) {}";
 
 			javaPopulateBody += "\n\n";
@@ -235,20 +257,17 @@ public class Anthill {
 					clazz.toJavaWF());
 
 		}
-		
-		
-		
 
-		String javaPopulate = "package com.massoftware.backend.populate;\n";
+		String javaPopulate = "package com.massoftware;\n";
 
 		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.Random;\n";
-		javaPopulate += "import com.massoftware.AppCX;\n";				
+		javaPopulate += "import com.massoftware.AppCX;\n";
 		javaPopulate += javaPopulateImport;
 		javaPopulate += "\n\npublic class Populate {";
 
-		javaPopulate += "\n\n\tstatic int maxRows = 1000;";
+		javaPopulate += "\n\n\tstatic int maxRows = 300;";
 
 		javaPopulate += "\n\n\tpublic static void main(String[] args) throws Exception {";
 		javaPopulate += javaPopulateInsert;
@@ -266,8 +285,10 @@ public class Anthill {
 				"---------------------------------------------------------------------------------------------------------------------------------------------");
 
 		writeFile(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
-		writeFile(folderService.getAbsolutePath() + File.separatorChar + "AbstractFactoryService.java", UtilJavaFactoryService.toJava(clazzList));
-		writeFile(folderWindows.getAbsolutePath() + File.separatorChar + "AbstractFactoryWidget.java", UtilJavaFactoryWidget.toJava(clazzList));
+		writeFile(folderService.getAbsolutePath() + File.separatorChar + "AbstractFactoryService.java",
+				UtilJavaFactoryService.toJava(clazzList));
+		writeFile(folderWindows.getAbsolutePath() + File.separatorChar + "AbstractFactoryWidget.java",
+				UtilJavaFactoryWidget.toJava(clazzList));
 
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_tables.sql", sqlTable);
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_types.sql", sqlType);

@@ -531,7 +531,7 @@ public class UtilJavaPOJO {
 
 		fieldsSQL = new ArrayList<String>();
 
-		buildConstructorAtts(maxLevel, level, "", clazzX, fieldsSQL);
+		buildConstructorAtts(maxLevel, level, "", clazzX, null, fieldsSQL);
 
 		for (int i = 0; i < fieldsSQL.size(); i++) {
 
@@ -563,14 +563,25 @@ public class UtilJavaPOJO {
 		return java;
 	}
 
-	private static void buildConstructorAtts(int maxLevel, int level, String source, Clazz clazz, List<String> fields) {
+	private static void buildConstructorAtts(int maxLevel, int level, String source, Clazz clazz, Att attSource, List<String> fields) {
 
 		String java = "";
 
 		if (source.length() > 0) {
-			java = source + "." + clazz.getName() + ".id";
+			
+			if(attSource != null) {
+				java = source + "." + attSource.getName() + ".id";	
+			} else {
+				java = source + "." + clazz.getName() + ".id";	
+			}	
+			
 		} else {
-			java = clazz.getName() + ".id";
+			
+			if(attSource != null) {
+				java = attSource.getName() + ".id";	
+			} else {
+				java = clazz.getName() + ".id";	
+			}
 		}
 
 		fields.add(java);
@@ -582,7 +593,7 @@ public class UtilJavaPOJO {
 			if (att.isSimple()) {
 
 				if (source.length() > 0) {
-					java = source + "." + clazz.getName() + "." + att.getName();
+					java = source + "." + attSource.getName() + "." + att.getName();
 				} else {
 					java = clazz.getName() + "." + att.getName();
 				}
@@ -592,23 +603,52 @@ public class UtilJavaPOJO {
 			} else {
 
 				if (level < maxLevel) {
+					
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
 					if (source.length() > 0) {
-						buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
-								dataTypeClazz.getClazz(), fields);
+						
+//						buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
+//								dataTypeClazz.getClazz(), att, fields);
+						
+						if(attSource != null) {
+							buildConstructorAtts(maxLevel, (level + 1), source + "." + attSource.getName(),
+									dataTypeClazz.getClazz(), att, fields);	
+						} else {
+							buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
+									dataTypeClazz.getClazz(), att, fields);	
+						}	
+						
+						
 					} else {
-						buildConstructorAtts(maxLevel, (level + 1), clazz.getName(), dataTypeClazz.getClazz(), fields);
+						
+						if(attSource != null) {
+							buildConstructorAtts(maxLevel, (level + 1), attSource.getName(), dataTypeClazz.getClazz(), att, fields);	
+						} else {
+							buildConstructorAtts(maxLevel, (level + 1), clazz.getName(), dataTypeClazz.getClazz(), att, fields);	
+						}
+						
+
 					}
 				} else {
 
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
-
-					if (source.length() > 0) {
-						java = source + "." + clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+					
+					if(attSource != null) {
+						if (source.length() > 0) {
+							java = source + "." + attSource.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+						} else {
+							java = attSource.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
+						}	
 					} else {
-						java = clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
+						if (source.length() > 0) {
+							java = source + "." + clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+						} else {
+							java = clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
+						}		
 					}
+
+					
 
 					fields.add(java);
 

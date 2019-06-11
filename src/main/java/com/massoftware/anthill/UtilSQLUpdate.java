@@ -46,7 +46,7 @@ public class UtilSQLUpdate {
 
 			} else if (att.isString()) {
 
-				argsSQL += sc + att.getName() + "Arg" + " " + att.getNameSQL() + "(" + att.getMaxLength() + ")";
+				argsSQL += sc + att.getName() + "Arg" + " " + att.getNameSQL();
 
 			} else if (att.isBoolean()) {
 

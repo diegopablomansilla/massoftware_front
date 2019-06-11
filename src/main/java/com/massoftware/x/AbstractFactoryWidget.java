@@ -3,6 +3,12 @@ package com.massoftware.x;
 import com.massoftware.service.seguridad.UsuarioFiltro;
 import com.massoftware.x.seguridad.WLUsuario;
 import com.massoftware.x.seguridad.WFUsuario;
+import com.massoftware.service.seguridad.SeguridadModuloFiltro;
+import com.massoftware.x.seguridad.WLSeguridadModulo;
+import com.massoftware.x.seguridad.WFSeguridadModulo;
+import com.massoftware.service.seguridad.SeguridadPuertaFiltro;
+import com.massoftware.x.seguridad.WLSeguridadPuerta;
+import com.massoftware.x.seguridad.WFSeguridadPuerta;
 import com.massoftware.service.geo.ZonaFiltro;
 import com.massoftware.x.geo.WLZona;
 import com.massoftware.x.geo.WFZona;
@@ -51,6 +57,18 @@ import com.massoftware.x.clientes.WFClasificacionCliente;
 import com.massoftware.service.clientes.MotivoBloqueoClienteFiltro;
 import com.massoftware.x.clientes.WLMotivoBloqueoCliente;
 import com.massoftware.x.clientes.WFMotivoBloqueoCliente;
+import com.massoftware.service.empresa.TipoSucursalFiltro;
+import com.massoftware.x.empresa.WLTipoSucursal;
+import com.massoftware.x.empresa.WFTipoSucursal;
+import com.massoftware.service.empresa.SucursalFiltro;
+import com.massoftware.x.empresa.WLSucursal;
+import com.massoftware.x.empresa.WFSucursal;
+import com.massoftware.service.empresa.DepositoModuloFiltro;
+import com.massoftware.x.empresa.WLDepositoModulo;
+import com.massoftware.x.empresa.WFDepositoModulo;
+import com.massoftware.service.empresa.DepositoFiltro;
+import com.massoftware.x.empresa.WLDeposito;
+import com.massoftware.x.empresa.WFDeposito;
 
 
 public abstract class AbstractFactoryWidget {
@@ -65,6 +83,28 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFUsuario buildWFUsuario(String mode, String id) throws Exception {
 		return new WFUsuario(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLSeguridadModulo buildWLSeguridadModulo() throws Exception {
+		return new WLSeguridadModulo();
+	}
+	public WLSeguridadModulo buildWLSeguridadModulo(SeguridadModuloFiltro filtro) throws Exception {
+		return new WLSeguridadModulo(filtro);
+	}
+	public WFSeguridadModulo buildWFSeguridadModulo(String mode, String id) throws Exception {
+		return new WFSeguridadModulo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLSeguridadPuerta buildWLSeguridadPuerta() throws Exception {
+		return new WLSeguridadPuerta();
+	}
+	public WLSeguridadPuerta buildWLSeguridadPuerta(SeguridadPuertaFiltro filtro) throws Exception {
+		return new WLSeguridadPuerta(filtro);
+	}
+	public WFSeguridadPuerta buildWFSeguridadPuerta(String mode, String id) throws Exception {
+		return new WFSeguridadPuerta(mode, id);
 	}
 
 	// -------------------------------------------------------------------------
@@ -241,6 +281,50 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFMotivoBloqueoCliente buildWFMotivoBloqueoCliente(String mode, String id) throws Exception {
 		return new WFMotivoBloqueoCliente(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTipoSucursal buildWLTipoSucursal() throws Exception {
+		return new WLTipoSucursal();
+	}
+	public WLTipoSucursal buildWLTipoSucursal(TipoSucursalFiltro filtro) throws Exception {
+		return new WLTipoSucursal(filtro);
+	}
+	public WFTipoSucursal buildWFTipoSucursal(String mode, String id) throws Exception {
+		return new WFTipoSucursal(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLSucursal buildWLSucursal() throws Exception {
+		return new WLSucursal();
+	}
+	public WLSucursal buildWLSucursal(SucursalFiltro filtro) throws Exception {
+		return new WLSucursal(filtro);
+	}
+	public WFSucursal buildWFSucursal(String mode, String id) throws Exception {
+		return new WFSucursal(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLDepositoModulo buildWLDepositoModulo() throws Exception {
+		return new WLDepositoModulo();
+	}
+	public WLDepositoModulo buildWLDepositoModulo(DepositoModuloFiltro filtro) throws Exception {
+		return new WLDepositoModulo(filtro);
+	}
+	public WFDepositoModulo buildWFDepositoModulo(String mode, String id) throws Exception {
+		return new WFDepositoModulo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLDeposito buildWLDeposito() throws Exception {
+		return new WLDeposito();
+	}
+	public WLDeposito buildWLDeposito(DepositoFiltro filtro) throws Exception {
+		return new WLDeposito(filtro);
+	}
+	public WFDeposito buildWFDeposito(String mode, String id) throws Exception {
+		return new WFDeposito(mode, id);
 	}
 
 }

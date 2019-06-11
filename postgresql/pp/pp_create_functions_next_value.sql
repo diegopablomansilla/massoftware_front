@@ -26,6 +26,52 @@ $$ LANGUAGE SQL;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: SeguridadModulo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadModulo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_SeguridadModulo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_SeguridadModulo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.SeguridadModulo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_SeguridadModulo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: SeguridadPuerta                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.SeguridadPuerta
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_SeguridadPuerta_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_SeguridadPuerta_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.SeguridadPuerta;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_SeguridadPuerta_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Zona                                                                                                   //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -559,3 +605,173 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_MotivoBloqueoCliente_numero() RETU
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_MotivoBloqueoCliente_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoSucursal                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoSucursal
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TipoSucursal_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TipoSucursal_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TipoSucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TipoSucursal_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Sucursal                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Sucursal
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_cantidadCaracteresClientes() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_cantidadCaracteresClientes() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(cantidadCaracteresClientes),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_cantidadCaracteresClientes();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_cantidadCaracteresProveedores() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_cantidadCaracteresProveedores() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(cantidadCaracteresProveedores),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_cantidadCaracteresProveedores();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_clientesOcacionalesDesde() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_clientesOcacionalesDesde() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(clientesOcacionalesDesde),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_clientesOcacionalesDesde();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_clientesOcacionalesHasta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_clientesOcacionalesHasta() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(clientesOcacionalesHasta),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_clientesOcacionalesHasta();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_numeroCobranzaDesde() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_numeroCobranzaDesde() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroCobranzaDesde),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_numeroCobranzaDesde();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Sucursal_numeroCobranzaHasta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Sucursal_numeroCobranzaHasta() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroCobranzaHasta),0) + 1)::INTEGER FROM massoftware.Sucursal;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Sucursal_numeroCobranzaHasta();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: DepositoModulo                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.DepositoModulo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_DepositoModulo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_DepositoModulo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.DepositoModulo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_DepositoModulo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Deposito                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Deposito
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Deposito_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Deposito_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Deposito;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Deposito_numero();

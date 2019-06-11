@@ -1,6 +1,8 @@
 package com.massoftware.service;
 
 import com.massoftware.service.seguridad.UsuarioService;
+import com.massoftware.service.seguridad.SeguridadModuloService;
+import com.massoftware.service.seguridad.SeguridadPuertaService;
 import com.massoftware.service.geo.ZonaService;
 import com.massoftware.service.geo.PaisService;
 import com.massoftware.service.geo.ProvinciaService;
@@ -17,12 +19,24 @@ import com.massoftware.service.clientes.MotivoComentarioService;
 import com.massoftware.service.clientes.TipoClienteService;
 import com.massoftware.service.clientes.ClasificacionClienteService;
 import com.massoftware.service.clientes.MotivoBloqueoClienteService;
+import com.massoftware.service.empresa.TipoSucursalService;
+import com.massoftware.service.empresa.SucursalService;
+import com.massoftware.service.empresa.DepositoModuloService;
+import com.massoftware.service.empresa.DepositoService;
 
 
 public abstract class AbstractFactoryService {
 
 	public UsuarioService buildUsuarioService() throws Exception {
 		return new UsuarioService();
+	}
+
+	public SeguridadModuloService buildSeguridadModuloService() throws Exception {
+		return new SeguridadModuloService();
+	}
+
+	public SeguridadPuertaService buildSeguridadPuertaService() throws Exception {
+		return new SeguridadPuertaService();
 	}
 
 	public ZonaService buildZonaService() throws Exception {
@@ -87,6 +101,22 @@ public abstract class AbstractFactoryService {
 
 	public MotivoBloqueoClienteService buildMotivoBloqueoClienteService() throws Exception {
 		return new MotivoBloqueoClienteService();
+	}
+
+	public TipoSucursalService buildTipoSucursalService() throws Exception {
+		return new TipoSucursalService();
+	}
+
+	public SucursalService buildSucursalService() throws Exception {
+		return new SucursalService();
+	}
+
+	public DepositoModuloService buildDepositoModuloService() throws Exception {
+		return new DepositoModuloService();
+	}
+
+	public DepositoService buildDepositoService() throws Exception {
+		return new DepositoService();
 	}
 
 
