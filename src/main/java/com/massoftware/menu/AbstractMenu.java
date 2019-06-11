@@ -1,13 +1,15 @@
 package com.massoftware.menu;
 
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.x.WindowFactory;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.Command;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 public abstract class AbstractMenu extends VerticalLayout implements View {
@@ -16,14 +18,10 @@ public abstract class AbstractMenu extends VerticalLayout implements View {
 	 * 
 	 */
 	private static final long serialVersionUID = 1980557664437735354L;
-	
-	protected WindowFactory windowBuilder;
 
 	public AbstractMenu(String title) {
 
 		try {
-			
-			windowBuilder = new WindowFactory();
 
 			preinit();
 
@@ -52,7 +50,7 @@ public abstract class AbstractMenu extends VerticalLayout implements View {
 
 	}
 
-	abstract protected MenuBar getMenuBar();
+	abstract protected MenuBar getMenuBar() throws Exception;
 
 	protected HorizontalLayout getControlBar() throws Exception {
 		return null;
@@ -65,7 +63,30 @@ public abstract class AbstractMenu extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
-
 	}
+
+//	protected Command buildCommandx(Window window) {
+//
+//		// -------------------------------------------
+//
+//		return new Command() {
+//
+//			private static final long serialVersionUID = 4645387020070455569L;
+//
+//			@Override
+//			public void menuSelected(MenuItem selectedItem) {
+//
+//				try {
+//					getUI().addWindow(window);
+//				} catch (Exception e) {
+//					LogAndNotification.print(e);
+//				}
+//
+//			}
+//		};
+//
+//		// -------------------------------------------
+//
+//	}
 
 }

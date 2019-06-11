@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.geo.CodigoPostal;
-import com.massoftware.dao.geo.CodigoPostalFiltro;
-import com.massoftware.dao.geo.CodigoPostalDAO;
+import com.massoftware.service.geo.CodigoPostalFiltro;
+import com.massoftware.service.geo.CodigoPostalService;
 
 import com.massoftware.model.logistica.Transporte;
-import com.massoftware.dao.logistica.TransporteDAO;
+import com.massoftware.service.logistica.TransporteService;
 
 @SuppressWarnings("serial")
 public class WFTransporte extends WindowForm {
@@ -28,7 +30,7 @@ public class WFTransporte extends WindowForm {
 
 	protected BeanItem<Transporte> itemBI;
 	
-	private TransporteDAO dao;
+	private TransporteService service;
 
 	// -------------------------------------------------------------
 
@@ -51,12 +53,12 @@ public class WFTransporte extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected TransporteDAO getDAO() {
-		if(dao == null){
-			dao = new TransporteDAO();
+	protected TransporteService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildTransporteService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -94,7 +96,7 @@ public class WFTransporte extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -104,7 +106,7 @@ public class WFTransporte extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -112,7 +114,7 @@ public class WFTransporte extends WindowForm {
 
 		cuitTXT = new TextFieldEntity(itemBI, "cuit", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCuit((Long)arg);
+				return getService().isExistsCuit((Long)arg);
 			}
 		};
 
@@ -128,9 +130,9 @@ public class WFTransporte extends WindowForm {
 
 		faxTXT = new TextFieldEntity(itemBI, "fax", this.mode);
 
-		CodigoPostalDAO codigoPostalDAO = new CodigoPostalDAO();
+		CodigoPostalService codigoPostalService = AppCX.services().buildCodigoPostalService();
 
-		long codigoPostalItems = codigoPostalDAO.count();
+		long codigoPostalItems = codigoPostalService.count();
 
 		if (codigoPostalItems < MAX_ROWS_FOR_CBX) {
 
@@ -140,7 +142,7 @@ public class WFTransporte extends WindowForm {
 
 			codigoPostalFiltro.setOrderBy(1);
 
-			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
+			List<CodigoPostal> codigoPostalLista = codigoPostalService.find(codigoPostalFiltro);
 
 			codigoPostalCBX = new ComboBoxEntity(itemBI, "codigoPostal", this.mode, codigoPostalLista);
 
@@ -151,9 +153,9 @@ public class WFTransporte extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CodigoPostalDAO dao = new CodigoPostalDAO();
+					CodigoPostalService service = AppCX.services().buildCodigoPostalService();
 
-					return dao.findByCodigoOrNumero(value);
+					return service.findByCodigoOrNumero(value);
 
 				}
 
@@ -167,7 +169,7 @@ public class WFTransporte extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLCodigoPostal(filtro);
+					return AppCX.widgets().buildWLCodigoPostal(filtro);
 
 				}
 
@@ -232,7 +234,7 @@ public class WFTransporte extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Transporte) item).setNumero(getDAO().nextValueNumero());
+		((Transporte) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -261,7 +263,7 @@ public class WFTransporte extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -280,7 +282,7 @@ public class WFTransporte extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -300,7 +302,7 @@ public class WFTransporte extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Transporte item = getDAO().findById(id);
+			Transporte item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

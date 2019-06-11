@@ -1,58 +1,60 @@
 package com.massoftware.backend.populate;
 import java.util.List;
+import java.util.List;
 import java.util.Random;
+import com.massoftware.AppCX;
 
 import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.dao.seguridad.UsuarioFiltro;
-import com.massoftware.dao.seguridad.UsuarioDAO;
+import com.massoftware.service.seguridad.UsuarioFiltro;
+import com.massoftware.service.seguridad.UsuarioService;
 import com.massoftware.model.geo.Zona;
-import com.massoftware.dao.geo.ZonaFiltro;
-import com.massoftware.dao.geo.ZonaDAO;
+import com.massoftware.service.geo.ZonaFiltro;
+import com.massoftware.service.geo.ZonaService;
 import com.massoftware.model.geo.Pais;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.service.geo.PaisFiltro;
+import com.massoftware.service.geo.PaisService;
 import com.massoftware.model.geo.Provincia;
-import com.massoftware.dao.geo.ProvinciaFiltro;
-import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
 import com.massoftware.model.geo.Ciudad;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.CiudadDAO;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
 import com.massoftware.model.geo.CodigoPostal;
-import com.massoftware.dao.geo.CodigoPostalFiltro;
-import com.massoftware.dao.geo.CodigoPostalDAO;
+import com.massoftware.service.geo.CodigoPostalFiltro;
+import com.massoftware.service.geo.CodigoPostalService;
 import com.massoftware.model.logistica.Transporte;
-import com.massoftware.dao.logistica.TransporteFiltro;
-import com.massoftware.dao.logistica.TransporteDAO;
+import com.massoftware.service.logistica.TransporteFiltro;
+import com.massoftware.service.logistica.TransporteService;
 import com.massoftware.model.logistica.Carga;
-import com.massoftware.dao.logistica.CargaFiltro;
-import com.massoftware.dao.logistica.CargaDAO;
+import com.massoftware.service.logistica.CargaFiltro;
+import com.massoftware.service.logistica.CargaService;
 import com.massoftware.model.logistica.TransporteTarifa;
-import com.massoftware.dao.logistica.TransporteTarifaFiltro;
-import com.massoftware.dao.logistica.TransporteTarifaDAO;
+import com.massoftware.service.logistica.TransporteTarifaFiltro;
+import com.massoftware.service.logistica.TransporteTarifaService;
 import com.massoftware.model.afip.TipoDocumentoAFIP;
-import com.massoftware.dao.afip.TipoDocumentoAFIPFiltro;
-import com.massoftware.dao.afip.TipoDocumentoAFIPDAO;
+import com.massoftware.service.afip.TipoDocumentoAFIPFiltro;
+import com.massoftware.service.afip.TipoDocumentoAFIPService;
 import com.massoftware.model.afip.MonedaAFIP;
-import com.massoftware.dao.afip.MonedaAFIPFiltro;
-import com.massoftware.dao.afip.MonedaAFIPDAO;
+import com.massoftware.service.afip.MonedaAFIPFiltro;
+import com.massoftware.service.afip.MonedaAFIPService;
 import com.massoftware.model.monedas.Moneda;
-import com.massoftware.dao.monedas.MonedaFiltro;
-import com.massoftware.dao.monedas.MonedaDAO;
+import com.massoftware.service.monedas.MonedaFiltro;
+import com.massoftware.service.monedas.MonedaService;
 import com.massoftware.model.contabilidad.ventas.NotaCreditoMotivo;
-import com.massoftware.dao.contabilidad.ventas.NotaCreditoMotivoFiltro;
-import com.massoftware.dao.contabilidad.ventas.NotaCreditoMotivoDAO;
+import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoFiltro;
+import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoService;
 import com.massoftware.model.clientes.MotivoComentario;
-import com.massoftware.dao.clientes.MotivoComentarioFiltro;
-import com.massoftware.dao.clientes.MotivoComentarioDAO;
+import com.massoftware.service.clientes.MotivoComentarioFiltro;
+import com.massoftware.service.clientes.MotivoComentarioService;
 import com.massoftware.model.clientes.TipoCliente;
-import com.massoftware.dao.clientes.TipoClienteFiltro;
-import com.massoftware.dao.clientes.TipoClienteDAO;
+import com.massoftware.service.clientes.TipoClienteFiltro;
+import com.massoftware.service.clientes.TipoClienteService;
 import com.massoftware.model.clientes.ClasificacionCliente;
-import com.massoftware.dao.clientes.ClasificacionClienteFiltro;
-import com.massoftware.dao.clientes.ClasificacionClienteDAO;
+import com.massoftware.service.clientes.ClasificacionClienteFiltro;
+import com.massoftware.service.clientes.ClasificacionClienteService;
 import com.massoftware.model.clientes.MotivoBloqueoCliente;
-import com.massoftware.dao.clientes.MotivoBloqueoClienteFiltro;
-import com.massoftware.dao.clientes.MotivoBloqueoClienteDAO;
+import com.massoftware.service.clientes.MotivoBloqueoClienteFiltro;
+import com.massoftware.service.clientes.MotivoBloqueoClienteService;
 
 public class Populate {
 
@@ -81,7 +83,7 @@ public class Populate {
 
 	public static void insertUsuario() throws Exception {
 
-		UsuarioDAO dao = new UsuarioDAO();
+		UsuarioService service = AppCX.services().buildUsuarioService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -93,7 +95,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -113,7 +115,7 @@ public class Populate {
 
 	public static void insertZona() throws Exception {
 
-		ZonaDAO dao = new ZonaDAO();
+		ZonaService service = AppCX.services().buildZonaService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -129,7 +131,7 @@ public class Populate {
 
 				obj.setRecargo(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("0"), new java.math.BigDecimal("99999.9999"), false, 13, 5));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -149,7 +151,7 @@ public class Populate {
 
 	public static void insertPais() throws Exception {
 
-		PaisDAO dao = new PaisDAO();
+		PaisService service = AppCX.services().buildPaisService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -163,7 +165,7 @@ public class Populate {
 
 				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -183,9 +185,9 @@ public class Populate {
 
 	public static void insertProvincia() throws Exception {
 
-		ProvinciaDAO dao = new ProvinciaDAO();
-		PaisDAO daoPais = new PaisDAO();
-		Long paisCount = daoPais.count();
+		ProvinciaService service = AppCX.services().buildProvinciaService();
+		PaisService servicePais = AppCX.services().buildPaisService();
+		Long paisCount = servicePais.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -209,10 +211,10 @@ public class Populate {
 				long paisIndex = UtilPopulate.getLongRandom(0L, paisCount-1);
 				paisFiltro.setOffset(paisIndex);
 				paisFiltro.setLimit(1L);
-				List<Pais> paisListado = daoPais.find(paisFiltro);
+				List<Pais> paisListado = servicePais.find(paisFiltro);
 				obj.setPais(paisListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -232,9 +234,9 @@ public class Populate {
 
 	public static void insertCiudad() throws Exception {
 
-		CiudadDAO dao = new CiudadDAO();
-		ProvinciaDAO daoProvincia = new ProvinciaDAO();
-		Long provinciaCount = daoProvincia.count();
+		CiudadService service = AppCX.services().buildCiudadService();
+		ProvinciaService serviceProvincia = AppCX.services().buildProvinciaService();
+		Long provinciaCount = serviceProvincia.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -254,10 +256,10 @@ public class Populate {
 				long provinciaIndex = UtilPopulate.getLongRandom(0L, provinciaCount-1);
 				provinciaFiltro.setOffset(provinciaIndex);
 				provinciaFiltro.setLimit(1L);
-				List<Provincia> provinciaListado = daoProvincia.find(provinciaFiltro);
+				List<Provincia> provinciaListado = serviceProvincia.find(provinciaFiltro);
 				obj.setProvincia(provinciaListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -277,9 +279,9 @@ public class Populate {
 
 	public static void insertCodigoPostal() throws Exception {
 
-		CodigoPostalDAO dao = new CodigoPostalDAO();
-		CiudadDAO daoCiudad = new CiudadDAO();
-		Long ciudadCount = daoCiudad.count();
+		CodigoPostalService service = AppCX.services().buildCodigoPostalService();
+		CiudadService serviceCiudad = AppCX.services().buildCiudadService();
+		Long ciudadCount = serviceCiudad.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -299,10 +301,10 @@ public class Populate {
 				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
 				ciudadFiltro.setOffset(ciudadIndex);
 				ciudadFiltro.setLimit(1L);
-				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
+				List<Ciudad> ciudadListado = serviceCiudad.find(ciudadFiltro);
 				obj.setCiudad(ciudadListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -322,9 +324,9 @@ public class Populate {
 
 	public static void insertTransporte() throws Exception {
 
-		TransporteDAO dao = new TransporteDAO();
-		CodigoPostalDAO daoCodigoPostal = new CodigoPostalDAO();
-		Long codigoPostalCount = daoCodigoPostal.count();
+		TransporteService service = AppCX.services().buildTransporteService();
+		CodigoPostalService serviceCodigoPostal = AppCX.services().buildCodigoPostalService();
+		Long codigoPostalCount = serviceCodigoPostal.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -348,14 +350,14 @@ public class Populate {
 				long codigoPostalIndex = UtilPopulate.getLongRandom(0L, codigoPostalCount-1);
 				codigoPostalFiltro.setOffset(codigoPostalIndex);
 				codigoPostalFiltro.setLimit(1L);
-				List<CodigoPostal> codigoPostalListado = daoCodigoPostal.find(codigoPostalFiltro);
+				List<CodigoPostal> codigoPostalListado = serviceCodigoPostal.find(codigoPostalFiltro);
 				obj.setCodigoPostal(codigoPostalListado.get(0));
 
 				obj.setDomicilio(UtilPopulate.getStringRandom(null, 150, false));
 
 				obj.setComentario(UtilPopulate.getStringRandom(null, 300, false));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -375,9 +377,9 @@ public class Populate {
 
 	public static void insertCarga() throws Exception {
 
-		CargaDAO dao = new CargaDAO();
-		TransporteDAO daoTransporte = new TransporteDAO();
-		Long transporteCount = daoTransporte.count();
+		CargaService service = AppCX.services().buildCargaService();
+		TransporteService serviceTransporte = AppCX.services().buildTransporteService();
+		Long transporteCount = serviceTransporte.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -393,10 +395,10 @@ public class Populate {
 				long transporteIndex = UtilPopulate.getLongRandom(0L, transporteCount-1);
 				transporteFiltro.setOffset(transporteIndex);
 				transporteFiltro.setLimit(1L);
-				List<Transporte> transporteListado = daoTransporte.find(transporteFiltro);
+				List<Transporte> transporteListado = serviceTransporte.find(transporteFiltro);
 				obj.setTransporte(transporteListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -416,11 +418,11 @@ public class Populate {
 
 	public static void insertTransporteTarifa() throws Exception {
 
-		TransporteTarifaDAO dao = new TransporteTarifaDAO();
-		CargaDAO daoCarga = new CargaDAO();
-		Long cargaCount = daoCarga.count();
-		CiudadDAO daoCiudad = new CiudadDAO();
-		Long ciudadCount = daoCiudad.count();
+		TransporteTarifaService service = AppCX.services().buildTransporteTarifaService();
+		CargaService serviceCarga = AppCX.services().buildCargaService();
+		Long cargaCount = serviceCarga.count();
+		CiudadService serviceCiudad = AppCX.services().buildCiudadService();
+		Long ciudadCount = serviceCiudad.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -434,14 +436,14 @@ public class Populate {
 				long cargaIndex = UtilPopulate.getLongRandom(0L, cargaCount-1);
 				cargaFiltro.setOffset(cargaIndex);
 				cargaFiltro.setLimit(1L);
-				List<Carga> cargaListado = daoCarga.find(cargaFiltro);
+				List<Carga> cargaListado = serviceCarga.find(cargaFiltro);
 				obj.setCarga(cargaListado.get(0));
 
 				CiudadFiltro ciudadFiltro = new CiudadFiltro();
 				long ciudadIndex = UtilPopulate.getLongRandom(0L, ciudadCount-1);
 				ciudadFiltro.setOffset(ciudadIndex);
 				ciudadFiltro.setLimit(1L);
-				List<Ciudad> ciudadListado = daoCiudad.find(ciudadFiltro);
+				List<Ciudad> ciudadListado = serviceCiudad.find(ciudadFiltro);
 				obj.setCiudad(ciudadListado.get(0));
 
 				obj.setPrecioFlete(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
@@ -456,7 +458,7 @@ public class Populate {
 
 				obj.setImporteMinimoCarga(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), false, 13, 5));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -476,7 +478,7 @@ public class Populate {
 
 	public static void insertTipoDocumentoAFIP() throws Exception {
 
-		TipoDocumentoAFIPDAO dao = new TipoDocumentoAFIPDAO();
+		TipoDocumentoAFIPService service = AppCX.services().buildTipoDocumentoAFIPService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -488,7 +490,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -508,7 +510,7 @@ public class Populate {
 
 	public static void insertMonedaAFIP() throws Exception {
 
-		MonedaAFIPDAO dao = new MonedaAFIPDAO();
+		MonedaAFIPService service = AppCX.services().buildMonedaAFIPService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -520,7 +522,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -540,9 +542,9 @@ public class Populate {
 
 	public static void insertMoneda() throws Exception {
 
-		MonedaDAO dao = new MonedaDAO();
-		MonedaAFIPDAO daoMonedaAFIP = new MonedaAFIPDAO();
-		Long monedaAFIPCount = daoMonedaAFIP.count();
+		MonedaService service = AppCX.services().buildMonedaService();
+		MonedaAFIPService serviceMonedaAFIP = AppCX.services().buildMonedaAFIPService();
+		Long monedaAFIPCount = serviceMonedaAFIP.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -566,10 +568,10 @@ public class Populate {
 				long monedaAFIPIndex = UtilPopulate.getLongRandom(0L, monedaAFIPCount-1);
 				monedaAFIPFiltro.setOffset(monedaAFIPIndex);
 				monedaAFIPFiltro.setLimit(1L);
-				List<MonedaAFIP> monedaAFIPListado = daoMonedaAFIP.find(monedaAFIPFiltro);
+				List<MonedaAFIP> monedaAFIPListado = serviceMonedaAFIP.find(monedaAFIPFiltro);
 				obj.setMonedaAFIP(monedaAFIPListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -589,7 +591,7 @@ public class Populate {
 
 	public static void insertNotaCreditoMotivo() throws Exception {
 
-		NotaCreditoMotivoDAO dao = new NotaCreditoMotivoDAO();
+		NotaCreditoMotivoService service = AppCX.services().buildNotaCreditoMotivoService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -601,7 +603,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -621,7 +623,7 @@ public class Populate {
 
 	public static void insertMotivoComentario() throws Exception {
 
-		MotivoComentarioDAO dao = new MotivoComentarioDAO();
+		MotivoComentarioService service = AppCX.services().buildMotivoComentarioService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -633,7 +635,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -653,7 +655,7 @@ public class Populate {
 
 	public static void insertTipoCliente() throws Exception {
 
-		TipoClienteDAO dao = new TipoClienteDAO();
+		TipoClienteService service = AppCX.services().buildTipoClienteService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -665,7 +667,7 @@ public class Populate {
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -685,7 +687,7 @@ public class Populate {
 
 	public static void insertClasificacionCliente() throws Exception {
 
-		ClasificacionClienteDAO dao = new ClasificacionClienteDAO();
+		ClasificacionClienteService service = AppCX.services().buildClasificacionClienteService();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -699,7 +701,7 @@ public class Populate {
 
 				obj.setColor(UtilPopulate.getIntegerRandom(1, null, true));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 
@@ -719,9 +721,9 @@ public class Populate {
 
 	public static void insertMotivoBloqueoCliente() throws Exception {
 
-		MotivoBloqueoClienteDAO dao = new MotivoBloqueoClienteDAO();
-		ClasificacionClienteDAO daoClasificacionCliente = new ClasificacionClienteDAO();
-		Long clasificacionClienteCount = daoClasificacionCliente.count();
+		MotivoBloqueoClienteService service = AppCX.services().buildMotivoBloqueoClienteService();
+		ClasificacionClienteService serviceClasificacionCliente = AppCX.services().buildClasificacionClienteService();
+		Long clasificacionClienteCount = serviceClasificacionCliente.count();
 
 		for(int i = 0; i < maxRows; i++){
 
@@ -737,10 +739,10 @@ public class Populate {
 				long clasificacionClienteIndex = UtilPopulate.getLongRandom(0L, clasificacionClienteCount-1);
 				clasificacionClienteFiltro.setOffset(clasificacionClienteIndex);
 				clasificacionClienteFiltro.setLimit(1L);
-				List<ClasificacionCliente> clasificacionClienteListado = daoClasificacionCliente.find(clasificacionClienteFiltro);
+				List<ClasificacionCliente> clasificacionClienteListado = serviceClasificacionCliente.find(clasificacionClienteFiltro);
 				obj.setClasificacionCliente(clasificacionClienteListado.get(0));
 
-				dao.insert(obj);
+				service.insert(obj);
 
 			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
 

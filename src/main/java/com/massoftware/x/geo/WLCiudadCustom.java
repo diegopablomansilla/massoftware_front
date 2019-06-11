@@ -4,15 +4,16 @@ package com.massoftware.x.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.PaisDAO;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.ProvinciaDAO;
-import com.massoftware.dao.geo.ProvinciaDAOCustom;
-import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.geo.Ciudad;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.PaisFiltro;
+import com.massoftware.service.geo.PaisService;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
+import com.massoftware.service.geo.ProvinciaServiceCustom;
 import com.massoftware.windows.ComboBoxBox;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -54,9 +55,9 @@ public class WLCiudadCustom extends WLCiudad {
 
 		// ------------------------------------------------------------------
 
-		PaisDAO paisDAO = new PaisDAO();
+		PaisService paisService = AppCX.services().buildPaisService();
 
-		long paisItems = paisDAO.count();
+		long paisItems = paisService.count();
 
 		if (paisItems < MAX_ROWS_FOR_CBX) {
 
@@ -66,7 +67,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 			paisFiltro.setOrderBy(1);
 
-			List<Pais> paisLista = paisDAO.find(paisFiltro);
+			List<Pais> paisLista = paisService.find(paisFiltro);
 
 			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
 
@@ -80,7 +81,7 @@ public class WLCiudadCustom extends WLCiudad {
 						provinciaSBX.setSelectedItem(null);
 					} else if (provinciaCBXB != null) {
 
-						ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+						ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
 						ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
@@ -92,7 +93,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 						provinciaFiltro.setOrderBy(1);
 
-						List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+						List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 						provinciaCBXB.valueCBX.setValues(provinciaLista, null);
 
@@ -123,9 +124,9 @@ public class WLCiudadCustom extends WLCiudad {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					PaisDAO dao = new PaisDAO();
+					PaisService service = AppCX.services().buildPaisService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -182,9 +183,9 @@ public class WLCiudadCustom extends WLCiudad {
 
 		// ------------------------------------------------------------------
 
-		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+		ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
-		long provinciaItems = provinciaDAO.count();
+		long provinciaItems = provinciaService.count();
 
 		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
@@ -194,7 +195,7 @@ public class WLCiudadCustom extends WLCiudad {
 
 			provinciaFiltro.setOrderBy(1);
 
-			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+			List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista,
 					filterBI.getBean().getProvincia());
@@ -213,9 +214,9 @@ public class WLCiudadCustom extends WLCiudad {
 				protected List findBean(String value) throws Exception {
 
 					// *************************************
-					ProvinciaDAOCustom dao = new ProvinciaDAOCustom();
+					ProvinciaServiceCustom service = (ProvinciaServiceCustom) AppCX.services().buildProvinciaService();
 
-					return dao.findByNumeroOrNombre(filterBI.getBean().getPais(), value);
+					return service.findByNumeroOrNombre(filterBI.getBean().getPais(), value);
 					// *************************************
 
 				}
@@ -337,7 +338,8 @@ public class WLCiudadCustom extends WLCiudad {
 	// =================================================================================
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return new WFCiudadCustom(mode, id, this.filterBI.getBean().getPais());
+		return AppCX.widgets().buildWFCiudad(mode, id, this.filterBI.getBean().getPais());
+//		return new WFCiudadCustom(mode, id, this.filterBI.getBean().getPais());
 	}
 
 	// =================================================================================

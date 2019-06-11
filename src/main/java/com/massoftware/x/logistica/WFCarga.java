@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.logistica.Transporte;
-import com.massoftware.dao.logistica.TransporteFiltro;
-import com.massoftware.dao.logistica.TransporteDAO;
+import com.massoftware.service.logistica.TransporteFiltro;
+import com.massoftware.service.logistica.TransporteService;
 
 import com.massoftware.model.logistica.Carga;
-import com.massoftware.dao.logistica.CargaDAO;
+import com.massoftware.service.logistica.CargaService;
 
 @SuppressWarnings("serial")
 public class WFCarga extends WindowForm {
@@ -28,7 +30,7 @@ public class WFCarga extends WindowForm {
 
 	protected BeanItem<Carga> itemBI;
 	
-	private CargaDAO dao;
+	private CargaService service;
 
 	// -------------------------------------------------------------
 
@@ -45,12 +47,12 @@ public class WFCarga extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected CargaDAO getDAO() {
-		if(dao == null){
-			dao = new CargaDAO();
+	protected CargaService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildCargaService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -88,7 +90,7 @@ public class WFCarga extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -98,13 +100,13 @@ public class WFCarga extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
-		TransporteDAO transporteDAO = new TransporteDAO();
+		TransporteService transporteService = AppCX.services().buildTransporteService();
 
-		long transporteItems = transporteDAO.count();
+		long transporteItems = transporteService.count();
 
 		if (transporteItems < MAX_ROWS_FOR_CBX) {
 
@@ -114,7 +116,7 @@ public class WFCarga extends WindowForm {
 
 			transporteFiltro.setOrderBy(1);
 
-			List<Transporte> transporteLista = transporteDAO.find(transporteFiltro);
+			List<Transporte> transporteLista = transporteService.find(transporteFiltro);
 
 			transporteCBX = new ComboBoxEntity(itemBI, "transporte", this.mode, transporteLista);
 
@@ -125,9 +127,9 @@ public class WFCarga extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					TransporteDAO dao = new TransporteDAO();
+					TransporteService service = AppCX.services().buildTransporteService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -141,7 +143,7 @@ public class WFCarga extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLTransporte(filtro);
+					return AppCX.widgets().buildWLTransporte(filtro);
 
 				}
 
@@ -192,7 +194,7 @@ public class WFCarga extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Carga) item).setNumero(getDAO().nextValueNumero());
+		((Carga) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -221,7 +223,7 @@ public class WFCarga extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -240,7 +242,7 @@ public class WFCarga extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -260,7 +262,7 @@ public class WFCarga extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Carga item = getDAO().findById(id);
+			Carga item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

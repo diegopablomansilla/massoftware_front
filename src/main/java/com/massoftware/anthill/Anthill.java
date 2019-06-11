@@ -122,8 +122,8 @@ public class Anthill {
 		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
 		folderPOJO.mkdirs();
 
-		File folderDAO = new File(src_java + File.separatorChar + "com\\massoftware\\dao");
-		folderDAO.mkdirs();
+		File folderService = new File(src_java + File.separatorChar + "com\\massoftware\\service");
+		folderService.mkdirs();
 
 		File folderWindows = new File(src_java + File.separatorChar + "com\\massoftware\\x");
 		folderWindows.mkdirs();
@@ -143,10 +143,13 @@ public class Anthill {
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
 		String javaPopulateInsert = "";
+		
+		List<Clazz> clazzList = new ArrayList<Clazz>();
 
 		for (Ant ant : ants) {
 
 			Clazz clazz = ant.build();
+			clazzList.add(clazz);
 
 			System.out.println();
 			System.out.println(
@@ -155,12 +158,6 @@ public class Anthill {
 			System.out.println(
 					"---------------------------------------------------------------------------------------------------------------------------------------------");
 
-			// String sqlViewItem = clazz.toSQLView();
-
-			// String sqlFindByIdFullItem = clazz.toSQLFindById(false);
-			// System.out.println(sqlFindByIdFullItem);
-			// String sqlFindByIdViewItem = clazz.toSQLFindById(true);
-
 			String sqlTypeItem = clazz.toSQLType();
 			String sqlTableItem = clazz.toSQLTable();
 			String sqlFindItem = clazz.toSQLFind();
@@ -168,57 +165,6 @@ public class Anthill {
 			String sqlFindExistsItem = clazz.toSQLFindExists();
 
 			String sqlItem = clazz.toSQL();
-
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar + clazz.getName());
-			// folderSQLItem.mkdirs();
-
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_PP_CREATE_TABLE.sql", clazz.toSQLTable());
-
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_PP.sql", clazz.toSQL());
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_CREATE_TABLE.sql", clazz.toSQLTable());
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_EXISTS_FUCNTIONS.sql", clazz.toSQLFindExists());
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_NEXT_VALUE_FUCNTIONS.sql",
-			// clazz.toSQLFindNextValue());
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_UPDATE_FUCNTIONS.sql", clazz.toSQLIUD());
-			//
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_TYPE_RETURN.sql", clazz.toSQLFindTypeReturn());
-			//
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_BY_ID_FUCNTIONS.sql", clazz.toSQLFindById());
-			//
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_FUCNTIONS_LEVEL_0.sql", clazz.toSQLFind0(false));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_FUCNTIONS_LEVEL_1.sql", clazz.toSQLFind1(false));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_FUCNTIONS_LEVEL_2.sql", clazz.toSQLFind2(false));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_FUCNTIONS_LEVEL_3.sql", clazz.toSQLFind3(false));
-			//
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_0.sql",
-			// clazz.toSQLFind0(true));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_1.sql",
-			// clazz.toSQLFind1(true));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_2.sql",
-			// clazz.toSQLFind2(true));
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_FIND_VIEW_FUCNTIONS_LEVEL_3.sql",
-			// clazz.toSQLFind3(true));
-			//
-			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
-			// clazz.getName() + "_VIEWS.sql", clazz.toSQLView());
 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -248,17 +194,6 @@ public class Anthill {
 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			// sqlView += "\n\n";
-			// sqlView += sqlViewItem;
-			//
-
-			//
-			// sqlFindByIdFull += "\n\n";
-			// sqlFindByIdFull += sqlFindByIdFullItem;
-			//
-			// sqlFindByIdView += "\n\n";
-			// sqlFindByIdView += sqlFindByIdViewItem;
-
 			// javaPopulateInsert += "\n\t\ttry {";
 			javaPopulateInsert += "\n\t\t\tinsert" + clazz.getName() + "();";
 			// javaPopulateInsert += "\n\t\t} catch (Exception e) {}";
@@ -270,17 +205,17 @@ public class Anthill {
 			javaPopulateImport += "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName()
 					+ ";";
 			javaPopulateImport += "\n";
-			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName()
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
 					+ "Filtro;";
 			javaPopulateImport += "\n";
-			javaPopulateImport += "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName()
-					+ "DAO;";
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
+					+ "Service;";
 
 			File folderPOJOPackage = new File(folderPOJO.getAbsolutePath() + File.separatorChar
 					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
 			folderPOJOPackage.mkdirs();
 
-			File folderDAOPackage = new File(folderDAO.getAbsolutePath() + File.separatorChar
+			File folderDAOPackage = new File(folderService.getAbsolutePath() + File.separatorChar
 					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
 			folderDAOPackage.mkdirs();
 
@@ -290,7 +225,7 @@ public class Anthill {
 
 			writeFile(folderPOJOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + ".java",
 					clazz.toJava());
-			writeFile(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "DAO.java",
+			writeFile(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Service.java",
 					clazz.toJavaDao());
 			writeFile(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Filtro.java",
 					clazz.toJavaFilter());
@@ -300,11 +235,16 @@ public class Anthill {
 					clazz.toJavaWF());
 
 		}
+		
+		
+		
 
 		String javaPopulate = "package com.massoftware.backend.populate;\n";
 
 		javaPopulate += "import java.util.List;\n";
+		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.Random;\n";
+		javaPopulate += "import com.massoftware.AppCX;\n";				
 		javaPopulate += javaPopulateImport;
 		javaPopulate += "\n\npublic class Populate {";
 
@@ -326,6 +266,8 @@ public class Anthill {
 				"---------------------------------------------------------------------------------------------------------------------------------------------");
 
 		writeFile(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
+		writeFile(folderService.getAbsolutePath() + File.separatorChar + "AbstractFactoryService.java", UtilJavaFactoryService.toJava(clazzList));
+		writeFile(folderWindows.getAbsolutePath() + File.separatorChar + "AbstractFactoryWidget.java", UtilJavaFactoryWidget.toJava(clazzList));
 
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_tables.sql", sqlTable);
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_types.sql", sqlType);

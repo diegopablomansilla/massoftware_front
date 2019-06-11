@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.afip.MonedaAFIP;
-import com.massoftware.dao.afip.MonedaAFIPDAO;
+import com.massoftware.service.afip.MonedaAFIPService;
 
 @SuppressWarnings("serial")
 public class WFMonedaAFIP extends WindowForm {
@@ -24,7 +26,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 	protected BeanItem<MonedaAFIP> itemBI;
 	
-	private MonedaAFIPDAO dao;
+	private MonedaAFIPService service;
 
 	// -------------------------------------------------------------
 
@@ -39,12 +41,12 @@ public class WFMonedaAFIP extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected MonedaAFIPDAO getDAO() {
-		if(dao == null){
-			dao = new MonedaAFIPDAO();
+	protected MonedaAFIPService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildMonedaAFIPService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -82,7 +84,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCodigo((String)arg);
+				return getService().isExistsCodigo((String)arg);
 			}
 		};
 
@@ -92,7 +94,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -161,7 +163,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -180,7 +182,7 @@ public class WFMonedaAFIP extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -200,7 +202,7 @@ public class WFMonedaAFIP extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			MonedaAFIP item = getDAO().findById(id);
+			MonedaAFIP item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

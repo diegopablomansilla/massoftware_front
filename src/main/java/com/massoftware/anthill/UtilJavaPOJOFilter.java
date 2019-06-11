@@ -12,10 +12,10 @@ public class UtilJavaPOJOFilter {
 
 	public static String toJavaFilter(Clazz clazzX) {
 
-		String java = "package com.massoftware.dao." + clazzX.getNamePackage() + ";";
+		String java = "package com.massoftware.service." + clazzX.getNamePackage() + ";";
 
 		java += "\n\nimport com.massoftware.backend.annotation.FieldConfAnont;";
-		java += "\nimport com.massoftware.dao.AbstractFilter;";
+		java += "\nimport com.massoftware.service.AbstractFilter;";
 		java += buildImports(clazzX);
 
 		java += "\n\npublic class " + clazzX.getName() + "Filtro extends AbstractFilter {";

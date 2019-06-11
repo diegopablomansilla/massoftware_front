@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.clientes.ClasificacionCliente;
-import com.massoftware.dao.clientes.ClasificacionClienteDAO;
+import com.massoftware.service.clientes.ClasificacionClienteService;
 
 @SuppressWarnings("serial")
 public class WFClasificacionCliente extends WindowForm {
@@ -24,7 +26,7 @@ public class WFClasificacionCliente extends WindowForm {
 
 	protected BeanItem<ClasificacionCliente> itemBI;
 	
-	private ClasificacionClienteDAO dao;
+	private ClasificacionClienteService service;
 
 	// -------------------------------------------------------------
 
@@ -40,12 +42,12 @@ public class WFClasificacionCliente extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected ClasificacionClienteDAO getDAO() {
-		if(dao == null){
-			dao = new ClasificacionClienteDAO();
+	protected ClasificacionClienteService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildClasificacionClienteService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -83,7 +85,7 @@ public class WFClasificacionCliente extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -93,7 +95,7 @@ public class WFClasificacionCliente extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -139,7 +141,7 @@ public class WFClasificacionCliente extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((ClasificacionCliente) item).setNumero(getDAO().nextValueNumero());
+		((ClasificacionCliente) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -168,7 +170,7 @@ public class WFClasificacionCliente extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -187,7 +189,7 @@ public class WFClasificacionCliente extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -207,7 +209,7 @@ public class WFClasificacionCliente extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			ClasificacionCliente item = getDAO().findById(id);
+			ClasificacionCliente item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

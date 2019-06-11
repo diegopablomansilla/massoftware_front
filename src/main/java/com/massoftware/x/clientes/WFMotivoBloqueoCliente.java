@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.clientes.ClasificacionCliente;
-import com.massoftware.dao.clientes.ClasificacionClienteFiltro;
-import com.massoftware.dao.clientes.ClasificacionClienteDAO;
+import com.massoftware.service.clientes.ClasificacionClienteFiltro;
+import com.massoftware.service.clientes.ClasificacionClienteService;
 
 import com.massoftware.model.clientes.MotivoBloqueoCliente;
-import com.massoftware.dao.clientes.MotivoBloqueoClienteDAO;
+import com.massoftware.service.clientes.MotivoBloqueoClienteService;
 
 @SuppressWarnings("serial")
 public class WFMotivoBloqueoCliente extends WindowForm {
@@ -28,7 +30,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 	protected BeanItem<MotivoBloqueoCliente> itemBI;
 	
-	private MotivoBloqueoClienteDAO dao;
+	private MotivoBloqueoClienteService service;
 
 	// -------------------------------------------------------------
 
@@ -45,12 +47,12 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected MotivoBloqueoClienteDAO getDAO() {
-		if(dao == null){
-			dao = new MotivoBloqueoClienteDAO();
+	protected MotivoBloqueoClienteService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildMotivoBloqueoClienteService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -88,7 +90,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -98,13 +100,13 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
-		ClasificacionClienteDAO clasificacionClienteDAO = new ClasificacionClienteDAO();
+		ClasificacionClienteService clasificacionClienteService = AppCX.services().buildClasificacionClienteService();
 
-		long clasificacionClienteItems = clasificacionClienteDAO.count();
+		long clasificacionClienteItems = clasificacionClienteService.count();
 
 		if (clasificacionClienteItems < MAX_ROWS_FOR_CBX) {
 
@@ -114,7 +116,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 			clasificacionClienteFiltro.setOrderBy(1);
 
-			List<ClasificacionCliente> clasificacionClienteLista = clasificacionClienteDAO.find(clasificacionClienteFiltro);
+			List<ClasificacionCliente> clasificacionClienteLista = clasificacionClienteService.find(clasificacionClienteFiltro);
 
 			clasificacionClienteCBX = new ComboBoxEntity(itemBI, "clasificacionCliente", this.mode, clasificacionClienteLista);
 
@@ -125,9 +127,9 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					ClasificacionClienteDAO dao = new ClasificacionClienteDAO();
+					ClasificacionClienteService service = AppCX.services().buildClasificacionClienteService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -141,7 +143,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLClasificacionCliente(filtro);
+					return AppCX.widgets().buildWLClasificacionCliente(filtro);
 
 				}
 
@@ -192,7 +194,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((MotivoBloqueoCliente) item).setNumero(getDAO().nextValueNumero());
+		((MotivoBloqueoCliente) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -221,7 +223,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -240,7 +242,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -260,7 +262,7 @@ public class WFMotivoBloqueoCliente extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			MotivoBloqueoCliente item = getDAO().findById(id);
+			MotivoBloqueoCliente item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

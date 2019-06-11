@@ -3,12 +3,12 @@ package com.massoftware.windows.a.monedas_cotizaciones;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.monedas.MonedaDAO;
-import com.massoftware.dao.monedas.MonedaFiltro;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.MonedaCotizacion;
 import com.massoftware.model.monedas.Moneda;
 import com.massoftware.model.seguridad.Usuario;
+import com.massoftware.service.monedas.MonedaFiltro;
+import com.massoftware.service.monedas.MonedaService;
 import com.massoftware.windows.CheckBoxEntity;
 import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.DateFieldEntity;
@@ -87,7 +87,7 @@ public class WMonedaCotizacion extends WindowForm {
 		// ---------------------------------------------------------------------------------------------------------
 		MonedaFiltro filtro = new MonedaFiltro();
 		filtro.setUnlimited(true);
-		List<Moneda> monedas =  new MonedaDAO().find(filtro);
+		List<Moneda> monedas =  new MonedaService().find(filtro);
 		monedaCBX = new ComboBoxEntity(this.itemBI, "moneda", this.mode, monedas);
 		// ---------------------------------------------------------------------------------------------------------
 		fechaDFT = new DateFieldEntity(this.itemBI, "fecha", this.mode, true);

@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.contabilidad.ventas.NotaCreditoMotivo;
-import com.massoftware.dao.contabilidad.ventas.NotaCreditoMotivoDAO;
+import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoService;
 
 @SuppressWarnings("serial")
 public class WFNotaCreditoMotivo extends WindowForm {
@@ -24,7 +26,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 
 	protected BeanItem<NotaCreditoMotivo> itemBI;
 	
-	private NotaCreditoMotivoDAO dao;
+	private NotaCreditoMotivoService service;
 
 	// -------------------------------------------------------------
 
@@ -39,12 +41,12 @@ public class WFNotaCreditoMotivo extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected NotaCreditoMotivoDAO getDAO() {
-		if(dao == null){
-			dao = new NotaCreditoMotivoDAO();
+	protected NotaCreditoMotivoService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildNotaCreditoMotivoService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -82,7 +84,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -92,7 +94,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -133,7 +135,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((NotaCreditoMotivo) item).setNumero(getDAO().nextValueNumero());
+		((NotaCreditoMotivo) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -162,7 +164,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -181,7 +183,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -201,7 +203,7 @@ public class WFNotaCreditoMotivo extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			NotaCreditoMotivo item = getDAO().findById(id);
+			NotaCreditoMotivo item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

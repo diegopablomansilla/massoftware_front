@@ -1,5 +1,6 @@
 package com.massoftware.menu;
 
+import com.massoftware.AppCX;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.sucursales.WSucursales;
 import com.massoftware.windows.a.talonarios.WTalonarios;
@@ -137,7 +138,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {				
 				
 				try {
-					Window window = windowBuilder.buildWLZona();
+					Window window = AppCX.widgets().buildWLZona();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -158,7 +159,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLTipoDocumentoAFIP();
+					Window window = AppCX.widgets().buildWLTipoDocumentoAFIP();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -180,7 +181,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLPais();
+					Window window = AppCX.widgets().buildWLPais();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -201,7 +202,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLProvincia();
+					Window window = AppCX.widgets().buildWLProvincia();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -222,7 +223,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLCiudad();
+					Window window = AppCX.widgets().buildWLCiudad();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -243,7 +244,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLTipoCliente();
+					Window window = AppCX.widgets().buildWLTipoCliente();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -264,7 +265,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLNotaCreditoMotivo();
+					Window window = AppCX.widgets().buildWLNotaCreditoMotivo();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -286,7 +287,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLMotivoComentario();
+					Window window = AppCX.widgets().buildWLMotivoComentario();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -308,7 +309,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLCodigoPostal();
+					Window window = AppCX.widgets().buildWLCodigoPostal();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -330,7 +331,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLClasificacionCliente();
+					Window window = AppCX.widgets().buildWLClasificacionCliente();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -352,7 +353,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLMotivoBloqueoCliente();
+					Window window = AppCX.widgets().buildWLMotivoBloqueoCliente();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -374,7 +375,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLTransporte();
+					Window window = AppCX.widgets().buildWLTransporte();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -396,7 +397,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLCarga();
+					Window window = AppCX.widgets().buildWLCarga();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -418,7 +419,7 @@ public class VentasMenu extends AbstractMenu {
 			public void menuSelected(MenuItem selectedItem) {
 
 				try {
-					Window window = windowBuilder.buildWLTransporteTarifa();
+					Window window = AppCX.widgets().buildWLTransporteTarifa();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

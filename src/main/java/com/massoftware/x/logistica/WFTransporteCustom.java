@@ -3,12 +3,13 @@ package com.massoftware.x.logistica;
 
 import java.util.List;
 
-import com.massoftware.dao.geo.CodigoPostalDAO;
-import com.massoftware.dao.geo.CodigoPostalFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.geo.Ciudad;
 import com.massoftware.model.geo.CodigoPostal;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
+import com.massoftware.service.geo.CodigoPostalFiltro;
+import com.massoftware.service.geo.CodigoPostalService;
 import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -33,9 +34,9 @@ public class WFTransporteCustom extends WFTransporte {
 	public WFTransporteCustom(String mode, String id) throws Exception {
 		super(mode, id);
 
-		CodigoPostalDAO codigoPostalDAO = new CodigoPostalDAO();
+		CodigoPostalService codigoPostalService = AppCX.services().buildCodigoPostalService();
 
-		long items = codigoPostalDAO.count();
+		long items = codigoPostalService.count();
 
 		if (items < this.MAX_ROWS_FOR_CBX) {
 
@@ -45,7 +46,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 			codigoPostalFiltro.setOrderBy(1);
 
-			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
+			List<CodigoPostal> codigoPostalLista = codigoPostalService.find(codigoPostalFiltro);
 			codigoPostalCBX.setValues(codigoPostalLista, null);
 
 		} else {
@@ -63,7 +64,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer) arg);
+				return getService().isExistsNumero((Integer) arg);
 			}
 		};
 
@@ -73,7 +74,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String) arg);
+				return getService().isExistsNombre((String) arg);
 			}
 		};
 
@@ -81,7 +82,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 		cuitTXT = new TextFieldEntity(itemBI, "cuit", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCuit((Long) arg);
+				return getService().isExistsCuit((Long) arg);
 			}
 		};
 
@@ -97,9 +98,9 @@ public class WFTransporteCustom extends WFTransporte {
 
 		faxTXT = new TextFieldEntity(itemBI, "fax", this.mode);
 
-		CodigoPostalDAO codigoPostalDAO = new CodigoPostalDAO();
+		CodigoPostalService codigoPostalService = AppCX.services().buildCodigoPostalService();
 
-		long items = codigoPostalDAO.count();
+		long items = codigoPostalService.count();
 
 		if (items < this.MAX_ROWS_FOR_CBX) {
 
@@ -109,7 +110,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 			codigoPostalFiltro.setOrderBy(1);
 
-			List<CodigoPostal> codigoPostalLista = codigoPostalDAO.find(codigoPostalFiltro);
+			List<CodigoPostal> codigoPostalLista = codigoPostalService.find(codigoPostalFiltro);
 
 			codigoPostalCBX = new ComboBoxEntity(itemBI, "codigoPostal", this.mode, codigoPostalLista);
 
@@ -136,9 +137,9 @@ public class WFTransporteCustom extends WFTransporte {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CodigoPostalDAO dao = new CodigoPostalDAO();
+					CodigoPostalService service = AppCX.services().buildCodigoPostalService();
 
-					return dao.findByCodigoOrNumero(value);
+					return service.findByCodigoOrNumero(value);
 
 				}
 
@@ -152,7 +153,7 @@ public class WFTransporteCustom extends WFTransporte {
 
 					}
 
-					return windowBuilder.buildWLCodigoPostal(filtro);
+					return AppCX.widgets().buildWLCodigoPostal(filtro);
 
 				}
 

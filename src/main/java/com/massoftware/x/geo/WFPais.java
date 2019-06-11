@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.geo.Pais;
-import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.service.geo.PaisService;
 
 @SuppressWarnings("serial")
 public class WFPais extends WindowForm {
@@ -24,7 +26,7 @@ public class WFPais extends WindowForm {
 
 	protected BeanItem<Pais> itemBI;
 	
-	private PaisDAO dao;
+	private PaisService service;
 
 	// -------------------------------------------------------------
 
@@ -40,12 +42,12 @@ public class WFPais extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected PaisDAO getDAO() {
-		if(dao == null){
-			dao = new PaisDAO();
+	protected PaisService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildPaisService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -83,7 +85,7 @@ public class WFPais extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -93,7 +95,7 @@ public class WFPais extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -101,7 +103,7 @@ public class WFPais extends WindowForm {
 
 		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsAbreviatura((String)arg);
+				return getService().isExistsAbreviatura((String)arg);
 			}
 		};
 
@@ -143,7 +145,7 @@ public class WFPais extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Pais) item).setNumero(getDAO().nextValueNumero());
+		((Pais) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -172,7 +174,7 @@ public class WFPais extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -191,7 +193,7 @@ public class WFPais extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -211,7 +213,7 @@ public class WFPais extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Pais item = getDAO().findById(id);
+			Pais item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

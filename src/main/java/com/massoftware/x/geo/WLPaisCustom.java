@@ -4,8 +4,8 @@ package com.massoftware.x.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.geo.PaisFiltro;
 import com.massoftware.model.geo.Pais;
+import com.massoftware.service.geo.PaisFiltro;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

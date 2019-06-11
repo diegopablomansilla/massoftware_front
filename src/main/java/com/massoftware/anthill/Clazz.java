@@ -189,7 +189,7 @@ public class Clazz {
 	}
 
 	public String toJavaDao() {
-		return UtilJavaDAO.toJavaDao(this);
+		return UtilJavaService.toJava(this);
 	}
 
 	public String toJavaWL() throws IOException {

@@ -26,13 +26,14 @@ import com.vaadin.ui.Component;
 
 import org.vaadin.patrik.FastNavigation;
 
+import com.massoftware.AppCX;
 import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
 import com.massoftware.model.NOMBRE_PAQUETE.NOMBRE_CLASE;
-import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEFiltro;
-import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEDAO;
+import com.massoftware.service.NOMBRE_PAQUETE.NOMBRE_CLASEFiltro;
+import com.massoftware.service.NOMBRE_PAQUETE.NOMBRE_CLASEService;
 @OTROSFILTROS@
 
 @SuppressWarnings("serial")
@@ -43,7 +44,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 	BeanItem<NOMBRE_CLASEFiltro> filterBI;
 	protected BeanItemContainer<NOMBRE_CLASE> itemsBIC;
 	
-	private NOMBRE_CLASEDAO dao;
+	private NOMBRE_CLASEService service;
 
 	// -------------------------------------------------------------
 
@@ -65,12 +66,12 @@ public class WLNOMBRE_CLASE extends WindowListado {
 		setFocusGrid();
 	}
 	
-	protected NOMBRE_CLASEDAO getDAO() {
-		if(dao == null){
-			dao = new NOMBRE_CLASEDAO();
+	protected NOMBRE_CLASEService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildNOMBRE_CLASEService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -262,7 +263,7 @@ public class WLNOMBRE_CLASE extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<NOMBRE_CLASE> items = getDAO().find(filterBI.getBean());
+				List<NOMBRE_CLASE> items = getService().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
 				for (NOMBRE_CLASE item : items) {
@@ -292,12 +293,12 @@ public class WLNOMBRE_CLASE extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		getDAO().deleteById(((EntityId) item).getId());
+		getService().deleteById(((EntityId) item).getId());
 
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFNOMBRE_CLASE(mode, id);
+		return AppCX.widgets().buildWFNOMBRE_CLASE(mode, id);
 	}
 	
 	public void setFocusGrid() {			

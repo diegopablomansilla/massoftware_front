@@ -3,11 +3,12 @@ package com.massoftware.x.geo;
 
 import java.util.List;
 
-import com.massoftware.dao.geo.ProvinciaDAO;
-import com.massoftware.dao.geo.ProvinciaDAOCustom;
-import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
+import com.massoftware.service.geo.ProvinciaServiceCustom;
 import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -50,7 +51,7 @@ public class WFCiudadCustom extends WFCiudad {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer) arg);
+				return getService().isExistsNumero((Integer) arg);
 			}
 		};
 
@@ -60,7 +61,7 @@ public class WFCiudadCustom extends WFCiudad {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String) arg);
+				return getService().isExistsNombre((String) arg);
 			}
 		};
 
@@ -72,7 +73,7 @@ public class WFCiudadCustom extends WFCiudad {
 
 		numeroAFIPTXT = new TextFieldEntity(itemBI, "numeroAFIP", this.mode);
 
-		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+		ProvinciaService provinciaDAO = AppCX.services().buildProvinciaService();
 
 		long items = provinciaDAO.count();
 
@@ -112,7 +113,7 @@ public class WFCiudadCustom extends WFCiudad {
 				protected List findBean(String value) throws Exception {
 
 					// *************************************
-					ProvinciaDAOCustom dao = new ProvinciaDAOCustom();
+					ProvinciaServiceCustom dao = (ProvinciaServiceCustom) AppCX.services().buildProvinciaService();
 
 					return dao.findByNumeroOrNombre(pais, value);
 					// *************************************

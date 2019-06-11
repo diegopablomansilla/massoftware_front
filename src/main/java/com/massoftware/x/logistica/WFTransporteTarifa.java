@@ -9,19 +9,21 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.logistica.Carga;
-import com.massoftware.dao.logistica.CargaFiltro;
-import com.massoftware.dao.logistica.CargaDAO;
+import com.massoftware.service.logistica.CargaFiltro;
+import com.massoftware.service.logistica.CargaService;
 import com.massoftware.model.geo.Ciudad;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.CiudadDAO;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
 
 import com.massoftware.model.logistica.TransporteTarifa;
-import com.massoftware.dao.logistica.TransporteTarifaDAO;
+import com.massoftware.service.logistica.TransporteTarifaService;
 
 @SuppressWarnings("serial")
 public class WFTransporteTarifa extends WindowForm {
@@ -31,7 +33,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 	protected BeanItem<TransporteTarifa> itemBI;
 	
-	private TransporteTarifaDAO dao;
+	private TransporteTarifaService service;
 
 	// -------------------------------------------------------------
 
@@ -55,12 +57,12 @@ public class WFTransporteTarifa extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected TransporteTarifaDAO getDAO() {
-		if(dao == null){
-			dao = new TransporteTarifaDAO();
+	protected TransporteTarifaService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildTransporteTarifaService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -100,9 +102,9 @@ public class WFTransporteTarifa extends WindowForm {
 
 		numeroTXT.focus();
 
-		CargaDAO cargaDAO = new CargaDAO();
+		CargaService cargaService = AppCX.services().buildCargaService();
 
-		long cargaItems = cargaDAO.count();
+		long cargaItems = cargaService.count();
 
 		if (cargaItems < MAX_ROWS_FOR_CBX) {
 
@@ -112,7 +114,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 			cargaFiltro.setOrderBy(1);
 
-			List<Carga> cargaLista = cargaDAO.find(cargaFiltro);
+			List<Carga> cargaLista = cargaService.find(cargaFiltro);
 
 			cargaCBX = new ComboBoxEntity(itemBI, "carga", this.mode, cargaLista);
 
@@ -123,9 +125,9 @@ public class WFTransporteTarifa extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CargaDAO dao = new CargaDAO();
+					CargaService service = AppCX.services().buildCargaService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -139,7 +141,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLCarga(filtro);
+					return AppCX.widgets().buildWLCarga(filtro);
 
 				}
 
@@ -147,9 +149,9 @@ public class WFTransporteTarifa extends WindowForm {
 
 		}
 
-		CiudadDAO ciudadDAO = new CiudadDAO();
+		CiudadService ciudadService = AppCX.services().buildCiudadService();
 
-		long ciudadItems = ciudadDAO.count();
+		long ciudadItems = ciudadService.count();
 
 		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
@@ -159,7 +161,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 			ciudadFiltro.setOrderBy(1);
 
-			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+			List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 			ciudadCBX = new ComboBoxEntity(itemBI, "ciudad", this.mode, ciudadLista);
 
@@ -170,9 +172,9 @@ public class WFTransporteTarifa extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CiudadDAO dao = new CiudadDAO();
+					CiudadService service = AppCX.services().buildCiudadService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -186,7 +188,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLCiudad(filtro);
+					return AppCX.widgets().buildWLCiudad(filtro);
 
 				}
 
@@ -272,7 +274,7 @@ public class WFTransporteTarifa extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((TransporteTarifa) item).setNumero(getDAO().nextValueNumero());
+		((TransporteTarifa) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -301,7 +303,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -320,7 +322,7 @@ public class WFTransporteTarifa extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -340,7 +342,7 @@ public class WFTransporteTarifa extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			TransporteTarifa item = getDAO().findById(id);
+			TransporteTarifa item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

@@ -3,15 +3,16 @@ package com.massoftware.x.logistica;
 
 import java.util.List;
 
-import com.massoftware.dao.geo.CiudadDAO;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.logistica.CargaDAO;
-import com.massoftware.dao.logistica.CargaFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.geo.Ciudad;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
 import com.massoftware.model.logistica.Carga;
 import com.massoftware.model.logistica.Transporte;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
+import com.massoftware.service.logistica.CargaFiltro;
+import com.massoftware.service.logistica.CargaService;
 import com.massoftware.windows.ComboBoxEntity;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -46,9 +47,9 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 		numeroTXT.focus();
 
-		CargaDAO cargaDAO = new CargaDAO();
+		CargaService cargaService = AppCX.services().buildCargaService();
 
-		long cargaItems = cargaDAO.count();
+		long cargaItems = cargaService.count();
 
 		if (cargaItems < MAX_ROWS_FOR_CBX) {
 
@@ -58,7 +59,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 			cargaFiltro.setOrderBy(1);
 
-			List<Carga> cargaLista = cargaDAO.find(cargaFiltro);
+			List<Carga> cargaLista = cargaService.find(cargaFiltro);
 
 			cargaCBX = new ComboBoxEntity(itemBI, "carga", this.mode, cargaLista);
 
@@ -85,9 +86,9 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CargaDAO dao = new CargaDAO();
+					CargaService service = AppCX.services().buildCargaService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -101,7 +102,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 					}
 
-					return windowBuilder.buildWLCarga(filtro);
+					return AppCX.widgets().buildWLCarga(filtro);
 
 				}
 
@@ -133,9 +134,9 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 		}
 
-		CiudadDAO ciudadDAO = new CiudadDAO();
+		CiudadService ciudadService = AppCX.services().buildCiudadService();
 
-		long ciudadItems = ciudadDAO.count();
+		long ciudadItems = ciudadService.count();
 
 		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
@@ -145,7 +146,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 			ciudadFiltro.setOrderBy(1);
 
-			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+			List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 			ciudadCBX = new ComboBoxEntity(itemBI, "ciudad", this.mode, ciudadLista);
 
@@ -172,9 +173,9 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CiudadDAO dao = new CiudadDAO();
+					CiudadService service = AppCX.services().buildCiudadService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -188,7 +189,7 @@ public class WFTransporteTarifaCustom extends WFTransporteTarifa {
 
 					}
 
-					return windowBuilder.buildWLCiudad(filtro);
+					return AppCX.widgets().buildWLCiudad(filtro);
 
 				}
 

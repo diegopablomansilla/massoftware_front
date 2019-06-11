@@ -4,8 +4,8 @@ package com.massoftware.x.clientes;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.clientes.ClasificacionClienteFiltro;
 import com.massoftware.model.clientes.ClasificacionCliente;
+import com.massoftware.service.clientes.ClasificacionClienteFiltro;
 import com.massoftware.windows.UtilUI;
 
 import com.vaadin.data.sort.SortOrder;

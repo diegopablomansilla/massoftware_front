@@ -8,11 +8,13 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 FK
 import com.massoftware.model.NOMBRE_PAQUETE.NOMBRE_CLASE;
-import com.massoftware.dao.NOMBRE_PAQUETE.NOMBRE_CLASEDAO;
+import com.massoftware.service.NOMBRE_PAQUETE.NOMBRE_CLASEService;
 
 @SuppressWarnings("serial")
 public class WFNOMBRE_CLASE extends WindowForm {
@@ -22,7 +24,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 	protected BeanItem<NOMBRE_CLASE> itemBI;
 	
-	private NOMBRE_CLASEDAO dao;
+	private NOMBRE_CLASEService service;
 
 	// -------------------------------------------------------------
 
@@ -34,12 +36,12 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected NOMBRE_CLASEDAO getDAO() {
-		if(dao == null){
-			dao = new NOMBRE_CLASEDAO();
+	protected NOMBRE_CLASEService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildNOMBRE_CLASEService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -134,7 +136,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -153,7 +155,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -173,7 +175,7 @@ public class WFNOMBRE_CLASE extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			NOMBRE_CLASE item = getDAO().findById(id);
+			NOMBRE_CLASE item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

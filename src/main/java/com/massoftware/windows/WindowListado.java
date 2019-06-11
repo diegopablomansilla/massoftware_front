@@ -5,9 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.dao.AbstractFilter;
 import com.massoftware.model.EntityId;
-import com.massoftware.x.WindowFactory;
+import com.massoftware.service.AbstractFilter;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;
@@ -24,11 +23,11 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.themes.ValoTheme;
 
 public abstract class WindowListado extends Window {
@@ -64,8 +63,6 @@ public abstract class WindowListado extends Window {
 
 	// -------------------------------------------------------------
 
-	protected WindowFactory windowBuilder;
-
 	// -------------------------------------------------------------
 
 	public WindowListado() {
@@ -75,8 +72,6 @@ public abstract class WindowListado extends Window {
 	public void init(boolean selectionMode) {
 
 		try {
-
-			windowBuilder = new WindowFactory();
 
 			this.selectionMode = selectionMode;
 
@@ -565,7 +560,7 @@ public abstract class WindowListado extends Window {
 		List<Column> columns = itemsGRD.getColumns();
 		for (int i = 0; i < columns.size(); i++) {
 			if (columns.get(i).getPropertyId().toString().equals(propertyId)) {
-				return i;
+				return i + 1;
 			}
 		}
 

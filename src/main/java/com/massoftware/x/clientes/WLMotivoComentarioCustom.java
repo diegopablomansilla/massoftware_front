@@ -1,11 +1,11 @@
-
+ 
 package com.massoftware.x.clientes;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.clientes.MotivoComentarioFiltro;
 import com.massoftware.model.clientes.MotivoComentario;
+import com.massoftware.service.clientes.MotivoComentarioFiltro;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

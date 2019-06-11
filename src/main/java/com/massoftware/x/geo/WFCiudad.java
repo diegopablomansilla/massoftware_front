@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.geo.Provincia;
-import com.massoftware.dao.geo.ProvinciaFiltro;
-import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
 
 import com.massoftware.model.geo.Ciudad;
-import com.massoftware.dao.geo.CiudadDAO;
+import com.massoftware.service.geo.CiudadService;
 
 @SuppressWarnings("serial")
 public class WFCiudad extends WindowForm {
@@ -28,7 +30,7 @@ public class WFCiudad extends WindowForm {
 
 	protected BeanItem<Ciudad> itemBI;
 	
-	private CiudadDAO dao;
+	private CiudadService service;
 
 	// -------------------------------------------------------------
 
@@ -47,12 +49,12 @@ public class WFCiudad extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected CiudadDAO getDAO() {
-		if(dao == null){
-			dao = new CiudadDAO();
+	protected CiudadService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildCiudadService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -90,7 +92,7 @@ public class WFCiudad extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -100,7 +102,7 @@ public class WFCiudad extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -112,9 +114,9 @@ public class WFCiudad extends WindowForm {
 
 		numeroAFIPTXT = new TextFieldEntity(itemBI, "numeroAFIP", this.mode);
 
-		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+		ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
-		long provinciaItems = provinciaDAO.count();
+		long provinciaItems = provinciaService.count();
 
 		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
@@ -124,7 +126,7 @@ public class WFCiudad extends WindowForm {
 
 			provinciaFiltro.setOrderBy(1);
 
-			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+			List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 			provinciaCBX = new ComboBoxEntity(itemBI, "provincia", this.mode, provinciaLista);
 
@@ -135,9 +137,9 @@ public class WFCiudad extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					ProvinciaDAO dao = new ProvinciaDAO();
+					ProvinciaService service = AppCX.services().buildProvinciaService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -151,7 +153,7 @@ public class WFCiudad extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLProvincia(filtro);
+					return AppCX.widgets().buildWLProvincia(filtro);
 
 				}
 
@@ -204,7 +206,7 @@ public class WFCiudad extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Ciudad) item).setNumero(getDAO().nextValueNumero());
+		((Ciudad) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -233,7 +235,7 @@ public class WFCiudad extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -252,7 +254,7 @@ public class WFCiudad extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -272,7 +274,7 @@ public class WFCiudad extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Ciudad item = getDAO().findById(id);
+			Ciudad item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

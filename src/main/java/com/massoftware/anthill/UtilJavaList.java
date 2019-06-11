@@ -7,7 +7,7 @@ import java.net.URL;
 import java.time.ZonedDateTime;
 
 public class UtilJavaList {
-	
+
 	private static String toCamelStart(String text) {
 		if (text == null || text.isEmpty()) {
 			return text;
@@ -62,29 +62,30 @@ public class UtilJavaList {
 
 		return java;
 	}
-	
+
 	private static String buildImports(Clazz clazz) {
 		String java = "";
 
-		for(Argument arg : clazz.getArgs()) {
-			if(arg.isSimple() == false) {
+		for (Argument arg : clazz.getArgs()) {
+			if (arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
-				
-				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
-				String java2 = "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "Filtro;";
-				String java3 = "\nimport com.massoftware.dao." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "DAO;";
-				
-				if(java.contains(java1) == false) {
+
+				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + ";";
+				String java2 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + "Filtro;";
+				String java3 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + "Service;";
+
+				if (java.contains(java1) == false) {
 					java += java1;
 					java += java2;
-					java += java3;	
+					java += java3;
 				}
-				
-				
+
 			}
 		}
-		
-		
+
 		return java;
 	}
 
@@ -116,8 +117,8 @@ public class UtilJavaList {
 
 			} else if (arg.isBoolean()) {
 				java += sc + "protected OptionGroupEntityBoolean " + arg.getName() + "OPT;";
-			} else if (arg.isSimple() == false) {				
-				
+			} else if (arg.isSimple() == false) {
+
 				java += sc + "protected ComboBoxBox " + arg.getName() + "CBXB;";
 				java += sc + "protected SelectorBox " + arg.getName() + "SBX;";
 			}
@@ -163,21 +164,23 @@ public class UtilJavaList {
 						+ ", \"Activas\", \"Obsoletas\", \"Todas\", true, 0)";
 
 			} else if (arg.isSimple() == false) {
-//				java += sc + arg.getDataType().getName().replaceAll("java.lang", "") + " " + arg.getName()
-//						+ "Filtro = new " + arg.getName() + "Filtro();";
-//				java += sc + arg.getName() + "Filtro.setUnlimited(true);";
-//				java += sc + arg.getDataType().getName().replaceAll("java.lang", "") + "DAO " + arg.getName()
-//						+ "DAO = new " + arg.getName() + "DAO();";
-//				java += sc + "List<" + arg.getDataType().getName().replaceAll("java.lang", "") + ">" + arg.getName()
-//						+ "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";
-//
-//				java += sc + arg.getName() + "CBXB = new ComboBoxBox(this, filterBI, \"" + arg.getName() + "\", "
-//						+ arg.getName() + "Lista" + ");";
-//
-//				java += sc + "private SelectorBox " + arg.getName() + "CBXB;";
-				
-				
-				
+				// java += sc + arg.getDataType().getName().replaceAll("java.lang", "") + " " +
+				// arg.getName()
+				// + "Filtro = new " + arg.getName() + "Filtro();";
+				// java += sc + arg.getName() + "Filtro.setUnlimited(true);";
+				// java += sc + arg.getDataType().getName().replaceAll("java.lang", "") + "DAO "
+				// + arg.getName()
+				// + "DAO = new " + arg.getName() + "DAO();";
+				// java += sc + "List<" + arg.getDataType().getName().replaceAll("java.lang",
+				// "") + ">" + arg.getName()
+				// + "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";
+				//
+				// java += sc + arg.getName() + "CBXB = new ComboBoxBox(this, filterBI, \"" +
+				// arg.getName() + "\", "
+				// + arg.getName() + "Lista" + ");";
+				//
+				// java += sc + "private SelectorBox " + arg.getName() + "CBXB;";
+
 				String sc2 = "\n\n\t\t";
 				String sc3 = sc2 + "\t";
 				String sc4 = sc3 + "\t";
@@ -185,49 +188,55 @@ public class UtilJavaList {
 				String sc6 = sc5 + "\t";
 				String sc7 = sc6 + "\t";
 
-				java += sc + arg.getDataType().getName() + "DAO " + arg.getName() + "DAO = new "
-						+ arg.getDataType().getName() + "DAO();";
+				// java += sc + arg.getDataType().getName() + "DAO " + arg.getName() + "DAO =
+				// new "
+				// + arg.getDataType().getName() + "DAO();";
 
-				java += sc2 + "long " + arg.getName() + "Items = " + arg.getName() + "DAO.count();";
+				java += sc + arg.getDataType().getName() + "Service " + arg.getName() + "Service = AppCX.services().build"
+						+ arg.getDataType().getName() + "Service();";
+
+				java += sc2 + "long " + arg.getName() + "Items = " + arg.getName() + "Service.count();";
 
 				java += sc2 + "if (" + arg.getName() + "Items < MAX_ROWS_FOR_CBX) {";
 
 				java += sc3 + arg.getDataType().getName() + "Filtro " + arg.getName() + "Filtro = new "
 						+ arg.getDataType().getName() + "Filtro();";
-				
+
 				java += sc3 + arg.getName() + "Filtro.setUnlimited(true);";
-				
+
 				DataTypeClazz dtArg = (DataTypeClazz) arg.getDataType();
-				
-//				java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" + dtArg.getClazz().getAtts().get(0).getName() + "\");";
+
+				// java += sc3 + arg.getName() + "Filtro.setOrderBy(\"" +
+				// dtArg.getClazz().getAtts().get(0).getName() + "\");";
 				java += sc3 + arg.getName() + "Filtro.setOrderBy(1);";
 
 				java += sc3 + "List<" + arg.getDataType().getName().replaceAll("java.lang", "") + "> " + arg.getName()
-						+ "Lista = " + arg.getName() + "DAO.find(" + arg.getName() + "Filtro);";
+						+ "Lista = " + arg.getName() + "Service.find(" + arg.getName() + "Filtro);";
 
 				java += sc3 + arg.getName() + "CBXB = new ComboBoxBox(this, filterBI, \"" + arg.getName() + "\", "
 						+ arg.getName() + "Lista" + ", filterBI.getBean().get" + toCamelStart(arg.getName()) + "());";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t\t" + arg.getName() + "CBXB.focus();";
 				}
 
 				java += sc2 + "} else {";
 
 				java += sc3 + arg.getName() + "SBX = new SelectorBox(filterBI, \"" + arg.getName() + "\") {";
-				
+
 				java += sc4 + "protected void sourceLoadDataResetPaged() {";
-				
+
 				java += sc5 + "loadDataResetPaged();";
-				
+
 				java += sc4 + "}";
-				
-				
 
 				java += sc4 + "@SuppressWarnings(\"rawtypes\")" + "\n\t\t\t\t"
 						+ "protected List findBean(String value) throws Exception {";
 
-				java += sc5 + arg.getDataType().getName() + "DAO dao = new " + arg.getDataType().getName() + "DAO();";
+				// java += sc5 + arg.getDataType().getName() + "DAO dao = new " +
+				// arg.getDataType().getName() + "DAO();";
+				java += sc5 + arg.getDataType().getName() + "Service service = AppCX.services().build"
+						+ arg.getDataType().getName() + "Service();";
 
 				Clazz clazzAtt = ((DataTypeClazz) arg.getDataType()).getClazz();
 				String arg1 = toCamelStart(clazzAtt.getArgsSBX().get(0).getName());
@@ -237,9 +246,9 @@ public class UtilJavaList {
 				}
 
 				if (clazzAtt.getArgsSBX().size() > 1) {
-					java += sc5 + "return dao.findBy" + arg1 + arg2 + "(value);";
+					java += sc5 + "return service.findBy" + arg1 + arg2 + "(value);";
 				} else {
-					java += sc5 + "return dao.findBy" + arg1 + "(value);";
+					java += sc5 + "return service.findBy" + arg1 + "(value);";
 				}
 
 				java += sc4 + "}";
@@ -257,40 +266,36 @@ public class UtilJavaList {
 				}
 
 				java += sc5 + "}";
-				
-				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName() + "(filtro) {";
+
+				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName()
+						+ "(filtro) {";
 				java += sc6 + "protected void setSelectedItem() throws Exception {";
-				
+
 				java += sc7 + arg.getName() + "SBX.setSelectedItem(itemsGRD.getSelectedRow());";
-				
+
 				java += sc6 + "}";
 				java += sc5 + "};";
-				
-				
-				
-				
+
 				java += sc5 + "return windowPoPup;";
 
 				java += sc4 + "}";
 
 				java += sc3 + "};";
-				
-				if(i == 0) {
+
+				if (i == 0) {
 					java += "\n\n\t\t\t" + arg.getName() + "SBX.focus();";
 				}
 
 				java += sc2 + "}";
 
-				
-//				WLPais windowPoPup = new WLPais(filtro) { 
-//					
-//					protected void setSelectedItem() {
-//						paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
-//					}
-//				
-//				};
-				
-				
+				// WLPais windowPoPup = new WLPais(filtro) {
+				//
+				// protected void setSelectedItem() {
+				// paisSBX.setSelectedItem(itemsGRD.getSelectedRow());
+				// }
+				//
+				// };
+
 			}
 		}
 
@@ -299,46 +304,46 @@ public class UtilJavaList {
 		return java;
 	}
 
-//	private static String buildWLControlsInstanceAddx(Clazz clazzX) {
-//		String java = "";
-//
-//		for (int i = 0; i < clazzX.getArgs().size(); i++) {
-//
-//			Argument arg = clazzX.getArgs().get(i);
-//
-//			String sc = (i == 0) ? "" : ", ";
-//
-//			if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
-//
-//				if (arg.getRange() == false) {
-//
-//					java += sc + arg.getName() + "TXTB";
-//
-//				} else {
-//
-//					java += sc + arg.getName() + "FromTXTB";
-//					sc = ", ";
-//					java += sc + arg.getName() + "ToTXTB";
-//
-//				}
-//
-//			} else if (arg.isString()) {
-//
-//				java += sc + arg.getName() + "TXTB";
-//
-//			} else if (arg.isBoolean()) {
-//
-//				java += sc + arg.getName() + "OPT";
-//
-//			} else if (arg.isSimple() == false) {
-//
-//				java += sc + arg.getName() + "CBXB";
-//			}
-//		}
-//
-//		return java;
-//	}
-	
+	// private static String buildWLControlsInstanceAddx(Clazz clazzX) {
+	// String java = "";
+	//
+	// for (int i = 0; i < clazzX.getArgs().size(); i++) {
+	//
+	// Argument arg = clazzX.getArgs().get(i);
+	//
+	// String sc = (i == 0) ? "" : ", ";
+	//
+	// if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
+	//
+	// if (arg.getRange() == false) {
+	//
+	// java += sc + arg.getName() + "TXTB";
+	//
+	// } else {
+	//
+	// java += sc + arg.getName() + "FromTXTB";
+	// sc = ", ";
+	// java += sc + arg.getName() + "ToTXTB";
+	//
+	// }
+	//
+	// } else if (arg.isString()) {
+	//
+	// java += sc + arg.getName() + "TXTB";
+	//
+	// } else if (arg.isBoolean()) {
+	//
+	// java += sc + arg.getName() + "OPT";
+	//
+	// } else if (arg.isSimple() == false) {
+	//
+	// java += sc + arg.getName() + "CBXB";
+	// }
+	// }
+	//
+	// return java;
+	// }
+
 	private static String buildWLControlsInstanceAdd(Clazz clazzX) {
 
 		String java = "";
@@ -347,10 +352,10 @@ public class UtilJavaList {
 
 			Argument att = clazzX.getArgs().get(i);
 
-//			String sc = (i == 0) ? "" : ", ";
+			// String sc = (i == 0) ? "" : ", ";
 
 			if (att.isNumber()) {
-				
+
 				if (att.getRange() == false) {
 
 					java += "\n\t\tif (" + att.getName() + "TXTB != null) {";
@@ -362,12 +367,12 @@ public class UtilJavaList {
 					java += "\n\t\tif (" + att.getName() + "FromTXTB != null) {";
 					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "FromTXTB);";
 					java += "\n\t\t}";
-					
+
 					java += "\n\t\tif (" + att.getName() + "ToTXTB != null) {";
 					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "ToTXTB);";
 					java += "\n\t\t}";
 
-				}				
+				}
 
 			} else if (att.isString()) {
 
@@ -379,7 +384,7 @@ public class UtilJavaList {
 
 				java += "\n\t\tif (" + att.getName() + "CHK != null) {";
 				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "CHK);";
-				java += "\n\t\t}";								
+				java += "\n\t\t}";
 
 			} else if (att.isTimestamp()) {
 
@@ -393,12 +398,12 @@ public class UtilJavaList {
 				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "DAFB);";
 				java += "\n\t\t}";
 
-			} else if (att.isSimple() == false) {				
-				
+			} else if (att.isSimple() == false) {
+
 				java += "\n\t\tif (" + att.getName() + "CBXB != null) {";
 				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "CBXB);";
 				java += "\n\t\t}";
-				
+
 				java += "\n\t\tif (" + att.getName() + "SBX != null) {";
 				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "SBX);";
 				java += "\n\t\t}";
@@ -437,9 +442,9 @@ public class UtilJavaList {
 			String w = "-1";
 
 			if (att.getColumns() != null) {
-				
+
 				w = att.getColumns().intValue() * 12 + "";
-				
+
 				if (att.isTimestamp()) {
 					w = "120";
 				} else if (att.isBoolean()) {
@@ -449,8 +454,8 @@ public class UtilJavaList {
 				} else if (att.isBigDecimal()) {
 					w = "120";
 				}
-				
-				if(i == clazzX.getAtts().size() - 1) {
+
+				if (i == clazzX.getAtts().size() - 1) {
 					w = "-1";
 				}
 
@@ -499,7 +504,7 @@ public class UtilJavaList {
 
 		return java;
 	}
-	
+
 	private static String buildWColumnsPropertiesDateImport(Clazz clazzX) {
 
 		for (int i = 0; i < clazzX.getAtts().size(); i++) {

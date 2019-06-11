@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.afip.TipoDocumentoAFIP;
-import com.massoftware.dao.afip.TipoDocumentoAFIPDAO;
+import com.massoftware.service.afip.TipoDocumentoAFIPService;
 
 @SuppressWarnings("serial")
 public class WFTipoDocumentoAFIP extends WindowForm {
@@ -24,7 +26,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 
 	protected BeanItem<TipoDocumentoAFIP> itemBI;
 	
-	private TipoDocumentoAFIPDAO dao;
+	private TipoDocumentoAFIPService service;
 
 	// -------------------------------------------------------------
 
@@ -39,12 +41,12 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected TipoDocumentoAFIPDAO getDAO() {
-		if(dao == null){
-			dao = new TipoDocumentoAFIPDAO();
+	protected TipoDocumentoAFIPService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildTipoDocumentoAFIPService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -82,7 +84,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -92,7 +94,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -133,7 +135,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((TipoDocumentoAFIP) item).setNumero(getDAO().nextValueNumero());
+		((TipoDocumentoAFIP) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -162,7 +164,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -181,7 +183,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -201,7 +203,7 @@ public class WFTipoDocumentoAFIP extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			TipoDocumentoAFIP item = getDAO().findById(id);
+			TipoDocumentoAFIP item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

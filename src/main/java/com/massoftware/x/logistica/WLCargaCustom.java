@@ -4,8 +4,8 @@ package com.massoftware.x.logistica;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.logistica.CargaFiltro;
 import com.massoftware.model.logistica.Carga;
+import com.massoftware.service.logistica.CargaFiltro;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

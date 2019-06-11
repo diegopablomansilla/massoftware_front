@@ -67,8 +67,8 @@ public class UtilJavaForm {
 				Clazz clazz = ((DataTypeClazz) att.getDataType()).getClazz();
 
 				java += sc + "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName() + ";";
-				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
-				java += sc + "import com.massoftware.dao." + clazz.getNamePackage() + "." + clazz.getName() + "DAO;";
+				java += sc + "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName() + "Filtro;";
+				java += sc + "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName() + "Service;";
 				// java += sc + "import com.massoftware.x." + clazz.getNamePackage() + ".WL" +
 				// clazz.getName() + ";";
 			}
@@ -147,7 +147,7 @@ public class UtilJavaForm {
 
 					java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
 
-					java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
+					java += "\n\t\t\t\treturn getService().isExists" + toCamelStart(att.getName()) + "(("
 							+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
 					java += "\n\t\t\t}";
 					java += "\n\t\t};";
@@ -178,7 +178,7 @@ public class UtilJavaForm {
 
 						java += "\n\t\t\tprotected boolean ifExists(Object arg) throws Exception {";
 
-						java += "\n\t\t\t\treturn getDAO().isExists" + toCamelStart(att.getName()) + "(("
+						java += "\n\t\t\t\treturn getService().isExists" + toCamelStart(att.getName()) + "(("
 								+ att.getDataType().getName().replace("java.lang.", "") + ")arg);";
 						java += "\n\t\t\t}";
 						java += "\n\t\t};";
@@ -229,10 +229,13 @@ public class UtilJavaForm {
 				String sc5 = sc4 + "\t";
 				String sc6 = sc5 + "\t";
 
-				java += sc2 + att.getDataType().getName() + "DAO " + att.getName() + "DAO = new "
-						+ att.getDataType().getName() + "DAO();";
+//				java += sc2 + att.getDataType().getName() + "DAO " + att.getName() + "DAO = new "
+//						+ att.getDataType().getName() + "DAO();";
+				
+				java += sc2 + att.getDataType().getName() + "Service " + att.getName() + "Service = AppCX.services().build"
+						+ att.getDataType().getName() + "Service();";
 
-				java += sc2 + "long " + att.getName() + "Items = " + att.getName() + "DAO.count();";
+				java += sc2 + "long " + att.getName() + "Items = " + att.getName() + "Service.count();";
 
 				java += sc2 + "if (" + att.getName() +"Items < MAX_ROWS_FOR_CBX) {";
 
@@ -245,7 +248,7 @@ public class UtilJavaForm {
 				java += sc3 + att.getName() + "Filtro.setOrderBy(1);";
 
 				java += sc3 + "List<" + att.getDataType().getName().replaceAll("java.lang", "") + "> " + att.getName()
-						+ "Lista = " + att.getName() + "DAO.find(" + att.getName() + "Filtro);";
+						+ "Lista = " + att.getName() + "Service.find(" + att.getName() + "Filtro);";
 
 				java += sc3 + att.getName() + "CBX = new ComboBoxEntity(itemBI, \"" + att.getName() + "\", this.mode, "
 						+ att.getName() + "Lista" + ");";
@@ -261,7 +264,8 @@ public class UtilJavaForm {
 				java += sc4 + "@SuppressWarnings(\"rawtypes\")" + "\n\t\t\t\t"
 						+ "protected List findBean(String value) throws Exception {";
 
-				java += sc5 + att.getDataType().getName() + "DAO dao = new " + att.getDataType().getName() + "DAO();";
+//				java += sc5 + att.getDataType().getName() + "DAO dao = new " + att.getDataType().getName() + "DAO();";
+				java += sc5 + att.getDataType().getName() + "Service service = AppCX.services().build" + att.getDataType().getName() + "Service();";
 
 				Clazz clazzAtt = ((DataTypeClazz) att.getDataType()).getClazz();
 				String arg1 = toCamelStart(clazzAtt.getArgsSBX().get(0).getName());
@@ -271,9 +275,9 @@ public class UtilJavaForm {
 				}
 
 				if (clazzAtt.getArgsSBX().size() > 1) {
-					java += sc5 + "return dao.findBy" + arg1 + arg2 + "(value);";
+					java += sc5 + "return service.findBy" + arg1 + arg2 + "(value);";
 				} else {
-					java += sc5 + "return dao.findBy" + arg1 + "(value);";
+					java += sc5 + "return service.findBy" + arg1 + "(value);";
 				}
 
 				java += sc4 + "}";
@@ -291,7 +295,7 @@ public class UtilJavaForm {
 				}
 
 				java += sc5 + "}";
-				java += sc5 + "return windowBuilder.buildWL" + att.getDataType().getName() + "(filtro);";
+				java += sc5 + "return AppCX.widgets().buildWL" + att.getDataType().getName() + "(filtro);";
 
 				java += sc4 + "}";
 
@@ -440,13 +444,13 @@ public class UtilJavaForm {
 
 				if (att.isBigDecimal() && ((DataTypeBigDecimal) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
-							+ "(getDAO().nextValue" + toCamelStart(att.getName()) + "());";
+							+ "(getService().nextValue" + toCamelStart(att.getName()) + "());";
 				} else if (att.isLong() && ((DataTypeLong) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
-							+ "(dao.nextValue" + toCamelStart(att.getName()) + "());";
+							+ "(getService().nextValue" + toCamelStart(att.getName()) + "());";
 				} else if (att.isInteger() && ((DataTypeInteger) att.getDataType()).getNextValueProposed() == true) {
 					java += sc + "((" + clazzX.getName() + ") item).set" + toCamelStart(att.getName())
-							+ "(getDAO().nextValue" + toCamelStart(att.getName()) + "());";
+							+ "(getService().nextValue" + toCamelStart(att.getName()) + "());";
 				}
 
 			}

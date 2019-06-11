@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.geo.Pais;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.service.geo.PaisFiltro;
+import com.massoftware.service.geo.PaisService;
 
 import com.massoftware.model.geo.Provincia;
-import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.service.geo.ProvinciaService;
 
 @SuppressWarnings("serial")
 public class WFProvincia extends WindowForm {
@@ -28,7 +30,7 @@ public class WFProvincia extends WindowForm {
 
 	protected BeanItem<Provincia> itemBI;
 	
-	private ProvinciaDAO dao;
+	private ProvinciaService service;
 
 	// -------------------------------------------------------------
 
@@ -49,12 +51,12 @@ public class WFProvincia extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected ProvinciaDAO getDAO() {
-		if(dao == null){
-			dao = new ProvinciaDAO();
+	protected ProvinciaService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildProvinciaService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -92,7 +94,7 @@ public class WFProvincia extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -102,7 +104,7 @@ public class WFProvincia extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -110,7 +112,7 @@ public class WFProvincia extends WindowForm {
 
 		abreviaturaTXT = new TextFieldEntity(itemBI, "abreviatura", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsAbreviatura((String)arg);
+				return getService().isExistsAbreviatura((String)arg);
 			}
 		};
 
@@ -126,9 +128,9 @@ public class WFProvincia extends WindowForm {
 
 		numeroRENATEATXT = new TextFieldEntity(itemBI, "numeroRENATEA", this.mode);
 
-		PaisDAO paisDAO = new PaisDAO();
+		PaisService paisService = AppCX.services().buildPaisService();
 
-		long paisItems = paisDAO.count();
+		long paisItems = paisService.count();
 
 		if (paisItems < MAX_ROWS_FOR_CBX) {
 
@@ -138,7 +140,7 @@ public class WFProvincia extends WindowForm {
 
 			paisFiltro.setOrderBy(1);
 
-			List<Pais> paisLista = paisDAO.find(paisFiltro);
+			List<Pais> paisLista = paisService.find(paisFiltro);
 
 			paisCBX = new ComboBoxEntity(itemBI, "pais", this.mode, paisLista);
 
@@ -149,9 +151,9 @@ public class WFProvincia extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					PaisDAO dao = new PaisDAO();
+					PaisService service = AppCX.services().buildPaisService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -165,7 +167,7 @@ public class WFProvincia extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLPais(filtro);
+					return AppCX.widgets().buildWLPais(filtro);
 
 				}
 
@@ -220,7 +222,7 @@ public class WFProvincia extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Provincia) item).setNumero(getDAO().nextValueNumero());
+		((Provincia) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -249,7 +251,7 @@ public class WFProvincia extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -268,7 +270,7 @@ public class WFProvincia extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -288,7 +290,7 @@ public class WFProvincia extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Provincia item = getDAO().findById(id);
+			Provincia item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

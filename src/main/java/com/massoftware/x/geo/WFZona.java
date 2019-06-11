@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.geo.Zona;
-import com.massoftware.dao.geo.ZonaDAO;
+import com.massoftware.service.geo.ZonaService;
 
 @SuppressWarnings("serial")
 public class WFZona extends WindowForm {
@@ -24,7 +26,7 @@ public class WFZona extends WindowForm {
 
 	protected BeanItem<Zona> itemBI;
 	
-	private ZonaDAO dao;
+	private ZonaService service;
 
 	// -------------------------------------------------------------
 
@@ -41,12 +43,12 @@ public class WFZona extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected ZonaDAO getDAO() {
-		if(dao == null){
-			dao = new ZonaDAO();
+	protected ZonaService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildZonaService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -84,7 +86,7 @@ public class WFZona extends WindowForm {
 
 		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCodigo((String)arg);
+				return getService().isExistsCodigo((String)arg);
 			}
 		};
 
@@ -94,7 +96,7 @@ public class WFZona extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -173,7 +175,7 @@ public class WFZona extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -192,7 +194,7 @@ public class WFZona extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -212,7 +214,7 @@ public class WFZona extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Zona item = getDAO().findById(id);
+			Zona item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

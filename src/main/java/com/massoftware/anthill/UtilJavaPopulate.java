@@ -24,7 +24,7 @@ public class UtilJavaPopulate {
 		java += "\n";
 		java += "\t";
 		java += "\t";
-		java += clazzX.getName() + "DAO dao = new " + clazzX.getName() + "DAO();";
+		java += clazzX.getName() + "Service service = AppCX.services().build" + clazzX.getName() + "Service();";
 
 		for (Att att : clazzX.getAtts()) {
 
@@ -35,13 +35,13 @@ public class UtilJavaPopulate {
 				java += "\n";
 				java += "\t";
 				java += "\t";				
-				java += dt.getClazz().getName() + "DAO dao" + dt.getClazz().getName() + " = new "
-						+ dt.getClazz().getName() + "DAO();";
+				java += dt.getClazz().getName() + "Service service" + dt.getClazz().getName() + " = AppCX.services().build"
+						+ dt.getClazz().getName() + "Service();";
 
 				java += "\n";
 				java += "\t";
 				java += "\t";				
-				java += "Long " + att.getName() + "Count = dao" + dt.getClazz().getName() + ".count();";
+				java += "Long " + att.getName() + "Count = service" + dt.getClazz().getName() + ".count();";
 
 			}
 
@@ -290,7 +290,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = dao"
+				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = service"
 						+ dt.getClazz().getName() + ".find(" + att.getName() + "Filtro);";
 
 				// java += "\n";
@@ -320,7 +320,7 @@ public class UtilJavaPopulate {
 		java += "\t";
 		java += "\t";
 		java += "\t";
-		java += "dao.insert(obj);";
+		java += "service.insert(obj);";
 
 		java += "\n";
 		java += "\n";

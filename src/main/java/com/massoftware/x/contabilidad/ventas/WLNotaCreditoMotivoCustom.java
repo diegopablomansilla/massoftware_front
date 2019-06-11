@@ -4,8 +4,8 @@ package com.massoftware.x.contabilidad.ventas;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.contabilidad.ventas.NotaCreditoMotivoFiltro;
 import com.massoftware.model.contabilidad.ventas.NotaCreditoMotivo;
+import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoFiltro;
 import com.massoftware.windows.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;

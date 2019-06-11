@@ -4,19 +4,20 @@ package com.massoftware.x.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.geo.CiudadDAO;
-import com.massoftware.dao.geo.CiudadDAOCustom;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.CodigoPostalFiltro;
-import com.massoftware.dao.geo.PaisDAO;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.ProvinciaDAO;
-import com.massoftware.dao.geo.ProvinciaDAOCustom;
-import com.massoftware.dao.geo.ProvinciaFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.geo.Ciudad;
 import com.massoftware.model.geo.CodigoPostal;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
+import com.massoftware.service.geo.CiudadServiceCustom;
+import com.massoftware.service.geo.CodigoPostalFiltro;
+import com.massoftware.service.geo.PaisFiltro;
+import com.massoftware.service.geo.PaisService;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
+import com.massoftware.service.geo.ProvinciaServiceCustom;
 import com.massoftware.windows.ComboBoxBox;
 import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.SelectorBox;
@@ -65,9 +66,9 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		// ------------------------------------------------------------------
 
-		PaisDAO paisDAO = new PaisDAO();
+		PaisService paisService = AppCX.services().buildPaisService();
 
-		long paisItems = paisDAO.count();
+		long paisItems = paisService.count();
 
 		if (paisItems < MAX_ROWS_FOR_CBX) {
 
@@ -77,7 +78,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 			paisFiltro.setOrderBy(1);
 
-			List<Pais> paisLista = paisDAO.find(paisFiltro);
+			List<Pais> paisLista = paisService.find(paisFiltro);
 
 			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
 
@@ -88,16 +89,16 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 					this.filterBI.getBean().setProvincia(null);
 					this.filterBI.getBean().setCiudad(null);
-					
+
 					// *************************************
 
 					if (provinciaSBX != null) {
 						provinciaSBX.setSelectedItem(null);
 					} else if (provinciaCBXB != null) {
 
-						if(this.filterBI.getBean().getPais() != null) {
-							
-							ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+						if (this.filterBI.getBean().getPais() != null) {
+
+							ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
 							ProvinciaFiltro provinciaFiltro = new ProvinciaFiltro();
 
@@ -109,14 +110,14 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 							provinciaFiltro.setOrderBy(1);
 
-							List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+							List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 							provinciaCBXB.valueCBX.setValues(provinciaLista, null);
 
 							if (provinciaLista.size() == 0) {
 								provinciaCBXB.valueCBX.setValue(null);
 							}
-						} else {							
+						} else {
 							provinciaCBXB.valueCBX.setValues(new ArrayList<Provincia>(), null);
 							provinciaCBXB.valueCBX.setValue(null);
 							this.filterBI.getBean().setProvincia(null);
@@ -126,11 +127,11 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 					if (ciudadSBX != null) {
 						ciudadSBX.setSelectedItem(null);
-					} else if (ciudadCBXB != null) {								
+					} else if (ciudadCBXB != null) {
 						ciudadCBXB.valueCBX.setValue(null);
 						ciudadCBXB.valueCBX.setValues(new ArrayList<Ciudad>(), null);
 					}
-					
+
 					// *************************************
 
 				} catch (Exception ex) {
@@ -153,9 +154,9 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					PaisDAO dao = new PaisDAO();
+					PaisService service = AppCX.services().buildPaisService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -215,9 +216,9 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		// ------------------------------------------------------------------
 
-		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+		ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
-		long provinciaItems = provinciaDAO.count();
+		long provinciaItems = provinciaService.count();
 
 		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
@@ -227,7 +228,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 			provinciaFiltro.setOrderBy(1);
 
-			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+			List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista,
 					filterBI.getBean().getProvincia());
@@ -241,13 +242,13 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 					if (ciudadSBX != null) {
 						ciudadSBX.setSelectedItem(null);
 					} else if (ciudadCBXB != null) {
-						
-						if(this.filterBI.getBean().getProvincia() != null) {
-							
+
+						if (this.filterBI.getBean().getProvincia() != null) {
+
 							ciudadCBXB.valueCBX.setValues(new ArrayList<Ciudad>(), null);
 							ciudadCBXB.valueCBX.setValue(null);
 
-							CiudadDAO ciudadDAO = new CiudadDAO();
+							CiudadService ciudadService = AppCX.services().buildCiudadService();
 
 							CiudadFiltro ciudadFiltro = new CiudadFiltro();
 
@@ -259,18 +260,18 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 							ciudadFiltro.setOrderBy(1);
 
-							List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+							List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 							ciudadCBXB.valueCBX.setValues(ciudadLista, null);
 
 							if (ciudadLista.size() == 0) {
 								ciudadCBXB.valueCBX.setValue(null);
 							}
-						} else {							
+						} else {
 							ciudadCBXB.valueCBX.setValues(new ArrayList<Ciudad>(), null);
 							ciudadCBXB.valueCBX.setValue(null);
 							this.filterBI.getBean().setCiudad(null);
-						}												
+						}
 
 					}
 					// *************************************
@@ -300,9 +301,9 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 					// return dao.findByNumeroOrNombre(value);
 
 					// *************************************
-					ProvinciaDAOCustom dao = new ProvinciaDAOCustom();
+					ProvinciaServiceCustom service = (ProvinciaServiceCustom) AppCX.services().buildProvinciaService();
 
-					return dao.findByNumeroOrNombre(filterBI.getBean().getPais(), value);
+					return service.findByNumeroOrNombre(filterBI.getBean().getPais(), value);
 					// *************************************
 
 				}
@@ -375,9 +376,9 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 		// ------------------------------------------------------------------
 
-		CiudadDAO ciudadDAO = new CiudadDAO();
+		CiudadService ciudadService = AppCX.services().buildCiudadService();
 
-		long ciudadItems = ciudadDAO.count();
+		long ciudadItems = ciudadService.count();
 
 		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
@@ -387,7 +388,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 
 			ciudadFiltro.setOrderBy(1);
 
-			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+			List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 			ciudadCBXB = new ComboBoxBox(this, filterBI, "ciudad", ciudadLista, filterBI.getBean().getCiudad());
 
@@ -404,14 +405,14 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-//					CiudadDAO dao = new CiudadDAO();
-//
-//					return dao.findByNumeroOrNombre(value);
-					
-					// *************************************
-					CiudadDAOCustom dao = new CiudadDAOCustom();
+					// CiudadDAO dao = new CiudadDAO();
+					//
+					// return dao.findByNumeroOrNombre(value);
 
-					return dao.findByNumeroOrNombre(filterBI.getBean().getProvincia(),value);
+					// *************************************
+					CiudadServiceCustom service = (CiudadServiceCustom) AppCX.services().buildCiudadService();
+
+					return service.findByNumeroOrNombre(filterBI.getBean().getProvincia(), value);
 					// *************************************
 
 				}
@@ -419,7 +420,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 				protected WindowListado getPopup(boolean filter) throws Exception {
 
 					CiudadFiltro filtro = new CiudadFiltro();
-					
+
 					// *************************************
 					filtro.setPais(filterBI.getBean().getPais());
 					filtro.setProvincia(filterBI.getBean().getProvincia());
@@ -440,7 +441,7 @@ public class WLCodigoPostalCustom extends WLCodigoPostal {
 						}
 
 					};
-					
+
 					// *************************************
 					if (windowPoPup.paisSBX != null) {
 						windowPoPup.paisSBX.setEnabled(false);

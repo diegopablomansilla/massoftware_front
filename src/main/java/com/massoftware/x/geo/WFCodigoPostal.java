@@ -9,16 +9,18 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 import java.util.List;
 import com.massoftware.model.geo.Ciudad;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.CiudadDAO;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
 
 import com.massoftware.model.geo.CodigoPostal;
-import com.massoftware.dao.geo.CodigoPostalDAO;
+import com.massoftware.service.geo.CodigoPostalService;
 
 @SuppressWarnings("serial")
 public class WFCodigoPostal extends WindowForm {
@@ -28,7 +30,7 @@ public class WFCodigoPostal extends WindowForm {
 
 	protected BeanItem<CodigoPostal> itemBI;
 	
-	private CodigoPostalDAO dao;
+	private CodigoPostalService service;
 
 	// -------------------------------------------------------------
 
@@ -47,12 +49,12 @@ public class WFCodigoPostal extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected CodigoPostalDAO getDAO() {
-		if(dao == null){
-			dao = new CodigoPostalDAO();
+	protected CodigoPostalService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildCodigoPostalService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -90,7 +92,7 @@ public class WFCodigoPostal extends WindowForm {
 
 		codigoTXT = new TextFieldEntity(itemBI, "codigo", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsCodigo((String)arg);
+				return getService().isExistsCodigo((String)arg);
 			}
 		};
 
@@ -100,7 +102,7 @@ public class WFCodigoPostal extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -112,9 +114,9 @@ public class WFCodigoPostal extends WindowForm {
 
 		numeroCalleTXT = new TextFieldEntity(itemBI, "numeroCalle", this.mode);
 
-		CiudadDAO ciudadDAO = new CiudadDAO();
+		CiudadService ciudadService = AppCX.services().buildCiudadService();
 
-		long ciudadItems = ciudadDAO.count();
+		long ciudadItems = ciudadService.count();
 
 		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
@@ -124,7 +126,7 @@ public class WFCodigoPostal extends WindowForm {
 
 			ciudadFiltro.setOrderBy(1);
 
-			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+			List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 			ciudadCBX = new ComboBoxEntity(itemBI, "ciudad", this.mode, ciudadLista);
 
@@ -135,9 +137,9 @@ public class WFCodigoPostal extends WindowForm {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CiudadDAO dao = new CiudadDAO();
+					CiudadService service = AppCX.services().buildCiudadService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -151,7 +153,7 @@ public class WFCodigoPostal extends WindowForm {
 
 					}
 
-					return windowBuilder.buildWLCiudad(filtro);
+					return AppCX.widgets().buildWLCiudad(filtro);
 
 				}
 
@@ -204,7 +206,7 @@ public class WFCodigoPostal extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((CodigoPostal) item).setNumero(getDAO().nextValueNumero());
+		((CodigoPostal) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -233,7 +235,7 @@ public class WFCodigoPostal extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -252,7 +254,7 @@ public class WFCodigoPostal extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -272,7 +274,7 @@ public class WFCodigoPostal extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			CodigoPostal item = getDAO().findById(id);
+			CodigoPostal item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

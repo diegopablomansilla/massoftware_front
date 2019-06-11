@@ -27,23 +27,24 @@ import com.vaadin.ui.Component;
 
 import org.vaadin.patrik.FastNavigation;
 
+import com.massoftware.AppCX;
 import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
 import com.massoftware.model.geo.CodigoPostal;
-import com.massoftware.dao.geo.CodigoPostalFiltro;
-import com.massoftware.dao.geo.CodigoPostalDAO;
+import com.massoftware.service.geo.CodigoPostalFiltro;
+import com.massoftware.service.geo.CodigoPostalService;
 
 import com.massoftware.model.geo.Pais;
-import com.massoftware.dao.geo.PaisFiltro;
-import com.massoftware.dao.geo.PaisDAO;
+import com.massoftware.service.geo.PaisFiltro;
+import com.massoftware.service.geo.PaisService;
 import com.massoftware.model.geo.Provincia;
-import com.massoftware.dao.geo.ProvinciaFiltro;
-import com.massoftware.dao.geo.ProvinciaDAO;
+import com.massoftware.service.geo.ProvinciaFiltro;
+import com.massoftware.service.geo.ProvinciaService;
 import com.massoftware.model.geo.Ciudad;
-import com.massoftware.dao.geo.CiudadFiltro;
-import com.massoftware.dao.geo.CiudadDAO;
+import com.massoftware.service.geo.CiudadFiltro;
+import com.massoftware.service.geo.CiudadService;
 
 @SuppressWarnings("serial")
 public class WLCodigoPostal extends WindowListado {
@@ -53,7 +54,7 @@ public class WLCodigoPostal extends WindowListado {
 	BeanItem<CodigoPostalFiltro> filterBI;
 	protected BeanItemContainer<CodigoPostal> itemsBIC;
 	
-	private CodigoPostalDAO dao;
+	private CodigoPostalService service;
 
 	// -------------------------------------------------------------
 
@@ -85,12 +86,12 @@ public class WLCodigoPostal extends WindowListado {
 		setFocusGrid();
 	}
 	
-	protected CodigoPostalDAO getDAO() {
-		if(dao == null){
-			dao = new CodigoPostalDAO();
+	protected CodigoPostalService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildCodigoPostalService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -144,9 +145,9 @@ public class WLCodigoPostal extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		PaisDAO paisDAO = new PaisDAO();
+		PaisService paisService = AppCX.services().buildPaisService();
 
-		long paisItems = paisDAO.count();
+		long paisItems = paisService.count();
 
 		if (paisItems < MAX_ROWS_FOR_CBX) {
 
@@ -156,7 +157,7 @@ public class WLCodigoPostal extends WindowListado {
 
 			paisFiltro.setOrderBy(1);
 
-			List<Pais> paisLista = paisDAO.find(paisFiltro);
+			List<Pais> paisLista = paisService.find(paisFiltro);
 
 			paisCBXB = new ComboBoxBox(this, filterBI, "pais", paisLista, filterBI.getBean().getPais());
 
@@ -173,9 +174,9 @@ public class WLCodigoPostal extends WindowListado {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					PaisDAO dao = new PaisDAO();
+					PaisService service = AppCX.services().buildPaisService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -209,9 +210,9 @@ public class WLCodigoPostal extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		ProvinciaDAO provinciaDAO = new ProvinciaDAO();
+		ProvinciaService provinciaService = AppCX.services().buildProvinciaService();
 
-		long provinciaItems = provinciaDAO.count();
+		long provinciaItems = provinciaService.count();
 
 		if (provinciaItems < MAX_ROWS_FOR_CBX) {
 
@@ -221,7 +222,7 @@ public class WLCodigoPostal extends WindowListado {
 
 			provinciaFiltro.setOrderBy(1);
 
-			List<Provincia> provinciaLista = provinciaDAO.find(provinciaFiltro);
+			List<Provincia> provinciaLista = provinciaService.find(provinciaFiltro);
 
 			provinciaCBXB = new ComboBoxBox(this, filterBI, "provincia", provinciaLista, filterBI.getBean().getProvincia());
 
@@ -238,9 +239,9 @@ public class WLCodigoPostal extends WindowListado {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					ProvinciaDAO dao = new ProvinciaDAO();
+					ProvinciaService service = AppCX.services().buildProvinciaService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -274,9 +275,9 @@ public class WLCodigoPostal extends WindowListado {
 
 		// ------------------------------------------------------------------
 
-		CiudadDAO ciudadDAO = new CiudadDAO();
+		CiudadService ciudadService = AppCX.services().buildCiudadService();
 
-		long ciudadItems = ciudadDAO.count();
+		long ciudadItems = ciudadService.count();
 
 		if (ciudadItems < MAX_ROWS_FOR_CBX) {
 
@@ -286,7 +287,7 @@ public class WLCodigoPostal extends WindowListado {
 
 			ciudadFiltro.setOrderBy(1);
 
-			List<Ciudad> ciudadLista = ciudadDAO.find(ciudadFiltro);
+			List<Ciudad> ciudadLista = ciudadService.find(ciudadFiltro);
 
 			ciudadCBXB = new ComboBoxBox(this, filterBI, "ciudad", ciudadLista, filterBI.getBean().getCiudad());
 
@@ -303,9 +304,9 @@ public class WLCodigoPostal extends WindowListado {
 				@SuppressWarnings("rawtypes")
 				protected List findBean(String value) throws Exception {
 
-					CiudadDAO dao = new CiudadDAO();
+					CiudadService service = AppCX.services().buildCiudadService();
 
-					return dao.findByNumeroOrNombre(value);
+					return service.findByNumeroOrNombre(value);
 
 				}
 
@@ -527,7 +528,7 @@ public class WLCodigoPostal extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<CodigoPostal> items = getDAO().find(filterBI.getBean());
+				List<CodigoPostal> items = getService().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
 				for (CodigoPostal item : items) {
@@ -557,12 +558,12 @@ public class WLCodigoPostal extends WindowListado {
 
 		// ((EntityId) item).delete();
 
-		getDAO().deleteById(((EntityId) item).getId());
+		getService().deleteById(((EntityId) item).getId());
 
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return windowBuilder.buildWFCodigoPostal(mode, id);
+		return AppCX.widgets().buildWFCodigoPostal(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -580,4 +581,4 @@ public class WLCodigoPostal extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-06-10T16:43:57.643-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-06-11T14:41:24.939-03:00[America/Buenos_Aires]

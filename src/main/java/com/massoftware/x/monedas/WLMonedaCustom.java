@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.dao.monedas.MonedaFiltro;
+import com.massoftware.AppCX;
 import com.massoftware.model.monedas.Moneda;
+import com.massoftware.service.monedas.MonedaFiltro;
 import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.WindowForm;
-import com.massoftware.x.afip.WFMonedaCustom;
 import com.vaadin.data.sort.SortOrder;
 
 //import com.vaadin.data.util.converter.StringToBooleanConverter;
@@ -99,8 +99,8 @@ public class WLMonedaCustom extends WLMoneda {
 		// ------------------------------------------------------------------
 	}
 	
-	protected WindowForm buildWinddowForm(String mode, String id) {
-		return new WFMonedaCustom(mode, id);
+	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
+		return AppCX.widgets().buildWFMoneda(mode, id);		
 	}
 
 } // END CLASS

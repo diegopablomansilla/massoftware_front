@@ -9,12 +9,14 @@ import com.vaadin.ui.VerticalLayout;
 
 import com.massoftware.windows.*;
 
+import com.massoftware.AppCX;
+
 import com.massoftware.model.EntityId;
 
 
 
 import com.massoftware.model.clientes.TipoCliente;
-import com.massoftware.dao.clientes.TipoClienteDAO;
+import com.massoftware.service.clientes.TipoClienteService;
 
 @SuppressWarnings("serial")
 public class WFTipoCliente extends WindowForm {
@@ -24,7 +26,7 @@ public class WFTipoCliente extends WindowForm {
 
 	protected BeanItem<TipoCliente> itemBI;
 	
-	private TipoClienteDAO dao;
+	private TipoClienteService service;
 
 	// -------------------------------------------------------------
 
@@ -39,12 +41,12 @@ public class WFTipoCliente extends WindowForm {
 		super(mode, id);					
 	}
 
-	protected TipoClienteDAO getDAO() {
-		if(dao == null){
-			dao = new TipoClienteDAO();
+	protected TipoClienteService getService() throws Exception {
+		if(service == null){
+			service = AppCX.services().buildTipoClienteService();
 		}
 		
-		return dao;
+		return service;
 	}
 
 	protected void buildContent() throws Exception {
@@ -82,7 +84,7 @@ public class WFTipoCliente extends WindowForm {
 
 		numeroTXT = new TextFieldEntity(itemBI, "numero", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNumero((Integer)arg);
+				return getService().isExistsNumero((Integer)arg);
 			}
 		};
 
@@ -92,7 +94,7 @@ public class WFTipoCliente extends WindowForm {
 
 		nombreTXT = new TextFieldEntity(itemBI, "nombre", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getDAO().isExistsNombre((String)arg);
+				return getService().isExistsNombre((String)arg);
 			}
 		};
 
@@ -133,7 +135,7 @@ public class WFTipoCliente extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((TipoCliente) item).setNumero(getDAO().nextValueNumero());
+		((TipoCliente) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -162,7 +164,7 @@ public class WFTipoCliente extends WindowForm {
 
 		try {
 			
-			getDAO().insert(getItemBIC().getBean());
+			getService().insert(getItemBIC().getBean());
 			// ((EntityId) getItemBIC().getBean()).insert();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -181,7 +183,7 @@ public class WFTipoCliente extends WindowForm {
 		try {
 
 
-			getDAO().update(getItemBIC().getBean());
+			getService().update(getItemBIC().getBean());
 //			((EntityId) getItemBIC().getBean()).update();
 			if (windowListado != null) {
 				windowListado.loadDataResetPagedFull();
@@ -201,7 +203,7 @@ public class WFTipoCliente extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			TipoCliente item = getDAO().findById(id);
+			TipoCliente item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;
