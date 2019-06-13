@@ -19,34 +19,10 @@ digraph "twoDegreesRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
-  "cuentafondo":"banco":sw -> "banco":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondogrupo":sw -> "cuentafondogrupo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondotipo":sw -> "cuentafondotipo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondogrupo":"cuentafondorubro":sw -> "cuentafondorubro":"elipses":se [arrowhead=none dir=back arrowtail=teeodot];
   "juridiccionconvniomultilateral":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
-  "banco" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">banco</TD></TR>
-      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
-      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD PORT="cuit" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuit</TD></TR>
-      <TR><TD PORT="bloqueado" COLSPAN="3" ALIGN="LEFT">bloqueado</TD></TR>
-      <TR><TD PORT="hoja" COLSPAN="3" ALIGN="LEFT">hoja</TD></TR>
-      <TR><TD PORT="primerafila" COLSPAN="3" ALIGN="LEFT">primerafila</TD></TR>
-      <TR><TD PORT="ultimafila" COLSPAN="3" ALIGN="LEFT">ultimafila</TD></TR>
-      <TR><TD PORT="fecha" COLSPAN="3" ALIGN="LEFT">fecha</TD></TR>
-      <TR><TD PORT="descripcion" COLSPAN="3" ALIGN="LEFT">descripcion</TD></TR>
-      <TR><TD PORT="referencia1" COLSPAN="3" ALIGN="LEFT">referencia1</TD></TR>
-      <TR><TD PORT="importe" COLSPAN="3" ALIGN="LEFT">importe</TD></TR>
-      <TR><TD PORT="referencia2" COLSPAN="3" ALIGN="LEFT">referencia2</TD></TR>
-      <TR><TD PORT="saldo" COLSPAN="3" ALIGN="LEFT">saldo</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">115 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
-    </TABLE>>
-    URL="banco.html"
-    tooltip="banco"
-  ];
   "cuentafondo" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -58,7 +34,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="cuentafondotipo" COLSPAN="2" ALIGN="LEFT">cuentafondotipo</TD><TD PORT="cuentafondotipo.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
       <TR><TD PORT="banco" COLSPAN="2" ALIGN="LEFT">banco</TD><TD PORT="banco.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
       <TR><TD PORT="bloqueado" COLSPAN="2" ALIGN="LEFT">bloqueado</TD><TD PORT="bloqueado.type" ALIGN="LEFT">bool[1]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">345 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondo.html"
     tooltip="cuentafondo"
@@ -71,7 +47,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="cuentafondorubro" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuentafondorubro</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">19 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondogrupo.html"
     tooltip="cuentafondogrupo"
@@ -81,7 +57,7 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentafondorubro</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">6 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondorubro.html"
     tooltip="cuentafondorubro"
@@ -106,7 +82,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="juridiccionconvniomultilateral.html"
     tooltip="juridiccionconvniomultilateral"

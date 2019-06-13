@@ -75,41 +75,39 @@ public class UtilPopulate {
 		return value;
 	}
 
-	// public static String getStringRandomFull(Integer min, Integer max, boolean
-	// required) {
-	//
-	// int leftLimit = 97; // letter 'a'
-	// int rightLimit = 122; // letter 'z'
-	// int targetStringLength = 30;
-	//
-	// if (min != null && max != null) {
-	// targetStringLength = max;
-	// } else if (min != null && max == null) {
-	// targetStringLength = min;
-	// } else if (min == null && max != null) {
-	// targetStringLength = max;
-	// }
-	//
-	// Random r = new Random();
-	//
-	// StringBuilder buffer = new StringBuilder(targetStringLength);
-	//
-	// for (int i = 0; i < targetStringLength; i++) {
-	//
-	// int randomLimitedInt = leftLimit + (int) (r.nextFloat() * (rightLimit -
-	// leftLimit + 1));
-	// buffer.append((char) randomLimitedInt);
-	//
-	// }
-	//
-	// String value = buffer.toString();
-	//
-	// if (required == false) {
-	// value = (r.nextBoolean()) ? value : null;
-	// }
-	//
-	// return value;
-	// }
+	public static String getStringRandomFull(Integer min, Integer max, boolean required) {
+
+		int leftLimit = 97; // letter 'a'
+		int rightLimit = 122; // letter 'z'
+		int targetStringLength = 30;
+
+		if (min != null && max != null) {
+			targetStringLength = max;
+		} else if (min != null && max == null) {
+			targetStringLength = min;
+		} else if (min == null && max != null) {
+			targetStringLength = max;
+		}
+
+		Random r = new Random();
+
+		StringBuilder buffer = new StringBuilder(targetStringLength);
+
+		for (int i = 0; i < targetStringLength; i++) {
+
+			int randomLimitedInt = leftLimit + (int) (r.nextFloat() * (rightLimit - leftLimit + 1));
+			buffer.append((char) randomLimitedInt);
+
+		}
+
+		String value = buffer.toString();
+
+		if (required == false) {
+			value = (r.nextBoolean()) ? value : null;
+		}
+
+		return value;
+	}
 
 	public static String getStringRandomABC(Integer min, Integer max, boolean required) {
 

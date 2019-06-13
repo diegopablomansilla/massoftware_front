@@ -929,3 +929,269 @@ CREATE OR REPLACE FUNCTION massoftware.f_exists_Deposito_abreviatura(abreviatura
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_exists_Deposito_abreviatura(null::VARCHAR(5));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: EjercicioContable                                                                                      //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.EjercicioContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_EjercicioContable_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_EjercicioContable_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.EjercicioContable
+	WHERE	(numeroArg IS NULL OR EjercicioContable.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_EjercicioContable_numero(null::INTEGER);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CentroCostoContable                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CentroCostoContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CentroCostoContable_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CentroCostoContable_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CentroCostoContable
+	WHERE	(numeroArg IS NULL OR CentroCostoContable.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CentroCostoContable_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CentroCostoContable_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CentroCostoContable_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CentroCostoContable
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CentroCostoContable.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CentroCostoContable_nombre(null::VARCHAR(50));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CentroCostoContable_abreviatura(abreviaturaArg VARCHAR(5)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CentroCostoContable_abreviatura(abreviaturaArg VARCHAR(5)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CentroCostoContable
+	WHERE	(abreviaturaArg IS NULL OR (CHAR_LENGTH(TRIM(abreviaturaArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CentroCostoContable.abreviatura)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(abreviaturaArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CentroCostoContable_abreviatura(null::VARCHAR(5));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoPuntoEquilibrio                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoPuntoEquilibrio
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoPuntoEquilibrio_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoPuntoEquilibrio_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoPuntoEquilibrio
+	WHERE	(numeroArg IS NULL OR TipoPuntoEquilibrio.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoPuntoEquilibrio_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoPuntoEquilibrio_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoPuntoEquilibrio_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoPuntoEquilibrio
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoPuntoEquilibrio.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoPuntoEquilibrio_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: PuntoEquilibrio                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.PuntoEquilibrio
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_PuntoEquilibrio_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_PuntoEquilibrio_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.PuntoEquilibrio
+	WHERE	(numeroArg IS NULL OR PuntoEquilibrio.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_PuntoEquilibrio_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_PuntoEquilibrio_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_PuntoEquilibrio_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.PuntoEquilibrio
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(PuntoEquilibrio.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_PuntoEquilibrio_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CostoVenta                                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CostoVenta
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CostoVenta_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CostoVenta_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CostoVenta
+	WHERE	(numeroArg IS NULL OR CostoVenta.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CostoVenta_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CostoVenta_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CostoVenta_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CostoVenta
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CostoVenta.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CostoVenta_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaContableEstado                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaContableEstado
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CuentaContableEstado_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CuentaContableEstado_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CuentaContableEstado
+	WHERE	(numeroArg IS NULL OR CuentaContableEstado.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CuentaContableEstado_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CuentaContableEstado_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CuentaContableEstado_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CuentaContableEstado
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CuentaContableEstado.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CuentaContableEstado_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaContable                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CuentaContable_codigo(codigoArg VARCHAR(11)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CuentaContable_codigo(codigoArg VARCHAR(11)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CuentaContable
+	WHERE	(codigoArg IS NULL OR (CHAR_LENGTH(TRIM(codigoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CuentaContable.codigo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(codigoArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CuentaContable_codigo(null::VARCHAR(11));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_CuentaContable_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_CuentaContable_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.CuentaContable
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(CuentaContable.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_CuentaContable_nombre(null::VARCHAR(50));

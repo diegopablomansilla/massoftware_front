@@ -94,6 +94,10 @@ public class Att {
 	public void setDataTypeTimestamp() {
 		this.dataType = new DataTypeTimestamp();
 	}
+	
+	public void setDataTypeDate() {
+		this.dataType = new DataTypeDate();
+	}
 
 	public String getLabel() {
 		return label;

@@ -23,6 +23,13 @@ import com.massoftware.service.empresa.TipoSucursalService;
 import com.massoftware.service.empresa.SucursalService;
 import com.massoftware.service.empresa.DepositoModuloService;
 import com.massoftware.service.empresa.DepositoService;
+import com.massoftware.service.contabilidad.EjercicioContableService;
+import com.massoftware.service.contabilidad.CentroCostoContableService;
+import com.massoftware.service.contabilidad.TipoPuntoEquilibrioService;
+import com.massoftware.service.contabilidad.PuntoEquilibrioService;
+import com.massoftware.service.contabilidad.CostoVentaService;
+import com.massoftware.service.contabilidad.CuentaContableEstadoService;
+import com.massoftware.service.contabilidad.CuentaContableService;
 
 
 public abstract class AbstractFactoryService {
@@ -117,6 +124,34 @@ public abstract class AbstractFactoryService {
 
 	public DepositoService buildDepositoService() throws Exception {
 		return new DepositoService();
+	}
+
+	public EjercicioContableService buildEjercicioContableService() throws Exception {
+		return new EjercicioContableService();
+	}
+
+	public CentroCostoContableService buildCentroCostoContableService() throws Exception {
+		return new CentroCostoContableService();
+	}
+
+	public TipoPuntoEquilibrioService buildTipoPuntoEquilibrioService() throws Exception {
+		return new TipoPuntoEquilibrioService();
+	}
+
+	public PuntoEquilibrioService buildPuntoEquilibrioService() throws Exception {
+		return new PuntoEquilibrioService();
+	}
+
+	public CostoVentaService buildCostoVentaService() throws Exception {
+		return new CostoVentaService();
+	}
+
+	public CuentaContableEstadoService buildCuentaContableEstadoService() throws Exception {
+		return new CuentaContableEstadoService();
+	}
+
+	public CuentaContableService buildCuentaContableService() throws Exception {
+		return new CuentaContableService();
 	}
 
 

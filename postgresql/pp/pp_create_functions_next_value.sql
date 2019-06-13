@@ -775,3 +775,164 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_Deposito_numero() RETURNS INTEGER 
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_Deposito_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: EjercicioContable                                                                                      //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.EjercicioContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_EjercicioContable_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_EjercicioContable_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.EjercicioContable;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_EjercicioContable_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CentroCostoContable                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CentroCostoContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CentroCostoContable_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CentroCostoContable_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CentroCostoContable;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CentroCostoContable_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoPuntoEquilibrio                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoPuntoEquilibrio
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TipoPuntoEquilibrio_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TipoPuntoEquilibrio_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TipoPuntoEquilibrio;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TipoPuntoEquilibrio_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: PuntoEquilibrio                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.PuntoEquilibrio
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_PuntoEquilibrio_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_PuntoEquilibrio_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.PuntoEquilibrio;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_PuntoEquilibrio_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CostoVenta                                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CostoVenta
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CostoVenta_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CostoVenta_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CostoVenta;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CostoVenta_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaContableEstado                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaContableEstado
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaContableEstado_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaContableEstado_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaContableEstado;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaContableEstado_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaContable                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaContable_porcentaje() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaContable_porcentaje() RETURNS DECIMAL(6,3) AS $$
+
+	SELECT (COALESCE(MAX(porcentaje),0) + 1)::DECIMAL(6,3) FROM massoftware.CuentaContable;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaContable_porcentaje();

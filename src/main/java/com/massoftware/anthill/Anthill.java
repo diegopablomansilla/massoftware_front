@@ -13,6 +13,13 @@ import com.massoftware.anthill.ant.clientes.ClasificacionClienteAnt;
 import com.massoftware.anthill.ant.clientes.MotivoBloqueoClienteAnt;
 import com.massoftware.anthill.ant.clientes.MotivoComentarioAnt;
 import com.massoftware.anthill.ant.clientes.TipoClienteAnt;
+import com.massoftware.anthill.ant.contabilidad.CentroCostoContableAnt;
+import com.massoftware.anthill.ant.contabilidad.CostoVentaAnt;
+import com.massoftware.anthill.ant.contabilidad.CuentaContableAnt;
+import com.massoftware.anthill.ant.contabilidad.CuentaContableEstadoAnt;
+import com.massoftware.anthill.ant.contabilidad.EjercicioContableAnt;
+import com.massoftware.anthill.ant.contabilidad.PuntoEquilibrioAnt;
+import com.massoftware.anthill.ant.contabilidad.TipoPuntoEquilibrioAnt;
 import com.massoftware.anthill.ant.contabilidad.ventas.NotaCreditoMotivoAnt;
 import com.massoftware.anthill.ant.empresa.DepositoAnt;
 import com.massoftware.anthill.ant.empresa.DepositoModuloAnt;
@@ -72,7 +79,7 @@ public class Anthill {
 		new UsuarioAnt(anthill);
 		SeguridadModuloAnt seguridadModuloAnt = new SeguridadModuloAnt(anthill);
 		SeguridadPuertaAnt seguridadPuertaAnt = new SeguridadPuertaAnt(anthill, seguridadModuloAnt);
-		
+
 		// ---------------------------------------------
 
 		new ZonaAnt(anthill);
@@ -111,11 +118,22 @@ public class Anthill {
 
 		TipoSucursalAnt tipoSucursalAnt = new TipoSucursalAnt(anthill);
 		SucursalAnt sucursalAnt = new SucursalAnt(anthill, tipoSucursalAnt);
-		
+
 		DepositoModuloAnt depositoModuloAnt = new DepositoModuloAnt(anthill);
 		new DepositoAnt(anthill, sucursalAnt, depositoModuloAnt, seguridadPuertaAnt);
 
 		// ---------------------------------------------
+
+		EjercicioContableAnt ejercicioContableAnt = new EjercicioContableAnt(anthill);
+		CentroCostoContableAnt centroCostoContableAnt = new CentroCostoContableAnt(anthill, ejercicioContableAnt);
+		TipoPuntoEquilibrioAnt tipoPuntoEquilibrioAnt = new TipoPuntoEquilibrioAnt(anthill);
+		PuntoEquilibrioAnt puntoEquilibrioAnt = new PuntoEquilibrioAnt(anthill, ejercicioContableAnt,
+				tipoPuntoEquilibrioAnt);
+		CostoVentaAnt costoVentaAnt = new CostoVentaAnt(anthill);
+		CuentaContableEstadoAnt cuentaContableEstadoAnt = new CuentaContableEstadoAnt(anthill);
+
+		CuentaContableAnt cuentaContableAnt = new CuentaContableAnt(anthill, ejercicioContableAnt,
+				cuentaContableEstadoAnt, centroCostoContableAnt, puntoEquilibrioAnt, costoVentaAnt, seguridadPuertaAnt);
 
 		///////////////////////////////////////////////////////////////////
 

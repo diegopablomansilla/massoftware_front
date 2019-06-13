@@ -165,8 +165,6 @@ public class WFTransporte extends WindowForm {
 
 					if (filter) {
 
-						filtro.setCodigo(getValue());
-
 					}
 
 					return AppCX.widgets().buildWLCodigoPostal(filtro);

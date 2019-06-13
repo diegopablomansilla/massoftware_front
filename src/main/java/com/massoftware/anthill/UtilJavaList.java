@@ -262,7 +262,7 @@ public class UtilJavaList {
 				if (clazzAtt.getArgsSBX().size() > 1) {
 					java += sc6 + "filtro.set" + toCamelStart(clazzAtt.getArgsSBX().get(1).getName()) + "(getValue());";
 				} else {
-					java += sc6 + "filtro.set" + toCamelStart(clazzAtt.getArgsSBX().get(0).getName()) + "(getValue());";
+//					java += sc6 + "filtro.set" + toCamelStart(clazzAtt.getArgsSBX().get(0).getName()) + "(getValue());";
 				}
 
 				java += sc5 + "}";

@@ -73,6 +73,27 @@ import com.massoftware.service.empresa.DepositoModuloService;
 import com.massoftware.model.empresa.Deposito;
 import com.massoftware.service.empresa.DepositoFiltro;
 import com.massoftware.service.empresa.DepositoService;
+import com.massoftware.model.contabilidad.EjercicioContable;
+import com.massoftware.service.contabilidad.EjercicioContableFiltro;
+import com.massoftware.service.contabilidad.EjercicioContableService;
+import com.massoftware.model.contabilidad.CentroCostoContable;
+import com.massoftware.service.contabilidad.CentroCostoContableFiltro;
+import com.massoftware.service.contabilidad.CentroCostoContableService;
+import com.massoftware.model.contabilidad.TipoPuntoEquilibrio;
+import com.massoftware.service.contabilidad.TipoPuntoEquilibrioFiltro;
+import com.massoftware.service.contabilidad.TipoPuntoEquilibrioService;
+import com.massoftware.model.contabilidad.PuntoEquilibrio;
+import com.massoftware.service.contabilidad.PuntoEquilibrioFiltro;
+import com.massoftware.service.contabilidad.PuntoEquilibrioService;
+import com.massoftware.model.contabilidad.CostoVenta;
+import com.massoftware.service.contabilidad.CostoVentaFiltro;
+import com.massoftware.service.contabilidad.CostoVentaService;
+import com.massoftware.model.contabilidad.CuentaContableEstado;
+import com.massoftware.service.contabilidad.CuentaContableEstadoFiltro;
+import com.massoftware.service.contabilidad.CuentaContableEstadoService;
+import com.massoftware.model.contabilidad.CuentaContable;
+import com.massoftware.service.contabilidad.CuentaContableFiltro;
+import com.massoftware.service.contabilidad.CuentaContableService;
 
 public class Populate {
 
@@ -98,10 +119,17 @@ public class Populate {
 			//insertTipoCliente();
 			//insertClasificacionCliente();
 			//insertMotivoBloqueoCliente();
-			insertTipoSucursal();
-			insertSucursal();
-			insertDepositoModulo();
-			insertDeposito();
+			//insertTipoSucursal();
+			//insertSucursal();
+			//insertDepositoModulo();
+			//insertDeposito();
+			//insertEjercicioContable();
+			//insertCentroCostoContable();
+			//insertTipoPuntoEquilibrio();
+			//insertPuntoEquilibrio();
+			//insertCostoVenta();
+			//insertCuentaContableEstado();
+			insertCuentaContable();
 	}
 
 
@@ -1045,6 +1073,335 @@ public class Populate {
 				puertaConsultaFiltro.setLimit(1L);
 				List<SeguridadPuerta> puertaConsultaListado = servicepuertaConsulta.find(puertaConsultaFiltro);
 				obj.setPuertaConsulta(puertaConsultaListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertEjercicioContable() throws Exception {
+
+		EjercicioContableService service = AppCX.services().buildEjercicioContableService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				EjercicioContable obj = new EjercicioContable();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setApertura(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setCierre(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setCerrado(new Random().nextBoolean());
+
+				obj.setCerradoModulos(new Random().nextBoolean());
+
+				obj.setComentario(UtilPopulate.getStringRandom(null, 250, false));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCentroCostoContable() throws Exception {
+
+		CentroCostoContableService service = AppCX.services().buildCentroCostoContableService();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CentroCostoContable obj = new CentroCostoContable();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTipoPuntoEquilibrio() throws Exception {
+
+		TipoPuntoEquilibrioService service = AppCX.services().buildTipoPuntoEquilibrioService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TipoPuntoEquilibrio obj = new TipoPuntoEquilibrio();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertPuntoEquilibrio() throws Exception {
+
+		PuntoEquilibrioService service = AppCX.services().buildPuntoEquilibrioService();
+		TipoPuntoEquilibrioService servicetipoPuntoEquilibrio = AppCX.services().buildTipoPuntoEquilibrioService();
+		Long tipoPuntoEquilibrioCount = servicetipoPuntoEquilibrio.count();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				PuntoEquilibrio obj = new PuntoEquilibrio();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				TipoPuntoEquilibrioFiltro tipoPuntoEquilibrioFiltro = new TipoPuntoEquilibrioFiltro();
+				long tipoPuntoEquilibrioIndex = UtilPopulate.getLongRandom(0L, tipoPuntoEquilibrioCount-1);
+				tipoPuntoEquilibrioFiltro.setOffset(tipoPuntoEquilibrioIndex);
+				tipoPuntoEquilibrioFiltro.setLimit(1L);
+				List<TipoPuntoEquilibrio> tipoPuntoEquilibrioListado = servicetipoPuntoEquilibrio.find(tipoPuntoEquilibrioFiltro);
+				obj.setTipoPuntoEquilibrio(tipoPuntoEquilibrioListado.get(0));
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCostoVenta() throws Exception {
+
+		CostoVentaService service = AppCX.services().buildCostoVentaService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CostoVenta obj = new CostoVenta();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaContableEstado() throws Exception {
+
+		CuentaContableEstadoService service = AppCX.services().buildCuentaContableEstadoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaContableEstado obj = new CuentaContableEstado();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaContable() throws Exception {
+
+		CuentaContableService service = AppCX.services().buildCuentaContableService();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+		CuentaContableEstadoService servicecuentaContableEstado = AppCX.services().buildCuentaContableEstadoService();
+		Long cuentaContableEstadoCount = servicecuentaContableEstado.count();
+		CentroCostoContableService servicecentroCostoContable = AppCX.services().buildCentroCostoContableService();
+		Long centroCostoContableCount = servicecentroCostoContable.count();
+		PuntoEquilibrioService servicepuntoEquilibrio = AppCX.services().buildPuntoEquilibrioService();
+		Long puntoEquilibrioCount = servicepuntoEquilibrio.count();
+		CostoVentaService servicecostoVenta = AppCX.services().buildCostoVentaService();
+		Long costoVentaCount = servicecostoVenta.count();
+		SeguridadPuertaService serviceseguridadPuerta = AppCX.services().buildSeguridadPuertaService();
+		Long seguridadPuertaCount = serviceseguridadPuerta.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaContable obj = new CuentaContable();
+
+				obj.setCodigo(UtilPopulate.getStringRandom(null, 11, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				obj.setIntegra(UtilPopulate.getStringRandomFull(16, 16, true));
+
+				obj.setCuentaJerarquia(UtilPopulate.getStringRandomFull(16, 16, true));
+
+				obj.setImputable(new Random().nextBoolean());
+
+				obj.setAjustaPorInflacion(new Random().nextBoolean());
+
+				CuentaContableEstadoFiltro cuentaContableEstadoFiltro = new CuentaContableEstadoFiltro();
+				long cuentaContableEstadoIndex = UtilPopulate.getLongRandom(0L, cuentaContableEstadoCount-1);
+				cuentaContableEstadoFiltro.setOffset(cuentaContableEstadoIndex);
+				cuentaContableEstadoFiltro.setLimit(1L);
+				List<CuentaContableEstado> cuentaContableEstadoListado = servicecuentaContableEstado.find(cuentaContableEstadoFiltro);
+				obj.setCuentaContableEstado(cuentaContableEstadoListado.get(0));
+
+				obj.setCuentaConApropiacion(new Random().nextBoolean());
+
+				CentroCostoContableFiltro centroCostoContableFiltro = new CentroCostoContableFiltro();
+				long centroCostoContableIndex = UtilPopulate.getLongRandom(0L, centroCostoContableCount-1);
+				centroCostoContableFiltro.setOffset(centroCostoContableIndex);
+				centroCostoContableFiltro.setLimit(1L);
+				List<CentroCostoContable> centroCostoContableListado = servicecentroCostoContable.find(centroCostoContableFiltro);
+				obj.setCentroCostoContable(centroCostoContableListado.get(0));
+
+				obj.setCuentaAgrupadora(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setPorcentaje(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("0"), new java.math.BigDecimal("999.99"), false, 6, 3));
+
+				PuntoEquilibrioFiltro puntoEquilibrioFiltro = new PuntoEquilibrioFiltro();
+				long puntoEquilibrioIndex = UtilPopulate.getLongRandom(0L, puntoEquilibrioCount-1);
+				puntoEquilibrioFiltro.setOffset(puntoEquilibrioIndex);
+				puntoEquilibrioFiltro.setLimit(1L);
+				List<PuntoEquilibrio> puntoEquilibrioListado = servicepuntoEquilibrio.find(puntoEquilibrioFiltro);
+				obj.setPuntoEquilibrio(puntoEquilibrioListado.get(0));
+
+				CostoVentaFiltro costoVentaFiltro = new CostoVentaFiltro();
+				long costoVentaIndex = UtilPopulate.getLongRandom(0L, costoVentaCount-1);
+				costoVentaFiltro.setOffset(costoVentaIndex);
+				costoVentaFiltro.setLimit(1L);
+				List<CostoVenta> costoVentaListado = servicecostoVenta.find(costoVentaFiltro);
+				obj.setCostoVenta(costoVentaListado.get(0));
+
+				SeguridadPuertaFiltro seguridadPuertaFiltro = new SeguridadPuertaFiltro();
+				long seguridadPuertaIndex = UtilPopulate.getLongRandom(0L, seguridadPuertaCount-1);
+				seguridadPuertaFiltro.setOffset(seguridadPuertaIndex);
+				seguridadPuertaFiltro.setLimit(1L);
+				List<SeguridadPuerta> seguridadPuertaListado = serviceseguridadPuerta.find(seguridadPuertaFiltro);
+				obj.setSeguridadPuerta(seguridadPuertaListado.get(0));
 
 				service.insert(obj);
 

@@ -43,7 +43,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="cantidadporlotes" COLSPAN="3" ALIGN="LEFT">cantidadporlotes</TD></TR>
       <TR><TD PORT="controldenunciado" COLSPAN="3" ALIGN="LEFT">controldenunciado</TD></TR>
       <TR><TD PORT="valormaximo" COLSPAN="3" ALIGN="LEFT">valormaximo</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="marcaticket.html"
     tooltip="marcaticket"

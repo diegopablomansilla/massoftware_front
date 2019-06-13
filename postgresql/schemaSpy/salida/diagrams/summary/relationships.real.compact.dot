@@ -27,7 +27,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="ejerciciocontable" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">ejerciciocontable</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">9 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/asientomodelo.html"
     tooltip="asientomodelo"
@@ -40,49 +40,74 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="asientomodelo" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">asientomodelo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="cuentacontable" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuentacontable</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">52 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/asientomodeloitem.html"
     tooltip="asientomodeloitem"
   ];
-  "banco" [
+  "carga" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">banco</TD></TR>
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">carga</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
-      <TR><TD PORT="cuit" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuit</TD></TR>
+      <TR><TD PORT="transporte" COLSPAN="3" ALIGN="LEFT">transporte</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">115 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">929 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
-    URL="tables/banco.html"
-    tooltip="banco"
-  ];
-  "caja" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">caja</TD></TR>
-      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
-      <TR><TD PORT="seguridadpuerta" COLSPAN="3" ALIGN="LEFT">seguridadpuerta</TD></TR>
-      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">9 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
-    </TABLE>>
-    URL="tables/caja.html"
-    tooltip="caja"
+    URL="tables/carga.html"
+    tooltip="carga"
   ];
   "centrocostocontable" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">centrocostocontable</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="ejerciciocontable" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">ejerciciocontable</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="ejerciciocontable" COLSPAN="3" ALIGN="LEFT">ejerciciocontable</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">24 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">266 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/centrocostocontable.html"
     tooltip="centrocostocontable"
+  ];
+  "ciudad" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">ciudad</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="provincia" COLSPAN="3" ALIGN="LEFT">provincia</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">926 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/ciudad.html"
+    tooltip="ciudad"
+  ];
+  "clasificacioncliente" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">clasificacioncliente</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">915 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/clasificacioncliente.html"
+    tooltip="clasificacioncliente"
+  ];
+  "codigopostal" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">codigopostal</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="ciudad" COLSPAN="3" ALIGN="LEFT">ciudad</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">521 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/codigopostal.html"
+    tooltip="codigopostal"
   ];
   "controldenunciado" [
     label=<
@@ -103,7 +128,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">278 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/costoventa.html"
     tooltip="costoventa"
@@ -113,14 +138,14 @@ digraph "compactRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentacontable</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="ejerciciocontable" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">ejerciciocontable</TD></TR>
+      <TR><TD PORT="ejerciciocontable" COLSPAN="3" ALIGN="LEFT">ejerciciocontable</TD></TR>
       <TR><TD PORT="cuentacontableestado" COLSPAN="3" ALIGN="LEFT">cuentacontableestado</TD></TR>
       <TR><TD PORT="centrocostocontable" COLSPAN="3" ALIGN="LEFT">centrocostocontable</TD></TR>
       <TR><TD PORT="puntoequilibrio" COLSPAN="3" ALIGN="LEFT">puntoequilibrio</TD></TR>
       <TR><TD PORT="costoventa" COLSPAN="3" ALIGN="LEFT">costoventa</TD></TR>
       <TR><TD PORT="seguridadpuerta" COLSPAN="3" ALIGN="LEFT">seguridadpuerta</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 6</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">11.360 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 6</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">173 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/cuentacontable.html"
     tooltip="cuentacontable"
@@ -132,7 +157,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentacontableestado.html"
     tooltip="cuentacontableestado"
@@ -145,9 +170,8 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="cuentafondogrupo" COLSPAN="3" ALIGN="LEFT">cuentafondogrupo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="cuentafondotipo" COLSPAN="3" ALIGN="LEFT">cuentafondotipo</TD></TR>
-      <TR><TD PORT="banco" COLSPAN="3" ALIGN="LEFT">banco</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">345 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentafondo.html"
     tooltip="cuentafondo"
@@ -160,7 +184,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="cuentafondorubro" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuentafondorubro</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">19 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentafondogrupo.html"
     tooltip="cuentafondogrupo"
@@ -172,7 +196,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">6 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentafondorubro.html"
     tooltip="cuentafondorubro"
@@ -189,6 +213,34 @@ digraph "compactRelationshipsDiagram" {
     URL="tables/cuentafondotipo.html"
     tooltip="cuentafondotipo"
   ];
+  "deposito" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">deposito</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="sucursal" COLSPAN="3" ALIGN="LEFT">sucursal</TD></TR>
+      <TR><TD PORT="depositomodulo" COLSPAN="3" ALIGN="LEFT">depositomodulo</TD></TR>
+      <TR><TD PORT="puertaoperativo" COLSPAN="3" ALIGN="LEFT">puertaoperativo</TD></TR>
+      <TR><TD PORT="puertaconsulta" COLSPAN="3" ALIGN="LEFT">puertaconsulta</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">482 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/deposito.html"
+    tooltip="deposito"
+  ];
+  "depositomodulo" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">depositomodulo</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">563 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/depositomodulo.html"
+    tooltip="depositomodulo"
+  ];
   "ejerciciocontable" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -196,7 +248,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">26 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
     </TABLE>>
     URL="tables/ejerciciocontable.html"
     tooltip="ejerciciocontable"
@@ -209,7 +261,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/juridiccionconvniomultilateral.html"
     tooltip="juridiccionconvniomultilateral"
@@ -222,10 +274,23 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="controldenunciado" COLSPAN="3" ALIGN="LEFT">controldenunciado</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/marcaticket.html"
     tooltip="marcaticket"
+  ];
+  "marcaticketmodelo" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">marcaticketmodelo</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="marcaticket" COLSPAN="3" ALIGN="LEFT">marcaticket</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/marcaticketmodelo.html"
+    tooltip="marcaticketmodelo"
   ];
   "moneda" [
     label=<
@@ -235,7 +300,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="monedaafip" COLSPAN="3" ALIGN="LEFT">monedaafip</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">7 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">793 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/moneda.html"
     tooltip="moneda"
@@ -246,49 +311,62 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">monedaafip</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">51 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">926 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/monedaafip.html"
     tooltip="monedaafip"
   ];
-  "monedacotizacion" [
+  "motivobloqueocliente" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">monedacotizacion</TD></TR>
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">motivobloqueocliente</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="moneda" COLSPAN="3" ALIGN="LEFT">moneda</TD></TR>
-      <TR><TD PORT="usuario" COLSPAN="3" ALIGN="LEFT">usuario</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="clasificacioncliente" COLSPAN="3" ALIGN="LEFT">clasificacioncliente</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1.781 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">919 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
-    URL="tables/monedacotizacion.html"
-    tooltip="monedacotizacion"
+    URL="tables/motivobloqueocliente.html"
+    tooltip="motivobloqueocliente"
+  ];
+  "pais" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">pais</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">788 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/pais.html"
+    tooltip="pais"
+  ];
+  "provincia" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">provincia</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="pais" COLSPAN="3" ALIGN="LEFT">pais</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">782 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/provincia.html"
+    tooltip="provincia"
   ];
   "puntoequilibrio" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">puntoequilibrio</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="ejerciciocontable" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">ejerciciocontable</TD></TR>
-      <TR><TD PORT="puntoequilibriotipo" COLSPAN="3" ALIGN="LEFT">puntoequilibriotipo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="tipopuntoequilibrio" COLSPAN="3" ALIGN="LEFT">tipopuntoequilibrio</TD></TR>
+      <TR><TD PORT="ejerciciocontable" COLSPAN="3" ALIGN="LEFT">ejerciciocontable</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">12 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">276 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/puntoequilibrio.html"
     tooltip="puntoequilibrio"
-  ];
-  "puntoequilibriotipo" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">puntoequilibriotipo</TD></TR>
-      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
-      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">5 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
-    </TABLE>>
-    URL="tables/puntoequilibriotipo.html"
-    tooltip="puntoequilibriotipo"
   ];
   "seguridadmodulo" [
     label=<
@@ -297,7 +375,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">9 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">280 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/seguridadmodulo.html"
     tooltip="seguridadmodulo"
@@ -307,10 +385,10 @@ digraph "compactRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">seguridadpuerta</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="seguridadmodulo" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">seguridadmodulo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="seguridadmodulo" COLSPAN="3" ALIGN="LEFT">seguridadmodulo</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">44 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">250 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
     </TABLE>>
     URL="tables/seguridadpuerta.html"
     tooltip="seguridadpuerta"
@@ -320,24 +398,13 @@ digraph "compactRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">sucursal</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="sucursaltipo" COLSPAN="3" ALIGN="LEFT">sucursaltipo</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="tiposucursal" COLSPAN="3" ALIGN="LEFT">tiposucursal</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">9 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">487 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/sucursal.html"
     tooltip="sucursal"
-  ];
-  "sucursaltipo" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">sucursaltipo</TD></TR>
-      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
-      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
-    </TABLE>>
-    URL="tables/sucursaltipo.html"
-    tooltip="sucursaltipo"
   ];
   "talonario" [
     label=<
@@ -347,7 +414,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="talonarioletra" COLSPAN="3" ALIGN="LEFT">talonarioletra</TD></TR>
       <TR><TD PORT="talonariocontroladorfizcal" COLSPAN="3" ALIGN="LEFT">talonariocontroladorfizcal</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">127 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/talonario.html"
     tooltip="talonario"
@@ -374,42 +441,88 @@ digraph "compactRelationshipsDiagram" {
     URL="tables/talonarioletra.html"
     tooltip="talonarioletra"
   ];
-  "usuario" [
+  "tipopuntoequilibrio" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">usuario</TD></TR>
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">tipopuntoequilibrio</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">53 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
-    URL="tables/usuario.html"
-    tooltip="usuario"
+    URL="tables/tipopuntoequilibrio.html"
+    tooltip="tipopuntoequilibrio"
   ];
-  "asientomodelo":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=teeodot];
+  "tiposucursal" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">tiposucursal</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">556 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/tiposucursal.html"
+    tooltip="tiposucursal"
+  ];
+  "transporte" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">transporte</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="cuit" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuit</TD></TR>
+      <TR><TD PORT="codigopostal" COLSPAN="3" ALIGN="LEFT">codigopostal</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">857 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/transporte.html"
+    tooltip="transporte"
+  ];
+  "transportetarifa" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">transportetarifa</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="carga" COLSPAN="3" ALIGN="LEFT">carga</TD></TR>
+      <TR><TD PORT="ciudad" COLSPAN="3" ALIGN="LEFT">ciudad</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1.000 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/transportetarifa.html"
+    tooltip="transportetarifa"
+  ];
   "asientomodeloitem":"asientomodelo":sw -> "asientomodelo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "asientomodeloitem":"cuentacontable":sw -> "cuentacontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "caja":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "centrocostocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=teeodot];
+  "carga":"transporte":sw -> "transporte":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "centrocostocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "ciudad":"provincia":sw -> "provincia":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "codigopostal":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"centrocostocontable":sw -> "centrocostocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"costoventa":sw -> "costoventa":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"cuentacontableestado":sw -> "cuentacontableestado":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "cuentacontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=teeodot];
+  "cuentacontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"puntoequilibrio":sw -> "puntoequilibrio":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "cuentafondo":"banco":sw -> "banco":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondogrupo":sw -> "cuentafondogrupo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondotipo":sw -> "cuentafondotipo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondogrupo":"cuentafondorubro":sw -> "cuentafondorubro":"id":se [arrowhead=none dir=back arrowtail=teeodot];
+  "deposito":"depositomodulo":sw -> "depositomodulo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "deposito":"puertaconsulta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "deposito":"puertaoperativo":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "deposito":"sucursal":sw -> "sucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "juridiccionconvniomultilateral":"cuentafondo":sw -> "cuentafondo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "marcaticket":"controldenunciado":sw -> "controldenunciado":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "marcaticketmodelo":"marcaticket":sw -> "marcaticket":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "moneda":"monedaafip":sw -> "monedaafip":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "monedacotizacion":"moneda":sw -> "moneda":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "monedacotizacion":"usuario":sw -> "usuario":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "puntoequilibrio":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=teeodot];
-  "puntoequilibrio":"puntoequilibriotipo":sw -> "puntoequilibriotipo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "seguridadpuerta":"seguridadmodulo":sw -> "seguridadmodulo":"id":se [arrowhead=none dir=back arrowtail=teeodot];
-  "sucursal":"sucursaltipo":sw -> "sucursaltipo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "motivobloqueocliente":"clasificacioncliente":sw -> "clasificacioncliente":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "provincia":"pais":sw -> "pais":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "puntoequilibrio":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "puntoequilibrio":"tipopuntoequilibrio":sw -> "tipopuntoequilibrio":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "seguridadpuerta":"seguridadmodulo":sw -> "seguridadmodulo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "sucursal":"tiposucursal":sw -> "tiposucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "talonario":"talonariocontroladorfizcal":sw -> "talonariocontroladorfizcal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "talonario":"talonarioletra":sw -> "talonarioletra":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "transporte":"codigopostal":sw -> "codigopostal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "transportetarifa":"carga":sw -> "carga":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "transportetarifa":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];
 }

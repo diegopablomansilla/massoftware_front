@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import javax.servlet.annotation.WebServlet;
 
 import com.massoftware.windows.LogAndNotification;
-import com.massoftware.x.ContabilidadGeneralMenu;
+import com.massoftware.x.ContabilidadMenu;
 import com.massoftware.x.FondosMenu;
 import com.massoftware.x.GeneralMenu;
 import com.massoftware.x.StockMenu;
@@ -145,7 +145,7 @@ public class MasSoftware extends UI {
 		navigator.addView("c", new StockMenu());
 		navigator.addView("d", new FondosMenu());
 		navigator.addView("e", new GeneralMenu());
-		navigator.addView("f", new ContabilidadGeneralMenu());
+		navigator.addView("f", new ContabilidadMenu());
 		navigator.addView("g", new GeneralMenu());
 		navigator.addView("h", new GeneralMenu());
 		navigator.addView("i", new GeneralMenu());

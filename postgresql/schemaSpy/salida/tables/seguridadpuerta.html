@@ -101,50 +101,36 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
-    <td class='relatedTable detail' title="caja.seguridadpuerta refs seguridadpuerta.id via caja_seguridadpuerta_fkey"><a href='caja.html'>caja</a><span class='relatedKey'>.seguridadpuerta</span>
-    </td>
-    <td class='constraint detail'>caja_seguridadpuerta_fkey<span title='Restrict delete:
- Parent cannot be deleted if children exist'>&nbsp;R</span></td>
-   </tr>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="cuentacontable.seguridadpuerta refs seguridadpuerta.id via cuentacontable_seguridadpuerta_fkey"><a href='cuentacontable.html'>cuentacontable</a><span class='relatedKey'>.seguridadpuerta</span>
     </td>
     <td class='constraint detail'>cuentacontable_seguridadpuerta_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-  </table>
-</td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='indexedColumn' title='Indexed'>seguridadmodulo</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'>
-  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
    <tr class='relative odd' valign='top'>
-    <td class='relatedTable detail' title="seguridadpuerta.seguridadmodulo refs seguridadmodulo.id via seguridadpuerta_seguridadmodulo_fkey"><a href='seguridadmodulo.html'>seguridadmodulo</a><span class='relatedKey'>.id</span>
+    <td class='relatedTable detail' title="deposito.puertaconsulta refs seguridadpuerta.id via deposito_puertaconsulta_fkey"><a href='deposito.html'>deposito</a><span class='relatedKey'>.puertaconsulta</span>
     </td>
-    <td class='constraint detail'>seguridadpuerta_seguridadmodulo_fkey<span title='Restrict delete:
+    <td class='constraint detail'>deposito_puertaconsulta_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="deposito.puertaoperativo refs seguridadpuerta.id via deposito_puertaoperativo_fkey"><a href='deposito.html'>deposito</a><span class='relatedKey'>.puertaoperativo</span>
+    </td>
+    <td class='constraint detail'>deposito_puertaoperativo_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
   </table>
- </td>
+</td>
+ <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
@@ -161,7 +147,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='odd'>
  <td class='detail'>nombre</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>50</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
@@ -172,7 +158,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='even'>
  <td class='detail'>equate</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>30</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
@@ -180,18 +166,39 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
+<tr class='odd'>
+ <td class='detail'>seguridadmodulo</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>36</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="seguridadpuerta.seguridadmodulo refs seguridadmodulo.id via seguridadpuerta_seguridadmodulo_fkey"><a href='seguridadmodulo.html'>seguridadmodulo</a><span class='relatedKey'>.id</span>
+    </td>
+    <td class='constraint detail'>seguridadpuerta_seguridadmodulo_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+ </td>
+ <td class='comment detail'></td>
+</tr>
 </table>
-<p title='5 columns'>Table contained 44 rows at mié mar 20 09:40 ART 2019<p/>
+<p title='5 columns'>Table contained 250 rows at jue jun 13 18:37 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
-<table class='dataTable' border='1' rules='groups'><colgroup><colgroup><colgroup><colgroup>
+<table class='dataTable' border='1' rules='groups'><colgroup><colgroup><colgroup><colgroup><colgroup>
 <thead>
  <tr>
   <th>Column(s)</th>
   <th>Type</th>
   <th>Sort</th>
   <th class='constraint' style='text-align:left;'>Constraint Name</th>
+  <th>Anomalies</th>
  </tr>
 </thead>
 <tbody>
@@ -200,18 +207,21 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   <td class='detail'>Primary key</td>
   <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
   <td class='constraint' style='text-align:left;'>seguridadpuerta_pkey</td>
+  <td>&nbsp;</td>
  </tr>
  <tr>
-  <td class='indexedColumn'>seguridadmodulo</td>
+  <td class='indexedColumn'>numero</td>
   <td class='detail'>Must be unique</td>
   <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
-  <td class='constraint' style='text-align:left;'>u_seguridadpuerta_seguridadmodulo_nombre</td>
+  <td class='constraint' style='text-align:left;'>seguridadpuerta_numero_key</td>
+  <td>&nbsp;</td>
  </tr>
  <tr>
-  <td class='indexedColumn'>seguridadmodulo + numero</td>
+  <td class='indexedColumn'></td>
   <td class='detail'>Must be unique</td>
-  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-  <td class='constraint' style='text-align:left;'>u_seguridadpuerta_seguridadmodulo_numero</td>
+  <td class='detail' style='text-align:left;'></td>
+  <td class='constraint' style='text-align:left;'>u_seguridadpuerta_nombre</td>
+  <td class='detail'>These unique columns are also nullable</td>
  </tr>
 </table>
 </div>
@@ -219,23 +229,24 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from seguridadpuerta'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="caja.html" title="caja" alt="" coords="557,8,696,154" >
-<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="196,290,494,466" >
-<area shape="rect" href="seguridadmodulo.html" title="seguridadmodulo" alt="" coords="8,316,152,441" >
-<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="538,172,714,590" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="472,8,648,426" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="196,598,428,774" >
+<area shape="rect" href="seguridadmodulo.html" title="seguridadmodulo" alt="" coords="8,692,152,817" >
+<area shape="rect" href="deposito.html" title="deposito" alt="" coords="490,444,629,681" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/seguridadpuerta.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" href="asientomodeloitem.html" title="asientomodeloitem" alt="" coords="758,186,913,266" >
-<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="538,188,714,606" >
-<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="195,72,494,248" >
-<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="263,398,426,478" >
-<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="9,398,150,478" >
-<area shape="rect" href="costoventa.html" title="costoventa" alt="" coords="283,593,406,673" >
-<area shape="rect" href="cuentacontableestado.html" title="cuentacontableestado" alt="" coords="257,301,433,381" >
-<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="274,496,415,576" >
-<area shape="rect" href="caja.html" title="caja" alt="" coords="557,8,695,154" >
-<area shape="rect" href="seguridadmodulo.html" title="seguridadmodulo" alt="" coords="7,97,151,222" >
+<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="230,218,393,298" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="9,218,150,298" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="472,7,648,426" >
+<area shape="rect" href="costoventa.html" title="costoventa" alt="" coords="241,413,382,493" >
+<area shape="rect" href="cuentacontableestado.html" title="cuentacontableestado" alt="" coords="224,121,400,201" >
+<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="236,315,388,395" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="196,705,428,881" >
+<area shape="rect" href="seguridadmodulo.html" title="seguridadmodulo" alt="" coords="8,798,152,923" >
+<area shape="rect" href="deposito.html" title="deposito" alt="" coords="490,523,629,761" >
+<area shape="rect" href="depositomodulo.html" title="depositomodulo" alt="" coords="242,607,381,687" >
+<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="237,510,386,590" >
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/seguridadpuerta.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

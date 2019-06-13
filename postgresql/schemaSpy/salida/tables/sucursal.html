@@ -104,36 +104,155 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="deposito.sucursal refs sucursal.id via deposito_sucursal_fkey"><a href='deposito.html'>deposito</a><span class='relatedKey'>.sucursal</span>
+    </td>
+    <td class='constraint detail'>deposito_sucursal_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+</td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='indexedColumn' title='Indexed'>numero</td>
+ <td class='detail'>int4</td>
+ <td class='detail' align='right'>10</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>nombre</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>50</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
- <td class='detail'>sucursaltipo</td>
+ <td class='detail'>abreviatura</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>5</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>tiposucursal</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
-    <td class='relatedTable detail' title="sucursal.sucursaltipo refs sucursaltipo.id via sucursal_sucursaltipo_fkey"><a href='sucursaltipo.html'>sucursaltipo</a><span class='relatedKey'>.id</span>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="sucursal.tiposucursal refs tiposucursal.id via sucursal_tiposucursal_fkey"><a href='tiposucursal.html'>tiposucursal</a><span class='relatedKey'>.id</span>
     </td>
-    <td class='constraint detail'>sucursal_sucursaltipo_fkey<span title='Restrict delete:
+    <td class='constraint detail'>sucursal_tiposucursal_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
   </table>
  </td>
  <td class='comment detail'></td>
 </tr>
+<tr class='even'>
+ <td class='detail'>cuentaclientesdesde</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>7</td>
+ <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='right'>null</td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
 <tr class='odd'>
- <td class='detail'>numero</td>
+ <td class='detail'>cuentaclienteshasta</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>7</td>
+ <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='right'>null</td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='detail'>cantidadcaracteresclientes</td>
+ <td class='detail'>int4</td>
+ <td class='detail' align='right'>10</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>identificacionnumericaclientes</td>
+ <td class='detail'>bool</td>
+ <td class='detail' align='right'>1</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='detail'>permitecambiarclientes</td>
+ <td class='detail'>bool</td>
+ <td class='detail' align='right'>1</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>cuentaproveedoresdesde</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>6</td>
+ <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='right'>null</td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='detail'>cuentaproveedoreshasta</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>6</td>
+ <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='right'>null</td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>cantidadcaracteresproveedores</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
  <td class='detail' align='center'></td>
@@ -144,183 +263,73 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
- <td class='detail'>nombre</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='detail'>abreviatura</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>cuentaclientedesde</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='detail'>cuentaclientehasa</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>cantidadcaracterescliente</td>
- <td class='detail'>int4</td>
- <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='detail'>identificacionnumericacliente</td>
+ <td class='detail'>identificacionnumericaproveedores</td>
  <td class='detail'>bool</td>
  <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
+ <td class='detail' align='center'></td>
  <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>permitecambiarcliente</td>
- <td class='detail'>bool</td>
- <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
+ <td class='detail'>permitecambiarproveedores</td>
+ <td class='detail'>bool</td>
+ <td class='detail' align='right'>1</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
  <td class='detail'>clientesocacionalesdesde</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
+ <td class='detail' align='center'></td>
  <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>clientesocacionaleshasa</td>
- <td class='detail'>int4</td>
- <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='detail'>nrocobranzadesde</td>
+ <td class='detail'>clientesocacionaleshasta</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
- <td class='detail'>nrocobranzahasa</td>
+ <td class='detail'>numerocobranzadesde</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='detail'>proveedoresdesde</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>proveedoreshasa</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='detail'>cantidadcaracteresproveedor</td>
+ <td class='detail'>numerocobranzahasta</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
+ <td class='detail' align='center'></td>
  <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
- <td class='detail'>identificacionnumericaproveedor</td>
- <td class='detail'>bool</td>
- <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
- <td class='detail'>permitecambiarproveedor</td>
- <td class='detail'>bool</td>
- <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='19 columns'>Table contained 9 rows at mié mar 20 09:40 ART 2019<p/>
+<p title='19 columns'>Table contained 487 rows at jue jun 13 18:37 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -343,6 +352,20 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   <td>&nbsp;</td>
  </tr>
  <tr>
+  <td class='indexedColumn'>numero</td>
+  <td class='detail'>Must be unique</td>
+  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
+  <td class='constraint' style='text-align:left;'>sucursal_numero_key</td>
+  <td>&nbsp;</td>
+ </tr>
+ <tr>
+  <td class='indexedColumn'></td>
+  <td class='detail'>Must be unique</td>
+  <td class='detail' style='text-align:left;'></td>
+  <td class='constraint' style='text-align:left;'>u_sucursal_abreviatura</td>
+  <td class='detail'>These unique columns are also nullable</td>
+ </tr>
+ <tr>
   <td class='indexedColumn'></td>
   <td class='detail'>Must be unique</td>
   <td class='detail' style='text-align:left;'></td>
@@ -352,11 +375,23 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </table>
 </div>
 <table width='100%' border='0'><tr><td class='container'>
-<br><form action='get'><b>Close relationships:</b></form><map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="174,8,574,501" >
-<area shape="rect" href="sucursaltipo.html" title="sucursaltipo" alt="" coords="8,33,130,158" >
+<br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from sucursal'>
+&nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
+<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" href="deposito.html" title="deposito" alt="" coords="584,7,722,245" >
+<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="190,94,540,587" >
+<area shape="rect" href="tiposucursal.html" title="tiposucursal" alt="" coords="8,187,146,313" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/sucursal.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
+<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" href="deposito.html" title="deposito" alt="" coords="584,433,722,670" >
+<area shape="rect" href="depositomodulo.html" title="depositomodulo" alt="" coords="296,518,434,598" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="289,615,441,695" >
+<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="190,7,540,501" >
+<area shape="rect" href="tiposucursal.html" title="tiposucursal" alt="" coords="8,101,146,226" >
+</map>
+
+  <a name='diagram'><img id='twoDegreesImg' src='../diagrams/sucursal.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 </td></tr></table>
 </div>
 </body>

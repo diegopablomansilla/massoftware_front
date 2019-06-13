@@ -701,3 +701,183 @@ CREATE TYPE massoftware.t_Deposito_2 AS (
 	, SeguridadModulo_39_nombre                   	VARCHAR(50)		-- 41	Deposito.SeguridadPuerta.SeguridadModulo.nombre
 
 );
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CentroCostoContable                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CentroCostoContable
+
+
+
+DROP TYPE IF EXISTS massoftware.t_CentroCostoContable_1 CASCADE;
+
+CREATE TYPE massoftware.t_CentroCostoContable_1 AS (
+
+	  CentroCostoContable_id            	VARCHAR(36) 		-- 0	CentroCostoContable.id
+	, CentroCostoContable_numero        	INTEGER     		-- 1	CentroCostoContable.numero
+	, CentroCostoContable_nombre        	VARCHAR(50) 		-- 2	CentroCostoContable.nombre
+	, CentroCostoContable_abreviatura   	VARCHAR(5)  		-- 3	CentroCostoContable.abreviatura
+	, EjercicioContable_4_id            	VARCHAR(36) 		-- 4	CentroCostoContable.EjercicioContable.id
+	, EjercicioContable_4_numero        	INTEGER     		-- 5	CentroCostoContable.EjercicioContable.numero
+	, EjercicioContable_4_apertura      	DATE        		-- 6	CentroCostoContable.EjercicioContable.apertura
+	, EjercicioContable_4_cierre        	DATE        		-- 7	CentroCostoContable.EjercicioContable.cierre
+	, EjercicioContable_4_cerrado       	BOOLEAN     		-- 8	CentroCostoContable.EjercicioContable.cerrado
+	, EjercicioContable_4_cerradoModulos	BOOLEAN     		-- 9	CentroCostoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_4_comentario    	VARCHAR(250)		-- 10	CentroCostoContable.EjercicioContable.comentario
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: PuntoEquilibrio                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.PuntoEquilibrio
+
+
+
+DROP TYPE IF EXISTS massoftware.t_PuntoEquilibrio_1 CASCADE;
+
+CREATE TYPE massoftware.t_PuntoEquilibrio_1 AS (
+
+	  PuntoEquilibrio_id                	VARCHAR(36) 		-- 0	PuntoEquilibrio.id
+	, PuntoEquilibrio_numero            	INTEGER     		-- 1	PuntoEquilibrio.numero
+	, PuntoEquilibrio_nombre            	VARCHAR(50) 		-- 2	PuntoEquilibrio.nombre
+	, TipoPuntoEquilibrio_3_id          	VARCHAR(36) 		-- 3	PuntoEquilibrio.TipoPuntoEquilibrio.id
+	, TipoPuntoEquilibrio_3_numero      	INTEGER     		-- 4	PuntoEquilibrio.TipoPuntoEquilibrio.numero
+	, TipoPuntoEquilibrio_3_nombre      	VARCHAR(50) 		-- 5	PuntoEquilibrio.TipoPuntoEquilibrio.nombre
+	, EjercicioContable_6_id            	VARCHAR(36) 		-- 6	PuntoEquilibrio.EjercicioContable.id
+	, EjercicioContable_6_numero        	INTEGER     		-- 7	PuntoEquilibrio.EjercicioContable.numero
+	, EjercicioContable_6_apertura      	DATE        		-- 8	PuntoEquilibrio.EjercicioContable.apertura
+	, EjercicioContable_6_cierre        	DATE        		-- 9	PuntoEquilibrio.EjercicioContable.cierre
+	, EjercicioContable_6_cerrado       	BOOLEAN     		-- 10	PuntoEquilibrio.EjercicioContable.cerrado
+	, EjercicioContable_6_cerradoModulos	BOOLEAN     		-- 11	PuntoEquilibrio.EjercicioContable.cerradoModulos
+	, EjercicioContable_6_comentario    	VARCHAR(250)		-- 12	PuntoEquilibrio.EjercicioContable.comentario
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaContable                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaContable
+
+
+
+DROP TYPE IF EXISTS massoftware.t_CuentaContable_1 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaContable_1 AS (
+
+	  CuentaContable_id                       	VARCHAR(36) 		-- 0	CuentaContable.id
+	, CuentaContable_codigo                   	VARCHAR(11) 		-- 1	CuentaContable.codigo
+	, CuentaContable_nombre                   	VARCHAR(50) 		-- 2	CuentaContable.nombre
+	, EjercicioContable_3_id                  	VARCHAR(36) 		-- 3	CuentaContable.EjercicioContable.id
+	, EjercicioContable_3_numero              	INTEGER     		-- 4	CuentaContable.EjercicioContable.numero
+	, EjercicioContable_3_apertura            	DATE        		-- 5	CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_3_cierre              	DATE        		-- 6	CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_3_cerrado             	BOOLEAN     		-- 7	CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_3_cerradoModulos      	BOOLEAN     		-- 8	CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_3_comentario          	VARCHAR(250)		-- 9	CuentaContable.EjercicioContable.comentario
+	, CuentaContable_integra                  	VARCHAR(16) 		-- 10	CuentaContable.integra
+	, CuentaContable_cuentaJerarquia          	VARCHAR(16) 		-- 11	CuentaContable.cuentaJerarquia
+	, CuentaContable_imputable                	BOOLEAN     		-- 12	CuentaContable.imputable
+	, CuentaContable_ajustaPorInflacion       	BOOLEAN     		-- 13	CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_14_id              	VARCHAR(36) 		-- 14	CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_14_numero          	INTEGER     		-- 15	CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_14_nombre          	VARCHAR(50) 		-- 16	CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_cuentaConApropiacion     	BOOLEAN     		-- 17	CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_18_id               	VARCHAR(36) 		-- 18	CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_18_numero           	INTEGER     		-- 19	CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_18_nombre           	VARCHAR(50) 		-- 20	CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_18_abreviatura      	VARCHAR(5)  		-- 21	CuentaContable.CentroCostoContable.abreviatura
+	, CentroCostoContable_18_ejercicioContable	VARCHAR(36) 		-- 22	CuentaContable.CentroCostoContable.ejercicioContable
+	, CuentaContable_cuentaAgrupadora         	VARCHAR(50) 		-- 23	CuentaContable.cuentaAgrupadora
+	, CuentaContable_porcentaje               	DECIMAL(6,3)		-- 24	CuentaContable.porcentaje
+	, PuntoEquilibrio_25_id                   	VARCHAR(36) 		-- 25	CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_25_numero               	INTEGER     		-- 26	CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_25_nombre               	VARCHAR(50) 		-- 27	CuentaContable.PuntoEquilibrio.nombre
+	, PuntoEquilibrio_25_tipoPuntoEquilibrio  	VARCHAR(36) 		-- 28	CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio
+	, PuntoEquilibrio_25_ejercicioContable    	VARCHAR(36) 		-- 29	CuentaContable.PuntoEquilibrio.ejercicioContable
+	, CostoVenta_30_id                        	VARCHAR(36) 		-- 30	CuentaContable.CostoVenta.id
+	, CostoVenta_30_numero                    	INTEGER     		-- 31	CuentaContable.CostoVenta.numero
+	, CostoVenta_30_nombre                    	VARCHAR(50) 		-- 32	CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_33_id                   	VARCHAR(36) 		-- 33	CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_33_numero               	INTEGER     		-- 34	CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_33_nombre               	VARCHAR(50) 		-- 35	CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_33_equate               	VARCHAR(30) 		-- 36	CuentaContable.SeguridadPuerta.equate
+	, SeguridadPuerta_33_seguridadModulo      	VARCHAR(36) 		-- 37	CuentaContable.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_CuentaContable_2 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaContable_2 AS (
+
+	  CuentaContable_id                  	VARCHAR(36) 		-- 0	CuentaContable.id
+	, CuentaContable_codigo              	VARCHAR(11) 		-- 1	CuentaContable.codigo
+	, CuentaContable_nombre              	VARCHAR(50) 		-- 2	CuentaContable.nombre
+	, EjercicioContable_3_id             	VARCHAR(36) 		-- 3	CuentaContable.EjercicioContable.id
+	, EjercicioContable_3_numero         	INTEGER     		-- 4	CuentaContable.EjercicioContable.numero
+	, EjercicioContable_3_apertura       	DATE        		-- 5	CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_3_cierre         	DATE        		-- 6	CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_3_cerrado        	BOOLEAN     		-- 7	CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_3_cerradoModulos 	BOOLEAN     		-- 8	CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_3_comentario     	VARCHAR(250)		-- 9	CuentaContable.EjercicioContable.comentario
+	, CuentaContable_integra             	VARCHAR(16) 		-- 10	CuentaContable.integra
+	, CuentaContable_cuentaJerarquia     	VARCHAR(16) 		-- 11	CuentaContable.cuentaJerarquia
+	, CuentaContable_imputable           	BOOLEAN     		-- 12	CuentaContable.imputable
+	, CuentaContable_ajustaPorInflacion  	BOOLEAN     		-- 13	CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_14_id         	VARCHAR(36) 		-- 14	CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_14_numero     	INTEGER     		-- 15	CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_14_nombre     	VARCHAR(50) 		-- 16	CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_cuentaConApropiacion	BOOLEAN     		-- 17	CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_18_id          	VARCHAR(36) 		-- 18	CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_18_numero      	INTEGER     		-- 19	CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_18_nombre      	VARCHAR(50) 		-- 20	CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_18_abreviatura 	VARCHAR(5)  		-- 21	CuentaContable.CentroCostoContable.abreviatura
+	, EjercicioContable_22_id            	VARCHAR(36) 		-- 22	CuentaContable.CentroCostoContable.EjercicioContable.id
+	, EjercicioContable_22_numero        	INTEGER     		-- 23	CuentaContable.CentroCostoContable.EjercicioContable.numero
+	, EjercicioContable_22_apertura      	DATE        		-- 24	CuentaContable.CentroCostoContable.EjercicioContable.apertura
+	, EjercicioContable_22_cierre        	DATE        		-- 25	CuentaContable.CentroCostoContable.EjercicioContable.cierre
+	, EjercicioContable_22_cerrado       	BOOLEAN     		-- 26	CuentaContable.CentroCostoContable.EjercicioContable.cerrado
+	, EjercicioContable_22_cerradoModulos	BOOLEAN     		-- 27	CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_22_comentario    	VARCHAR(250)		-- 28	CuentaContable.CentroCostoContable.EjercicioContable.comentario
+	, CuentaContable_cuentaAgrupadora    	VARCHAR(50) 		-- 29	CuentaContable.cuentaAgrupadora
+	, CuentaContable_porcentaje          	DECIMAL(6,3)		-- 30	CuentaContable.porcentaje
+	, PuntoEquilibrio_31_id              	VARCHAR(36) 		-- 31	CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_31_numero          	INTEGER     		-- 32	CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_31_nombre          	VARCHAR(50) 		-- 33	CuentaContable.PuntoEquilibrio.nombre
+	, TipoPuntoEquilibrio_34_id          	VARCHAR(36) 		-- 34	CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id
+	, TipoPuntoEquilibrio_34_numero      	INTEGER     		-- 35	CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero
+	, TipoPuntoEquilibrio_34_nombre      	VARCHAR(50) 		-- 36	CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre
+	, EjercicioContable_37_id            	VARCHAR(36) 		-- 37	CuentaContable.PuntoEquilibrio.EjercicioContable.id
+	, EjercicioContable_37_numero        	INTEGER     		-- 38	CuentaContable.PuntoEquilibrio.EjercicioContable.numero
+	, EjercicioContable_37_apertura      	DATE        		-- 39	CuentaContable.PuntoEquilibrio.EjercicioContable.apertura
+	, EjercicioContable_37_cierre        	DATE        		-- 40	CuentaContable.PuntoEquilibrio.EjercicioContable.cierre
+	, EjercicioContable_37_cerrado       	BOOLEAN     		-- 41	CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado
+	, EjercicioContable_37_cerradoModulos	BOOLEAN     		-- 42	CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos
+	, EjercicioContable_37_comentario    	VARCHAR(250)		-- 43	CuentaContable.PuntoEquilibrio.EjercicioContable.comentario
+	, CostoVenta_44_id                   	VARCHAR(36) 		-- 44	CuentaContable.CostoVenta.id
+	, CostoVenta_44_numero               	INTEGER     		-- 45	CuentaContable.CostoVenta.numero
+	, CostoVenta_44_nombre               	VARCHAR(50) 		-- 46	CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_47_id              	VARCHAR(36) 		-- 47	CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_47_numero          	INTEGER     		-- 48	CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_47_nombre          	VARCHAR(50) 		-- 49	CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_47_equate          	VARCHAR(30) 		-- 50	CuentaContable.SeguridadPuerta.equate
+	, SeguridadModulo_51_id              	VARCHAR(36) 		-- 51	CuentaContable.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_51_numero          	INTEGER     		-- 52	CuentaContable.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_51_nombre          	VARCHAR(50) 		-- 53	CuentaContable.SeguridadPuerta.SeguridadModulo.nombre
+
+);

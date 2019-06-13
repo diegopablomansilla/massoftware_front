@@ -69,6 +69,27 @@ import com.massoftware.x.empresa.WFDepositoModulo;
 import com.massoftware.service.empresa.DepositoFiltro;
 import com.massoftware.x.empresa.WLDeposito;
 import com.massoftware.x.empresa.WFDeposito;
+import com.massoftware.service.contabilidad.EjercicioContableFiltro;
+import com.massoftware.x.contabilidad.WLEjercicioContable;
+import com.massoftware.x.contabilidad.WFEjercicioContable;
+import com.massoftware.service.contabilidad.CentroCostoContableFiltro;
+import com.massoftware.x.contabilidad.WLCentroCostoContable;
+import com.massoftware.x.contabilidad.WFCentroCostoContable;
+import com.massoftware.service.contabilidad.TipoPuntoEquilibrioFiltro;
+import com.massoftware.x.contabilidad.WLTipoPuntoEquilibrio;
+import com.massoftware.x.contabilidad.WFTipoPuntoEquilibrio;
+import com.massoftware.service.contabilidad.PuntoEquilibrioFiltro;
+import com.massoftware.x.contabilidad.WLPuntoEquilibrio;
+import com.massoftware.x.contabilidad.WFPuntoEquilibrio;
+import com.massoftware.service.contabilidad.CostoVentaFiltro;
+import com.massoftware.x.contabilidad.WLCostoVenta;
+import com.massoftware.x.contabilidad.WFCostoVenta;
+import com.massoftware.service.contabilidad.CuentaContableEstadoFiltro;
+import com.massoftware.x.contabilidad.WLCuentaContableEstado;
+import com.massoftware.x.contabilidad.WFCuentaContableEstado;
+import com.massoftware.service.contabilidad.CuentaContableFiltro;
+import com.massoftware.x.contabilidad.WLCuentaContable;
+import com.massoftware.x.contabilidad.WFCuentaContable;
 
 
 public abstract class AbstractFactoryWidget {
@@ -325,6 +346,83 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFDeposito buildWFDeposito(String mode, String id) throws Exception {
 		return new WFDeposito(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLEjercicioContable buildWLEjercicioContable() throws Exception {
+		return new WLEjercicioContable();
+	}
+	public WLEjercicioContable buildWLEjercicioContable(EjercicioContableFiltro filtro) throws Exception {
+		return new WLEjercicioContable(filtro);
+	}
+	public WFEjercicioContable buildWFEjercicioContable(String mode, String id) throws Exception {
+		return new WFEjercicioContable(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCentroCostoContable buildWLCentroCostoContable() throws Exception {
+		return new WLCentroCostoContable();
+	}
+	public WLCentroCostoContable buildWLCentroCostoContable(CentroCostoContableFiltro filtro) throws Exception {
+		return new WLCentroCostoContable(filtro);
+	}
+	public WFCentroCostoContable buildWFCentroCostoContable(String mode, String id) throws Exception {
+		return new WFCentroCostoContable(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTipoPuntoEquilibrio buildWLTipoPuntoEquilibrio() throws Exception {
+		return new WLTipoPuntoEquilibrio();
+	}
+	public WLTipoPuntoEquilibrio buildWLTipoPuntoEquilibrio(TipoPuntoEquilibrioFiltro filtro) throws Exception {
+		return new WLTipoPuntoEquilibrio(filtro);
+	}
+	public WFTipoPuntoEquilibrio buildWFTipoPuntoEquilibrio(String mode, String id) throws Exception {
+		return new WFTipoPuntoEquilibrio(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLPuntoEquilibrio buildWLPuntoEquilibrio() throws Exception {
+		return new WLPuntoEquilibrio();
+	}
+	public WLPuntoEquilibrio buildWLPuntoEquilibrio(PuntoEquilibrioFiltro filtro) throws Exception {
+		return new WLPuntoEquilibrio(filtro);
+	}
+	public WFPuntoEquilibrio buildWFPuntoEquilibrio(String mode, String id) throws Exception {
+		return new WFPuntoEquilibrio(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCostoVenta buildWLCostoVenta() throws Exception {
+		return new WLCostoVenta();
+	}
+	public WLCostoVenta buildWLCostoVenta(CostoVentaFiltro filtro) throws Exception {
+		return new WLCostoVenta(filtro);
+	}
+	public WFCostoVenta buildWFCostoVenta(String mode, String id) throws Exception {
+		return new WFCostoVenta(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaContableEstado buildWLCuentaContableEstado() throws Exception {
+		return new WLCuentaContableEstado();
+	}
+	public WLCuentaContableEstado buildWLCuentaContableEstado(CuentaContableEstadoFiltro filtro) throws Exception {
+		return new WLCuentaContableEstado(filtro);
+	}
+	public WFCuentaContableEstado buildWFCuentaContableEstado(String mode, String id) throws Exception {
+		return new WFCuentaContableEstado(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaContable buildWLCuentaContable() throws Exception {
+		return new WLCuentaContable();
+	}
+	public WLCuentaContable buildWLCuentaContable(CuentaContableFiltro filtro) throws Exception {
+		return new WLCuentaContable(filtro);
+	}
+	public WFCuentaContable buildWFCuentaContable(String mode, String id) throws Exception {
+		return new WFCuentaContable(mode, id);
 	}
 
 }

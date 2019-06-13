@@ -19,15 +19,15 @@ digraph "oneDegreeRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
-  "seguridadpuerta":"seguridadmodulo":sw -> "seguridadmodulo":"id.type":se [arrowhead=none dir=back arrowtail=teeodot];
+  "seguridadpuerta":"seguridadmodulo":sw -> "seguridadmodulo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "seguridadmodulo" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">seguridadmodulo</TD></TR>
-      <TR><TD PORT="id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD><TD PORT="id.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
+      <TR><TD PORT="id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD><TD PORT="id.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="numero" COLSPAN="2" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD><TD PORT="numero.type" ALIGN="LEFT">int4[10]</TD></TR>
-      <TR><TD PORT="nombre" COLSPAN="2" ALIGN="LEFT">nombre</TD><TD PORT="nombre.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">9 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="2" ALIGN="LEFT">nombre</TD><TD PORT="nombre.type" ALIGN="LEFT">varchar[50]</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">280 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="seguridadmodulo.html"
     tooltip="seguridadmodulo"
@@ -37,11 +37,11 @@ digraph "oneDegreeRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">seguridadpuerta</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="seguridadmodulo" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">seguridadmodulo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
       <TR><TD PORT="equate" COLSPAN="3" ALIGN="LEFT">equate</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">44 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+      <TR><TD PORT="seguridadmodulo" COLSPAN="3" ALIGN="LEFT">seguridadmodulo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">250 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
     </TABLE>>
     URL="seguridadpuerta.html"
     tooltip="seguridadpuerta"

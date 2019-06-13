@@ -101,34 +101,28 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='odd'>
+<tr class='even'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
-    <td class='relatedTable detail' title="asientomodelo.ejerciciocontable refs ejerciciocontable.id via asientomodelo_ejerciciocontable_fkey"><a href='asientomodelo.html'>asientomodelo</a><span class='relatedKey'>.ejerciciocontable</span>
-    </td>
-    <td class='constraint detail'>asientomodelo_ejerciciocontable_fkey<span title='Restrict delete:
- Parent cannot be deleted if children exist'>&nbsp;R</span></td>
-   </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="centrocostocontable.ejerciciocontable refs ejerciciocontable.id via centrocostocontable_ejerciciocontable_fkey"><a href='centrocostocontable.html'>centrocostocontable</a><span class='relatedKey'>.ejerciciocontable</span>
     </td>
     <td class='constraint detail'>centrocostocontable_ejerciciocontable_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="cuentacontable.ejerciciocontable refs ejerciciocontable.id via cuentacontable_ejerciciocontable_fkey"><a href='cuentacontable.html'>cuentacontable</a><span class='relatedKey'>.ejerciciocontable</span>
     </td>
     <td class='constraint detail'>cuentacontable_ejerciciocontable_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="puntoequilibrio.ejerciciocontable refs ejerciciocontable.id via puntoequilibrio_ejerciciocontable_fkey"><a href='puntoequilibrio.html'>puntoequilibrio</a><span class='relatedKey'>.ejerciciocontable</span>
     </td>
     <td class='constraint detail'>puntoequilibrio_ejerciciocontable_fkey<span title='Restrict delete:
@@ -139,7 +133,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>numero</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -150,7 +144,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>apertura</td>
  <td class='detail'>date</td>
  <td class='detail' align='right'>13</td>
@@ -161,7 +155,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>cierre</td>
  <td class='detail'>date</td>
  <td class='detail' align='right'>13</td>
@@ -172,32 +166,32 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>cerrado</td>
  <td class='detail'>bool</td>
  <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
+ <td class='detail'>cerradomodulos</td>
+ <td class='detail'>bool</td>
+ <td class='detail' align='right'>1</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
  <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
- <td class='detail'>cerradomodulos</td>
- <td class='detail'>bool</td>
- <td class='detail' align='right'>1</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>false</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
  <td class='detail'>comentario</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>250</td>
  <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>null</td>
@@ -206,7 +200,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='7 columns'>Table contained 26 rows at mié mar 20 09:40 ART 2019<p/>
+<p title='7 columns'>Table contained 300 rows at jue jun 13 18:37 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -238,24 +232,21 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from ejerciciocontable'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="353,8,494,154" >
-<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="7,178,298,400" >
-<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="342,208,505,378" >
-<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="549,102,725,521" >
-<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="347,396,499,566" >
+<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="286,152,449,322" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="7,240,242,461" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="493,8,669,426" >
+<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="291,340,443,510" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/ejerciciocontable.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="579,8,721,154" >
-<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="7,186,298,408" >
-<area shape="rect" href="asientomodeloitem.html" title="asientomodeloitem" alt="" coords="782,89,937,169" >
-<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="562,172,738,590" >
-<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="349,277,511,448" >
-<area shape="rect" href="costoventa.html" title="costoventa" alt="" coords="369,653,491,733" >
-<area shape="rect" href="cuentacontableestado.html" title="cuentacontableestado" alt="" coords="342,180,518,260" >
-<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="354,465,506,636" >
-<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="358,750,502,830" >
-<area shape="rect" href="puntoequilibriotipo.html" title="puntoequilibriotipo" alt="" coords="77,510,229,590" >
+<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="293,173,456,344" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="8,226,242,448" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="506,8,682,426" >
+<area shape="rect" href="costoventa.html" title="costoventa" alt="" coords="304,549,445,629" >
+<area shape="rect" href="cuentacontableestado.html" title="cuentacontableestado" alt="" coords="286,76,462,156" >
+<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="298,361,450,532" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="298,646,450,726" >
+<area shape="rect" href="tipopuntoequilibrio.html" title="tipopuntoequilibrio" alt="" coords="49,465,201,545" >
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/ejerciciocontable.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

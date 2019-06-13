@@ -26,7 +26,7 @@ digraph "firmante" {
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
       <TR><TD PORT="cargo" COLSPAN="3" ALIGN="LEFT">cargo</TD></TR>
       <TR><TD PORT="bloqueado" COLSPAN="3" ALIGN="LEFT">bloqueado</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/firmante.html"
     tooltip="firmante"

@@ -214,6 +214,10 @@ public class UtilJavaPOJO {
 				minValue = "minValue = \"" + "" + "\"";
 				maxValue = "maxValue = \"" + "" + "\"";
 				maxLength = "maxLength = " + -1;
+			} else if (att.isDate()) {
+				minValue = "minValue = \"" + "" + "\"";
+				maxValue = "maxValue = \"" + "" + "\"";
+				maxLength = "maxLength = " + -1;
 			} else if (att.isTimestamp()) {
 				minValue = "minValue = \"" + "" + "\"";
 				maxValue = "maxValue = \"" + "" + "\"";

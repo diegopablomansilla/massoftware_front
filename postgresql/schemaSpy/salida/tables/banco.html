@@ -101,27 +101,18 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
- <td class='detail'>
-  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
-    <td class='relatedTable detail' title="cuentafondo.banco refs banco.id via cuentafondo_banco_fkey"><a href='cuentafondo.html'>cuentafondo</a><span class='relatedKey'>.banco</span>
-    </td>
-    <td class='constraint detail'>cuentafondo_banco_fkey<span title='Restrict delete:
- Parent cannot be deleted if children exist'>&nbsp;R</span></td>
-   </tr>
-  </table>
-</td>
+ <td class='detail'></td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>numero</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -132,10 +123,21 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>nombre</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>50</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'> </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='indexedColumn' title='Indexed'>cuit</td>
+ <td class='detail'>int8</td>
+ <td class='detail' align='right'>19</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
@@ -144,17 +146,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='indexedColumn' title='Indexed'>cuit</td>
- <td class='detail'>int8</td>
- <td class='detail' align='right'>19</td>
- <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='right'>null</td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='even'>
  <td class='detail'>bloqueado</td>
  <td class='detail'>bool</td>
  <td class='detail' align='right'>1</td>
@@ -165,7 +156,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>hoja</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -176,7 +167,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>primerafila</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -187,7 +178,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>ultimafila</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -198,7 +189,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>fecha</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -209,7 +200,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>descripcion</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -220,7 +211,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>referencia1</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -231,7 +222,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>importe</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -242,7 +233,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>referencia2</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -253,7 +244,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>saldo</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>3</td>
@@ -265,7 +256,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='14 columns'>Table contained 115 rows at mié mar 20 09:40 ART 2019<p/>
+<p title='14 columns'>Table contained 4 rows at jue jun 13 18:37 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -292,7 +283,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   <td class='detail'>Must be unique</td>
   <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
   <td class='constraint' style='text-align:left;'>banco_cuit_key</td>
-  <td class='detail'>This unique column is also nullable</td>
+  <td>&nbsp;</td>
  </tr>
  <tr>
   <td class='indexedColumn'>numero</td>
@@ -310,24 +301,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </tr>
 </table>
 </div>
-<table width='100%' border='0'><tr><td class='container'>
-<br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from banco'>
-&nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
-<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="326,8,478,224" >
-<area shape="rect" href="banco.html" title="banco" alt="" coords="8,120,282,498" >
-</map>
-  <a name='diagram'><img id='oneDegreeImg' src='../diagrams/banco.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
-<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="326,14,478,230" >
-<area shape="rect" href="banco.html" title="banco" alt="" coords="8,202,282,581" >
-<area shape="rect" href="cuentafondogrupo.html" title="cuentafondogrupo" alt="" coords="69,8,221,88" >
-<area shape="rect" href="cuentafondotipo.html" title="cuentafondotipo" alt="" coords="76,105,214,185" >
-<area shape="rect" href="juridiccionconvniomultilateral.html" title="juridiccionconvniomultilateral" alt="" coords="522,14,744,94" >
-</map>
-
-  <a name='diagram'><img id='twoDegreesImg' src='../diagrams/banco.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
-</td></tr></table>
 </div>
 </body>
 </html>
