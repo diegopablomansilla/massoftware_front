@@ -330,9 +330,14 @@ public abstract class WindowListado extends Window {
 		}
 
 	}
+	
+	public SelectorBox selectorSBX;
 
 	protected void setSelectedItem() throws Exception {
 		// setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+		if(selectorSBX != null) {
+			selectorSBX.setSelectedItem(itemsGRD.getSelectedRow());
+		}
 	}
 
 	protected void addKeyEvents() {

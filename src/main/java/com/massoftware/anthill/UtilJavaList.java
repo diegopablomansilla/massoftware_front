@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 
+import com.massoftware.AppCX;
+
 public class UtilJavaList {
 
 	private static String toCamelStart(String text) {
@@ -76,11 +78,14 @@ public class UtilJavaList {
 						+ dt.getClazz().getName() + "Filtro;";
 				String java3 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
 						+ dt.getClazz().getName() + "Service;";
+				String java4 = "\nimport com.massoftware.x." + dt.getClazz().getNamePackage() + ".WL"
+						+ dt.getClazz().getName() + ";";
 
 				if (java.contains(java1) == false) {
 					java += java1;
 					java += java2;
 					java += java3;
+					java += java4;
 				}
 
 			}
@@ -267,15 +272,19 @@ public class UtilJavaList {
 
 				java += sc5 + "}";
 
-				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName()
+				java += sc5 + "//WL" + arg.getDataType().getName() + " windowPoPup = new WL" + arg.getDataType().getName()
 						+ "(filtro) {";
-				java += sc6 + "protected void setSelectedItem() throws Exception {";
+				java += sc6 + "//protected void setSelectedItem() throws Exception {";
 
-				java += sc7 + arg.getName() + "SBX.setSelectedItem(itemsGRD.getSelectedRow());";
+				java += sc7 + "//" + arg.getName() + "SBX.setSelectedItem(itemsGRD.getSelectedRow());";
 
-				java += sc6 + "}";
-				java += sc5 + "};";
-
+				java += sc6 + "//}";
+				java += sc5 + "//};";
+				
+				java += sc5 + "WL" + arg.getDataType().getName() + " windowPoPup = AppCX.widgets().buildWL" + arg.getDataType().getName()
+						+ "(filtro);";
+				java += sc5 + "windowPoPup.selectorSBX = " + arg.getName() + "SBX;";
+				
 				java += sc5 + "return windowPoPup;";
 
 				java += sc4 + "}";
@@ -387,16 +396,52 @@ public class UtilJavaList {
 				java += "\n\t\t}";
 
 			} else if (att.isTimestamp()) {
+				
+				if (att.getRange() == false) {
 
-				java += "\n\t\tif (" + att.getName() + "DAFB != null) {";
-				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "DAFB);";
-				java += "\n\t\t}";
+					java += "\n\t\tif (" + att.getName() + "TXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "TXTB);";
+					java += "\n\t\t}";
+
+				} else {
+
+					java += "\n\t\tif (" + att.getName() + "FromTXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "FromTXTB);";
+					java += "\n\t\t}";
+
+					java += "\n\t\tif (" + att.getName() + "ToTXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "ToTXTB);";
+					java += "\n\t\t}";
+
+				}
+
+//				java += "\n\t\tif (" + att.getName() + "TXTB != null) {";
+//				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "TXTB);";
+//				java += "\n\t\t}";
 
 			} else if (att.isDate()) {
+				
+				if (att.getRange() == false) {
 
-				java += "\n\t\tif (" + att.getName() + "DAFB != null) {";
-				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "DAFB);";
-				java += "\n\t\t}";
+					java += "\n\t\tif (" + att.getName() + "TXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "TXTB);";
+					java += "\n\t\t}";
+
+				} else {
+
+					java += "\n\t\tif (" + att.getName() + "FromTXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "FromTXTB);";
+					java += "\n\t\t}";
+
+					java += "\n\t\tif (" + att.getName() + "ToTXTB != null) {";
+					java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "ToTXTB);";
+					java += "\n\t\t}";
+
+				}
+
+//				java += "\n\t\tif (" + att.getName() + "DAFB != null) {";
+//				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "DAFB);";
+//				java += "\n\t\t}";
 
 			} else if (att.isSimple() == false) {
 

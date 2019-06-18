@@ -95,7 +95,9 @@ public class UtilJavaService {
 	private static String toFindCodeOrDecsription(Clazz clazz) {
 		String java = "";
 
-		// if (clazz.getArgsSBX().size() > 0) {
+		if (clazz.getArgsSBX().size() == 0) {
+			return "";
+		}
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
@@ -1659,8 +1661,9 @@ public class UtilJavaService {
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 					buildMapper(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
 				} else {
-					java = "String " + att.getName()
-							+ att.getClazz().getName() + "Arg" + fields.size() + " = (String) row[++c]; // " + att.getDataType().getName().replace("java.lang.", "") + ".id";
+					java = "String " + att.getName() + att.getClazz().getName() + "Arg" + fields.size()
+							+ " = (String) row[++c]; // " + att.getDataType().getName().replace("java.lang.", "")
+							+ ".id";
 
 					fields.add(java);
 				}
@@ -1809,9 +1812,9 @@ public class UtilJavaService {
 					buildMapperArgs(maxLevel, (level + 1), dataTypeClazz.getClazz(), fields);
 				} else {
 
-					 java = att.getName() + att.getClazz().getName() + "Arg" + fields.size();
+					java = att.getName() + att.getClazz().getName() + "Arg" + fields.size();
 
-					 fields.add(java);
+					fields.add(java);
 
 				}
 

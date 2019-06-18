@@ -90,6 +90,27 @@ import com.massoftware.x.contabilidad.WFCuentaContableEstado;
 import com.massoftware.service.contabilidad.CuentaContableFiltro;
 import com.massoftware.x.contabilidad.WLCuentaContable;
 import com.massoftware.x.contabilidad.WFCuentaContable;
+import com.massoftware.service.contabilidad.AsientoModeloFiltro;
+import com.massoftware.x.contabilidad.WLAsientoModelo;
+import com.massoftware.x.contabilidad.WFAsientoModelo;
+import com.massoftware.service.contabilidad.AsientoModeloItemFiltro;
+import com.massoftware.x.contabilidad.WLAsientoModeloItem;
+import com.massoftware.x.contabilidad.WFAsientoModeloItem;
+import com.massoftware.service.contabilidad.MinutaContableFiltro;
+import com.massoftware.x.contabilidad.WLMinutaContable;
+import com.massoftware.x.contabilidad.WFMinutaContable;
+import com.massoftware.service.contabilidad.AsientoContableModuloFiltro;
+import com.massoftware.x.contabilidad.WLAsientoContableModulo;
+import com.massoftware.x.contabilidad.WFAsientoContableModulo;
+import com.massoftware.service.contabilidad.AsientoContableFiltro;
+import com.massoftware.x.contabilidad.WLAsientoContable;
+import com.massoftware.x.contabilidad.WFAsientoContable;
+import com.massoftware.service.contabilidad.AsientoContableItemFiltro;
+import com.massoftware.x.contabilidad.WLAsientoContableItem;
+import com.massoftware.x.contabilidad.WFAsientoContableItem;
+import com.massoftware.service.empresa.EmpresaFiltro;
+import com.massoftware.x.empresa.WLEmpresa;
+import com.massoftware.x.empresa.WFEmpresa;
 
 
 public abstract class AbstractFactoryWidget {
@@ -423,6 +444,83 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFCuentaContable buildWFCuentaContable(String mode, String id) throws Exception {
 		return new WFCuentaContable(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLAsientoModelo buildWLAsientoModelo() throws Exception {
+		return new WLAsientoModelo();
+	}
+	public WLAsientoModelo buildWLAsientoModelo(AsientoModeloFiltro filtro) throws Exception {
+		return new WLAsientoModelo(filtro);
+	}
+	public WFAsientoModelo buildWFAsientoModelo(String mode, String id) throws Exception {
+		return new WFAsientoModelo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLAsientoModeloItem buildWLAsientoModeloItem() throws Exception {
+		return new WLAsientoModeloItem();
+	}
+	public WLAsientoModeloItem buildWLAsientoModeloItem(AsientoModeloItemFiltro filtro) throws Exception {
+		return new WLAsientoModeloItem(filtro);
+	}
+	public WFAsientoModeloItem buildWFAsientoModeloItem(String mode, String id) throws Exception {
+		return new WFAsientoModeloItem(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLMinutaContable buildWLMinutaContable() throws Exception {
+		return new WLMinutaContable();
+	}
+	public WLMinutaContable buildWLMinutaContable(MinutaContableFiltro filtro) throws Exception {
+		return new WLMinutaContable(filtro);
+	}
+	public WFMinutaContable buildWFMinutaContable(String mode, String id) throws Exception {
+		return new WFMinutaContable(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLAsientoContableModulo buildWLAsientoContableModulo() throws Exception {
+		return new WLAsientoContableModulo();
+	}
+	public WLAsientoContableModulo buildWLAsientoContableModulo(AsientoContableModuloFiltro filtro) throws Exception {
+		return new WLAsientoContableModulo(filtro);
+	}
+	public WFAsientoContableModulo buildWFAsientoContableModulo(String mode, String id) throws Exception {
+		return new WFAsientoContableModulo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLAsientoContable buildWLAsientoContable() throws Exception {
+		return new WLAsientoContable();
+	}
+	public WLAsientoContable buildWLAsientoContable(AsientoContableFiltro filtro) throws Exception {
+		return new WLAsientoContable(filtro);
+	}
+	public WFAsientoContable buildWFAsientoContable(String mode, String id) throws Exception {
+		return new WFAsientoContable(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLAsientoContableItem buildWLAsientoContableItem() throws Exception {
+		return new WLAsientoContableItem();
+	}
+	public WLAsientoContableItem buildWLAsientoContableItem(AsientoContableItemFiltro filtro) throws Exception {
+		return new WLAsientoContableItem(filtro);
+	}
+	public WFAsientoContableItem buildWFAsientoContableItem(String mode, String id) throws Exception {
+		return new WFAsientoContableItem(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLEmpresa buildWLEmpresa() throws Exception {
+		return new WLEmpresa();
+	}
+	public WLEmpresa buildWLEmpresa(EmpresaFiltro filtro) throws Exception {
+		return new WLEmpresa(filtro);
+	}
+	public WFEmpresa buildWFEmpresa(String mode, String id) throws Exception {
+		return new WFEmpresa(mode, id);
 	}
 
 }

@@ -13,16 +13,23 @@ import com.massoftware.anthill.ant.clientes.ClasificacionClienteAnt;
 import com.massoftware.anthill.ant.clientes.MotivoBloqueoClienteAnt;
 import com.massoftware.anthill.ant.clientes.MotivoComentarioAnt;
 import com.massoftware.anthill.ant.clientes.TipoClienteAnt;
+import com.massoftware.anthill.ant.contabilidad.AsientoContableAnt;
+import com.massoftware.anthill.ant.contabilidad.AsientoContableItemAnt;
+import com.massoftware.anthill.ant.contabilidad.AsientoContableModuloAnt;
+import com.massoftware.anthill.ant.contabilidad.AsientoModeloAnt;
+import com.massoftware.anthill.ant.contabilidad.AsientoModeloItemAnt;
 import com.massoftware.anthill.ant.contabilidad.CentroCostoContableAnt;
 import com.massoftware.anthill.ant.contabilidad.CostoVentaAnt;
 import com.massoftware.anthill.ant.contabilidad.CuentaContableAnt;
 import com.massoftware.anthill.ant.contabilidad.CuentaContableEstadoAnt;
 import com.massoftware.anthill.ant.contabilidad.EjercicioContableAnt;
+import com.massoftware.anthill.ant.contabilidad.MinutaContableAnt;
 import com.massoftware.anthill.ant.contabilidad.PuntoEquilibrioAnt;
 import com.massoftware.anthill.ant.contabilidad.TipoPuntoEquilibrioAnt;
 import com.massoftware.anthill.ant.contabilidad.ventas.NotaCreditoMotivoAnt;
 import com.massoftware.anthill.ant.empresa.DepositoAnt;
 import com.massoftware.anthill.ant.empresa.DepositoModuloAnt;
+import com.massoftware.anthill.ant.empresa.EmpresaAnt;
 import com.massoftware.anthill.ant.empresa.SucursalAnt;
 import com.massoftware.anthill.ant.empresa.TipoSucursalAnt;
 import com.massoftware.anthill.ant.geo.CiudadAnt;
@@ -135,6 +142,20 @@ public class Anthill {
 		CuentaContableAnt cuentaContableAnt = new CuentaContableAnt(anthill, ejercicioContableAnt,
 				cuentaContableEstadoAnt, centroCostoContableAnt, puntoEquilibrioAnt, costoVentaAnt, seguridadPuertaAnt);
 
+		AsientoModeloAnt asientoModeloAnt = new AsientoModeloAnt(anthill, ejercicioContableAnt);
+		AsientoModeloItemAnt asientoModeloItemAnt = new AsientoModeloItemAnt(anthill, asientoModeloAnt,
+				cuentaContableAnt);
+
+		MinutaContableAnt minutaContableAnt = new MinutaContableAnt(anthill);
+		AsientoContableModuloAnt asientoContableModuloAnt = new AsientoContableModuloAnt(anthill);
+
+		AsientoContableAnt asientoContableAnt = new AsientoContableAnt(anthill, ejercicioContableAnt, minutaContableAnt,
+				sucursalAnt, asientoContableModuloAnt);
+		
+		AsientoContableItemAnt asientoContableItemAnt = new AsientoContableItemAnt(anthill, asientoContableAnt, cuentaContableAnt);
+		
+		EmpresaAnt empresaAnt = new EmpresaAnt(anthill, ejercicioContableAnt);
+
 		///////////////////////////////////////////////////////////////////
 
 		anthill.build();
@@ -168,11 +189,9 @@ public class Anthill {
 		String sqlFind = "";
 		String sqlFindNextValue = "";
 		String sqlFindExists = "";
-
-		// String sqlView = "";
-
-		// String sqlFindByIdFull = "";
-		// String sqlFindByIdView = "";
+		String sqlFindInsert = "";
+		String sqlFindUpdate = "";
+		String sqlFindDelete = "";
 
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
@@ -197,6 +216,9 @@ public class Anthill {
 			String sqlFindItem = clazz.toSQLFind();
 			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
 			String sqlFindExistsItem = clazz.toSQLFindExists();
+			String sqlFindInsertItem = clazz.toSQLInsert();
+			String sqlFindUpdateItem = clazz.toSQLUpdate();
+			String sqlFindDeleteItem = clazz.toSQLDeleteById();
 
 			String sqlItem = clazz.toSQL();
 
@@ -225,6 +247,15 @@ public class Anthill {
 				sqlFindExists += "\n\n";
 				sqlFindExists += sqlFindExistsItem;
 			}
+
+			sqlFindInsert += "\n\n";
+			sqlFindInsert += sqlFindInsertItem;
+
+			sqlFindDelete += "\n\n";
+			sqlFindDelete += sqlFindDeleteItem;
+
+			sqlFindUpdate += "\n\n";
+			sqlFindUpdate += sqlFindUpdateItem;
 
 			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar
 					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
@@ -314,6 +345,10 @@ public class Anthill {
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_next_value.sql",
 				sqlFindNextValue);
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_exists.sql", sqlFindExists);
+
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_insert.sql", sqlFindInsert);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_update.sql", sqlFindUpdate);
+		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_delete.sql", sqlFindDelete);
 
 	}
 

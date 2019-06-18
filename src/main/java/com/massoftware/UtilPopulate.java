@@ -244,8 +244,8 @@ public class UtilPopulate {
 		long diff = end - offset + 1;
 		long value = offset + (long) (Math.random() * diff);
 
-		if (required == false) {
-			value = (new Random().nextBoolean()) ? value : null;
+		if (required == false) {						
+			value = (new Random().nextBoolean()) ? value : 0;
 		}
 
 		return value;
@@ -280,7 +280,12 @@ public class UtilPopulate {
 
 			value = new BigDecimal(stringPrecision + "." + stringScale);
 
-			b = value.compareTo(min) > 0 && value.compareTo(max) < 0;
+			if(min == null && max == null) {
+				b = true;
+			} else {
+				b = value.compareTo(min) > 0 && value.compareTo(max) < 0;	
+			}
+			
 
 		} while (!b);
 

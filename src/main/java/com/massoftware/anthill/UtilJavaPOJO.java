@@ -179,6 +179,7 @@ public class UtilJavaPOJO {
 
 				} else if (att.isBigDecimal()) {
 					DataTypeBigDecimal dt = (DataTypeBigDecimal) att.getDataType();
+					
 					if (dt.getMinValue() != null) {
 						minValue = "minValue = \"" + dt.getMinValue() + "\"";
 					}
@@ -202,6 +203,8 @@ public class UtilJavaPOJO {
 
 						if (length > 0) {
 							maxLength = "maxLength = " + length;
+						} else {
+							maxLength = "maxLength = " + -1;
 						}
 
 					}

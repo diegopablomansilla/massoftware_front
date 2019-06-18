@@ -31,7 +31,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="departamento" COLSPAN="3" ALIGN="LEFT">departamento</TD></TR>
       <TR><TD PORT="numeroafip" COLSPAN="3" ALIGN="LEFT">numeroafip</TD></TR>
       <TR><TD PORT="provincia" COLSPAN="3" ALIGN="LEFT">provincia</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">926 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">275 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
     </TABLE>>
     URL="ciudad.html"
     tooltip="ciudad"
@@ -46,7 +46,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="nombrecalle" COLSPAN="2" ALIGN="LEFT">nombrecalle</TD><TD PORT="nombrecalle.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="numerocalle" COLSPAN="2" ALIGN="LEFT">numerocalle</TD><TD PORT="numerocalle.type" ALIGN="LEFT">varchar[20]</TD></TR>
       <TR><TD PORT="ciudad" COLSPAN="2" ALIGN="LEFT">ciudad</TD><TD PORT="ciudad.type" ALIGN="LEFT">varchar[36]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">521 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">172 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="codigopostal.html"
     tooltip="codigopostal"
@@ -65,7 +65,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="codigopostal" COLSPAN="3" ALIGN="LEFT">codigopostal</TD></TR>
       <TR><TD PORT="domicilio" COLSPAN="3" ALIGN="LEFT">domicilio</TD></TR>
       <TR><TD PORT="comentario" COLSPAN="3" ALIGN="LEFT">comentario</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">857 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">253 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="transporte.html"
     tooltip="transporte"

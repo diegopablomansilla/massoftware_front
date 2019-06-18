@@ -936,3 +936,177 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaContable_porcentaje() RETURN
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_CuentaContable_porcentaje();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModelo                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoModelo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoModelo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.AsientoModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoModelo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModeloItem                                                                                      //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModeloItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoModeloItem_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoModeloItem_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.AsientoModeloItem;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoModeloItem_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MinutaContable                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MinutaContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_MinutaContable_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_MinutaContable_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.MinutaContable;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_MinutaContable_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContableModulo                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContableModulo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoContableModulo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoContableModulo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.AsientoContableModulo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoContableModulo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContable                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContable
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoContable_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoContable_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.AsientoContable;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoContable_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContableItem                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContableItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoContableItem_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoContableItem_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.AsientoContableItem;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoContableItem_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoContableItem_debe() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoContableItem_debe() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(debe),0) + 1)::DECIMAL(13,5) FROM massoftware.AsientoContableItem;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoContableItem_debe();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_AsientoContableItem_haber() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_AsientoContableItem_haber() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(haber),0) + 1)::DECIMAL(13,5) FROM massoftware.AsientoContableItem;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_AsientoContableItem_haber();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Empresa                                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Empresa

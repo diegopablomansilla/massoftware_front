@@ -92,7 +92,9 @@ public class ContabilidadMenu extends AbstractMenu {
 		
 		a1.addItem("Ejercicios contables ...", openEjercicioContableCmd());
 		a1.addItem("+++++++++Ejercicios contables ...", openEjerciciosContablesCmd());
-		a1.addItem("Modelos de asientos", openAsientosModeloCmd());		
+		a1.addItem("++ Modelos de asientos", openAsientosModeloCmd());
+		a1.addItem("Modelos de asientos", openAsientoModeloCmd());
+		a1.addItem("Modelos de asientos item", openAsientoModeloItemCmd());
 		a1.addItem("Centros de costos ...", openCentroCostoContableCmd());
 		a1.addItem("++++++++++Centros de costos ...", openCentrosCostoContableCmd());
 		
@@ -274,6 +276,50 @@ public class ContabilidadMenu extends AbstractMenu {
 				
 				try {
 					Window window = AppCX.widgets().buildWLCuentaContableEstado();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openAsientoModeloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLAsientoModelo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openAsientoModeloItemCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLAsientoModeloItem();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

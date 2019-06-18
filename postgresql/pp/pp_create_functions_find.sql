@@ -8851,3 +8851,3204 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.f_CuentaContable_2 ( null , null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_CuentaContableById_2 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModelo                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModelo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModelo (
+
+	  idArg0                  VARCHAR(36)	-- 0
+	, orderByArg1             INTEGER    	-- 1
+	, orderByDescArg2         BOOLEAN    	-- 2
+	, limitArg3               BIGINT     	-- 3
+	, offSetArg4              BIGINT     	-- 4
+	, numeroFromArg5          INTEGER    	-- 5
+	, numeroToArg6            INTEGER    	-- 6
+	, nombreArg7              VARCHAR(50)	-- 7
+	, ejercicioContableArg8   VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModelo (
+
+	  idArg0                  VARCHAR(36)	-- 0
+	, orderByArg1             INTEGER    	-- 1
+	, orderByDescArg2         BOOLEAN    	-- 2
+	, limitArg3               BIGINT     	-- 3
+	, offSetArg4              BIGINT     	-- 4
+	, numeroFromArg5          INTEGER    	-- 5
+	, numeroToArg6            INTEGER    	-- 6
+	, nombreArg7              VARCHAR(50)	-- 7
+	, ejercicioContableArg8   VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.AsientoModelo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModelo.id                   AS AsientoModelo_id               	-- 0	.id              		VARCHAR(36)
+				, AsientoModelo.numero               AS AsientoModelo_numero           	-- 1	.numero          		INTEGER
+				, AsientoModelo.nombre               AS AsientoModelo_nombre           	-- 2	.nombre          		VARCHAR(50)
+				, AsientoModelo.ejercicioContable    AS AsientoModelo_ejercicioContable	-- 3	.ejercicioContable		VARCHAR(36)	EjercicioContable.id
+
+		FROM	massoftware.AsientoModelo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModelo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND ejercicioContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ejercicioContableArg8)) > 0 THEN
+		ejercicioContableArg8 = REPLACE(ejercicioContableArg8, '''', '''''');
+		ejercicioContableArg8 = LOWER(TRIM(ejercicioContableArg8));
+		ejercicioContableArg8 = TRANSLATE(ejercicioContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ejercicioContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModelo.ejercicioContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloById (idArg VARCHAR(36)) RETURNS SETOF massoftware.AsientoModelo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModelo ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModelo ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModelo_1 (
+
+	  idArg0                  VARCHAR(36)	-- 0
+	, orderByArg1             INTEGER    	-- 1
+	, orderByDescArg2         BOOLEAN    	-- 2
+	, limitArg3               BIGINT     	-- 3
+	, offSetArg4              BIGINT     	-- 4
+	, numeroFromArg5          INTEGER    	-- 5
+	, numeroToArg6            INTEGER    	-- 6
+	, nombreArg7              VARCHAR(50)	-- 7
+	, ejercicioContableArg8   VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModelo_1 (
+
+	  idArg0                  VARCHAR(36)	-- 0
+	, orderByArg1             INTEGER    	-- 1
+	, orderByDescArg2         BOOLEAN    	-- 2
+	, limitArg3               BIGINT     	-- 3
+	, offSetArg4              BIGINT     	-- 4
+	, numeroFromArg5          INTEGER    	-- 5
+	, numeroToArg6            INTEGER    	-- 6
+	, nombreArg7              VARCHAR(50)	-- 7
+	, ejercicioContableArg8   VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_AsientoModelo_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModelo.id                      AS AsientoModelo_id                  	-- 0	.id                             		VARCHAR(36)
+				, AsientoModelo.numero                  AS AsientoModelo_numero              	-- 1	.numero                         		INTEGER
+				, AsientoModelo.nombre                  AS AsientoModelo_nombre              	-- 2	.nombre                         		VARCHAR(50)
+				, EjercicioContable_3.id                AS EjercicioContable_3_id            	-- 3	.EjercicioContable.id           		VARCHAR(36)
+				, EjercicioContable_3.numero            AS EjercicioContable_3_numero        	-- 4	.EjercicioContable.numero       		INTEGER
+				, EjercicioContable_3.apertura          AS EjercicioContable_3_apertura      	-- 5	.EjercicioContable.apertura     		DATE
+				, EjercicioContable_3.cierre            AS EjercicioContable_3_cierre        	-- 6	.EjercicioContable.cierre       		DATE
+				, EjercicioContable_3.cerrado           AS EjercicioContable_3_cerrado       	-- 7	.EjercicioContable.cerrado      		BOOLEAN
+				, EjercicioContable_3.cerradoModulos    AS EjercicioContable_3_cerradoModulos	-- 8	.EjercicioContable.cerradoModulos		BOOLEAN
+				, EjercicioContable_3.comentario        AS EjercicioContable_3_comentario    	-- 9	.EjercicioContable.comentario   		VARCHAR(250)
+
+		FROM	massoftware.AsientoModelo
+			LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_3        ON AsientoModelo.ejercicioContable = EjercicioContable_3.id 	-- 3 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModelo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModelo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND ejercicioContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(ejercicioContableArg8)) > 0 THEN
+		ejercicioContableArg8 = REPLACE(ejercicioContableArg8, '''', '''''');
+		ejercicioContableArg8 = LOWER(TRIM(ejercicioContableArg8));
+		ejercicioContableArg8 = TRANSLATE(ejercicioContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ejercicioContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModelo.ejercicioContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoModelo_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModelo_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModelo_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModeloItem                                                                                      //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModeloItem
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItem (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItem (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) RETURNS SETOF massoftware.AsientoModeloItem AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModeloItem.id                AS AsientoModeloItem_id            	-- 0	.id           		VARCHAR(36)
+				, AsientoModeloItem.numero            AS AsientoModeloItem_numero        	-- 1	.numero       		INTEGER
+				, AsientoModeloItem.asientoModelo     AS AsientoModeloItem_asientoModelo 	-- 2	.asientoModelo		VARCHAR(36)	AsientoModelo.id
+				, AsientoModeloItem.cuentaContable    AS AsientoModeloItem_cuentaContable	-- 3	.cuentaContable		VARCHAR(36)	CuentaContable.id
+
+		FROM	massoftware.AsientoModeloItem
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModeloItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND asientoModeloArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoModeloArg5)) > 0 THEN
+		asientoModeloArg5 = REPLACE(asientoModeloArg5, '''', '''''');
+		asientoModeloArg5 = LOWER(TRIM(asientoModeloArg5));
+		asientoModeloArg5 = TRANSLATE(asientoModeloArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoModeloArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModeloItem.asientoModelo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItemById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItemById (idArg VARCHAR(36)) RETURNS SETOF massoftware.AsientoModeloItem AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModeloItem ( idArg , null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModeloItem ( null , null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloItemById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItem_1 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItem_1 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) RETURNS SETOF massoftware.t_AsientoModeloItem_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModeloItem.id                      AS AsientoModeloItem_id                 	-- 0	.id                                		VARCHAR(36)
+				, AsientoModeloItem.numero                  AS AsientoModeloItem_numero             	-- 1	.numero                            		INTEGER
+				, AsientoModelo_2.id                        AS AsientoModelo_2_id                   	-- 2	.AsientoModelo.id                  		VARCHAR(36)
+				, AsientoModelo_2.numero                    AS AsientoModelo_2_numero               	-- 3	.AsientoModelo.numero              		INTEGER
+				, AsientoModelo_2.nombre                    AS AsientoModelo_2_nombre               	-- 4	.AsientoModelo.nombre              		VARCHAR(50)
+				, AsientoModelo_2.ejercicioContable         AS AsientoModelo_2_ejercicioContable    	-- 5	.AsientoModelo.ejercicioContable   		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_6.id                       AS CuentaContable_6_id                  	-- 6	.CuentaContable.id                 		VARCHAR(36)
+				, CuentaContable_6.codigo                   AS CuentaContable_6_codigo              	-- 7	.CuentaContable.codigo             		VARCHAR(11)
+				, CuentaContable_6.nombre                   AS CuentaContable_6_nombre              	-- 8	.CuentaContable.nombre             		VARCHAR(50)
+				, CuentaContable_6.ejercicioContable        AS CuentaContable_6_ejercicioContable   	-- 9	.CuentaContable.ejercicioContable  		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_6.integra                  AS CuentaContable_6_integra             	-- 10	.CuentaContable.integra            		VARCHAR(16)
+				, CuentaContable_6.cuentaJerarquia          AS CuentaContable_6_cuentaJerarquia     	-- 11	.CuentaContable.cuentaJerarquia    		VARCHAR(16)
+				, CuentaContable_6.imputable                AS CuentaContable_6_imputable           	-- 12	.CuentaContable.imputable          		BOOLEAN
+				, CuentaContable_6.ajustaPorInflacion       AS CuentaContable_6_ajustaPorInflacion  	-- 13	.CuentaContable.ajustaPorInflacion 		BOOLEAN
+				, CuentaContable_6.cuentaContableEstado     AS CuentaContable_6_cuentaContableEstado	-- 14	.CuentaContable.cuentaContableEstado		VARCHAR(36)	CuentaContableEstado.id
+				, CuentaContable_6.cuentaConApropiacion     AS CuentaContable_6_cuentaConApropiacion	-- 15	.CuentaContable.cuentaConApropiacion		BOOLEAN
+				, CuentaContable_6.centroCostoContable      AS CuentaContable_6_centroCostoContable 	-- 16	.CuentaContable.centroCostoContable		VARCHAR(36)	CentroCostoContable.id
+				, CuentaContable_6.cuentaAgrupadora         AS CuentaContable_6_cuentaAgrupadora    	-- 17	.CuentaContable.cuentaAgrupadora   		VARCHAR(50)
+				, CuentaContable_6.porcentaje               AS CuentaContable_6_porcentaje          	-- 18	.CuentaContable.porcentaje         		DECIMAL(6,3)
+				, CuentaContable_6.puntoEquilibrio          AS CuentaContable_6_puntoEquilibrio     	-- 19	.CuentaContable.puntoEquilibrio    		VARCHAR(36)	PuntoEquilibrio.id
+				, CuentaContable_6.costoVenta               AS CuentaContable_6_costoVenta          	-- 20	.CuentaContable.costoVenta         		VARCHAR(36)	CostoVenta.id
+				, CuentaContable_6.seguridadPuerta          AS CuentaContable_6_seguridadPuerta     	-- 21	.CuentaContable.seguridadPuerta    		VARCHAR(36)	SeguridadPuerta.id
+
+		FROM	massoftware.AsientoModeloItem
+			LEFT JOIN massoftware.AsientoModelo AS AsientoModelo_2         ON AsientoModeloItem.asientoModelo = AsientoModelo_2.id 	-- 2 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_6        ON AsientoModeloItem.cuentaContable = CuentaContable_6.id 	-- 6 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModeloItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND asientoModeloArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoModeloArg5)) > 0 THEN
+		asientoModeloArg5 = REPLACE(asientoModeloArg5, '''', '''''');
+		asientoModeloArg5 = LOWER(TRIM(asientoModeloArg5));
+		asientoModeloArg5 = TRANSLATE(asientoModeloArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoModeloArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModeloItem.asientoModelo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItemById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItemById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoModeloItem_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModeloItem_1 ( idArg , null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModeloItem_1 ( null , null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloItemById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItem_2 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItem_2 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) RETURNS SETOF massoftware.t_AsientoModeloItem_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModeloItem.id                         AS AsientoModeloItem_id                    	-- 0	.id                                                 		VARCHAR(36)
+				, AsientoModeloItem.numero                     AS AsientoModeloItem_numero                	-- 1	.numero                                             		INTEGER
+				, AsientoModelo_2.id                           AS AsientoModelo_2_id                      	-- 2	.AsientoModelo.id                                   		VARCHAR(36)
+				, AsientoModelo_2.numero                       AS AsientoModelo_2_numero                  	-- 3	.AsientoModelo.numero                               		INTEGER
+				, AsientoModelo_2.nombre                       AS AsientoModelo_2_nombre                  	-- 4	.AsientoModelo.nombre                               		VARCHAR(50)
+				, EjercicioContable_5.id                       AS EjercicioContable_5_id                  	-- 5	.AsientoModelo.EjercicioContable.id                 		VARCHAR(36)
+				, EjercicioContable_5.numero                   AS EjercicioContable_5_numero              	-- 6	.AsientoModelo.EjercicioContable.numero             		INTEGER
+				, EjercicioContable_5.apertura                 AS EjercicioContable_5_apertura            	-- 7	.AsientoModelo.EjercicioContable.apertura           		DATE
+				, EjercicioContable_5.cierre                   AS EjercicioContable_5_cierre              	-- 8	.AsientoModelo.EjercicioContable.cierre             		DATE
+				, EjercicioContable_5.cerrado                  AS EjercicioContable_5_cerrado             	-- 9	.AsientoModelo.EjercicioContable.cerrado            		BOOLEAN
+				, EjercicioContable_5.cerradoModulos           AS EjercicioContable_5_cerradoModulos      	-- 10	.AsientoModelo.EjercicioContable.cerradoModulos     		BOOLEAN
+				, EjercicioContable_5.comentario               AS EjercicioContable_5_comentario          	-- 11	.AsientoModelo.EjercicioContable.comentario         		VARCHAR(250)
+				, CuentaContable_12.id                         AS CuentaContable_12_id                    	-- 12	.CuentaContable.id                                  		VARCHAR(36)
+				, CuentaContable_12.codigo                     AS CuentaContable_12_codigo                	-- 13	.CuentaContable.codigo                              		VARCHAR(11)
+				, CuentaContable_12.nombre                     AS CuentaContable_12_nombre                	-- 14	.CuentaContable.nombre                              		VARCHAR(50)
+				, EjercicioContable_15.id                      AS EjercicioContable_15_id                 	-- 15	.CuentaContable.EjercicioContable.id                		VARCHAR(36)
+				, EjercicioContable_15.numero                  AS EjercicioContable_15_numero             	-- 16	.CuentaContable.EjercicioContable.numero            		INTEGER
+				, EjercicioContable_15.apertura                AS EjercicioContable_15_apertura           	-- 17	.CuentaContable.EjercicioContable.apertura          		DATE
+				, EjercicioContable_15.cierre                  AS EjercicioContable_15_cierre             	-- 18	.CuentaContable.EjercicioContable.cierre            		DATE
+				, EjercicioContable_15.cerrado                 AS EjercicioContable_15_cerrado            	-- 19	.CuentaContable.EjercicioContable.cerrado           		BOOLEAN
+				, EjercicioContable_15.cerradoModulos          AS EjercicioContable_15_cerradoModulos     	-- 20	.CuentaContable.EjercicioContable.cerradoModulos    		BOOLEAN
+				, EjercicioContable_15.comentario              AS EjercicioContable_15_comentario         	-- 21	.CuentaContable.EjercicioContable.comentario        		VARCHAR(250)
+				, CuentaContable_12.integra                    AS CuentaContable_12_integra               	-- 22	.CuentaContable.integra                             		VARCHAR(16)
+				, CuentaContable_12.cuentaJerarquia            AS CuentaContable_12_cuentaJerarquia       	-- 23	.CuentaContable.cuentaJerarquia                     		VARCHAR(16)
+				, CuentaContable_12.imputable                  AS CuentaContable_12_imputable             	-- 24	.CuentaContable.imputable                           		BOOLEAN
+				, CuentaContable_12.ajustaPorInflacion         AS CuentaContable_12_ajustaPorInflacion    	-- 25	.CuentaContable.ajustaPorInflacion                  		BOOLEAN
+				, CuentaContableEstado_26.id                   AS CuentaContableEstado_26_id              	-- 26	.CuentaContable.CuentaContableEstado.id             		VARCHAR(36)
+				, CuentaContableEstado_26.numero               AS CuentaContableEstado_26_numero          	-- 27	.CuentaContable.CuentaContableEstado.numero         		INTEGER
+				, CuentaContableEstado_26.nombre               AS CuentaContableEstado_26_nombre          	-- 28	.CuentaContable.CuentaContableEstado.nombre         		VARCHAR(50)
+				, CuentaContable_12.cuentaConApropiacion       AS CuentaContable_12_cuentaConApropiacion  	-- 29	.CuentaContable.cuentaConApropiacion                		BOOLEAN
+				, CentroCostoContable_30.id                    AS CentroCostoContable_30_id               	-- 30	.CuentaContable.CentroCostoContable.id              		VARCHAR(36)
+				, CentroCostoContable_30.numero                AS CentroCostoContable_30_numero           	-- 31	.CuentaContable.CentroCostoContable.numero          		INTEGER
+				, CentroCostoContable_30.nombre                AS CentroCostoContable_30_nombre           	-- 32	.CuentaContable.CentroCostoContable.nombre          		VARCHAR(50)
+				, CentroCostoContable_30.abreviatura           AS CentroCostoContable_30_abreviatura      	-- 33	.CuentaContable.CentroCostoContable.abreviatura     		VARCHAR(5)
+				, CentroCostoContable_30.ejercicioContable     AS CentroCostoContable_30_ejercicioContable	-- 34	.CuentaContable.CentroCostoContable.ejercicioContable		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_12.cuentaAgrupadora           AS CuentaContable_12_cuentaAgrupadora      	-- 35	.CuentaContable.cuentaAgrupadora                    		VARCHAR(50)
+				, CuentaContable_12.porcentaje                 AS CuentaContable_12_porcentaje            	-- 36	.CuentaContable.porcentaje                          		DECIMAL(6,3)
+				, PuntoEquilibrio_37.id                        AS PuntoEquilibrio_37_id                   	-- 37	.CuentaContable.PuntoEquilibrio.id                  		VARCHAR(36)
+				, PuntoEquilibrio_37.numero                    AS PuntoEquilibrio_37_numero               	-- 38	.CuentaContable.PuntoEquilibrio.numero              		INTEGER
+				, PuntoEquilibrio_37.nombre                    AS PuntoEquilibrio_37_nombre               	-- 39	.CuentaContable.PuntoEquilibrio.nombre              		VARCHAR(50)
+				, PuntoEquilibrio_37.tipoPuntoEquilibrio       AS PuntoEquilibrio_37_tipoPuntoEquilibrio  	-- 40	.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio 		VARCHAR(36)	TipoPuntoEquilibrio.id
+				, PuntoEquilibrio_37.ejercicioContable         AS PuntoEquilibrio_37_ejercicioContable    	-- 41	.CuentaContable.PuntoEquilibrio.ejercicioContable   		VARCHAR(36)	EjercicioContable.id
+				, CostoVenta_42.id                             AS CostoVenta_42_id                        	-- 42	.CuentaContable.CostoVenta.id                       		VARCHAR(36)
+				, CostoVenta_42.numero                         AS CostoVenta_42_numero                    	-- 43	.CuentaContable.CostoVenta.numero                   		INTEGER
+				, CostoVenta_42.nombre                         AS CostoVenta_42_nombre                    	-- 44	.CuentaContable.CostoVenta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_45.id                        AS SeguridadPuerta_45_id                   	-- 45	.CuentaContable.SeguridadPuerta.id                  		VARCHAR(36)
+				, SeguridadPuerta_45.numero                    AS SeguridadPuerta_45_numero               	-- 46	.CuentaContable.SeguridadPuerta.numero              		INTEGER
+				, SeguridadPuerta_45.nombre                    AS SeguridadPuerta_45_nombre               	-- 47	.CuentaContable.SeguridadPuerta.nombre              		VARCHAR(50)
+				, SeguridadPuerta_45.equate                    AS SeguridadPuerta_45_equate               	-- 48	.CuentaContable.SeguridadPuerta.equate              		VARCHAR(30)
+				, SeguridadPuerta_45.seguridadModulo           AS SeguridadPuerta_45_seguridadModulo      	-- 49	.CuentaContable.SeguridadPuerta.seguridadModulo     		VARCHAR(36)	SeguridadModulo.id
+
+		FROM	massoftware.AsientoModeloItem
+			LEFT JOIN massoftware.AsientoModelo AS AsientoModelo_2                   ON AsientoModeloItem.asientoModelo = AsientoModelo_2.id 	-- 2 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_5              ON AsientoModelo_2.ejercicioContable = EjercicioContable_5.id 	-- 5 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_12                 ON AsientoModeloItem.cuentaContable = CuentaContable_12.id 	-- 12 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_15              ON CuentaContable_12.ejercicioContable = EjercicioContable_15.id 	-- 15 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_26           ON CuentaContable_12.cuentaContableEstado = CuentaContableEstado_26.id 	-- 26 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_30            ON CuentaContable_12.centroCostoContable = CentroCostoContable_30.id 	-- 30 LEFT LEVEL: 2
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_37                ON CuentaContable_12.puntoEquilibrio = PuntoEquilibrio_37.id 	-- 37 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_42                     ON CuentaContable_12.costoVenta = CostoVenta_42.id 	-- 42 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_45                ON CuentaContable_12.seguridadPuerta = SeguridadPuerta_45.id 	-- 45 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModeloItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND asientoModeloArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoModeloArg5)) > 0 THEN
+		asientoModeloArg5 = REPLACE(asientoModeloArg5, '''', '''''');
+		asientoModeloArg5 = LOWER(TRIM(asientoModeloArg5));
+		asientoModeloArg5 = TRANSLATE(asientoModeloArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoModeloArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModeloItem.asientoModelo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItemById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItemById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoModeloItem_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModeloItem_2 ( idArg , null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModeloItem_2 ( null , null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloItemById_2 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItem_3 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItem_3 (
+
+	  idArg0              VARCHAR(36)	-- 0
+	, orderByArg1         INTEGER    	-- 1
+	, orderByDescArg2     BOOLEAN    	-- 2
+	, limitArg3           BIGINT     	-- 3
+	, offSetArg4          BIGINT     	-- 4
+	, asientoModeloArg5   VARCHAR(36)	-- 5
+
+) RETURNS SETOF massoftware.t_AsientoModeloItem_3 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoModeloItem.id                       AS AsientoModeloItem_id                  	-- 0	.id                                                                		VARCHAR(36)
+				, AsientoModeloItem.numero                   AS AsientoModeloItem_numero              	-- 1	.numero                                                            		INTEGER
+				, AsientoModelo_2.id                         AS AsientoModelo_2_id                    	-- 2	.AsientoModelo.id                                                  		VARCHAR(36)
+				, AsientoModelo_2.numero                     AS AsientoModelo_2_numero                	-- 3	.AsientoModelo.numero                                              		INTEGER
+				, AsientoModelo_2.nombre                     AS AsientoModelo_2_nombre                	-- 4	.AsientoModelo.nombre                                              		VARCHAR(50)
+				, EjercicioContable_5.id                     AS EjercicioContable_5_id                	-- 5	.AsientoModelo.EjercicioContable.id                                		VARCHAR(36)
+				, EjercicioContable_5.numero                 AS EjercicioContable_5_numero            	-- 6	.AsientoModelo.EjercicioContable.numero                            		INTEGER
+				, EjercicioContable_5.apertura               AS EjercicioContable_5_apertura          	-- 7	.AsientoModelo.EjercicioContable.apertura                          		DATE
+				, EjercicioContable_5.cierre                 AS EjercicioContable_5_cierre            	-- 8	.AsientoModelo.EjercicioContable.cierre                            		DATE
+				, EjercicioContable_5.cerrado                AS EjercicioContable_5_cerrado           	-- 9	.AsientoModelo.EjercicioContable.cerrado                           		BOOLEAN
+				, EjercicioContable_5.cerradoModulos         AS EjercicioContable_5_cerradoModulos    	-- 10	.AsientoModelo.EjercicioContable.cerradoModulos                    		BOOLEAN
+				, EjercicioContable_5.comentario             AS EjercicioContable_5_comentario        	-- 11	.AsientoModelo.EjercicioContable.comentario                        		VARCHAR(250)
+				, CuentaContable_12.id                       AS CuentaContable_12_id                  	-- 12	.CuentaContable.id                                                 		VARCHAR(36)
+				, CuentaContable_12.codigo                   AS CuentaContable_12_codigo              	-- 13	.CuentaContable.codigo                                             		VARCHAR(11)
+				, CuentaContable_12.nombre                   AS CuentaContable_12_nombre              	-- 14	.CuentaContable.nombre                                             		VARCHAR(50)
+				, EjercicioContable_15.id                    AS EjercicioContable_15_id               	-- 15	.CuentaContable.EjercicioContable.id                               		VARCHAR(36)
+				, EjercicioContable_15.numero                AS EjercicioContable_15_numero           	-- 16	.CuentaContable.EjercicioContable.numero                           		INTEGER
+				, EjercicioContable_15.apertura              AS EjercicioContable_15_apertura         	-- 17	.CuentaContable.EjercicioContable.apertura                         		DATE
+				, EjercicioContable_15.cierre                AS EjercicioContable_15_cierre           	-- 18	.CuentaContable.EjercicioContable.cierre                           		DATE
+				, EjercicioContable_15.cerrado               AS EjercicioContable_15_cerrado          	-- 19	.CuentaContable.EjercicioContable.cerrado                          		BOOLEAN
+				, EjercicioContable_15.cerradoModulos        AS EjercicioContable_15_cerradoModulos   	-- 20	.CuentaContable.EjercicioContable.cerradoModulos                   		BOOLEAN
+				, EjercicioContable_15.comentario            AS EjercicioContable_15_comentario       	-- 21	.CuentaContable.EjercicioContable.comentario                       		VARCHAR(250)
+				, CuentaContable_12.integra                  AS CuentaContable_12_integra             	-- 22	.CuentaContable.integra                                            		VARCHAR(16)
+				, CuentaContable_12.cuentaJerarquia          AS CuentaContable_12_cuentaJerarquia     	-- 23	.CuentaContable.cuentaJerarquia                                    		VARCHAR(16)
+				, CuentaContable_12.imputable                AS CuentaContable_12_imputable           	-- 24	.CuentaContable.imputable                                          		BOOLEAN
+				, CuentaContable_12.ajustaPorInflacion       AS CuentaContable_12_ajustaPorInflacion  	-- 25	.CuentaContable.ajustaPorInflacion                                 		BOOLEAN
+				, CuentaContableEstado_26.id                 AS CuentaContableEstado_26_id            	-- 26	.CuentaContable.CuentaContableEstado.id                            		VARCHAR(36)
+				, CuentaContableEstado_26.numero             AS CuentaContableEstado_26_numero        	-- 27	.CuentaContable.CuentaContableEstado.numero                        		INTEGER
+				, CuentaContableEstado_26.nombre             AS CuentaContableEstado_26_nombre        	-- 28	.CuentaContable.CuentaContableEstado.nombre                        		VARCHAR(50)
+				, CuentaContable_12.cuentaConApropiacion     AS CuentaContable_12_cuentaConApropiacion	-- 29	.CuentaContable.cuentaConApropiacion                               		BOOLEAN
+				, CentroCostoContable_30.id                  AS CentroCostoContable_30_id             	-- 30	.CuentaContable.CentroCostoContable.id                             		VARCHAR(36)
+				, CentroCostoContable_30.numero              AS CentroCostoContable_30_numero         	-- 31	.CuentaContable.CentroCostoContable.numero                         		INTEGER
+				, CentroCostoContable_30.nombre              AS CentroCostoContable_30_nombre         	-- 32	.CuentaContable.CentroCostoContable.nombre                         		VARCHAR(50)
+				, CentroCostoContable_30.abreviatura         AS CentroCostoContable_30_abreviatura    	-- 33	.CuentaContable.CentroCostoContable.abreviatura                    		VARCHAR(5)
+				, EjercicioContable_34.id                    AS EjercicioContable_34_id               	-- 34	.CuentaContable.CentroCostoContable.EjercicioContable.id           		VARCHAR(36)
+				, EjercicioContable_34.numero                AS EjercicioContable_34_numero           	-- 35	.CuentaContable.CentroCostoContable.EjercicioContable.numero       		INTEGER
+				, EjercicioContable_34.apertura              AS EjercicioContable_34_apertura         	-- 36	.CuentaContable.CentroCostoContable.EjercicioContable.apertura     		DATE
+				, EjercicioContable_34.cierre                AS EjercicioContable_34_cierre           	-- 37	.CuentaContable.CentroCostoContable.EjercicioContable.cierre       		DATE
+				, EjercicioContable_34.cerrado               AS EjercicioContable_34_cerrado          	-- 38	.CuentaContable.CentroCostoContable.EjercicioContable.cerrado      		BOOLEAN
+				, EjercicioContable_34.cerradoModulos        AS EjercicioContable_34_cerradoModulos   	-- 39	.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos		BOOLEAN
+				, EjercicioContable_34.comentario            AS EjercicioContable_34_comentario       	-- 40	.CuentaContable.CentroCostoContable.EjercicioContable.comentario   		VARCHAR(250)
+				, CuentaContable_12.cuentaAgrupadora         AS CuentaContable_12_cuentaAgrupadora    	-- 41	.CuentaContable.cuentaAgrupadora                                   		VARCHAR(50)
+				, CuentaContable_12.porcentaje               AS CuentaContable_12_porcentaje          	-- 42	.CuentaContable.porcentaje                                         		DECIMAL(6,3)
+				, PuntoEquilibrio_43.id                      AS PuntoEquilibrio_43_id                 	-- 43	.CuentaContable.PuntoEquilibrio.id                                 		VARCHAR(36)
+				, PuntoEquilibrio_43.numero                  AS PuntoEquilibrio_43_numero             	-- 44	.CuentaContable.PuntoEquilibrio.numero                             		INTEGER
+				, PuntoEquilibrio_43.nombre                  AS PuntoEquilibrio_43_nombre             	-- 45	.CuentaContable.PuntoEquilibrio.nombre                             		VARCHAR(50)
+				, TipoPuntoEquilibrio_46.id                  AS TipoPuntoEquilibrio_46_id             	-- 46	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id             		VARCHAR(36)
+				, TipoPuntoEquilibrio_46.numero              AS TipoPuntoEquilibrio_46_numero         	-- 47	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero         		INTEGER
+				, TipoPuntoEquilibrio_46.nombre              AS TipoPuntoEquilibrio_46_nombre         	-- 48	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre         		VARCHAR(50)
+				, EjercicioContable_49.id                    AS EjercicioContable_49_id               	-- 49	.CuentaContable.PuntoEquilibrio.EjercicioContable.id               		VARCHAR(36)
+				, EjercicioContable_49.numero                AS EjercicioContable_49_numero           	-- 50	.CuentaContable.PuntoEquilibrio.EjercicioContable.numero           		INTEGER
+				, EjercicioContable_49.apertura              AS EjercicioContable_49_apertura         	-- 51	.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura         		DATE
+				, EjercicioContable_49.cierre                AS EjercicioContable_49_cierre           	-- 52	.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre           		DATE
+				, EjercicioContable_49.cerrado               AS EjercicioContable_49_cerrado          	-- 53	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado          		BOOLEAN
+				, EjercicioContable_49.cerradoModulos        AS EjercicioContable_49_cerradoModulos   	-- 54	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos   		BOOLEAN
+				, EjercicioContable_49.comentario            AS EjercicioContable_49_comentario       	-- 55	.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario       		VARCHAR(250)
+				, CostoVenta_56.id                           AS CostoVenta_56_id                      	-- 56	.CuentaContable.CostoVenta.id                                      		VARCHAR(36)
+				, CostoVenta_56.numero                       AS CostoVenta_56_numero                  	-- 57	.CuentaContable.CostoVenta.numero                                  		INTEGER
+				, CostoVenta_56.nombre                       AS CostoVenta_56_nombre                  	-- 58	.CuentaContable.CostoVenta.nombre                                  		VARCHAR(50)
+				, SeguridadPuerta_59.id                      AS SeguridadPuerta_59_id                 	-- 59	.CuentaContable.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_59.numero                  AS SeguridadPuerta_59_numero             	-- 60	.CuentaContable.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_59.nombre                  AS SeguridadPuerta_59_nombre             	-- 61	.CuentaContable.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_59.equate                  AS SeguridadPuerta_59_equate             	-- 62	.CuentaContable.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_63.id                      AS SeguridadModulo_63_id                 	-- 63	.CuentaContable.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_63.numero                  AS SeguridadModulo_63_numero             	-- 64	.CuentaContable.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_63.nombre                  AS SeguridadModulo_63_nombre             	-- 65	.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+
+		FROM	massoftware.AsientoModeloItem
+			LEFT JOIN massoftware.AsientoModelo AS AsientoModelo_2                     ON AsientoModeloItem.asientoModelo = AsientoModelo_2.id 	-- 2 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_5                ON AsientoModelo_2.ejercicioContable = EjercicioContable_5.id 	-- 5 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_12                   ON AsientoModeloItem.cuentaContable = CuentaContable_12.id 	-- 12 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_15                ON CuentaContable_12.ejercicioContable = EjercicioContable_15.id 	-- 15 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_26             ON CuentaContable_12.cuentaContableEstado = CuentaContableEstado_26.id 	-- 26 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_30              ON CuentaContable_12.centroCostoContable = CentroCostoContable_30.id 	-- 30 LEFT LEVEL: 2
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_34               ON CentroCostoContable_30.ejercicioContable = EjercicioContable_34.id 	-- 34 LEFT LEVEL: 3
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_43                  ON CuentaContable_12.puntoEquilibrio = PuntoEquilibrio_43.id 	-- 43 LEFT LEVEL: 2
+					LEFT JOIN massoftware.TipoPuntoEquilibrio AS TipoPuntoEquilibrio_46             ON PuntoEquilibrio_43.tipoPuntoEquilibrio = TipoPuntoEquilibrio_46.id 	-- 46 LEFT LEVEL: 3
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_49               ON PuntoEquilibrio_43.ejercicioContable = EjercicioContable_49.id 	-- 49 LEFT LEVEL: 3
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_56                       ON CuentaContable_12.costoVenta = CostoVenta_56.id 	-- 56 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_59                  ON CuentaContable_12.seguridadPuerta = SeguridadPuerta_59.id 	-- 59 LEFT LEVEL: 2
+					LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_63                 ON SeguridadPuerta_59.seguridadModulo = SeguridadModulo_63.id 	-- 63 LEFT LEVEL: 3
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoModeloItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND asientoModeloArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoModeloArg5)) > 0 THEN
+		asientoModeloArg5 = REPLACE(asientoModeloArg5, '''', '''''');
+		asientoModeloArg5 = LOWER(TRIM(asientoModeloArg5));
+		asientoModeloArg5 = TRANSLATE(asientoModeloArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoModeloArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoModeloItem.asientoModelo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoModeloItemById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoModeloItemById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoModeloItem_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoModeloItem_3 ( idArg , null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoModeloItem_3 ( null , null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoModeloItemById_3 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MinutaContable                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MinutaContable
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_MinutaContable (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MinutaContable (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.MinutaContable AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  MinutaContable.id        AS MinutaContable_id    	-- 0	.id   		VARCHAR(36)
+				, MinutaContable.numero    AS MinutaContable_numero	-- 1	.numero		INTEGER
+				, MinutaContable.nombre    AS MinutaContable_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.MinutaContable
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MinutaContable.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MinutaContable.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MinutaContable.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MinutaContable.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MinutaContableById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MinutaContableById (idArg VARCHAR(36)) RETURNS SETOF massoftware.MinutaContable AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MinutaContable ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MinutaContable ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MinutaContableById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContableModulo                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContableModulo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableModulo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.AsientoContableModulo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContableModulo.id        AS AsientoContableModulo_id    	-- 0	.id   		VARCHAR(36)
+				, AsientoContableModulo.numero    AS AsientoContableModulo_numero	-- 1	.numero		INTEGER
+				, AsientoContableModulo.nombre    AS AsientoContableModulo_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.AsientoContableModulo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableModulo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableModulo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableModulo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableModulo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableModuloById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableModuloById (idArg VARCHAR(36)) RETURNS SETOF massoftware.AsientoContableModulo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContableModulo ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContableModulo ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableModuloById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContable                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContable
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContable (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContable (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) RETURNS SETOF massoftware.AsientoContable AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContable.id                       AS AsientoContable_id                   	-- 0	.id                  		VARCHAR(36)
+				, AsientoContable.numero                   AS AsientoContable_numero               	-- 1	.numero              		INTEGER
+				, AsientoContable.fecha                    AS AsientoContable_fecha                	-- 2	.fecha               		DATE
+				, AsientoContable.detalle                  AS AsientoContable_detalle              	-- 3	.detalle             		VARCHAR(100)
+				, AsientoContable.ejercicioContable        AS AsientoContable_ejercicioContable    	-- 4	.ejercicioContable   		VARCHAR(36)	EjercicioContable.id
+				, AsientoContable.minutaContable           AS AsientoContable_minutaContable       	-- 5	.minutaContable      		VARCHAR(36)	MinutaContable.id
+				, AsientoContable.sucursal                 AS AsientoContable_sucursal             	-- 6	.sucursal            		VARCHAR(36)	Sucursal.id
+				, AsientoContable.asientoContableModulo    AS AsientoContable_asientoContableModulo	-- 7	.asientoContableModulo		VARCHAR(36)	AsientoContableModulo.id
+
+		FROM	massoftware.AsientoContable
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND fechaFromArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha >= ' || fechaFromArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND fechaToArg9 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha <= ' || fechaToArg9;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND ejercicioContableArg10 IS NOT NULL AND CHAR_LENGTH(TRIM(ejercicioContableArg10)) > 0 THEN
+		ejercicioContableArg10 = REPLACE(ejercicioContableArg10, '''', '''''');
+		ejercicioContableArg10 = LOWER(TRIM(ejercicioContableArg10));
+		ejercicioContableArg10 = TRANSLATE(ejercicioContableArg10,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ejercicioContableArg10, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.ejercicioContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND minutaContableArg11 IS NOT NULL AND CHAR_LENGTH(TRIM(minutaContableArg11)) > 0 THEN
+		minutaContableArg11 = REPLACE(minutaContableArg11, '''', '''''');
+		minutaContableArg11 = LOWER(TRIM(minutaContableArg11));
+		minutaContableArg11 = TRANSLATE(minutaContableArg11,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(minutaContableArg11, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.minutaContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableModuloArg12 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableModuloArg12)) > 0 THEN
+		asientoContableModuloArg12 = REPLACE(asientoContableModuloArg12, '''', '''''');
+		asientoContableModuloArg12 = LOWER(TRIM(asientoContableModuloArg12));
+		asientoContableModuloArg12 = TRANSLATE(asientoContableModuloArg12,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableModuloArg12, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.asientoContableModulo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg13 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg13)) > 0 THEN
+		sucursalArg13 = REPLACE(sucursalArg13, '''', '''''');
+		sucursalArg13 = LOWER(TRIM(sucursalArg13));
+		sucursalArg13 = TRANSLATE(sucursalArg13,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg13, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableById (idArg VARCHAR(36)) RETURNS SETOF massoftware.AsientoContable AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContable ( idArg , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContable ( null , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContable_1 (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContable_1 (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) RETURNS SETOF massoftware.t_AsientoContable_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContable.id                                AS AsientoContable_id                           	-- 0	.id                                       		VARCHAR(36)
+				, AsientoContable.numero                            AS AsientoContable_numero                       	-- 1	.numero                                   		INTEGER
+				, AsientoContable.fecha                             AS AsientoContable_fecha                        	-- 2	.fecha                                    		DATE
+				, AsientoContable.detalle                           AS AsientoContable_detalle                      	-- 3	.detalle                                  		VARCHAR(100)
+				, EjercicioContable_4.id                            AS EjercicioContable_4_id                       	-- 4	.EjercicioContable.id                     		VARCHAR(36)
+				, EjercicioContable_4.numero                        AS EjercicioContable_4_numero                   	-- 5	.EjercicioContable.numero                 		INTEGER
+				, EjercicioContable_4.apertura                      AS EjercicioContable_4_apertura                 	-- 6	.EjercicioContable.apertura               		DATE
+				, EjercicioContable_4.cierre                        AS EjercicioContable_4_cierre                   	-- 7	.EjercicioContable.cierre                 		DATE
+				, EjercicioContable_4.cerrado                       AS EjercicioContable_4_cerrado                  	-- 8	.EjercicioContable.cerrado                		BOOLEAN
+				, EjercicioContable_4.cerradoModulos                AS EjercicioContable_4_cerradoModulos           	-- 9	.EjercicioContable.cerradoModulos         		BOOLEAN
+				, EjercicioContable_4.comentario                    AS EjercicioContable_4_comentario               	-- 10	.EjercicioContable.comentario             		VARCHAR(250)
+				, MinutaContable_11.id                              AS MinutaContable_11_id                         	-- 11	.MinutaContable.id                        		VARCHAR(36)
+				, MinutaContable_11.numero                          AS MinutaContable_11_numero                     	-- 12	.MinutaContable.numero                    		INTEGER
+				, MinutaContable_11.nombre                          AS MinutaContable_11_nombre                     	-- 13	.MinutaContable.nombre                    		VARCHAR(50)
+				, Sucursal_14.id                                    AS Sucursal_14_id                               	-- 14	.Sucursal.id                              		VARCHAR(36)
+				, Sucursal_14.numero                                AS Sucursal_14_numero                           	-- 15	.Sucursal.numero                          		INTEGER
+				, Sucursal_14.nombre                                AS Sucursal_14_nombre                           	-- 16	.Sucursal.nombre                          		VARCHAR(50)
+				, Sucursal_14.abreviatura                           AS Sucursal_14_abreviatura                      	-- 17	.Sucursal.abreviatura                     		VARCHAR(5)
+				, Sucursal_14.tipoSucursal                          AS Sucursal_14_tipoSucursal                     	-- 18	.Sucursal.tipoSucursal                    		VARCHAR(36)	TipoSucursal.id
+				, Sucursal_14.cuentaClientesDesde                   AS Sucursal_14_cuentaClientesDesde              	-- 19	.Sucursal.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal_14.cuentaClientesHasta                   AS Sucursal_14_cuentaClientesHasta              	-- 20	.Sucursal.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal_14.cantidadCaracteresClientes            AS Sucursal_14_cantidadCaracteresClientes       	-- 21	.Sucursal.cantidadCaracteresClientes      		INTEGER
+				, Sucursal_14.identificacionNumericaClientes        AS Sucursal_14_identificacionNumericaClientes   	-- 22	.Sucursal.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal_14.permiteCambiarClientes                AS Sucursal_14_permiteCambiarClientes           	-- 23	.Sucursal.permiteCambiarClientes          		BOOLEAN
+				, Sucursal_14.cuentaProveedoresDesde                AS Sucursal_14_cuentaProveedoresDesde           	-- 24	.Sucursal.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal_14.cuentaProveedoresHasta                AS Sucursal_14_cuentaProveedoresHasta           	-- 25	.Sucursal.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal_14.cantidadCaracteresProveedores         AS Sucursal_14_cantidadCaracteresProveedores    	-- 26	.Sucursal.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal_14.identificacionNumericaProveedores     AS Sucursal_14_identificacionNumericaProveedores	-- 27	.Sucursal.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal_14.permiteCambiarProveedores             AS Sucursal_14_permiteCambiarProveedores        	-- 28	.Sucursal.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal_14.clientesOcacionalesDesde              AS Sucursal_14_clientesOcacionalesDesde         	-- 29	.Sucursal.clientesOcacionalesDesde        		INTEGER
+				, Sucursal_14.clientesOcacionalesHasta              AS Sucursal_14_clientesOcacionalesHasta         	-- 30	.Sucursal.clientesOcacionalesHasta        		INTEGER
+				, Sucursal_14.numeroCobranzaDesde                   AS Sucursal_14_numeroCobranzaDesde              	-- 31	.Sucursal.numeroCobranzaDesde             		INTEGER
+				, Sucursal_14.numeroCobranzaHasta                   AS Sucursal_14_numeroCobranzaHasta              	-- 32	.Sucursal.numeroCobranzaHasta             		INTEGER
+				, AsientoContableModulo_33.id                       AS AsientoContableModulo_33_id                  	-- 33	.AsientoContableModulo.id                 		VARCHAR(36)
+				, AsientoContableModulo_33.numero                   AS AsientoContableModulo_33_numero              	-- 34	.AsientoContableModulo.numero             		INTEGER
+				, AsientoContableModulo_33.nombre                   AS AsientoContableModulo_33_nombre              	-- 35	.AsientoContableModulo.nombre             		VARCHAR(50)
+
+		FROM	massoftware.AsientoContable
+			LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_4             ON AsientoContable.ejercicioContable = EjercicioContable_4.id 	-- 4 LEFT LEVEL: 1
+			LEFT JOIN massoftware.MinutaContable AS MinutaContable_11               ON AsientoContable.minutaContable = MinutaContable_11.id 	-- 11 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Sucursal AS Sucursal_14                     ON AsientoContable.sucursal = Sucursal_14.id 	-- 14 LEFT LEVEL: 1
+			LEFT JOIN massoftware.AsientoContableModulo AS AsientoContableModulo_33        ON AsientoContable.asientoContableModulo = AsientoContableModulo_33.id 	-- 33 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND fechaFromArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha >= ' || fechaFromArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND fechaToArg9 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha <= ' || fechaToArg9;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND ejercicioContableArg10 IS NOT NULL AND CHAR_LENGTH(TRIM(ejercicioContableArg10)) > 0 THEN
+		ejercicioContableArg10 = REPLACE(ejercicioContableArg10, '''', '''''');
+		ejercicioContableArg10 = LOWER(TRIM(ejercicioContableArg10));
+		ejercicioContableArg10 = TRANSLATE(ejercicioContableArg10,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ejercicioContableArg10, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.ejercicioContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND minutaContableArg11 IS NOT NULL AND CHAR_LENGTH(TRIM(minutaContableArg11)) > 0 THEN
+		minutaContableArg11 = REPLACE(minutaContableArg11, '''', '''''');
+		minutaContableArg11 = LOWER(TRIM(minutaContableArg11));
+		minutaContableArg11 = TRANSLATE(minutaContableArg11,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(minutaContableArg11, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.minutaContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableModuloArg12 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableModuloArg12)) > 0 THEN
+		asientoContableModuloArg12 = REPLACE(asientoContableModuloArg12, '''', '''''');
+		asientoContableModuloArg12 = LOWER(TRIM(asientoContableModuloArg12));
+		asientoContableModuloArg12 = TRANSLATE(asientoContableModuloArg12,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableModuloArg12, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.asientoContableModulo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg13 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg13)) > 0 THEN
+		sucursalArg13 = REPLACE(sucursalArg13, '''', '''''');
+		sucursalArg13 = LOWER(TRIM(sucursalArg13));
+		sucursalArg13 = TRANSLATE(sucursalArg13,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg13, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoContable_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContable_1 ( idArg , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContable_1 ( null , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContable_2 (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContable_2 (
+
+	  idArg0                       VARCHAR(36) 	-- 0
+	, orderByArg1                  INTEGER     	-- 1
+	, orderByDescArg2              BOOLEAN     	-- 2
+	, limitArg3                    BIGINT      	-- 3
+	, offSetArg4                   BIGINT      	-- 4
+	, numeroFromArg5               INTEGER     	-- 5
+	, numeroToArg6                 INTEGER     	-- 6
+	, detalleArg7                  VARCHAR(100)	-- 7
+	, fechaFromArg8                DATE        	-- 8
+	, fechaToArg9                  DATE        	-- 9
+	, ejercicioContableArg10       VARCHAR(36) 	-- 10
+	, minutaContableArg11          VARCHAR(36) 	-- 11
+	, asientoContableModuloArg12   VARCHAR(36) 	-- 12
+	, sucursalArg13                VARCHAR(36) 	-- 13
+
+) RETURNS SETOF massoftware.t_AsientoContable_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContable.id                                AS AsientoContable_id                           	-- 0	.id                                       		VARCHAR(36)
+				, AsientoContable.numero                            AS AsientoContable_numero                       	-- 1	.numero                                   		INTEGER
+				, AsientoContable.fecha                             AS AsientoContable_fecha                        	-- 2	.fecha                                    		DATE
+				, AsientoContable.detalle                           AS AsientoContable_detalle                      	-- 3	.detalle                                  		VARCHAR(100)
+				, EjercicioContable_4.id                            AS EjercicioContable_4_id                       	-- 4	.EjercicioContable.id                     		VARCHAR(36)
+				, EjercicioContable_4.numero                        AS EjercicioContable_4_numero                   	-- 5	.EjercicioContable.numero                 		INTEGER
+				, EjercicioContable_4.apertura                      AS EjercicioContable_4_apertura                 	-- 6	.EjercicioContable.apertura               		DATE
+				, EjercicioContable_4.cierre                        AS EjercicioContable_4_cierre                   	-- 7	.EjercicioContable.cierre                 		DATE
+				, EjercicioContable_4.cerrado                       AS EjercicioContable_4_cerrado                  	-- 8	.EjercicioContable.cerrado                		BOOLEAN
+				, EjercicioContable_4.cerradoModulos                AS EjercicioContable_4_cerradoModulos           	-- 9	.EjercicioContable.cerradoModulos         		BOOLEAN
+				, EjercicioContable_4.comentario                    AS EjercicioContable_4_comentario               	-- 10	.EjercicioContable.comentario             		VARCHAR(250)
+				, MinutaContable_11.id                              AS MinutaContable_11_id                         	-- 11	.MinutaContable.id                        		VARCHAR(36)
+				, MinutaContable_11.numero                          AS MinutaContable_11_numero                     	-- 12	.MinutaContable.numero                    		INTEGER
+				, MinutaContable_11.nombre                          AS MinutaContable_11_nombre                     	-- 13	.MinutaContable.nombre                    		VARCHAR(50)
+				, Sucursal_14.id                                    AS Sucursal_14_id                               	-- 14	.Sucursal.id                              		VARCHAR(36)
+				, Sucursal_14.numero                                AS Sucursal_14_numero                           	-- 15	.Sucursal.numero                          		INTEGER
+				, Sucursal_14.nombre                                AS Sucursal_14_nombre                           	-- 16	.Sucursal.nombre                          		VARCHAR(50)
+				, Sucursal_14.abreviatura                           AS Sucursal_14_abreviatura                      	-- 17	.Sucursal.abreviatura                     		VARCHAR(5)
+				, TipoSucursal_18.id                                AS TipoSucursal_18_id                           	-- 18	.Sucursal.TipoSucursal.id                 		VARCHAR(36)
+				, TipoSucursal_18.numero                            AS TipoSucursal_18_numero                       	-- 19	.Sucursal.TipoSucursal.numero             		INTEGER
+				, TipoSucursal_18.nombre                            AS TipoSucursal_18_nombre                       	-- 20	.Sucursal.TipoSucursal.nombre             		VARCHAR(50)
+				, Sucursal_14.cuentaClientesDesde                   AS Sucursal_14_cuentaClientesDesde              	-- 21	.Sucursal.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal_14.cuentaClientesHasta                   AS Sucursal_14_cuentaClientesHasta              	-- 22	.Sucursal.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal_14.cantidadCaracteresClientes            AS Sucursal_14_cantidadCaracteresClientes       	-- 23	.Sucursal.cantidadCaracteresClientes      		INTEGER
+				, Sucursal_14.identificacionNumericaClientes        AS Sucursal_14_identificacionNumericaClientes   	-- 24	.Sucursal.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal_14.permiteCambiarClientes                AS Sucursal_14_permiteCambiarClientes           	-- 25	.Sucursal.permiteCambiarClientes          		BOOLEAN
+				, Sucursal_14.cuentaProveedoresDesde                AS Sucursal_14_cuentaProveedoresDesde           	-- 26	.Sucursal.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal_14.cuentaProveedoresHasta                AS Sucursal_14_cuentaProveedoresHasta           	-- 27	.Sucursal.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal_14.cantidadCaracteresProveedores         AS Sucursal_14_cantidadCaracteresProveedores    	-- 28	.Sucursal.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal_14.identificacionNumericaProveedores     AS Sucursal_14_identificacionNumericaProveedores	-- 29	.Sucursal.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal_14.permiteCambiarProveedores             AS Sucursal_14_permiteCambiarProveedores        	-- 30	.Sucursal.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal_14.clientesOcacionalesDesde              AS Sucursal_14_clientesOcacionalesDesde         	-- 31	.Sucursal.clientesOcacionalesDesde        		INTEGER
+				, Sucursal_14.clientesOcacionalesHasta              AS Sucursal_14_clientesOcacionalesHasta         	-- 32	.Sucursal.clientesOcacionalesHasta        		INTEGER
+				, Sucursal_14.numeroCobranzaDesde                   AS Sucursal_14_numeroCobranzaDesde              	-- 33	.Sucursal.numeroCobranzaDesde             		INTEGER
+				, Sucursal_14.numeroCobranzaHasta                   AS Sucursal_14_numeroCobranzaHasta              	-- 34	.Sucursal.numeroCobranzaHasta             		INTEGER
+				, AsientoContableModulo_35.id                       AS AsientoContableModulo_35_id                  	-- 35	.AsientoContableModulo.id                 		VARCHAR(36)
+				, AsientoContableModulo_35.numero                   AS AsientoContableModulo_35_numero              	-- 36	.AsientoContableModulo.numero             		INTEGER
+				, AsientoContableModulo_35.nombre                   AS AsientoContableModulo_35_nombre              	-- 37	.AsientoContableModulo.nombre             		VARCHAR(50)
+
+		FROM	massoftware.AsientoContable
+			LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_4             ON AsientoContable.ejercicioContable = EjercicioContable_4.id 	-- 4 LEFT LEVEL: 1
+			LEFT JOIN massoftware.MinutaContable AS MinutaContable_11               ON AsientoContable.minutaContable = MinutaContable_11.id 	-- 11 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Sucursal AS Sucursal_14                     ON AsientoContable.sucursal = Sucursal_14.id 	-- 14 LEFT LEVEL: 1
+				LEFT JOIN massoftware.TipoSucursal AS TipoSucursal_18                 ON Sucursal_14.tipoSucursal = TipoSucursal_18.id 	-- 18 LEFT LEVEL: 2
+			LEFT JOIN massoftware.AsientoContableModulo AS AsientoContableModulo_35        ON AsientoContable.asientoContableModulo = AsientoContableModulo_35.id 	-- 35 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND fechaFromArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha >= ' || fechaFromArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND fechaToArg9 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContable.fecha <= ' || fechaToArg9;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND ejercicioContableArg10 IS NOT NULL AND CHAR_LENGTH(TRIM(ejercicioContableArg10)) > 0 THEN
+		ejercicioContableArg10 = REPLACE(ejercicioContableArg10, '''', '''''');
+		ejercicioContableArg10 = LOWER(TRIM(ejercicioContableArg10));
+		ejercicioContableArg10 = TRANSLATE(ejercicioContableArg10,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(ejercicioContableArg10, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.ejercicioContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND minutaContableArg11 IS NOT NULL AND CHAR_LENGTH(TRIM(minutaContableArg11)) > 0 THEN
+		minutaContableArg11 = REPLACE(minutaContableArg11, '''', '''''');
+		minutaContableArg11 = LOWER(TRIM(minutaContableArg11));
+		minutaContableArg11 = TRANSLATE(minutaContableArg11,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(minutaContableArg11, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.minutaContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableModuloArg12 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableModuloArg12)) > 0 THEN
+		asientoContableModuloArg12 = REPLACE(asientoContableModuloArg12, '''', '''''');
+		asientoContableModuloArg12 = LOWER(TRIM(asientoContableModuloArg12));
+		asientoContableModuloArg12 = TRANSLATE(asientoContableModuloArg12,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableModuloArg12, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.asientoContableModulo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND sucursalArg13 IS NOT NULL AND CHAR_LENGTH(TRIM(sucursalArg13)) > 0 THEN
+		sucursalArg13 = REPLACE(sucursalArg13, '''', '''''');
+		sucursalArg13 = LOWER(TRIM(sucursalArg13));
+		sucursalArg13 = TRANSLATE(sucursalArg13,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(sucursalArg13, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContable.sucursal),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoContable_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContable_2 ( idArg , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContable_2 ( null , null, null, null, null, null, null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableById_2 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContableItem                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContableItem
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItem (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItem (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) RETURNS SETOF massoftware.AsientoContableItem AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContableItem.id                 AS AsientoContableItem_id             	-- 0	.id            		VARCHAR(36)
+				, AsientoContableItem.numero             AS AsientoContableItem_numero         	-- 1	.numero        		INTEGER
+				, AsientoContableItem.fecha              AS AsientoContableItem_fecha          	-- 2	.fecha         		DATE
+				, AsientoContableItem.detalle            AS AsientoContableItem_detalle        	-- 3	.detalle       		VARCHAR(100)
+				, AsientoContableItem.asientoContable    AS AsientoContableItem_asientoContable	-- 4	.asientoContable		VARCHAR(36)	AsientoContable.id
+				, AsientoContableItem.cuentaContable     AS AsientoContableItem_cuentaContable 	-- 5	.cuentaContable		VARCHAR(36)	CuentaContable.id
+				, AsientoContableItem.debe               AS AsientoContableItem_debe           	-- 6	.debe          		DECIMAL(13,5)
+				, AsientoContableItem.haber              AS AsientoContableItem_haber          	-- 7	.haber         		DECIMAL(13,5)
+
+		FROM	massoftware.AsientoContableItem
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableArg8)) > 0 THEN
+		asientoContableArg8 = REPLACE(asientoContableArg8, '''', '''''');
+		asientoContableArg8 = LOWER(TRIM(asientoContableArg8));
+		asientoContableArg8 = TRANSLATE(asientoContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.asientoContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItemById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItemById (idArg VARCHAR(36)) RETURNS SETOF massoftware.AsientoContableItem AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContableItem ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContableItem ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableItemById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItem_1 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItem_1 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) RETURNS SETOF massoftware.t_AsientoContableItem_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContableItem.id                      AS AsientoContableItem_id                 	-- 0	.id                                  		VARCHAR(36)
+				, AsientoContableItem.numero                  AS AsientoContableItem_numero             	-- 1	.numero                              		INTEGER
+				, AsientoContableItem.fecha                   AS AsientoContableItem_fecha              	-- 2	.fecha                               		DATE
+				, AsientoContableItem.detalle                 AS AsientoContableItem_detalle            	-- 3	.detalle                             		VARCHAR(100)
+				, AsientoContable_4.id                        AS AsientoContable_4_id                   	-- 4	.AsientoContable.id                  		VARCHAR(36)
+				, AsientoContable_4.numero                    AS AsientoContable_4_numero               	-- 5	.AsientoContable.numero              		INTEGER
+				, AsientoContable_4.fecha                     AS AsientoContable_4_fecha                	-- 6	.AsientoContable.fecha               		DATE
+				, AsientoContable_4.detalle                   AS AsientoContable_4_detalle              	-- 7	.AsientoContable.detalle             		VARCHAR(100)
+				, AsientoContable_4.ejercicioContable         AS AsientoContable_4_ejercicioContable    	-- 8	.AsientoContable.ejercicioContable   		VARCHAR(36)	EjercicioContable.id
+				, AsientoContable_4.minutaContable            AS AsientoContable_4_minutaContable       	-- 9	.AsientoContable.minutaContable      		VARCHAR(36)	MinutaContable.id
+				, AsientoContable_4.sucursal                  AS AsientoContable_4_sucursal             	-- 10	.AsientoContable.sucursal            		VARCHAR(36)	Sucursal.id
+				, AsientoContable_4.asientoContableModulo     AS AsientoContable_4_asientoContableModulo	-- 11	.AsientoContable.asientoContableModulo		VARCHAR(36)	AsientoContableModulo.id
+				, CuentaContable_12.id                        AS CuentaContable_12_id                   	-- 12	.CuentaContable.id                   		VARCHAR(36)
+				, CuentaContable_12.codigo                    AS CuentaContable_12_codigo               	-- 13	.CuentaContable.codigo               		VARCHAR(11)
+				, CuentaContable_12.nombre                    AS CuentaContable_12_nombre               	-- 14	.CuentaContable.nombre               		VARCHAR(50)
+				, CuentaContable_12.ejercicioContable         AS CuentaContable_12_ejercicioContable    	-- 15	.CuentaContable.ejercicioContable    		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_12.integra                   AS CuentaContable_12_integra              	-- 16	.CuentaContable.integra              		VARCHAR(16)
+				, CuentaContable_12.cuentaJerarquia           AS CuentaContable_12_cuentaJerarquia      	-- 17	.CuentaContable.cuentaJerarquia      		VARCHAR(16)
+				, CuentaContable_12.imputable                 AS CuentaContable_12_imputable            	-- 18	.CuentaContable.imputable            		BOOLEAN
+				, CuentaContable_12.ajustaPorInflacion        AS CuentaContable_12_ajustaPorInflacion   	-- 19	.CuentaContable.ajustaPorInflacion   		BOOLEAN
+				, CuentaContable_12.cuentaContableEstado      AS CuentaContable_12_cuentaContableEstado 	-- 20	.CuentaContable.cuentaContableEstado 		VARCHAR(36)	CuentaContableEstado.id
+				, CuentaContable_12.cuentaConApropiacion      AS CuentaContable_12_cuentaConApropiacion 	-- 21	.CuentaContable.cuentaConApropiacion 		BOOLEAN
+				, CuentaContable_12.centroCostoContable       AS CuentaContable_12_centroCostoContable  	-- 22	.CuentaContable.centroCostoContable  		VARCHAR(36)	CentroCostoContable.id
+				, CuentaContable_12.cuentaAgrupadora          AS CuentaContable_12_cuentaAgrupadora     	-- 23	.CuentaContable.cuentaAgrupadora     		VARCHAR(50)
+				, CuentaContable_12.porcentaje                AS CuentaContable_12_porcentaje           	-- 24	.CuentaContable.porcentaje           		DECIMAL(6,3)
+				, CuentaContable_12.puntoEquilibrio           AS CuentaContable_12_puntoEquilibrio      	-- 25	.CuentaContable.puntoEquilibrio      		VARCHAR(36)	PuntoEquilibrio.id
+				, CuentaContable_12.costoVenta                AS CuentaContable_12_costoVenta           	-- 26	.CuentaContable.costoVenta           		VARCHAR(36)	CostoVenta.id
+				, CuentaContable_12.seguridadPuerta           AS CuentaContable_12_seguridadPuerta      	-- 27	.CuentaContable.seguridadPuerta      		VARCHAR(36)	SeguridadPuerta.id
+				, AsientoContableItem.debe                    AS AsientoContableItem_debe               	-- 28	.debe                                		DECIMAL(13,5)
+				, AsientoContableItem.haber                   AS AsientoContableItem_haber              	-- 29	.haber                               		DECIMAL(13,5)
+
+		FROM	massoftware.AsientoContableItem
+			LEFT JOIN massoftware.AsientoContable AS AsientoContable_4        ON AsientoContableItem.asientoContable = AsientoContable_4.id 	-- 4 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_12         ON AsientoContableItem.cuentaContable = CuentaContable_12.id 	-- 12 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableArg8)) > 0 THEN
+		asientoContableArg8 = REPLACE(asientoContableArg8, '''', '''''');
+		asientoContableArg8 = LOWER(TRIM(asientoContableArg8));
+		asientoContableArg8 = TRANSLATE(asientoContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.asientoContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItemById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItemById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoContableItem_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContableItem_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContableItem_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableItemById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItem_2 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItem_2 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) RETURNS SETOF massoftware.t_AsientoContableItem_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContableItem.id                            AS AsientoContableItem_id                       	-- 0	.id                                                       		VARCHAR(36)
+				, AsientoContableItem.numero                        AS AsientoContableItem_numero                   	-- 1	.numero                                                   		INTEGER
+				, AsientoContableItem.fecha                         AS AsientoContableItem_fecha                    	-- 2	.fecha                                                    		DATE
+				, AsientoContableItem.detalle                       AS AsientoContableItem_detalle                  	-- 3	.detalle                                                  		VARCHAR(100)
+				, AsientoContable_4.id                              AS AsientoContable_4_id                         	-- 4	.AsientoContable.id                                       		VARCHAR(36)
+				, AsientoContable_4.numero                          AS AsientoContable_4_numero                     	-- 5	.AsientoContable.numero                                   		INTEGER
+				, AsientoContable_4.fecha                           AS AsientoContable_4_fecha                      	-- 6	.AsientoContable.fecha                                    		DATE
+				, AsientoContable_4.detalle                         AS AsientoContable_4_detalle                    	-- 7	.AsientoContable.detalle                                  		VARCHAR(100)
+				, EjercicioContable_8.id                            AS EjercicioContable_8_id                       	-- 8	.AsientoContable.EjercicioContable.id                     		VARCHAR(36)
+				, EjercicioContable_8.numero                        AS EjercicioContable_8_numero                   	-- 9	.AsientoContable.EjercicioContable.numero                 		INTEGER
+				, EjercicioContable_8.apertura                      AS EjercicioContable_8_apertura                 	-- 10	.AsientoContable.EjercicioContable.apertura               		DATE
+				, EjercicioContable_8.cierre                        AS EjercicioContable_8_cierre                   	-- 11	.AsientoContable.EjercicioContable.cierre                 		DATE
+				, EjercicioContable_8.cerrado                       AS EjercicioContable_8_cerrado                  	-- 12	.AsientoContable.EjercicioContable.cerrado                		BOOLEAN
+				, EjercicioContable_8.cerradoModulos                AS EjercicioContable_8_cerradoModulos           	-- 13	.AsientoContable.EjercicioContable.cerradoModulos         		BOOLEAN
+				, EjercicioContable_8.comentario                    AS EjercicioContable_8_comentario               	-- 14	.AsientoContable.EjercicioContable.comentario             		VARCHAR(250)
+				, MinutaContable_15.id                              AS MinutaContable_15_id                         	-- 15	.AsientoContable.MinutaContable.id                        		VARCHAR(36)
+				, MinutaContable_15.numero                          AS MinutaContable_15_numero                     	-- 16	.AsientoContable.MinutaContable.numero                    		INTEGER
+				, MinutaContable_15.nombre                          AS MinutaContable_15_nombre                     	-- 17	.AsientoContable.MinutaContable.nombre                    		VARCHAR(50)
+				, Sucursal_18.id                                    AS Sucursal_18_id                               	-- 18	.AsientoContable.Sucursal.id                              		VARCHAR(36)
+				, Sucursal_18.numero                                AS Sucursal_18_numero                           	-- 19	.AsientoContable.Sucursal.numero                          		INTEGER
+				, Sucursal_18.nombre                                AS Sucursal_18_nombre                           	-- 20	.AsientoContable.Sucursal.nombre                          		VARCHAR(50)
+				, Sucursal_18.abreviatura                           AS Sucursal_18_abreviatura                      	-- 21	.AsientoContable.Sucursal.abreviatura                     		VARCHAR(5)
+				, Sucursal_18.tipoSucursal                          AS Sucursal_18_tipoSucursal                     	-- 22	.AsientoContable.Sucursal.tipoSucursal                    		VARCHAR(36)	TipoSucursal.id
+				, Sucursal_18.cuentaClientesDesde                   AS Sucursal_18_cuentaClientesDesde              	-- 23	.AsientoContable.Sucursal.cuentaClientesDesde             		VARCHAR(7)
+				, Sucursal_18.cuentaClientesHasta                   AS Sucursal_18_cuentaClientesHasta              	-- 24	.AsientoContable.Sucursal.cuentaClientesHasta             		VARCHAR(7)
+				, Sucursal_18.cantidadCaracteresClientes            AS Sucursal_18_cantidadCaracteresClientes       	-- 25	.AsientoContable.Sucursal.cantidadCaracteresClientes      		INTEGER
+				, Sucursal_18.identificacionNumericaClientes        AS Sucursal_18_identificacionNumericaClientes   	-- 26	.AsientoContable.Sucursal.identificacionNumericaClientes  		BOOLEAN
+				, Sucursal_18.permiteCambiarClientes                AS Sucursal_18_permiteCambiarClientes           	-- 27	.AsientoContable.Sucursal.permiteCambiarClientes          		BOOLEAN
+				, Sucursal_18.cuentaProveedoresDesde                AS Sucursal_18_cuentaProveedoresDesde           	-- 28	.AsientoContable.Sucursal.cuentaProveedoresDesde          		VARCHAR(6)
+				, Sucursal_18.cuentaProveedoresHasta                AS Sucursal_18_cuentaProveedoresHasta           	-- 29	.AsientoContable.Sucursal.cuentaProveedoresHasta          		VARCHAR(6)
+				, Sucursal_18.cantidadCaracteresProveedores         AS Sucursal_18_cantidadCaracteresProveedores    	-- 30	.AsientoContable.Sucursal.cantidadCaracteresProveedores   		INTEGER
+				, Sucursal_18.identificacionNumericaProveedores     AS Sucursal_18_identificacionNumericaProveedores	-- 31	.AsientoContable.Sucursal.identificacionNumericaProveedores		BOOLEAN
+				, Sucursal_18.permiteCambiarProveedores             AS Sucursal_18_permiteCambiarProveedores        	-- 32	.AsientoContable.Sucursal.permiteCambiarProveedores       		BOOLEAN
+				, Sucursal_18.clientesOcacionalesDesde              AS Sucursal_18_clientesOcacionalesDesde         	-- 33	.AsientoContable.Sucursal.clientesOcacionalesDesde        		INTEGER
+				, Sucursal_18.clientesOcacionalesHasta              AS Sucursal_18_clientesOcacionalesHasta         	-- 34	.AsientoContable.Sucursal.clientesOcacionalesHasta        		INTEGER
+				, Sucursal_18.numeroCobranzaDesde                   AS Sucursal_18_numeroCobranzaDesde              	-- 35	.AsientoContable.Sucursal.numeroCobranzaDesde             		INTEGER
+				, Sucursal_18.numeroCobranzaHasta                   AS Sucursal_18_numeroCobranzaHasta              	-- 36	.AsientoContable.Sucursal.numeroCobranzaHasta             		INTEGER
+				, AsientoContableModulo_37.id                       AS AsientoContableModulo_37_id                  	-- 37	.AsientoContable.AsientoContableModulo.id                 		VARCHAR(36)
+				, AsientoContableModulo_37.numero                   AS AsientoContableModulo_37_numero              	-- 38	.AsientoContable.AsientoContableModulo.numero             		INTEGER
+				, AsientoContableModulo_37.nombre                   AS AsientoContableModulo_37_nombre              	-- 39	.AsientoContable.AsientoContableModulo.nombre             		VARCHAR(50)
+				, CuentaContable_40.id                              AS CuentaContable_40_id                         	-- 40	.CuentaContable.id                                        		VARCHAR(36)
+				, CuentaContable_40.codigo                          AS CuentaContable_40_codigo                     	-- 41	.CuentaContable.codigo                                    		VARCHAR(11)
+				, CuentaContable_40.nombre                          AS CuentaContable_40_nombre                     	-- 42	.CuentaContable.nombre                                    		VARCHAR(50)
+				, EjercicioContable_43.id                           AS EjercicioContable_43_id                      	-- 43	.CuentaContable.EjercicioContable.id                      		VARCHAR(36)
+				, EjercicioContable_43.numero                       AS EjercicioContable_43_numero                  	-- 44	.CuentaContable.EjercicioContable.numero                  		INTEGER
+				, EjercicioContable_43.apertura                     AS EjercicioContable_43_apertura                	-- 45	.CuentaContable.EjercicioContable.apertura                		DATE
+				, EjercicioContable_43.cierre                       AS EjercicioContable_43_cierre                  	-- 46	.CuentaContable.EjercicioContable.cierre                  		DATE
+				, EjercicioContable_43.cerrado                      AS EjercicioContable_43_cerrado                 	-- 47	.CuentaContable.EjercicioContable.cerrado                 		BOOLEAN
+				, EjercicioContable_43.cerradoModulos               AS EjercicioContable_43_cerradoModulos          	-- 48	.CuentaContable.EjercicioContable.cerradoModulos          		BOOLEAN
+				, EjercicioContable_43.comentario                   AS EjercicioContable_43_comentario              	-- 49	.CuentaContable.EjercicioContable.comentario              		VARCHAR(250)
+				, CuentaContable_40.integra                         AS CuentaContable_40_integra                    	-- 50	.CuentaContable.integra                                   		VARCHAR(16)
+				, CuentaContable_40.cuentaJerarquia                 AS CuentaContable_40_cuentaJerarquia            	-- 51	.CuentaContable.cuentaJerarquia                           		VARCHAR(16)
+				, CuentaContable_40.imputable                       AS CuentaContable_40_imputable                  	-- 52	.CuentaContable.imputable                                 		BOOLEAN
+				, CuentaContable_40.ajustaPorInflacion              AS CuentaContable_40_ajustaPorInflacion         	-- 53	.CuentaContable.ajustaPorInflacion                        		BOOLEAN
+				, CuentaContableEstado_54.id                        AS CuentaContableEstado_54_id                   	-- 54	.CuentaContable.CuentaContableEstado.id                   		VARCHAR(36)
+				, CuentaContableEstado_54.numero                    AS CuentaContableEstado_54_numero               	-- 55	.CuentaContable.CuentaContableEstado.numero               		INTEGER
+				, CuentaContableEstado_54.nombre                    AS CuentaContableEstado_54_nombre               	-- 56	.CuentaContable.CuentaContableEstado.nombre               		VARCHAR(50)
+				, CuentaContable_40.cuentaConApropiacion            AS CuentaContable_40_cuentaConApropiacion       	-- 57	.CuentaContable.cuentaConApropiacion                      		BOOLEAN
+				, CentroCostoContable_58.id                         AS CentroCostoContable_58_id                    	-- 58	.CuentaContable.CentroCostoContable.id                    		VARCHAR(36)
+				, CentroCostoContable_58.numero                     AS CentroCostoContable_58_numero                	-- 59	.CuentaContable.CentroCostoContable.numero                		INTEGER
+				, CentroCostoContable_58.nombre                     AS CentroCostoContable_58_nombre                	-- 60	.CuentaContable.CentroCostoContable.nombre                		VARCHAR(50)
+				, CentroCostoContable_58.abreviatura                AS CentroCostoContable_58_abreviatura           	-- 61	.CuentaContable.CentroCostoContable.abreviatura           		VARCHAR(5)
+				, CentroCostoContable_58.ejercicioContable          AS CentroCostoContable_58_ejercicioContable     	-- 62	.CuentaContable.CentroCostoContable.ejercicioContable     		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_40.cuentaAgrupadora                AS CuentaContable_40_cuentaAgrupadora           	-- 63	.CuentaContable.cuentaAgrupadora                          		VARCHAR(50)
+				, CuentaContable_40.porcentaje                      AS CuentaContable_40_porcentaje                 	-- 64	.CuentaContable.porcentaje                                		DECIMAL(6,3)
+				, PuntoEquilibrio_65.id                             AS PuntoEquilibrio_65_id                        	-- 65	.CuentaContable.PuntoEquilibrio.id                        		VARCHAR(36)
+				, PuntoEquilibrio_65.numero                         AS PuntoEquilibrio_65_numero                    	-- 66	.CuentaContable.PuntoEquilibrio.numero                    		INTEGER
+				, PuntoEquilibrio_65.nombre                         AS PuntoEquilibrio_65_nombre                    	-- 67	.CuentaContable.PuntoEquilibrio.nombre                    		VARCHAR(50)
+				, PuntoEquilibrio_65.tipoPuntoEquilibrio            AS PuntoEquilibrio_65_tipoPuntoEquilibrio       	-- 68	.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio       		VARCHAR(36)	TipoPuntoEquilibrio.id
+				, PuntoEquilibrio_65.ejercicioContable              AS PuntoEquilibrio_65_ejercicioContable         	-- 69	.CuentaContable.PuntoEquilibrio.ejercicioContable         		VARCHAR(36)	EjercicioContable.id
+				, CostoVenta_70.id                                  AS CostoVenta_70_id                             	-- 70	.CuentaContable.CostoVenta.id                             		VARCHAR(36)
+				, CostoVenta_70.numero                              AS CostoVenta_70_numero                         	-- 71	.CuentaContable.CostoVenta.numero                         		INTEGER
+				, CostoVenta_70.nombre                              AS CostoVenta_70_nombre                         	-- 72	.CuentaContable.CostoVenta.nombre                         		VARCHAR(50)
+				, SeguridadPuerta_73.id                             AS SeguridadPuerta_73_id                        	-- 73	.CuentaContable.SeguridadPuerta.id                        		VARCHAR(36)
+				, SeguridadPuerta_73.numero                         AS SeguridadPuerta_73_numero                    	-- 74	.CuentaContable.SeguridadPuerta.numero                    		INTEGER
+				, SeguridadPuerta_73.nombre                         AS SeguridadPuerta_73_nombre                    	-- 75	.CuentaContable.SeguridadPuerta.nombre                    		VARCHAR(50)
+				, SeguridadPuerta_73.equate                         AS SeguridadPuerta_73_equate                    	-- 76	.CuentaContable.SeguridadPuerta.equate                    		VARCHAR(30)
+				, SeguridadPuerta_73.seguridadModulo                AS SeguridadPuerta_73_seguridadModulo           	-- 77	.CuentaContable.SeguridadPuerta.seguridadModulo           		VARCHAR(36)	SeguridadModulo.id
+				, AsientoContableItem.debe                          AS AsientoContableItem_debe                     	-- 78	.debe                                                     		DECIMAL(13,5)
+				, AsientoContableItem.haber                         AS AsientoContableItem_haber                    	-- 79	.haber                                                    		DECIMAL(13,5)
+
+		FROM	massoftware.AsientoContableItem
+			LEFT JOIN massoftware.AsientoContable AS AsientoContable_4                  ON AsientoContableItem.asientoContable = AsientoContable_4.id 	-- 4 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_8               ON AsientoContable_4.ejercicioContable = EjercicioContable_8.id 	-- 8 LEFT LEVEL: 2
+				LEFT JOIN massoftware.MinutaContable AS MinutaContable_15                  ON AsientoContable_4.minutaContable = MinutaContable_15.id 	-- 15 LEFT LEVEL: 2
+				LEFT JOIN massoftware.Sucursal AS Sucursal_18                        ON AsientoContable_4.sucursal = Sucursal_18.id 	-- 18 LEFT LEVEL: 2
+				LEFT JOIN massoftware.AsientoContableModulo AS AsientoContableModulo_37           ON AsientoContable_4.asientoContableModulo = AsientoContableModulo_37.id 	-- 37 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_40                  ON AsientoContableItem.cuentaContable = CuentaContable_40.id 	-- 40 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_43               ON CuentaContable_40.ejercicioContable = EjercicioContable_43.id 	-- 43 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_54            ON CuentaContable_40.cuentaContableEstado = CuentaContableEstado_54.id 	-- 54 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_58             ON CuentaContable_40.centroCostoContable = CentroCostoContable_58.id 	-- 58 LEFT LEVEL: 2
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_65                 ON CuentaContable_40.puntoEquilibrio = PuntoEquilibrio_65.id 	-- 65 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_70                      ON CuentaContable_40.costoVenta = CostoVenta_70.id 	-- 70 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_73                 ON CuentaContable_40.seguridadPuerta = SeguridadPuerta_73.id 	-- 73 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableArg8)) > 0 THEN
+		asientoContableArg8 = REPLACE(asientoContableArg8, '''', '''''');
+		asientoContableArg8 = LOWER(TRIM(asientoContableArg8));
+		asientoContableArg8 = TRANSLATE(asientoContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.asientoContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItemById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItemById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoContableItem_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContableItem_2 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContableItem_2 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableItemById_2 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItem_3 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItem_3 (
+
+	  idArg0                VARCHAR(36) 	-- 0
+	, orderByArg1           INTEGER     	-- 1
+	, orderByDescArg2       BOOLEAN     	-- 2
+	, limitArg3             BIGINT      	-- 3
+	, offSetArg4            BIGINT      	-- 4
+	, numeroFromArg5        INTEGER     	-- 5
+	, numeroToArg6          INTEGER     	-- 6
+	, detalleArg7           VARCHAR(100)	-- 7
+	, asientoContableArg8   VARCHAR(36) 	-- 8
+
+) RETURNS SETOF massoftware.t_AsientoContableItem_3 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  AsientoContableItem.id                            AS AsientoContableItem_id                       	-- 0	.id                                                                		VARCHAR(36)
+				, AsientoContableItem.numero                        AS AsientoContableItem_numero                   	-- 1	.numero                                                            		INTEGER
+				, AsientoContableItem.fecha                         AS AsientoContableItem_fecha                    	-- 2	.fecha                                                             		DATE
+				, AsientoContableItem.detalle                       AS AsientoContableItem_detalle                  	-- 3	.detalle                                                           		VARCHAR(100)
+				, AsientoContable_4.id                              AS AsientoContable_4_id                         	-- 4	.AsientoContable.id                                                		VARCHAR(36)
+				, AsientoContable_4.numero                          AS AsientoContable_4_numero                     	-- 5	.AsientoContable.numero                                            		INTEGER
+				, AsientoContable_4.fecha                           AS AsientoContable_4_fecha                      	-- 6	.AsientoContable.fecha                                             		DATE
+				, AsientoContable_4.detalle                         AS AsientoContable_4_detalle                    	-- 7	.AsientoContable.detalle                                           		VARCHAR(100)
+				, EjercicioContable_8.id                            AS EjercicioContable_8_id                       	-- 8	.AsientoContable.EjercicioContable.id                              		VARCHAR(36)
+				, EjercicioContable_8.numero                        AS EjercicioContable_8_numero                   	-- 9	.AsientoContable.EjercicioContable.numero                          		INTEGER
+				, EjercicioContable_8.apertura                      AS EjercicioContable_8_apertura                 	-- 10	.AsientoContable.EjercicioContable.apertura                        		DATE
+				, EjercicioContable_8.cierre                        AS EjercicioContable_8_cierre                   	-- 11	.AsientoContable.EjercicioContable.cierre                          		DATE
+				, EjercicioContable_8.cerrado                       AS EjercicioContable_8_cerrado                  	-- 12	.AsientoContable.EjercicioContable.cerrado                         		BOOLEAN
+				, EjercicioContable_8.cerradoModulos                AS EjercicioContable_8_cerradoModulos           	-- 13	.AsientoContable.EjercicioContable.cerradoModulos                  		BOOLEAN
+				, EjercicioContable_8.comentario                    AS EjercicioContable_8_comentario               	-- 14	.AsientoContable.EjercicioContable.comentario                      		VARCHAR(250)
+				, MinutaContable_15.id                              AS MinutaContable_15_id                         	-- 15	.AsientoContable.MinutaContable.id                                 		VARCHAR(36)
+				, MinutaContable_15.numero                          AS MinutaContable_15_numero                     	-- 16	.AsientoContable.MinutaContable.numero                             		INTEGER
+				, MinutaContable_15.nombre                          AS MinutaContable_15_nombre                     	-- 17	.AsientoContable.MinutaContable.nombre                             		VARCHAR(50)
+				, Sucursal_18.id                                    AS Sucursal_18_id                               	-- 18	.AsientoContable.Sucursal.id                                       		VARCHAR(36)
+				, Sucursal_18.numero                                AS Sucursal_18_numero                           	-- 19	.AsientoContable.Sucursal.numero                                   		INTEGER
+				, Sucursal_18.nombre                                AS Sucursal_18_nombre                           	-- 20	.AsientoContable.Sucursal.nombre                                   		VARCHAR(50)
+				, Sucursal_18.abreviatura                           AS Sucursal_18_abreviatura                      	-- 21	.AsientoContable.Sucursal.abreviatura                              		VARCHAR(5)
+				, TipoSucursal_22.id                                AS TipoSucursal_22_id                           	-- 22	.AsientoContable.Sucursal.TipoSucursal.id                          		VARCHAR(36)
+				, TipoSucursal_22.numero                            AS TipoSucursal_22_numero                       	-- 23	.AsientoContable.Sucursal.TipoSucursal.numero                      		INTEGER
+				, TipoSucursal_22.nombre                            AS TipoSucursal_22_nombre                       	-- 24	.AsientoContable.Sucursal.TipoSucursal.nombre                      		VARCHAR(50)
+				, Sucursal_18.cuentaClientesDesde                   AS Sucursal_18_cuentaClientesDesde              	-- 25	.AsientoContable.Sucursal.cuentaClientesDesde                      		VARCHAR(7)
+				, Sucursal_18.cuentaClientesHasta                   AS Sucursal_18_cuentaClientesHasta              	-- 26	.AsientoContable.Sucursal.cuentaClientesHasta                      		VARCHAR(7)
+				, Sucursal_18.cantidadCaracteresClientes            AS Sucursal_18_cantidadCaracteresClientes       	-- 27	.AsientoContable.Sucursal.cantidadCaracteresClientes               		INTEGER
+				, Sucursal_18.identificacionNumericaClientes        AS Sucursal_18_identificacionNumericaClientes   	-- 28	.AsientoContable.Sucursal.identificacionNumericaClientes           		BOOLEAN
+				, Sucursal_18.permiteCambiarClientes                AS Sucursal_18_permiteCambiarClientes           	-- 29	.AsientoContable.Sucursal.permiteCambiarClientes                   		BOOLEAN
+				, Sucursal_18.cuentaProveedoresDesde                AS Sucursal_18_cuentaProveedoresDesde           	-- 30	.AsientoContable.Sucursal.cuentaProveedoresDesde                   		VARCHAR(6)
+				, Sucursal_18.cuentaProveedoresHasta                AS Sucursal_18_cuentaProveedoresHasta           	-- 31	.AsientoContable.Sucursal.cuentaProveedoresHasta                   		VARCHAR(6)
+				, Sucursal_18.cantidadCaracteresProveedores         AS Sucursal_18_cantidadCaracteresProveedores    	-- 32	.AsientoContable.Sucursal.cantidadCaracteresProveedores            		INTEGER
+				, Sucursal_18.identificacionNumericaProveedores     AS Sucursal_18_identificacionNumericaProveedores	-- 33	.AsientoContable.Sucursal.identificacionNumericaProveedores        		BOOLEAN
+				, Sucursal_18.permiteCambiarProveedores             AS Sucursal_18_permiteCambiarProveedores        	-- 34	.AsientoContable.Sucursal.permiteCambiarProveedores                		BOOLEAN
+				, Sucursal_18.clientesOcacionalesDesde              AS Sucursal_18_clientesOcacionalesDesde         	-- 35	.AsientoContable.Sucursal.clientesOcacionalesDesde                 		INTEGER
+				, Sucursal_18.clientesOcacionalesHasta              AS Sucursal_18_clientesOcacionalesHasta         	-- 36	.AsientoContable.Sucursal.clientesOcacionalesHasta                 		INTEGER
+				, Sucursal_18.numeroCobranzaDesde                   AS Sucursal_18_numeroCobranzaDesde              	-- 37	.AsientoContable.Sucursal.numeroCobranzaDesde                      		INTEGER
+				, Sucursal_18.numeroCobranzaHasta                   AS Sucursal_18_numeroCobranzaHasta              	-- 38	.AsientoContable.Sucursal.numeroCobranzaHasta                      		INTEGER
+				, AsientoContableModulo_39.id                       AS AsientoContableModulo_39_id                  	-- 39	.AsientoContable.AsientoContableModulo.id                          		VARCHAR(36)
+				, AsientoContableModulo_39.numero                   AS AsientoContableModulo_39_numero              	-- 40	.AsientoContable.AsientoContableModulo.numero                      		INTEGER
+				, AsientoContableModulo_39.nombre                   AS AsientoContableModulo_39_nombre              	-- 41	.AsientoContable.AsientoContableModulo.nombre                      		VARCHAR(50)
+				, CuentaContable_42.id                              AS CuentaContable_42_id                         	-- 42	.CuentaContable.id                                                 		VARCHAR(36)
+				, CuentaContable_42.codigo                          AS CuentaContable_42_codigo                     	-- 43	.CuentaContable.codigo                                             		VARCHAR(11)
+				, CuentaContable_42.nombre                          AS CuentaContable_42_nombre                     	-- 44	.CuentaContable.nombre                                             		VARCHAR(50)
+				, EjercicioContable_45.id                           AS EjercicioContable_45_id                      	-- 45	.CuentaContable.EjercicioContable.id                               		VARCHAR(36)
+				, EjercicioContable_45.numero                       AS EjercicioContable_45_numero                  	-- 46	.CuentaContable.EjercicioContable.numero                           		INTEGER
+				, EjercicioContable_45.apertura                     AS EjercicioContable_45_apertura                	-- 47	.CuentaContable.EjercicioContable.apertura                         		DATE
+				, EjercicioContable_45.cierre                       AS EjercicioContable_45_cierre                  	-- 48	.CuentaContable.EjercicioContable.cierre                           		DATE
+				, EjercicioContable_45.cerrado                      AS EjercicioContable_45_cerrado                 	-- 49	.CuentaContable.EjercicioContable.cerrado                          		BOOLEAN
+				, EjercicioContable_45.cerradoModulos               AS EjercicioContable_45_cerradoModulos          	-- 50	.CuentaContable.EjercicioContable.cerradoModulos                   		BOOLEAN
+				, EjercicioContable_45.comentario                   AS EjercicioContable_45_comentario              	-- 51	.CuentaContable.EjercicioContable.comentario                       		VARCHAR(250)
+				, CuentaContable_42.integra                         AS CuentaContable_42_integra                    	-- 52	.CuentaContable.integra                                            		VARCHAR(16)
+				, CuentaContable_42.cuentaJerarquia                 AS CuentaContable_42_cuentaJerarquia            	-- 53	.CuentaContable.cuentaJerarquia                                    		VARCHAR(16)
+				, CuentaContable_42.imputable                       AS CuentaContable_42_imputable                  	-- 54	.CuentaContable.imputable                                          		BOOLEAN
+				, CuentaContable_42.ajustaPorInflacion              AS CuentaContable_42_ajustaPorInflacion         	-- 55	.CuentaContable.ajustaPorInflacion                                 		BOOLEAN
+				, CuentaContableEstado_56.id                        AS CuentaContableEstado_56_id                   	-- 56	.CuentaContable.CuentaContableEstado.id                            		VARCHAR(36)
+				, CuentaContableEstado_56.numero                    AS CuentaContableEstado_56_numero               	-- 57	.CuentaContable.CuentaContableEstado.numero                        		INTEGER
+				, CuentaContableEstado_56.nombre                    AS CuentaContableEstado_56_nombre               	-- 58	.CuentaContable.CuentaContableEstado.nombre                        		VARCHAR(50)
+				, CuentaContable_42.cuentaConApropiacion            AS CuentaContable_42_cuentaConApropiacion       	-- 59	.CuentaContable.cuentaConApropiacion                               		BOOLEAN
+				, CentroCostoContable_60.id                         AS CentroCostoContable_60_id                    	-- 60	.CuentaContable.CentroCostoContable.id                             		VARCHAR(36)
+				, CentroCostoContable_60.numero                     AS CentroCostoContable_60_numero                	-- 61	.CuentaContable.CentroCostoContable.numero                         		INTEGER
+				, CentroCostoContable_60.nombre                     AS CentroCostoContable_60_nombre                	-- 62	.CuentaContable.CentroCostoContable.nombre                         		VARCHAR(50)
+				, CentroCostoContable_60.abreviatura                AS CentroCostoContable_60_abreviatura           	-- 63	.CuentaContable.CentroCostoContable.abreviatura                    		VARCHAR(5)
+				, EjercicioContable_64.id                           AS EjercicioContable_64_id                      	-- 64	.CuentaContable.CentroCostoContable.EjercicioContable.id           		VARCHAR(36)
+				, EjercicioContable_64.numero                       AS EjercicioContable_64_numero                  	-- 65	.CuentaContable.CentroCostoContable.EjercicioContable.numero       		INTEGER
+				, EjercicioContable_64.apertura                     AS EjercicioContable_64_apertura                	-- 66	.CuentaContable.CentroCostoContable.EjercicioContable.apertura     		DATE
+				, EjercicioContable_64.cierre                       AS EjercicioContable_64_cierre                  	-- 67	.CuentaContable.CentroCostoContable.EjercicioContable.cierre       		DATE
+				, EjercicioContable_64.cerrado                      AS EjercicioContable_64_cerrado                 	-- 68	.CuentaContable.CentroCostoContable.EjercicioContable.cerrado      		BOOLEAN
+				, EjercicioContable_64.cerradoModulos               AS EjercicioContable_64_cerradoModulos          	-- 69	.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos		BOOLEAN
+				, EjercicioContable_64.comentario                   AS EjercicioContable_64_comentario              	-- 70	.CuentaContable.CentroCostoContable.EjercicioContable.comentario   		VARCHAR(250)
+				, CuentaContable_42.cuentaAgrupadora                AS CuentaContable_42_cuentaAgrupadora           	-- 71	.CuentaContable.cuentaAgrupadora                                   		VARCHAR(50)
+				, CuentaContable_42.porcentaje                      AS CuentaContable_42_porcentaje                 	-- 72	.CuentaContable.porcentaje                                         		DECIMAL(6,3)
+				, PuntoEquilibrio_73.id                             AS PuntoEquilibrio_73_id                        	-- 73	.CuentaContable.PuntoEquilibrio.id                                 		VARCHAR(36)
+				, PuntoEquilibrio_73.numero                         AS PuntoEquilibrio_73_numero                    	-- 74	.CuentaContable.PuntoEquilibrio.numero                             		INTEGER
+				, PuntoEquilibrio_73.nombre                         AS PuntoEquilibrio_73_nombre                    	-- 75	.CuentaContable.PuntoEquilibrio.nombre                             		VARCHAR(50)
+				, TipoPuntoEquilibrio_76.id                         AS TipoPuntoEquilibrio_76_id                    	-- 76	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id             		VARCHAR(36)
+				, TipoPuntoEquilibrio_76.numero                     AS TipoPuntoEquilibrio_76_numero                	-- 77	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero         		INTEGER
+				, TipoPuntoEquilibrio_76.nombre                     AS TipoPuntoEquilibrio_76_nombre                	-- 78	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre         		VARCHAR(50)
+				, EjercicioContable_79.id                           AS EjercicioContable_79_id                      	-- 79	.CuentaContable.PuntoEquilibrio.EjercicioContable.id               		VARCHAR(36)
+				, EjercicioContable_79.numero                       AS EjercicioContable_79_numero                  	-- 80	.CuentaContable.PuntoEquilibrio.EjercicioContable.numero           		INTEGER
+				, EjercicioContable_79.apertura                     AS EjercicioContable_79_apertura                	-- 81	.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura         		DATE
+				, EjercicioContable_79.cierre                       AS EjercicioContable_79_cierre                  	-- 82	.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre           		DATE
+				, EjercicioContable_79.cerrado                      AS EjercicioContable_79_cerrado                 	-- 83	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado          		BOOLEAN
+				, EjercicioContable_79.cerradoModulos               AS EjercicioContable_79_cerradoModulos          	-- 84	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos   		BOOLEAN
+				, EjercicioContable_79.comentario                   AS EjercicioContable_79_comentario              	-- 85	.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario       		VARCHAR(250)
+				, CostoVenta_86.id                                  AS CostoVenta_86_id                             	-- 86	.CuentaContable.CostoVenta.id                                      		VARCHAR(36)
+				, CostoVenta_86.numero                              AS CostoVenta_86_numero                         	-- 87	.CuentaContable.CostoVenta.numero                                  		INTEGER
+				, CostoVenta_86.nombre                              AS CostoVenta_86_nombre                         	-- 88	.CuentaContable.CostoVenta.nombre                                  		VARCHAR(50)
+				, SeguridadPuerta_89.id                             AS SeguridadPuerta_89_id                        	-- 89	.CuentaContable.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_89.numero                         AS SeguridadPuerta_89_numero                    	-- 90	.CuentaContable.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_89.nombre                         AS SeguridadPuerta_89_nombre                    	-- 91	.CuentaContable.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_89.equate                         AS SeguridadPuerta_89_equate                    	-- 92	.CuentaContable.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_93.id                             AS SeguridadModulo_93_id                        	-- 93	.CuentaContable.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_93.numero                         AS SeguridadModulo_93_numero                    	-- 94	.CuentaContable.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_93.nombre                         AS SeguridadModulo_93_nombre                    	-- 95	.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+				, AsientoContableItem.debe                          AS AsientoContableItem_debe                     	-- 96	.debe                                                              		DECIMAL(13,5)
+				, AsientoContableItem.haber                         AS AsientoContableItem_haber                    	-- 97	.haber                                                             		DECIMAL(13,5)
+
+		FROM	massoftware.AsientoContableItem
+			LEFT JOIN massoftware.AsientoContable AS AsientoContable_4                   ON AsientoContableItem.asientoContable = AsientoContable_4.id 	-- 4 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_8                ON AsientoContable_4.ejercicioContable = EjercicioContable_8.id 	-- 8 LEFT LEVEL: 2
+				LEFT JOIN massoftware.MinutaContable AS MinutaContable_15                   ON AsientoContable_4.minutaContable = MinutaContable_15.id 	-- 15 LEFT LEVEL: 2
+				LEFT JOIN massoftware.Sucursal AS Sucursal_18                         ON AsientoContable_4.sucursal = Sucursal_18.id 	-- 18 LEFT LEVEL: 2
+					LEFT JOIN massoftware.TipoSucursal AS TipoSucursal_22                    ON Sucursal_18.tipoSucursal = TipoSucursal_22.id 	-- 22 LEFT LEVEL: 3
+				LEFT JOIN massoftware.AsientoContableModulo AS AsientoContableModulo_39            ON AsientoContable_4.asientoContableModulo = AsientoContableModulo_39.id 	-- 39 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_42                   ON AsientoContableItem.cuentaContable = CuentaContable_42.id 	-- 42 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_45                ON CuentaContable_42.ejercicioContable = EjercicioContable_45.id 	-- 45 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_56             ON CuentaContable_42.cuentaContableEstado = CuentaContableEstado_56.id 	-- 56 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_60              ON CuentaContable_42.centroCostoContable = CentroCostoContable_60.id 	-- 60 LEFT LEVEL: 2
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_64               ON CentroCostoContable_60.ejercicioContable = EjercicioContable_64.id 	-- 64 LEFT LEVEL: 3
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_73                  ON CuentaContable_42.puntoEquilibrio = PuntoEquilibrio_73.id 	-- 73 LEFT LEVEL: 2
+					LEFT JOIN massoftware.TipoPuntoEquilibrio AS TipoPuntoEquilibrio_76             ON PuntoEquilibrio_73.tipoPuntoEquilibrio = TipoPuntoEquilibrio_76.id 	-- 76 LEFT LEVEL: 3
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_79               ON PuntoEquilibrio_73.ejercicioContable = EjercicioContable_79.id 	-- 79 LEFT LEVEL: 3
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_86                       ON CuentaContable_42.costoVenta = CostoVenta_86.id 	-- 86 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_89                  ON CuentaContable_42.seguridadPuerta = SeguridadPuerta_89.id 	-- 89 LEFT LEVEL: 2
+					LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_93                 ON SeguridadPuerta_89.seguridadModulo = SeguridadModulo_93.id 	-- 93 LEFT LEVEL: 3
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' AsientoContableItem.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND detalleArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(detalleArg7)) > 0 THEN
+		detalleArg7 = REPLACE(detalleArg7, '''', '''''');
+		detalleArg7 = LOWER(TRIM(detalleArg7));
+		detalleArg7 = TRANSLATE(detalleArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(detalleArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.detalle),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND asientoContableArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(asientoContableArg8)) > 0 THEN
+		asientoContableArg8 = REPLACE(asientoContableArg8, '''', '''''');
+		asientoContableArg8 = LOWER(TRIM(asientoContableArg8));
+		asientoContableArg8 = TRANSLATE(asientoContableArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(asientoContableArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(AsientoContableItem.asientoContable),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_AsientoContableItemById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_AsientoContableItemById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_AsientoContableItem_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_AsientoContableItem_3 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_AsientoContableItem_3 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_AsientoContableItemById_3 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Empresa                                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Empresa
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Empresa (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Empresa (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+
+) RETURNS SETOF massoftware.Empresa AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Empresa.id                                 AS Empresa_id                             	-- 0	.id                            		VARCHAR(36)
+				, Empresa.ejercicioContable                  AS Empresa_ejercicioContable              	-- 1	.ejercicioContable             		VARCHAR(36)	EjercicioContable.id
+				, Empresa.fechaCierreVentas                  AS Empresa_fechaCierreVentas              	-- 2	.fechaCierreVentas             		DATE
+				, Empresa.fechaCierreStock                   AS Empresa_fechaCierreStock               	-- 3	.fechaCierreStock              		DATE
+				, Empresa.fechaCierreFondo                   AS Empresa_fechaCierreFondo               	-- 4	.fechaCierreFondo              		DATE
+				, Empresa.fechaCierreCompras                 AS Empresa_fechaCierreCompras             	-- 5	.fechaCierreCompras            		DATE
+				, Empresa.fechaCierreContabilidad            AS Empresa_fechaCierreContabilidad        	-- 6	.fechaCierreContabilidad       		DATE
+				, Empresa.fechaCierreGarantiaDevoluciones    AS Empresa_fechaCierreGarantiaDevoluciones	-- 7	.fechaCierreGarantiaDevoluciones		DATE
+				, Empresa.fechaCierreTambos                  AS Empresa_fechaCierreTambos              	-- 8	.fechaCierreTambos             		DATE
+				, Empresa.fechaCierreRRHH                    AS Empresa_fechaCierreRRHH                	-- 9	.fechaCierreRRHH               		DATE
+
+		FROM	massoftware.Empresa
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Empresa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_EmpresaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_EmpresaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Empresa AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Empresa ( idArg , null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Empresa ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_EmpresaById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Empresa_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Empresa_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+
+) RETURNS SETOF massoftware.t_Empresa_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Empresa.id                                  AS Empresa_id                             	-- 0	.id                             		VARCHAR(36)
+				, EjercicioContable_1.id                      AS EjercicioContable_1_id                 	-- 1	.EjercicioContable.id           		VARCHAR(36)
+				, EjercicioContable_1.numero                  AS EjercicioContable_1_numero             	-- 2	.EjercicioContable.numero       		INTEGER
+				, EjercicioContable_1.apertura                AS EjercicioContable_1_apertura           	-- 3	.EjercicioContable.apertura     		DATE
+				, EjercicioContable_1.cierre                  AS EjercicioContable_1_cierre             	-- 4	.EjercicioContable.cierre       		DATE
+				, EjercicioContable_1.cerrado                 AS EjercicioContable_1_cerrado            	-- 5	.EjercicioContable.cerrado      		BOOLEAN
+				, EjercicioContable_1.cerradoModulos          AS EjercicioContable_1_cerradoModulos     	-- 6	.EjercicioContable.cerradoModulos		BOOLEAN
+				, EjercicioContable_1.comentario              AS EjercicioContable_1_comentario         	-- 7	.EjercicioContable.comentario   		VARCHAR(250)
+				, Empresa.fechaCierreVentas                   AS Empresa_fechaCierreVentas              	-- 8	.fechaCierreVentas              		DATE
+				, Empresa.fechaCierreStock                    AS Empresa_fechaCierreStock               	-- 9	.fechaCierreStock               		DATE
+				, Empresa.fechaCierreFondo                    AS Empresa_fechaCierreFondo               	-- 10	.fechaCierreFondo               		DATE
+				, Empresa.fechaCierreCompras                  AS Empresa_fechaCierreCompras             	-- 11	.fechaCierreCompras             		DATE
+				, Empresa.fechaCierreContabilidad             AS Empresa_fechaCierreContabilidad        	-- 12	.fechaCierreContabilidad        		DATE
+				, Empresa.fechaCierreGarantiaDevoluciones     AS Empresa_fechaCierreGarantiaDevoluciones	-- 13	.fechaCierreGarantiaDevoluciones		DATE
+				, Empresa.fechaCierreTambos                   AS Empresa_fechaCierreTambos              	-- 14	.fechaCierreTambos              		DATE
+				, Empresa.fechaCierreRRHH                     AS Empresa_fechaCierreRRHH                	-- 15	.fechaCierreRRHH                		DATE
+
+		FROM	massoftware.Empresa
+			LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_1        ON Empresa.ejercicioContable = EjercicioContable_1.id 	-- 1 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Empresa.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_EmpresaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_EmpresaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Empresa_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Empresa_1 ( idArg , null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Empresa_1 ( null , null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_EmpresaById_1 ('xxx'); 

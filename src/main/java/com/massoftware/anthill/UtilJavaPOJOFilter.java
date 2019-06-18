@@ -190,28 +190,28 @@ public class UtilJavaPOJOFilter {
 
 		}
 
-		java += buildClone(clazzX);
+		java += buildEquals(clazzX);
 
 		java += "\n\n} // END CLASS ----------------------------------------------------------------------------------------------------------";
 
 		return java;
 	}
-	
+
 	private static String buildImports(Clazz clazz) {
 		String java = "";
 
-		for(Argument arg : clazz.getArgs()) {
-			if(arg.isSimple() == false) {
+		for (Argument arg : clazz.getArgs()) {
+			if (arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
-				
-				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + ";";
-				if(java.contains(java1) == false) {
+
+				String java1 = "\nimport com.massoftware.model." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + ";";
+				if (java.contains(java1) == false) {
 					java += java1;
 				}
 			}
 		}
-		
-		
+
 		return java;
 	}
 
@@ -396,6 +396,10 @@ public class UtilJavaPOJOFilter {
 			minValue = "minValue = \"" + "" + "\"";
 			maxValue = "maxValue = \"" + "" + "\"";
 			maxLength = "maxLength = " + -1;
+		} else if (att.isDate()) {
+			minValue = "minValue = \"" + "" + "\"";
+			maxValue = "maxValue = \"" + "" + "\"";
+			maxLength = "maxLength = " + -1;
 		} else if (att.isSimple() == false) {
 			minValue = "minValue = \"" + "" + "\"";
 			maxValue = "maxValue = \"" + "" + "\"";
@@ -445,7 +449,7 @@ public class UtilJavaPOJOFilter {
 		return java;
 	}
 
-	private static String buildClone(Clazz clazz) {
+	private static String buildEquals(Clazz clazz) {
 		String java = "";
 
 		String t1 = "\n\t";
@@ -474,7 +478,8 @@ public class UtilJavaPOJOFilter {
 
 			String get = "get" + toCamelStart(arg.getName()) + "";
 
-			if (arg.isNumber() && arg.getRange() == true) {
+			if ((arg.isNumber() == true || arg.isDate() == true || arg.isTimestamp() == true)
+					&& arg.getRange() == true) {
 
 				get = "get" + toCamelStart(arg.getName()) + "From";
 

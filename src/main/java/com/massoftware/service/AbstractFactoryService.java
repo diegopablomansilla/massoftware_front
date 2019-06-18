@@ -30,6 +30,13 @@ import com.massoftware.service.contabilidad.PuntoEquilibrioService;
 import com.massoftware.service.contabilidad.CostoVentaService;
 import com.massoftware.service.contabilidad.CuentaContableEstadoService;
 import com.massoftware.service.contabilidad.CuentaContableService;
+import com.massoftware.service.contabilidad.AsientoModeloService;
+import com.massoftware.service.contabilidad.AsientoModeloItemService;
+import com.massoftware.service.contabilidad.MinutaContableService;
+import com.massoftware.service.contabilidad.AsientoContableModuloService;
+import com.massoftware.service.contabilidad.AsientoContableService;
+import com.massoftware.service.contabilidad.AsientoContableItemService;
+import com.massoftware.service.empresa.EmpresaService;
 
 
 public abstract class AbstractFactoryService {
@@ -152,6 +159,34 @@ public abstract class AbstractFactoryService {
 
 	public CuentaContableService buildCuentaContableService() throws Exception {
 		return new CuentaContableService();
+	}
+
+	public AsientoModeloService buildAsientoModeloService() throws Exception {
+		return new AsientoModeloService();
+	}
+
+	public AsientoModeloItemService buildAsientoModeloItemService() throws Exception {
+		return new AsientoModeloItemService();
+	}
+
+	public MinutaContableService buildMinutaContableService() throws Exception {
+		return new MinutaContableService();
+	}
+
+	public AsientoContableModuloService buildAsientoContableModuloService() throws Exception {
+		return new AsientoContableModuloService();
+	}
+
+	public AsientoContableService buildAsientoContableService() throws Exception {
+		return new AsientoContableService();
+	}
+
+	public AsientoContableItemService buildAsientoContableItemService() throws Exception {
+		return new AsientoContableItemService();
+	}
+
+	public EmpresaService buildEmpresaService() throws Exception {
+		return new EmpresaService();
 	}
 
 

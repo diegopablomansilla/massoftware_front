@@ -104,7 +104,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
@@ -113,26 +113,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
- <td class='indexedColumn' title='Indexed'>asientomodelo</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'>
-  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
-    <td class='relatedTable detail' title="asientomodeloitem.asientomodelo refs asientomodelo.id via asientomodeloitem_asientomodelo_fkey"><a href='asientomodelo.html'>asientomodelo</a><span class='relatedKey'>.id</span>
-    </td>
-    <td class='constraint detail'>asientomodeloitem_asientomodelo_fkey<span title='Restrict delete:
- Parent cannot be deleted if children exist'>&nbsp;R</span></td>
-   </tr>
-  </table>
- </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>numero</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -143,19 +123,48 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
- <td class='indexedColumn' title='Indexed'>cuentacontable</td>
+<tr class='odd'>
+ <td class='detail'>asientomodelo</td>
  <td class='detail'>varchar</td>
- <td class='detail' align='right'>2147483647</td>
+ <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
  <td class='detail'></td>
- <td class='detail'> </td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="asientomodeloitem.asientomodelo refs asientomodelo.id via asientomodeloitem_asientomodelo_fkey"><a href='asientomodelo.html'>asientomodelo</a><span class='relatedKey'>.id</span>
+    </td>
+    <td class='constraint detail'>asientomodeloitem_asientomodelo_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+ </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='even'>
+ <td class='detail'>cuentacontable</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>36</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative even' valign='top'>
+    <td class='relatedTable detail' title="asientomodeloitem.cuentacontable refs cuentacontable.id via asientomodeloitem_cuentacontable_fkey"><a href='cuentacontable.html'>cuentacontable</a><span class='relatedKey'>.id</span>
+    </td>
+    <td class='constraint detail'>asientomodeloitem_cuentacontable_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+ </td>
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='4 columns'>Table contained 0 rows at jue jun 13 18:37 ART 2019<p/>
+<p title='4 columns'>Table contained 300 rows at lun jun 17 21:05 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -176,25 +185,36 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   <td class='constraint' style='text-align:left;'>asientomodeloitem_pkey</td>
  </tr>
  <tr>
-  <td class='indexedColumn'>asientomodelo + cuentacontable</td>
+  <td class='indexedColumn'>numero</td>
   <td class='detail'>Must be unique</td>
-  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-  <td class='constraint' style='text-align:left;'>u_asientomodeloitem_asientomodelo_cuentacontable</td>
- </tr>
- <tr>
-  <td class='indexedColumn'>asientomodelo + numero</td>
-  <td class='detail'>Must be unique</td>
-  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-  <td class='constraint' style='text-align:left;'>u_asientomodeloitem_asientomodelo_numero</td>
+  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
+  <td class='constraint' style='text-align:left;'>asientomodeloitem_numero_key</td>
  </tr>
 </table>
 </div>
 <table width='100%' border='0'><tr><td class='container'>
-<br><form action='get'><b>Close relationships:</b></form><map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="asientomodeloitem.html" title="asientomodeloitem" alt="" coords="193,7,478,159" >
-<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="8,33,149,179" >
+<br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from asientomodeloitem'>
+&nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
+<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" href="asientomodeloitem.html" title="asientomodeloitem" alt="" coords="228,30,446,182" >
+<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="21,8,170,154" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="8,172,184,590" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/asientomodeloitem.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
+<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" href="asientocontableitem.html" title="asientocontableitem" alt="" coords="661,197,824,277" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="413,198,589,617" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="8,308,149,388" >
+<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="200,394,362,474" >
+<area shape="rect" href="costoventa.html" title="costoventa" alt="" coords="210,589,352,669" >
+<area shape="rect" href="cuentacontableestado.html" title="cuentacontableestado" alt="" coords="193,297,369,377" >
+<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="205,492,357,572" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="205,686,357,766" >
+<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="426,34,576,181" >
+<area shape="rect" href="asientomodeloitem.html" title="asientomodeloitem" alt="" coords="633,8,852,160" >
+</map>
+
+  <a name='diagram'><img id='twoDegreesImg' src='../diagrams/asientomodeloitem.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 </td></tr></table>
 </div>
 </body>

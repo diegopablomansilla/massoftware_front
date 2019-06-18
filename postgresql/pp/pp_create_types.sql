@@ -881,3 +881,579 @@ CREATE TYPE massoftware.t_CuentaContable_2 AS (
 	, SeguridadModulo_51_nombre          	VARCHAR(50) 		-- 53	CuentaContable.SeguridadPuerta.SeguridadModulo.nombre
 
 );
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModelo                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModelo
+
+
+
+DROP TYPE IF EXISTS massoftware.t_AsientoModelo_1 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoModelo_1 AS (
+
+	  AsientoModelo_id                  	VARCHAR(36) 		-- 0	AsientoModelo.id
+	, AsientoModelo_numero              	INTEGER     		-- 1	AsientoModelo.numero
+	, AsientoModelo_nombre              	VARCHAR(50) 		-- 2	AsientoModelo.nombre
+	, EjercicioContable_3_id            	VARCHAR(36) 		-- 3	AsientoModelo.EjercicioContable.id
+	, EjercicioContable_3_numero        	INTEGER     		-- 4	AsientoModelo.EjercicioContable.numero
+	, EjercicioContable_3_apertura      	DATE        		-- 5	AsientoModelo.EjercicioContable.apertura
+	, EjercicioContable_3_cierre        	DATE        		-- 6	AsientoModelo.EjercicioContable.cierre
+	, EjercicioContable_3_cerrado       	BOOLEAN     		-- 7	AsientoModelo.EjercicioContable.cerrado
+	, EjercicioContable_3_cerradoModulos	BOOLEAN     		-- 8	AsientoModelo.EjercicioContable.cerradoModulos
+	, EjercicioContable_3_comentario    	VARCHAR(250)		-- 9	AsientoModelo.EjercicioContable.comentario
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoModeloItem                                                                                      //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoModeloItem
+
+
+
+DROP TYPE IF EXISTS massoftware.t_AsientoModeloItem_1 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoModeloItem_1 AS (
+
+	  AsientoModeloItem_id                 	VARCHAR(36) 		-- 0	AsientoModeloItem.id
+	, AsientoModeloItem_numero             	INTEGER     		-- 1	AsientoModeloItem.numero
+	, AsientoModelo_2_id                   	VARCHAR(36) 		-- 2	AsientoModeloItem.AsientoModelo.id
+	, AsientoModelo_2_numero               	INTEGER     		-- 3	AsientoModeloItem.AsientoModelo.numero
+	, AsientoModelo_2_nombre               	VARCHAR(50) 		-- 4	AsientoModeloItem.AsientoModelo.nombre
+	, AsientoModelo_2_ejercicioContable    	VARCHAR(36) 		-- 5	AsientoModeloItem.AsientoModelo.ejercicioContable
+	, CuentaContable_6_id                  	VARCHAR(36) 		-- 6	AsientoModeloItem.CuentaContable.id
+	, CuentaContable_6_codigo              	VARCHAR(11) 		-- 7	AsientoModeloItem.CuentaContable.codigo
+	, CuentaContable_6_nombre              	VARCHAR(50) 		-- 8	AsientoModeloItem.CuentaContable.nombre
+	, CuentaContable_6_ejercicioContable   	VARCHAR(36) 		-- 9	AsientoModeloItem.CuentaContable.ejercicioContable
+	, CuentaContable_6_integra             	VARCHAR(16) 		-- 10	AsientoModeloItem.CuentaContable.integra
+	, CuentaContable_6_cuentaJerarquia     	VARCHAR(16) 		-- 11	AsientoModeloItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_6_imputable           	BOOLEAN     		-- 12	AsientoModeloItem.CuentaContable.imputable
+	, CuentaContable_6_ajustaPorInflacion  	BOOLEAN     		-- 13	AsientoModeloItem.CuentaContable.ajustaPorInflacion
+	, CuentaContable_6_cuentaContableEstado	VARCHAR(36) 		-- 14	AsientoModeloItem.CuentaContable.cuentaContableEstado
+	, CuentaContable_6_cuentaConApropiacion	BOOLEAN     		-- 15	AsientoModeloItem.CuentaContable.cuentaConApropiacion
+	, CuentaContable_6_centroCostoContable 	VARCHAR(36) 		-- 16	AsientoModeloItem.CuentaContable.centroCostoContable
+	, CuentaContable_6_cuentaAgrupadora    	VARCHAR(50) 		-- 17	AsientoModeloItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_6_porcentaje          	DECIMAL(6,3)		-- 18	AsientoModeloItem.CuentaContable.porcentaje
+	, CuentaContable_6_puntoEquilibrio     	VARCHAR(36) 		-- 19	AsientoModeloItem.CuentaContable.puntoEquilibrio
+	, CuentaContable_6_costoVenta          	VARCHAR(36) 		-- 20	AsientoModeloItem.CuentaContable.costoVenta
+	, CuentaContable_6_seguridadPuerta     	VARCHAR(36) 		-- 21	AsientoModeloItem.CuentaContable.seguridadPuerta
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_AsientoModeloItem_2 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoModeloItem_2 AS (
+
+	  AsientoModeloItem_id                    	VARCHAR(36) 		-- 0	AsientoModeloItem.id
+	, AsientoModeloItem_numero                	INTEGER     		-- 1	AsientoModeloItem.numero
+	, AsientoModelo_2_id                      	VARCHAR(36) 		-- 2	AsientoModeloItem.AsientoModelo.id
+	, AsientoModelo_2_numero                  	INTEGER     		-- 3	AsientoModeloItem.AsientoModelo.numero
+	, AsientoModelo_2_nombre                  	VARCHAR(50) 		-- 4	AsientoModeloItem.AsientoModelo.nombre
+	, EjercicioContable_5_id                  	VARCHAR(36) 		-- 5	AsientoModeloItem.AsientoModelo.EjercicioContable.id
+	, EjercicioContable_5_numero              	INTEGER     		-- 6	AsientoModeloItem.AsientoModelo.EjercicioContable.numero
+	, EjercicioContable_5_apertura            	DATE        		-- 7	AsientoModeloItem.AsientoModelo.EjercicioContable.apertura
+	, EjercicioContable_5_cierre              	DATE        		-- 8	AsientoModeloItem.AsientoModelo.EjercicioContable.cierre
+	, EjercicioContable_5_cerrado             	BOOLEAN     		-- 9	AsientoModeloItem.AsientoModelo.EjercicioContable.cerrado
+	, EjercicioContable_5_cerradoModulos      	BOOLEAN     		-- 10	AsientoModeloItem.AsientoModelo.EjercicioContable.cerradoModulos
+	, EjercicioContable_5_comentario          	VARCHAR(250)		-- 11	AsientoModeloItem.AsientoModelo.EjercicioContable.comentario
+	, CuentaContable_12_id                    	VARCHAR(36) 		-- 12	AsientoModeloItem.CuentaContable.id
+	, CuentaContable_12_codigo                	VARCHAR(11) 		-- 13	AsientoModeloItem.CuentaContable.codigo
+	, CuentaContable_12_nombre                	VARCHAR(50) 		-- 14	AsientoModeloItem.CuentaContable.nombre
+	, EjercicioContable_15_id                 	VARCHAR(36) 		-- 15	AsientoModeloItem.CuentaContable.EjercicioContable.id
+	, EjercicioContable_15_numero             	INTEGER     		-- 16	AsientoModeloItem.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_15_apertura           	DATE        		-- 17	AsientoModeloItem.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_15_cierre             	DATE        		-- 18	AsientoModeloItem.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_15_cerrado            	BOOLEAN     		-- 19	AsientoModeloItem.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_15_cerradoModulos     	BOOLEAN     		-- 20	AsientoModeloItem.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_15_comentario         	VARCHAR(250)		-- 21	AsientoModeloItem.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_12_integra               	VARCHAR(16) 		-- 22	AsientoModeloItem.CuentaContable.integra
+	, CuentaContable_12_cuentaJerarquia       	VARCHAR(16) 		-- 23	AsientoModeloItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_12_imputable             	BOOLEAN     		-- 24	AsientoModeloItem.CuentaContable.imputable
+	, CuentaContable_12_ajustaPorInflacion    	BOOLEAN     		-- 25	AsientoModeloItem.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_26_id              	VARCHAR(36) 		-- 26	AsientoModeloItem.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_26_numero          	INTEGER     		-- 27	AsientoModeloItem.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_26_nombre          	VARCHAR(50) 		-- 28	AsientoModeloItem.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_12_cuentaConApropiacion  	BOOLEAN     		-- 29	AsientoModeloItem.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_30_id               	VARCHAR(36) 		-- 30	AsientoModeloItem.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_30_numero           	INTEGER     		-- 31	AsientoModeloItem.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_30_nombre           	VARCHAR(50) 		-- 32	AsientoModeloItem.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_30_abreviatura      	VARCHAR(5)  		-- 33	AsientoModeloItem.CuentaContable.CentroCostoContable.abreviatura
+	, CentroCostoContable_30_ejercicioContable	VARCHAR(36) 		-- 34	AsientoModeloItem.CuentaContable.CentroCostoContable.ejercicioContable
+	, CuentaContable_12_cuentaAgrupadora      	VARCHAR(50) 		-- 35	AsientoModeloItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_12_porcentaje            	DECIMAL(6,3)		-- 36	AsientoModeloItem.CuentaContable.porcentaje
+	, PuntoEquilibrio_37_id                   	VARCHAR(36) 		-- 37	AsientoModeloItem.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_37_numero               	INTEGER     		-- 38	AsientoModeloItem.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_37_nombre               	VARCHAR(50) 		-- 39	AsientoModeloItem.CuentaContable.PuntoEquilibrio.nombre
+	, PuntoEquilibrio_37_tipoPuntoEquilibrio  	VARCHAR(36) 		-- 40	AsientoModeloItem.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio
+	, PuntoEquilibrio_37_ejercicioContable    	VARCHAR(36) 		-- 41	AsientoModeloItem.CuentaContable.PuntoEquilibrio.ejercicioContable
+	, CostoVenta_42_id                        	VARCHAR(36) 		-- 42	AsientoModeloItem.CuentaContable.CostoVenta.id
+	, CostoVenta_42_numero                    	INTEGER     		-- 43	AsientoModeloItem.CuentaContable.CostoVenta.numero
+	, CostoVenta_42_nombre                    	VARCHAR(50) 		-- 44	AsientoModeloItem.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_45_id                   	VARCHAR(36) 		-- 45	AsientoModeloItem.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_45_numero               	INTEGER     		-- 46	AsientoModeloItem.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_45_nombre               	VARCHAR(50) 		-- 47	AsientoModeloItem.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_45_equate               	VARCHAR(30) 		-- 48	AsientoModeloItem.CuentaContable.SeguridadPuerta.equate
+	, SeguridadPuerta_45_seguridadModulo      	VARCHAR(36) 		-- 49	AsientoModeloItem.CuentaContable.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_AsientoModeloItem_3 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoModeloItem_3 AS (
+
+	  AsientoModeloItem_id                  	VARCHAR(36) 		-- 0	AsientoModeloItem.id
+	, AsientoModeloItem_numero              	INTEGER     		-- 1	AsientoModeloItem.numero
+	, AsientoModelo_2_id                    	VARCHAR(36) 		-- 2	AsientoModeloItem.AsientoModelo.id
+	, AsientoModelo_2_numero                	INTEGER     		-- 3	AsientoModeloItem.AsientoModelo.numero
+	, AsientoModelo_2_nombre                	VARCHAR(50) 		-- 4	AsientoModeloItem.AsientoModelo.nombre
+	, EjercicioContable_5_id                	VARCHAR(36) 		-- 5	AsientoModeloItem.AsientoModelo.EjercicioContable.id
+	, EjercicioContable_5_numero            	INTEGER     		-- 6	AsientoModeloItem.AsientoModelo.EjercicioContable.numero
+	, EjercicioContable_5_apertura          	DATE        		-- 7	AsientoModeloItem.AsientoModelo.EjercicioContable.apertura
+	, EjercicioContable_5_cierre            	DATE        		-- 8	AsientoModeloItem.AsientoModelo.EjercicioContable.cierre
+	, EjercicioContable_5_cerrado           	BOOLEAN     		-- 9	AsientoModeloItem.AsientoModelo.EjercicioContable.cerrado
+	, EjercicioContable_5_cerradoModulos    	BOOLEAN     		-- 10	AsientoModeloItem.AsientoModelo.EjercicioContable.cerradoModulos
+	, EjercicioContable_5_comentario        	VARCHAR(250)		-- 11	AsientoModeloItem.AsientoModelo.EjercicioContable.comentario
+	, CuentaContable_12_id                  	VARCHAR(36) 		-- 12	AsientoModeloItem.CuentaContable.id
+	, CuentaContable_12_codigo              	VARCHAR(11) 		-- 13	AsientoModeloItem.CuentaContable.codigo
+	, CuentaContable_12_nombre              	VARCHAR(50) 		-- 14	AsientoModeloItem.CuentaContable.nombre
+	, EjercicioContable_15_id               	VARCHAR(36) 		-- 15	AsientoModeloItem.CuentaContable.EjercicioContable.id
+	, EjercicioContable_15_numero           	INTEGER     		-- 16	AsientoModeloItem.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_15_apertura         	DATE        		-- 17	AsientoModeloItem.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_15_cierre           	DATE        		-- 18	AsientoModeloItem.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_15_cerrado          	BOOLEAN     		-- 19	AsientoModeloItem.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_15_cerradoModulos   	BOOLEAN     		-- 20	AsientoModeloItem.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_15_comentario       	VARCHAR(250)		-- 21	AsientoModeloItem.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_12_integra             	VARCHAR(16) 		-- 22	AsientoModeloItem.CuentaContable.integra
+	, CuentaContable_12_cuentaJerarquia     	VARCHAR(16) 		-- 23	AsientoModeloItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_12_imputable           	BOOLEAN     		-- 24	AsientoModeloItem.CuentaContable.imputable
+	, CuentaContable_12_ajustaPorInflacion  	BOOLEAN     		-- 25	AsientoModeloItem.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_26_id            	VARCHAR(36) 		-- 26	AsientoModeloItem.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_26_numero        	INTEGER     		-- 27	AsientoModeloItem.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_26_nombre        	VARCHAR(50) 		-- 28	AsientoModeloItem.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_12_cuentaConApropiacion	BOOLEAN     		-- 29	AsientoModeloItem.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_30_id             	VARCHAR(36) 		-- 30	AsientoModeloItem.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_30_numero         	INTEGER     		-- 31	AsientoModeloItem.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_30_nombre         	VARCHAR(50) 		-- 32	AsientoModeloItem.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_30_abreviatura    	VARCHAR(5)  		-- 33	AsientoModeloItem.CuentaContable.CentroCostoContable.abreviatura
+	, EjercicioContable_34_id               	VARCHAR(36) 		-- 34	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.id
+	, EjercicioContable_34_numero           	INTEGER     		-- 35	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.numero
+	, EjercicioContable_34_apertura         	DATE        		-- 36	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.apertura
+	, EjercicioContable_34_cierre           	DATE        		-- 37	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.cierre
+	, EjercicioContable_34_cerrado          	BOOLEAN     		-- 38	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.cerrado
+	, EjercicioContable_34_cerradoModulos   	BOOLEAN     		-- 39	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_34_comentario       	VARCHAR(250)		-- 40	AsientoModeloItem.CuentaContable.CentroCostoContable.EjercicioContable.comentario
+	, CuentaContable_12_cuentaAgrupadora    	VARCHAR(50) 		-- 41	AsientoModeloItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_12_porcentaje          	DECIMAL(6,3)		-- 42	AsientoModeloItem.CuentaContable.porcentaje
+	, PuntoEquilibrio_43_id                 	VARCHAR(36) 		-- 43	AsientoModeloItem.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_43_numero             	INTEGER     		-- 44	AsientoModeloItem.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_43_nombre             	VARCHAR(50) 		-- 45	AsientoModeloItem.CuentaContable.PuntoEquilibrio.nombre
+	, TipoPuntoEquilibrio_46_id             	VARCHAR(36) 		-- 46	AsientoModeloItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id
+	, TipoPuntoEquilibrio_46_numero         	INTEGER     		-- 47	AsientoModeloItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero
+	, TipoPuntoEquilibrio_46_nombre         	VARCHAR(50) 		-- 48	AsientoModeloItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre
+	, EjercicioContable_49_id               	VARCHAR(36) 		-- 49	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.id
+	, EjercicioContable_49_numero           	INTEGER     		-- 50	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.numero
+	, EjercicioContable_49_apertura         	DATE        		-- 51	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura
+	, EjercicioContable_49_cierre           	DATE        		-- 52	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre
+	, EjercicioContable_49_cerrado          	BOOLEAN     		-- 53	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado
+	, EjercicioContable_49_cerradoModulos   	BOOLEAN     		-- 54	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos
+	, EjercicioContable_49_comentario       	VARCHAR(250)		-- 55	AsientoModeloItem.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario
+	, CostoVenta_56_id                      	VARCHAR(36) 		-- 56	AsientoModeloItem.CuentaContable.CostoVenta.id
+	, CostoVenta_56_numero                  	INTEGER     		-- 57	AsientoModeloItem.CuentaContable.CostoVenta.numero
+	, CostoVenta_56_nombre                  	VARCHAR(50) 		-- 58	AsientoModeloItem.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_59_id                 	VARCHAR(36) 		-- 59	AsientoModeloItem.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_59_numero             	INTEGER     		-- 60	AsientoModeloItem.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_59_nombre             	VARCHAR(50) 		-- 61	AsientoModeloItem.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_59_equate             	VARCHAR(30) 		-- 62	AsientoModeloItem.CuentaContable.SeguridadPuerta.equate
+	, SeguridadModulo_63_id                 	VARCHAR(36) 		-- 63	AsientoModeloItem.CuentaContable.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_63_numero             	INTEGER     		-- 64	AsientoModeloItem.CuentaContable.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_63_nombre             	VARCHAR(50) 		-- 65	AsientoModeloItem.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContable                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContable
+
+
+
+DROP TYPE IF EXISTS massoftware.t_AsientoContable_1 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoContable_1 AS (
+
+	  AsientoContable_id                           	VARCHAR(36) 		-- 0	AsientoContable.id
+	, AsientoContable_numero                       	INTEGER     		-- 1	AsientoContable.numero
+	, AsientoContable_fecha                        	DATE        		-- 2	AsientoContable.fecha
+	, AsientoContable_detalle                      	VARCHAR(100)		-- 3	AsientoContable.detalle
+	, EjercicioContable_4_id                       	VARCHAR(36) 		-- 4	AsientoContable.EjercicioContable.id
+	, EjercicioContable_4_numero                   	INTEGER     		-- 5	AsientoContable.EjercicioContable.numero
+	, EjercicioContable_4_apertura                 	DATE        		-- 6	AsientoContable.EjercicioContable.apertura
+	, EjercicioContable_4_cierre                   	DATE        		-- 7	AsientoContable.EjercicioContable.cierre
+	, EjercicioContable_4_cerrado                  	BOOLEAN     		-- 8	AsientoContable.EjercicioContable.cerrado
+	, EjercicioContable_4_cerradoModulos           	BOOLEAN     		-- 9	AsientoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_4_comentario               	VARCHAR(250)		-- 10	AsientoContable.EjercicioContable.comentario
+	, MinutaContable_11_id                         	VARCHAR(36) 		-- 11	AsientoContable.MinutaContable.id
+	, MinutaContable_11_numero                     	INTEGER     		-- 12	AsientoContable.MinutaContable.numero
+	, MinutaContable_11_nombre                     	VARCHAR(50) 		-- 13	AsientoContable.MinutaContable.nombre
+	, Sucursal_14_id                               	VARCHAR(36) 		-- 14	AsientoContable.Sucursal.id
+	, Sucursal_14_numero                           	INTEGER     		-- 15	AsientoContable.Sucursal.numero
+	, Sucursal_14_nombre                           	VARCHAR(50) 		-- 16	AsientoContable.Sucursal.nombre
+	, Sucursal_14_abreviatura                      	VARCHAR(5)  		-- 17	AsientoContable.Sucursal.abreviatura
+	, Sucursal_14_tipoSucursal                     	VARCHAR(36) 		-- 18	AsientoContable.Sucursal.tipoSucursal
+	, Sucursal_14_cuentaClientesDesde              	VARCHAR(7)  		-- 19	AsientoContable.Sucursal.cuentaClientesDesde
+	, Sucursal_14_cuentaClientesHasta              	VARCHAR(7)  		-- 20	AsientoContable.Sucursal.cuentaClientesHasta
+	, Sucursal_14_cantidadCaracteresClientes       	INTEGER     		-- 21	AsientoContable.Sucursal.cantidadCaracteresClientes
+	, Sucursal_14_identificacionNumericaClientes   	BOOLEAN     		-- 22	AsientoContable.Sucursal.identificacionNumericaClientes
+	, Sucursal_14_permiteCambiarClientes           	BOOLEAN     		-- 23	AsientoContable.Sucursal.permiteCambiarClientes
+	, Sucursal_14_cuentaProveedoresDesde           	VARCHAR(6)  		-- 24	AsientoContable.Sucursal.cuentaProveedoresDesde
+	, Sucursal_14_cuentaProveedoresHasta           	VARCHAR(6)  		-- 25	AsientoContable.Sucursal.cuentaProveedoresHasta
+	, Sucursal_14_cantidadCaracteresProveedores    	INTEGER     		-- 26	AsientoContable.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_14_identificacionNumericaProveedores	BOOLEAN     		-- 27	AsientoContable.Sucursal.identificacionNumericaProveedores
+	, Sucursal_14_permiteCambiarProveedores        	BOOLEAN     		-- 28	AsientoContable.Sucursal.permiteCambiarProveedores
+	, Sucursal_14_clientesOcacionalesDesde         	INTEGER     		-- 29	AsientoContable.Sucursal.clientesOcacionalesDesde
+	, Sucursal_14_clientesOcacionalesHasta         	INTEGER     		-- 30	AsientoContable.Sucursal.clientesOcacionalesHasta
+	, Sucursal_14_numeroCobranzaDesde              	INTEGER     		-- 31	AsientoContable.Sucursal.numeroCobranzaDesde
+	, Sucursal_14_numeroCobranzaHasta              	INTEGER     		-- 32	AsientoContable.Sucursal.numeroCobranzaHasta
+	, AsientoContableModulo_33_id                  	VARCHAR(36) 		-- 33	AsientoContable.AsientoContableModulo.id
+	, AsientoContableModulo_33_numero              	INTEGER     		-- 34	AsientoContable.AsientoContableModulo.numero
+	, AsientoContableModulo_33_nombre              	VARCHAR(50) 		-- 35	AsientoContable.AsientoContableModulo.nombre
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_AsientoContable_2 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoContable_2 AS (
+
+	  AsientoContable_id                           	VARCHAR(36) 		-- 0	AsientoContable.id
+	, AsientoContable_numero                       	INTEGER     		-- 1	AsientoContable.numero
+	, AsientoContable_fecha                        	DATE        		-- 2	AsientoContable.fecha
+	, AsientoContable_detalle                      	VARCHAR(100)		-- 3	AsientoContable.detalle
+	, EjercicioContable_4_id                       	VARCHAR(36) 		-- 4	AsientoContable.EjercicioContable.id
+	, EjercicioContable_4_numero                   	INTEGER     		-- 5	AsientoContable.EjercicioContable.numero
+	, EjercicioContable_4_apertura                 	DATE        		-- 6	AsientoContable.EjercicioContable.apertura
+	, EjercicioContable_4_cierre                   	DATE        		-- 7	AsientoContable.EjercicioContable.cierre
+	, EjercicioContable_4_cerrado                  	BOOLEAN     		-- 8	AsientoContable.EjercicioContable.cerrado
+	, EjercicioContable_4_cerradoModulos           	BOOLEAN     		-- 9	AsientoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_4_comentario               	VARCHAR(250)		-- 10	AsientoContable.EjercicioContable.comentario
+	, MinutaContable_11_id                         	VARCHAR(36) 		-- 11	AsientoContable.MinutaContable.id
+	, MinutaContable_11_numero                     	INTEGER     		-- 12	AsientoContable.MinutaContable.numero
+	, MinutaContable_11_nombre                     	VARCHAR(50) 		-- 13	AsientoContable.MinutaContable.nombre
+	, Sucursal_14_id                               	VARCHAR(36) 		-- 14	AsientoContable.Sucursal.id
+	, Sucursal_14_numero                           	INTEGER     		-- 15	AsientoContable.Sucursal.numero
+	, Sucursal_14_nombre                           	VARCHAR(50) 		-- 16	AsientoContable.Sucursal.nombre
+	, Sucursal_14_abreviatura                      	VARCHAR(5)  		-- 17	AsientoContable.Sucursal.abreviatura
+	, TipoSucursal_18_id                           	VARCHAR(36) 		-- 18	AsientoContable.Sucursal.TipoSucursal.id
+	, TipoSucursal_18_numero                       	INTEGER     		-- 19	AsientoContable.Sucursal.TipoSucursal.numero
+	, TipoSucursal_18_nombre                       	VARCHAR(50) 		-- 20	AsientoContable.Sucursal.TipoSucursal.nombre
+	, Sucursal_14_cuentaClientesDesde              	VARCHAR(7)  		-- 21	AsientoContable.Sucursal.cuentaClientesDesde
+	, Sucursal_14_cuentaClientesHasta              	VARCHAR(7)  		-- 22	AsientoContable.Sucursal.cuentaClientesHasta
+	, Sucursal_14_cantidadCaracteresClientes       	INTEGER     		-- 23	AsientoContable.Sucursal.cantidadCaracteresClientes
+	, Sucursal_14_identificacionNumericaClientes   	BOOLEAN     		-- 24	AsientoContable.Sucursal.identificacionNumericaClientes
+	, Sucursal_14_permiteCambiarClientes           	BOOLEAN     		-- 25	AsientoContable.Sucursal.permiteCambiarClientes
+	, Sucursal_14_cuentaProveedoresDesde           	VARCHAR(6)  		-- 26	AsientoContable.Sucursal.cuentaProveedoresDesde
+	, Sucursal_14_cuentaProveedoresHasta           	VARCHAR(6)  		-- 27	AsientoContable.Sucursal.cuentaProveedoresHasta
+	, Sucursal_14_cantidadCaracteresProveedores    	INTEGER     		-- 28	AsientoContable.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_14_identificacionNumericaProveedores	BOOLEAN     		-- 29	AsientoContable.Sucursal.identificacionNumericaProveedores
+	, Sucursal_14_permiteCambiarProveedores        	BOOLEAN     		-- 30	AsientoContable.Sucursal.permiteCambiarProveedores
+	, Sucursal_14_clientesOcacionalesDesde         	INTEGER     		-- 31	AsientoContable.Sucursal.clientesOcacionalesDesde
+	, Sucursal_14_clientesOcacionalesHasta         	INTEGER     		-- 32	AsientoContable.Sucursal.clientesOcacionalesHasta
+	, Sucursal_14_numeroCobranzaDesde              	INTEGER     		-- 33	AsientoContable.Sucursal.numeroCobranzaDesde
+	, Sucursal_14_numeroCobranzaHasta              	INTEGER     		-- 34	AsientoContable.Sucursal.numeroCobranzaHasta
+	, AsientoContableModulo_35_id                  	VARCHAR(36) 		-- 35	AsientoContable.AsientoContableModulo.id
+	, AsientoContableModulo_35_numero              	INTEGER     		-- 36	AsientoContable.AsientoContableModulo.numero
+	, AsientoContableModulo_35_nombre              	VARCHAR(50) 		-- 37	AsientoContable.AsientoContableModulo.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: AsientoContableItem                                                                                    //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.AsientoContableItem
+
+
+
+DROP TYPE IF EXISTS massoftware.t_AsientoContableItem_1 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoContableItem_1 AS (
+
+	  AsientoContableItem_id                 	VARCHAR(36)  		-- 0	AsientoContableItem.id
+	, AsientoContableItem_numero             	INTEGER      		-- 1	AsientoContableItem.numero
+	, AsientoContableItem_fecha              	DATE         		-- 2	AsientoContableItem.fecha
+	, AsientoContableItem_detalle            	VARCHAR(100) 		-- 3	AsientoContableItem.detalle
+	, AsientoContable_4_id                   	VARCHAR(36)  		-- 4	AsientoContableItem.AsientoContable.id
+	, AsientoContable_4_numero               	INTEGER      		-- 5	AsientoContableItem.AsientoContable.numero
+	, AsientoContable_4_fecha                	DATE         		-- 6	AsientoContableItem.AsientoContable.fecha
+	, AsientoContable_4_detalle              	VARCHAR(100) 		-- 7	AsientoContableItem.AsientoContable.detalle
+	, AsientoContable_4_ejercicioContable    	VARCHAR(36)  		-- 8	AsientoContableItem.AsientoContable.ejercicioContable
+	, AsientoContable_4_minutaContable       	VARCHAR(36)  		-- 9	AsientoContableItem.AsientoContable.minutaContable
+	, AsientoContable_4_sucursal             	VARCHAR(36)  		-- 10	AsientoContableItem.AsientoContable.sucursal
+	, AsientoContable_4_asientoContableModulo	VARCHAR(36)  		-- 11	AsientoContableItem.AsientoContable.asientoContableModulo
+	, CuentaContable_12_id                   	VARCHAR(36)  		-- 12	AsientoContableItem.CuentaContable.id
+	, CuentaContable_12_codigo               	VARCHAR(11)  		-- 13	AsientoContableItem.CuentaContable.codigo
+	, CuentaContable_12_nombre               	VARCHAR(50)  		-- 14	AsientoContableItem.CuentaContable.nombre
+	, CuentaContable_12_ejercicioContable    	VARCHAR(36)  		-- 15	AsientoContableItem.CuentaContable.ejercicioContable
+	, CuentaContable_12_integra              	VARCHAR(16)  		-- 16	AsientoContableItem.CuentaContable.integra
+	, CuentaContable_12_cuentaJerarquia      	VARCHAR(16)  		-- 17	AsientoContableItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_12_imputable            	BOOLEAN      		-- 18	AsientoContableItem.CuentaContable.imputable
+	, CuentaContable_12_ajustaPorInflacion   	BOOLEAN      		-- 19	AsientoContableItem.CuentaContable.ajustaPorInflacion
+	, CuentaContable_12_cuentaContableEstado 	VARCHAR(36)  		-- 20	AsientoContableItem.CuentaContable.cuentaContableEstado
+	, CuentaContable_12_cuentaConApropiacion 	BOOLEAN      		-- 21	AsientoContableItem.CuentaContable.cuentaConApropiacion
+	, CuentaContable_12_centroCostoContable  	VARCHAR(36)  		-- 22	AsientoContableItem.CuentaContable.centroCostoContable
+	, CuentaContable_12_cuentaAgrupadora     	VARCHAR(50)  		-- 23	AsientoContableItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_12_porcentaje           	DECIMAL(6,3) 		-- 24	AsientoContableItem.CuentaContable.porcentaje
+	, CuentaContable_12_puntoEquilibrio      	VARCHAR(36)  		-- 25	AsientoContableItem.CuentaContable.puntoEquilibrio
+	, CuentaContable_12_costoVenta           	VARCHAR(36)  		-- 26	AsientoContableItem.CuentaContable.costoVenta
+	, CuentaContable_12_seguridadPuerta      	VARCHAR(36)  		-- 27	AsientoContableItem.CuentaContable.seguridadPuerta
+	, AsientoContableItem_debe               	DECIMAL(13,5)		-- 28	AsientoContableItem.debe
+	, AsientoContableItem_haber              	DECIMAL(13,5)		-- 29	AsientoContableItem.haber
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_AsientoContableItem_2 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoContableItem_2 AS (
+
+	  AsientoContableItem_id                       	VARCHAR(36)  		-- 0	AsientoContableItem.id
+	, AsientoContableItem_numero                   	INTEGER      		-- 1	AsientoContableItem.numero
+	, AsientoContableItem_fecha                    	DATE         		-- 2	AsientoContableItem.fecha
+	, AsientoContableItem_detalle                  	VARCHAR(100) 		-- 3	AsientoContableItem.detalle
+	, AsientoContable_4_id                         	VARCHAR(36)  		-- 4	AsientoContableItem.AsientoContable.id
+	, AsientoContable_4_numero                     	INTEGER      		-- 5	AsientoContableItem.AsientoContable.numero
+	, AsientoContable_4_fecha                      	DATE         		-- 6	AsientoContableItem.AsientoContable.fecha
+	, AsientoContable_4_detalle                    	VARCHAR(100) 		-- 7	AsientoContableItem.AsientoContable.detalle
+	, EjercicioContable_8_id                       	VARCHAR(36)  		-- 8	AsientoContableItem.AsientoContable.EjercicioContable.id
+	, EjercicioContable_8_numero                   	INTEGER      		-- 9	AsientoContableItem.AsientoContable.EjercicioContable.numero
+	, EjercicioContable_8_apertura                 	DATE         		-- 10	AsientoContableItem.AsientoContable.EjercicioContable.apertura
+	, EjercicioContable_8_cierre                   	DATE         		-- 11	AsientoContableItem.AsientoContable.EjercicioContable.cierre
+	, EjercicioContable_8_cerrado                  	BOOLEAN      		-- 12	AsientoContableItem.AsientoContable.EjercicioContable.cerrado
+	, EjercicioContable_8_cerradoModulos           	BOOLEAN      		-- 13	AsientoContableItem.AsientoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_8_comentario               	VARCHAR(250) 		-- 14	AsientoContableItem.AsientoContable.EjercicioContable.comentario
+	, MinutaContable_15_id                         	VARCHAR(36)  		-- 15	AsientoContableItem.AsientoContable.MinutaContable.id
+	, MinutaContable_15_numero                     	INTEGER      		-- 16	AsientoContableItem.AsientoContable.MinutaContable.numero
+	, MinutaContable_15_nombre                     	VARCHAR(50)  		-- 17	AsientoContableItem.AsientoContable.MinutaContable.nombre
+	, Sucursal_18_id                               	VARCHAR(36)  		-- 18	AsientoContableItem.AsientoContable.Sucursal.id
+	, Sucursal_18_numero                           	INTEGER      		-- 19	AsientoContableItem.AsientoContable.Sucursal.numero
+	, Sucursal_18_nombre                           	VARCHAR(50)  		-- 20	AsientoContableItem.AsientoContable.Sucursal.nombre
+	, Sucursal_18_abreviatura                      	VARCHAR(5)   		-- 21	AsientoContableItem.AsientoContable.Sucursal.abreviatura
+	, Sucursal_18_tipoSucursal                     	VARCHAR(36)  		-- 22	AsientoContableItem.AsientoContable.Sucursal.tipoSucursal
+	, Sucursal_18_cuentaClientesDesde              	VARCHAR(7)   		-- 23	AsientoContableItem.AsientoContable.Sucursal.cuentaClientesDesde
+	, Sucursal_18_cuentaClientesHasta              	VARCHAR(7)   		-- 24	AsientoContableItem.AsientoContable.Sucursal.cuentaClientesHasta
+	, Sucursal_18_cantidadCaracteresClientes       	INTEGER      		-- 25	AsientoContableItem.AsientoContable.Sucursal.cantidadCaracteresClientes
+	, Sucursal_18_identificacionNumericaClientes   	BOOLEAN      		-- 26	AsientoContableItem.AsientoContable.Sucursal.identificacionNumericaClientes
+	, Sucursal_18_permiteCambiarClientes           	BOOLEAN      		-- 27	AsientoContableItem.AsientoContable.Sucursal.permiteCambiarClientes
+	, Sucursal_18_cuentaProveedoresDesde           	VARCHAR(6)   		-- 28	AsientoContableItem.AsientoContable.Sucursal.cuentaProveedoresDesde
+	, Sucursal_18_cuentaProveedoresHasta           	VARCHAR(6)   		-- 29	AsientoContableItem.AsientoContable.Sucursal.cuentaProveedoresHasta
+	, Sucursal_18_cantidadCaracteresProveedores    	INTEGER      		-- 30	AsientoContableItem.AsientoContable.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_18_identificacionNumericaProveedores	BOOLEAN      		-- 31	AsientoContableItem.AsientoContable.Sucursal.identificacionNumericaProveedores
+	, Sucursal_18_permiteCambiarProveedores        	BOOLEAN      		-- 32	AsientoContableItem.AsientoContable.Sucursal.permiteCambiarProveedores
+	, Sucursal_18_clientesOcacionalesDesde         	INTEGER      		-- 33	AsientoContableItem.AsientoContable.Sucursal.clientesOcacionalesDesde
+	, Sucursal_18_clientesOcacionalesHasta         	INTEGER      		-- 34	AsientoContableItem.AsientoContable.Sucursal.clientesOcacionalesHasta
+	, Sucursal_18_numeroCobranzaDesde              	INTEGER      		-- 35	AsientoContableItem.AsientoContable.Sucursal.numeroCobranzaDesde
+	, Sucursal_18_numeroCobranzaHasta              	INTEGER      		-- 36	AsientoContableItem.AsientoContable.Sucursal.numeroCobranzaHasta
+	, AsientoContableModulo_37_id                  	VARCHAR(36)  		-- 37	AsientoContableItem.AsientoContable.AsientoContableModulo.id
+	, AsientoContableModulo_37_numero              	INTEGER      		-- 38	AsientoContableItem.AsientoContable.AsientoContableModulo.numero
+	, AsientoContableModulo_37_nombre              	VARCHAR(50)  		-- 39	AsientoContableItem.AsientoContable.AsientoContableModulo.nombre
+	, CuentaContable_40_id                         	VARCHAR(36)  		-- 40	AsientoContableItem.CuentaContable.id
+	, CuentaContable_40_codigo                     	VARCHAR(11)  		-- 41	AsientoContableItem.CuentaContable.codigo
+	, CuentaContable_40_nombre                     	VARCHAR(50)  		-- 42	AsientoContableItem.CuentaContable.nombre
+	, EjercicioContable_43_id                      	VARCHAR(36)  		-- 43	AsientoContableItem.CuentaContable.EjercicioContable.id
+	, EjercicioContable_43_numero                  	INTEGER      		-- 44	AsientoContableItem.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_43_apertura                	DATE         		-- 45	AsientoContableItem.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_43_cierre                  	DATE         		-- 46	AsientoContableItem.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_43_cerrado                 	BOOLEAN      		-- 47	AsientoContableItem.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_43_cerradoModulos          	BOOLEAN      		-- 48	AsientoContableItem.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_43_comentario              	VARCHAR(250) 		-- 49	AsientoContableItem.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_40_integra                    	VARCHAR(16)  		-- 50	AsientoContableItem.CuentaContable.integra
+	, CuentaContable_40_cuentaJerarquia            	VARCHAR(16)  		-- 51	AsientoContableItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_40_imputable                  	BOOLEAN      		-- 52	AsientoContableItem.CuentaContable.imputable
+	, CuentaContable_40_ajustaPorInflacion         	BOOLEAN      		-- 53	AsientoContableItem.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_54_id                   	VARCHAR(36)  		-- 54	AsientoContableItem.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_54_numero               	INTEGER      		-- 55	AsientoContableItem.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_54_nombre               	VARCHAR(50)  		-- 56	AsientoContableItem.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_40_cuentaConApropiacion       	BOOLEAN      		-- 57	AsientoContableItem.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_58_id                    	VARCHAR(36)  		-- 58	AsientoContableItem.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_58_numero                	INTEGER      		-- 59	AsientoContableItem.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_58_nombre                	VARCHAR(50)  		-- 60	AsientoContableItem.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_58_abreviatura           	VARCHAR(5)   		-- 61	AsientoContableItem.CuentaContable.CentroCostoContable.abreviatura
+	, CentroCostoContable_58_ejercicioContable     	VARCHAR(36)  		-- 62	AsientoContableItem.CuentaContable.CentroCostoContable.ejercicioContable
+	, CuentaContable_40_cuentaAgrupadora           	VARCHAR(50)  		-- 63	AsientoContableItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_40_porcentaje                 	DECIMAL(6,3) 		-- 64	AsientoContableItem.CuentaContable.porcentaje
+	, PuntoEquilibrio_65_id                        	VARCHAR(36)  		-- 65	AsientoContableItem.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_65_numero                    	INTEGER      		-- 66	AsientoContableItem.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_65_nombre                    	VARCHAR(50)  		-- 67	AsientoContableItem.CuentaContable.PuntoEquilibrio.nombre
+	, PuntoEquilibrio_65_tipoPuntoEquilibrio       	VARCHAR(36)  		-- 68	AsientoContableItem.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio
+	, PuntoEquilibrio_65_ejercicioContable         	VARCHAR(36)  		-- 69	AsientoContableItem.CuentaContable.PuntoEquilibrio.ejercicioContable
+	, CostoVenta_70_id                             	VARCHAR(36)  		-- 70	AsientoContableItem.CuentaContable.CostoVenta.id
+	, CostoVenta_70_numero                         	INTEGER      		-- 71	AsientoContableItem.CuentaContable.CostoVenta.numero
+	, CostoVenta_70_nombre                         	VARCHAR(50)  		-- 72	AsientoContableItem.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_73_id                        	VARCHAR(36)  		-- 73	AsientoContableItem.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_73_numero                    	INTEGER      		-- 74	AsientoContableItem.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_73_nombre                    	VARCHAR(50)  		-- 75	AsientoContableItem.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_73_equate                    	VARCHAR(30)  		-- 76	AsientoContableItem.CuentaContable.SeguridadPuerta.equate
+	, SeguridadPuerta_73_seguridadModulo           	VARCHAR(36)  		-- 77	AsientoContableItem.CuentaContable.SeguridadPuerta.seguridadModulo
+	, AsientoContableItem_debe                     	DECIMAL(13,5)		-- 78	AsientoContableItem.debe
+	, AsientoContableItem_haber                    	DECIMAL(13,5)		-- 79	AsientoContableItem.haber
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_AsientoContableItem_3 CASCADE;
+
+CREATE TYPE massoftware.t_AsientoContableItem_3 AS (
+
+	  AsientoContableItem_id                       	VARCHAR(36)  		-- 0	AsientoContableItem.id
+	, AsientoContableItem_numero                   	INTEGER      		-- 1	AsientoContableItem.numero
+	, AsientoContableItem_fecha                    	DATE         		-- 2	AsientoContableItem.fecha
+	, AsientoContableItem_detalle                  	VARCHAR(100) 		-- 3	AsientoContableItem.detalle
+	, AsientoContable_4_id                         	VARCHAR(36)  		-- 4	AsientoContableItem.AsientoContable.id
+	, AsientoContable_4_numero                     	INTEGER      		-- 5	AsientoContableItem.AsientoContable.numero
+	, AsientoContable_4_fecha                      	DATE         		-- 6	AsientoContableItem.AsientoContable.fecha
+	, AsientoContable_4_detalle                    	VARCHAR(100) 		-- 7	AsientoContableItem.AsientoContable.detalle
+	, EjercicioContable_8_id                       	VARCHAR(36)  		-- 8	AsientoContableItem.AsientoContable.EjercicioContable.id
+	, EjercicioContable_8_numero                   	INTEGER      		-- 9	AsientoContableItem.AsientoContable.EjercicioContable.numero
+	, EjercicioContable_8_apertura                 	DATE         		-- 10	AsientoContableItem.AsientoContable.EjercicioContable.apertura
+	, EjercicioContable_8_cierre                   	DATE         		-- 11	AsientoContableItem.AsientoContable.EjercicioContable.cierre
+	, EjercicioContable_8_cerrado                  	BOOLEAN      		-- 12	AsientoContableItem.AsientoContable.EjercicioContable.cerrado
+	, EjercicioContable_8_cerradoModulos           	BOOLEAN      		-- 13	AsientoContableItem.AsientoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_8_comentario               	VARCHAR(250) 		-- 14	AsientoContableItem.AsientoContable.EjercicioContable.comentario
+	, MinutaContable_15_id                         	VARCHAR(36)  		-- 15	AsientoContableItem.AsientoContable.MinutaContable.id
+	, MinutaContable_15_numero                     	INTEGER      		-- 16	AsientoContableItem.AsientoContable.MinutaContable.numero
+	, MinutaContable_15_nombre                     	VARCHAR(50)  		-- 17	AsientoContableItem.AsientoContable.MinutaContable.nombre
+	, Sucursal_18_id                               	VARCHAR(36)  		-- 18	AsientoContableItem.AsientoContable.Sucursal.id
+	, Sucursal_18_numero                           	INTEGER      		-- 19	AsientoContableItem.AsientoContable.Sucursal.numero
+	, Sucursal_18_nombre                           	VARCHAR(50)  		-- 20	AsientoContableItem.AsientoContable.Sucursal.nombre
+	, Sucursal_18_abreviatura                      	VARCHAR(5)   		-- 21	AsientoContableItem.AsientoContable.Sucursal.abreviatura
+	, TipoSucursal_22_id                           	VARCHAR(36)  		-- 22	AsientoContableItem.AsientoContable.Sucursal.TipoSucursal.id
+	, TipoSucursal_22_numero                       	INTEGER      		-- 23	AsientoContableItem.AsientoContable.Sucursal.TipoSucursal.numero
+	, TipoSucursal_22_nombre                       	VARCHAR(50)  		-- 24	AsientoContableItem.AsientoContable.Sucursal.TipoSucursal.nombre
+	, Sucursal_18_cuentaClientesDesde              	VARCHAR(7)   		-- 25	AsientoContableItem.AsientoContable.Sucursal.cuentaClientesDesde
+	, Sucursal_18_cuentaClientesHasta              	VARCHAR(7)   		-- 26	AsientoContableItem.AsientoContable.Sucursal.cuentaClientesHasta
+	, Sucursal_18_cantidadCaracteresClientes       	INTEGER      		-- 27	AsientoContableItem.AsientoContable.Sucursal.cantidadCaracteresClientes
+	, Sucursal_18_identificacionNumericaClientes   	BOOLEAN      		-- 28	AsientoContableItem.AsientoContable.Sucursal.identificacionNumericaClientes
+	, Sucursal_18_permiteCambiarClientes           	BOOLEAN      		-- 29	AsientoContableItem.AsientoContable.Sucursal.permiteCambiarClientes
+	, Sucursal_18_cuentaProveedoresDesde           	VARCHAR(6)   		-- 30	AsientoContableItem.AsientoContable.Sucursal.cuentaProveedoresDesde
+	, Sucursal_18_cuentaProveedoresHasta           	VARCHAR(6)   		-- 31	AsientoContableItem.AsientoContable.Sucursal.cuentaProveedoresHasta
+	, Sucursal_18_cantidadCaracteresProveedores    	INTEGER      		-- 32	AsientoContableItem.AsientoContable.Sucursal.cantidadCaracteresProveedores
+	, Sucursal_18_identificacionNumericaProveedores	BOOLEAN      		-- 33	AsientoContableItem.AsientoContable.Sucursal.identificacionNumericaProveedores
+	, Sucursal_18_permiteCambiarProveedores        	BOOLEAN      		-- 34	AsientoContableItem.AsientoContable.Sucursal.permiteCambiarProveedores
+	, Sucursal_18_clientesOcacionalesDesde         	INTEGER      		-- 35	AsientoContableItem.AsientoContable.Sucursal.clientesOcacionalesDesde
+	, Sucursal_18_clientesOcacionalesHasta         	INTEGER      		-- 36	AsientoContableItem.AsientoContable.Sucursal.clientesOcacionalesHasta
+	, Sucursal_18_numeroCobranzaDesde              	INTEGER      		-- 37	AsientoContableItem.AsientoContable.Sucursal.numeroCobranzaDesde
+	, Sucursal_18_numeroCobranzaHasta              	INTEGER      		-- 38	AsientoContableItem.AsientoContable.Sucursal.numeroCobranzaHasta
+	, AsientoContableModulo_39_id                  	VARCHAR(36)  		-- 39	AsientoContableItem.AsientoContable.AsientoContableModulo.id
+	, AsientoContableModulo_39_numero              	INTEGER      		-- 40	AsientoContableItem.AsientoContable.AsientoContableModulo.numero
+	, AsientoContableModulo_39_nombre              	VARCHAR(50)  		-- 41	AsientoContableItem.AsientoContable.AsientoContableModulo.nombre
+	, CuentaContable_42_id                         	VARCHAR(36)  		-- 42	AsientoContableItem.CuentaContable.id
+	, CuentaContable_42_codigo                     	VARCHAR(11)  		-- 43	AsientoContableItem.CuentaContable.codigo
+	, CuentaContable_42_nombre                     	VARCHAR(50)  		-- 44	AsientoContableItem.CuentaContable.nombre
+	, EjercicioContable_45_id                      	VARCHAR(36)  		-- 45	AsientoContableItem.CuentaContable.EjercicioContable.id
+	, EjercicioContable_45_numero                  	INTEGER      		-- 46	AsientoContableItem.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_45_apertura                	DATE         		-- 47	AsientoContableItem.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_45_cierre                  	DATE         		-- 48	AsientoContableItem.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_45_cerrado                 	BOOLEAN      		-- 49	AsientoContableItem.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_45_cerradoModulos          	BOOLEAN      		-- 50	AsientoContableItem.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_45_comentario              	VARCHAR(250) 		-- 51	AsientoContableItem.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_42_integra                    	VARCHAR(16)  		-- 52	AsientoContableItem.CuentaContable.integra
+	, CuentaContable_42_cuentaJerarquia            	VARCHAR(16)  		-- 53	AsientoContableItem.CuentaContable.cuentaJerarquia
+	, CuentaContable_42_imputable                  	BOOLEAN      		-- 54	AsientoContableItem.CuentaContable.imputable
+	, CuentaContable_42_ajustaPorInflacion         	BOOLEAN      		-- 55	AsientoContableItem.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_56_id                   	VARCHAR(36)  		-- 56	AsientoContableItem.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_56_numero               	INTEGER      		-- 57	AsientoContableItem.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_56_nombre               	VARCHAR(50)  		-- 58	AsientoContableItem.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_42_cuentaConApropiacion       	BOOLEAN      		-- 59	AsientoContableItem.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_60_id                    	VARCHAR(36)  		-- 60	AsientoContableItem.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_60_numero                	INTEGER      		-- 61	AsientoContableItem.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_60_nombre                	VARCHAR(50)  		-- 62	AsientoContableItem.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_60_abreviatura           	VARCHAR(5)   		-- 63	AsientoContableItem.CuentaContable.CentroCostoContable.abreviatura
+	, EjercicioContable_64_id                      	VARCHAR(36)  		-- 64	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.id
+	, EjercicioContable_64_numero                  	INTEGER      		-- 65	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.numero
+	, EjercicioContable_64_apertura                	DATE         		-- 66	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.apertura
+	, EjercicioContable_64_cierre                  	DATE         		-- 67	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.cierre
+	, EjercicioContable_64_cerrado                 	BOOLEAN      		-- 68	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.cerrado
+	, EjercicioContable_64_cerradoModulos          	BOOLEAN      		-- 69	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_64_comentario              	VARCHAR(250) 		-- 70	AsientoContableItem.CuentaContable.CentroCostoContable.EjercicioContable.comentario
+	, CuentaContable_42_cuentaAgrupadora           	VARCHAR(50)  		-- 71	AsientoContableItem.CuentaContable.cuentaAgrupadora
+	, CuentaContable_42_porcentaje                 	DECIMAL(6,3) 		-- 72	AsientoContableItem.CuentaContable.porcentaje
+	, PuntoEquilibrio_73_id                        	VARCHAR(36)  		-- 73	AsientoContableItem.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_73_numero                    	INTEGER      		-- 74	AsientoContableItem.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_73_nombre                    	VARCHAR(50)  		-- 75	AsientoContableItem.CuentaContable.PuntoEquilibrio.nombre
+	, TipoPuntoEquilibrio_76_id                    	VARCHAR(36)  		-- 76	AsientoContableItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id
+	, TipoPuntoEquilibrio_76_numero                	INTEGER      		-- 77	AsientoContableItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero
+	, TipoPuntoEquilibrio_76_nombre                	VARCHAR(50)  		-- 78	AsientoContableItem.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre
+	, EjercicioContable_79_id                      	VARCHAR(36)  		-- 79	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.id
+	, EjercicioContable_79_numero                  	INTEGER      		-- 80	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.numero
+	, EjercicioContable_79_apertura                	DATE         		-- 81	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura
+	, EjercicioContable_79_cierre                  	DATE         		-- 82	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre
+	, EjercicioContable_79_cerrado                 	BOOLEAN      		-- 83	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado
+	, EjercicioContable_79_cerradoModulos          	BOOLEAN      		-- 84	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos
+	, EjercicioContable_79_comentario              	VARCHAR(250) 		-- 85	AsientoContableItem.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario
+	, CostoVenta_86_id                             	VARCHAR(36)  		-- 86	AsientoContableItem.CuentaContable.CostoVenta.id
+	, CostoVenta_86_numero                         	INTEGER      		-- 87	AsientoContableItem.CuentaContable.CostoVenta.numero
+	, CostoVenta_86_nombre                         	VARCHAR(50)  		-- 88	AsientoContableItem.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_89_id                        	VARCHAR(36)  		-- 89	AsientoContableItem.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_89_numero                    	INTEGER      		-- 90	AsientoContableItem.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_89_nombre                    	VARCHAR(50)  		-- 91	AsientoContableItem.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_89_equate                    	VARCHAR(30)  		-- 92	AsientoContableItem.CuentaContable.SeguridadPuerta.equate
+	, SeguridadModulo_93_id                        	VARCHAR(36)  		-- 93	AsientoContableItem.CuentaContable.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_93_numero                    	INTEGER      		-- 94	AsientoContableItem.CuentaContable.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_93_nombre                    	VARCHAR(50)  		-- 95	AsientoContableItem.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre
+	, AsientoContableItem_debe                     	DECIMAL(13,5)		-- 96	AsientoContableItem.debe
+	, AsientoContableItem_haber                    	DECIMAL(13,5)		-- 97	AsientoContableItem.haber
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Empresa                                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Empresa
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Empresa_1 CASCADE;
+
+CREATE TYPE massoftware.t_Empresa_1 AS (
+
+	  Empresa_id                             	VARCHAR(36) 		-- 0	Empresa.id
+	, EjercicioContable_1_id                 	VARCHAR(36) 		-- 1	Empresa.EjercicioContable.id
+	, EjercicioContable_1_numero             	INTEGER     		-- 2	Empresa.EjercicioContable.numero
+	, EjercicioContable_1_apertura           	DATE        		-- 3	Empresa.EjercicioContable.apertura
+	, EjercicioContable_1_cierre             	DATE        		-- 4	Empresa.EjercicioContable.cierre
+	, EjercicioContable_1_cerrado            	BOOLEAN     		-- 5	Empresa.EjercicioContable.cerrado
+	, EjercicioContable_1_cerradoModulos     	BOOLEAN     		-- 6	Empresa.EjercicioContable.cerradoModulos
+	, EjercicioContable_1_comentario         	VARCHAR(250)		-- 7	Empresa.EjercicioContable.comentario
+	, Empresa_fechaCierreVentas              	DATE        		-- 8	Empresa.fechaCierreVentas
+	, Empresa_fechaCierreStock               	DATE        		-- 9	Empresa.fechaCierreStock
+	, Empresa_fechaCierreFondo               	DATE        		-- 10	Empresa.fechaCierreFondo
+	, Empresa_fechaCierreCompras             	DATE        		-- 11	Empresa.fechaCierreCompras
+	, Empresa_fechaCierreContabilidad        	DATE        		-- 12	Empresa.fechaCierreContabilidad
+	, Empresa_fechaCierreGarantiaDevoluciones	DATE        		-- 13	Empresa.fechaCierreGarantiaDevoluciones
+	, Empresa_fechaCierreTambos              	DATE        		-- 14	Empresa.fechaCierreTambos
+	, Empresa_fechaCierreRRHH                	DATE        		-- 15	Empresa.fechaCierreRRHH
+
+);

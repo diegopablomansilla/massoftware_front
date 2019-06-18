@@ -94,6 +94,27 @@ import com.massoftware.service.contabilidad.CuentaContableEstadoService;
 import com.massoftware.model.contabilidad.CuentaContable;
 import com.massoftware.service.contabilidad.CuentaContableFiltro;
 import com.massoftware.service.contabilidad.CuentaContableService;
+import com.massoftware.model.contabilidad.AsientoModelo;
+import com.massoftware.service.contabilidad.AsientoModeloFiltro;
+import com.massoftware.service.contabilidad.AsientoModeloService;
+import com.massoftware.model.contabilidad.AsientoModeloItem;
+import com.massoftware.service.contabilidad.AsientoModeloItemFiltro;
+import com.massoftware.service.contabilidad.AsientoModeloItemService;
+import com.massoftware.model.contabilidad.MinutaContable;
+import com.massoftware.service.contabilidad.MinutaContableFiltro;
+import com.massoftware.service.contabilidad.MinutaContableService;
+import com.massoftware.model.contabilidad.AsientoContableModulo;
+import com.massoftware.service.contabilidad.AsientoContableModuloFiltro;
+import com.massoftware.service.contabilidad.AsientoContableModuloService;
+import com.massoftware.model.contabilidad.AsientoContable;
+import com.massoftware.service.contabilidad.AsientoContableFiltro;
+import com.massoftware.service.contabilidad.AsientoContableService;
+import com.massoftware.model.contabilidad.AsientoContableItem;
+import com.massoftware.service.contabilidad.AsientoContableItemFiltro;
+import com.massoftware.service.contabilidad.AsientoContableItemService;
+import com.massoftware.model.empresa.Empresa;
+import com.massoftware.service.empresa.EmpresaFiltro;
+import com.massoftware.service.empresa.EmpresaService;
 
 public class Populate {
 
@@ -129,7 +150,14 @@ public class Populate {
 			//insertPuntoEquilibrio();
 			//insertCostoVenta();
 			//insertCuentaContableEstado();
-			insertCuentaContable();
+			//insertCuentaContable();
+			//insertAsientoModelo();
+			//insertAsientoModeloItem();
+			//insertMinutaContable();
+			//insertAsientoContableModulo();
+			//insertAsientoContable();
+			//insertAsientoContableItem();
+			insertEmpresa();
 	}
 
 
@@ -1354,9 +1382,9 @@ public class Populate {
 				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
 				obj.setEjercicioContable(ejercicioContableListado.get(0));
 
-				obj.setIntegra(UtilPopulate.getStringRandomFull(16, 16, true));
+				obj.setIntegra(UtilPopulate.getStringRandom(16, 16, true));
 
-				obj.setCuentaJerarquia(UtilPopulate.getStringRandomFull(16, 16, true));
+				obj.setCuentaJerarquia(UtilPopulate.getStringRandom(16, 16, true));
 
 				obj.setImputable(new Random().nextBoolean());
 
@@ -1402,6 +1430,338 @@ public class Populate {
 				seguridadPuertaFiltro.setLimit(1L);
 				List<SeguridadPuerta> seguridadPuertaListado = serviceseguridadPuerta.find(seguridadPuertaFiltro);
 				obj.setSeguridadPuerta(seguridadPuertaListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertAsientoModelo() throws Exception {
+
+		AsientoModeloService service = AppCX.services().buildAsientoModeloService();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				AsientoModelo obj = new AsientoModelo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertAsientoModeloItem() throws Exception {
+
+		AsientoModeloItemService service = AppCX.services().buildAsientoModeloItemService();
+		AsientoModeloService serviceasientoModelo = AppCX.services().buildAsientoModeloService();
+		Long asientoModeloCount = serviceasientoModelo.count();
+		CuentaContableService servicecuentaContable = AppCX.services().buildCuentaContableService();
+		Long cuentaContableCount = servicecuentaContable.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				AsientoModeloItem obj = new AsientoModeloItem();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				AsientoModeloFiltro asientoModeloFiltro = new AsientoModeloFiltro();
+				long asientoModeloIndex = UtilPopulate.getLongRandom(0L, asientoModeloCount-1);
+				asientoModeloFiltro.setOffset(asientoModeloIndex);
+				asientoModeloFiltro.setLimit(1L);
+				List<AsientoModelo> asientoModeloListado = serviceasientoModelo.find(asientoModeloFiltro);
+				obj.setAsientoModelo(asientoModeloListado.get(0));
+
+				CuentaContableFiltro cuentaContableFiltro = new CuentaContableFiltro();
+				long cuentaContableIndex = UtilPopulate.getLongRandom(0L, cuentaContableCount-1);
+				cuentaContableFiltro.setOffset(cuentaContableIndex);
+				cuentaContableFiltro.setLimit(1L);
+				List<CuentaContable> cuentaContableListado = servicecuentaContable.find(cuentaContableFiltro);
+				obj.setCuentaContable(cuentaContableListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertMinutaContable() throws Exception {
+
+		MinutaContableService service = AppCX.services().buildMinutaContableService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				MinutaContable obj = new MinutaContable();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertAsientoContableModulo() throws Exception {
+
+		AsientoContableModuloService service = AppCX.services().buildAsientoContableModuloService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				AsientoContableModulo obj = new AsientoContableModulo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertAsientoContable() throws Exception {
+
+		AsientoContableService service = AppCX.services().buildAsientoContableService();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+		MinutaContableService serviceminutaContable = AppCX.services().buildMinutaContableService();
+		Long minutaContableCount = serviceminutaContable.count();
+		SucursalService servicesucursal = AppCX.services().buildSucursalService();
+		Long sucursalCount = servicesucursal.count();
+		AsientoContableModuloService serviceasientoContableModulo = AppCX.services().buildAsientoContableModuloService();
+		Long asientoContableModuloCount = serviceasientoContableModulo.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				AsientoContable obj = new AsientoContable();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setFecha(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setDetalle(UtilPopulate.getStringRandom(null, 100, false));
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				MinutaContableFiltro minutaContableFiltro = new MinutaContableFiltro();
+				long minutaContableIndex = UtilPopulate.getLongRandom(0L, minutaContableCount-1);
+				minutaContableFiltro.setOffset(minutaContableIndex);
+				minutaContableFiltro.setLimit(1L);
+				List<MinutaContable> minutaContableListado = serviceminutaContable.find(minutaContableFiltro);
+				obj.setMinutaContable(minutaContableListado.get(0));
+
+				SucursalFiltro sucursalFiltro = new SucursalFiltro();
+				long sucursalIndex = UtilPopulate.getLongRandom(0L, sucursalCount-1);
+				sucursalFiltro.setOffset(sucursalIndex);
+				sucursalFiltro.setLimit(1L);
+				List<Sucursal> sucursalListado = servicesucursal.find(sucursalFiltro);
+				obj.setSucursal(sucursalListado.get(0));
+
+				AsientoContableModuloFiltro asientoContableModuloFiltro = new AsientoContableModuloFiltro();
+				long asientoContableModuloIndex = UtilPopulate.getLongRandom(0L, asientoContableModuloCount-1);
+				asientoContableModuloFiltro.setOffset(asientoContableModuloIndex);
+				asientoContableModuloFiltro.setLimit(1L);
+				List<AsientoContableModulo> asientoContableModuloListado = serviceasientoContableModulo.find(asientoContableModuloFiltro);
+				obj.setAsientoContableModulo(asientoContableModuloListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertAsientoContableItem() throws Exception {
+
+		AsientoContableItemService service = AppCX.services().buildAsientoContableItemService();
+		AsientoContableService serviceasientoContable = AppCX.services().buildAsientoContableService();
+		Long asientoContableCount = serviceasientoContable.count();
+		CuentaContableService servicecuentaContable = AppCX.services().buildCuentaContableService();
+		Long cuentaContableCount = servicecuentaContable.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				AsientoContableItem obj = new AsientoContableItem();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setFecha(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setDetalle(UtilPopulate.getStringRandom(null, 100, false));
+
+				AsientoContableFiltro asientoContableFiltro = new AsientoContableFiltro();
+				long asientoContableIndex = UtilPopulate.getLongRandom(0L, asientoContableCount-1);
+				asientoContableFiltro.setOffset(asientoContableIndex);
+				asientoContableFiltro.setLimit(1L);
+				List<AsientoContable> asientoContableListado = serviceasientoContable.find(asientoContableFiltro);
+				obj.setAsientoContable(asientoContableListado.get(0));
+
+				CuentaContableFiltro cuentaContableFiltro = new CuentaContableFiltro();
+				long cuentaContableIndex = UtilPopulate.getLongRandom(0L, cuentaContableCount-1);
+				cuentaContableFiltro.setOffset(cuentaContableIndex);
+				cuentaContableFiltro.setLimit(1L);
+				List<CuentaContable> cuentaContableListado = servicecuentaContable.find(cuentaContableFiltro);
+				obj.setCuentaContable(cuentaContableListado.get(0));
+
+				obj.setDebe(UtilPopulate.getBigDecimalRandom(null, null, true, 13, 5));
+
+				obj.setHaber(UtilPopulate.getBigDecimalRandom(null, null, true, 13, 5));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertEmpresa() throws Exception {
+
+		EmpresaService service = AppCX.services().buildEmpresaService();
+		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
+		Long ejercicioContableCount = serviceejercicioContable.count();
+
+		for(int i = 0; i < 1; i++){
+
+			try {
+
+				Empresa obj = new Empresa();
+
+				EjercicioContableFiltro ejercicioContableFiltro = new EjercicioContableFiltro();
+				long ejercicioContableIndex = UtilPopulate.getLongRandom(0L, ejercicioContableCount-1);
+				ejercicioContableFiltro.setOffset(ejercicioContableIndex);
+				ejercicioContableFiltro.setLimit(1L);
+				List<EjercicioContable> ejercicioContableListado = serviceejercicioContable.find(ejercicioContableFiltro);
+				obj.setEjercicioContable(ejercicioContableListado.get(0));
+
+				obj.setFechaCierreVentas(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreStock(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreFondo(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreCompras(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreContabilidad(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreGarantiaDevoluciones(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreTambos(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setFechaCierreRRHH(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
 
 				service.insert(obj);
 
