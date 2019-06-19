@@ -1,4 +1,4 @@
-package com.anthill.ant.fondos;
+package com.anthill.ant.fondos.banco;
 
 import com.anthill.Anthill;
 import com.anthill.ant.Ant;
@@ -23,7 +23,7 @@ public class BancoAnt extends Ant {
 
 		c.setName("Banco");
 
-		c.setNamePackage("fondos");
+		c.setNamePackage("fondos.banco");
 		c.setSingular("Banco");
 		c.setPlural("Bancos");
 		c.setSingularPre("el banco");

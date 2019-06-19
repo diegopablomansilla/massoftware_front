@@ -2949,3 +2949,81 @@ CREATE TRIGGER tgFormatBanco BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.Banco;
 
 -- SELECT * FROM massoftware.Banco WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: BancoFirmante                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.BancoFirmante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.BancoFirmante CASCADE;
+
+CREATE TABLE massoftware.BancoFirmante
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº firmante
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT BancoFirmante_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Cargo
+	cargo VARCHAR(50), 
+	
+	-- Obsoleto
+	bloqueado BOOLEAN NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_BancoFirmante_nombre ON massoftware.BancoFirmante (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_BancoFirmante_cargo ON massoftware.BancoFirmante (TRANSLATE(LOWER(TRIM(cargo))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatBancoFirmante() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatBancoFirmante() RETURNS TRIGGER AS $formatBancoFirmante$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.cargo := massoftware.white_is_null(NEW.cargo);
+
+	RETURN NEW;
+END;
+$formatBancoFirmante$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatBancoFirmante ON massoftware.BancoFirmante CASCADE;
+
+CREATE TRIGGER tgFormatBancoFirmante BEFORE INSERT OR UPDATE
+	ON massoftware.BancoFirmante FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatBancoFirmante();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.BancoFirmante;
+
+-- SELECT * FROM massoftware.BancoFirmante LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.BancoFirmante;
+
+-- SELECT * FROM massoftware.BancoFirmante WHERE id = 'xxx';

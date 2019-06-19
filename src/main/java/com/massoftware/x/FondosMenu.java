@@ -99,7 +99,8 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Chequeras ...", openChequerasCmd()).setEnabled(false);
 		a1.addItem("+++ Bancos ...", openBancosCmd());
 		a1.addItem("Bancos ...", openBancoCmd());
-		a1.addItem("Firmantes (cheques propios) ...", openFirmantesCmd());
+		a1.addItem("+++Firmantes (cheques propios) ...", openFirmantesCmd());
+		a1.addItem("Firmantes (cheques propios) ...", openBancoFirmanteCmd());
 		a1.addItem("Cajas", openCajasCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
 		a1.addItem("Monedas ...", openMonedasCmd());
@@ -237,6 +238,27 @@ public class FondosMenu extends AbstractMenu {
 				
 				try {
 					Window window = AppCX.widgets().buildWLBanco();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openBancoFirmanteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {				
+				
+				try {
+					Window window = AppCX.widgets().buildWLBancoFirmante();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

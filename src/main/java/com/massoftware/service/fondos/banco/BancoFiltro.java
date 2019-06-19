@@ -1,4 +1,4 @@
-package com.massoftware.service.fondos;
+package com.massoftware.service.fondos.banco;
 
 import com.massoftware.backend.annotation.FieldConfAnont;
 import com.massoftware.service.AbstractFilter;

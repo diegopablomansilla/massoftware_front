@@ -1,4 +1,4 @@
-package com.massoftware.model.fondos;
+package com.massoftware.model.fondos.banco;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;

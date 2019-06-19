@@ -4,6 +4,7 @@ tipodocumentoafip
 tipocliente
 notacreditomotivo
 motivocomentario
+bancofirmante
 banco
 deposito
 asientocontable

@@ -1,5 +1,5 @@
 
-package com.massoftware.x.fondos;
+package com.massoftware.x.fondos.banco;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
@@ -15,46 +15,37 @@ import com.massoftware.model.EntityId;
 
 
 
-import com.massoftware.model.fondos.Banco;
-import com.massoftware.service.fondos.BancoService;
+import com.massoftware.model.fondos.banco.BancoFirmante;
+import com.massoftware.service.fondos.banco.BancoFirmanteService;
 
 @SuppressWarnings("serial")
-public class WFBanco extends WindowForm {
+public class WFBancoFirmante extends WindowForm {
 
 
 	// -------------------------------------------------------------
 
-	protected BeanItem<Banco> itemBI;
+	protected BeanItem<BancoFirmante> itemBI;
 	
-	private BancoService service;
+	private BancoFirmanteService service;
 
 	// -------------------------------------------------------------
 
 	
 	protected TextFieldEntity numeroTXT;
 	protected TextFieldEntity nombreTXT;
-	protected TextFieldEntity cuitTXT;
+	protected TextFieldEntity cargoTXT;
 	protected CheckBoxEntity bloqueadoCHK;
-	protected TextFieldEntity hojaTXT;
-	protected TextFieldEntity primeraFilaTXT;
-	protected TextFieldEntity ultimaFilaTXT;
-	protected TextFieldEntity fechaTXT;
-	protected TextFieldEntity descripcionTXT;
-	protected TextFieldEntity referencia1TXT;
-	protected TextFieldEntity importeTXT;
-	protected TextFieldEntity referencia2TXT;
-	protected TextFieldEntity saldoTXT;
 
 
 	// -------------------------------------------------------------
 
-	public WFBanco(String mode, String id) {
+	public WFBancoFirmante(String mode, String id) {
 		super(mode, id);					
 	}
 
-	protected BancoService getService() throws Exception {
+	protected BancoFirmanteService getService() throws Exception {
 		if(service == null){
-			service = AppCX.services().buildBancoService();
+			service = AppCX.services().buildBancoFirmanteService();
 		}
 		
 		return service;
@@ -111,51 +102,15 @@ public class WFBanco extends WindowForm {
 
 		// ------------------------------------------------------------------
 
-		cuitTXT = new TextFieldEntity(itemBI, "cuit", this.mode) {
+		cargoTXT = new TextFieldEntity(itemBI, "cargo", this.mode) {
 			protected boolean ifExists(Object arg) throws Exception {
-				return getService().isExistsCuit((Long)arg);
+				return getService().isExistsCargo((String)arg);
 			}
 		};
 
 		// ------------------------------------------------------------------
 
 		bloqueadoCHK = new CheckBoxEntity(itemBI, "bloqueado");
-
-		// ------------------------------------------------------------------
-
-		hojaTXT = new TextFieldEntity(itemBI, "hoja", this.mode);
-
-		// ------------------------------------------------------------------
-
-		primeraFilaTXT = new TextFieldEntity(itemBI, "primeraFila", this.mode);
-
-		// ------------------------------------------------------------------
-
-		ultimaFilaTXT = new TextFieldEntity(itemBI, "ultimaFila", this.mode);
-
-		// ------------------------------------------------------------------
-
-		fechaTXT = new TextFieldEntity(itemBI, "fecha", this.mode);
-
-		// ------------------------------------------------------------------
-
-		descripcionTXT = new TextFieldEntity(itemBI, "descripcion", this.mode);
-
-		// ------------------------------------------------------------------
-
-		referencia1TXT = new TextFieldEntity(itemBI, "referencia1", this.mode);
-
-		// ------------------------------------------------------------------
-
-		importeTXT = new TextFieldEntity(itemBI, "importe", this.mode);
-
-		// ------------------------------------------------------------------
-
-		referencia2TXT = new TextFieldEntity(itemBI, "referencia2", this.mode);
-
-		// ------------------------------------------------------------------
-
-		saldoTXT = new TextFieldEntity(itemBI, "saldo", this.mode);
 
 		
 		// ---------------------------------------------------------------------------------------------------------
@@ -174,17 +129,8 @@ public class WFBanco extends WindowForm {
 		
 		generalVL.addComponent(numeroTXT);
 		generalVL.addComponent(nombreTXT);
-		generalVL.addComponent(cuitTXT);
+		generalVL.addComponent(cargoTXT);
 		generalVL.addComponent(bloqueadoCHK);
-		generalVL.addComponent(hojaTXT);
-		generalVL.addComponent(primeraFilaTXT);
-		generalVL.addComponent(ultimaFilaTXT);
-		generalVL.addComponent(fechaTXT);
-		generalVL.addComponent(descripcionTXT);
-		generalVL.addComponent(referencia1TXT);
-		generalVL.addComponent(importeTXT);
-		generalVL.addComponent(referencia2TXT);
-		generalVL.addComponent(saldoTXT);
 
 		// ---------------------------------------------------------------------------------------------------------
 
@@ -205,7 +151,7 @@ public class WFBanco extends WindowForm {
 		// item.setNumero(this.itemBI.getBean().maxValueInteger("numero"));		
 		
 		
-		((Banco) item).setNumero(getService().nextValueNumero());
+		((BancoFirmante) item).setNumero(getService().nextValueNumero());
 
 	}
 
@@ -213,10 +159,10 @@ public class WFBanco extends WindowForm {
 
 		// se utiliza para asignarle o cambiar el bean al contenedor del formulario
 
-		itemBI.setBean((Banco) obj);
+		itemBI.setBean((BancoFirmante) obj);
 	}
 
-	protected BeanItem<Banco> getItemBIC() throws Exception {
+	protected BeanItem<BancoFirmante> getItemBIC() throws Exception {
 
 		// -----------------------------------------------------------------
 		// Crea el Container del form, en base a al bean que queremos usar, y ademas
@@ -225,7 +171,7 @@ public class WFBanco extends WindowForm {
 		// vez
 
 		if (itemBI == null) {
-			itemBI = new BeanItem<Banco>(new Banco());
+			itemBI = new BeanItem<BancoFirmante>(new BancoFirmante());
 		}
 		return itemBI;
 	}
@@ -273,7 +219,7 @@ public class WFBanco extends WindowForm {
 
 			//EntityId item = (EntityId) getItemBIC().getBean();
 			//item.loadById(id); // consulta a DB						
-			Banco item = getService().findById(id);
+			BancoFirmante item = getService().findById(id);
 			getItemBIC().setBean(item);
 
 			return item;

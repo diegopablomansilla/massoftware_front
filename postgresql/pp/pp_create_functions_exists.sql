@@ -1443,3 +1443,55 @@ CREATE OR REPLACE FUNCTION massoftware.f_exists_Banco_cuit(cuitArg BIGINT) RETUR
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_exists_Banco_cuit(null::BIGINT);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: BancoFirmante                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.BancoFirmante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_BancoFirmante_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_BancoFirmante_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.BancoFirmante
+	WHERE	(numeroArg IS NULL OR BancoFirmante.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_BancoFirmante_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_BancoFirmante_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_BancoFirmante_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.BancoFirmante
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(BancoFirmante.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_BancoFirmante_nombre(null::VARCHAR(50));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_BancoFirmante_cargo(cargoArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_BancoFirmante_cargo(cargoArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.BancoFirmante
+	WHERE	(cargoArg IS NULL OR (CHAR_LENGTH(TRIM(cargoArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(BancoFirmante.cargo)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(cargoArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_BancoFirmante_cargo(null::VARCHAR(50));

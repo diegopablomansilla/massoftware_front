@@ -33,7 +33,8 @@ import com.anthill.ant.empresa.DepositoModuloAnt;
 import com.anthill.ant.empresa.EmpresaAnt;
 import com.anthill.ant.empresa.SucursalAnt;
 import com.anthill.ant.empresa.TipoSucursalAnt;
-import com.anthill.ant.fondos.BancoAnt;
+import com.anthill.ant.fondos.banco.BancoAnt;
+import com.anthill.ant.fondos.banco.BancoFirmanteAnt;
 import com.anthill.ant.geo.CiudadAnt;
 import com.anthill.ant.geo.CodigoPostalAnt;
 import com.anthill.ant.geo.PaisAnt;
@@ -169,6 +170,8 @@ public class Anthill {
 		// ---------------------------------------------
 
 		BancoAnt bancoAnt = new BancoAnt(anthill);
+		
+		BancoFirmanteAnt bancoFirmanteAnt = new BancoFirmanteAnt(anthill);
 
 		///////////////////////////////////////////////////////////////////
 

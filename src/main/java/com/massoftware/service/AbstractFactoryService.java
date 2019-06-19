@@ -37,7 +37,8 @@ import com.massoftware.service.contabilidad.AsientoContableModuloService;
 import com.massoftware.service.contabilidad.AsientoContableService;
 import com.massoftware.service.contabilidad.AsientoContableItemService;
 import com.massoftware.service.empresa.EmpresaService;
-import com.massoftware.service.fondos.BancoService;
+import com.massoftware.service.fondos.banco.BancoService;
+import com.massoftware.service.fondos.banco.BancoFirmanteService;
 
 
 public abstract class AbstractFactoryService {
@@ -192,6 +193,10 @@ public abstract class AbstractFactoryService {
 
 	public BancoService buildBancoService() throws Exception {
 		return new BancoService();
+	}
+
+	public BancoFirmanteService buildBancoFirmanteService() throws Exception {
+		return new BancoFirmanteService();
 	}
 
 

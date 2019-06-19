@@ -115,9 +115,12 @@ import com.massoftware.service.contabilidad.AsientoContableItemService;
 import com.massoftware.model.empresa.Empresa;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.service.empresa.EmpresaService;
-import com.massoftware.model.fondos.Banco;
-import com.massoftware.service.fondos.BancoFiltro;
-import com.massoftware.service.fondos.BancoService;
+import com.massoftware.model.fondos.banco.Banco;
+import com.massoftware.service.fondos.banco.BancoFiltro;
+import com.massoftware.service.fondos.banco.BancoService;
+import com.massoftware.model.fondos.banco.BancoFirmante;
+import com.massoftware.service.fondos.banco.BancoFirmanteFiltro;
+import com.massoftware.service.fondos.banco.BancoFirmanteService;
 
 public class Populate {
 
@@ -161,7 +164,8 @@ public class Populate {
 			//insertAsientoContable();
 			//insertAsientoContableItem();
 			//insertEmpresa();
-			insertBanco();
+			//insertBanco();
+			//insertBancoFirmante();
 	}
 
 
@@ -1820,6 +1824,42 @@ public class Populate {
 				obj.setReferencia2(UtilPopulate.getStringRandom(null, 3, false));
 
 				obj.setSaldo(UtilPopulate.getStringRandom(null, 3, false));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertBancoFirmante() throws Exception {
+
+		BancoFirmanteService service = AppCX.services().buildBancoFirmanteService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				BancoFirmante obj = new BancoFirmante();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setCargo(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setBloqueado(new Random().nextBoolean());
 
 				service.insert(obj);
 

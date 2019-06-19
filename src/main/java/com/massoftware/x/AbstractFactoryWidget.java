@@ -111,9 +111,12 @@ import com.massoftware.x.contabilidad.WFAsientoContableItem;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.x.empresa.WLEmpresa;
 import com.massoftware.x.empresa.WFEmpresa;
-import com.massoftware.service.fondos.BancoFiltro;
-import com.massoftware.x.fondos.WLBanco;
-import com.massoftware.x.fondos.WFBanco;
+import com.massoftware.service.fondos.banco.BancoFiltro;
+import com.massoftware.x.fondos.banco.WLBanco;
+import com.massoftware.x.fondos.banco.WFBanco;
+import com.massoftware.service.fondos.banco.BancoFirmanteFiltro;
+import com.massoftware.x.fondos.banco.WLBancoFirmante;
+import com.massoftware.x.fondos.banco.WFBancoFirmante;
 
 
 public abstract class AbstractFactoryWidget {
@@ -535,6 +538,17 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFBanco buildWFBanco(String mode, String id) throws Exception {
 		return new WFBanco(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLBancoFirmante buildWLBancoFirmante() throws Exception {
+		return new WLBancoFirmante();
+	}
+	public WLBancoFirmante buildWLBancoFirmante(BancoFirmanteFiltro filtro) throws Exception {
+		return new WLBancoFirmante(filtro);
+	}
+	public WFBancoFirmante buildWFBancoFirmante(String mode, String id) throws Exception {
+		return new WFBancoFirmante(mode, id);
 	}
 
 }

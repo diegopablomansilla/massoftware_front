@@ -2419,3 +2419,67 @@ SELECT * FROM massoftware.i_Banco(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: BancoFirmante                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.BancoFirmante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_BancoFirmante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cargoArg VARCHAR(50)
+		, bloqueadoArg BOOLEAN
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_BancoFirmante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cargoArg VARCHAR(50)
+		, bloqueadoArg BOOLEAN
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF bloqueadoArg IS NULL THEN
+
+		bloqueadoArg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.BancoFirmante(id, numero, nombre, cargo, bloqueado) VALUES (idArg, numeroArg, nombreArg, cargoArg, bloqueadoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.BancoFirmante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND BancoFirmante.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_BancoFirmante(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(50)
+		, null::BOOLEAN
+);
+
+*/

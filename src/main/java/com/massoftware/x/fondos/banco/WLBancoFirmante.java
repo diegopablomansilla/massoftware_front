@@ -1,5 +1,5 @@
 
-package com.massoftware.x.fondos;
+package com.massoftware.x.fondos.banco;
 
 
 import java.util.ArrayList;
@@ -35,20 +35,20 @@ import com.massoftware.windows.*;
 
 import com.massoftware.model.EntityId;
 
-import com.massoftware.model.fondos.Banco;
-import com.massoftware.service.fondos.BancoFiltro;
-import com.massoftware.service.fondos.BancoService;
+import com.massoftware.model.fondos.banco.BancoFirmante;
+import com.massoftware.service.fondos.banco.BancoFirmanteFiltro;
+import com.massoftware.service.fondos.banco.BancoFirmanteService;
 
 
 @SuppressWarnings("serial")
-public class WLBanco extends WindowListado {
+public class WLBancoFirmante extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	BeanItem<BancoFiltro> filterBI;
-	protected BeanItemContainer<Banco> itemsBIC;
+	BeanItem<BancoFirmanteFiltro> filterBI;
+	protected BeanItemContainer<BancoFirmante> itemsBIC;
 	
-	private BancoService service;
+	private BancoFirmanteService service;
 
 	// -------------------------------------------------------------
 
@@ -60,23 +60,23 @@ public class WLBanco extends WindowListado {
 
 	// -------------------------------------------------------------
 
-	public WLBanco() {
+	public WLBancoFirmante() {
 		super();		
-		filterBI = new BeanItem<BancoFiltro>(new BancoFiltro());
+		filterBI = new BeanItem<BancoFirmanteFiltro>(new BancoFirmanteFiltro());
 		init(false);
 		setFocusGrid();
 	}
 
-	public WLBanco(BancoFiltro filtro) {
+	public WLBancoFirmante(BancoFirmanteFiltro filtro) {
 		super();		
-		filterBI = new BeanItem<BancoFiltro>(filtro);
+		filterBI = new BeanItem<BancoFirmanteFiltro>(filtro);
 		init(true);
 		setFocusGrid();
 	}
 	
-	protected BancoService getService() throws Exception {
+	protected BancoFirmanteService getService() throws Exception {
 		if(service == null){
-			service = AppCX.services().buildBancoService();
+			service = AppCX.services().buildBancoFirmanteService();
 		}
 		
 		return service;
@@ -84,7 +84,7 @@ public class WLBanco extends WindowListado {
 
 	protected void buildContent() throws Exception {
 
-		confWinList(this, new Banco().labelPlural());
+		confWinList(this, new BancoFirmante().labelPlural());
 
 		// =======================================================
 		// FILTROS
@@ -209,7 +209,7 @@ public class WLBanco extends WindowListado {
 		// itemsGRD.setWidth(25f, Unit.EM);
 		itemsGRD.setHeight(20.5f, Unit.EM);
 
-		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "cuit", "bloqueado", "hoja", "primeraFila", "ultimaFila", "fecha", "descripcion", "referencia1", "importe", "referencia2", "saldo" });
+		itemsGRD.setColumns(new Object[] { "id", "numero", "nombre", "cargo", "bloqueado" });
 
 		// ------------------------------------------------------------------
 		
@@ -219,31 +219,13 @@ public class WLBanco extends WindowListado {
 
 		UtilUI.confColumn(itemsGRD.getColumn("nombre"), true, 240);
 
-		UtilUI.confColumn(itemsGRD.getColumn("cuit"), true, 132);
+		UtilUI.confColumn(itemsGRD.getColumn("cargo"), true, 240);
 
-		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, 70);
-
-		UtilUI.confColumn(itemsGRD.getColumn("hoja"), true, 100);
-
-		UtilUI.confColumn(itemsGRD.getColumn("primeraFila"), true, 100);
-
-		UtilUI.confColumn(itemsGRD.getColumn("ultimaFila"), true, 100);
-
-		UtilUI.confColumn(itemsGRD.getColumn("fecha"), true, 72);
-
-		UtilUI.confColumn(itemsGRD.getColumn("descripcion"), true, 72);
-
-		UtilUI.confColumn(itemsGRD.getColumn("referencia1"), true, 72);
-
-		UtilUI.confColumn(itemsGRD.getColumn("importe"), true, 72);
-
-		UtilUI.confColumn(itemsGRD.getColumn("referencia2"), true, 72);
-
-		UtilUI.confColumn(itemsGRD.getColumn("saldo"), true, -1);
+		UtilUI.confColumn(itemsGRD.getColumn("bloqueado"), true, -1);
 		
 		// ------------------------------------------------------------------
 
-		Banco dto = new Banco();
+		BancoFirmante dto = new BancoFirmante();
 		for (Column column : itemsGRD.getColumns()) {
 			column.setHeaderCaption(dto.label(column.getPropertyId().toString()));
 		}
@@ -279,7 +261,7 @@ public class WLBanco extends WindowListado {
 
 	// =================================================================================
 
-	protected BeanItemContainer<Banco> getItemsBIC() {
+	protected BeanItemContainer<BancoFirmante> getItemsBIC() {
 
 		// -----------------------------------------------------------------
 		// Crea el Container de la grilla, en base a al bean que queremos usar, y ademas
@@ -287,7 +269,7 @@ public class WLBanco extends WindowListado {
 
 		if (itemsBIC == null) {
 
-			itemsBIC = new BeanItemContainer<Banco>(Banco.class, new ArrayList<Banco>());
+			itemsBIC = new BeanItemContainer<BancoFirmante>(BancoFirmante.class, new ArrayList<BancoFirmante>());
 		}
 
 		return itemsBIC;
@@ -303,7 +285,7 @@ public class WLBanco extends WindowListado {
 
 			// -----------------------------------------------------------------
 			// realiza la consulta a la base de datos
-			// List<Banco> items = new Banco().find(limit, offset, buildOrderBy(),
+			// List<BancoFirmante> items = new BancoFirmante().find(limit, offset, buildOrderBy(),
 			// filterBI.getBean());
 
 			filterBI.getBean().setLimit((long)limit);
@@ -313,7 +295,7 @@ public class WLBanco extends WindowListado {
 			
 			if (filterBI.getBean().equals(lastFilter) == false) {						
 			
-				lastFilter = (BancoFiltro) filterBI.getBean().clone();
+				lastFilter = (BancoFirmanteFiltro) filterBI.getBean().clone();
 				
 				if (removeAllItems) {
 					getItemsBIC().removeAllItems();
@@ -321,10 +303,10 @@ public class WLBanco extends WindowListado {
 				
 				validateFilterSection();						 
 			
-				List<Banco> items = getService().find(filterBI.getBean());
+				List<BancoFirmante> items = getService().find(filterBI.getBean());
 				
 				// Agrega los resultados a la grilla
-				for (Banco item : items) {
+				for (BancoFirmante item : items) {
 					getItemsBIC().addBean(item);
 				}
 				
@@ -356,7 +338,7 @@ public class WLBanco extends WindowListado {
 	}
 
 	protected WindowForm buildWinddowForm(String mode, String id) throws Exception {
-		return AppCX.widgets().buildWFBanco(mode, id);
+		return AppCX.widgets().buildWFBancoFirmante(mode, id);
 	}
 	
 	public void setFocusGrid() {			
@@ -374,4 +356,4 @@ public class WLBanco extends WindowListado {
 
 } // END CLASS
 
-// GENERATED BY ANTHILL 2019-06-19T11:51:57.871-03:00[America/Buenos_Aires]
+// GENERATED BY ANTHILL 2019-06-19T12:29:54.820-03:00[America/Buenos_Aires]

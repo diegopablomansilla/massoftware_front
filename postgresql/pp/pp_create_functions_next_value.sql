@@ -1185,3 +1185,26 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_ultimaFila() RETURNS INTEGER
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_Banco_ultimaFila();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: BancoFirmante                                                                                          //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.BancoFirmante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_BancoFirmante_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_BancoFirmante_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.BancoFirmante;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_BancoFirmante_numero();

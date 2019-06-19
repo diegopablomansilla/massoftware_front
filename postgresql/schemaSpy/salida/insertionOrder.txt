@@ -30,6 +30,7 @@ transportetarifa
 asientocontable
 deposito
 banco
+bancofirmante
 motivocomentario
 notacreditomotivo
 tipocliente
