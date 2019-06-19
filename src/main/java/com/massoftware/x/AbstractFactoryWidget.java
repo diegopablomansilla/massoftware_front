@@ -111,6 +111,9 @@ import com.massoftware.x.contabilidad.WFAsientoContableItem;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.x.empresa.WLEmpresa;
 import com.massoftware.x.empresa.WFEmpresa;
+import com.massoftware.service.fondos.BancoFiltro;
+import com.massoftware.x.fondos.WLBanco;
+import com.massoftware.x.fondos.WFBanco;
 
 
 public abstract class AbstractFactoryWidget {
@@ -521,6 +524,17 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFEmpresa buildWFEmpresa(String mode, String id) throws Exception {
 		return new WFEmpresa(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLBanco buildWLBanco() throws Exception {
+		return new WLBanco();
+	}
+	public WLBanco buildWLBanco(BancoFiltro filtro) throws Exception {
+		return new WLBanco(filtro);
+	}
+	public WFBanco buildWFBanco(String mode, String id) throws Exception {
+		return new WFBanco(mode, id);
 	}
 
 }

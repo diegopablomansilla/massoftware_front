@@ -2843,3 +2843,109 @@ CREATE TRIGGER tgFormatEmpresa BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.Empresa;
 
 -- SELECT * FROM massoftware.Empresa WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Banco CASCADE;
+
+CREATE TABLE massoftware.Banco
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº banco
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Banco_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- CUIT
+	cuit BIGINT NOT NULL  UNIQUE  CONSTRAINT Banco_cuit_chk CHECK ( cuit >= 1 AND cuit <= 99999999999 AND char_length(cuit::VARCHAR) >= 11 AND char_length(cuit::VARCHAR) <= 11  ), 
+	
+	-- Obsoleto
+	bloqueado BOOLEAN NOT NULL, 
+	
+	-- Hoja
+	hoja INTEGER CONSTRAINT Banco_hoja_chk CHECK ( hoja >= 1 AND hoja <= 100  ), 
+	
+	-- Primera fila
+	primeraFila INTEGER CONSTRAINT Banco_primeraFila_chk CHECK ( primeraFila >= 1 AND primeraFila <= 1000  ), 
+	
+	-- Última fila
+	ultimaFila INTEGER CONSTRAINT Banco_ultimaFila_chk CHECK ( ultimaFila >= 1 AND ultimaFila <= 1000  ), 
+	
+	-- Fecha
+	fecha VARCHAR(3), 
+	
+	-- Descripción
+	descripcion VARCHAR(3), 
+	
+	-- Referencia 1
+	referencia1 VARCHAR(3), 
+	
+	-- Importe
+	importe VARCHAR(3), 
+	
+	-- Referencia 2
+	referencia2 VARCHAR(3), 
+	
+	-- Saldo
+	saldo VARCHAR(3)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Banco_nombre ON massoftware.Banco (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatBanco() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatBanco() RETURNS TRIGGER AS $formatBanco$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.fecha := massoftware.white_is_null(NEW.fecha);
+	 NEW.descripcion := massoftware.white_is_null(NEW.descripcion);
+	 NEW.referencia1 := massoftware.white_is_null(NEW.referencia1);
+	 NEW.importe := massoftware.white_is_null(NEW.importe);
+	 NEW.referencia2 := massoftware.white_is_null(NEW.referencia2);
+	 NEW.saldo := massoftware.white_is_null(NEW.saldo);
+
+	RETURN NEW;
+END;
+$formatBanco$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatBanco ON massoftware.Banco CASCADE;
+
+CREATE TRIGGER tgFormatBanco BEFORE INSERT OR UPDATE
+	ON massoftware.Banco FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatBanco();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Banco;
+
+-- SELECT * FROM massoftware.Banco LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Banco;
+
+-- SELECT * FROM massoftware.Banco WHERE id = 'xxx';

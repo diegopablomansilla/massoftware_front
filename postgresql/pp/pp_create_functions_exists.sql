@@ -1391,3 +1391,55 @@ $$ LANGUAGE SQL;
 
 
 -- Table: massoftware.Empresa
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Banco_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Banco_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Banco
+	WHERE	(numeroArg IS NULL OR Banco.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_Banco_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Banco_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Banco_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Banco
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(Banco.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_Banco_nombre(null::VARCHAR(50));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_Banco_cuit(cuitArg BIGINT) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_Banco_cuit(cuitArg BIGINT) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.Banco
+	WHERE	(cuitArg IS NULL OR Banco.cuit = cuitArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_Banco_cuit(null::BIGINT);

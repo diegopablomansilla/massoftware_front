@@ -23,7 +23,6 @@ digraph "twoDegreesRelationshipsDiagram" {
   "asientocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"minutacontable":sw -> "minutacontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"sucursal":sw -> "sucursal":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
-  "asientocontableitem":"elipses":sw -> "asientocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontableitem":"elipses":sw -> "cuentacontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientomodelo":"ejerciciocontable":sw -> "ejerciciocontable":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientomodeloitem":"elipses":sw -> "asientomodelo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -50,7 +49,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="minutacontable" COLSPAN="3" ALIGN="LEFT">minutacontable</TD></TR>
       <TR><TD PORT="sucursal" COLSPAN="3" ALIGN="LEFT">sucursal</TD></TR>
       <TR><TD PORT="asientocontablemodulo" COLSPAN="3" ALIGN="LEFT">asientocontablemodulo</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="asientocontable.html"
     tooltip="asientocontable"
@@ -60,7 +59,7 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">asientocontableitem</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">600 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="asientocontableitem.html"
     tooltip="asientocontableitem"

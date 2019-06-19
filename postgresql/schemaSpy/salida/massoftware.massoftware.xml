@@ -2,9 +2,7 @@
 <database name="massoftware" schema="massoftware" type="PostgreSQL - 9.6.2">
    <tables>
       <table name="asientocontable" numRows="300" remarks="" schema="massoftware" type="TABLE">
-         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
-            <child column="asientocontable" foreignKey="asientocontableitem_asientocontable_fkey" implied="false" onDeleteCascade="false" table="asientocontableitem"/>
-         </column>
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="fecha" nullable="false" remarks="" size="13" type="date"/>
          <column autoUpdated="false" digits="0" id="3" name="detalle" nullable="true" remarks="" size="100" type="varchar"/>
@@ -28,14 +26,12 @@
             <column ascending="true" name="numero"/>
          </index>
       </table>
-      <table name="asientocontableitem" numRows="300" remarks="" schema="massoftware" type="TABLE">
+      <table name="asientocontableitem" numRows="600" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="fecha" nullable="false" remarks="" size="13" type="date"/>
          <column autoUpdated="false" digits="0" id="3" name="detalle" nullable="true" remarks="" size="100" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="4" name="asientocontable" nullable="false" remarks="" size="36" type="varchar">
-            <parent column="id" foreignKey="asientocontableitem_asientocontable_fkey" implied="false" onDeleteCascade="false" table="asientocontable"/>
-         </column>
+         <column autoUpdated="false" digits="0" id="4" name="asientocontable" nullable="false" remarks="" size="36" type="varchar"/>
          <column autoUpdated="false" digits="0" id="5" name="cuentacontable" nullable="false" remarks="" size="36" type="varchar">
             <parent column="id" foreignKey="asientocontableitem_cuentacontable_fkey" implied="false" onDeleteCascade="false" table="cuentacontable"/>
          </column>
@@ -98,6 +94,33 @@
          <index name="asientomodeloitem_numero_key" unique="true">
             <column ascending="true" name="numero"/>
          </index>
+      </table>
+      <table name="banco" numRows="253" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="cuit" nullable="false" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="4" name="bloqueado" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="5" name="hoja" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="primerafila" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="ultimafila" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="8" name="fecha" nullable="true" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="descripcion" nullable="true" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="10" name="referencia1" nullable="true" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="11" name="importe" nullable="true" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="12" name="referencia2" nullable="true" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="13" name="saldo" nullable="true" remarks="" size="3" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="banco_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="banco_cuit_key" unique="true">
+            <column ascending="true" name="cuit"/>
+         </index>
+         <index name="banco_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_banco_nombre" unique="true"/>
       </table>
       <table name="carga" numRows="273" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">

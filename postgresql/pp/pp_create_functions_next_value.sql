@@ -1110,3 +1110,78 @@ $$ LANGUAGE SQL;
 
 
 -- Table: massoftware.Empresa
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Banco_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Banco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Banco_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Banco_cuit() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_cuit() RETURNS BIGINT AS $$
+
+	SELECT (COALESCE(MAX(cuit),0) + 1)::BIGINT FROM massoftware.Banco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Banco_cuit();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Banco_hoja() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_hoja() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(hoja),0) + 1)::INTEGER FROM massoftware.Banco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Banco_hoja();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Banco_primeraFila() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_primeraFila() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(primeraFila),0) + 1)::INTEGER FROM massoftware.Banco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Banco_primeraFila();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Banco_ultimaFila() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Banco_ultimaFila() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(ultimaFila),0) + 1)::INTEGER FROM massoftware.Banco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Banco_ultimaFila();

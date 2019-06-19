@@ -12052,3 +12052,162 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.f_Empresa_1 ( null , null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_EmpresaById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Banco (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Banco (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.Banco AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Banco.id              AS Banco_id         	-- 0	.id        		VARCHAR(36)
+				, Banco.numero          AS Banco_numero     	-- 1	.numero    		INTEGER
+				, Banco.nombre          AS Banco_nombre     	-- 2	.nombre    		VARCHAR(50)
+				, Banco.cuit            AS Banco_cuit       	-- 3	.cuit      		BIGINT
+				, Banco.bloqueado       AS Banco_bloqueado  	-- 4	.bloqueado 		BOOLEAN
+				, Banco.hoja            AS Banco_hoja       	-- 5	.hoja      		INTEGER
+				, Banco.primeraFila     AS Banco_primeraFila	-- 6	.primeraFila		INTEGER
+				, Banco.ultimaFila      AS Banco_ultimaFila 	-- 7	.ultimaFila		INTEGER
+				, Banco.fecha           AS Banco_fecha      	-- 8	.fecha     		VARCHAR(3)
+				, Banco.descripcion     AS Banco_descripcion	-- 9	.descripcion		VARCHAR(3)
+				, Banco.referencia1     AS Banco_referencia1	-- 10	.referencia1		VARCHAR(3)
+				, Banco.importe         AS Banco_importe    	-- 11	.importe   		VARCHAR(3)
+				, Banco.referencia2     AS Banco_referencia2	-- 12	.referencia2		VARCHAR(3)
+				, Banco.saldo           AS Banco_saldo      	-- 13	.saldo     		VARCHAR(3)
+
+		FROM	massoftware.Banco
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Banco.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Banco.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_BancoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_BancoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Banco AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Banco ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Banco ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_BancoById ('xxx'); 

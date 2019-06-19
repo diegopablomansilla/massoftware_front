@@ -115,6 +115,9 @@ import com.massoftware.service.contabilidad.AsientoContableItemService;
 import com.massoftware.model.empresa.Empresa;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.service.empresa.EmpresaService;
+import com.massoftware.model.fondos.Banco;
+import com.massoftware.service.fondos.BancoFiltro;
+import com.massoftware.service.fondos.BancoService;
 
 public class Populate {
 
@@ -158,6 +161,7 @@ public class Populate {
 			//insertAsientoContable();
 			//insertAsientoContableItem();
 			//insertEmpresa();
+			insertBanco();
 	}
 
 
@@ -1762,6 +1766,60 @@ public class Populate {
 				obj.setFechaCierreTambos(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
 
 				obj.setFechaCierreRRHH(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertBanco() throws Exception {
+
+		BancoService service = AppCX.services().buildBancoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Banco obj = new Banco();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setCuit(UtilPopulate.getLongRandom(1L, 99999999999L, true));
+
+				obj.setBloqueado(new Random().nextBoolean());
+
+				obj.setHoja(UtilPopulate.getIntegerRandom(1, 100, false));
+
+				obj.setPrimeraFila(UtilPopulate.getIntegerRandom(1, 1000, false));
+
+				obj.setUltimaFila(UtilPopulate.getIntegerRandom(1, 1000, false));
+
+				obj.setFecha(UtilPopulate.getStringRandom(null, 3, false));
+
+				obj.setDescripcion(UtilPopulate.getStringRandom(null, 3, false));
+
+				obj.setReferencia1(UtilPopulate.getStringRandom(null, 3, false));
+
+				obj.setImporte(UtilPopulate.getStringRandom(null, 3, false));
+
+				obj.setReferencia2(UtilPopulate.getStringRandom(null, 3, false));
+
+				obj.setSaldo(UtilPopulate.getStringRandom(null, 3, false));
 
 				service.insert(obj);
 

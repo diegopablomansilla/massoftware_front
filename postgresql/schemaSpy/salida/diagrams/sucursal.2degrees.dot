@@ -23,7 +23,6 @@ digraph "twoDegreesRelationshipsDiagram" {
   "asientocontable":"ejerciciocontable":sw -> "ejerciciocontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"minutacontable":sw -> "minutacontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"sucursal":sw -> "sucursal":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
-  "asientocontableitem":"elipses":sw -> "asientocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"depositomodulo":sw -> "depositomodulo":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"puertaconsulta":sw -> "seguridadpuerta":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"puertaoperativo":sw -> "seguridadpuerta":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -41,20 +40,10 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="minutacontable" COLSPAN="3" ALIGN="LEFT">minutacontable</TD></TR>
       <TR><TD PORT="sucursal" COLSPAN="3" ALIGN="LEFT">sucursal</TD></TR>
       <TR><TD PORT="asientocontablemodulo" COLSPAN="3" ALIGN="LEFT">asientocontablemodulo</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="asientocontable.html"
     tooltip="asientocontable"
-  ];
-  "asientocontableitem" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">asientocontableitem</TD></TR>
-      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
-    </TABLE>>
-    URL="asientocontableitem.html"
-    tooltip="asientocontableitem"
   ];
   "asientocontablemodulo" [
     label=<

@@ -1331,3 +1331,39 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.d_EmpresaById('xxx');
 
 -- SELECT * FROM massoftware.d_EmpresaById((SELECT Empresa.id FROM massoftware.Empresa LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_BancoById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_BancoById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Banco WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Banco.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Banco WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Banco.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Banco WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Banco.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_BancoById('xxx');
+
+-- SELECT * FROM massoftware.d_BancoById((SELECT Banco.id FROM massoftware.Banco LIMIT 1)::VARCHAR);

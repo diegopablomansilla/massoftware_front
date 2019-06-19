@@ -2268,3 +2268,102 @@ SELECT * FROM massoftware.u_Empresa(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Banco                                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Banco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_Banco(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuitArg BIGINT
+		, bloqueadoArg BOOLEAN
+		, hojaArg INTEGER
+		, primeraFilaArg INTEGER
+		, ultimaFilaArg INTEGER
+		, fechaArg VARCHAR(3)
+		, descripcionArg VARCHAR(3)
+		, referencia1Arg VARCHAR(3)
+		, importeArg VARCHAR(3)
+		, referencia2Arg VARCHAR(3)
+		, saldoArg VARCHAR(3)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_Banco(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuitArg BIGINT
+		, bloqueadoArg BOOLEAN
+		, hojaArg INTEGER
+		, primeraFilaArg INTEGER
+		, ultimaFilaArg INTEGER
+		, fechaArg VARCHAR(3)
+		, descripcionArg VARCHAR(3)
+		, referencia1Arg VARCHAR(3)
+		, importeArg VARCHAR(3)
+		, referencia2Arg VARCHAR(3)
+		, saldoArg VARCHAR(3)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF bloqueadoArg IS NULL THEN
+
+		bloqueadoArg = false;
+
+	END IF;
+
+	UPDATE massoftware.Banco SET 
+		  numero = numeroArg
+		, nombre = nombreArg
+		, cuit = cuitArg
+		, bloqueado = bloqueadoArg
+		, hoja = hojaArg
+		, primeraFila = primeraFilaArg
+		, ultimaFila = ultimaFilaArg
+		, fecha = fechaArg
+		, descripcion = descripcionArg
+		, referencia1 = referencia1Arg
+		, importe = importeArg
+		, referencia2 = referencia2Arg
+		, saldo = saldoArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Banco.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Banco WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Banco.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_Banco(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::BIGINT
+		, null::BOOLEAN
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::VARCHAR(3)
+		, null::VARCHAR(3)
+		, null::VARCHAR(3)
+		, null::VARCHAR(3)
+		, null::VARCHAR(3)
+		, null::VARCHAR(3)
+);
+
+*/

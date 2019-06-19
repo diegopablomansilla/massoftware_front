@@ -35,7 +35,7 @@ digraph "banco" {
       <TR><TD PORT="importe" COLSPAN="3" ALIGN="LEFT">importe</TD></TR>
       <TR><TD PORT="referencia2" COLSPAN="3" ALIGN="LEFT">referencia2</TD></TR>
       <TR><TD PORT="saldo" COLSPAN="3" ALIGN="LEFT">saldo</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">4 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">253 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/banco.html"
     tooltip="banco"

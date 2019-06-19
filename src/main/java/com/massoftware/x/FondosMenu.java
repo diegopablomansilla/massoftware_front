@@ -2,6 +2,7 @@ package com.massoftware.x;
 
 import java.io.File;
 
+import com.massoftware.AppCX;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.seguridad.Usuario;
 import com.massoftware.windows.LogAndNotification;
@@ -96,7 +97,8 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Rubros y grupos de cuentas ...", openCuentasFondoCmd());
 		a1.addItem("Cobranzas ...", openTiposCobranzasCmd()).setEnabled(false);
 		a1.addItem("Chequeras ...", openChequerasCmd()).setEnabled(false);
-		a1.addItem("Bancos ...", openBancosCmd());
+		a1.addItem("+++ Bancos ...", openBancosCmd());
+		a1.addItem("Bancos ...", openBancoCmd());
 		a1.addItem("Firmantes (cheques propios) ...", openFirmantesCmd());
 		a1.addItem("Cajas", openCajasCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
@@ -218,6 +220,27 @@ public class FondosMenu extends AbstractMenu {
 
 				Window window = new WBancos();
 				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openBancoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {				
+				
+				try {
+					Window window = AppCX.widgets().buildWLBanco();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
 			}
 		};
 	}
