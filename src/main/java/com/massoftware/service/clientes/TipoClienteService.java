@@ -426,7 +426,7 @@ public class TipoClienteService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_TipoCliente" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_TipoCliente" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();

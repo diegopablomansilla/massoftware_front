@@ -289,7 +289,7 @@ public class EmpresaService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_Empresa" + levelString + "(?, ?, ?, ?, ?, )";
+		String sql = "SELECT * FROM massoftware.f_Empresa" + levelString + "(?, ?, ?, ?, ? )";
 
 
 		Object[] args = null;

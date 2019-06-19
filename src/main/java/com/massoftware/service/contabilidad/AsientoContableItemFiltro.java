@@ -13,11 +13,11 @@ public class AsientoContableItemFiltro extends AbstractFilter {
 	}
 
 	// Nº item (desde)
-	@FieldConfAnont(label = "Nº item (desde)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
+	@FieldConfAnont(label = "Nº item (desde)", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
 	private Integer numeroFrom;
 
 	// Nº item (hasta)
-	@FieldConfAnont(label = "Nº item (hasta)", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
+	@FieldConfAnont(label = "Nº item (hasta)", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = 10, minValue = "1", maxValue = "2147483647", mask = "")
 	private Integer numeroTo;
 
 	// Detalle

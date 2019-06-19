@@ -913,7 +913,9 @@ public class UtilJavaService {
 		java += "\n";
 
 		java += "\n\t\tString sql = \"SELECT * FROM massoftware.f_" + clazzX.getName()
-				+ "\" + levelString + \"(?, ?, ?, ?, ?, ";
+				+ "\" + levelString + \"(?, ?, ?, ?, ? ";
+		
+		String javaArg = "";
 
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 
@@ -927,11 +929,11 @@ public class UtilJavaService {
 
 				if (arg.getRange() == false) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else {
-					java += (i == 0) ? "?" : ", ?";
-					java += ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
+					javaArg += ", ?";
 				}
 
 			} else if (arg.isString()) {
@@ -939,87 +941,87 @@ public class UtilJavaService {
 
 				if (arg.getSearchOption().equals(Argument.EQUALS)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.EQUALS_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.EQUALS_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.EQUALS_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.STARTS_WITCH)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.STARTS_WITCH_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.STARTS_WITCH_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.STARTS_WITCH_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.ENDS_WITCH)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.ENDS_WITCH_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.ENDS_WITCH_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.ENDS_WITCH_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_OR_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 					for (int j = 0; j < 4; j++) {
 
@@ -1028,16 +1030,16 @@ public class UtilJavaService {
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 					for (int j = 0; j < 4; j++) {
 
-						java += (i == 0) ? "?" : ", ?";
+//						javaArg += (i == 0) ? "?" : ", ?";
 					}
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 					for (int j = 0; j < 4; j++) {
 
@@ -1046,7 +1048,7 @@ public class UtilJavaService {
 
 				} else if (arg.getSearchOption().equals(Argument.CONTAINS_WORDS_AND_IGNORE_CASE_TRASLATE)) {
 
-					java += (i == 0) ? "?" : ", ?";
+					javaArg += (i == 0) ? "?" : ", ?";
 
 					for (int j = 0; j < 4; j++) {
 
@@ -1057,8 +1059,12 @@ public class UtilJavaService {
 
 				/////////////////////////////////////// **********************************************
 			} else {
-				java += (i == 0) ? "?" : ", ?";
+				javaArg += (i == 0) ? "?" : ", ?";
 			}
+		}
+		
+		if(javaArg.trim().length() > 0) {
+			java += ", " + javaArg;
 		}
 
 		java += ")\";";

@@ -456,7 +456,7 @@ public class CodigoPostalService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_CodigoPostal" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_CodigoPostal" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?, ?)";
 
 		Object codigo = ( filtro.getCodigo() == null ) ? String.class : filtro.getCodigo();
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();

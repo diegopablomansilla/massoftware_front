@@ -438,7 +438,7 @@ public class SeguridadPuertaService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_SeguridadPuerta" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_SeguridadPuerta" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();

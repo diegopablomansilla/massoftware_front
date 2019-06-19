@@ -69,15 +69,15 @@ public class ContabilidadMenu extends AbstractMenu {
 		menubar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
 
 		final MenuBar.MenuItem a1 = menubar.addItem("Archivos", null);
-		final MenuBar.MenuItem a2 = menubar.addItem("Editar", null);
+//		final MenuBar.MenuItem a2 = menubar.addItem("Editar", null);
 		final MenuBar.MenuItem a3 = menubar.addItem("Asientos", null);
 		final MenuBar.MenuItem a4 = menubar.addItem("Procesos", null);
 		final MenuBar.MenuItem a5 = menubar.addItem("Informes", null);
 		final MenuBar.MenuItem a6 = menubar.addItem("Ventana", null);
 		final MenuBar.MenuItem a7 = menubar.addItem("Ayuda", null);
 
-		a2.setEnabled(false);
-		a3.setEnabled(false);
+//		a2.setEnabled(false);
+//		a3.setEnabled(false);
 		a4.setEnabled(false);
 		a5.setEnabled(false);
 		a6.setEnabled(false);
@@ -98,6 +98,9 @@ public class ContabilidadMenu extends AbstractMenu {
 		a1.addItem("Centros de costos ...", openCentroCostoContableCmd());
 		a1.addItem("++++++++++Centros de costos ...", openCentrosCostoContableCmd());
 		
+		a1.addItem("Minutas contables", openMinutaContableCmd());
+		a1.addItem("Módulos", openAsientoContableModuloCmd());
+		
 		MenuBar.MenuItem a11 = a1.addItem("Puntos de equilibrio", null);
 		
 		a11.addItem("Tipos de puntos de equilibrio", openTipoPuntoEquilibrioCmd());
@@ -106,13 +109,14 @@ public class ContabilidadMenu extends AbstractMenu {
 		
 		
 		a1.addSeparator();
-		a1.addItem("Parámetros generales", null).setEnabled(false);
-		a1.addItem("Fecha de cierre por módulos", null).setEnabled(false);
+		a1.addItem("Parámetros generales", openEmpresaCmd());
+		a1.addItem("Fecha de cierre por módulos", openEmpresaCmd());
 		a1.addSeparator();
 		a1.addItem("Especificar impresora ...", null).setEnabled(false);
 
 		// nuevoAsientoMI = a3.addItem("Nuevo asiento ...", null);
-		a3.addItem("Asientos realizados ...", null);
+		a3.addItem("Asientos realizados ...", openAsientoContableCmd());
+		a3.addItem("Asientos realizados items ...", openAsientoContableItemCmd());
 		// asientos.addItem("Lotes de asientos importados ...", null);
 		// asientos.addItem("Anulación de asientos ...", null);
 
@@ -329,6 +333,50 @@ public class ContabilidadMenu extends AbstractMenu {
 		};
 	}
 	
+	protected Command openAsientoContableCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLAsientoContable();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openAsientoContableItemCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLAsientoContableItem();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
 	protected Command openCuentaContableCmd() {
 
 		return new Command() {
@@ -342,6 +390,72 @@ public class ContabilidadMenu extends AbstractMenu {
 				
 				try {
 					Window window = AppCX.widgets().buildWLCuentaContable();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openMinutaContableCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLMinutaContable();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openAsientoContableModuloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLAsientoContableModulo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
+			}
+		};
+	}
+	
+	protected Command openEmpresaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLEmpresa();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -373,6 +487,8 @@ public class ContabilidadMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+
 	
 	protected Command openCentrosCostoContableCmd() {
 

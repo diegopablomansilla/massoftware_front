@@ -84,11 +84,11 @@ public class AsientoContableItemAnt extends Ant {
 		// -------- SBX Args
 
 		c.addArgument(numero, true);
-		c.getLastArgument().setRequired(false);
+//		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
 		c.addArgument(detalle);
-		c.getLastArgument().setRequired(false);
+//		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args

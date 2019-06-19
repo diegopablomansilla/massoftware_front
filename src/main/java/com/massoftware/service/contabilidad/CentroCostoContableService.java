@@ -477,7 +477,7 @@ public class CentroCostoContableService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_CentroCostoContable" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_CentroCostoContable" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();

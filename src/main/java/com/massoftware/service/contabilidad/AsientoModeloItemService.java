@@ -352,7 +352,7 @@ public class AsientoModeloItemService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_AsientoModeloItem" + levelString + "(?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_AsientoModeloItem" + levelString + "(?, ?, ?, ?, ? , ?)";
 
 		Object asientoModelo = ( filtro.getAsientoModelo() != null && filtro.getAsientoModelo().getId() != null) ? filtro.getAsientoModelo().getId() : String.class;
 

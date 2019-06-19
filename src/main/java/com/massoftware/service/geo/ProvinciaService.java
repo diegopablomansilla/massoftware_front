@@ -549,7 +549,7 @@ public class ProvinciaService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_Provincia" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_Provincia" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?, ?, ?)";
 
 		Object numeroFrom = ( filtro.getNumeroFrom() == null ) ? Integer.class : filtro.getNumeroFrom();
 		Object numeroTo = ( filtro.getNumeroTo() == null ) ? Integer.class : filtro.getNumeroTo();

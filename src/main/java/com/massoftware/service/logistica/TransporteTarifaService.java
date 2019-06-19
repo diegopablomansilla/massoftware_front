@@ -501,7 +501,7 @@ public class TransporteTarifaService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_TransporteTarifa" + levelString + "(?, ?, ?, ?, ?, )";
+		String sql = "SELECT * FROM massoftware.f_TransporteTarifa" + levelString + "(?, ?, ?, ?, ? )";
 
 
 		Object[] args = null;

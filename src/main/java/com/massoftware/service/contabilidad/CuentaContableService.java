@@ -463,7 +463,7 @@ public class CuentaContableService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_CuentaContable" + levelString + "(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_CuentaContable" + levelString + "(?, ?, ?, ?, ? , ?, ?, ?)";
 
 		Object codigo = ( filtro.getCodigo() == null ) ? String.class : filtro.getCodigo();
 		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();

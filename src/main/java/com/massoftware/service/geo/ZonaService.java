@@ -447,7 +447,7 @@ public class ZonaService {
 
 		String levelString = (filtro.getLevel() > 0) ? "_" + filtro.getLevel() : "";
 
-		String sql = "SELECT * FROM massoftware.f_Zona" + levelString + "(?, ?, ?, ?, ?, ?, ?)";
+		String sql = "SELECT * FROM massoftware.f_Zona" + levelString + "(?, ?, ?, ?, ? , ?, ?)";
 
 		Object codigo = ( filtro.getCodigo() == null ) ? String.class : filtro.getCodigo();
 		Object nombre = ( filtro.getNombre() == null ) ? String.class : filtro.getNombre();

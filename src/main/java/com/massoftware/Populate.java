@@ -157,7 +157,7 @@ public class Populate {
 			//insertAsientoContableModulo();
 			//insertAsientoContable();
 			//insertAsientoContableItem();
-			insertEmpresa();
+			//insertEmpresa();
 	}
 
 
@@ -1734,7 +1734,7 @@ public class Populate {
 		EjercicioContableService serviceejercicioContable = AppCX.services().buildEjercicioContableService();
 		Long ejercicioContableCount = serviceejercicioContable.count();
 
-		for(int i = 0; i < 1; i++){
+		for(int i = 0; i < maxRows; i++){
 
 			try {
 
