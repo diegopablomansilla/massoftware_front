@@ -2,10 +2,10 @@ package com.massoftware.windows.a.cajas;
 
 import com.massoftware.model.Caja;
 import com.massoftware.model.EntityId;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.TextFieldEntity;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowForm;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.controls.TextFieldEntity;
+import com.massoftware.x.util.windows.LogAndNotification;
+import com.massoftware.x.util.windows.WindowForm;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.event.ShortcutAction.KeyCode;

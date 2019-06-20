@@ -506,35 +506,6 @@ CREATE TYPE massoftware.t_TransporteTarifa_3 AS (
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
--- //          TABLA: Moneda                                                                                                 //
--- //                                                                                                                        //
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.Moneda
-
-
-
-DROP TYPE IF EXISTS massoftware.t_Moneda_1 CASCADE;
-
-CREATE TYPE massoftware.t_Moneda_1 AS (
-
-	  Moneda_id                  	VARCHAR(36)  		-- 0	Moneda.id
-	, Moneda_numero              	INTEGER      		-- 1	Moneda.numero
-	, Moneda_nombre              	VARCHAR(50)  		-- 2	Moneda.nombre
-	, Moneda_abreviatura         	VARCHAR(5)   		-- 3	Moneda.abreviatura
-	, Moneda_cotizacion          	DECIMAL(13,5)		-- 4	Moneda.cotizacion
-	, Moneda_cotizacionFecha     	TIMESTAMP    		-- 5	Moneda.cotizacionFecha
-	, Moneda_controlActualizacion	BOOLEAN      		-- 6	Moneda.controlActualizacion
-	, MonedaAFIP_7_id            	VARCHAR(36)  		-- 7	Moneda.MonedaAFIP.id
-	, MonedaAFIP_7_codigo        	VARCHAR(3)   		-- 8	Moneda.MonedaAFIP.codigo
-	, MonedaAFIP_7_nombre        	VARCHAR(50)  		-- 9	Moneda.MonedaAFIP.nombre
-
-);
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //                                                                                                                        //
 -- //          TABLA: MotivoBloqueoCliente                                                                                   //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1455,5 +1426,547 @@ CREATE TYPE massoftware.t_Empresa_1 AS (
 	, Empresa_fechaCierreGarantiaDevoluciones	DATE        		-- 13	Empresa.fechaCierreGarantiaDevoluciones
 	, Empresa_fechaCierreTambos              	DATE        		-- 14	Empresa.fechaCierreTambos
 	, Empresa_fechaCierreRRHH                	DATE        		-- 15	Empresa.fechaCierreRRHH
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Moneda                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Moneda
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Moneda_1 CASCADE;
+
+CREATE TYPE massoftware.t_Moneda_1 AS (
+
+	  Moneda_id                  	VARCHAR(36)  		-- 0	Moneda.id
+	, Moneda_numero              	INTEGER      		-- 1	Moneda.numero
+	, Moneda_nombre              	VARCHAR(50)  		-- 2	Moneda.nombre
+	, Moneda_abreviatura         	VARCHAR(5)   		-- 3	Moneda.abreviatura
+	, Moneda_cotizacion          	DECIMAL(13,5)		-- 4	Moneda.cotizacion
+	, Moneda_cotizacionFecha     	TIMESTAMP    		-- 5	Moneda.cotizacionFecha
+	, Moneda_controlActualizacion	BOOLEAN      		-- 6	Moneda.controlActualizacion
+	, MonedaAFIP_7_id            	VARCHAR(36)  		-- 7	Moneda.MonedaAFIP.id
+	, MonedaAFIP_7_codigo        	VARCHAR(3)   		-- 8	Moneda.MonedaAFIP.codigo
+	, MonedaAFIP_7_nombre        	VARCHAR(50)  		-- 9	Moneda.MonedaAFIP.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MonedaCotizacion                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaCotizacion
+
+
+
+DROP TYPE IF EXISTS massoftware.t_MonedaCotizacion_1 CASCADE;
+
+CREATE TYPE massoftware.t_MonedaCotizacion_1 AS (
+
+	  MonedaCotizacion_id                      	VARCHAR(36)  		-- 0	MonedaCotizacion.id
+	, MonedaCotizacion_cotizacionFecha         	TIMESTAMP    		-- 1	MonedaCotizacion.cotizacionFecha
+	, MonedaCotizacion_compra                  	DECIMAL(13,5)		-- 2	MonedaCotizacion.compra
+	, MonedaCotizacion_venta                   	DECIMAL(13,5)		-- 3	MonedaCotizacion.venta
+	, MonedaCotizacion_cotizacionFechaAuditoria	TIMESTAMP    		-- 4	MonedaCotizacion.cotizacionFechaAuditoria
+	, Moneda_5_id                              	VARCHAR(36)  		-- 5	MonedaCotizacion.Moneda.id
+	, Moneda_5_numero                          	INTEGER      		-- 6	MonedaCotizacion.Moneda.numero
+	, Moneda_5_nombre                          	VARCHAR(50)  		-- 7	MonedaCotizacion.Moneda.nombre
+	, Moneda_5_abreviatura                     	VARCHAR(5)   		-- 8	MonedaCotizacion.Moneda.abreviatura
+	, Moneda_5_cotizacion                      	DECIMAL(13,5)		-- 9	MonedaCotizacion.Moneda.cotizacion
+	, Moneda_5_cotizacionFecha                 	TIMESTAMP    		-- 10	MonedaCotizacion.Moneda.cotizacionFecha
+	, Moneda_5_controlActualizacion            	BOOLEAN      		-- 11	MonedaCotizacion.Moneda.controlActualizacion
+	, Moneda_5_monedaAFIP                      	VARCHAR(36)  		-- 12	MonedaCotizacion.Moneda.monedaAFIP
+	, Usuario_13_id                            	VARCHAR(36)  		-- 13	MonedaCotizacion.Usuario.id
+	, Usuario_13_numero                        	INTEGER      		-- 14	MonedaCotizacion.Usuario.numero
+	, Usuario_13_nombre                        	VARCHAR(50)  		-- 15	MonedaCotizacion.Usuario.nombre
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_MonedaCotizacion_2 CASCADE;
+
+CREATE TYPE massoftware.t_MonedaCotizacion_2 AS (
+
+	  MonedaCotizacion_id                      	VARCHAR(36)  		-- 0	MonedaCotizacion.id
+	, MonedaCotizacion_cotizacionFecha         	TIMESTAMP    		-- 1	MonedaCotizacion.cotizacionFecha
+	, MonedaCotizacion_compra                  	DECIMAL(13,5)		-- 2	MonedaCotizacion.compra
+	, MonedaCotizacion_venta                   	DECIMAL(13,5)		-- 3	MonedaCotizacion.venta
+	, MonedaCotizacion_cotizacionFechaAuditoria	TIMESTAMP    		-- 4	MonedaCotizacion.cotizacionFechaAuditoria
+	, Moneda_5_id                              	VARCHAR(36)  		-- 5	MonedaCotizacion.Moneda.id
+	, Moneda_5_numero                          	INTEGER      		-- 6	MonedaCotizacion.Moneda.numero
+	, Moneda_5_nombre                          	VARCHAR(50)  		-- 7	MonedaCotizacion.Moneda.nombre
+	, Moneda_5_abreviatura                     	VARCHAR(5)   		-- 8	MonedaCotizacion.Moneda.abreviatura
+	, Moneda_5_cotizacion                      	DECIMAL(13,5)		-- 9	MonedaCotizacion.Moneda.cotizacion
+	, Moneda_5_cotizacionFecha                 	TIMESTAMP    		-- 10	MonedaCotizacion.Moneda.cotizacionFecha
+	, Moneda_5_controlActualizacion            	BOOLEAN      		-- 11	MonedaCotizacion.Moneda.controlActualizacion
+	, MonedaAFIP_12_id                         	VARCHAR(36)  		-- 12	MonedaCotizacion.Moneda.MonedaAFIP.id
+	, MonedaAFIP_12_codigo                     	VARCHAR(3)   		-- 13	MonedaCotizacion.Moneda.MonedaAFIP.codigo
+	, MonedaAFIP_12_nombre                     	VARCHAR(50)  		-- 14	MonedaCotizacion.Moneda.MonedaAFIP.nombre
+	, Usuario_15_id                            	VARCHAR(36)  		-- 15	MonedaCotizacion.Usuario.id
+	, Usuario_15_numero                        	INTEGER      		-- 16	MonedaCotizacion.Usuario.numero
+	, Usuario_15_nombre                        	VARCHAR(50)  		-- 17	MonedaCotizacion.Usuario.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Caja                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Caja
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Caja_1 CASCADE;
+
+CREATE TYPE massoftware.t_Caja_1 AS (
+
+	  Caja_id                          	VARCHAR(36)		-- 0	Caja.id
+	, Caja_numero                      	INTEGER    		-- 1	Caja.numero
+	, Caja_nombre                      	VARCHAR(50)		-- 2	Caja.nombre
+	, SeguridadPuerta_3_id             	VARCHAR(36)		-- 3	Caja.SeguridadPuerta.id
+	, SeguridadPuerta_3_numero         	INTEGER    		-- 4	Caja.SeguridadPuerta.numero
+	, SeguridadPuerta_3_nombre         	VARCHAR(50)		-- 5	Caja.SeguridadPuerta.nombre
+	, SeguridadPuerta_3_equate         	VARCHAR(30)		-- 6	Caja.SeguridadPuerta.equate
+	, SeguridadPuerta_3_seguridadModulo	VARCHAR(36)		-- 7	Caja.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_Caja_2 CASCADE;
+
+CREATE TYPE massoftware.t_Caja_2 AS (
+
+	  Caja_id                 	VARCHAR(36)		-- 0	Caja.id
+	, Caja_numero             	INTEGER    		-- 1	Caja.numero
+	, Caja_nombre             	VARCHAR(50)		-- 2	Caja.nombre
+	, SeguridadPuerta_3_id    	VARCHAR(36)		-- 3	Caja.SeguridadPuerta.id
+	, SeguridadPuerta_3_numero	INTEGER    		-- 4	Caja.SeguridadPuerta.numero
+	, SeguridadPuerta_3_nombre	VARCHAR(50)		-- 5	Caja.SeguridadPuerta.nombre
+	, SeguridadPuerta_3_equate	VARCHAR(30)		-- 6	Caja.SeguridadPuerta.equate
+	, SeguridadModulo_7_id    	VARCHAR(36)		-- 7	Caja.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_7_numero	INTEGER    		-- 8	Caja.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_7_nombre	VARCHAR(50)		-- 9	Caja.SeguridadPuerta.SeguridadModulo.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoGrupo                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoGrupo
+
+
+
+DROP TYPE IF EXISTS massoftware.t_CuentaFondoGrupo_1 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaFondoGrupo_1 AS (
+
+	  CuentaFondoGrupo_id      	VARCHAR(36)		-- 0	CuentaFondoGrupo.id
+	, CuentaFondoGrupo_numero  	INTEGER    		-- 1	CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_nombre  	VARCHAR(50)		-- 2	CuentaFondoGrupo.nombre
+	, CuentaFondoRubro_3_id    	VARCHAR(36)		-- 3	CuentaFondoGrupo.CuentaFondoRubro.id
+	, CuentaFondoRubro_3_numero	INTEGER    		-- 4	CuentaFondoGrupo.CuentaFondoRubro.numero
+	, CuentaFondoRubro_3_nombre	VARCHAR(50)		-- 5	CuentaFondoGrupo.CuentaFondoRubro.nombre
+
+);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondo                                                                                            //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondo
+
+
+
+DROP TYPE IF EXISTS massoftware.t_CuentaFondo_1 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaFondo_1 AS (
+
+	  CuentaFondo_id                       	VARCHAR(36)  		-- 0	CuentaFondo.id
+	, CuentaFondo_numero                   	INTEGER      		-- 1	CuentaFondo.numero
+	, CuentaFondo_nombre                   	VARCHAR(50)  		-- 2	CuentaFondo.nombre
+	, CuentaContable_3_id                  	VARCHAR(36)  		-- 3	CuentaFondo.CuentaContable.id
+	, CuentaContable_3_codigo              	VARCHAR(11)  		-- 4	CuentaFondo.CuentaContable.codigo
+	, CuentaContable_3_nombre              	VARCHAR(50)  		-- 5	CuentaFondo.CuentaContable.nombre
+	, CuentaContable_3_ejercicioContable   	VARCHAR(36)  		-- 6	CuentaFondo.CuentaContable.ejercicioContable
+	, CuentaContable_3_integra             	VARCHAR(16)  		-- 7	CuentaFondo.CuentaContable.integra
+	, CuentaContable_3_cuentaJerarquia     	VARCHAR(16)  		-- 8	CuentaFondo.CuentaContable.cuentaJerarquia
+	, CuentaContable_3_imputable           	BOOLEAN      		-- 9	CuentaFondo.CuentaContable.imputable
+	, CuentaContable_3_ajustaPorInflacion  	BOOLEAN      		-- 10	CuentaFondo.CuentaContable.ajustaPorInflacion
+	, CuentaContable_3_cuentaContableEstado	VARCHAR(36)  		-- 11	CuentaFondo.CuentaContable.cuentaContableEstado
+	, CuentaContable_3_cuentaConApropiacion	BOOLEAN      		-- 12	CuentaFondo.CuentaContable.cuentaConApropiacion
+	, CuentaContable_3_centroCostoContable 	VARCHAR(36)  		-- 13	CuentaFondo.CuentaContable.centroCostoContable
+	, CuentaContable_3_cuentaAgrupadora    	VARCHAR(50)  		-- 14	CuentaFondo.CuentaContable.cuentaAgrupadora
+	, CuentaContable_3_porcentaje          	DECIMAL(6,3) 		-- 15	CuentaFondo.CuentaContable.porcentaje
+	, CuentaContable_3_puntoEquilibrio     	VARCHAR(36)  		-- 16	CuentaFondo.CuentaContable.puntoEquilibrio
+	, CuentaContable_3_costoVenta          	VARCHAR(36)  		-- 17	CuentaFondo.CuentaContable.costoVenta
+	, CuentaContable_3_seguridadPuerta     	VARCHAR(36)  		-- 18	CuentaFondo.CuentaContable.seguridadPuerta
+	, CuentaFondoGrupo_19_id               	VARCHAR(36)  		-- 19	CuentaFondo.CuentaFondoGrupo.id
+	, CuentaFondoGrupo_19_numero           	INTEGER      		-- 20	CuentaFondo.CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_19_nombre           	VARCHAR(50)  		-- 21	CuentaFondo.CuentaFondoGrupo.nombre
+	, CuentaFondoGrupo_19_cuentaFondoRubro 	VARCHAR(36)  		-- 22	CuentaFondo.CuentaFondoGrupo.cuentaFondoRubro
+	, CuentaFondoTipo_23_id                	VARCHAR(36)  		-- 23	CuentaFondo.CuentaFondoTipo.id
+	, CuentaFondoTipo_23_numero            	INTEGER      		-- 24	CuentaFondo.CuentaFondoTipo.numero
+	, CuentaFondoTipo_23_nombre            	VARCHAR(50)  		-- 25	CuentaFondo.CuentaFondoTipo.nombre
+	, CuentaFondo_obsoleto                 	BOOLEAN      		-- 26	CuentaFondo.obsoleto
+	, CuentaFondo_noImprimeCaja            	BOOLEAN      		-- 27	CuentaFondo.noImprimeCaja
+	, CuentaFondo_ventas                   	BOOLEAN      		-- 28	CuentaFondo.ventas
+	, CuentaFondo_fondos                   	BOOLEAN      		-- 29	CuentaFondo.fondos
+	, CuentaFondo_compras                  	BOOLEAN      		-- 30	CuentaFondo.compras
+	, Moneda_31_id                         	VARCHAR(36)  		-- 31	CuentaFondo.Moneda.id
+	, Moneda_31_numero                     	INTEGER      		-- 32	CuentaFondo.Moneda.numero
+	, Moneda_31_nombre                     	VARCHAR(50)  		-- 33	CuentaFondo.Moneda.nombre
+	, Moneda_31_abreviatura                	VARCHAR(5)   		-- 34	CuentaFondo.Moneda.abreviatura
+	, Moneda_31_cotizacion                 	DECIMAL(13,5)		-- 35	CuentaFondo.Moneda.cotizacion
+	, Moneda_31_cotizacionFecha            	TIMESTAMP    		-- 36	CuentaFondo.Moneda.cotizacionFecha
+	, Moneda_31_controlActualizacion       	BOOLEAN      		-- 37	CuentaFondo.Moneda.controlActualizacion
+	, Moneda_31_monedaAFIP                 	VARCHAR(36)  		-- 38	CuentaFondo.Moneda.monedaAFIP
+	, Caja_39_id                           	VARCHAR(36)  		-- 39	CuentaFondo.Caja.id
+	, Caja_39_numero                       	INTEGER      		-- 40	CuentaFondo.Caja.numero
+	, Caja_39_nombre                       	VARCHAR(50)  		-- 41	CuentaFondo.Caja.nombre
+	, Caja_39_seguridadPuerta              	VARCHAR(36)  		-- 42	CuentaFondo.Caja.seguridadPuerta
+	, CuentaFondo_rechazados               	BOOLEAN      		-- 43	CuentaFondo.rechazados
+	, CuentaFondo_conciliacion             	BOOLEAN      		-- 44	CuentaFondo.conciliacion
+	, CuentaFondoTipoBanco_45_id           	VARCHAR(36)  		-- 45	CuentaFondo.CuentaFondoTipoBanco.id
+	, CuentaFondoTipoBanco_45_numero       	INTEGER      		-- 46	CuentaFondo.CuentaFondoTipoBanco.numero
+	, CuentaFondoTipoBanco_45_nombre       	VARCHAR(50)  		-- 47	CuentaFondo.CuentaFondoTipoBanco.nombre
+	, Banco_48_id                          	VARCHAR(36)  		-- 48	CuentaFondo.Banco.id
+	, Banco_48_numero                      	INTEGER      		-- 49	CuentaFondo.Banco.numero
+	, Banco_48_nombre                      	VARCHAR(50)  		-- 50	CuentaFondo.Banco.nombre
+	, Banco_48_cuit                        	BIGINT       		-- 51	CuentaFondo.Banco.cuit
+	, Banco_48_bloqueado                   	BOOLEAN      		-- 52	CuentaFondo.Banco.bloqueado
+	, Banco_48_hoja                        	INTEGER      		-- 53	CuentaFondo.Banco.hoja
+	, Banco_48_primeraFila                 	INTEGER      		-- 54	CuentaFondo.Banco.primeraFila
+	, Banco_48_ultimaFila                  	INTEGER      		-- 55	CuentaFondo.Banco.ultimaFila
+	, Banco_48_fecha                       	VARCHAR(3)   		-- 56	CuentaFondo.Banco.fecha
+	, Banco_48_descripcion                 	VARCHAR(3)   		-- 57	CuentaFondo.Banco.descripcion
+	, Banco_48_referencia1                 	VARCHAR(3)   		-- 58	CuentaFondo.Banco.referencia1
+	, Banco_48_importe                     	VARCHAR(3)   		-- 59	CuentaFondo.Banco.importe
+	, Banco_48_referencia2                 	VARCHAR(3)   		-- 60	CuentaFondo.Banco.referencia2
+	, Banco_48_saldo                       	VARCHAR(3)   		-- 61	CuentaFondo.Banco.saldo
+	, CuentaFondo_cuentaBancaria           	VARCHAR(22)  		-- 62	CuentaFondo.cuentaBancaria
+	, CuentaFondo_cbu                      	VARCHAR(22)  		-- 63	CuentaFondo.cbu
+	, CuentaFondo_limiteDescubierto        	DECIMAL(13,5)		-- 64	CuentaFondo.limiteDescubierto
+	, CuentaFondo_cuentaFondoCaucion       	VARCHAR(50)  		-- 65	CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_cuentaFondoDiferidos     	VARCHAR(50)  		-- 66	CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_formato                  	VARCHAR(50)  		-- 67	CuentaFondo.formato
+	, CuentaFondoBancoCopia_68_id          	VARCHAR(36)  		-- 68	CuentaFondo.CuentaFondoBancoCopia.id
+	, CuentaFondoBancoCopia_68_numero      	INTEGER      		-- 69	CuentaFondo.CuentaFondoBancoCopia.numero
+	, CuentaFondoBancoCopia_68_nombre      	VARCHAR(50)  		-- 70	CuentaFondo.CuentaFondoBancoCopia.nombre
+	, CuentaFondo_limiteOperacionIndividual	DECIMAL(13,5)		-- 71	CuentaFondo.limiteOperacionIndividual
+	, SeguridadPuerta_72_id                	VARCHAR(36)  		-- 72	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_72_numero            	INTEGER      		-- 73	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_72_nombre            	VARCHAR(50)  		-- 74	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_72_equate            	VARCHAR(30)  		-- 75	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_72_seguridadModulo   	VARCHAR(36)  		-- 76	CuentaFondo.SeguridadPuerta.seguridadModulo
+	, SeguridadPuerta_77_id                	VARCHAR(36)  		-- 77	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_77_numero            	INTEGER      		-- 78	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_77_nombre            	VARCHAR(50)  		-- 79	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_77_equate            	VARCHAR(30)  		-- 80	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_77_seguridadModulo   	VARCHAR(36)  		-- 81	CuentaFondo.SeguridadPuerta.seguridadModulo
+	, SeguridadPuerta_82_id                	VARCHAR(36)  		-- 82	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_82_numero            	INTEGER      		-- 83	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_82_nombre            	VARCHAR(50)  		-- 84	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_82_equate            	VARCHAR(30)  		-- 85	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_82_seguridadModulo   	VARCHAR(36)  		-- 86	CuentaFondo.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_CuentaFondo_2 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaFondo_2 AS (
+
+	  CuentaFondo_id                          	VARCHAR(36)  		-- 0	CuentaFondo.id
+	, CuentaFondo_numero                      	INTEGER      		-- 1	CuentaFondo.numero
+	, CuentaFondo_nombre                      	VARCHAR(50)  		-- 2	CuentaFondo.nombre
+	, CuentaContable_3_id                     	VARCHAR(36)  		-- 3	CuentaFondo.CuentaContable.id
+	, CuentaContable_3_codigo                 	VARCHAR(11)  		-- 4	CuentaFondo.CuentaContable.codigo
+	, CuentaContable_3_nombre                 	VARCHAR(50)  		-- 5	CuentaFondo.CuentaContable.nombre
+	, EjercicioContable_6_id                  	VARCHAR(36)  		-- 6	CuentaFondo.CuentaContable.EjercicioContable.id
+	, EjercicioContable_6_numero              	INTEGER      		-- 7	CuentaFondo.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_6_apertura            	DATE         		-- 8	CuentaFondo.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_6_cierre              	DATE         		-- 9	CuentaFondo.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_6_cerrado             	BOOLEAN      		-- 10	CuentaFondo.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_6_cerradoModulos      	BOOLEAN      		-- 11	CuentaFondo.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_6_comentario          	VARCHAR(250) 		-- 12	CuentaFondo.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_3_integra                	VARCHAR(16)  		-- 13	CuentaFondo.CuentaContable.integra
+	, CuentaContable_3_cuentaJerarquia        	VARCHAR(16)  		-- 14	CuentaFondo.CuentaContable.cuentaJerarquia
+	, CuentaContable_3_imputable              	BOOLEAN      		-- 15	CuentaFondo.CuentaContable.imputable
+	, CuentaContable_3_ajustaPorInflacion     	BOOLEAN      		-- 16	CuentaFondo.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_17_id              	VARCHAR(36)  		-- 17	CuentaFondo.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_17_numero          	INTEGER      		-- 18	CuentaFondo.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_17_nombre          	VARCHAR(50)  		-- 19	CuentaFondo.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_3_cuentaConApropiacion   	BOOLEAN      		-- 20	CuentaFondo.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_21_id               	VARCHAR(36)  		-- 21	CuentaFondo.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_21_numero           	INTEGER      		-- 22	CuentaFondo.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_21_nombre           	VARCHAR(50)  		-- 23	CuentaFondo.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_21_abreviatura      	VARCHAR(5)   		-- 24	CuentaFondo.CuentaContable.CentroCostoContable.abreviatura
+	, CentroCostoContable_21_ejercicioContable	VARCHAR(36)  		-- 25	CuentaFondo.CuentaContable.CentroCostoContable.ejercicioContable
+	, CuentaContable_3_cuentaAgrupadora       	VARCHAR(50)  		-- 26	CuentaFondo.CuentaContable.cuentaAgrupadora
+	, CuentaContable_3_porcentaje             	DECIMAL(6,3) 		-- 27	CuentaFondo.CuentaContable.porcentaje
+	, PuntoEquilibrio_28_id                   	VARCHAR(36)  		-- 28	CuentaFondo.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_28_numero               	INTEGER      		-- 29	CuentaFondo.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_28_nombre               	VARCHAR(50)  		-- 30	CuentaFondo.CuentaContable.PuntoEquilibrio.nombre
+	, PuntoEquilibrio_28_tipoPuntoEquilibrio  	VARCHAR(36)  		-- 31	CuentaFondo.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio
+	, PuntoEquilibrio_28_ejercicioContable    	VARCHAR(36)  		-- 32	CuentaFondo.CuentaContable.PuntoEquilibrio.ejercicioContable
+	, CostoVenta_33_id                        	VARCHAR(36)  		-- 33	CuentaFondo.CuentaContable.CostoVenta.id
+	, CostoVenta_33_numero                    	INTEGER      		-- 34	CuentaFondo.CuentaContable.CostoVenta.numero
+	, CostoVenta_33_nombre                    	VARCHAR(50)  		-- 35	CuentaFondo.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_36_id                   	VARCHAR(36)  		-- 36	CuentaFondo.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_36_numero               	INTEGER      		-- 37	CuentaFondo.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_36_nombre               	VARCHAR(50)  		-- 38	CuentaFondo.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_36_equate               	VARCHAR(30)  		-- 39	CuentaFondo.CuentaContable.SeguridadPuerta.equate
+	, SeguridadPuerta_36_seguridadModulo      	VARCHAR(36)  		-- 40	CuentaFondo.CuentaContable.SeguridadPuerta.seguridadModulo
+	, CuentaFondoGrupo_41_id                  	VARCHAR(36)  		-- 41	CuentaFondo.CuentaFondoGrupo.id
+	, CuentaFondoGrupo_41_numero              	INTEGER      		-- 42	CuentaFondo.CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_41_nombre              	VARCHAR(50)  		-- 43	CuentaFondo.CuentaFondoGrupo.nombre
+	, CuentaFondoRubro_44_id                  	VARCHAR(36)  		-- 44	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.id
+	, CuentaFondoRubro_44_numero              	INTEGER      		-- 45	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.numero
+	, CuentaFondoRubro_44_nombre              	VARCHAR(50)  		-- 46	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.nombre
+	, CuentaFondoTipo_47_id                   	VARCHAR(36)  		-- 47	CuentaFondo.CuentaFondoTipo.id
+	, CuentaFondoTipo_47_numero               	INTEGER      		-- 48	CuentaFondo.CuentaFondoTipo.numero
+	, CuentaFondoTipo_47_nombre               	VARCHAR(50)  		-- 49	CuentaFondo.CuentaFondoTipo.nombre
+	, CuentaFondo_obsoleto                    	BOOLEAN      		-- 50	CuentaFondo.obsoleto
+	, CuentaFondo_noImprimeCaja               	BOOLEAN      		-- 51	CuentaFondo.noImprimeCaja
+	, CuentaFondo_ventas                      	BOOLEAN      		-- 52	CuentaFondo.ventas
+	, CuentaFondo_fondos                      	BOOLEAN      		-- 53	CuentaFondo.fondos
+	, CuentaFondo_compras                     	BOOLEAN      		-- 54	CuentaFondo.compras
+	, Moneda_55_id                            	VARCHAR(36)  		-- 55	CuentaFondo.Moneda.id
+	, Moneda_55_numero                        	INTEGER      		-- 56	CuentaFondo.Moneda.numero
+	, Moneda_55_nombre                        	VARCHAR(50)  		-- 57	CuentaFondo.Moneda.nombre
+	, Moneda_55_abreviatura                   	VARCHAR(5)   		-- 58	CuentaFondo.Moneda.abreviatura
+	, Moneda_55_cotizacion                    	DECIMAL(13,5)		-- 59	CuentaFondo.Moneda.cotizacion
+	, Moneda_55_cotizacionFecha               	TIMESTAMP    		-- 60	CuentaFondo.Moneda.cotizacionFecha
+	, Moneda_55_controlActualizacion          	BOOLEAN      		-- 61	CuentaFondo.Moneda.controlActualizacion
+	, MonedaAFIP_62_id                        	VARCHAR(36)  		-- 62	CuentaFondo.Moneda.MonedaAFIP.id
+	, MonedaAFIP_62_codigo                    	VARCHAR(3)   		-- 63	CuentaFondo.Moneda.MonedaAFIP.codigo
+	, MonedaAFIP_62_nombre                    	VARCHAR(50)  		-- 64	CuentaFondo.Moneda.MonedaAFIP.nombre
+	, Caja_65_id                              	VARCHAR(36)  		-- 65	CuentaFondo.Caja.id
+	, Caja_65_numero                          	INTEGER      		-- 66	CuentaFondo.Caja.numero
+	, Caja_65_nombre                          	VARCHAR(50)  		-- 67	CuentaFondo.Caja.nombre
+	, SeguridadPuerta_68_id                   	VARCHAR(36)  		-- 68	CuentaFondo.Caja.SeguridadPuerta.id
+	, SeguridadPuerta_68_numero               	INTEGER      		-- 69	CuentaFondo.Caja.SeguridadPuerta.numero
+	, SeguridadPuerta_68_nombre               	VARCHAR(50)  		-- 70	CuentaFondo.Caja.SeguridadPuerta.nombre
+	, SeguridadPuerta_68_equate               	VARCHAR(30)  		-- 71	CuentaFondo.Caja.SeguridadPuerta.equate
+	, SeguridadPuerta_68_seguridadModulo      	VARCHAR(36)  		-- 72	CuentaFondo.Caja.SeguridadPuerta.seguridadModulo
+	, CuentaFondo_rechazados                  	BOOLEAN      		-- 73	CuentaFondo.rechazados
+	, CuentaFondo_conciliacion                	BOOLEAN      		-- 74	CuentaFondo.conciliacion
+	, CuentaFondoTipoBanco_75_id              	VARCHAR(36)  		-- 75	CuentaFondo.CuentaFondoTipoBanco.id
+	, CuentaFondoTipoBanco_75_numero          	INTEGER      		-- 76	CuentaFondo.CuentaFondoTipoBanco.numero
+	, CuentaFondoTipoBanco_75_nombre          	VARCHAR(50)  		-- 77	CuentaFondo.CuentaFondoTipoBanco.nombre
+	, Banco_78_id                             	VARCHAR(36)  		-- 78	CuentaFondo.Banco.id
+	, Banco_78_numero                         	INTEGER      		-- 79	CuentaFondo.Banco.numero
+	, Banco_78_nombre                         	VARCHAR(50)  		-- 80	CuentaFondo.Banco.nombre
+	, Banco_78_cuit                           	BIGINT       		-- 81	CuentaFondo.Banco.cuit
+	, Banco_78_bloqueado                      	BOOLEAN      		-- 82	CuentaFondo.Banco.bloqueado
+	, Banco_78_hoja                           	INTEGER      		-- 83	CuentaFondo.Banco.hoja
+	, Banco_78_primeraFila                    	INTEGER      		-- 84	CuentaFondo.Banco.primeraFila
+	, Banco_78_ultimaFila                     	INTEGER      		-- 85	CuentaFondo.Banco.ultimaFila
+	, Banco_78_fecha                          	VARCHAR(3)   		-- 86	CuentaFondo.Banco.fecha
+	, Banco_78_descripcion                    	VARCHAR(3)   		-- 87	CuentaFondo.Banco.descripcion
+	, Banco_78_referencia1                    	VARCHAR(3)   		-- 88	CuentaFondo.Banco.referencia1
+	, Banco_78_importe                        	VARCHAR(3)   		-- 89	CuentaFondo.Banco.importe
+	, Banco_78_referencia2                    	VARCHAR(3)   		-- 90	CuentaFondo.Banco.referencia2
+	, Banco_78_saldo                          	VARCHAR(3)   		-- 91	CuentaFondo.Banco.saldo
+	, CuentaFondo_cuentaBancaria              	VARCHAR(22)  		-- 92	CuentaFondo.cuentaBancaria
+	, CuentaFondo_cbu                         	VARCHAR(22)  		-- 93	CuentaFondo.cbu
+	, CuentaFondo_limiteDescubierto           	DECIMAL(13,5)		-- 94	CuentaFondo.limiteDescubierto
+	, CuentaFondo_cuentaFondoCaucion          	VARCHAR(50)  		-- 95	CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_cuentaFondoDiferidos        	VARCHAR(50)  		-- 96	CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_formato                     	VARCHAR(50)  		-- 97	CuentaFondo.formato
+	, CuentaFondoBancoCopia_98_id             	VARCHAR(36)  		-- 98	CuentaFondo.CuentaFondoBancoCopia.id
+	, CuentaFondoBancoCopia_98_numero         	INTEGER      		-- 99	CuentaFondo.CuentaFondoBancoCopia.numero
+	, CuentaFondoBancoCopia_98_nombre         	VARCHAR(50)  		-- 100	CuentaFondo.CuentaFondoBancoCopia.nombre
+	, CuentaFondo_limiteOperacionIndividual   	DECIMAL(13,5)		-- 101	CuentaFondo.limiteOperacionIndividual
+	, SeguridadPuerta_102_id                  	VARCHAR(36)  		-- 102	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_102_numero              	INTEGER      		-- 103	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_102_nombre              	VARCHAR(50)  		-- 104	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_102_equate              	VARCHAR(30)  		-- 105	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_106_id                  	VARCHAR(36)  		-- 106	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_106_numero              	INTEGER      		-- 107	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_106_nombre              	VARCHAR(50)  		-- 108	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_109_id                  	VARCHAR(36)  		-- 109	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_109_numero              	INTEGER      		-- 110	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_109_nombre              	VARCHAR(50)  		-- 111	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_109_equate              	VARCHAR(30)  		-- 112	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_113_id                  	VARCHAR(36)  		-- 113	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_113_numero              	INTEGER      		-- 114	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_113_nombre              	VARCHAR(50)  		-- 115	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_116_id                  	VARCHAR(36)  		-- 116	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_116_numero              	INTEGER      		-- 117	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_116_nombre              	VARCHAR(50)  		-- 118	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_116_equate              	VARCHAR(30)  		-- 119	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_120_id                  	VARCHAR(36)  		-- 120	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_120_numero              	INTEGER      		-- 121	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_120_nombre              	VARCHAR(50)  		-- 122	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_CuentaFondo_3 CASCADE;
+
+CREATE TYPE massoftware.t_CuentaFondo_3 AS (
+
+	  CuentaFondo_id                       	VARCHAR(36)  		-- 0	CuentaFondo.id
+	, CuentaFondo_numero                   	INTEGER      		-- 1	CuentaFondo.numero
+	, CuentaFondo_nombre                   	VARCHAR(50)  		-- 2	CuentaFondo.nombre
+	, CuentaContable_3_id                  	VARCHAR(36)  		-- 3	CuentaFondo.CuentaContable.id
+	, CuentaContable_3_codigo              	VARCHAR(11)  		-- 4	CuentaFondo.CuentaContable.codigo
+	, CuentaContable_3_nombre              	VARCHAR(50)  		-- 5	CuentaFondo.CuentaContable.nombre
+	, EjercicioContable_6_id               	VARCHAR(36)  		-- 6	CuentaFondo.CuentaContable.EjercicioContable.id
+	, EjercicioContable_6_numero           	INTEGER      		-- 7	CuentaFondo.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_6_apertura         	DATE         		-- 8	CuentaFondo.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_6_cierre           	DATE         		-- 9	CuentaFondo.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_6_cerrado          	BOOLEAN      		-- 10	CuentaFondo.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_6_cerradoModulos   	BOOLEAN      		-- 11	CuentaFondo.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_6_comentario       	VARCHAR(250) 		-- 12	CuentaFondo.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_3_integra             	VARCHAR(16)  		-- 13	CuentaFondo.CuentaContable.integra
+	, CuentaContable_3_cuentaJerarquia     	VARCHAR(16)  		-- 14	CuentaFondo.CuentaContable.cuentaJerarquia
+	, CuentaContable_3_imputable           	BOOLEAN      		-- 15	CuentaFondo.CuentaContable.imputable
+	, CuentaContable_3_ajustaPorInflacion  	BOOLEAN      		-- 16	CuentaFondo.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_17_id           	VARCHAR(36)  		-- 17	CuentaFondo.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_17_numero       	INTEGER      		-- 18	CuentaFondo.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_17_nombre       	VARCHAR(50)  		-- 19	CuentaFondo.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_3_cuentaConApropiacion	BOOLEAN      		-- 20	CuentaFondo.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_21_id            	VARCHAR(36)  		-- 21	CuentaFondo.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_21_numero        	INTEGER      		-- 22	CuentaFondo.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_21_nombre        	VARCHAR(50)  		-- 23	CuentaFondo.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_21_abreviatura   	VARCHAR(5)   		-- 24	CuentaFondo.CuentaContable.CentroCostoContable.abreviatura
+	, EjercicioContable_25_id              	VARCHAR(36)  		-- 25	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.id
+	, EjercicioContable_25_numero          	INTEGER      		-- 26	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.numero
+	, EjercicioContable_25_apertura        	DATE         		-- 27	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.apertura
+	, EjercicioContable_25_cierre          	DATE         		-- 28	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.cierre
+	, EjercicioContable_25_cerrado         	BOOLEAN      		-- 29	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.cerrado
+	, EjercicioContable_25_cerradoModulos  	BOOLEAN      		-- 30	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_25_comentario      	VARCHAR(250) 		-- 31	CuentaFondo.CuentaContable.CentroCostoContable.EjercicioContable.comentario
+	, CuentaContable_3_cuentaAgrupadora    	VARCHAR(50)  		-- 32	CuentaFondo.CuentaContable.cuentaAgrupadora
+	, CuentaContable_3_porcentaje          	DECIMAL(6,3) 		-- 33	CuentaFondo.CuentaContable.porcentaje
+	, PuntoEquilibrio_34_id                	VARCHAR(36)  		-- 34	CuentaFondo.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_34_numero            	INTEGER      		-- 35	CuentaFondo.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_34_nombre            	VARCHAR(50)  		-- 36	CuentaFondo.CuentaContable.PuntoEquilibrio.nombre
+	, TipoPuntoEquilibrio_37_id            	VARCHAR(36)  		-- 37	CuentaFondo.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id
+	, TipoPuntoEquilibrio_37_numero        	INTEGER      		-- 38	CuentaFondo.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero
+	, TipoPuntoEquilibrio_37_nombre        	VARCHAR(50)  		-- 39	CuentaFondo.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre
+	, EjercicioContable_40_id              	VARCHAR(36)  		-- 40	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.id
+	, EjercicioContable_40_numero          	INTEGER      		-- 41	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.numero
+	, EjercicioContable_40_apertura        	DATE         		-- 42	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura
+	, EjercicioContable_40_cierre          	DATE         		-- 43	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre
+	, EjercicioContable_40_cerrado         	BOOLEAN      		-- 44	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado
+	, EjercicioContable_40_cerradoModulos  	BOOLEAN      		-- 45	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos
+	, EjercicioContable_40_comentario      	VARCHAR(250) 		-- 46	CuentaFondo.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario
+	, CostoVenta_47_id                     	VARCHAR(36)  		-- 47	CuentaFondo.CuentaContable.CostoVenta.id
+	, CostoVenta_47_numero                 	INTEGER      		-- 48	CuentaFondo.CuentaContable.CostoVenta.numero
+	, CostoVenta_47_nombre                 	VARCHAR(50)  		-- 49	CuentaFondo.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_50_id                	VARCHAR(36)  		-- 50	CuentaFondo.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_50_numero            	INTEGER      		-- 51	CuentaFondo.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_50_nombre            	VARCHAR(50)  		-- 52	CuentaFondo.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_50_equate            	VARCHAR(30)  		-- 53	CuentaFondo.CuentaContable.SeguridadPuerta.equate
+	, SeguridadModulo_54_id                	VARCHAR(36)  		-- 54	CuentaFondo.CuentaContable.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_54_numero            	INTEGER      		-- 55	CuentaFondo.CuentaContable.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_54_nombre            	VARCHAR(50)  		-- 56	CuentaFondo.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre
+	, CuentaFondoGrupo_57_id               	VARCHAR(36)  		-- 57	CuentaFondo.CuentaFondoGrupo.id
+	, CuentaFondoGrupo_57_numero           	INTEGER      		-- 58	CuentaFondo.CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_57_nombre           	VARCHAR(50)  		-- 59	CuentaFondo.CuentaFondoGrupo.nombre
+	, CuentaFondoRubro_60_id               	VARCHAR(36)  		-- 60	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.id
+	, CuentaFondoRubro_60_numero           	INTEGER      		-- 61	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.numero
+	, CuentaFondoRubro_60_nombre           	VARCHAR(50)  		-- 62	CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.nombre
+	, CuentaFondoTipo_63_id                	VARCHAR(36)  		-- 63	CuentaFondo.CuentaFondoTipo.id
+	, CuentaFondoTipo_63_numero            	INTEGER      		-- 64	CuentaFondo.CuentaFondoTipo.numero
+	, CuentaFondoTipo_63_nombre            	VARCHAR(50)  		-- 65	CuentaFondo.CuentaFondoTipo.nombre
+	, CuentaFondo_obsoleto                 	BOOLEAN      		-- 66	CuentaFondo.obsoleto
+	, CuentaFondo_noImprimeCaja            	BOOLEAN      		-- 67	CuentaFondo.noImprimeCaja
+	, CuentaFondo_ventas                   	BOOLEAN      		-- 68	CuentaFondo.ventas
+	, CuentaFondo_fondos                   	BOOLEAN      		-- 69	CuentaFondo.fondos
+	, CuentaFondo_compras                  	BOOLEAN      		-- 70	CuentaFondo.compras
+	, Moneda_71_id                         	VARCHAR(36)  		-- 71	CuentaFondo.Moneda.id
+	, Moneda_71_numero                     	INTEGER      		-- 72	CuentaFondo.Moneda.numero
+	, Moneda_71_nombre                     	VARCHAR(50)  		-- 73	CuentaFondo.Moneda.nombre
+	, Moneda_71_abreviatura                	VARCHAR(5)   		-- 74	CuentaFondo.Moneda.abreviatura
+	, Moneda_71_cotizacion                 	DECIMAL(13,5)		-- 75	CuentaFondo.Moneda.cotizacion
+	, Moneda_71_cotizacionFecha            	TIMESTAMP    		-- 76	CuentaFondo.Moneda.cotizacionFecha
+	, Moneda_71_controlActualizacion       	BOOLEAN      		-- 77	CuentaFondo.Moneda.controlActualizacion
+	, MonedaAFIP_78_id                     	VARCHAR(36)  		-- 78	CuentaFondo.Moneda.MonedaAFIP.id
+	, MonedaAFIP_78_codigo                 	VARCHAR(3)   		-- 79	CuentaFondo.Moneda.MonedaAFIP.codigo
+	, MonedaAFIP_78_nombre                 	VARCHAR(50)  		-- 80	CuentaFondo.Moneda.MonedaAFIP.nombre
+	, Caja_81_id                           	VARCHAR(36)  		-- 81	CuentaFondo.Caja.id
+	, Caja_81_numero                       	INTEGER      		-- 82	CuentaFondo.Caja.numero
+	, Caja_81_nombre                       	VARCHAR(50)  		-- 83	CuentaFondo.Caja.nombre
+	, SeguridadPuerta_84_id                	VARCHAR(36)  		-- 84	CuentaFondo.Caja.SeguridadPuerta.id
+	, SeguridadPuerta_84_numero            	INTEGER      		-- 85	CuentaFondo.Caja.SeguridadPuerta.numero
+	, SeguridadPuerta_84_nombre            	VARCHAR(50)  		-- 86	CuentaFondo.Caja.SeguridadPuerta.nombre
+	, SeguridadPuerta_84_equate            	VARCHAR(30)  		-- 87	CuentaFondo.Caja.SeguridadPuerta.equate
+	, SeguridadModulo_88_id                	VARCHAR(36)  		-- 88	CuentaFondo.Caja.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_88_numero            	INTEGER      		-- 89	CuentaFondo.Caja.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_88_nombre            	VARCHAR(50)  		-- 90	CuentaFondo.Caja.SeguridadPuerta.SeguridadModulo.nombre
+	, CuentaFondo_rechazados               	BOOLEAN      		-- 91	CuentaFondo.rechazados
+	, CuentaFondo_conciliacion             	BOOLEAN      		-- 92	CuentaFondo.conciliacion
+	, CuentaFondoTipoBanco_93_id           	VARCHAR(36)  		-- 93	CuentaFondo.CuentaFondoTipoBanco.id
+	, CuentaFondoTipoBanco_93_numero       	INTEGER      		-- 94	CuentaFondo.CuentaFondoTipoBanco.numero
+	, CuentaFondoTipoBanco_93_nombre       	VARCHAR(50)  		-- 95	CuentaFondo.CuentaFondoTipoBanco.nombre
+	, Banco_96_id                          	VARCHAR(36)  		-- 96	CuentaFondo.Banco.id
+	, Banco_96_numero                      	INTEGER      		-- 97	CuentaFondo.Banco.numero
+	, Banco_96_nombre                      	VARCHAR(50)  		-- 98	CuentaFondo.Banco.nombre
+	, Banco_96_cuit                        	BIGINT       		-- 99	CuentaFondo.Banco.cuit
+	, Banco_96_bloqueado                   	BOOLEAN      		-- 100	CuentaFondo.Banco.bloqueado
+	, Banco_96_hoja                        	INTEGER      		-- 101	CuentaFondo.Banco.hoja
+	, Banco_96_primeraFila                 	INTEGER      		-- 102	CuentaFondo.Banco.primeraFila
+	, Banco_96_ultimaFila                  	INTEGER      		-- 103	CuentaFondo.Banco.ultimaFila
+	, Banco_96_fecha                       	VARCHAR(3)   		-- 104	CuentaFondo.Banco.fecha
+	, Banco_96_descripcion                 	VARCHAR(3)   		-- 105	CuentaFondo.Banco.descripcion
+	, Banco_96_referencia1                 	VARCHAR(3)   		-- 106	CuentaFondo.Banco.referencia1
+	, Banco_96_importe                     	VARCHAR(3)   		-- 107	CuentaFondo.Banco.importe
+	, Banco_96_referencia2                 	VARCHAR(3)   		-- 108	CuentaFondo.Banco.referencia2
+	, Banco_96_saldo                       	VARCHAR(3)   		-- 109	CuentaFondo.Banco.saldo
+	, CuentaFondo_cuentaBancaria           	VARCHAR(22)  		-- 110	CuentaFondo.cuentaBancaria
+	, CuentaFondo_cbu                      	VARCHAR(22)  		-- 111	CuentaFondo.cbu
+	, CuentaFondo_limiteDescubierto        	DECIMAL(13,5)		-- 112	CuentaFondo.limiteDescubierto
+	, CuentaFondo_cuentaFondoCaucion       	VARCHAR(50)  		-- 113	CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_cuentaFondoDiferidos     	VARCHAR(50)  		-- 114	CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_formato                  	VARCHAR(50)  		-- 115	CuentaFondo.formato
+	, CuentaFondoBancoCopia_116_id         	VARCHAR(36)  		-- 116	CuentaFondo.CuentaFondoBancoCopia.id
+	, CuentaFondoBancoCopia_116_numero     	INTEGER      		-- 117	CuentaFondo.CuentaFondoBancoCopia.numero
+	, CuentaFondoBancoCopia_116_nombre     	VARCHAR(50)  		-- 118	CuentaFondo.CuentaFondoBancoCopia.nombre
+	, CuentaFondo_limiteOperacionIndividual	DECIMAL(13,5)		-- 119	CuentaFondo.limiteOperacionIndividual
+	, SeguridadPuerta_120_id               	VARCHAR(36)  		-- 120	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_120_numero           	INTEGER      		-- 121	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_120_nombre           	VARCHAR(50)  		-- 122	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_120_equate           	VARCHAR(30)  		-- 123	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_124_id               	VARCHAR(36)  		-- 124	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_124_numero           	INTEGER      		-- 125	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_124_nombre           	VARCHAR(50)  		-- 126	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_127_id               	VARCHAR(36)  		-- 127	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_127_numero           	INTEGER      		-- 128	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_127_nombre           	VARCHAR(50)  		-- 129	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_127_equate           	VARCHAR(30)  		-- 130	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_131_id               	VARCHAR(36)  		-- 131	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_131_numero           	INTEGER      		-- 132	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_131_nombre           	VARCHAR(50)  		-- 133	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_134_id               	VARCHAR(36)  		-- 134	CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_134_numero           	INTEGER      		-- 135	CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_134_nombre           	VARCHAR(50)  		-- 136	CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_134_equate           	VARCHAR(30)  		-- 137	CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_138_id               	VARCHAR(36)  		-- 138	CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_138_numero           	INTEGER      		-- 139	CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_138_nombre           	VARCHAR(50)  		-- 140	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
 
 );

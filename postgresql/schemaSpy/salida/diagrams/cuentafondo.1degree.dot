@@ -19,34 +19,138 @@ digraph "oneDegreeRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
+  "caja":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentacontable":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"banco":sw -> "banco":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"caja":sw -> "caja":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"cuentacontable":sw -> "cuentacontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"cuentafondobancocopia":sw -> "cuentafondobancocopia":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondogrupo":sw -> "cuentafondogrupo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"cuentafondotipo":sw -> "cuentafondotipo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
-  "juridiccionconvniomultilateral":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"cuentafondotipobanco":sw -> "cuentafondotipobanco":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"moneda":sw -> "moneda":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"seguridadpuertaconsulta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"seguridadpuertalimite":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "cuentafondo":"seguridadpuertauso":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "banco" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">banco</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="cuit" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuit</TD></TR>
+      <TR><TD PORT="bloqueado" COLSPAN="3" ALIGN="LEFT">bloqueado</TD></TR>
+      <TR><TD PORT="hoja" COLSPAN="3" ALIGN="LEFT">hoja</TD></TR>
+      <TR><TD PORT="primerafila" COLSPAN="3" ALIGN="LEFT">primerafila</TD></TR>
+      <TR><TD PORT="ultimafila" COLSPAN="3" ALIGN="LEFT">ultimafila</TD></TR>
+      <TR><TD PORT="fecha" COLSPAN="3" ALIGN="LEFT">fecha</TD></TR>
+      <TR><TD PORT="descripcion" COLSPAN="3" ALIGN="LEFT">descripcion</TD></TR>
+      <TR><TD PORT="referencia1" COLSPAN="3" ALIGN="LEFT">referencia1</TD></TR>
+      <TR><TD PORT="importe" COLSPAN="3" ALIGN="LEFT">importe</TD></TR>
+      <TR><TD PORT="referencia2" COLSPAN="3" ALIGN="LEFT">referencia2</TD></TR>
+      <TR><TD PORT="saldo" COLSPAN="3" ALIGN="LEFT">saldo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">244 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="banco.html"
+    tooltip="banco"
+  ];
+  "caja" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">caja</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="seguridadpuerta" COLSPAN="3" ALIGN="LEFT">seguridadpuerta</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">275 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="caja.html"
+    tooltip="caja"
+  ];
+  "cuentacontable" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentacontable</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="codigo" COLSPAN="3" ALIGN="LEFT">codigo</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="ejerciciocontable" COLSPAN="3" ALIGN="LEFT">ejerciciocontable</TD></TR>
+      <TR><TD PORT="integra" COLSPAN="3" ALIGN="LEFT">integra</TD></TR>
+      <TR><TD PORT="cuentajerarquia" COLSPAN="3" ALIGN="LEFT">cuentajerarquia</TD></TR>
+      <TR><TD PORT="imputable" COLSPAN="3" ALIGN="LEFT">imputable</TD></TR>
+      <TR><TD PORT="ajustaporinflacion" COLSPAN="3" ALIGN="LEFT">ajustaporinflacion</TD></TR>
+      <TR><TD PORT="cuentacontableestado" COLSPAN="3" ALIGN="LEFT">cuentacontableestado</TD></TR>
+      <TR><TD PORT="cuentaconapropiacion" COLSPAN="3" ALIGN="LEFT">cuentaconapropiacion</TD></TR>
+      <TR><TD PORT="centrocostocontable" COLSPAN="3" ALIGN="LEFT">centrocostocontable</TD></TR>
+      <TR><TD PORT="cuentaagrupadora" COLSPAN="3" ALIGN="LEFT">cuentaagrupadora</TD></TR>
+      <TR><TD PORT="porcentaje" COLSPAN="3" ALIGN="LEFT">porcentaje</TD></TR>
+      <TR><TD PORT="puntoequilibrio" COLSPAN="3" ALIGN="LEFT">puntoequilibrio</TD></TR>
+      <TR><TD PORT="costoventa" COLSPAN="3" ALIGN="LEFT">costoventa</TD></TR>
+      <TR><TD PORT="seguridadpuerta" COLSPAN="3" ALIGN="LEFT">seguridadpuerta</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 6</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">185 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
+    </TABLE>>
+    URL="cuentacontable.html"
+    tooltip="cuentacontable"
+  ];
   "cuentafondo" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentafondo</TD></TR>
-      <TR><TD PORT="id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD><TD PORT="id.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
-      <TR><TD PORT="cuentafondogrupo" COLSPAN="2" ALIGN="LEFT">cuentafondogrupo</TD><TD PORT="cuentafondogrupo.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
+      <TR><TD PORT="id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD><TD PORT="id.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="numero" COLSPAN="2" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD><TD PORT="numero.type" ALIGN="LEFT">int4[10]</TD></TR>
-      <TR><TD PORT="nombre" COLSPAN="2" ALIGN="LEFT">nombre</TD><TD PORT="nombre.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
-      <TR><TD PORT="cuentafondotipo" COLSPAN="2" ALIGN="LEFT">cuentafondotipo</TD><TD PORT="cuentafondotipo.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
-      <TR><TD PORT="banco" COLSPAN="2" ALIGN="LEFT">banco</TD><TD PORT="banco.type" ALIGN="LEFT">varchar[2147483647]</TD></TR>
-      <TR><TD PORT="bloqueado" COLSPAN="2" ALIGN="LEFT">bloqueado</TD><TD PORT="bloqueado.type" ALIGN="LEFT">bool[1]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="2" ALIGN="LEFT">nombre</TD><TD PORT="nombre.type" ALIGN="LEFT">varchar[50]</TD></TR>
+      <TR><TD PORT="cuentacontable" COLSPAN="2" ALIGN="LEFT">cuentacontable</TD><TD PORT="cuentacontable.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="cuentafondogrupo" COLSPAN="2" ALIGN="LEFT">cuentafondogrupo</TD><TD PORT="cuentafondogrupo.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="cuentafondotipo" COLSPAN="2" ALIGN="LEFT">cuentafondotipo</TD><TD PORT="cuentafondotipo.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="obsoleto" COLSPAN="2" ALIGN="LEFT">obsoleto</TD><TD PORT="obsoleto.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="noimprimecaja" COLSPAN="2" ALIGN="LEFT">noimprimecaja</TD><TD PORT="noimprimecaja.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="ventas" COLSPAN="2" ALIGN="LEFT">ventas</TD><TD PORT="ventas.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="fondos" COLSPAN="2" ALIGN="LEFT">fondos</TD><TD PORT="fondos.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="compras" COLSPAN="2" ALIGN="LEFT">compras</TD><TD PORT="compras.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="moneda" COLSPAN="2" ALIGN="LEFT">moneda</TD><TD PORT="moneda.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="caja" COLSPAN="2" ALIGN="LEFT">caja</TD><TD PORT="caja.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="rechazados" COLSPAN="2" ALIGN="LEFT">rechazados</TD><TD PORT="rechazados.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="conciliacion" COLSPAN="2" ALIGN="LEFT">conciliacion</TD><TD PORT="conciliacion.type" ALIGN="LEFT">bool[1]</TD></TR>
+      <TR><TD PORT="cuentafondotipobanco" COLSPAN="2" ALIGN="LEFT">cuentafondotipobanco</TD><TD PORT="cuentafondotipobanco.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="banco" COLSPAN="2" ALIGN="LEFT">banco</TD><TD PORT="banco.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="cuentabancaria" COLSPAN="2" ALIGN="LEFT">cuentabancaria</TD><TD PORT="cuentabancaria.type" ALIGN="LEFT">varchar[22]</TD></TR>
+      <TR><TD PORT="cbu" COLSPAN="2" ALIGN="LEFT">cbu</TD><TD PORT="cbu.type" ALIGN="LEFT">varchar[22]</TD></TR>
+      <TR><TD PORT="limitedescubierto" COLSPAN="2" ALIGN="LEFT">limitedescubierto</TD><TD PORT="limitedescubierto.type" ALIGN="LEFT">numeric[13,5]</TD></TR>
+      <TR><TD PORT="cuentafondocaucion" COLSPAN="2" ALIGN="LEFT">cuentafondocaucion</TD><TD PORT="cuentafondocaucion.type" ALIGN="LEFT">varchar[50]</TD></TR>
+      <TR><TD PORT="cuentafondodiferidos" COLSPAN="2" ALIGN="LEFT">cuentafondodiferidos</TD><TD PORT="cuentafondodiferidos.type" ALIGN="LEFT">varchar[50]</TD></TR>
+      <TR><TD PORT="formato" COLSPAN="2" ALIGN="LEFT">formato</TD><TD PORT="formato.type" ALIGN="LEFT">varchar[50]</TD></TR>
+      <TR><TD PORT="cuentafondobancocopia" COLSPAN="2" ALIGN="LEFT">cuentafondobancocopia</TD><TD PORT="cuentafondobancocopia.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="limiteoperacionindividual" COLSPAN="2" ALIGN="LEFT">limiteoperacionindividual</TD><TD PORT="limiteoperacionindividual.type" ALIGN="LEFT">numeric[13,5]</TD></TR>
+      <TR><TD PORT="seguridadpuertauso" COLSPAN="2" ALIGN="LEFT">seguridadpuertauso</TD><TD PORT="seguridadpuertauso.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="2" ALIGN="LEFT">seguridadpuertaconsulta</TD><TD PORT="seguridadpuertaconsulta.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD PORT="seguridadpuertalimite" COLSPAN="2" ALIGN="LEFT">seguridadpuertalimite</TD><TD PORT="seguridadpuertalimite.type" ALIGN="LEFT">varchar[36]</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondo.html"
     tooltip="cuentafondo"
+  ];
+  "cuentafondobancocopia" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentafondobancocopia</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">277 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="cuentafondobancocopia.html"
+    tooltip="cuentafondobancocopia"
   ];
   "cuentafondogrupo" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentafondogrupo</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="cuentafondorubro" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">cuentafondorubro</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD PORT="cuentafondorubro" COLSPAN="3" ALIGN="LEFT">cuentafondorubro</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">277 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondogrupo.html"
     tooltip="cuentafondogrupo"
@@ -58,22 +162,52 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">6 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">279 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondotipo.html"
     tooltip="cuentafondotipo"
   ];
-  "juridiccionconvniomultilateral" [
+  "cuentafondotipobanco" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">juridiccionconvniomultilateral</TD></TR>
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">cuentafondotipobanco</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
-      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">286 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
-    URL="juridiccionconvniomultilateral.html"
-    tooltip="juridiccionconvniomultilateral"
+    URL="cuentafondotipobanco.html"
+    tooltip="cuentafondotipobanco"
+  ];
+  "moneda" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">moneda</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="abreviatura" COLSPAN="3" ALIGN="LEFT">abreviatura</TD></TR>
+      <TR><TD PORT="cotizacion" COLSPAN="3" ALIGN="LEFT">cotizacion</TD></TR>
+      <TR><TD PORT="cotizacionfecha" COLSPAN="3" ALIGN="LEFT">cotizacionfecha</TD></TR>
+      <TR><TD PORT="controlactualizacion" COLSPAN="3" ALIGN="LEFT">controlactualizacion</TD></TR>
+      <TR><TD PORT="monedaafip" COLSPAN="3" ALIGN="LEFT">monedaafip</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">264 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+    </TABLE>>
+    URL="moneda.html"
+    tooltip="moneda"
+  ];
+  "seguridadpuerta" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">seguridadpuerta</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="equate" COLSPAN="3" ALIGN="LEFT">equate</TD></TR>
+      <TR><TD PORT="seguridadmodulo" COLSPAN="3" ALIGN="LEFT">seguridadmodulo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">251 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">7 &gt;</TD></TR>
+    </TABLE>>
+    URL="seguridadpuerta.html"
+    tooltip="seguridadpuerta"
   ];
 }

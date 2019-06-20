@@ -2,10 +2,10 @@ package com.massoftware.windows.firmantes;
 
 import com.massoftware.model.EntityId;
 import com.massoftware.model.Firmante;
-import com.massoftware.windows.CheckBoxEntity;
-import com.massoftware.windows.TextFieldEntity;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowForm;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.controls.CheckBoxEntity;
+import com.massoftware.x.util.controls.TextFieldEntity;
+import com.massoftware.x.util.windows.WindowForm;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;

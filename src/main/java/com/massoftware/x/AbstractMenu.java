@@ -1,6 +1,6 @@
 package com.massoftware.x;
 
-import com.massoftware.windows.LogAndNotification;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.HorizontalLayout;

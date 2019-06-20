@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.bancos.WBancos;
+import com.massoftware.x.util.controls.SelectorBoxOld;
+import com.massoftware.x.util.windows.LogAndNotification;
 
 class WCBancoSB extends SelectorBoxOld {
 

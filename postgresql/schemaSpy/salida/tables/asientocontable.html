@@ -101,18 +101,27 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
- <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="asientocontableitem.asientocontable refs asientocontable.id via asientocontableitem_asientocontable_fkey"><a href='asientocontableitem.html'>asientocontableitem</a><span class='relatedKey'>.asientocontable</span>
+    </td>
+    <td class='constraint detail'>asientocontableitem_asientocontable_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+</td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>numero</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -123,7 +132,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>fecha</td>
  <td class='detail'>date</td>
  <td class='detail' align='right'>13</td>
@@ -134,7 +143,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>detalle</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
@@ -145,7 +154,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>ejerciciocontable</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -155,7 +164,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="asientocontable.ejerciciocontable refs ejerciciocontable.id via asientocontable_ejerciciocontable_fkey"><a href='ejerciciocontable.html'>ejerciciocontable</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>asientocontable_ejerciciocontable_fkey<span title='Restrict delete:
@@ -165,7 +174,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>minutacontable</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -175,7 +184,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="asientocontable.minutacontable refs minutacontable.id via asientocontable_minutacontable_fkey"><a href='minutacontable.html'>minutacontable</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>asientocontable_minutacontable_fkey<span title='Restrict delete:
@@ -185,7 +194,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>sucursal</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -195,7 +204,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="asientocontable.sucursal refs sucursal.id via asientocontable_sucursal_fkey"><a href='sucursal.html'>sucursal</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>asientocontable_sucursal_fkey<span title='Restrict delete:
@@ -205,7 +214,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>asientocontablemodulo</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -215,7 +224,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="asientocontable.asientocontablemodulo refs asientocontablemodulo.id via asientocontable_asientocontablemodulo_fkey"><a href='asientocontablemodulo.html'>asientocontablemodulo</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>asientocontable_asientocontablemodulo_fkey<span title='Restrict delete:
@@ -226,7 +235,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='8 columns'>Table contained 300 rows at mié jun 19 12:34 ART 2019<p/>
+<p title='8 columns'>Table contained 300 rows at jue jun 20 16:21 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -260,24 +269,26 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
 <area shape="rect" href="asientocontable.html" title="asientocontable" alt="" coords="313,186,593,429" >
 <area shape="rect" href="asientocontablemodulo.html" title="asientocontablemodulo" alt="" coords="46,889,230,1014" >
-<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="67,8,209,224" >
-<area shape="rect" href="minutacontable.html" title="minutacontable" alt="" coords="67,241,209,366" >
-<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="7,384,269,872" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="68,8,209,224" >
+<area shape="rect" href="minutacontable.html" title="minutacontable" alt="" coords="68,241,209,366" >
+<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="8,384,269,872" >
+<area shape="rect" href="asientocontableitem.html" title="asientocontableitem" alt="" coords="637,98,800,336" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/asientocontable.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" href="asientocontable.html" title="asientocontable" alt="" coords="498,8,778,250" >
-<area shape="rect" href="asientocontablemodulo.html" title="asientocontablemodulo" alt="" coords="232,220,416,345" >
-<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="253,389,394,605" >
-<area shape="rect" href="minutacontable.html" title="minutacontable" alt="" coords="253,77,394,202" >
-<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="193,669,454,1157" >
-<area shape="rect" href="tiposucursal.html" title="tiposucursal" alt="" coords="8,760,149,840" >
-<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="564,365,713,445" >
-<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="557,462,720,542" >
-<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="822,518,974,598" >
-<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="562,596,714,676" >
-<area shape="rect" href="deposito.html" title="deposito" alt="" coords="568,693,709,773" >
-<area shape="rect" href="empresa.html" title="empresa" alt="" coords="581,268,696,348" >
+<area shape="rect" href="asientocontable.html" title="asientocontable" alt="" coords="498,531,778,774" >
+<area shape="rect" href="asientocontablemodulo.html" title="asientocontablemodulo" alt="" coords="231,789,415,914" >
+<area shape="rect" href="ejerciciocontable.html" title="ejerciciocontable" alt="" coords="7,981,149,1197" >
+<area shape="rect" href="minutacontable.html" title="minutacontable" alt="" coords="253,646,394,771" >
+<area shape="rect" href="sucursal.html" title="sucursal" alt="" coords="193,7,454,495" >
+<area shape="rect" href="tiposucursal.html" title="tiposucursal" alt="" coords="7,98,149,178" >
+<area shape="rect" href="asientocontableitem.html" title="asientocontableitem" alt="" coords="822,681,985,918" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="563,1029,713,1109" >
+<area shape="rect" href="centrocostocontable.html" title="centrocostocontable" alt="" coords="242,931,405,1011" >
+<area shape="rect" href="puntoequilibrio.html" title="puntoequilibrio" alt="" coords="247,1126,399,1206" >
+<area shape="rect" href="asientomodelo.html" title="asientomodelo" alt="" coords="247,549,399,629" >
+<area shape="rect" href="deposito.html" title="deposito" alt="" coords="567,7,709,87" >
+<area shape="rect" href="empresa.html" title="empresa" alt="" coords="266,1029,381,1109" >
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/asientocontable.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

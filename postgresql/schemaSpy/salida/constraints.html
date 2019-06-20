@@ -32,7 +32,7 @@
 <div class='indent'>
 <table width='100%'>
 <tr><td class='container' valign='bottom'><b>
-33 Foreign Key Constraints:</b>
+49 Foreign Key Constraints:</b>
 </td><td class='container' align='right'>
 <table>
   <tr><td class='container' align='right' valign='top'><a href='http://sourceforge.net' target='_blank'><img src='http://sourceforge.net/sflogo.php?group_id=137197&amp;type=1' alt='SourceForge.net' border='0' height='31' width='88'></a></td></tr>
@@ -100,30 +100,44 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
   <tr class='even'>
+  <td class='detail'>asientocontableitem_asientocontable_fkey</td>
+  <td class='detail'><a href='tables/asientocontableitem.html'>asientocontableitem</a>.asientocontable</td>
+  <td class='detail'><a href='tables/asientocontable.html'>asientocontable</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
   <td class='detail'>asientocontableitem_cuentacontable_fkey</td>
   <td class='detail'><a href='tables/asientocontableitem.html'>asientocontableitem</a>.cuentacontable</td>
   <td class='detail'><a href='tables/cuentacontable.html'>cuentacontable</a>.id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='odd'>
+  <tr class='even'>
   <td class='detail'>asientomodelo_ejerciciocontable_fkey</td>
   <td class='detail'><a href='tables/asientomodelo.html'>asientomodelo</a>.ejerciciocontable</td>
   <td class='detail'><a href='tables/ejerciciocontable.html'>ejerciciocontable</a>.id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='even'>
+  <tr class='odd'>
   <td class='detail'>asientomodeloitem_asientomodelo_fkey</td>
   <td class='detail'><a href='tables/asientomodeloitem.html'>asientomodeloitem</a>.asientomodelo</td>
   <td class='detail'><a href='tables/asientomodelo.html'>asientomodelo</a>.id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='odd'>
+  <tr class='even'>
   <td class='detail'>asientomodeloitem_cuentacontable_fkey</td>
   <td class='detail'><a href='tables/asientomodeloitem.html'>asientomodeloitem</a>.cuentacontable</td>
   <td class='detail'><a href='tables/cuentacontable.html'>cuentacontable</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>caja_seguridadpuerta_fkey</td>
+  <td class='detail'><a href='tables/caja.html'>caja</a>.seguridadpuerta</td>
+  <td class='detail'><a href='tables/seguridadpuerta.html'>seguridadpuerta</a>.id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
@@ -198,6 +212,90 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
   <tr class='even'>
+  <td class='detail'>cuentafondo_banco_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.banco</td>
+  <td class='detail'><a href='tables/banco.html'>banco</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondo_caja_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.caja</td>
+  <td class='detail'><a href='tables/caja.html'>caja</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>cuentafondo_cuentacontable_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.cuentacontable</td>
+  <td class='detail'><a href='tables/cuentacontable.html'>cuentacontable</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondo_cuentafondobancocopia_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.cuentafondobancocopia</td>
+  <td class='detail'><a href='tables/cuentafondobancocopia.html'>cuentafondobancocopia</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>cuentafondo_cuentafondogrupo_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.cuentafondogrupo</td>
+  <td class='detail'><a href='tables/cuentafondogrupo.html'>cuentafondogrupo</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondo_cuentafondotipo_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.cuentafondotipo</td>
+  <td class='detail'><a href='tables/cuentafondotipo.html'>cuentafondotipo</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>cuentafondo_cuentafondotipobanco_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.cuentafondotipobanco</td>
+  <td class='detail'><a href='tables/cuentafondotipobanco.html'>cuentafondotipobanco</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondo_moneda_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.moneda</td>
+  <td class='detail'><a href='tables/moneda.html'>moneda</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>cuentafondo_seguridadpuertaconsulta_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.seguridadpuertaconsulta</td>
+  <td class='detail'><a href='tables/seguridadpuerta.html'>seguridadpuerta</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondo_seguridadpuertalimite_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.seguridadpuertalimite</td>
+  <td class='detail'><a href='tables/seguridadpuerta.html'>seguridadpuerta</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>cuentafondo_seguridadpuertauso_fkey</td>
+  <td class='detail'><a href='tables/cuentafondo.html'>cuentafondo</a>.seguridadpuertauso</td>
+  <td class='detail'><a href='tables/seguridadpuerta.html'>seguridadpuerta</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>cuentafondogrupo_cuentafondorubro_fkey</td>
+  <td class='detail'><a href='tables/cuentafondogrupo.html'>cuentafondogrupo</a>.cuentafondorubro</td>
+  <td class='detail'><a href='tables/cuentafondorubro.html'>cuentafondorubro</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
   <td class='detail'>deposito_depositomodulo_fkey</td>
   <td class='detail'><a href='tables/deposito.html'>deposito</a>.depositomodulo</td>
   <td class='detail'><a href='tables/depositomodulo.html'>depositomodulo</a>.id</td>
@@ -236,6 +334,20 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   <td class='detail'>moneda_monedaafip_fkey</td>
   <td class='detail'><a href='tables/moneda.html'>moneda</a>.monedaafip</td>
   <td class='detail'><a href='tables/monedaafip.html'>monedaafip</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>monedacotizacion_moneda_fkey</td>
+  <td class='detail'><a href='tables/monedacotizacion.html'>monedacotizacion</a>.moneda</td>
+  <td class='detail'><a href='tables/moneda.html'>moneda</a>.id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>monedacotizacion_usuario_fkey</td>
+  <td class='detail'><a href='tables/monedacotizacion.html'>monedacotizacion</a>.usuario</td>
+  <td class='detail'><a href='tables/usuario.html'>usuario</a>.id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>

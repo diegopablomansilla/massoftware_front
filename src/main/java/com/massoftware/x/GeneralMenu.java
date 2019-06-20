@@ -1,8 +1,8 @@
 package com.massoftware.x;
 
 import com.massoftware.AppCX;
-import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.seguridad_puertas.WSeguridadPuertas;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;

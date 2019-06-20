@@ -43,9 +43,6 @@ import com.massoftware.service.afip.TipoDocumentoAFIPService;
 import com.massoftware.model.afip.MonedaAFIP;
 import com.massoftware.service.afip.MonedaAFIPFiltro;
 import com.massoftware.service.afip.MonedaAFIPService;
-import com.massoftware.model.monedas.Moneda;
-import com.massoftware.service.monedas.MonedaFiltro;
-import com.massoftware.service.monedas.MonedaService;
 import com.massoftware.model.contabilidad.ventas.NotaCreditoMotivo;
 import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoFiltro;
 import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoService;
@@ -115,12 +112,39 @@ import com.massoftware.service.contabilidad.AsientoContableItemService;
 import com.massoftware.model.empresa.Empresa;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.service.empresa.EmpresaService;
+import com.massoftware.model.monedas.Moneda;
+import com.massoftware.service.monedas.MonedaFiltro;
+import com.massoftware.service.monedas.MonedaService;
+import com.massoftware.model.monedas.MonedaCotizacion;
+import com.massoftware.service.monedas.MonedaCotizacionFiltro;
+import com.massoftware.service.monedas.MonedaCotizacionService;
 import com.massoftware.model.fondos.banco.Banco;
 import com.massoftware.service.fondos.banco.BancoFiltro;
 import com.massoftware.service.fondos.banco.BancoService;
 import com.massoftware.model.fondos.banco.BancoFirmante;
 import com.massoftware.service.fondos.banco.BancoFirmanteFiltro;
 import com.massoftware.service.fondos.banco.BancoFirmanteService;
+import com.massoftware.model.fondos.Caja;
+import com.massoftware.service.fondos.CajaFiltro;
+import com.massoftware.service.fondos.CajaService;
+import com.massoftware.model.fondos.CuentaFondoTipo;
+import com.massoftware.service.fondos.CuentaFondoTipoFiltro;
+import com.massoftware.service.fondos.CuentaFondoTipoService;
+import com.massoftware.model.fondos.CuentaFondoRubro;
+import com.massoftware.service.fondos.CuentaFondoRubroFiltro;
+import com.massoftware.service.fondos.CuentaFondoRubroService;
+import com.massoftware.model.fondos.CuentaFondoGrupo;
+import com.massoftware.service.fondos.CuentaFondoGrupoFiltro;
+import com.massoftware.service.fondos.CuentaFondoGrupoService;
+import com.massoftware.model.fondos.CuentaFondoTipoBanco;
+import com.massoftware.service.fondos.CuentaFondoTipoBancoFiltro;
+import com.massoftware.service.fondos.CuentaFondoTipoBancoService;
+import com.massoftware.model.fondos.CuentaFondoBancoCopia;
+import com.massoftware.service.fondos.CuentaFondoBancoCopiaFiltro;
+import com.massoftware.service.fondos.CuentaFondoBancoCopiaService;
+import com.massoftware.model.fondos.CuentaFondo;
+import com.massoftware.service.fondos.CuentaFondoFiltro;
+import com.massoftware.service.fondos.CuentaFondoService;
 
 public class Populate {
 
@@ -140,7 +164,6 @@ public class Populate {
 			//insertTransporteTarifa();
 			//insertTipoDocumentoAFIP();
 			//insertMonedaAFIP();
-			//insertMoneda();
 			//insertNotaCreditoMotivo();
 			//insertMotivoComentario();
 			//insertTipoCliente();
@@ -164,8 +187,17 @@ public class Populate {
 			//insertAsientoContable();
 			//insertAsientoContableItem();
 			//insertEmpresa();
+			//insertMoneda();
+			//insertMonedaCotizacion();
 			//insertBanco();
 			//insertBancoFirmante();
+			//insertCaja();
+			//insertCuentaFondoTipo();
+			//insertCuentaFondoRubro();
+			//insertCuentaFondoGrupo();
+			//insertCuentaFondoTipoBanco();
+			//insertCuentaFondoBancoCopia();
+			insertCuentaFondo();
 	}
 
 
@@ -684,55 +716,6 @@ public class Populate {
 				obj.setCodigo(UtilPopulate.getStringRandom(null, 3, true));
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
-
-				service.insert(obj);
-
-			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
-
-				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
-
-					throw e;
-
-				}
-
-			}
-
-		}
-
-	}
-
-
-
-	public static void insertMoneda() throws Exception {
-
-		MonedaService service = AppCX.services().buildMonedaService();
-		MonedaAFIPService servicemonedaAFIP = AppCX.services().buildMonedaAFIPService();
-		Long monedaAFIPCount = servicemonedaAFIP.count();
-
-		for(int i = 0; i < maxRows; i++){
-
-			try {
-
-				Moneda obj = new Moneda();
-
-				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
-
-				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
-
-				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
-
-				obj.setCotizacion(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
-
-				obj.setCotizacionFecha(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, true)));
-
-				obj.setControlActualizacion(new Random().nextBoolean());
-
-				MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
-				long monedaAFIPIndex = UtilPopulate.getLongRandom(0L, monedaAFIPCount-1);
-				monedaAFIPFiltro.setOffset(monedaAFIPIndex);
-				monedaAFIPFiltro.setLimit(1L);
-				List<MonedaAFIP> monedaAFIPListado = servicemonedaAFIP.find(monedaAFIPFiltro);
-				obj.setMonedaAFIP(monedaAFIPListado.get(0));
 
 				service.insert(obj);
 
@@ -1789,6 +1772,109 @@ public class Populate {
 
 
 
+	public static void insertMoneda() throws Exception {
+
+		MonedaService service = AppCX.services().buildMonedaService();
+		MonedaAFIPService servicemonedaAFIP = AppCX.services().buildMonedaAFIPService();
+		Long monedaAFIPCount = servicemonedaAFIP.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Moneda obj = new Moneda();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setAbreviatura(UtilPopulate.getStringRandom(null, 5, true));
+
+				obj.setCotizacion(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setCotizacionFecha(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setControlActualizacion(new Random().nextBoolean());
+
+				MonedaAFIPFiltro monedaAFIPFiltro = new MonedaAFIPFiltro();
+				long monedaAFIPIndex = UtilPopulate.getLongRandom(0L, monedaAFIPCount-1);
+				monedaAFIPFiltro.setOffset(monedaAFIPIndex);
+				monedaAFIPFiltro.setLimit(1L);
+				List<MonedaAFIP> monedaAFIPListado = servicemonedaAFIP.find(monedaAFIPFiltro);
+				obj.setMonedaAFIP(monedaAFIPListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertMonedaCotizacion() throws Exception {
+
+		MonedaCotizacionService service = AppCX.services().buildMonedaCotizacionService();
+		MonedaService servicemoneda = AppCX.services().buildMonedaService();
+		Long monedaCount = servicemoneda.count();
+		UsuarioService serviceusuario = AppCX.services().buildUsuarioService();
+		Long usuarioCount = serviceusuario.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				MonedaCotizacion obj = new MonedaCotizacion();
+
+				obj.setCotizacionFecha(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				obj.setCompra(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setVenta(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), true, 13, 5));
+
+				obj.setCotizacionFechaAuditoria(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, true)));
+
+				MonedaFiltro monedaFiltro = new MonedaFiltro();
+				long monedaIndex = UtilPopulate.getLongRandom(0L, monedaCount-1);
+				monedaFiltro.setOffset(monedaIndex);
+				monedaFiltro.setLimit(1L);
+				List<Moneda> monedaListado = servicemoneda.find(monedaFiltro);
+				obj.setMoneda(monedaListado.get(0));
+
+				UsuarioFiltro usuarioFiltro = new UsuarioFiltro();
+				long usuarioIndex = UtilPopulate.getLongRandom(0L, usuarioCount-1);
+				usuarioFiltro.setOffset(usuarioIndex);
+				usuarioFiltro.setLimit(1L);
+				List<Usuario> usuarioListado = serviceusuario.find(usuarioFiltro);
+				obj.setUsuario(usuarioListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
 	public static void insertBanco() throws Exception {
 
 		BancoService service = AppCX.services().buildBancoService();
@@ -1860,6 +1946,375 @@ public class Populate {
 				obj.setCargo(UtilPopulate.getStringRandom(null, 50, false));
 
 				obj.setBloqueado(new Random().nextBoolean());
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCaja() throws Exception {
+
+		CajaService service = AppCX.services().buildCajaService();
+		SeguridadPuertaService serviceseguridadPuerta = AppCX.services().buildSeguridadPuertaService();
+		Long seguridadPuertaCount = serviceseguridadPuerta.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Caja obj = new Caja();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				SeguridadPuertaFiltro seguridadPuertaFiltro = new SeguridadPuertaFiltro();
+				long seguridadPuertaIndex = UtilPopulate.getLongRandom(0L, seguridadPuertaCount-1);
+				seguridadPuertaFiltro.setOffset(seguridadPuertaIndex);
+				seguridadPuertaFiltro.setLimit(1L);
+				List<SeguridadPuerta> seguridadPuertaListado = serviceseguridadPuerta.find(seguridadPuertaFiltro);
+				obj.setSeguridadPuerta(seguridadPuertaListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondoTipo() throws Exception {
+
+		CuentaFondoTipoService service = AppCX.services().buildCuentaFondoTipoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondoTipo obj = new CuentaFondoTipo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondoRubro() throws Exception {
+
+		CuentaFondoRubroService service = AppCX.services().buildCuentaFondoRubroService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondoRubro obj = new CuentaFondoRubro();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondoGrupo() throws Exception {
+
+		CuentaFondoGrupoService service = AppCX.services().buildCuentaFondoGrupoService();
+		CuentaFondoRubroService servicecuentaFondoRubro = AppCX.services().buildCuentaFondoRubroService();
+		Long cuentaFondoRubroCount = servicecuentaFondoRubro.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondoGrupo obj = new CuentaFondoGrupo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				CuentaFondoRubroFiltro cuentaFondoRubroFiltro = new CuentaFondoRubroFiltro();
+				long cuentaFondoRubroIndex = UtilPopulate.getLongRandom(0L, cuentaFondoRubroCount-1);
+				cuentaFondoRubroFiltro.setOffset(cuentaFondoRubroIndex);
+				cuentaFondoRubroFiltro.setLimit(1L);
+				List<CuentaFondoRubro> cuentaFondoRubroListado = servicecuentaFondoRubro.find(cuentaFondoRubroFiltro);
+				obj.setCuentaFondoRubro(cuentaFondoRubroListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondoTipoBanco() throws Exception {
+
+		CuentaFondoTipoBancoService service = AppCX.services().buildCuentaFondoTipoBancoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondoTipoBanco obj = new CuentaFondoTipoBanco();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondoBancoCopia() throws Exception {
+
+		CuentaFondoBancoCopiaService service = AppCX.services().buildCuentaFondoBancoCopiaService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondoBancoCopia obj = new CuentaFondoBancoCopia();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertCuentaFondo() throws Exception {
+
+		CuentaFondoService service = AppCX.services().buildCuentaFondoService();
+		CuentaContableService servicecuentaContable = AppCX.services().buildCuentaContableService();
+		Long cuentaContableCount = servicecuentaContable.count();
+		CuentaFondoGrupoService servicecuentaFondoGrupo = AppCX.services().buildCuentaFondoGrupoService();
+		Long cuentaFondoGrupoCount = servicecuentaFondoGrupo.count();
+		CuentaFondoTipoService servicecuentaFondoTipo = AppCX.services().buildCuentaFondoTipoService();
+		Long cuentaFondoTipoCount = servicecuentaFondoTipo.count();
+		MonedaService servicemoneda = AppCX.services().buildMonedaService();
+		Long monedaCount = servicemoneda.count();
+		CajaService servicecaja = AppCX.services().buildCajaService();
+		Long cajaCount = servicecaja.count();
+		CuentaFondoTipoBancoService servicecuentaFondoTipoBanco = AppCX.services().buildCuentaFondoTipoBancoService();
+		Long cuentaFondoTipoBancoCount = servicecuentaFondoTipoBanco.count();
+		BancoService servicebanco = AppCX.services().buildBancoService();
+		Long bancoCount = servicebanco.count();
+		CuentaFondoBancoCopiaService servicecuentaFondoBancoCopia = AppCX.services().buildCuentaFondoBancoCopiaService();
+		Long cuentaFondoBancoCopiaCount = servicecuentaFondoBancoCopia.count();
+		SeguridadPuertaService serviceseguridadPuertaUso = AppCX.services().buildSeguridadPuertaService();
+		Long seguridadPuertaUsoCount = serviceseguridadPuertaUso.count();
+		SeguridadPuertaService serviceseguridadPuertaConsulta = AppCX.services().buildSeguridadPuertaService();
+		Long seguridadPuertaConsultaCount = serviceseguridadPuertaConsulta.count();
+		SeguridadPuertaService serviceseguridadPuertaLimite = AppCX.services().buildSeguridadPuertaService();
+		Long seguridadPuertaLimiteCount = serviceseguridadPuertaLimite.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				CuentaFondo obj = new CuentaFondo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				CuentaContableFiltro cuentaContableFiltro = new CuentaContableFiltro();
+				long cuentaContableIndex = UtilPopulate.getLongRandom(0L, cuentaContableCount-1);
+				cuentaContableFiltro.setOffset(cuentaContableIndex);
+				cuentaContableFiltro.setLimit(1L);
+				List<CuentaContable> cuentaContableListado = servicecuentaContable.find(cuentaContableFiltro);
+				obj.setCuentaContable(cuentaContableListado.get(0));
+
+				CuentaFondoGrupoFiltro cuentaFondoGrupoFiltro = new CuentaFondoGrupoFiltro();
+				long cuentaFondoGrupoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoGrupoCount-1);
+				cuentaFondoGrupoFiltro.setOffset(cuentaFondoGrupoIndex);
+				cuentaFondoGrupoFiltro.setLimit(1L);
+				List<CuentaFondoGrupo> cuentaFondoGrupoListado = servicecuentaFondoGrupo.find(cuentaFondoGrupoFiltro);
+				obj.setCuentaFondoGrupo(cuentaFondoGrupoListado.get(0));
+
+				CuentaFondoTipoFiltro cuentaFondoTipoFiltro = new CuentaFondoTipoFiltro();
+				long cuentaFondoTipoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoTipoCount-1);
+				cuentaFondoTipoFiltro.setOffset(cuentaFondoTipoIndex);
+				cuentaFondoTipoFiltro.setLimit(1L);
+				List<CuentaFondoTipo> cuentaFondoTipoListado = servicecuentaFondoTipo.find(cuentaFondoTipoFiltro);
+				obj.setCuentaFondoTipo(cuentaFondoTipoListado.get(0));
+
+				obj.setObsoleto(new Random().nextBoolean());
+
+				obj.setNoImprimeCaja(new Random().nextBoolean());
+
+				obj.setVentas(new Random().nextBoolean());
+
+				obj.setFondos(new Random().nextBoolean());
+
+				obj.setCompras(new Random().nextBoolean());
+
+				MonedaFiltro monedaFiltro = new MonedaFiltro();
+				long monedaIndex = UtilPopulate.getLongRandom(0L, monedaCount-1);
+				monedaFiltro.setOffset(monedaIndex);
+				monedaFiltro.setLimit(1L);
+				List<Moneda> monedaListado = servicemoneda.find(monedaFiltro);
+				obj.setMoneda(monedaListado.get(0));
+
+				CajaFiltro cajaFiltro = new CajaFiltro();
+				long cajaIndex = UtilPopulate.getLongRandom(0L, cajaCount-1);
+				cajaFiltro.setOffset(cajaIndex);
+				cajaFiltro.setLimit(1L);
+				List<Caja> cajaListado = servicecaja.find(cajaFiltro);
+				obj.setCaja(cajaListado.get(0));
+
+				obj.setRechazados(new Random().nextBoolean());
+
+				obj.setConciliacion(new Random().nextBoolean());
+
+				CuentaFondoTipoBancoFiltro cuentaFondoTipoBancoFiltro = new CuentaFondoTipoBancoFiltro();
+				long cuentaFondoTipoBancoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoTipoBancoCount-1);
+				cuentaFondoTipoBancoFiltro.setOffset(cuentaFondoTipoBancoIndex);
+				cuentaFondoTipoBancoFiltro.setLimit(1L);
+				List<CuentaFondoTipoBanco> cuentaFondoTipoBancoListado = servicecuentaFondoTipoBanco.find(cuentaFondoTipoBancoFiltro);
+				obj.setCuentaFondoTipoBanco(cuentaFondoTipoBancoListado.get(0));
+
+				BancoFiltro bancoFiltro = new BancoFiltro();
+				long bancoIndex = UtilPopulate.getLongRandom(0L, bancoCount-1);
+				bancoFiltro.setOffset(bancoIndex);
+				bancoFiltro.setLimit(1L);
+				List<Banco> bancoListado = servicebanco.find(bancoFiltro);
+				obj.setBanco(bancoListado.get(0));
+
+				obj.setCuentaBancaria(UtilPopulate.getStringRandom(null, 22, false));
+
+				obj.setCbu(UtilPopulate.getStringRandom(null, 22, false));
+
+				obj.setLimiteDescubierto(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), false, 13, 5));
+
+				obj.setCuentaFondoCaucion(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setCuentaFondoDiferidos(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setFormato(UtilPopulate.getStringRandom(null, 50, false));
+
+				CuentaFondoBancoCopiaFiltro cuentaFondoBancoCopiaFiltro = new CuentaFondoBancoCopiaFiltro();
+				long cuentaFondoBancoCopiaIndex = UtilPopulate.getLongRandom(0L, cuentaFondoBancoCopiaCount-1);
+				cuentaFondoBancoCopiaFiltro.setOffset(cuentaFondoBancoCopiaIndex);
+				cuentaFondoBancoCopiaFiltro.setLimit(1L);
+				List<CuentaFondoBancoCopia> cuentaFondoBancoCopiaListado = servicecuentaFondoBancoCopia.find(cuentaFondoBancoCopiaFiltro);
+				obj.setCuentaFondoBancoCopia(cuentaFondoBancoCopiaListado.get(0));
+
+				obj.setLimiteOperacionIndividual(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("-9999.9999"), new java.math.BigDecimal("99999.9999"), false, 13, 5));
+
+				SeguridadPuertaFiltro seguridadPuertaUsoFiltro = new SeguridadPuertaFiltro();
+				long seguridadPuertaUsoIndex = UtilPopulate.getLongRandom(0L, seguridadPuertaUsoCount-1);
+				seguridadPuertaUsoFiltro.setOffset(seguridadPuertaUsoIndex);
+				seguridadPuertaUsoFiltro.setLimit(1L);
+				List<SeguridadPuerta> seguridadPuertaUsoListado = serviceseguridadPuertaUso.find(seguridadPuertaUsoFiltro);
+				obj.setSeguridadPuertaUso(seguridadPuertaUsoListado.get(0));
+
+				SeguridadPuertaFiltro seguridadPuertaConsultaFiltro = new SeguridadPuertaFiltro();
+				long seguridadPuertaConsultaIndex = UtilPopulate.getLongRandom(0L, seguridadPuertaConsultaCount-1);
+				seguridadPuertaConsultaFiltro.setOffset(seguridadPuertaConsultaIndex);
+				seguridadPuertaConsultaFiltro.setLimit(1L);
+				List<SeguridadPuerta> seguridadPuertaConsultaListado = serviceseguridadPuertaConsulta.find(seguridadPuertaConsultaFiltro);
+				obj.setSeguridadPuertaConsulta(seguridadPuertaConsultaListado.get(0));
+
+				SeguridadPuertaFiltro seguridadPuertaLimiteFiltro = new SeguridadPuertaFiltro();
+				long seguridadPuertaLimiteIndex = UtilPopulate.getLongRandom(0L, seguridadPuertaLimiteCount-1);
+				seguridadPuertaLimiteFiltro.setOffset(seguridadPuertaLimiteIndex);
+				seguridadPuertaLimiteFiltro.setLimit(1L);
+				List<SeguridadPuerta> seguridadPuertaLimiteListado = serviceseguridadPuertaLimite.find(seguridadPuertaLimiteFiltro);
+				obj.setSeguridadPuertaLimite(seguridadPuertaLimiteListado.get(0));
 
 				service.insert(obj);
 

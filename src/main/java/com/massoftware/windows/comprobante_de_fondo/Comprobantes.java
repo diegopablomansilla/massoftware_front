@@ -1,6 +1,6 @@
 package com.massoftware.windows.comprobante_de_fondo;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class Comprobantes {
 

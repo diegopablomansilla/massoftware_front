@@ -8,8 +8,8 @@ import java.util.List;
 import com.massoftware.AppCX;
 import com.massoftware.model.monedas.Moneda;
 import com.massoftware.service.monedas.MonedaFiltro;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowForm;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.WindowForm;
 import com.vaadin.data.sort.SortOrder;
 
 //import com.vaadin.data.util.converter.StringToBooleanConverter;

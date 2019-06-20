@@ -7,9 +7,9 @@ import java.util.UUID;
 import com.massoftware.model.AsientoModeloItem;
 import com.massoftware.model.CuentaContable;
 import com.massoftware.model.CuentasContableFiltro;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.cuentas_contable.WCuentasContable;
+import com.massoftware.x.util.controls.SelectorBoxOld;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 

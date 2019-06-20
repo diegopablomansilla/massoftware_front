@@ -808,91 +808,6 @@ SELECT * FROM massoftware.i_MonedaAFIP(
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
--- //          TABLA: Moneda                                                                                                 //
--- //                                                                                                                        //
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.Moneda
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-DROP FUNCTION IF EXISTS massoftware.i_Moneda(
-		  idArg VARCHAR(36)
-
-		, numeroArg INTEGER
-		, nombreArg VARCHAR(50)
-		, abreviaturaArg VARCHAR(5)
-		, cotizacionArg DECIMAL(13,5)
-		, cotizacionFechaArg TIMESTAMP
-		, controlActualizacionArg BOOLEAN
-		, monedaAFIPArg VARCHAR(36)
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.i_Moneda(
-		  idArg VARCHAR(36)
-
-		, numeroArg INTEGER
-		, nombreArg VARCHAR(50)
-		, abreviaturaArg VARCHAR(5)
-		, cotizacionArg DECIMAL(13,5)
-		, cotizacionFechaArg TIMESTAMP
-		, controlActualizacionArg BOOLEAN
-		, monedaAFIPArg VARCHAR(36)
-) RETURNS BOOLEAN AS $$
-
-BEGIN
-
-	IF idArg IS NULL THEN
-
-		idArg = uuid_generate_v4();
-
-	END IF;
-
-	IF cotizacionArg IS NULL THEN
-
-		cotizacionArg = 1;
-
-	END IF;
-
-	IF cotizacionFechaArg IS NULL THEN
-
-		cotizacionFechaArg = now();
-
-	END IF;
-
-	IF controlActualizacionArg IS NULL THEN
-
-		controlActualizacionArg = false;
-
-	END IF;
-
-	INSERT INTO massoftware.Moneda(id, numero, nombre, abreviatura, cotizacion, cotizacionFecha, controlActualizacion, monedaAFIP) VALUES (idArg, numeroArg, nombreArg, abreviaturaArg, cotizacionArg, cotizacionFechaArg, controlActualizacionArg, monedaAFIPArg);
-
-	RETURN ((SELECT COUNT(*) FROM massoftware.Moneda WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Moneda.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
-
-END;
-$$ LANGUAGE plpgsql;
-
-/*
-
-SELECT * FROM massoftware.i_Moneda(
-		null::VARCHAR(36)
-		, null::INTEGER
-		, null::VARCHAR(50)
-		, null::VARCHAR(5)
-		, null::DECIMAL(13,5)
-		, null::TIMESTAMP
-		, null::BOOLEAN
-		, null::VARCHAR(36)
-);
-
-*/
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //                                                                                                                        //
 -- //          TABLA: NotaCreditoMotivo                                                                                      //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2332,6 +2247,161 @@ SELECT * FROM massoftware.i_Empresa(
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: Moneda                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Moneda
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Moneda(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, cotizacionArg DECIMAL(13,5)
+		, cotizacionFechaArg TIMESTAMP
+		, controlActualizacionArg BOOLEAN
+		, monedaAFIPArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Moneda(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, abreviaturaArg VARCHAR(5)
+		, cotizacionArg DECIMAL(13,5)
+		, cotizacionFechaArg TIMESTAMP
+		, controlActualizacionArg BOOLEAN
+		, monedaAFIPArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF cotizacionArg IS NULL THEN
+
+		cotizacionArg = 1;
+
+	END IF;
+
+	IF cotizacionFechaArg IS NULL THEN
+
+		cotizacionFechaArg = now();
+
+	END IF;
+
+	IF controlActualizacionArg IS NULL THEN
+
+		controlActualizacionArg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.Moneda(id, numero, nombre, abreviatura, cotizacion, cotizacionFecha, controlActualizacion, monedaAFIP) VALUES (idArg, numeroArg, nombreArg, abreviaturaArg, cotizacionArg, cotizacionFechaArg, controlActualizacionArg, monedaAFIPArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Moneda WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Moneda.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Moneda(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(5)
+		, null::DECIMAL(13,5)
+		, null::TIMESTAMP
+		, null::BOOLEAN
+		, null::VARCHAR(36)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MonedaCotizacion                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaCotizacion
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_MonedaCotizacion(
+		  idArg VARCHAR(36)
+
+		, cotizacionFechaArg TIMESTAMP
+		, compraArg DECIMAL(13,5)
+		, ventaArg DECIMAL(13,5)
+		, cotizacionFechaAuditoriaArg TIMESTAMP
+		, monedaArg VARCHAR(36)
+		, usuarioArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_MonedaCotizacion(
+		  idArg VARCHAR(36)
+
+		, cotizacionFechaArg TIMESTAMP
+		, compraArg DECIMAL(13,5)
+		, ventaArg DECIMAL(13,5)
+		, cotizacionFechaAuditoriaArg TIMESTAMP
+		, monedaArg VARCHAR(36)
+		, usuarioArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF cotizacionFechaAuditoriaArg IS NULL THEN
+
+		cotizacionFechaAuditoriaArg = now();
+
+	END IF;
+
+	INSERT INTO massoftware.MonedaCotizacion(id, cotizacionFecha, compra, venta, cotizacionFechaAuditoria, moneda, usuario) VALUES (idArg, cotizacionFechaArg, compraArg, ventaArg, cotizacionFechaAuditoriaArg, monedaArg, usuarioArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.MonedaCotizacion WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND MonedaCotizacion.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_MonedaCotizacion(
+		null::VARCHAR(36)
+		, null::TIMESTAMP
+		, null::DECIMAL(13,5)
+		, null::DECIMAL(13,5)
+		, null::TIMESTAMP
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Banco                                                                                                  //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2480,6 +2550,493 @@ SELECT * FROM massoftware.i_BancoFirmante(
 		, null::VARCHAR(50)
 		, null::VARCHAR(50)
 		, null::BOOLEAN
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Caja                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Caja
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Caja(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, seguridadPuertaArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Caja(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, seguridadPuertaArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.Caja(id, numero, nombre, seguridadPuerta) VALUES (idArg, numeroArg, nombreArg, seguridadPuertaArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Caja WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Caja.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Caja(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondoTipo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondoTipo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondoTipo(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondoTipo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondoTipo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondoTipo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoRubro                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoRubro
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondoRubro(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondoRubro(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondoRubro(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondoRubro WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondoRubro.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondoRubro(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoGrupo                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoGrupo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondoGrupo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoRubroArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondoGrupo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoRubroArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondoGrupo(id, numero, nombre, cuentaFondoRubro) VALUES (idArg, numeroArg, nombreArg, cuentaFondoRubroArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondoGrupo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondoGrupo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondoGrupo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipoBanco                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipoBanco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondoTipoBanco(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondoTipoBanco(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondoTipoBanco(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondoTipoBanco WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondoTipoBanco.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondoTipoBanco(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoBancoCopia                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoBancoCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondoBancoCopia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondoBancoCopia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondoBancoCopia(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondoBancoCopia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondoBancoCopia.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondoBancoCopia(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondo                                                                                            //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_CuentaFondo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaContableArg VARCHAR(36)
+		, cuentaFondoGrupoArg VARCHAR(36)
+		, cuentaFondoTipoArg VARCHAR(36)
+		, obsoletoArg BOOLEAN
+		, noImprimeCajaArg BOOLEAN
+		, ventasArg BOOLEAN
+		, fondosArg BOOLEAN
+		, comprasArg BOOLEAN
+		, monedaArg VARCHAR(36)
+		, cajaArg VARCHAR(36)
+		, rechazadosArg BOOLEAN
+		, conciliacionArg BOOLEAN
+		, cuentaFondoTipoBancoArg VARCHAR(36)
+		, bancoArg VARCHAR(36)
+		, cuentaBancariaArg VARCHAR(22)
+		, cbuArg VARCHAR(22)
+		, limiteDescubiertoArg DECIMAL(13,5)
+		, cuentaFondoCaucionArg VARCHAR(50)
+		, cuentaFondoDiferidosArg VARCHAR(50)
+		, formatoArg VARCHAR(50)
+		, cuentaFondoBancoCopiaArg VARCHAR(36)
+		, limiteOperacionIndividualArg DECIMAL(13,5)
+		, seguridadPuertaUsoArg VARCHAR(36)
+		, seguridadPuertaConsultaArg VARCHAR(36)
+		, seguridadPuertaLimiteArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_CuentaFondo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaContableArg VARCHAR(36)
+		, cuentaFondoGrupoArg VARCHAR(36)
+		, cuentaFondoTipoArg VARCHAR(36)
+		, obsoletoArg BOOLEAN
+		, noImprimeCajaArg BOOLEAN
+		, ventasArg BOOLEAN
+		, fondosArg BOOLEAN
+		, comprasArg BOOLEAN
+		, monedaArg VARCHAR(36)
+		, cajaArg VARCHAR(36)
+		, rechazadosArg BOOLEAN
+		, conciliacionArg BOOLEAN
+		, cuentaFondoTipoBancoArg VARCHAR(36)
+		, bancoArg VARCHAR(36)
+		, cuentaBancariaArg VARCHAR(22)
+		, cbuArg VARCHAR(22)
+		, limiteDescubiertoArg DECIMAL(13,5)
+		, cuentaFondoCaucionArg VARCHAR(50)
+		, cuentaFondoDiferidosArg VARCHAR(50)
+		, formatoArg VARCHAR(50)
+		, cuentaFondoBancoCopiaArg VARCHAR(36)
+		, limiteOperacionIndividualArg DECIMAL(13,5)
+		, seguridadPuertaUsoArg VARCHAR(36)
+		, seguridadPuertaConsultaArg VARCHAR(36)
+		, seguridadPuertaLimiteArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF obsoletoArg IS NULL THEN
+
+		obsoletoArg = false;
+
+	END IF;
+
+	IF noImprimeCajaArg IS NULL THEN
+
+		noImprimeCajaArg = false;
+
+	END IF;
+
+	IF ventasArg IS NULL THEN
+
+		ventasArg = false;
+
+	END IF;
+
+	IF fondosArg IS NULL THEN
+
+		fondosArg = false;
+
+	END IF;
+
+	IF comprasArg IS NULL THEN
+
+		comprasArg = false;
+
+	END IF;
+
+	IF rechazadosArg IS NULL THEN
+
+		rechazadosArg = false;
+
+	END IF;
+
+	IF conciliacionArg IS NULL THEN
+
+		conciliacionArg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.CuentaFondo(id, numero, nombre, cuentaContable, cuentaFondoGrupo, cuentaFondoTipo, obsoleto, noImprimeCaja, ventas, fondos, compras, moneda, caja, rechazados, conciliacion, cuentaFondoTipoBanco, banco, cuentaBancaria, cbu, limiteDescubierto, cuentaFondoCaucion, cuentaFondoDiferidos, formato, cuentaFondoBancoCopia, limiteOperacionIndividual, seguridadPuertaUso, seguridadPuertaConsulta, seguridadPuertaLimite) VALUES (idArg, numeroArg, nombreArg, cuentaContableArg, cuentaFondoGrupoArg, cuentaFondoTipoArg, obsoletoArg, noImprimeCajaArg, ventasArg, fondosArg, comprasArg, monedaArg, cajaArg, rechazadosArg, conciliacionArg, cuentaFondoTipoBancoArg, bancoArg, cuentaBancariaArg, cbuArg, limiteDescubiertoArg, cuentaFondoCaucionArg, cuentaFondoDiferidosArg, formatoArg, cuentaFondoBancoCopiaArg, limiteOperacionIndividualArg, seguridadPuertaUsoArg, seguridadPuertaConsultaArg, seguridadPuertaLimiteArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.CuentaFondo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND CuentaFondo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_CuentaFondo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+		, null::VARCHAR(22)
+		, null::VARCHAR(22)
+		, null::DECIMAL(13,5)
+		, null::VARCHAR(50)
+		, null::VARCHAR(50)
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+		, null::DECIMAL(13,5)
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
 );
 
 */

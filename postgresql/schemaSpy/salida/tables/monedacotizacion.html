@@ -101,7 +101,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -112,19 +112,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
- <td class='detail'>moneda</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>36</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
 <tr class='even'>
- <td class='detail'>fecha</td>
+ <td class='detail'>cotizacionfecha</td>
  <td class='detail'>timestamp</td>
  <td class='detail' align='right'>29,6</td>
  <td class='detail' align='center'></td>
@@ -137,7 +126,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='odd'>
  <td class='detail'>compra</td>
  <td class='detail'>numeric</td>
- <td class='detail' align='right'>9,4</td>
+ <td class='detail' align='right'>13,5</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
@@ -148,7 +137,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <tr class='even'>
  <td class='detail'>venta</td>
  <td class='detail'>numeric</td>
- <td class='detail' align='right'>9,4</td>
+ <td class='detail' align='right'>13,5</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
@@ -157,7 +146,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='detail'>auditoriafecha</td>
+ <td class='detail'>cotizacionfechaauditoria</td>
  <td class='detail'>timestamp</td>
  <td class='detail' align='right'>29,6</td>
  <td class='detail' align='center'></td>
@@ -168,6 +157,26 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
+ <td class='detail'>moneda</td>
+ <td class='detail'>varchar</td>
+ <td class='detail' align='right'>36</td>
+ <td class='detail' align='center'></td>
+ <td class='detail' align='center'></td>
+ <td class='detail'></td>
+ <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative even' valign='top'>
+    <td class='relatedTable detail' title="monedacotizacion.moneda refs moneda.id via monedacotizacion_moneda_fkey"><a href='moneda.html'>moneda</a><span class='relatedKey'>.id</span>
+    </td>
+    <td class='constraint detail'>monedacotizacion_moneda_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+ </td>
+ <td class='comment detail'></td>
+</tr>
+<tr class='odd'>
  <td class='detail'>usuario</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -175,11 +184,20 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail' align='center'></td>
  <td class='detail'></td>
  <td class='detail'></td>
- <td class='detail'> </td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="monedacotizacion.usuario refs usuario.id via monedacotizacion_usuario_fkey"><a href='usuario.html'>usuario</a><span class='relatedKey'>.id</span>
+    </td>
+    <td class='constraint detail'>monedacotizacion_usuario_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+ </td>
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='7 columns'>Table contained 0 rows at lun jun 17 18:22 ART 2019<p/>
+<p title='7 columns'>Table contained 300 rows at jue jun 20 16:21 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -201,6 +219,25 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  </tr>
 </table>
 </div>
+<table width='100%' border='0'><tr><td class='container'>
+<br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from monedacotizacion'>
+&nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
+<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" href="monedacotizacion.html" title="monedacotizacion" alt="" coords="211,7,521,229" >
+<area shape="rect" href="moneda.html" title="moneda" alt="" coords="7,7,167,245" >
+<area shape="rect" href="usuario.html" title="usuario" alt="" coords="17,262,158,387" >
+</map>
+  <a name='diagram'><img id='oneDegreeImg' src='../diagrams/monedacotizacion.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
+<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="477,8,626,88" >
+<area shape="rect" href="moneda.html" title="moneda" alt="" coords="193,9,353,246" >
+<area shape="rect" href="monedaafip.html" title="monedaafip" alt="" coords="8,166,149,246" >
+<area shape="rect" href="monedacotizacion.html" title="monedacotizacion" alt="" coords="397,114,706,336" >
+<area shape="rect" href="usuario.html" title="usuario" alt="" coords="202,264,344,389" >
+</map>
+
+  <a name='diagram'><img id='twoDegreesImg' src='../diagrams/monedacotizacion.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
+</td></tr></table>
 </div>
 </body>
 </html>

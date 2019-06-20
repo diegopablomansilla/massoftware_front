@@ -18,12 +18,12 @@ import com.massoftware.service.geo.PaisService;
 import com.massoftware.service.geo.ProvinciaFiltro;
 import com.massoftware.service.geo.ProvinciaService;
 import com.massoftware.service.geo.ProvinciaServiceCustom;
-import com.massoftware.windows.ComboBoxBox;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBox;
-import com.massoftware.windows.TextFieldBox;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowListado;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.controls.ComboBoxBox;
+import com.massoftware.x.util.controls.SelectorBox;
+import com.massoftware.x.util.controls.TextFieldBox;
+import com.massoftware.x.util.windows.LogAndNotification;
+import com.massoftware.x.util.windows.WindowListado;
 
 //import com.vaadin.data.util.converter.StringToBooleanConverter;
 //import com.vaadin.server.FontAwesome;

@@ -6,8 +6,7 @@ import java.util.List;
 
 import com.massoftware.model.clientes.ClasificacionCliente;
 import com.massoftware.service.clientes.ClasificacionClienteFiltro;
-import com.massoftware.windows.UtilUI;
-
+import com.massoftware.x.util.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Grid.Column;

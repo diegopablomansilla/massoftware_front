@@ -23,7 +23,7 @@ import org.vaadin.patrik.events.EditorOpenEvent;
 import org.vaadin.patrik.events.RowEditEvent;
 import org.vaadin.patrik.events.RowFocusEvent;
 
-import com.massoftware.windows.LogAndNotification;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;

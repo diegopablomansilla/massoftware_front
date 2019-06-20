@@ -33,6 +33,13 @@ import com.anthill.ant.empresa.DepositoModuloAnt;
 import com.anthill.ant.empresa.EmpresaAnt;
 import com.anthill.ant.empresa.SucursalAnt;
 import com.anthill.ant.empresa.TipoSucursalAnt;
+import com.anthill.ant.fondos.CajaAnt;
+import com.anthill.ant.fondos.CuentaFondoAnt;
+import com.anthill.ant.fondos.CuentaFondoBancoCopiaAnt;
+import com.anthill.ant.fondos.CuentaFondoGrupoAnt;
+import com.anthill.ant.fondos.CuentaFondoRubroAnt;
+import com.anthill.ant.fondos.CuentaFondoTipoAnt;
+import com.anthill.ant.fondos.CuentaFondoTipoBancoAnt;
 import com.anthill.ant.fondos.banco.BancoAnt;
 import com.anthill.ant.fondos.banco.BancoFirmanteAnt;
 import com.anthill.ant.geo.CiudadAnt;
@@ -44,6 +51,7 @@ import com.anthill.ant.logistica.CargaAnt;
 import com.anthill.ant.logistica.TransporteAnt;
 import com.anthill.ant.logistica.TransporteTarifaAnt;
 import com.anthill.ant.monedas.MonedaAnt;
+import com.anthill.ant.monedas.MonedaCotizacionAnt;
 import com.anthill.ant.seguridad.SeguridadModuloAnt;
 import com.anthill.ant.seguridad.SeguridadPuertaAnt;
 import com.anthill.ant.seguridad.UsuarioAnt;
@@ -91,8 +99,10 @@ public class Anthill {
 
 		///////////////////////////////////////////////////////////////////
 
-		new UsuarioAnt(anthill);
+		UsuarioAnt usuarioAnt = new UsuarioAnt(anthill);
+
 		SeguridadModuloAnt seguridadModuloAnt = new SeguridadModuloAnt(anthill);
+
 		SeguridadPuertaAnt seguridadPuertaAnt = new SeguridadPuertaAnt(anthill, seguridadModuloAnt);
 
 		// ---------------------------------------------
@@ -115,8 +125,6 @@ public class Anthill {
 		MonedaAFIPAnt monedaAFIP = new MonedaAFIPAnt(anthill);
 
 		// ---------------------------------------------
-
-		MonedaAnt moneda = new MonedaAnt(anthill, monedaAFIP);
 
 		// ---------------------------------------------
 
@@ -169,9 +177,32 @@ public class Anthill {
 
 		// ---------------------------------------------
 
+		MonedaAnt monedaAnt = new MonedaAnt(anthill, monedaAFIP);
+
+		MonedaCotizacionAnt monedaCotizacionAnt = new MonedaCotizacionAnt(anthill, monedaAnt, usuarioAnt);
+
+		// ---------------------------------------------
+
 		BancoAnt bancoAnt = new BancoAnt(anthill);
-		
+
 		BancoFirmanteAnt bancoFirmanteAnt = new BancoFirmanteAnt(anthill);
+
+		CajaAnt cajaAnt = new CajaAnt(anthill, seguridadPuertaAnt);
+
+		CuentaFondoTipoAnt cuentaFondoTipoAnt = new CuentaFondoTipoAnt(anthill);
+
+		CuentaFondoRubroAnt cuentaFondoRubroAnt = new CuentaFondoRubroAnt(anthill);
+
+		CuentaFondoGrupoAnt cuentaFondoGrupoAnt = new CuentaFondoGrupoAnt(anthill, cuentaFondoRubroAnt);
+
+		CuentaFondoTipoBancoAnt cuentaFondoTipoBancoAnt = new CuentaFondoTipoBancoAnt(anthill);
+
+		CuentaFondoBancoCopiaAnt cuentaFondoBancoCopiaAnt = new CuentaFondoBancoCopiaAnt(anthill);
+
+		CuentaFondoAnt cuentaFondoAnt = new CuentaFondoAnt(anthill, cuentaContableAnt, cuentaFondoGrupoAnt,
+				cuentaFondoTipoAnt, monedaAnt, cajaAnt, cuentaFondoTipoBancoAnt, bancoAnt, /*cuentaFondoAnt,
+				cuentaFondoAnt,*/ cuentaFondoBancoCopiaAnt, seguridadPuertaAnt, seguridadPuertaAnt,
+				seguridadPuertaAnt);
 
 		///////////////////////////////////////////////////////////////////
 
@@ -443,7 +474,5 @@ public class Anthill {
 
 		return monedaCotizacion;
 	}
-
-
 
 }

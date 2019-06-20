@@ -107,7 +107,7 @@ public class UtilJavaList {
 
 			String sc = "\n\t";
 
-			if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
+			if (arg.isNumber()) {
 
 				if (arg.getRange() == false) {
 
@@ -120,12 +120,40 @@ public class UtilJavaList {
 
 				}
 
+			} else if (arg.isDate()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + "protected DateFieldBox " + arg.getName() + "TXTB;";
+
+				} else {
+
+					java += sc + "protected DateFieldBox " + arg.getName() + "FromTXTB;";
+					java += sc + "protected DateFieldBox " + arg.getName() + "ToTXTB;";
+
+				}
+
+			} else if (arg.isTimestamp()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + "protected DateFieldBox " + arg.getName() + "TXTB;";
+
+				} else {
+
+					java += sc + "protected DateFieldBox " + arg.getName() + "FromTXTB;";
+					java += sc + "protected DateFieldBox " + arg.getName() + "ToTXTB;";
+
+				}
+
 			} else if (arg.isString()) {
 
 				java += sc + "protected TextFieldBox " + arg.getName() + "TXTB;";
 
 			} else if (arg.isBoolean()) {
+
 				java += sc + "protected OptionGroupEntityBoolean " + arg.getName() + "OPT;";
+				
 			} else if (arg.isSimple() == false) {
 
 				java += sc + "protected ComboBoxBox " + arg.getName() + "CBXB;";
@@ -147,7 +175,7 @@ public class UtilJavaList {
 
 			String sc = "\n\n\t\t// ------------------------------------------------------------------\n\n\t\t";
 
-			if (arg.isNumber() || arg.isTimestamp() || arg.isDate()) {
+			if (arg.isNumber()) {
 
 				if (arg.getRange() == false) {
 
@@ -161,6 +189,36 @@ public class UtilJavaList {
 							+ "To\");";
 
 				}
+
+			} else if (arg.isDate()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + arg.getName() + "TXTB = new DateFieldBox(this, filterBI, \"" + arg.getName() + "\", false);";
+
+				} else {
+
+					java += sc + arg.getName() + "FromTXTB = new DateFieldBox(this, filterBI, \"" + arg.getName()
+							+ "From\", false);";
+					java += sc + arg.getName() + "ToTXTB = new DateFieldBox(this, filterBI, \"" + arg.getName()
+							+ "To\", false);";
+
+				}
+
+			} else if (arg.isTimestamp()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + arg.getName() + "TXTB = new DateFieldBox(this, filterBI, \"" + arg.getName() + "\", false);";
+
+				} else {
+
+					java += sc + arg.getName() + "FromTXTB = new DateFieldBox(this, filterBI, \"" + arg.getName()
+							+ "From\", false);";
+					java += sc + arg.getName() + "ToTXTB = new DateFieldBox(this, filterBI, \"" + arg.getName()
+							+ "To\", false);";
+
+				}				
 
 			} else if (arg.isString()) {
 

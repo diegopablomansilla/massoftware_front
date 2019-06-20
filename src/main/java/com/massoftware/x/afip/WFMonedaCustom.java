@@ -1,8 +1,8 @@
 
 package com.massoftware.x.afip;
 
-import com.massoftware.windows.UtilUI;
 import com.massoftware.x.monedas.WFMoneda;
+import com.massoftware.x.util.UtilUI;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;

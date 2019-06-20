@@ -1,7 +1,7 @@
 package com.massoftware.windows.tipos_comprobantes;
 
-import com.massoftware.windows.UtilModel;
 import com.massoftware.windows.a.sucursales.SucursalesOld;
+import com.massoftware.x.util.UtilModel;
 
 public class TiposComprobantesFiltro {
 

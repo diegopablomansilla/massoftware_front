@@ -23,6 +23,7 @@ digraph "oneDegreeRelationshipsDiagram" {
   "asientocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"minutacontable":sw -> "minutacontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable":"sucursal":sw -> "sucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "asientocontableitem":"asientocontable":sw -> "asientocontable":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "asientocontable" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -35,10 +36,27 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="minutacontable" COLSPAN="2" ALIGN="LEFT">minutacontable</TD><TD PORT="minutacontable.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="sucursal" COLSPAN="2" ALIGN="LEFT">sucursal</TD><TD PORT="sucursal.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="asientocontablemodulo" COLSPAN="2" ALIGN="LEFT">asientocontablemodulo</TD><TD PORT="asientocontablemodulo.type" ALIGN="LEFT">varchar[36]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="asientocontable.html"
     tooltip="asientocontable"
+  ];
+  "asientocontableitem" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">asientocontableitem</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="fecha" COLSPAN="3" ALIGN="LEFT">fecha</TD></TR>
+      <TR><TD PORT="detalle" COLSPAN="3" ALIGN="LEFT">detalle</TD></TR>
+      <TR><TD PORT="asientocontable" COLSPAN="3" ALIGN="LEFT">asientocontable</TD></TR>
+      <TR><TD PORT="cuentacontable" COLSPAN="3" ALIGN="LEFT">cuentacontable</TD></TR>
+      <TR><TD PORT="debe" COLSPAN="3" ALIGN="LEFT">debe</TD></TR>
+      <TR><TD PORT="haber" COLSPAN="3" ALIGN="LEFT">haber</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="asientocontableitem.html"
+    tooltip="asientocontableitem"
   ];
   "asientocontablemodulo" [
     label=<
@@ -47,7 +65,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">284 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">288 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="asientocontablemodulo.html"
     tooltip="asientocontablemodulo"
@@ -75,7 +93,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
       <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">278 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">272 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="minutacontable.html"
     tooltip="minutacontable"
@@ -103,7 +121,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="clientesocacionaleshasta" COLSPAN="3" ALIGN="LEFT">clientesocacionaleshasta</TD></TR>
       <TR><TD PORT="numerocobranzadesde" COLSPAN="3" ALIGN="LEFT">numerocobranzadesde</TD></TR>
       <TR><TD PORT="numerocobranzahasta" COLSPAN="3" ALIGN="LEFT">numerocobranzahasta</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">245 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">266 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
     </TABLE>>
     URL="sucursal.html"
     tooltip="sucursal"

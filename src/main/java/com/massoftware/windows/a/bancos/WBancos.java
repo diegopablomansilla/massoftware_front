@@ -7,12 +7,12 @@ import org.vaadin.patrik.FastNavigation;
 
 import com.massoftware.model.Banco;
 import com.massoftware.model.BancosFiltro;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.OptionGroupEntityBoolean;
-import com.massoftware.windows.TextFieldBox;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowForm;
-import com.massoftware.windows.WindowListado;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.controls.OptionGroupEntityBoolean;
+import com.massoftware.x.util.controls.TextFieldBox;
+import com.massoftware.x.util.windows.LogAndNotification;
+import com.massoftware.x.util.windows.WindowForm;
+import com.massoftware.x.util.windows.WindowListado;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;

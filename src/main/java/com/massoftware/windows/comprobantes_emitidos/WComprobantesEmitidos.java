@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UtilModel;
-import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.a.talonarios.WTalonarios;
 import com.massoftware.windows.aperturas_cierres_cajas.AperturasCierresCajas;
 import com.massoftware.windows.aperturas_cierres_cajas.WAperturasCierresCajas;
 import com.massoftware.windows.tipos_comprobantes.TiposComprobantes;
 import com.massoftware.windows.tipos_comprobantes.WTiposComprobantes;
+import com.massoftware.x.util.UtilModel;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validatable;

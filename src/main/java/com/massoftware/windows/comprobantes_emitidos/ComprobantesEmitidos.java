@@ -3,7 +3,7 @@ package com.massoftware.windows.comprobantes_emitidos;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class ComprobantesEmitidos {
 

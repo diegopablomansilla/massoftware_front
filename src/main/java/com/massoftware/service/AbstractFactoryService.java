@@ -13,7 +13,6 @@ import com.massoftware.service.logistica.CargaService;
 import com.massoftware.service.logistica.TransporteTarifaService;
 import com.massoftware.service.afip.TipoDocumentoAFIPService;
 import com.massoftware.service.afip.MonedaAFIPService;
-import com.massoftware.service.monedas.MonedaService;
 import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoService;
 import com.massoftware.service.clientes.MotivoComentarioService;
 import com.massoftware.service.clientes.TipoClienteService;
@@ -37,8 +36,17 @@ import com.massoftware.service.contabilidad.AsientoContableModuloService;
 import com.massoftware.service.contabilidad.AsientoContableService;
 import com.massoftware.service.contabilidad.AsientoContableItemService;
 import com.massoftware.service.empresa.EmpresaService;
+import com.massoftware.service.monedas.MonedaService;
+import com.massoftware.service.monedas.MonedaCotizacionService;
 import com.massoftware.service.fondos.banco.BancoService;
 import com.massoftware.service.fondos.banco.BancoFirmanteService;
+import com.massoftware.service.fondos.CajaService;
+import com.massoftware.service.fondos.CuentaFondoTipoService;
+import com.massoftware.service.fondos.CuentaFondoRubroService;
+import com.massoftware.service.fondos.CuentaFondoGrupoService;
+import com.massoftware.service.fondos.CuentaFondoTipoBancoService;
+import com.massoftware.service.fondos.CuentaFondoBancoCopiaService;
+import com.massoftware.service.fondos.CuentaFondoService;
 
 
 public abstract class AbstractFactoryService {
@@ -93,10 +101,6 @@ public abstract class AbstractFactoryService {
 
 	public MonedaAFIPService buildMonedaAFIPService() throws Exception {
 		return new MonedaAFIPService();
-	}
-
-	public MonedaService buildMonedaService() throws Exception {
-		return new MonedaService();
 	}
 
 	public NotaCreditoMotivoService buildNotaCreditoMotivoService() throws Exception {
@@ -191,12 +195,48 @@ public abstract class AbstractFactoryService {
 		return new EmpresaService();
 	}
 
+	public MonedaService buildMonedaService() throws Exception {
+		return new MonedaService();
+	}
+
+	public MonedaCotizacionService buildMonedaCotizacionService() throws Exception {
+		return new MonedaCotizacionService();
+	}
+
 	public BancoService buildBancoService() throws Exception {
 		return new BancoService();
 	}
 
 	public BancoFirmanteService buildBancoFirmanteService() throws Exception {
 		return new BancoFirmanteService();
+	}
+
+	public CajaService buildCajaService() throws Exception {
+		return new CajaService();
+	}
+
+	public CuentaFondoTipoService buildCuentaFondoTipoService() throws Exception {
+		return new CuentaFondoTipoService();
+	}
+
+	public CuentaFondoRubroService buildCuentaFondoRubroService() throws Exception {
+		return new CuentaFondoRubroService();
+	}
+
+	public CuentaFondoGrupoService buildCuentaFondoGrupoService() throws Exception {
+		return new CuentaFondoGrupoService();
+	}
+
+	public CuentaFondoTipoBancoService buildCuentaFondoTipoBancoService() throws Exception {
+		return new CuentaFondoTipoBancoService();
+	}
+
+	public CuentaFondoBancoCopiaService buildCuentaFondoBancoCopiaService() throws Exception {
+		return new CuentaFondoBancoCopiaService();
+	}
+
+	public CuentaFondoService buildCuentaFondoService() throws Exception {
+		return new CuentaFondoService();
 	}
 
 

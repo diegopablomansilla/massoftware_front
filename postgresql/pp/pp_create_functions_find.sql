@@ -4480,347 +4480,6 @@ $$ LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
--- //          TABLA: Moneda                                                                                                 //
--- //                                                                                                                        //
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.Moneda
-
-
-
-DROP FUNCTION IF EXISTS massoftware.f_Moneda (
-
-	  idArg0            VARCHAR(36)	-- 0
-	, orderByArg1       INTEGER    	-- 1
-	, orderByDescArg2   BOOLEAN    	-- 2
-	, limitArg3         BIGINT     	-- 3
-	, offSetArg4        BIGINT     	-- 4
-	, numeroFromArg5    INTEGER    	-- 5
-	, numeroToArg6      INTEGER    	-- 6
-	, nombreArg7        VARCHAR(50)	-- 7
-	, abreviaturaArg8   VARCHAR(5) 	-- 8
-
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda (
-
-	  idArg0            VARCHAR(36)	-- 0
-	, orderByArg1       INTEGER    	-- 1
-	, orderByDescArg2   BOOLEAN    	-- 2
-	, limitArg3         BIGINT     	-- 3
-	, offSetArg4        BIGINT     	-- 4
-	, numeroFromArg5    INTEGER    	-- 5
-	, numeroToArg6      INTEGER    	-- 6
-	, nombreArg7        VARCHAR(50)	-- 7
-	, abreviaturaArg8   VARCHAR(5) 	-- 8
-
-) RETURNS SETOF massoftware.Moneda AS $$
-
-DECLARE
-
-	sqlSrc TEXT = '';
-	sqlSrcWhere TEXT = '';
-	sqlSrcWhereCount INTEGER = 0;
-	sqlSrcWhereCountOR INTEGER = 0;
-	searchById BOOLEAN = false;
-	words TEXT[];
-	word TEXT = '';
-
-BEGIN
-
-
-	sqlSrc = '
-
-		SELECT
-				  Moneda.id                      AS Moneda_id                  	-- 0	.id                 		VARCHAR(36)
-				, Moneda.numero                  AS Moneda_numero              	-- 1	.numero             		INTEGER
-				, Moneda.nombre                  AS Moneda_nombre              	-- 2	.nombre             		VARCHAR(50)
-				, Moneda.abreviatura             AS Moneda_abreviatura         	-- 3	.abreviatura        		VARCHAR(5)
-				, Moneda.cotizacion              AS Moneda_cotizacion          	-- 4	.cotizacion         		DECIMAL(13,5)
-				, Moneda.cotizacionFecha         AS Moneda_cotizacionFecha     	-- 5	.cotizacionFecha    		TIMESTAMP
-				, Moneda.controlActualizacion    AS Moneda_controlActualizacion	-- 6	.controlActualizacion		BOOLEAN
-				, Moneda.monedaAFIP              AS Moneda_monedaAFIP          	-- 7	.monedaAFIP         		VARCHAR(36)	MonedaAFIP.id
-
-		FROM	massoftware.Moneda
-
-	';
-
-	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-		searchById = true;
-	END IF;
-
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-	END IF;
-
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-	END IF;
-
-	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
-		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
-		nombreArg7 = LOWER(TRIM(nombreArg7));
-		nombreArg7 = TRANSLATE(nombreArg7,
-			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
-			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg7, ' ');
-		FOREACH word IN ARRAY words
-		LOOP
-			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
-				word = TRIM(word);
-				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
-				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
-				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
-				sqlSrcWhereCount = sqlSrcWhereCount + 1;
-			END IF;
-		END LOOP;
-	END IF;
-
-	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
-		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
-		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
-		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
-			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
-			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg8, ' ');
-		FOREACH word IN ARRAY words
-		LOOP
-			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
-				word = TRIM(word);
-				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
-				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
-				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
-				sqlSrcWhereCount = sqlSrcWhereCount + 1;
-			END IF;
-		END LOOP;
-	END IF;
-
-	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
-		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
-	END IF;
-
-	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
-		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
-	ELSEIF searchById = false THEN 
-		sqlSrc = sqlSrc || ' ORDER BY 1 ';
-	END IF;
-
-	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
-		sqlSrc = sqlSrc || ' DESC ';
-	END IF;
-
-	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
-		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
-	END IF;
-
-	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
-
-	RETURN QUERY EXECUTE sqlSrc || ';';
-
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS massoftware.f_MonedaById (idArg VARCHAR(36)) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Moneda AS $$
-
-DECLARE
-
-BEGIN
-
-
-	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
-		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
-	END IF;
-
-	RETURN QUERY SELECT * FROM massoftware.f_Moneda ( idArg , null, null, null, null, null, null, null, null); 
-
-END;
-$$ LANGUAGE plpgsql;
-
-
--- SELECT * FROM massoftware.f_Moneda ( null , null, null, null, null, null, null, null, null); 
-
--- SELECT * FROM massoftware.f_MonedaById ('xxx'); 
-
-DROP FUNCTION IF EXISTS massoftware.f_Moneda_1 (
-
-	  idArg0            VARCHAR(36)	-- 0
-	, orderByArg1       INTEGER    	-- 1
-	, orderByDescArg2   BOOLEAN    	-- 2
-	, limitArg3         BIGINT     	-- 3
-	, offSetArg4        BIGINT     	-- 4
-	, numeroFromArg5    INTEGER    	-- 5
-	, numeroToArg6      INTEGER    	-- 6
-	, nombreArg7        VARCHAR(50)	-- 7
-	, abreviaturaArg8   VARCHAR(5) 	-- 8
-
-) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_Moneda_1 (
-
-	  idArg0            VARCHAR(36)	-- 0
-	, orderByArg1       INTEGER    	-- 1
-	, orderByDescArg2   BOOLEAN    	-- 2
-	, limitArg3         BIGINT     	-- 3
-	, offSetArg4        BIGINT     	-- 4
-	, numeroFromArg5    INTEGER    	-- 5
-	, numeroToArg6      INTEGER    	-- 6
-	, nombreArg7        VARCHAR(50)	-- 7
-	, abreviaturaArg8   VARCHAR(5) 	-- 8
-
-) RETURNS SETOF massoftware.t_Moneda_1 AS $$
-
-DECLARE
-
-	sqlSrc TEXT = '';
-	sqlSrcWhere TEXT = '';
-	sqlSrcWhereCount INTEGER = 0;
-	sqlSrcWhereCountOR INTEGER = 0;
-	searchById BOOLEAN = false;
-	words TEXT[];
-	word TEXT = '';
-
-BEGIN
-
-
-	sqlSrc = '
-
-		SELECT
-				  Moneda.id                      AS Moneda_id                  	-- 0	.id                 		VARCHAR(36)
-				, Moneda.numero                  AS Moneda_numero              	-- 1	.numero             		INTEGER
-				, Moneda.nombre                  AS Moneda_nombre              	-- 2	.nombre             		VARCHAR(50)
-				, Moneda.abreviatura             AS Moneda_abreviatura         	-- 3	.abreviatura        		VARCHAR(5)
-				, Moneda.cotizacion              AS Moneda_cotizacion          	-- 4	.cotizacion         		DECIMAL(13,5)
-				, Moneda.cotizacionFecha         AS Moneda_cotizacionFecha     	-- 5	.cotizacionFecha    		TIMESTAMP
-				, Moneda.controlActualizacion    AS Moneda_controlActualizacion	-- 6	.controlActualizacion		BOOLEAN
-				, MonedaAFIP_7.id                AS MonedaAFIP_7_id            	-- 7	.MonedaAFIP.id      		VARCHAR(36)
-				, MonedaAFIP_7.codigo            AS MonedaAFIP_7_codigo        	-- 8	.MonedaAFIP.codigo  		VARCHAR(3)
-				, MonedaAFIP_7.nombre            AS MonedaAFIP_7_nombre        	-- 9	.MonedaAFIP.nombre  		VARCHAR(50)
-
-		FROM	massoftware.Moneda
-			LEFT JOIN massoftware.MonedaAFIP AS MonedaAFIP_7        ON Moneda.monedaAFIP = MonedaAFIP_7.id 	-- 7 LEFT LEVEL: 1
-
-	';
-
-	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-		searchById = true;
-	END IF;
-
-	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-	END IF;
-
-	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
-		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
-		sqlSrcWhereCount = sqlSrcWhereCount + 1;
-	END IF;
-
-	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
-		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
-		nombreArg7 = LOWER(TRIM(nombreArg7));
-		nombreArg7 = TRANSLATE(nombreArg7,
-			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
-			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(nombreArg7, ' ');
-		FOREACH word IN ARRAY words
-		LOOP
-			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
-				word = TRIM(word);
-				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
-				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
-				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
-				sqlSrcWhereCount = sqlSrcWhereCount + 1;
-			END IF;
-		END LOOP;
-	END IF;
-
-	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
-		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
-		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
-		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
-			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
-			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
-		words = regexp_split_to_array(abreviaturaArg8, ' ');
-		FOREACH word IN ARRAY words
-		LOOP
-			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
-				word = TRIM(word);
-				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
-				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
-				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
-				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
-				sqlSrcWhereCount = sqlSrcWhereCount + 1;
-			END IF;
-		END LOOP;
-	END IF;
-
-	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
-		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
-	END IF;
-
-	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
-		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
-	ELSEIF searchById = false THEN 
-		sqlSrc = sqlSrc || ' ORDER BY 1 ';
-	END IF;
-
-	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
-		sqlSrc = sqlSrc || ' DESC ';
-	END IF;
-
-	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
-		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
-	END IF;
-
-	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
-
-	RETURN QUERY EXECUTE sqlSrc || ';';
-
-END;
-$$ LANGUAGE plpgsql;
-
-DROP FUNCTION IF EXISTS massoftware.f_MonedaById_1 (idArg VARCHAR(36)) CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Moneda_1 AS $$
-
-DECLARE
-
-BEGIN
-
-
-	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
-		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
-	END IF;
-
-	RETURN QUERY SELECT * FROM massoftware.f_Moneda_1 ( idArg , null, null, null, null, null, null, null, null); 
-
-END;
-$$ LANGUAGE plpgsql;
-
-
--- SELECT * FROM massoftware.f_Moneda_1 ( null , null, null, null, null, null, null, null, null); 
-
--- SELECT * FROM massoftware.f_MonedaById_1 ('xxx'); 
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //                                                                                                                        //
 -- //          TABLA: NotaCreditoMotivo                                                                                      //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12056,6 +11715,804 @@ $$ LANGUAGE plpgsql;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: Moneda                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Moneda
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Moneda (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+
+) RETURNS SETOF massoftware.Moneda AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Moneda.id                      AS Moneda_id                  	-- 0	.id                 		VARCHAR(36)
+				, Moneda.numero                  AS Moneda_numero              	-- 1	.numero             		INTEGER
+				, Moneda.nombre                  AS Moneda_nombre              	-- 2	.nombre             		VARCHAR(50)
+				, Moneda.abreviatura             AS Moneda_abreviatura         	-- 3	.abreviatura        		VARCHAR(5)
+				, Moneda.cotizacion              AS Moneda_cotizacion          	-- 4	.cotizacion         		DECIMAL(13,5)
+				, Moneda.cotizacionFecha         AS Moneda_cotizacionFecha     	-- 5	.cotizacionFecha    		TIMESTAMP
+				, Moneda.controlActualizacion    AS Moneda_controlActualizacion	-- 6	.controlActualizacion		BOOLEAN
+				, Moneda.monedaAFIP              AS Moneda_monedaAFIP          	-- 7	.monedaAFIP         		VARCHAR(36)	MonedaAFIP.id
+
+		FROM	massoftware.Moneda
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Moneda AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Moneda ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Moneda_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Moneda_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, abreviaturaArg8   VARCHAR(5) 	-- 8
+
+) RETURNS SETOF massoftware.t_Moneda_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Moneda.id                      AS Moneda_id                  	-- 0	.id                 		VARCHAR(36)
+				, Moneda.numero                  AS Moneda_numero              	-- 1	.numero             		INTEGER
+				, Moneda.nombre                  AS Moneda_nombre              	-- 2	.nombre             		VARCHAR(50)
+				, Moneda.abreviatura             AS Moneda_abreviatura         	-- 3	.abreviatura        		VARCHAR(5)
+				, Moneda.cotizacion              AS Moneda_cotizacion          	-- 4	.cotizacion         		DECIMAL(13,5)
+				, Moneda.cotizacionFecha         AS Moneda_cotizacionFecha     	-- 5	.cotizacionFecha    		TIMESTAMP
+				, Moneda.controlActualizacion    AS Moneda_controlActualizacion	-- 6	.controlActualizacion		BOOLEAN
+				, MonedaAFIP_7.id                AS MonedaAFIP_7_id            	-- 7	.MonedaAFIP.id      		VARCHAR(36)
+				, MonedaAFIP_7.codigo            AS MonedaAFIP_7_codigo        	-- 8	.MonedaAFIP.codigo  		VARCHAR(3)
+				, MonedaAFIP_7.nombre            AS MonedaAFIP_7_nombre        	-- 9	.MonedaAFIP.nombre  		VARCHAR(50)
+
+		FROM	massoftware.Moneda
+			LEFT JOIN massoftware.MonedaAFIP AS MonedaAFIP_7        ON Moneda.monedaAFIP = MonedaAFIP_7.id 	-- 7 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Moneda.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND abreviaturaArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(abreviaturaArg8)) > 0 THEN
+		abreviaturaArg8 = REPLACE(abreviaturaArg8, '''', '''''');
+		abreviaturaArg8 = LOWER(TRIM(abreviaturaArg8));
+		abreviaturaArg8 = TRANSLATE(abreviaturaArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(abreviaturaArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Moneda.abreviatura),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Moneda_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Moneda_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Moneda_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MonedaCotizacion                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaCotizacion
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacion (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacion (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) RETURNS SETOF massoftware.MonedaCotizacion AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  MonedaCotizacion.id                          AS MonedaCotizacion_id                      	-- 0	.id                     		VARCHAR(36)
+				, MonedaCotizacion.cotizacionFecha             AS MonedaCotizacion_cotizacionFecha         	-- 1	.cotizacionFecha        		TIMESTAMP
+				, MonedaCotizacion.compra                      AS MonedaCotizacion_compra                  	-- 2	.compra                 		DECIMAL(13,5)
+				, MonedaCotizacion.venta                       AS MonedaCotizacion_venta                   	-- 3	.venta                  		DECIMAL(13,5)
+				, MonedaCotizacion.cotizacionFechaAuditoria    AS MonedaCotizacion_cotizacionFechaAuditoria	-- 4	.cotizacionFechaAuditoria		TIMESTAMP
+				, MonedaCotizacion.moneda                      AS MonedaCotizacion_moneda                  	-- 5	.moneda                 		VARCHAR(36)	Moneda.id
+				, MonedaCotizacion.usuario                     AS MonedaCotizacion_usuario                 	-- 6	.usuario                		VARCHAR(36)	Usuario.id
+
+		FROM	massoftware.MonedaCotizacion
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND monedaArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(monedaArg5)) > 0 THEN
+		monedaArg5 = REPLACE(monedaArg5, '''', '''''');
+		monedaArg5 = LOWER(TRIM(monedaArg5));
+		monedaArg5 = TRANSLATE(monedaArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(monedaArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MonedaCotizacion.moneda),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaFromArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha >= ' || cotizacionFechaFromArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaToArg7 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha <= ' || cotizacionFechaToArg7;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacionById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacionById (idArg VARCHAR(36)) RETURNS SETOF massoftware.MonedaCotizacion AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MonedaCotizacion ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MonedaCotizacion ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaCotizacionById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacion_1 (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacion_1 (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) RETURNS SETOF massoftware.t_MonedaCotizacion_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  MonedaCotizacion.id                          AS MonedaCotizacion_id                      	-- 0	.id                        		VARCHAR(36)
+				, MonedaCotizacion.cotizacionFecha             AS MonedaCotizacion_cotizacionFecha         	-- 1	.cotizacionFecha           		TIMESTAMP
+				, MonedaCotizacion.compra                      AS MonedaCotizacion_compra                  	-- 2	.compra                    		DECIMAL(13,5)
+				, MonedaCotizacion.venta                       AS MonedaCotizacion_venta                   	-- 3	.venta                     		DECIMAL(13,5)
+				, MonedaCotizacion.cotizacionFechaAuditoria    AS MonedaCotizacion_cotizacionFechaAuditoria	-- 4	.cotizacionFechaAuditoria  		TIMESTAMP
+				, Moneda_5.id                                  AS Moneda_5_id                              	-- 5	.Moneda.id                 		VARCHAR(36)
+				, Moneda_5.numero                              AS Moneda_5_numero                          	-- 6	.Moneda.numero             		INTEGER
+				, Moneda_5.nombre                              AS Moneda_5_nombre                          	-- 7	.Moneda.nombre             		VARCHAR(50)
+				, Moneda_5.abreviatura                         AS Moneda_5_abreviatura                     	-- 8	.Moneda.abreviatura        		VARCHAR(5)
+				, Moneda_5.cotizacion                          AS Moneda_5_cotizacion                      	-- 9	.Moneda.cotizacion         		DECIMAL(13,5)
+				, Moneda_5.cotizacionFecha                     AS Moneda_5_cotizacionFecha                 	-- 10	.Moneda.cotizacionFecha    		TIMESTAMP
+				, Moneda_5.controlActualizacion                AS Moneda_5_controlActualizacion            	-- 11	.Moneda.controlActualizacion		BOOLEAN
+				, Moneda_5.monedaAFIP                          AS Moneda_5_monedaAFIP                      	-- 12	.Moneda.monedaAFIP         		VARCHAR(36)	MonedaAFIP.id
+				, Usuario_13.id                                AS Usuario_13_id                            	-- 13	.Usuario.id                		VARCHAR(36)
+				, Usuario_13.numero                            AS Usuario_13_numero                        	-- 14	.Usuario.numero            		INTEGER
+				, Usuario_13.nombre                            AS Usuario_13_nombre                        	-- 15	.Usuario.nombre            		VARCHAR(50)
+
+		FROM	massoftware.MonedaCotizacion
+			LEFT JOIN massoftware.Moneda AS Moneda_5          ON MonedaCotizacion.moneda = Moneda_5.id 	-- 5 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Usuario AS Usuario_13        ON MonedaCotizacion.usuario = Usuario_13.id 	-- 13 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND monedaArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(monedaArg5)) > 0 THEN
+		monedaArg5 = REPLACE(monedaArg5, '''', '''''');
+		monedaArg5 = LOWER(TRIM(monedaArg5));
+		monedaArg5 = TRANSLATE(monedaArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(monedaArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MonedaCotizacion.moneda),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaFromArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha >= ' || cotizacionFechaFromArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaToArg7 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha <= ' || cotizacionFechaToArg7;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacionById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacionById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_MonedaCotizacion_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MonedaCotizacion_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MonedaCotizacion_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaCotizacionById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacion_2 (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacion_2 (
+
+	  idArg0                    VARCHAR(36)	-- 0
+	, orderByArg1               INTEGER    	-- 1
+	, orderByDescArg2           BOOLEAN    	-- 2
+	, limitArg3                 BIGINT     	-- 3
+	, offSetArg4                BIGINT     	-- 4
+	, monedaArg5                VARCHAR(36)	-- 5
+	, cotizacionFechaFromArg6   TIMESTAMP  	-- 6
+	, cotizacionFechaToArg7     TIMESTAMP  	-- 7
+
+) RETURNS SETOF massoftware.t_MonedaCotizacion_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  MonedaCotizacion.id                          AS MonedaCotizacion_id                      	-- 0	.id                        		VARCHAR(36)
+				, MonedaCotizacion.cotizacionFecha             AS MonedaCotizacion_cotizacionFecha         	-- 1	.cotizacionFecha           		TIMESTAMP
+				, MonedaCotizacion.compra                      AS MonedaCotizacion_compra                  	-- 2	.compra                    		DECIMAL(13,5)
+				, MonedaCotizacion.venta                       AS MonedaCotizacion_venta                   	-- 3	.venta                     		DECIMAL(13,5)
+				, MonedaCotizacion.cotizacionFechaAuditoria    AS MonedaCotizacion_cotizacionFechaAuditoria	-- 4	.cotizacionFechaAuditoria  		TIMESTAMP
+				, Moneda_5.id                                  AS Moneda_5_id                              	-- 5	.Moneda.id                 		VARCHAR(36)
+				, Moneda_5.numero                              AS Moneda_5_numero                          	-- 6	.Moneda.numero             		INTEGER
+				, Moneda_5.nombre                              AS Moneda_5_nombre                          	-- 7	.Moneda.nombre             		VARCHAR(50)
+				, Moneda_5.abreviatura                         AS Moneda_5_abreviatura                     	-- 8	.Moneda.abreviatura        		VARCHAR(5)
+				, Moneda_5.cotizacion                          AS Moneda_5_cotizacion                      	-- 9	.Moneda.cotizacion         		DECIMAL(13,5)
+				, Moneda_5.cotizacionFecha                     AS Moneda_5_cotizacionFecha                 	-- 10	.Moneda.cotizacionFecha    		TIMESTAMP
+				, Moneda_5.controlActualizacion                AS Moneda_5_controlActualizacion            	-- 11	.Moneda.controlActualizacion		BOOLEAN
+				, MonedaAFIP_12.id                             AS MonedaAFIP_12_id                         	-- 12	.Moneda.MonedaAFIP.id      		VARCHAR(36)
+				, MonedaAFIP_12.codigo                         AS MonedaAFIP_12_codigo                     	-- 13	.Moneda.MonedaAFIP.codigo  		VARCHAR(3)
+				, MonedaAFIP_12.nombre                         AS MonedaAFIP_12_nombre                     	-- 14	.Moneda.MonedaAFIP.nombre  		VARCHAR(50)
+				, Usuario_15.id                                AS Usuario_15_id                            	-- 15	.Usuario.id                		VARCHAR(36)
+				, Usuario_15.numero                            AS Usuario_15_numero                        	-- 16	.Usuario.numero            		INTEGER
+				, Usuario_15.nombre                            AS Usuario_15_nombre                        	-- 17	.Usuario.nombre            		VARCHAR(50)
+
+		FROM	massoftware.MonedaCotizacion
+			LEFT JOIN massoftware.Moneda AS Moneda_5                ON MonedaCotizacion.moneda = Moneda_5.id 	-- 5 LEFT LEVEL: 1
+				LEFT JOIN massoftware.MonedaAFIP AS MonedaAFIP_12           ON Moneda_5.monedaAFIP = MonedaAFIP_12.id 	-- 12 LEFT LEVEL: 2
+			LEFT JOIN massoftware.Usuario AS Usuario_15              ON MonedaCotizacion.usuario = Usuario_15.id 	-- 15 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND monedaArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(monedaArg5)) > 0 THEN
+		monedaArg5 = REPLACE(monedaArg5, '''', '''''');
+		monedaArg5 = LOWER(TRIM(monedaArg5));
+		monedaArg5 = TRANSLATE(monedaArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(monedaArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(MonedaCotizacion.moneda),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaFromArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha >= ' || cotizacionFechaFromArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND cotizacionFechaToArg7 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' MonedaCotizacion.cotizacionFecha <= ' || cotizacionFechaToArg7;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_MonedaCotizacionById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_MonedaCotizacionById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_MonedaCotizacion_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_MonedaCotizacion_2 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_MonedaCotizacion_2 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_MonedaCotizacionById_2 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Banco                                                                                                  //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12361,3 +12818,2437 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.f_BancoFirmante ( null , null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_BancoFirmanteById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Caja                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Caja
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Caja (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Caja (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.Caja AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Caja.id                 AS Caja_id             	-- 0	.id            		VARCHAR(36)
+				, Caja.numero             AS Caja_numero         	-- 1	.numero        		INTEGER
+				, Caja.nombre             AS Caja_nombre         	-- 2	.nombre        		VARCHAR(50)
+				, Caja.seguridadPuerta    AS Caja_seguridadPuerta	-- 3	.seguridadPuerta		VARCHAR(36)	SeguridadPuerta.id
+
+		FROM	massoftware.Caja
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Caja.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Caja.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CajaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CajaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Caja AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Caja ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Caja ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CajaById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Caja_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Caja_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.t_Caja_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Caja.id                              AS Caja_id                          	-- 0	.id                            		VARCHAR(36)
+				, Caja.numero                          AS Caja_numero                      	-- 1	.numero                        		INTEGER
+				, Caja.nombre                          AS Caja_nombre                      	-- 2	.nombre                        		VARCHAR(50)
+				, SeguridadPuerta_3.id                 AS SeguridadPuerta_3_id             	-- 3	.SeguridadPuerta.id            		VARCHAR(36)
+				, SeguridadPuerta_3.numero             AS SeguridadPuerta_3_numero         	-- 4	.SeguridadPuerta.numero        		INTEGER
+				, SeguridadPuerta_3.nombre             AS SeguridadPuerta_3_nombre         	-- 5	.SeguridadPuerta.nombre        		VARCHAR(50)
+				, SeguridadPuerta_3.equate             AS SeguridadPuerta_3_equate         	-- 6	.SeguridadPuerta.equate        		VARCHAR(30)
+				, SeguridadPuerta_3.seguridadModulo    AS SeguridadPuerta_3_seguridadModulo	-- 7	.SeguridadPuerta.seguridadModulo		VARCHAR(36)	SeguridadModulo.id
+
+		FROM	massoftware.Caja
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_3        ON Caja.seguridadPuerta = SeguridadPuerta_3.id 	-- 3 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Caja.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Caja.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CajaById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CajaById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Caja_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Caja_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Caja_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CajaById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Caja_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Caja_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.t_Caja_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Caja.id                     AS Caja_id                 	-- 0	.id                                   		VARCHAR(36)
+				, Caja.numero                 AS Caja_numero             	-- 1	.numero                               		INTEGER
+				, Caja.nombre                 AS Caja_nombre             	-- 2	.nombre                               		VARCHAR(50)
+				, SeguridadPuerta_3.id        AS SeguridadPuerta_3_id    	-- 3	.SeguridadPuerta.id                   		VARCHAR(36)
+				, SeguridadPuerta_3.numero    AS SeguridadPuerta_3_numero	-- 4	.SeguridadPuerta.numero               		INTEGER
+				, SeguridadPuerta_3.nombre    AS SeguridadPuerta_3_nombre	-- 5	.SeguridadPuerta.nombre               		VARCHAR(50)
+				, SeguridadPuerta_3.equate    AS SeguridadPuerta_3_equate	-- 6	.SeguridadPuerta.equate               		VARCHAR(30)
+				, SeguridadModulo_7.id        AS SeguridadModulo_7_id    	-- 7	.SeguridadPuerta.SeguridadModulo.id   		VARCHAR(36)
+				, SeguridadModulo_7.numero    AS SeguridadModulo_7_numero	-- 8	.SeguridadPuerta.SeguridadModulo.numero		INTEGER
+				, SeguridadModulo_7.nombre    AS SeguridadModulo_7_nombre	-- 9	.SeguridadPuerta.SeguridadModulo.nombre		VARCHAR(50)
+
+		FROM	massoftware.Caja
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_3           ON Caja.seguridadPuerta = SeguridadPuerta_3.id 	-- 3 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_7           ON SeguridadPuerta_3.seguridadModulo = SeguridadModulo_7.id 	-- 7 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Caja.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Caja.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Caja.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CajaById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CajaById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Caja_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Caja_2 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Caja_2 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CajaById_2 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoTipo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoTipo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.CuentaFondoTipo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoTipo.id        AS CuentaFondoTipo_id    	-- 0	.id   		VARCHAR(36)
+				, CuentaFondoTipo.numero    AS CuentaFondoTipo_numero	-- 1	.numero		INTEGER
+				, CuentaFondoTipo.nombre    AS CuentaFondoTipo_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondoTipo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoTipo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoTipoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoTipoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondoTipo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoTipo ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoTipo ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoTipoById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoRubro                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoRubro
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoRubro (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoRubro (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.CuentaFondoRubro AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoRubro.id        AS CuentaFondoRubro_id    	-- 0	.id   		VARCHAR(36)
+				, CuentaFondoRubro.numero    AS CuentaFondoRubro_numero	-- 1	.numero		INTEGER
+				, CuentaFondoRubro.nombre    AS CuentaFondoRubro_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondoRubro
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoRubro.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoRubro.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoRubro.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoRubro.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoRubroById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoRubroById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondoRubro AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoRubro ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoRubro ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoRubroById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoGrupo                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoGrupo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoGrupo (
+
+	  idArg0                 VARCHAR(36)	-- 0
+	, orderByArg1            INTEGER    	-- 1
+	, orderByDescArg2        BOOLEAN    	-- 2
+	, limitArg3              BIGINT     	-- 3
+	, offSetArg4             BIGINT     	-- 4
+	, numeroFromArg5         INTEGER    	-- 5
+	, numeroToArg6           INTEGER    	-- 6
+	, nombreArg7             VARCHAR(50)	-- 7
+	, cuentaFondoRubroArg8   VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoGrupo (
+
+	  idArg0                 VARCHAR(36)	-- 0
+	, orderByArg1            INTEGER    	-- 1
+	, orderByDescArg2        BOOLEAN    	-- 2
+	, limitArg3              BIGINT     	-- 3
+	, offSetArg4             BIGINT     	-- 4
+	, numeroFromArg5         INTEGER    	-- 5
+	, numeroToArg6           INTEGER    	-- 6
+	, nombreArg7             VARCHAR(50)	-- 7
+	, cuentaFondoRubroArg8   VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.CuentaFondoGrupo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoGrupo.id                  AS CuentaFondoGrupo_id              	-- 0	.id             		VARCHAR(36)
+				, CuentaFondoGrupo.numero              AS CuentaFondoGrupo_numero          	-- 1	.numero         		INTEGER
+				, CuentaFondoGrupo.nombre              AS CuentaFondoGrupo_nombre          	-- 2	.nombre         		VARCHAR(50)
+				, CuentaFondoGrupo.cuentaFondoRubro    AS CuentaFondoGrupo_cuentaFondoRubro	-- 3	.cuentaFondoRubro		VARCHAR(36)	CuentaFondoRubro.id
+
+		FROM	massoftware.CuentaFondoGrupo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoGrupo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND cuentaFondoRubroArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(cuentaFondoRubroArg8)) > 0 THEN
+		cuentaFondoRubroArg8 = REPLACE(cuentaFondoRubroArg8, '''', '''''');
+		cuentaFondoRubroArg8 = LOWER(TRIM(cuentaFondoRubroArg8));
+		cuentaFondoRubroArg8 = TRANSLATE(cuentaFondoRubroArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(cuentaFondoRubroArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoGrupo.cuentaFondoRubro),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoGrupoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoGrupoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondoGrupo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoGrupo ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoGrupo ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoGrupoById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoGrupo_1 (
+
+	  idArg0                 VARCHAR(36)	-- 0
+	, orderByArg1            INTEGER    	-- 1
+	, orderByDescArg2        BOOLEAN    	-- 2
+	, limitArg3              BIGINT     	-- 3
+	, offSetArg4             BIGINT     	-- 4
+	, numeroFromArg5         INTEGER    	-- 5
+	, numeroToArg6           INTEGER    	-- 6
+	, nombreArg7             VARCHAR(50)	-- 7
+	, cuentaFondoRubroArg8   VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoGrupo_1 (
+
+	  idArg0                 VARCHAR(36)	-- 0
+	, orderByArg1            INTEGER    	-- 1
+	, orderByDescArg2        BOOLEAN    	-- 2
+	, limitArg3              BIGINT     	-- 3
+	, offSetArg4             BIGINT     	-- 4
+	, numeroFromArg5         INTEGER    	-- 5
+	, numeroToArg6           INTEGER    	-- 6
+	, nombreArg7             VARCHAR(50)	-- 7
+	, cuentaFondoRubroArg8   VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_CuentaFondoGrupo_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoGrupo.id          AS CuentaFondoGrupo_id      	-- 0	.id                    		VARCHAR(36)
+				, CuentaFondoGrupo.numero      AS CuentaFondoGrupo_numero  	-- 1	.numero                		INTEGER
+				, CuentaFondoGrupo.nombre      AS CuentaFondoGrupo_nombre  	-- 2	.nombre                		VARCHAR(50)
+				, CuentaFondoRubro_3.id        AS CuentaFondoRubro_3_id    	-- 3	.CuentaFondoRubro.id   		VARCHAR(36)
+				, CuentaFondoRubro_3.numero    AS CuentaFondoRubro_3_numero	-- 4	.CuentaFondoRubro.numero		INTEGER
+				, CuentaFondoRubro_3.nombre    AS CuentaFondoRubro_3_nombre	-- 5	.CuentaFondoRubro.nombre		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondoGrupo
+			LEFT JOIN massoftware.CuentaFondoRubro AS CuentaFondoRubro_3        ON CuentaFondoGrupo.cuentaFondoRubro = CuentaFondoRubro_3.id 	-- 3 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoGrupo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoGrupo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND cuentaFondoRubroArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(cuentaFondoRubroArg8)) > 0 THEN
+		cuentaFondoRubroArg8 = REPLACE(cuentaFondoRubroArg8, '''', '''''');
+		cuentaFondoRubroArg8 = LOWER(TRIM(cuentaFondoRubroArg8));
+		cuentaFondoRubroArg8 = TRANSLATE(cuentaFondoRubroArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(cuentaFondoRubroArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoGrupo.cuentaFondoRubro),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoGrupoById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoGrupoById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CuentaFondoGrupo_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoGrupo_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoGrupo_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoGrupoById_1 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipoBanco                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipoBanco
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoTipoBanco (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoTipoBanco (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.CuentaFondoTipoBanco AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoTipoBanco.id        AS CuentaFondoTipoBanco_id    	-- 0	.id   		VARCHAR(36)
+				, CuentaFondoTipoBanco.numero    AS CuentaFondoTipoBanco_numero	-- 1	.numero		INTEGER
+				, CuentaFondoTipoBanco.nombre    AS CuentaFondoTipoBanco_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondoTipoBanco
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipoBanco.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipoBanco.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoTipoBanco.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoTipoBanco.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoTipoBancoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoTipoBancoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondoTipoBanco AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoTipoBanco ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoTipoBanco ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoTipoBancoById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoBancoCopia                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoBancoCopia
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoBancoCopia (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoBancoCopia (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.CuentaFondoBancoCopia AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondoBancoCopia.id        AS CuentaFondoBancoCopia_id    	-- 0	.id   		VARCHAR(36)
+				, CuentaFondoBancoCopia.numero    AS CuentaFondoBancoCopia_numero	-- 1	.numero		INTEGER
+				, CuentaFondoBancoCopia.nombre    AS CuentaFondoBancoCopia_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondoBancoCopia
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoBancoCopia.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoBancoCopia.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondoBancoCopia.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondoBancoCopia.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoBancoCopiaById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoBancoCopiaById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondoBancoCopia AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondoBancoCopia ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondoBancoCopia ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoBancoCopiaById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondo                                                                                            //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondo
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondo (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.CuentaFondo AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondo.id                            AS CuentaFondo_id                       	-- 0	.id                      		VARCHAR(36)
+				, CuentaFondo.numero                        AS CuentaFondo_numero                   	-- 1	.numero                  		INTEGER
+				, CuentaFondo.nombre                        AS CuentaFondo_nombre                   	-- 2	.nombre                  		VARCHAR(50)
+				, CuentaFondo.cuentaContable                AS CuentaFondo_cuentaContable           	-- 3	.cuentaContable          		VARCHAR(36)	CuentaContable.id
+				, CuentaFondo.cuentaFondoGrupo              AS CuentaFondo_cuentaFondoGrupo         	-- 4	.cuentaFondoGrupo        		VARCHAR(36)	CuentaFondoGrupo.id
+				, CuentaFondo.cuentaFondoTipo               AS CuentaFondo_cuentaFondoTipo          	-- 5	.cuentaFondoTipo         		VARCHAR(36)	CuentaFondoTipo.id
+				, CuentaFondo.obsoleto                      AS CuentaFondo_obsoleto                 	-- 6	.obsoleto                		BOOLEAN
+				, CuentaFondo.noImprimeCaja                 AS CuentaFondo_noImprimeCaja            	-- 7	.noImprimeCaja           		BOOLEAN
+				, CuentaFondo.ventas                        AS CuentaFondo_ventas                   	-- 8	.ventas                  		BOOLEAN
+				, CuentaFondo.fondos                        AS CuentaFondo_fondos                   	-- 9	.fondos                  		BOOLEAN
+				, CuentaFondo.compras                       AS CuentaFondo_compras                  	-- 10	.compras                 		BOOLEAN
+				, CuentaFondo.moneda                        AS CuentaFondo_moneda                   	-- 11	.moneda                  		VARCHAR(36)	Moneda.id
+				, CuentaFondo.caja                          AS CuentaFondo_caja                     	-- 12	.caja                    		VARCHAR(36)	Caja.id
+				, CuentaFondo.rechazados                    AS CuentaFondo_rechazados               	-- 13	.rechazados              		BOOLEAN
+				, CuentaFondo.conciliacion                  AS CuentaFondo_conciliacion             	-- 14	.conciliacion            		BOOLEAN
+				, CuentaFondo.cuentaFondoTipoBanco          AS CuentaFondo_cuentaFondoTipoBanco     	-- 15	.cuentaFondoTipoBanco    		VARCHAR(36)	CuentaFondoTipoBanco.id
+				, CuentaFondo.banco                         AS CuentaFondo_banco                    	-- 16	.banco                   		VARCHAR(36)	Banco.id
+				, CuentaFondo.cuentaBancaria                AS CuentaFondo_cuentaBancaria           	-- 17	.cuentaBancaria          		VARCHAR(22)
+				, CuentaFondo.cbu                           AS CuentaFondo_cbu                      	-- 18	.cbu                     		VARCHAR(22)
+				, CuentaFondo.limiteDescubierto             AS CuentaFondo_limiteDescubierto        	-- 19	.limiteDescubierto       		DECIMAL(13,5)
+				, CuentaFondo.cuentaFondoCaucion            AS CuentaFondo_cuentaFondoCaucion       	-- 20	.cuentaFondoCaucion      		VARCHAR(50)
+				, CuentaFondo.cuentaFondoDiferidos          AS CuentaFondo_cuentaFondoDiferidos     	-- 21	.cuentaFondoDiferidos    		VARCHAR(50)
+				, CuentaFondo.formato                       AS CuentaFondo_formato                  	-- 22	.formato                 		VARCHAR(50)
+				, CuentaFondo.cuentaFondoBancoCopia         AS CuentaFondo_cuentaFondoBancoCopia    	-- 23	.cuentaFondoBancoCopia   		VARCHAR(36)	CuentaFondoBancoCopia.id
+				, CuentaFondo.limiteOperacionIndividual     AS CuentaFondo_limiteOperacionIndividual	-- 24	.limiteOperacionIndividual		DECIMAL(13,5)
+				, CuentaFondo.seguridadPuertaUso            AS CuentaFondo_seguridadPuertaUso       	-- 25	.seguridadPuertaUso      		VARCHAR(36)	SeguridadPuerta.id
+				, CuentaFondo.seguridadPuertaConsulta       AS CuentaFondo_seguridadPuertaConsulta  	-- 26	.seguridadPuertaConsulta 		VARCHAR(36)	SeguridadPuerta.id
+				, CuentaFondo.seguridadPuertaLimite         AS CuentaFondo_seguridadPuertaLimite    	-- 27	.seguridadPuertaLimite   		VARCHAR(36)	SeguridadPuerta.id
+
+		FROM	massoftware.CuentaFondo
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND bancoArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(bancoArg8)) > 0 THEN
+		bancoArg8 = REPLACE(bancoArg8, '''', '''''');
+		bancoArg8 = LOWER(TRIM(bancoArg8));
+		bancoArg8 = TRANSLATE(bancoArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(bancoArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.banco),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoById (idArg VARCHAR(36)) RETURNS SETOF massoftware.CuentaFondo AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondo ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondo ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondo_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondo_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_CuentaFondo_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondo.id                            AS CuentaFondo_id                       	-- 0	.id                                		VARCHAR(36)
+				, CuentaFondo.numero                        AS CuentaFondo_numero                   	-- 1	.numero                            		INTEGER
+				, CuentaFondo.nombre                        AS CuentaFondo_nombre                   	-- 2	.nombre                            		VARCHAR(50)
+				, CuentaContable_3.id                       AS CuentaContable_3_id                  	-- 3	.CuentaContable.id                 		VARCHAR(36)
+				, CuentaContable_3.codigo                   AS CuentaContable_3_codigo              	-- 4	.CuentaContable.codigo             		VARCHAR(11)
+				, CuentaContable_3.nombre                   AS CuentaContable_3_nombre              	-- 5	.CuentaContable.nombre             		VARCHAR(50)
+				, CuentaContable_3.ejercicioContable        AS CuentaContable_3_ejercicioContable   	-- 6	.CuentaContable.ejercicioContable  		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_3.integra                  AS CuentaContable_3_integra             	-- 7	.CuentaContable.integra            		VARCHAR(16)
+				, CuentaContable_3.cuentaJerarquia          AS CuentaContable_3_cuentaJerarquia     	-- 8	.CuentaContable.cuentaJerarquia    		VARCHAR(16)
+				, CuentaContable_3.imputable                AS CuentaContable_3_imputable           	-- 9	.CuentaContable.imputable          		BOOLEAN
+				, CuentaContable_3.ajustaPorInflacion       AS CuentaContable_3_ajustaPorInflacion  	-- 10	.CuentaContable.ajustaPorInflacion 		BOOLEAN
+				, CuentaContable_3.cuentaContableEstado     AS CuentaContable_3_cuentaContableEstado	-- 11	.CuentaContable.cuentaContableEstado		VARCHAR(36)	CuentaContableEstado.id
+				, CuentaContable_3.cuentaConApropiacion     AS CuentaContable_3_cuentaConApropiacion	-- 12	.CuentaContable.cuentaConApropiacion		BOOLEAN
+				, CuentaContable_3.centroCostoContable      AS CuentaContable_3_centroCostoContable 	-- 13	.CuentaContable.centroCostoContable		VARCHAR(36)	CentroCostoContable.id
+				, CuentaContable_3.cuentaAgrupadora         AS CuentaContable_3_cuentaAgrupadora    	-- 14	.CuentaContable.cuentaAgrupadora   		VARCHAR(50)
+				, CuentaContable_3.porcentaje               AS CuentaContable_3_porcentaje          	-- 15	.CuentaContable.porcentaje         		DECIMAL(6,3)
+				, CuentaContable_3.puntoEquilibrio          AS CuentaContable_3_puntoEquilibrio     	-- 16	.CuentaContable.puntoEquilibrio    		VARCHAR(36)	PuntoEquilibrio.id
+				, CuentaContable_3.costoVenta               AS CuentaContable_3_costoVenta          	-- 17	.CuentaContable.costoVenta         		VARCHAR(36)	CostoVenta.id
+				, CuentaContable_3.seguridadPuerta          AS CuentaContable_3_seguridadPuerta     	-- 18	.CuentaContable.seguridadPuerta    		VARCHAR(36)	SeguridadPuerta.id
+				, CuentaFondoGrupo_19.id                    AS CuentaFondoGrupo_19_id               	-- 19	.CuentaFondoGrupo.id               		VARCHAR(36)
+				, CuentaFondoGrupo_19.numero                AS CuentaFondoGrupo_19_numero           	-- 20	.CuentaFondoGrupo.numero           		INTEGER
+				, CuentaFondoGrupo_19.nombre                AS CuentaFondoGrupo_19_nombre           	-- 21	.CuentaFondoGrupo.nombre           		VARCHAR(50)
+				, CuentaFondoGrupo_19.cuentaFondoRubro      AS CuentaFondoGrupo_19_cuentaFondoRubro 	-- 22	.CuentaFondoGrupo.cuentaFondoRubro 		VARCHAR(36)	CuentaFondoRubro.id
+				, CuentaFondoTipo_23.id                     AS CuentaFondoTipo_23_id                	-- 23	.CuentaFondoTipo.id                		VARCHAR(36)
+				, CuentaFondoTipo_23.numero                 AS CuentaFondoTipo_23_numero            	-- 24	.CuentaFondoTipo.numero            		INTEGER
+				, CuentaFondoTipo_23.nombre                 AS CuentaFondoTipo_23_nombre            	-- 25	.CuentaFondoTipo.nombre            		VARCHAR(50)
+				, CuentaFondo.obsoleto                      AS CuentaFondo_obsoleto                 	-- 26	.obsoleto                          		BOOLEAN
+				, CuentaFondo.noImprimeCaja                 AS CuentaFondo_noImprimeCaja            	-- 27	.noImprimeCaja                     		BOOLEAN
+				, CuentaFondo.ventas                        AS CuentaFondo_ventas                   	-- 28	.ventas                            		BOOLEAN
+				, CuentaFondo.fondos                        AS CuentaFondo_fondos                   	-- 29	.fondos                            		BOOLEAN
+				, CuentaFondo.compras                       AS CuentaFondo_compras                  	-- 30	.compras                           		BOOLEAN
+				, Moneda_31.id                              AS Moneda_31_id                         	-- 31	.Moneda.id                         		VARCHAR(36)
+				, Moneda_31.numero                          AS Moneda_31_numero                     	-- 32	.Moneda.numero                     		INTEGER
+				, Moneda_31.nombre                          AS Moneda_31_nombre                     	-- 33	.Moneda.nombre                     		VARCHAR(50)
+				, Moneda_31.abreviatura                     AS Moneda_31_abreviatura                	-- 34	.Moneda.abreviatura                		VARCHAR(5)
+				, Moneda_31.cotizacion                      AS Moneda_31_cotizacion                 	-- 35	.Moneda.cotizacion                 		DECIMAL(13,5)
+				, Moneda_31.cotizacionFecha                 AS Moneda_31_cotizacionFecha            	-- 36	.Moneda.cotizacionFecha            		TIMESTAMP
+				, Moneda_31.controlActualizacion            AS Moneda_31_controlActualizacion       	-- 37	.Moneda.controlActualizacion       		BOOLEAN
+				, Moneda_31.monedaAFIP                      AS Moneda_31_monedaAFIP                 	-- 38	.Moneda.monedaAFIP                 		VARCHAR(36)	MonedaAFIP.id
+				, Caja_39.id                                AS Caja_39_id                           	-- 39	.Caja.id                           		VARCHAR(36)
+				, Caja_39.numero                            AS Caja_39_numero                       	-- 40	.Caja.numero                       		INTEGER
+				, Caja_39.nombre                            AS Caja_39_nombre                       	-- 41	.Caja.nombre                       		VARCHAR(50)
+				, Caja_39.seguridadPuerta                   AS Caja_39_seguridadPuerta              	-- 42	.Caja.seguridadPuerta              		VARCHAR(36)	SeguridadPuerta.id
+				, CuentaFondo.rechazados                    AS CuentaFondo_rechazados               	-- 43	.rechazados                        		BOOLEAN
+				, CuentaFondo.conciliacion                  AS CuentaFondo_conciliacion             	-- 44	.conciliacion                      		BOOLEAN
+				, CuentaFondoTipoBanco_45.id                AS CuentaFondoTipoBanco_45_id           	-- 45	.CuentaFondoTipoBanco.id           		VARCHAR(36)
+				, CuentaFondoTipoBanco_45.numero            AS CuentaFondoTipoBanco_45_numero       	-- 46	.CuentaFondoTipoBanco.numero       		INTEGER
+				, CuentaFondoTipoBanco_45.nombre            AS CuentaFondoTipoBanco_45_nombre       	-- 47	.CuentaFondoTipoBanco.nombre       		VARCHAR(50)
+				, Banco_48.id                               AS Banco_48_id                          	-- 48	.Banco.id                          		VARCHAR(36)
+				, Banco_48.numero                           AS Banco_48_numero                      	-- 49	.Banco.numero                      		INTEGER
+				, Banco_48.nombre                           AS Banco_48_nombre                      	-- 50	.Banco.nombre                      		VARCHAR(50)
+				, Banco_48.cuit                             AS Banco_48_cuit                        	-- 51	.Banco.cuit                        		BIGINT
+				, Banco_48.bloqueado                        AS Banco_48_bloqueado                   	-- 52	.Banco.bloqueado                   		BOOLEAN
+				, Banco_48.hoja                             AS Banco_48_hoja                        	-- 53	.Banco.hoja                        		INTEGER
+				, Banco_48.primeraFila                      AS Banco_48_primeraFila                 	-- 54	.Banco.primeraFila                 		INTEGER
+				, Banco_48.ultimaFila                       AS Banco_48_ultimaFila                  	-- 55	.Banco.ultimaFila                  		INTEGER
+				, Banco_48.fecha                            AS Banco_48_fecha                       	-- 56	.Banco.fecha                       		VARCHAR(3)
+				, Banco_48.descripcion                      AS Banco_48_descripcion                 	-- 57	.Banco.descripcion                 		VARCHAR(3)
+				, Banco_48.referencia1                      AS Banco_48_referencia1                 	-- 58	.Banco.referencia1                 		VARCHAR(3)
+				, Banco_48.importe                          AS Banco_48_importe                     	-- 59	.Banco.importe                     		VARCHAR(3)
+				, Banco_48.referencia2                      AS Banco_48_referencia2                 	-- 60	.Banco.referencia2                 		VARCHAR(3)
+				, Banco_48.saldo                            AS Banco_48_saldo                       	-- 61	.Banco.saldo                       		VARCHAR(3)
+				, CuentaFondo.cuentaBancaria                AS CuentaFondo_cuentaBancaria           	-- 62	.cuentaBancaria                    		VARCHAR(22)
+				, CuentaFondo.cbu                           AS CuentaFondo_cbu                      	-- 63	.cbu                               		VARCHAR(22)
+				, CuentaFondo.limiteDescubierto             AS CuentaFondo_limiteDescubierto        	-- 64	.limiteDescubierto                 		DECIMAL(13,5)
+				, CuentaFondo.cuentaFondoCaucion            AS CuentaFondo_cuentaFondoCaucion       	-- 65	.cuentaFondoCaucion                		VARCHAR(50)
+				, CuentaFondo.cuentaFondoDiferidos          AS CuentaFondo_cuentaFondoDiferidos     	-- 66	.cuentaFondoDiferidos              		VARCHAR(50)
+				, CuentaFondo.formato                       AS CuentaFondo_formato                  	-- 67	.formato                           		VARCHAR(50)
+				, CuentaFondoBancoCopia_68.id               AS CuentaFondoBancoCopia_68_id          	-- 68	.CuentaFondoBancoCopia.id          		VARCHAR(36)
+				, CuentaFondoBancoCopia_68.numero           AS CuentaFondoBancoCopia_68_numero      	-- 69	.CuentaFondoBancoCopia.numero      		INTEGER
+				, CuentaFondoBancoCopia_68.nombre           AS CuentaFondoBancoCopia_68_nombre      	-- 70	.CuentaFondoBancoCopia.nombre      		VARCHAR(50)
+				, CuentaFondo.limiteOperacionIndividual     AS CuentaFondo_limiteOperacionIndividual	-- 71	.limiteOperacionIndividual         		DECIMAL(13,5)
+				, SeguridadPuerta_72.id                     AS SeguridadPuerta_72_id                	-- 72	.SeguridadPuerta.id                		VARCHAR(36)
+				, SeguridadPuerta_72.numero                 AS SeguridadPuerta_72_numero            	-- 73	.SeguridadPuerta.numero            		INTEGER
+				, SeguridadPuerta_72.nombre                 AS SeguridadPuerta_72_nombre            	-- 74	.SeguridadPuerta.nombre            		VARCHAR(50)
+				, SeguridadPuerta_72.equate                 AS SeguridadPuerta_72_equate            	-- 75	.SeguridadPuerta.equate            		VARCHAR(30)
+				, SeguridadPuerta_72.seguridadModulo        AS SeguridadPuerta_72_seguridadModulo   	-- 76	.SeguridadPuerta.seguridadModulo   		VARCHAR(36)	SeguridadModulo.id
+				, SeguridadPuerta_77.id                     AS SeguridadPuerta_77_id                	-- 77	.SeguridadPuerta.id                		VARCHAR(36)
+				, SeguridadPuerta_77.numero                 AS SeguridadPuerta_77_numero            	-- 78	.SeguridadPuerta.numero            		INTEGER
+				, SeguridadPuerta_77.nombre                 AS SeguridadPuerta_77_nombre            	-- 79	.SeguridadPuerta.nombre            		VARCHAR(50)
+				, SeguridadPuerta_77.equate                 AS SeguridadPuerta_77_equate            	-- 80	.SeguridadPuerta.equate            		VARCHAR(30)
+				, SeguridadPuerta_77.seguridadModulo        AS SeguridadPuerta_77_seguridadModulo   	-- 81	.SeguridadPuerta.seguridadModulo   		VARCHAR(36)	SeguridadModulo.id
+				, SeguridadPuerta_82.id                     AS SeguridadPuerta_82_id                	-- 82	.SeguridadPuerta.id                		VARCHAR(36)
+				, SeguridadPuerta_82.numero                 AS SeguridadPuerta_82_numero            	-- 83	.SeguridadPuerta.numero            		INTEGER
+				, SeguridadPuerta_82.nombre                 AS SeguridadPuerta_82_nombre            	-- 84	.SeguridadPuerta.nombre            		VARCHAR(50)
+				, SeguridadPuerta_82.equate                 AS SeguridadPuerta_82_equate            	-- 85	.SeguridadPuerta.equate            		VARCHAR(30)
+				, SeguridadPuerta_82.seguridadModulo        AS SeguridadPuerta_82_seguridadModulo   	-- 86	.SeguridadPuerta.seguridadModulo   		VARCHAR(36)	SeguridadModulo.id
+
+		FROM	massoftware.CuentaFondo
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_3                ON CuentaFondo.cuentaContable = CuentaContable_3.id 	-- 3 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoGrupo AS CuentaFondoGrupo_19             ON CuentaFondo.cuentaFondoGrupo = CuentaFondoGrupo_19.id 	-- 19 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoTipo AS CuentaFondoTipo_23              ON CuentaFondo.cuentaFondoTipo = CuentaFondoTipo_23.id 	-- 23 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Moneda AS Moneda_31                       ON CuentaFondo.moneda = Moneda_31.id 	-- 31 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Caja AS Caja_39                         ON CuentaFondo.caja = Caja_39.id 	-- 39 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoTipoBanco AS CuentaFondoTipoBanco_45         ON CuentaFondo.cuentaFondoTipoBanco = CuentaFondoTipoBanco_45.id 	-- 45 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Banco AS Banco_48                        ON CuentaFondo.banco = Banco_48.id 	-- 48 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoBancoCopia AS CuentaFondoBancoCopia_68        ON CuentaFondo.cuentaFondoBancoCopia = CuentaFondoBancoCopia_68.id 	-- 68 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_72              ON CuentaFondo.seguridadPuertaUso = SeguridadPuerta_72.id 	-- 72 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_77              ON CuentaFondo.seguridadPuertaConsulta = SeguridadPuerta_77.id 	-- 77 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_82              ON CuentaFondo.seguridadPuertaLimite = SeguridadPuerta_82.id 	-- 82 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND bancoArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(bancoArg8)) > 0 THEN
+		bancoArg8 = REPLACE(bancoArg8, '''', '''''');
+		bancoArg8 = LOWER(TRIM(bancoArg8));
+		bancoArg8 = TRANSLATE(bancoArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(bancoArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.banco),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CuentaFondo_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondo_1 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondo_1 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoById_1 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondo_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondo_2 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_CuentaFondo_2 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondo.id                               AS CuentaFondo_id                          	-- 0	.id                                                 		VARCHAR(36)
+				, CuentaFondo.numero                           AS CuentaFondo_numero                      	-- 1	.numero                                             		INTEGER
+				, CuentaFondo.nombre                           AS CuentaFondo_nombre                      	-- 2	.nombre                                             		VARCHAR(50)
+				, CuentaContable_3.id                          AS CuentaContable_3_id                     	-- 3	.CuentaContable.id                                  		VARCHAR(36)
+				, CuentaContable_3.codigo                      AS CuentaContable_3_codigo                 	-- 4	.CuentaContable.codigo                              		VARCHAR(11)
+				, CuentaContable_3.nombre                      AS CuentaContable_3_nombre                 	-- 5	.CuentaContable.nombre                              		VARCHAR(50)
+				, EjercicioContable_6.id                       AS EjercicioContable_6_id                  	-- 6	.CuentaContable.EjercicioContable.id                		VARCHAR(36)
+				, EjercicioContable_6.numero                   AS EjercicioContable_6_numero              	-- 7	.CuentaContable.EjercicioContable.numero            		INTEGER
+				, EjercicioContable_6.apertura                 AS EjercicioContable_6_apertura            	-- 8	.CuentaContable.EjercicioContable.apertura          		DATE
+				, EjercicioContable_6.cierre                   AS EjercicioContable_6_cierre              	-- 9	.CuentaContable.EjercicioContable.cierre            		DATE
+				, EjercicioContable_6.cerrado                  AS EjercicioContable_6_cerrado             	-- 10	.CuentaContable.EjercicioContable.cerrado           		BOOLEAN
+				, EjercicioContable_6.cerradoModulos           AS EjercicioContable_6_cerradoModulos      	-- 11	.CuentaContable.EjercicioContable.cerradoModulos    		BOOLEAN
+				, EjercicioContable_6.comentario               AS EjercicioContable_6_comentario          	-- 12	.CuentaContable.EjercicioContable.comentario        		VARCHAR(250)
+				, CuentaContable_3.integra                     AS CuentaContable_3_integra                	-- 13	.CuentaContable.integra                             		VARCHAR(16)
+				, CuentaContable_3.cuentaJerarquia             AS CuentaContable_3_cuentaJerarquia        	-- 14	.CuentaContable.cuentaJerarquia                     		VARCHAR(16)
+				, CuentaContable_3.imputable                   AS CuentaContable_3_imputable              	-- 15	.CuentaContable.imputable                           		BOOLEAN
+				, CuentaContable_3.ajustaPorInflacion          AS CuentaContable_3_ajustaPorInflacion     	-- 16	.CuentaContable.ajustaPorInflacion                  		BOOLEAN
+				, CuentaContableEstado_17.id                   AS CuentaContableEstado_17_id              	-- 17	.CuentaContable.CuentaContableEstado.id             		VARCHAR(36)
+				, CuentaContableEstado_17.numero               AS CuentaContableEstado_17_numero          	-- 18	.CuentaContable.CuentaContableEstado.numero         		INTEGER
+				, CuentaContableEstado_17.nombre               AS CuentaContableEstado_17_nombre          	-- 19	.CuentaContable.CuentaContableEstado.nombre         		VARCHAR(50)
+				, CuentaContable_3.cuentaConApropiacion        AS CuentaContable_3_cuentaConApropiacion   	-- 20	.CuentaContable.cuentaConApropiacion                		BOOLEAN
+				, CentroCostoContable_21.id                    AS CentroCostoContable_21_id               	-- 21	.CuentaContable.CentroCostoContable.id              		VARCHAR(36)
+				, CentroCostoContable_21.numero                AS CentroCostoContable_21_numero           	-- 22	.CuentaContable.CentroCostoContable.numero          		INTEGER
+				, CentroCostoContable_21.nombre                AS CentroCostoContable_21_nombre           	-- 23	.CuentaContable.CentroCostoContable.nombre          		VARCHAR(50)
+				, CentroCostoContable_21.abreviatura           AS CentroCostoContable_21_abreviatura      	-- 24	.CuentaContable.CentroCostoContable.abreviatura     		VARCHAR(5)
+				, CentroCostoContable_21.ejercicioContable     AS CentroCostoContable_21_ejercicioContable	-- 25	.CuentaContable.CentroCostoContable.ejercicioContable		VARCHAR(36)	EjercicioContable.id
+				, CuentaContable_3.cuentaAgrupadora            AS CuentaContable_3_cuentaAgrupadora       	-- 26	.CuentaContable.cuentaAgrupadora                    		VARCHAR(50)
+				, CuentaContable_3.porcentaje                  AS CuentaContable_3_porcentaje             	-- 27	.CuentaContable.porcentaje                          		DECIMAL(6,3)
+				, PuntoEquilibrio_28.id                        AS PuntoEquilibrio_28_id                   	-- 28	.CuentaContable.PuntoEquilibrio.id                  		VARCHAR(36)
+				, PuntoEquilibrio_28.numero                    AS PuntoEquilibrio_28_numero               	-- 29	.CuentaContable.PuntoEquilibrio.numero              		INTEGER
+				, PuntoEquilibrio_28.nombre                    AS PuntoEquilibrio_28_nombre               	-- 30	.CuentaContable.PuntoEquilibrio.nombre              		VARCHAR(50)
+				, PuntoEquilibrio_28.tipoPuntoEquilibrio       AS PuntoEquilibrio_28_tipoPuntoEquilibrio  	-- 31	.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio 		VARCHAR(36)	TipoPuntoEquilibrio.id
+				, PuntoEquilibrio_28.ejercicioContable         AS PuntoEquilibrio_28_ejercicioContable    	-- 32	.CuentaContable.PuntoEquilibrio.ejercicioContable   		VARCHAR(36)	EjercicioContable.id
+				, CostoVenta_33.id                             AS CostoVenta_33_id                        	-- 33	.CuentaContable.CostoVenta.id                       		VARCHAR(36)
+				, CostoVenta_33.numero                         AS CostoVenta_33_numero                    	-- 34	.CuentaContable.CostoVenta.numero                   		INTEGER
+				, CostoVenta_33.nombre                         AS CostoVenta_33_nombre                    	-- 35	.CuentaContable.CostoVenta.nombre                   		VARCHAR(50)
+				, SeguridadPuerta_36.id                        AS SeguridadPuerta_36_id                   	-- 36	.CuentaContable.SeguridadPuerta.id                  		VARCHAR(36)
+				, SeguridadPuerta_36.numero                    AS SeguridadPuerta_36_numero               	-- 37	.CuentaContable.SeguridadPuerta.numero              		INTEGER
+				, SeguridadPuerta_36.nombre                    AS SeguridadPuerta_36_nombre               	-- 38	.CuentaContable.SeguridadPuerta.nombre              		VARCHAR(50)
+				, SeguridadPuerta_36.equate                    AS SeguridadPuerta_36_equate               	-- 39	.CuentaContable.SeguridadPuerta.equate              		VARCHAR(30)
+				, SeguridadPuerta_36.seguridadModulo           AS SeguridadPuerta_36_seguridadModulo      	-- 40	.CuentaContable.SeguridadPuerta.seguridadModulo     		VARCHAR(36)	SeguridadModulo.id
+				, CuentaFondoGrupo_41.id                       AS CuentaFondoGrupo_41_id                  	-- 41	.CuentaFondoGrupo.id                                		VARCHAR(36)
+				, CuentaFondoGrupo_41.numero                   AS CuentaFondoGrupo_41_numero              	-- 42	.CuentaFondoGrupo.numero                            		INTEGER
+				, CuentaFondoGrupo_41.nombre                   AS CuentaFondoGrupo_41_nombre              	-- 43	.CuentaFondoGrupo.nombre                            		VARCHAR(50)
+				, CuentaFondoRubro_44.id                       AS CuentaFondoRubro_44_id                  	-- 44	.CuentaFondoGrupo.CuentaFondoRubro.id               		VARCHAR(36)
+				, CuentaFondoRubro_44.numero                   AS CuentaFondoRubro_44_numero              	-- 45	.CuentaFondoGrupo.CuentaFondoRubro.numero           		INTEGER
+				, CuentaFondoRubro_44.nombre                   AS CuentaFondoRubro_44_nombre              	-- 46	.CuentaFondoGrupo.CuentaFondoRubro.nombre           		VARCHAR(50)
+				, CuentaFondoTipo_47.id                        AS CuentaFondoTipo_47_id                   	-- 47	.CuentaFondoTipo.id                                 		VARCHAR(36)
+				, CuentaFondoTipo_47.numero                    AS CuentaFondoTipo_47_numero               	-- 48	.CuentaFondoTipo.numero                             		INTEGER
+				, CuentaFondoTipo_47.nombre                    AS CuentaFondoTipo_47_nombre               	-- 49	.CuentaFondoTipo.nombre                             		VARCHAR(50)
+				, CuentaFondo.obsoleto                         AS CuentaFondo_obsoleto                    	-- 50	.obsoleto                                           		BOOLEAN
+				, CuentaFondo.noImprimeCaja                    AS CuentaFondo_noImprimeCaja               	-- 51	.noImprimeCaja                                      		BOOLEAN
+				, CuentaFondo.ventas                           AS CuentaFondo_ventas                      	-- 52	.ventas                                             		BOOLEAN
+				, CuentaFondo.fondos                           AS CuentaFondo_fondos                      	-- 53	.fondos                                             		BOOLEAN
+				, CuentaFondo.compras                          AS CuentaFondo_compras                     	-- 54	.compras                                            		BOOLEAN
+				, Moneda_55.id                                 AS Moneda_55_id                            	-- 55	.Moneda.id                                          		VARCHAR(36)
+				, Moneda_55.numero                             AS Moneda_55_numero                        	-- 56	.Moneda.numero                                      		INTEGER
+				, Moneda_55.nombre                             AS Moneda_55_nombre                        	-- 57	.Moneda.nombre                                      		VARCHAR(50)
+				, Moneda_55.abreviatura                        AS Moneda_55_abreviatura                   	-- 58	.Moneda.abreviatura                                 		VARCHAR(5)
+				, Moneda_55.cotizacion                         AS Moneda_55_cotizacion                    	-- 59	.Moneda.cotizacion                                  		DECIMAL(13,5)
+				, Moneda_55.cotizacionFecha                    AS Moneda_55_cotizacionFecha               	-- 60	.Moneda.cotizacionFecha                             		TIMESTAMP
+				, Moneda_55.controlActualizacion               AS Moneda_55_controlActualizacion          	-- 61	.Moneda.controlActualizacion                        		BOOLEAN
+				, MonedaAFIP_62.id                             AS MonedaAFIP_62_id                        	-- 62	.Moneda.MonedaAFIP.id                               		VARCHAR(36)
+				, MonedaAFIP_62.codigo                         AS MonedaAFIP_62_codigo                    	-- 63	.Moneda.MonedaAFIP.codigo                           		VARCHAR(3)
+				, MonedaAFIP_62.nombre                         AS MonedaAFIP_62_nombre                    	-- 64	.Moneda.MonedaAFIP.nombre                           		VARCHAR(50)
+				, Caja_65.id                                   AS Caja_65_id                              	-- 65	.Caja.id                                            		VARCHAR(36)
+				, Caja_65.numero                               AS Caja_65_numero                          	-- 66	.Caja.numero                                        		INTEGER
+				, Caja_65.nombre                               AS Caja_65_nombre                          	-- 67	.Caja.nombre                                        		VARCHAR(50)
+				, SeguridadPuerta_68.id                        AS SeguridadPuerta_68_id                   	-- 68	.Caja.SeguridadPuerta.id                            		VARCHAR(36)
+				, SeguridadPuerta_68.numero                    AS SeguridadPuerta_68_numero               	-- 69	.Caja.SeguridadPuerta.numero                        		INTEGER
+				, SeguridadPuerta_68.nombre                    AS SeguridadPuerta_68_nombre               	-- 70	.Caja.SeguridadPuerta.nombre                        		VARCHAR(50)
+				, SeguridadPuerta_68.equate                    AS SeguridadPuerta_68_equate               	-- 71	.Caja.SeguridadPuerta.equate                        		VARCHAR(30)
+				, SeguridadPuerta_68.seguridadModulo           AS SeguridadPuerta_68_seguridadModulo      	-- 72	.Caja.SeguridadPuerta.seguridadModulo               		VARCHAR(36)	SeguridadModulo.id
+				, CuentaFondo.rechazados                       AS CuentaFondo_rechazados                  	-- 73	.rechazados                                         		BOOLEAN
+				, CuentaFondo.conciliacion                     AS CuentaFondo_conciliacion                	-- 74	.conciliacion                                       		BOOLEAN
+				, CuentaFondoTipoBanco_75.id                   AS CuentaFondoTipoBanco_75_id              	-- 75	.CuentaFondoTipoBanco.id                            		VARCHAR(36)
+				, CuentaFondoTipoBanco_75.numero               AS CuentaFondoTipoBanco_75_numero          	-- 76	.CuentaFondoTipoBanco.numero                        		INTEGER
+				, CuentaFondoTipoBanco_75.nombre               AS CuentaFondoTipoBanco_75_nombre          	-- 77	.CuentaFondoTipoBanco.nombre                        		VARCHAR(50)
+				, Banco_78.id                                  AS Banco_78_id                             	-- 78	.Banco.id                                           		VARCHAR(36)
+				, Banco_78.numero                              AS Banco_78_numero                         	-- 79	.Banco.numero                                       		INTEGER
+				, Banco_78.nombre                              AS Banco_78_nombre                         	-- 80	.Banco.nombre                                       		VARCHAR(50)
+				, Banco_78.cuit                                AS Banco_78_cuit                           	-- 81	.Banco.cuit                                         		BIGINT
+				, Banco_78.bloqueado                           AS Banco_78_bloqueado                      	-- 82	.Banco.bloqueado                                    		BOOLEAN
+				, Banco_78.hoja                                AS Banco_78_hoja                           	-- 83	.Banco.hoja                                         		INTEGER
+				, Banco_78.primeraFila                         AS Banco_78_primeraFila                    	-- 84	.Banco.primeraFila                                  		INTEGER
+				, Banco_78.ultimaFila                          AS Banco_78_ultimaFila                     	-- 85	.Banco.ultimaFila                                   		INTEGER
+				, Banco_78.fecha                               AS Banco_78_fecha                          	-- 86	.Banco.fecha                                        		VARCHAR(3)
+				, Banco_78.descripcion                         AS Banco_78_descripcion                    	-- 87	.Banco.descripcion                                  		VARCHAR(3)
+				, Banco_78.referencia1                         AS Banco_78_referencia1                    	-- 88	.Banco.referencia1                                  		VARCHAR(3)
+				, Banco_78.importe                             AS Banco_78_importe                        	-- 89	.Banco.importe                                      		VARCHAR(3)
+				, Banco_78.referencia2                         AS Banco_78_referencia2                    	-- 90	.Banco.referencia2                                  		VARCHAR(3)
+				, Banco_78.saldo                               AS Banco_78_saldo                          	-- 91	.Banco.saldo                                        		VARCHAR(3)
+				, CuentaFondo.cuentaBancaria                   AS CuentaFondo_cuentaBancaria              	-- 92	.cuentaBancaria                                     		VARCHAR(22)
+				, CuentaFondo.cbu                              AS CuentaFondo_cbu                         	-- 93	.cbu                                                		VARCHAR(22)
+				, CuentaFondo.limiteDescubierto                AS CuentaFondo_limiteDescubierto           	-- 94	.limiteDescubierto                                  		DECIMAL(13,5)
+				, CuentaFondo.cuentaFondoCaucion               AS CuentaFondo_cuentaFondoCaucion          	-- 95	.cuentaFondoCaucion                                 		VARCHAR(50)
+				, CuentaFondo.cuentaFondoDiferidos             AS CuentaFondo_cuentaFondoDiferidos        	-- 96	.cuentaFondoDiferidos                               		VARCHAR(50)
+				, CuentaFondo.formato                          AS CuentaFondo_formato                     	-- 97	.formato                                            		VARCHAR(50)
+				, CuentaFondoBancoCopia_98.id                  AS CuentaFondoBancoCopia_98_id             	-- 98	.CuentaFondoBancoCopia.id                           		VARCHAR(36)
+				, CuentaFondoBancoCopia_98.numero              AS CuentaFondoBancoCopia_98_numero         	-- 99	.CuentaFondoBancoCopia.numero                       		INTEGER
+				, CuentaFondoBancoCopia_98.nombre              AS CuentaFondoBancoCopia_98_nombre         	-- 100	.CuentaFondoBancoCopia.nombre                       		VARCHAR(50)
+				, CuentaFondo.limiteOperacionIndividual        AS CuentaFondo_limiteOperacionIndividual   	-- 101	.limiteOperacionIndividual                          		DECIMAL(13,5)
+				, SeguridadPuerta_102.id                       AS SeguridadPuerta_102_id                  	-- 102	.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_102.numero                   AS SeguridadPuerta_102_numero              	-- 103	.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_102.nombre                   AS SeguridadPuerta_102_nombre              	-- 104	.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_102.equate                   AS SeguridadPuerta_102_equate              	-- 105	.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_106.id                       AS SeguridadModulo_106_id                  	-- 106	.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_106.numero                   AS SeguridadModulo_106_numero              	-- 107	.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_106.nombre                   AS SeguridadModulo_106_nombre              	-- 108	.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+				, SeguridadPuerta_109.id                       AS SeguridadPuerta_109_id                  	-- 109	.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_109.numero                   AS SeguridadPuerta_109_numero              	-- 110	.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_109.nombre                   AS SeguridadPuerta_109_nombre              	-- 111	.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_109.equate                   AS SeguridadPuerta_109_equate              	-- 112	.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_113.id                       AS SeguridadModulo_113_id                  	-- 113	.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_113.numero                   AS SeguridadModulo_113_numero              	-- 114	.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_113.nombre                   AS SeguridadModulo_113_nombre              	-- 115	.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+				, SeguridadPuerta_116.id                       AS SeguridadPuerta_116_id                  	-- 116	.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_116.numero                   AS SeguridadPuerta_116_numero              	-- 117	.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_116.nombre                   AS SeguridadPuerta_116_nombre              	-- 118	.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_116.equate                   AS SeguridadPuerta_116_equate              	-- 119	.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_120.id                       AS SeguridadModulo_120_id                  	-- 120	.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_120.numero                   AS SeguridadModulo_120_numero              	-- 121	.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_120.nombre                   AS SeguridadModulo_120_nombre              	-- 122	.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondo
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_3                  ON CuentaFondo.cuentaContable = CuentaContable_3.id 	-- 3 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_6              ON CuentaContable_3.ejercicioContable = EjercicioContable_6.id 	-- 6 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_17           ON CuentaContable_3.cuentaContableEstado = CuentaContableEstado_17.id 	-- 17 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_21            ON CuentaContable_3.centroCostoContable = CentroCostoContable_21.id 	-- 21 LEFT LEVEL: 2
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_28                ON CuentaContable_3.puntoEquilibrio = PuntoEquilibrio_28.id 	-- 28 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_33                     ON CuentaContable_3.costoVenta = CostoVenta_33.id 	-- 33 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_36                ON CuentaContable_3.seguridadPuerta = SeguridadPuerta_36.id 	-- 36 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaFondoGrupo AS CuentaFondoGrupo_41               ON CuentaFondo.cuentaFondoGrupo = CuentaFondoGrupo_41.id 	-- 41 LEFT LEVEL: 1
+				LEFT JOIN massoftware.CuentaFondoRubro AS CuentaFondoRubro_44               ON CuentaFondoGrupo_41.cuentaFondoRubro = CuentaFondoRubro_44.id 	-- 44 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaFondoTipo AS CuentaFondoTipo_47                ON CuentaFondo.cuentaFondoTipo = CuentaFondoTipo_47.id 	-- 47 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Moneda AS Moneda_55                         ON CuentaFondo.moneda = Moneda_55.id 	-- 55 LEFT LEVEL: 1
+				LEFT JOIN massoftware.MonedaAFIP AS MonedaAFIP_62                     ON Moneda_55.monedaAFIP = MonedaAFIP_62.id 	-- 62 LEFT LEVEL: 2
+			LEFT JOIN massoftware.Caja AS Caja_65                           ON CuentaFondo.caja = Caja_65.id 	-- 65 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_68                ON Caja_65.seguridadPuerta = SeguridadPuerta_68.id 	-- 68 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaFondoTipoBanco AS CuentaFondoTipoBanco_75           ON CuentaFondo.cuentaFondoTipoBanco = CuentaFondoTipoBanco_75.id 	-- 75 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Banco AS Banco_78                          ON CuentaFondo.banco = Banco_78.id 	-- 78 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoBancoCopia AS CuentaFondoBancoCopia_98          ON CuentaFondo.cuentaFondoBancoCopia = CuentaFondoBancoCopia_98.id 	-- 98 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_102                ON CuentaFondo.seguridadPuertaUso = SeguridadPuerta_102.id 	-- 102 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_106               ON SeguridadPuerta_102.seguridadModulo = SeguridadModulo_106.id 	-- 106 LEFT LEVEL: 2
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_109                ON CuentaFondo.seguridadPuertaConsulta = SeguridadPuerta_109.id 	-- 109 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_113               ON SeguridadPuerta_109.seguridadModulo = SeguridadModulo_113.id 	-- 113 LEFT LEVEL: 2
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_116                ON CuentaFondo.seguridadPuertaLimite = SeguridadPuerta_116.id 	-- 116 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_120               ON SeguridadPuerta_116.seguridadModulo = SeguridadModulo_120.id 	-- 120 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND bancoArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(bancoArg8)) > 0 THEN
+		bancoArg8 = REPLACE(bancoArg8, '''', '''''');
+		bancoArg8 = LOWER(TRIM(bancoArg8));
+		bancoArg8 = TRANSLATE(bancoArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(bancoArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.banco),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoById_2 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoById_2 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CuentaFondo_2 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondo_2 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondo_2 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoById_2 ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondo_3 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondo_3 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bancoArg8         VARCHAR(36)	-- 8
+
+) RETURNS SETOF massoftware.t_CuentaFondo_3 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  CuentaFondo.id                             AS CuentaFondo_id                       	-- 0	.id                                                                		VARCHAR(36)
+				, CuentaFondo.numero                         AS CuentaFondo_numero                   	-- 1	.numero                                                            		INTEGER
+				, CuentaFondo.nombre                         AS CuentaFondo_nombre                   	-- 2	.nombre                                                            		VARCHAR(50)
+				, CuentaContable_3.id                        AS CuentaContable_3_id                  	-- 3	.CuentaContable.id                                                 		VARCHAR(36)
+				, CuentaContable_3.codigo                    AS CuentaContable_3_codigo              	-- 4	.CuentaContable.codigo                                             		VARCHAR(11)
+				, CuentaContable_3.nombre                    AS CuentaContable_3_nombre              	-- 5	.CuentaContable.nombre                                             		VARCHAR(50)
+				, EjercicioContable_6.id                     AS EjercicioContable_6_id               	-- 6	.CuentaContable.EjercicioContable.id                               		VARCHAR(36)
+				, EjercicioContable_6.numero                 AS EjercicioContable_6_numero           	-- 7	.CuentaContable.EjercicioContable.numero                           		INTEGER
+				, EjercicioContable_6.apertura               AS EjercicioContable_6_apertura         	-- 8	.CuentaContable.EjercicioContable.apertura                         		DATE
+				, EjercicioContable_6.cierre                 AS EjercicioContable_6_cierre           	-- 9	.CuentaContable.EjercicioContable.cierre                           		DATE
+				, EjercicioContable_6.cerrado                AS EjercicioContable_6_cerrado          	-- 10	.CuentaContable.EjercicioContable.cerrado                          		BOOLEAN
+				, EjercicioContable_6.cerradoModulos         AS EjercicioContable_6_cerradoModulos   	-- 11	.CuentaContable.EjercicioContable.cerradoModulos                   		BOOLEAN
+				, EjercicioContable_6.comentario             AS EjercicioContable_6_comentario       	-- 12	.CuentaContable.EjercicioContable.comentario                       		VARCHAR(250)
+				, CuentaContable_3.integra                   AS CuentaContable_3_integra             	-- 13	.CuentaContable.integra                                            		VARCHAR(16)
+				, CuentaContable_3.cuentaJerarquia           AS CuentaContable_3_cuentaJerarquia     	-- 14	.CuentaContable.cuentaJerarquia                                    		VARCHAR(16)
+				, CuentaContable_3.imputable                 AS CuentaContable_3_imputable           	-- 15	.CuentaContable.imputable                                          		BOOLEAN
+				, CuentaContable_3.ajustaPorInflacion        AS CuentaContable_3_ajustaPorInflacion  	-- 16	.CuentaContable.ajustaPorInflacion                                 		BOOLEAN
+				, CuentaContableEstado_17.id                 AS CuentaContableEstado_17_id           	-- 17	.CuentaContable.CuentaContableEstado.id                            		VARCHAR(36)
+				, CuentaContableEstado_17.numero             AS CuentaContableEstado_17_numero       	-- 18	.CuentaContable.CuentaContableEstado.numero                        		INTEGER
+				, CuentaContableEstado_17.nombre             AS CuentaContableEstado_17_nombre       	-- 19	.CuentaContable.CuentaContableEstado.nombre                        		VARCHAR(50)
+				, CuentaContable_3.cuentaConApropiacion      AS CuentaContable_3_cuentaConApropiacion	-- 20	.CuentaContable.cuentaConApropiacion                               		BOOLEAN
+				, CentroCostoContable_21.id                  AS CentroCostoContable_21_id            	-- 21	.CuentaContable.CentroCostoContable.id                             		VARCHAR(36)
+				, CentroCostoContable_21.numero              AS CentroCostoContable_21_numero        	-- 22	.CuentaContable.CentroCostoContable.numero                         		INTEGER
+				, CentroCostoContable_21.nombre              AS CentroCostoContable_21_nombre        	-- 23	.CuentaContable.CentroCostoContable.nombre                         		VARCHAR(50)
+				, CentroCostoContable_21.abreviatura         AS CentroCostoContable_21_abreviatura   	-- 24	.CuentaContable.CentroCostoContable.abreviatura                    		VARCHAR(5)
+				, EjercicioContable_25.id                    AS EjercicioContable_25_id              	-- 25	.CuentaContable.CentroCostoContable.EjercicioContable.id           		VARCHAR(36)
+				, EjercicioContable_25.numero                AS EjercicioContable_25_numero          	-- 26	.CuentaContable.CentroCostoContable.EjercicioContable.numero       		INTEGER
+				, EjercicioContable_25.apertura              AS EjercicioContable_25_apertura        	-- 27	.CuentaContable.CentroCostoContable.EjercicioContable.apertura     		DATE
+				, EjercicioContable_25.cierre                AS EjercicioContable_25_cierre          	-- 28	.CuentaContable.CentroCostoContable.EjercicioContable.cierre       		DATE
+				, EjercicioContable_25.cerrado               AS EjercicioContable_25_cerrado         	-- 29	.CuentaContable.CentroCostoContable.EjercicioContable.cerrado      		BOOLEAN
+				, EjercicioContable_25.cerradoModulos        AS EjercicioContable_25_cerradoModulos  	-- 30	.CuentaContable.CentroCostoContable.EjercicioContable.cerradoModulos		BOOLEAN
+				, EjercicioContable_25.comentario            AS EjercicioContable_25_comentario      	-- 31	.CuentaContable.CentroCostoContable.EjercicioContable.comentario   		VARCHAR(250)
+				, CuentaContable_3.cuentaAgrupadora          AS CuentaContable_3_cuentaAgrupadora    	-- 32	.CuentaContable.cuentaAgrupadora                                   		VARCHAR(50)
+				, CuentaContable_3.porcentaje                AS CuentaContable_3_porcentaje          	-- 33	.CuentaContable.porcentaje                                         		DECIMAL(6,3)
+				, PuntoEquilibrio_34.id                      AS PuntoEquilibrio_34_id                	-- 34	.CuentaContable.PuntoEquilibrio.id                                 		VARCHAR(36)
+				, PuntoEquilibrio_34.numero                  AS PuntoEquilibrio_34_numero            	-- 35	.CuentaContable.PuntoEquilibrio.numero                             		INTEGER
+				, PuntoEquilibrio_34.nombre                  AS PuntoEquilibrio_34_nombre            	-- 36	.CuentaContable.PuntoEquilibrio.nombre                             		VARCHAR(50)
+				, TipoPuntoEquilibrio_37.id                  AS TipoPuntoEquilibrio_37_id            	-- 37	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.id             		VARCHAR(36)
+				, TipoPuntoEquilibrio_37.numero              AS TipoPuntoEquilibrio_37_numero        	-- 38	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.numero         		INTEGER
+				, TipoPuntoEquilibrio_37.nombre              AS TipoPuntoEquilibrio_37_nombre        	-- 39	.CuentaContable.PuntoEquilibrio.TipoPuntoEquilibrio.nombre         		VARCHAR(50)
+				, EjercicioContable_40.id                    AS EjercicioContable_40_id              	-- 40	.CuentaContable.PuntoEquilibrio.EjercicioContable.id               		VARCHAR(36)
+				, EjercicioContable_40.numero                AS EjercicioContable_40_numero          	-- 41	.CuentaContable.PuntoEquilibrio.EjercicioContable.numero           		INTEGER
+				, EjercicioContable_40.apertura              AS EjercicioContable_40_apertura        	-- 42	.CuentaContable.PuntoEquilibrio.EjercicioContable.apertura         		DATE
+				, EjercicioContable_40.cierre                AS EjercicioContable_40_cierre          	-- 43	.CuentaContable.PuntoEquilibrio.EjercicioContable.cierre           		DATE
+				, EjercicioContable_40.cerrado               AS EjercicioContable_40_cerrado         	-- 44	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerrado          		BOOLEAN
+				, EjercicioContable_40.cerradoModulos        AS EjercicioContable_40_cerradoModulos  	-- 45	.CuentaContable.PuntoEquilibrio.EjercicioContable.cerradoModulos   		BOOLEAN
+				, EjercicioContable_40.comentario            AS EjercicioContable_40_comentario      	-- 46	.CuentaContable.PuntoEquilibrio.EjercicioContable.comentario       		VARCHAR(250)
+				, CostoVenta_47.id                           AS CostoVenta_47_id                     	-- 47	.CuentaContable.CostoVenta.id                                      		VARCHAR(36)
+				, CostoVenta_47.numero                       AS CostoVenta_47_numero                 	-- 48	.CuentaContable.CostoVenta.numero                                  		INTEGER
+				, CostoVenta_47.nombre                       AS CostoVenta_47_nombre                 	-- 49	.CuentaContable.CostoVenta.nombre                                  		VARCHAR(50)
+				, SeguridadPuerta_50.id                      AS SeguridadPuerta_50_id                	-- 50	.CuentaContable.SeguridadPuerta.id                                 		VARCHAR(36)
+				, SeguridadPuerta_50.numero                  AS SeguridadPuerta_50_numero            	-- 51	.CuentaContable.SeguridadPuerta.numero                             		INTEGER
+				, SeguridadPuerta_50.nombre                  AS SeguridadPuerta_50_nombre            	-- 52	.CuentaContable.SeguridadPuerta.nombre                             		VARCHAR(50)
+				, SeguridadPuerta_50.equate                  AS SeguridadPuerta_50_equate            	-- 53	.CuentaContable.SeguridadPuerta.equate                             		VARCHAR(30)
+				, SeguridadModulo_54.id                      AS SeguridadModulo_54_id                	-- 54	.CuentaContable.SeguridadPuerta.SeguridadModulo.id                 		VARCHAR(36)
+				, SeguridadModulo_54.numero                  AS SeguridadModulo_54_numero            	-- 55	.CuentaContable.SeguridadPuerta.SeguridadModulo.numero             		INTEGER
+				, SeguridadModulo_54.nombre                  AS SeguridadModulo_54_nombre            	-- 56	.CuentaContable.SeguridadPuerta.SeguridadModulo.nombre             		VARCHAR(50)
+				, CuentaFondoGrupo_57.id                     AS CuentaFondoGrupo_57_id               	-- 57	.CuentaFondoGrupo.id                                               		VARCHAR(36)
+				, CuentaFondoGrupo_57.numero                 AS CuentaFondoGrupo_57_numero           	-- 58	.CuentaFondoGrupo.numero                                           		INTEGER
+				, CuentaFondoGrupo_57.nombre                 AS CuentaFondoGrupo_57_nombre           	-- 59	.CuentaFondoGrupo.nombre                                           		VARCHAR(50)
+				, CuentaFondoRubro_60.id                     AS CuentaFondoRubro_60_id               	-- 60	.CuentaFondoGrupo.CuentaFondoRubro.id                              		VARCHAR(36)
+				, CuentaFondoRubro_60.numero                 AS CuentaFondoRubro_60_numero           	-- 61	.CuentaFondoGrupo.CuentaFondoRubro.numero                          		INTEGER
+				, CuentaFondoRubro_60.nombre                 AS CuentaFondoRubro_60_nombre           	-- 62	.CuentaFondoGrupo.CuentaFondoRubro.nombre                          		VARCHAR(50)
+				, CuentaFondoTipo_63.id                      AS CuentaFondoTipo_63_id                	-- 63	.CuentaFondoTipo.id                                                		VARCHAR(36)
+				, CuentaFondoTipo_63.numero                  AS CuentaFondoTipo_63_numero            	-- 64	.CuentaFondoTipo.numero                                            		INTEGER
+				, CuentaFondoTipo_63.nombre                  AS CuentaFondoTipo_63_nombre            	-- 65	.CuentaFondoTipo.nombre                                            		VARCHAR(50)
+				, CuentaFondo.obsoleto                       AS CuentaFondo_obsoleto                 	-- 66	.obsoleto                                                          		BOOLEAN
+				, CuentaFondo.noImprimeCaja                  AS CuentaFondo_noImprimeCaja            	-- 67	.noImprimeCaja                                                     		BOOLEAN
+				, CuentaFondo.ventas                         AS CuentaFondo_ventas                   	-- 68	.ventas                                                            		BOOLEAN
+				, CuentaFondo.fondos                         AS CuentaFondo_fondos                   	-- 69	.fondos                                                            		BOOLEAN
+				, CuentaFondo.compras                        AS CuentaFondo_compras                  	-- 70	.compras                                                           		BOOLEAN
+				, Moneda_71.id                               AS Moneda_71_id                         	-- 71	.Moneda.id                                                         		VARCHAR(36)
+				, Moneda_71.numero                           AS Moneda_71_numero                     	-- 72	.Moneda.numero                                                     		INTEGER
+				, Moneda_71.nombre                           AS Moneda_71_nombre                     	-- 73	.Moneda.nombre                                                     		VARCHAR(50)
+				, Moneda_71.abreviatura                      AS Moneda_71_abreviatura                	-- 74	.Moneda.abreviatura                                                		VARCHAR(5)
+				, Moneda_71.cotizacion                       AS Moneda_71_cotizacion                 	-- 75	.Moneda.cotizacion                                                 		DECIMAL(13,5)
+				, Moneda_71.cotizacionFecha                  AS Moneda_71_cotizacionFecha            	-- 76	.Moneda.cotizacionFecha                                            		TIMESTAMP
+				, Moneda_71.controlActualizacion             AS Moneda_71_controlActualizacion       	-- 77	.Moneda.controlActualizacion                                       		BOOLEAN
+				, MonedaAFIP_78.id                           AS MonedaAFIP_78_id                     	-- 78	.Moneda.MonedaAFIP.id                                              		VARCHAR(36)
+				, MonedaAFIP_78.codigo                       AS MonedaAFIP_78_codigo                 	-- 79	.Moneda.MonedaAFIP.codigo                                          		VARCHAR(3)
+				, MonedaAFIP_78.nombre                       AS MonedaAFIP_78_nombre                 	-- 80	.Moneda.MonedaAFIP.nombre                                          		VARCHAR(50)
+				, Caja_81.id                                 AS Caja_81_id                           	-- 81	.Caja.id                                                           		VARCHAR(36)
+				, Caja_81.numero                             AS Caja_81_numero                       	-- 82	.Caja.numero                                                       		INTEGER
+				, Caja_81.nombre                             AS Caja_81_nombre                       	-- 83	.Caja.nombre                                                       		VARCHAR(50)
+				, SeguridadPuerta_84.id                      AS SeguridadPuerta_84_id                	-- 84	.Caja.SeguridadPuerta.id                                           		VARCHAR(36)
+				, SeguridadPuerta_84.numero                  AS SeguridadPuerta_84_numero            	-- 85	.Caja.SeguridadPuerta.numero                                       		INTEGER
+				, SeguridadPuerta_84.nombre                  AS SeguridadPuerta_84_nombre            	-- 86	.Caja.SeguridadPuerta.nombre                                       		VARCHAR(50)
+				, SeguridadPuerta_84.equate                  AS SeguridadPuerta_84_equate            	-- 87	.Caja.SeguridadPuerta.equate                                       		VARCHAR(30)
+				, SeguridadModulo_88.id                      AS SeguridadModulo_88_id                	-- 88	.Caja.SeguridadPuerta.SeguridadModulo.id                           		VARCHAR(36)
+				, SeguridadModulo_88.numero                  AS SeguridadModulo_88_numero            	-- 89	.Caja.SeguridadPuerta.SeguridadModulo.numero                       		INTEGER
+				, SeguridadModulo_88.nombre                  AS SeguridadModulo_88_nombre            	-- 90	.Caja.SeguridadPuerta.SeguridadModulo.nombre                       		VARCHAR(50)
+				, CuentaFondo.rechazados                     AS CuentaFondo_rechazados               	-- 91	.rechazados                                                        		BOOLEAN
+				, CuentaFondo.conciliacion                   AS CuentaFondo_conciliacion             	-- 92	.conciliacion                                                      		BOOLEAN
+				, CuentaFondoTipoBanco_93.id                 AS CuentaFondoTipoBanco_93_id           	-- 93	.CuentaFondoTipoBanco.id                                           		VARCHAR(36)
+				, CuentaFondoTipoBanco_93.numero             AS CuentaFondoTipoBanco_93_numero       	-- 94	.CuentaFondoTipoBanco.numero                                       		INTEGER
+				, CuentaFondoTipoBanco_93.nombre             AS CuentaFondoTipoBanco_93_nombre       	-- 95	.CuentaFondoTipoBanco.nombre                                       		VARCHAR(50)
+				, Banco_96.id                                AS Banco_96_id                          	-- 96	.Banco.id                                                          		VARCHAR(36)
+				, Banco_96.numero                            AS Banco_96_numero                      	-- 97	.Banco.numero                                                      		INTEGER
+				, Banco_96.nombre                            AS Banco_96_nombre                      	-- 98	.Banco.nombre                                                      		VARCHAR(50)
+				, Banco_96.cuit                              AS Banco_96_cuit                        	-- 99	.Banco.cuit                                                        		BIGINT
+				, Banco_96.bloqueado                         AS Banco_96_bloqueado                   	-- 100	.Banco.bloqueado                                                   		BOOLEAN
+				, Banco_96.hoja                              AS Banco_96_hoja                        	-- 101	.Banco.hoja                                                        		INTEGER
+				, Banco_96.primeraFila                       AS Banco_96_primeraFila                 	-- 102	.Banco.primeraFila                                                 		INTEGER
+				, Banco_96.ultimaFila                        AS Banco_96_ultimaFila                  	-- 103	.Banco.ultimaFila                                                  		INTEGER
+				, Banco_96.fecha                             AS Banco_96_fecha                       	-- 104	.Banco.fecha                                                       		VARCHAR(3)
+				, Banco_96.descripcion                       AS Banco_96_descripcion                 	-- 105	.Banco.descripcion                                                 		VARCHAR(3)
+				, Banco_96.referencia1                       AS Banco_96_referencia1                 	-- 106	.Banco.referencia1                                                 		VARCHAR(3)
+				, Banco_96.importe                           AS Banco_96_importe                     	-- 107	.Banco.importe                                                     		VARCHAR(3)
+				, Banco_96.referencia2                       AS Banco_96_referencia2                 	-- 108	.Banco.referencia2                                                 		VARCHAR(3)
+				, Banco_96.saldo                             AS Banco_96_saldo                       	-- 109	.Banco.saldo                                                       		VARCHAR(3)
+				, CuentaFondo.cuentaBancaria                 AS CuentaFondo_cuentaBancaria           	-- 110	.cuentaBancaria                                                    		VARCHAR(22)
+				, CuentaFondo.cbu                            AS CuentaFondo_cbu                      	-- 111	.cbu                                                               		VARCHAR(22)
+				, CuentaFondo.limiteDescubierto              AS CuentaFondo_limiteDescubierto        	-- 112	.limiteDescubierto                                                 		DECIMAL(13,5)
+				, CuentaFondo.cuentaFondoCaucion             AS CuentaFondo_cuentaFondoCaucion       	-- 113	.cuentaFondoCaucion                                                		VARCHAR(50)
+				, CuentaFondo.cuentaFondoDiferidos           AS CuentaFondo_cuentaFondoDiferidos     	-- 114	.cuentaFondoDiferidos                                              		VARCHAR(50)
+				, CuentaFondo.formato                        AS CuentaFondo_formato                  	-- 115	.formato                                                           		VARCHAR(50)
+				, CuentaFondoBancoCopia_116.id               AS CuentaFondoBancoCopia_116_id         	-- 116	.CuentaFondoBancoCopia.id                                          		VARCHAR(36)
+				, CuentaFondoBancoCopia_116.numero           AS CuentaFondoBancoCopia_116_numero     	-- 117	.CuentaFondoBancoCopia.numero                                      		INTEGER
+				, CuentaFondoBancoCopia_116.nombre           AS CuentaFondoBancoCopia_116_nombre     	-- 118	.CuentaFondoBancoCopia.nombre                                      		VARCHAR(50)
+				, CuentaFondo.limiteOperacionIndividual      AS CuentaFondo_limiteOperacionIndividual	-- 119	.limiteOperacionIndividual                                         		DECIMAL(13,5)
+				, SeguridadPuerta_120.id                     AS SeguridadPuerta_120_id               	-- 120	.SeguridadPuerta.id                                                		VARCHAR(36)
+				, SeguridadPuerta_120.numero                 AS SeguridadPuerta_120_numero           	-- 121	.SeguridadPuerta.numero                                            		INTEGER
+				, SeguridadPuerta_120.nombre                 AS SeguridadPuerta_120_nombre           	-- 122	.SeguridadPuerta.nombre                                            		VARCHAR(50)
+				, SeguridadPuerta_120.equate                 AS SeguridadPuerta_120_equate           	-- 123	.SeguridadPuerta.equate                                            		VARCHAR(30)
+				, SeguridadModulo_124.id                     AS SeguridadModulo_124_id               	-- 124	.SeguridadPuerta.SeguridadModulo.id                                		VARCHAR(36)
+				, SeguridadModulo_124.numero                 AS SeguridadModulo_124_numero           	-- 125	.SeguridadPuerta.SeguridadModulo.numero                            		INTEGER
+				, SeguridadModulo_124.nombre                 AS SeguridadModulo_124_nombre           	-- 126	.SeguridadPuerta.SeguridadModulo.nombre                            		VARCHAR(50)
+				, SeguridadPuerta_127.id                     AS SeguridadPuerta_127_id               	-- 127	.SeguridadPuerta.id                                                		VARCHAR(36)
+				, SeguridadPuerta_127.numero                 AS SeguridadPuerta_127_numero           	-- 128	.SeguridadPuerta.numero                                            		INTEGER
+				, SeguridadPuerta_127.nombre                 AS SeguridadPuerta_127_nombre           	-- 129	.SeguridadPuerta.nombre                                            		VARCHAR(50)
+				, SeguridadPuerta_127.equate                 AS SeguridadPuerta_127_equate           	-- 130	.SeguridadPuerta.equate                                            		VARCHAR(30)
+				, SeguridadModulo_131.id                     AS SeguridadModulo_131_id               	-- 131	.SeguridadPuerta.SeguridadModulo.id                                		VARCHAR(36)
+				, SeguridadModulo_131.numero                 AS SeguridadModulo_131_numero           	-- 132	.SeguridadPuerta.SeguridadModulo.numero                            		INTEGER
+				, SeguridadModulo_131.nombre                 AS SeguridadModulo_131_nombre           	-- 133	.SeguridadPuerta.SeguridadModulo.nombre                            		VARCHAR(50)
+				, SeguridadPuerta_134.id                     AS SeguridadPuerta_134_id               	-- 134	.SeguridadPuerta.id                                                		VARCHAR(36)
+				, SeguridadPuerta_134.numero                 AS SeguridadPuerta_134_numero           	-- 135	.SeguridadPuerta.numero                                            		INTEGER
+				, SeguridadPuerta_134.nombre                 AS SeguridadPuerta_134_nombre           	-- 136	.SeguridadPuerta.nombre                                            		VARCHAR(50)
+				, SeguridadPuerta_134.equate                 AS SeguridadPuerta_134_equate           	-- 137	.SeguridadPuerta.equate                                            		VARCHAR(30)
+				, SeguridadModulo_138.id                     AS SeguridadModulo_138_id               	-- 138	.SeguridadPuerta.SeguridadModulo.id                                		VARCHAR(36)
+				, SeguridadModulo_138.numero                 AS SeguridadModulo_138_numero           	-- 139	.SeguridadPuerta.SeguridadModulo.numero                            		INTEGER
+				, SeguridadModulo_138.nombre                 AS SeguridadModulo_138_nombre           	-- 140	.SeguridadPuerta.SeguridadModulo.nombre                            		VARCHAR(50)
+
+		FROM	massoftware.CuentaFondo
+			LEFT JOIN massoftware.CuentaContable AS CuentaContable_3                    ON CuentaFondo.cuentaContable = CuentaContable_3.id 	-- 3 LEFT LEVEL: 1
+				LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_6                ON CuentaContable_3.ejercicioContable = EjercicioContable_6.id 	-- 6 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CuentaContableEstado AS CuentaContableEstado_17             ON CuentaContable_3.cuentaContableEstado = CuentaContableEstado_17.id 	-- 17 LEFT LEVEL: 2
+				LEFT JOIN massoftware.CentroCostoContable AS CentroCostoContable_21              ON CuentaContable_3.centroCostoContable = CentroCostoContable_21.id 	-- 21 LEFT LEVEL: 2
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_25               ON CentroCostoContable_21.ejercicioContable = EjercicioContable_25.id 	-- 25 LEFT LEVEL: 3
+				LEFT JOIN massoftware.PuntoEquilibrio AS PuntoEquilibrio_34                  ON CuentaContable_3.puntoEquilibrio = PuntoEquilibrio_34.id 	-- 34 LEFT LEVEL: 2
+					LEFT JOIN massoftware.TipoPuntoEquilibrio AS TipoPuntoEquilibrio_37             ON PuntoEquilibrio_34.tipoPuntoEquilibrio = TipoPuntoEquilibrio_37.id 	-- 37 LEFT LEVEL: 3
+					LEFT JOIN massoftware.EjercicioContable AS EjercicioContable_40               ON PuntoEquilibrio_34.ejercicioContable = EjercicioContable_40.id 	-- 40 LEFT LEVEL: 3
+				LEFT JOIN massoftware.CostoVenta AS CostoVenta_47                       ON CuentaContable_3.costoVenta = CostoVenta_47.id 	-- 47 LEFT LEVEL: 2
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_50                  ON CuentaContable_3.seguridadPuerta = SeguridadPuerta_50.id 	-- 50 LEFT LEVEL: 2
+					LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_54                 ON SeguridadPuerta_50.seguridadModulo = SeguridadModulo_54.id 	-- 54 LEFT LEVEL: 3
+			LEFT JOIN massoftware.CuentaFondoGrupo AS CuentaFondoGrupo_57                 ON CuentaFondo.cuentaFondoGrupo = CuentaFondoGrupo_57.id 	-- 57 LEFT LEVEL: 1
+				LEFT JOIN massoftware.CuentaFondoRubro AS CuentaFondoRubro_60                 ON CuentaFondoGrupo_57.cuentaFondoRubro = CuentaFondoRubro_60.id 	-- 60 LEFT LEVEL: 2
+			LEFT JOIN massoftware.CuentaFondoTipo AS CuentaFondoTipo_63                  ON CuentaFondo.cuentaFondoTipo = CuentaFondoTipo_63.id 	-- 63 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Moneda AS Moneda_71                           ON CuentaFondo.moneda = Moneda_71.id 	-- 71 LEFT LEVEL: 1
+				LEFT JOIN massoftware.MonedaAFIP AS MonedaAFIP_78                       ON Moneda_71.monedaAFIP = MonedaAFIP_78.id 	-- 78 LEFT LEVEL: 2
+			LEFT JOIN massoftware.Caja AS Caja_81                             ON CuentaFondo.caja = Caja_81.id 	-- 81 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_84                  ON Caja_81.seguridadPuerta = SeguridadPuerta_84.id 	-- 84 LEFT LEVEL: 2
+					LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_88                 ON SeguridadPuerta_84.seguridadModulo = SeguridadModulo_88.id 	-- 88 LEFT LEVEL: 3
+			LEFT JOIN massoftware.CuentaFondoTipoBanco AS CuentaFondoTipoBanco_93             ON CuentaFondo.cuentaFondoTipoBanco = CuentaFondoTipoBanco_93.id 	-- 93 LEFT LEVEL: 1
+			LEFT JOIN massoftware.Banco AS Banco_96                            ON CuentaFondo.banco = Banco_96.id 	-- 96 LEFT LEVEL: 1
+			LEFT JOIN massoftware.CuentaFondoBancoCopia AS CuentaFondoBancoCopia_116            ON CuentaFondo.cuentaFondoBancoCopia = CuentaFondoBancoCopia_116.id 	-- 116 LEFT LEVEL: 1
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_120                  ON CuentaFondo.seguridadPuertaUso = SeguridadPuerta_120.id 	-- 120 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_124                 ON SeguridadPuerta_120.seguridadModulo = SeguridadModulo_124.id 	-- 124 LEFT LEVEL: 2
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_127                  ON CuentaFondo.seguridadPuertaConsulta = SeguridadPuerta_127.id 	-- 127 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_131                 ON SeguridadPuerta_127.seguridadModulo = SeguridadModulo_131.id 	-- 131 LEFT LEVEL: 2
+			LEFT JOIN massoftware.SeguridadPuerta AS SeguridadPuerta_134                  ON CuentaFondo.seguridadPuertaLimite = SeguridadPuerta_134.id 	-- 134 LEFT LEVEL: 1
+				LEFT JOIN massoftware.SeguridadModulo AS SeguridadModulo_138                 ON SeguridadPuerta_134.seguridadModulo = SeguridadModulo_138.id 	-- 138 LEFT LEVEL: 2
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' CuentaFondo.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND bancoArg8 IS NOT NULL AND CHAR_LENGTH(TRIM(bancoArg8)) > 0 THEN
+		bancoArg8 = REPLACE(bancoArg8, '''', '''''');
+		bancoArg8 = LOWER(TRIM(bancoArg8));
+		bancoArg8 = TRANSLATE(bancoArg8,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(bancoArg8, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(CuentaFondo.banco),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_CuentaFondoById_3 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_CuentaFondoById_3 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_CuentaFondo_3 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_CuentaFondo_3 ( idArg , null, null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_CuentaFondo_3 ( null , null, null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_CuentaFondoById_3 ('xxx'); 

@@ -1,6 +1,6 @@
 package com.massoftware.windows.modelos_cbtes_fondos;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class ModelosCbtesFondos {
 

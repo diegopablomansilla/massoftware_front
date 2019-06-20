@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import javax.servlet.annotation.WebServlet;
 
-import com.massoftware.windows.LogAndNotification;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;

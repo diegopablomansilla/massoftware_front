@@ -1,6 +1,6 @@
 package com.massoftware.windows.firmantes;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class FirmantesOld {
 

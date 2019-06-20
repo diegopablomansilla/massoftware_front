@@ -108,7 +108,22 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail' align='right'>uuid_generate_v4()</td>
- <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="cuentafondo.moneda refs moneda.id via cuentafondo_moneda_fkey"><a href='cuentafondo.html'>cuentafondo</a><span class='relatedKey'>.moneda</span>
+    </td>
+    <td class='constraint detail'>cuentafondo_moneda_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="monedacotizacion.moneda refs moneda.id via monedacotizacion_moneda_fkey"><a href='monedacotizacion.html'>monedacotizacion</a><span class='relatedKey'>.moneda</span>
+    </td>
+    <td class='constraint detail'>monedacotizacion_moneda_fkey<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+</td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
@@ -199,7 +214,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='8 columns'>Table contained 266 rows at mié jun 19 12:34 ART 2019<p/>
+<p title='8 columns'>Table contained 264 rows at jue jun 20 16:21 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -245,11 +260,32 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </table>
 </div>
 <table width='100%' border='0'><tr><td class='container'>
-<br><form action='get'><b>Close relationships:</b></form><map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" href="moneda.html" title="moneda" alt="" coords="193,8,473,250" >
-<area shape="rect" href="monedaafip.html" title="monedaafip" alt="" coords="7,168,149,293" >
+<br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from moneda'>
+&nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
+<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="517,7,712,698" >
+<area shape="rect" href="moneda.html" title="moneda" alt="" coords="193,541,473,783" >
+<area shape="rect" href="monedaafip.html" title="monedaafip" alt="" coords="8,701,149,826" >
+<area shape="rect" href="monedacotizacion.html" title="monedacotizacion" alt="" coords="520,715,709,931" >
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/moneda.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
+<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" href="caja.html" title="caja" alt="" coords="268,300,420,380" >
+<area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="8,664,160,744" >
+<area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="269,8,418,88" >
+<area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="528,76,722,766" >
+<area shape="rect" href="banco.html" title="banco" alt="" coords="273,494,414,574" >
+<area shape="rect" href="cuentafondobancocopia.html" title="cuentafondobancocopia" alt="" coords="249,592,438,672" >
+<area shape="rect" href="cuentafondogrupo.html" title="cuentafondogrupo" alt="" coords="268,105,420,185" >
+<area shape="rect" href="cuentafondotipo.html" title="cuentafondotipo" alt="" coords="273,202,414,282" >
+<area shape="rect" href="cuentafondotipobanco.html" title="cuentafondotipobanco" alt="" coords="254,397,433,477" >
+<area shape="rect" href="moneda.html" title="moneda" alt="" coords="204,757,484,1000" >
+<area shape="rect" href="monedaafip.html" title="monedaafip" alt="" coords="13,917,154,1042" >
+<area shape="rect" href="monedacotizacion.html" title="monedacotizacion" alt="" coords="530,832,720,1048" >
+<area shape="rect" href="usuario.html" title="usuario" alt="" coords="273,1017,414,1097" >
+</map>
+
+  <a name='diagram'><img id='twoDegreesImg' src='../diagrams/moneda.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 </td></tr></table>
 </div>
 </body>

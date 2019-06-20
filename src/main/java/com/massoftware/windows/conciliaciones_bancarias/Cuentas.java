@@ -1,6 +1,6 @@
 package com.massoftware.windows.conciliaciones_bancarias;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class Cuentas {
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.massoftware.model.geo.Pais;
 import com.massoftware.service.geo.PaisFiltro;
-import com.massoftware.windows.UtilUI;
+import com.massoftware.x.util.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Grid.Column;

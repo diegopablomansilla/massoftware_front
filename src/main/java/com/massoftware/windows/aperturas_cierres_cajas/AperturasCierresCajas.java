@@ -2,7 +2,7 @@ package com.massoftware.windows.aperturas_cierres_cajas;
 
 import java.sql.Timestamp;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class AperturasCierresCajas {
 

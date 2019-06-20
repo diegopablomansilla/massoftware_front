@@ -999,94 +999,6 @@ CREATE TRIGGER tgFormatMonedaAFIP BEFORE INSERT OR UPDATE
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
--- //          TABLA: Moneda                                                                                                 //
--- //                                                                                                                        //
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.Moneda
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-DROP TABLE IF EXISTS massoftware.Moneda CASCADE;
-
-CREATE TABLE massoftware.Moneda
-(
-	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
-	
-	-- Nº moneda
-	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Moneda_numero_chk CHECK ( numero >= 1  ), 
-	
-	-- Nombre
-	nombre VARCHAR(50) NOT NULL, 
-	
-	-- Abreviatura
-	abreviatura VARCHAR(5) NOT NULL, 
-	
-	-- Cotización
-	cotizacion DECIMAL(13,5) NOT NULL  CONSTRAINT Moneda_cotizacion_chk CHECK ( cotizacion >= -9999.9999 AND cotizacion <= 99999.9999  ), 
-	
-	-- Fecha cotización
-	cotizacionFecha TIMESTAMP NOT NULL, 
-	
-	-- Control de actualizacion
-	controlActualizacion BOOLEAN NOT NULL, 
-	
-	-- Moneda AFIP
-	monedaAFIP VARCHAR(36)  NOT NULL  REFERENCES massoftware.MonedaAFIP (id)
-);
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-CREATE UNIQUE INDEX u_Moneda_nombre ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(nombre))
-	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
-	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
-
-CREATE UNIQUE INDEX u_Moneda_abreviatura ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(abreviatura))
-	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
-	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP FUNCTION IF EXISTS massoftware.ftgFormatMoneda() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.ftgFormatMoneda() RETURNS TRIGGER AS $formatMoneda$
-DECLARE
-BEGIN
-	 NEW.id := massoftware.white_is_null(NEW.id);
-	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
-	 NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);
-	 NEW.monedaAFIP := massoftware.white_is_null(NEW.monedaAFIP);
-
-	RETURN NEW;
-END;
-$formatMoneda$ LANGUAGE plpgsql;
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-DROP TRIGGER IF EXISTS tgFormatMoneda ON massoftware.Moneda CASCADE;
-
-CREATE TRIGGER tgFormatMoneda BEFORE INSERT OR UPDATE
-	ON massoftware.Moneda FOR EACH ROW
-	EXECUTE PROCEDURE massoftware.ftgFormatMoneda();
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-
--- SELECT COUNT(*) FROM massoftware.Moneda;
-
--- SELECT * FROM massoftware.Moneda LIMIT 100 OFFSET 0;
-
--- SELECT * FROM massoftware.Moneda;
-
--- SELECT * FROM massoftware.Moneda WHERE id = 'xxx';
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //                                                                                                                        //
 -- //          TABLA: NotaCreditoMotivo                                                                                      //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2847,6 +2759,170 @@ CREATE TRIGGER tgFormatEmpresa BEFORE INSERT OR UPDATE
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: Moneda                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Moneda
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Moneda CASCADE;
+
+CREATE TABLE massoftware.Moneda
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº moneda
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Moneda_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Abreviatura
+	abreviatura VARCHAR(5) NOT NULL, 
+	
+	-- Cotización
+	cotizacion DECIMAL(13,5) NOT NULL  CONSTRAINT Moneda_cotizacion_chk CHECK ( cotizacion >= -9999.9999 AND cotizacion <= 99999.9999  ), 
+	
+	-- Fecha cotización
+	cotizacionFecha TIMESTAMP NOT NULL, 
+	
+	-- Control de actualizacion
+	controlActualizacion BOOLEAN NOT NULL, 
+	
+	-- Moneda AFIP
+	monedaAFIP VARCHAR(36)  NOT NULL  REFERENCES massoftware.MonedaAFIP (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Moneda_nombre ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_Moneda_abreviatura ON massoftware.Moneda (TRANSLATE(LOWER(TRIM(abreviatura))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMoneda() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMoneda() RETURNS TRIGGER AS $formatMoneda$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.abreviatura := massoftware.white_is_null(NEW.abreviatura);
+	 NEW.monedaAFIP := massoftware.white_is_null(NEW.monedaAFIP);
+
+	RETURN NEW;
+END;
+$formatMoneda$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMoneda ON massoftware.Moneda CASCADE;
+
+CREATE TRIGGER tgFormatMoneda BEFORE INSERT OR UPDATE
+	ON massoftware.Moneda FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatMoneda();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Moneda;
+
+-- SELECT * FROM massoftware.Moneda LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Moneda;
+
+-- SELECT * FROM massoftware.Moneda WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MonedaCotizacion                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaCotizacion
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.MonedaCotizacion CASCADE;
+
+CREATE TABLE massoftware.MonedaCotizacion
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Fecha cotización
+	cotizacionFecha TIMESTAMP NOT NULL, 
+	
+	-- Compra
+	compra DECIMAL(13,5) NOT NULL  CONSTRAINT MonedaCotizacion_compra_chk CHECK ( compra >= -9999.9999 AND compra <= 99999.9999  ), 
+	
+	-- Venta
+	venta DECIMAL(13,5) NOT NULL  CONSTRAINT MonedaCotizacion_venta_chk CHECK ( venta >= -9999.9999 AND venta <= 99999.9999  ), 
+	
+	-- Fecha cotización (Auditoria)
+	cotizacionFechaAuditoria TIMESTAMP NOT NULL, 
+	
+	-- Moneda
+	moneda VARCHAR(36)  NOT NULL  REFERENCES massoftware.Moneda (id), 
+	
+	-- Usuario
+	usuario VARCHAR(36)  NOT NULL  REFERENCES massoftware.Usuario (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatMonedaCotizacion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatMonedaCotizacion() RETURNS TRIGGER AS $formatMonedaCotizacion$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.moneda := massoftware.white_is_null(NEW.moneda);
+	 NEW.usuario := massoftware.white_is_null(NEW.usuario);
+
+	RETURN NEW;
+END;
+$formatMonedaCotizacion$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatMonedaCotizacion ON massoftware.MonedaCotizacion CASCADE;
+
+CREATE TRIGGER tgFormatMonedaCotizacion BEFORE INSERT OR UPDATE
+	ON massoftware.MonedaCotizacion FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatMonedaCotizacion();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.MonedaCotizacion;
+
+-- SELECT * FROM massoftware.MonedaCotizacion LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.MonedaCotizacion;
+
+-- SELECT * FROM massoftware.MonedaCotizacion WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Banco                                                                                                  //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3027,3 +3103,571 @@ CREATE TRIGGER tgFormatBancoFirmante BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.BancoFirmante;
 
 -- SELECT * FROM massoftware.BancoFirmante WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Caja                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Caja
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Caja CASCADE;
+
+CREATE TABLE massoftware.Caja
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº caja
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Caja_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Puerta
+	seguridadPuerta VARCHAR(36)  REFERENCES massoftware.SeguridadPuerta (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Caja_nombre ON massoftware.Caja (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCaja() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCaja() RETURNS TRIGGER AS $formatCaja$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.seguridadPuerta := massoftware.white_is_null(NEW.seguridadPuerta);
+
+	RETURN NEW;
+END;
+$formatCaja$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCaja ON massoftware.Caja CASCADE;
+
+CREATE TRIGGER tgFormatCaja BEFORE INSERT OR UPDATE
+	ON massoftware.Caja FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCaja();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Caja;
+
+-- SELECT * FROM massoftware.Caja LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Caja;
+
+-- SELECT * FROM massoftware.Caja WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoTipo CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoTipo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº tipo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondoTipo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondoTipo_nombre ON massoftware.CuentaFondoTipo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoTipo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoTipo() RETURNS TRIGGER AS $formatCuentaFondoTipo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatCuentaFondoTipo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoTipo ON massoftware.CuentaFondoTipo CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoTipo BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondoTipo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoTipo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondoTipo;
+
+-- SELECT * FROM massoftware.CuentaFondoTipo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondoTipo;
+
+-- SELECT * FROM massoftware.CuentaFondoTipo WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoRubro                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoRubro
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoRubro CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoRubro
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº rubro
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondoRubro_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondoRubro_nombre ON massoftware.CuentaFondoRubro (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoRubro() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoRubro() RETURNS TRIGGER AS $formatCuentaFondoRubro$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatCuentaFondoRubro$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoRubro ON massoftware.CuentaFondoRubro CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoRubro BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondoRubro FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoRubro();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondoRubro;
+
+-- SELECT * FROM massoftware.CuentaFondoRubro LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondoRubro;
+
+-- SELECT * FROM massoftware.CuentaFondoRubro WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoGrupo                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoGrupo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoGrupo CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoGrupo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº grupo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondoGrupo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Rubro
+	cuentaFondoRubro VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondoRubro (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondoGrupo_nombre ON massoftware.CuentaFondoGrupo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoGrupo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoGrupo() RETURNS TRIGGER AS $formatCuentaFondoGrupo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.cuentaFondoRubro := massoftware.white_is_null(NEW.cuentaFondoRubro);
+
+	RETURN NEW;
+END;
+$formatCuentaFondoGrupo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoGrupo ON massoftware.CuentaFondoGrupo CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoGrupo BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondoGrupo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoGrupo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondoGrupo;
+
+-- SELECT * FROM massoftware.CuentaFondoGrupo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondoGrupo;
+
+-- SELECT * FROM massoftware.CuentaFondoGrupo WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipoBanco                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipoBanco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoTipoBanco CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoTipoBanco
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº tipo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondoTipoBanco_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondoTipoBanco_nombre ON massoftware.CuentaFondoTipoBanco (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoTipoBanco() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoTipoBanco() RETURNS TRIGGER AS $formatCuentaFondoTipoBanco$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatCuentaFondoTipoBanco$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoTipoBanco ON massoftware.CuentaFondoTipoBanco CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoTipoBanco BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondoTipoBanco FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoTipoBanco();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondoTipoBanco;
+
+-- SELECT * FROM massoftware.CuentaFondoTipoBanco LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondoTipoBanco;
+
+-- SELECT * FROM massoftware.CuentaFondoTipoBanco WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoBancoCopia                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoBancoCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondoBancoCopia CASCADE;
+
+CREATE TABLE massoftware.CuentaFondoBancoCopia
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº tipo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondoBancoCopia_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondoBancoCopia_nombre ON massoftware.CuentaFondoBancoCopia (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondoBancoCopia() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondoBancoCopia() RETURNS TRIGGER AS $formatCuentaFondoBancoCopia$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatCuentaFondoBancoCopia$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondoBancoCopia ON massoftware.CuentaFondoBancoCopia CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondoBancoCopia BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondoBancoCopia FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondoBancoCopia();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondoBancoCopia;
+
+-- SELECT * FROM massoftware.CuentaFondoBancoCopia LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondoBancoCopia;
+
+-- SELECT * FROM massoftware.CuentaFondoBancoCopia WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondo                                                                                            //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.CuentaFondo CASCADE;
+
+CREATE TABLE massoftware.CuentaFondo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº cuenta
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT CuentaFondo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Cuenta contable
+	cuentaContable VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaContable (id), 
+	
+	-- Grupo
+	cuentaFondoGrupo VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondoGrupo (id), 
+	
+	-- Tipo
+	cuentaFondoTipo VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondoTipo (id), 
+	
+	-- Obsoleto
+	obsoleto BOOLEAN NOT NULL, 
+	
+	-- No imprime caja
+	noImprimeCaja BOOLEAN NOT NULL, 
+	
+	-- Ventas
+	ventas BOOLEAN NOT NULL, 
+	
+	-- Fondos
+	fondos BOOLEAN NOT NULL, 
+	
+	-- Compras
+	compras BOOLEAN NOT NULL, 
+	
+	-- Moneda
+	moneda VARCHAR(36)  REFERENCES massoftware.Moneda (id), 
+	
+	-- Caja
+	caja VARCHAR(36)  REFERENCES massoftware.Caja (id), 
+	
+	-- Rechazados
+	rechazados BOOLEAN NOT NULL, 
+	
+	-- Conciliación
+	conciliacion BOOLEAN NOT NULL, 
+	
+	-- Tipo de banco
+	cuentaFondoTipoBanco VARCHAR(36)  REFERENCES massoftware.CuentaFondoTipoBanco (id), 
+	
+	-- banco
+	banco VARCHAR(36)  REFERENCES massoftware.Banco (id), 
+	
+	-- Cuenta bancaria
+	cuentaBancaria VARCHAR(22), 
+	
+	-- CBU
+	cbu VARCHAR(22), 
+	
+	-- Límite descubierto
+	limiteDescubierto DECIMAL(13,5) CONSTRAINT CuentaFondo_limiteDescubierto_chk CHECK ( limiteDescubierto >= -9999.9999 AND limiteDescubierto <= 99999.9999  ), 
+	
+	-- Cuenta fondo caución
+	cuentaFondoCaucion VARCHAR(50), 
+	
+	-- Cuenta fondo diferidos
+	cuentaFondoDiferidos VARCHAR(50), 
+	
+	-- Formato
+	formato VARCHAR(50), 
+	
+	-- Tipo de copias
+	cuentaFondoBancoCopia VARCHAR(36)  REFERENCES massoftware.CuentaFondoBancoCopia (id), 
+	
+	-- Límite operación individual
+	limiteOperacionIndividual DECIMAL(13,5) CONSTRAINT CuentaFondo_limiteOperacionIndividual_chk CHECK ( limiteOperacionIndividual >= -9999.9999 AND limiteOperacionIndividual <= 99999.9999  ), 
+	
+	-- Puerta p/ uso
+	seguridadPuertaUso VARCHAR(36)  REFERENCES massoftware.SeguridadPuerta (id), 
+	
+	-- Puerta p/ consulta
+	seguridadPuertaConsulta VARCHAR(36)  REFERENCES massoftware.SeguridadPuerta (id), 
+	
+	-- Puerta p/ superar límite
+	seguridadPuertaLimite VARCHAR(36)  REFERENCES massoftware.SeguridadPuerta (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_CuentaFondo_nombre ON massoftware.CuentaFondo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatCuentaFondo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatCuentaFondo() RETURNS TRIGGER AS $formatCuentaFondo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.cuentaContable := massoftware.white_is_null(NEW.cuentaContable);
+	 NEW.cuentaFondoGrupo := massoftware.white_is_null(NEW.cuentaFondoGrupo);
+	 NEW.cuentaFondoTipo := massoftware.white_is_null(NEW.cuentaFondoTipo);
+	 NEW.moneda := massoftware.white_is_null(NEW.moneda);
+	 NEW.caja := massoftware.white_is_null(NEW.caja);
+	 NEW.cuentaFondoTipoBanco := massoftware.white_is_null(NEW.cuentaFondoTipoBanco);
+	 NEW.banco := massoftware.white_is_null(NEW.banco);
+	 NEW.cuentaBancaria := massoftware.white_is_null(NEW.cuentaBancaria);
+	 NEW.cbu := massoftware.white_is_null(NEW.cbu);
+	 NEW.cuentaFondoCaucion := massoftware.white_is_null(NEW.cuentaFondoCaucion);
+	 NEW.cuentaFondoDiferidos := massoftware.white_is_null(NEW.cuentaFondoDiferidos);
+	 NEW.formato := massoftware.white_is_null(NEW.formato);
+	 NEW.cuentaFondoBancoCopia := massoftware.white_is_null(NEW.cuentaFondoBancoCopia);
+	 NEW.seguridadPuertaUso := massoftware.white_is_null(NEW.seguridadPuertaUso);
+	 NEW.seguridadPuertaConsulta := massoftware.white_is_null(NEW.seguridadPuertaConsulta);
+	 NEW.seguridadPuertaLimite := massoftware.white_is_null(NEW.seguridadPuertaLimite);
+
+	RETURN NEW;
+END;
+$formatCuentaFondo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatCuentaFondo ON massoftware.CuentaFondo CASCADE;
+
+CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
+	ON massoftware.CuentaFondo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatCuentaFondo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.CuentaFondo;
+
+-- SELECT * FROM massoftware.CuentaFondo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.CuentaFondo;
+
+-- SELECT * FROM massoftware.CuentaFondo WHERE id = 'xxx';

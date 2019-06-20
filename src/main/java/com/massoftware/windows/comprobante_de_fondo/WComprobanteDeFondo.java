@@ -8,8 +8,8 @@ import org.cendra.ex.crud.UniqueException;
 
 import com.massoftware.model.Caja;
 import com.massoftware.model.ComprobanteDeFondo;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UtilUI;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.ShortcutAction.KeyCode;

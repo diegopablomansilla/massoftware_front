@@ -14,7 +14,7 @@ public class BancoFirmanteAnt extends Ant {
 
 	public Clazz build() throws Exception {
 
-		// 
+		// SELECT  A.CODIGO, A.NOMBRE, A.CARGO, A.ACTIVO FROM BancosFirmantes A ORDER BY  A.CODIGO
 		
 		
 		// -------- Clazz

@@ -6,8 +6,7 @@ import java.util.List;
 
 import com.massoftware.model.geo.Zona;
 import com.massoftware.service.geo.ZonaFiltro;
-import com.massoftware.windows.UtilUI;
-
+import com.massoftware.x.util.UtilUI;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Grid.Column;

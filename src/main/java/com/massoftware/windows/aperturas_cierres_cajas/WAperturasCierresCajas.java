@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.massoftware.model.Caja;
-import com.massoftware.windows.EliminarDialog;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.a.cajas.WCajas;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.EliminarDialog;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.sort.SortOrder;

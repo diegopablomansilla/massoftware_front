@@ -39,9 +39,6 @@ import com.massoftware.x.afip.WFTipoDocumentoAFIP;
 import com.massoftware.service.afip.MonedaAFIPFiltro;
 import com.massoftware.x.afip.WLMonedaAFIP;
 import com.massoftware.x.afip.WFMonedaAFIP;
-import com.massoftware.service.monedas.MonedaFiltro;
-import com.massoftware.x.monedas.WLMoneda;
-import com.massoftware.x.monedas.WFMoneda;
 import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoFiltro;
 import com.massoftware.x.contabilidad.ventas.WLNotaCreditoMotivo;
 import com.massoftware.x.contabilidad.ventas.WFNotaCreditoMotivo;
@@ -111,12 +108,39 @@ import com.massoftware.x.contabilidad.WFAsientoContableItem;
 import com.massoftware.service.empresa.EmpresaFiltro;
 import com.massoftware.x.empresa.WLEmpresa;
 import com.massoftware.x.empresa.WFEmpresa;
+import com.massoftware.service.monedas.MonedaFiltro;
+import com.massoftware.x.monedas.WLMoneda;
+import com.massoftware.x.monedas.WFMoneda;
+import com.massoftware.service.monedas.MonedaCotizacionFiltro;
+import com.massoftware.x.monedas.WLMonedaCotizacion;
+import com.massoftware.x.monedas.WFMonedaCotizacion;
 import com.massoftware.service.fondos.banco.BancoFiltro;
 import com.massoftware.x.fondos.banco.WLBanco;
 import com.massoftware.x.fondos.banco.WFBanco;
 import com.massoftware.service.fondos.banco.BancoFirmanteFiltro;
 import com.massoftware.x.fondos.banco.WLBancoFirmante;
 import com.massoftware.x.fondos.banco.WFBancoFirmante;
+import com.massoftware.service.fondos.CajaFiltro;
+import com.massoftware.x.fondos.WLCaja;
+import com.massoftware.x.fondos.WFCaja;
+import com.massoftware.service.fondos.CuentaFondoTipoFiltro;
+import com.massoftware.x.fondos.WLCuentaFondoTipo;
+import com.massoftware.x.fondos.WFCuentaFondoTipo;
+import com.massoftware.service.fondos.CuentaFondoRubroFiltro;
+import com.massoftware.x.fondos.WLCuentaFondoRubro;
+import com.massoftware.x.fondos.WFCuentaFondoRubro;
+import com.massoftware.service.fondos.CuentaFondoGrupoFiltro;
+import com.massoftware.x.fondos.WLCuentaFondoGrupo;
+import com.massoftware.x.fondos.WFCuentaFondoGrupo;
+import com.massoftware.service.fondos.CuentaFondoTipoBancoFiltro;
+import com.massoftware.x.fondos.WLCuentaFondoTipoBanco;
+import com.massoftware.x.fondos.WFCuentaFondoTipoBanco;
+import com.massoftware.service.fondos.CuentaFondoBancoCopiaFiltro;
+import com.massoftware.x.fondos.WLCuentaFondoBancoCopia;
+import com.massoftware.x.fondos.WFCuentaFondoBancoCopia;
+import com.massoftware.service.fondos.CuentaFondoFiltro;
+import com.massoftware.x.fondos.WLCuentaFondo;
+import com.massoftware.x.fondos.WFCuentaFondo;
 
 
 public abstract class AbstractFactoryWidget {
@@ -263,17 +287,6 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFMonedaAFIP buildWFMonedaAFIP(String mode, String id) throws Exception {
 		return new WFMonedaAFIP(mode, id);
-	}
-
-	// -------------------------------------------------------------------------
-	public WLMoneda buildWLMoneda() throws Exception {
-		return new WLMoneda();
-	}
-	public WLMoneda buildWLMoneda(MonedaFiltro filtro) throws Exception {
-		return new WLMoneda(filtro);
-	}
-	public WFMoneda buildWFMoneda(String mode, String id) throws Exception {
-		return new WFMoneda(mode, id);
 	}
 
 	// -------------------------------------------------------------------------
@@ -530,6 +543,28 @@ public abstract class AbstractFactoryWidget {
 	}
 
 	// -------------------------------------------------------------------------
+	public WLMoneda buildWLMoneda() throws Exception {
+		return new WLMoneda();
+	}
+	public WLMoneda buildWLMoneda(MonedaFiltro filtro) throws Exception {
+		return new WLMoneda(filtro);
+	}
+	public WFMoneda buildWFMoneda(String mode, String id) throws Exception {
+		return new WFMoneda(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLMonedaCotizacion buildWLMonedaCotizacion() throws Exception {
+		return new WLMonedaCotizacion();
+	}
+	public WLMonedaCotizacion buildWLMonedaCotizacion(MonedaCotizacionFiltro filtro) throws Exception {
+		return new WLMonedaCotizacion(filtro);
+	}
+	public WFMonedaCotizacion buildWFMonedaCotizacion(String mode, String id) throws Exception {
+		return new WFMonedaCotizacion(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
 	public WLBanco buildWLBanco() throws Exception {
 		return new WLBanco();
 	}
@@ -549,6 +584,83 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFBancoFirmante buildWFBancoFirmante(String mode, String id) throws Exception {
 		return new WFBancoFirmante(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCaja buildWLCaja() throws Exception {
+		return new WLCaja();
+	}
+	public WLCaja buildWLCaja(CajaFiltro filtro) throws Exception {
+		return new WLCaja(filtro);
+	}
+	public WFCaja buildWFCaja(String mode, String id) throws Exception {
+		return new WFCaja(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondoTipo buildWLCuentaFondoTipo() throws Exception {
+		return new WLCuentaFondoTipo();
+	}
+	public WLCuentaFondoTipo buildWLCuentaFondoTipo(CuentaFondoTipoFiltro filtro) throws Exception {
+		return new WLCuentaFondoTipo(filtro);
+	}
+	public WFCuentaFondoTipo buildWFCuentaFondoTipo(String mode, String id) throws Exception {
+		return new WFCuentaFondoTipo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondoRubro buildWLCuentaFondoRubro() throws Exception {
+		return new WLCuentaFondoRubro();
+	}
+	public WLCuentaFondoRubro buildWLCuentaFondoRubro(CuentaFondoRubroFiltro filtro) throws Exception {
+		return new WLCuentaFondoRubro(filtro);
+	}
+	public WFCuentaFondoRubro buildWFCuentaFondoRubro(String mode, String id) throws Exception {
+		return new WFCuentaFondoRubro(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondoGrupo buildWLCuentaFondoGrupo() throws Exception {
+		return new WLCuentaFondoGrupo();
+	}
+	public WLCuentaFondoGrupo buildWLCuentaFondoGrupo(CuentaFondoGrupoFiltro filtro) throws Exception {
+		return new WLCuentaFondoGrupo(filtro);
+	}
+	public WFCuentaFondoGrupo buildWFCuentaFondoGrupo(String mode, String id) throws Exception {
+		return new WFCuentaFondoGrupo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondoTipoBanco buildWLCuentaFondoTipoBanco() throws Exception {
+		return new WLCuentaFondoTipoBanco();
+	}
+	public WLCuentaFondoTipoBanco buildWLCuentaFondoTipoBanco(CuentaFondoTipoBancoFiltro filtro) throws Exception {
+		return new WLCuentaFondoTipoBanco(filtro);
+	}
+	public WFCuentaFondoTipoBanco buildWFCuentaFondoTipoBanco(String mode, String id) throws Exception {
+		return new WFCuentaFondoTipoBanco(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondoBancoCopia buildWLCuentaFondoBancoCopia() throws Exception {
+		return new WLCuentaFondoBancoCopia();
+	}
+	public WLCuentaFondoBancoCopia buildWLCuentaFondoBancoCopia(CuentaFondoBancoCopiaFiltro filtro) throws Exception {
+		return new WLCuentaFondoBancoCopia(filtro);
+	}
+	public WFCuentaFondoBancoCopia buildWFCuentaFondoBancoCopia(String mode, String id) throws Exception {
+		return new WFCuentaFondoBancoCopia(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLCuentaFondo buildWLCuentaFondo() throws Exception {
+		return new WLCuentaFondo();
+	}
+	public WLCuentaFondo buildWLCuentaFondo(CuentaFondoFiltro filtro) throws Exception {
+		return new WLCuentaFondo(filtro);
+	}
+	public WFCuentaFondo buildWFCuentaFondo(String mode, String id) throws Exception {
+		return new WFCuentaFondo(mode, id);
 	}
 
 }

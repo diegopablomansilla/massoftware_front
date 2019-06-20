@@ -6,9 +6,9 @@ import java.util.List;
 import com.massoftware.model.Caja;
 import com.massoftware.model.SeguridadPuerta;
 import com.massoftware.model.SeguridadPuertasFiltro;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.SelectorBoxOld;
 import com.massoftware.windows.a.seguridad_puertas.WSeguridadPuertas;
+import com.massoftware.x.util.controls.SelectorBoxOld;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Window;
 

@@ -1,8 +1,8 @@
 package com.massoftware.windows.a.cuentas_contable;
 
 import com.massoftware.model.Entity;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.TextFieldEntity;
+import com.massoftware.x.util.controls.TextFieldEntity;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.validator.AbstractValidator;
 

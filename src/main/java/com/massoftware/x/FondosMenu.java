@@ -5,7 +5,6 @@ import java.io.File;
 import com.massoftware.AppCX;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.windows.LogAndNotification;
 import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
 import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
@@ -32,6 +31,7 @@ import com.massoftware.windows.valores_terceros.WValoresTerceros;
 import com.massoftware.x.afip.WLMonedaAFIPCustom;
 import com.massoftware.x.geo.WLZonaCustom;
 import com.massoftware.x.monedas.WLMonedaCustom;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FileResource;
@@ -93,20 +93,37 @@ public class FondosMenu extends AbstractMenu {
 		a7.setEnabled(false);
 		a8.setEnabled(false);
 
-		a1.addItem("Cuentas de fondo ...", openCuentasFondoCmd());
-		a1.addItem("Rubros y grupos de cuentas ...", openCuentasFondoCmd());
+		MenuBar.MenuItem a11 = a1.addItem("Cuentas de fondo", null);
+
+		a11.addItem("Tipos de Cuentas de fondo", openCuentaFondoTipoCmd());
+		a11.addItem("Rubros de Cuentas de fondo", openCuentaFondoRubroCmd());
+		a11.addItem("Grupos de Cuentas de fondo", openCuentaFondoGrupoCmd());
+		a11.addItem("Tipo de banco", openCuentaFondoTipoBancoCmd());
+		a11.addItem("Tipo de copias", openCuentaFondoBancoCopiaCmd());
+		a11.addItem("Cuentas de fondo ...", openCuentaFondoCmd());
+		a11.addItem("+++++Cuentas de fondo ...", openCuentasFondoCmd());
+		a11.addItem("+++++Rubros y grupos de cuentas ...", openCuentasFondoCmd());
+
 		a1.addItem("Cobranzas ...", openTiposCobranzasCmd()).setEnabled(false);
 		a1.addItem("Chequeras ...", openChequerasCmd()).setEnabled(false);
 		a1.addItem("+++ Bancos ...", openBancosCmd());
 		a1.addItem("Bancos ...", openBancoCmd());
 		a1.addItem("+++Firmantes (cheques propios) ...", openFirmantesCmd());
 		a1.addItem("Firmantes (cheques propios) ...", openBancoFirmanteCmd());
-		a1.addItem("Cajas", openCajasCmd());
+		a1.addItem("+++++Cajas", openCajasCmd());
+		a1.addItem("Cajas", openCajaCmd());
 		a1.addItem("Monedas AFIP...", openMonedasAFIPCmd());
 		a1.addItem("Monedas ...", openMonedasCmd());
-		a1.addItem("Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
+		a1.addItem("++++Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
+		a1.addItem("Cotizaciones de monedas ...", openMonedaCotizacionCmd());
 		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
-		a1.addItem("Sucursales ...", openSucursalesCmd());
+
+		MenuBar.MenuItem a13 = a1.addItem("Sucursales", null);
+
+		a13.addItem("Tipo de sucursales ...", openTipoSucursalCmd());
+		a13.addItem("Sucursales ...", openSucursalCmd());
+		a13.addItem("+++++++++Sucursales ...", openSucursalesCmd());
+
 		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
 		a1.addSeparator();
 		a1.addItem("Marcas de ticket's ...", openMarcasTicketCmd());
@@ -224,7 +241,7 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
 	protected Command openBancoCmd() {
 
 		return new Command() {
@@ -234,8 +251,8 @@ public class FondosMenu extends AbstractMenu {
 			private static final long serialVersionUID = 4645387020070455569L;
 
 			@Override
-			public void menuSelected(MenuItem selectedItem) {				
-				
+			public void menuSelected(MenuItem selectedItem) {
+
 				try {
 					Window window = AppCX.widgets().buildWLBanco();
 					getUI().addWindow(window);
@@ -245,7 +262,133 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
-	
+
+	protected Command openCuentaFondoTipoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondoTipo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCuentaFondoRubroCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondoRubro();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCuentaFondoGrupoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondoGrupo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCuentaFondoTipoBancoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondoTipoBanco();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCuentaFondoBancoCopiaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondoBancoCopia();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCuentaFondoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCuentaFondo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
 	protected Command openBancoFirmanteCmd() {
 
 		return new Command() {
@@ -255,10 +398,52 @@ public class FondosMenu extends AbstractMenu {
 			private static final long serialVersionUID = 4645387020070455569L;
 
 			@Override
-			public void menuSelected(MenuItem selectedItem) {				
-				
+			public void menuSelected(MenuItem selectedItem) {
+
 				try {
 					Window window = AppCX.widgets().buildWLBancoFirmante();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openCajaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLCaja();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+
+	protected Command openMonedaCotizacionCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLMonedaCotizacion();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);
@@ -375,6 +560,50 @@ public class FondosMenu extends AbstractMenu {
 
 				Window window = new WModelosCbtesFondos();
 				getUI().addWindow(window);
+			}
+		};
+	}
+
+	protected Command openTipoSucursalCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTipoSucursal();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+
+	protected Command openSucursalCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLSucursal();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
 			}
 		};
 	}

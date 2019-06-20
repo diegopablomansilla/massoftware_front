@@ -1,6 +1,6 @@
 package com.massoftware.windows.a.sucursales;
 
-import com.massoftware.windows.UtilModel;
+import com.massoftware.x.util.UtilModel;
 
 public class SucursalesFiltroOld {
 

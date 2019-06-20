@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.massoftware.model.geo.Provincia;
 import com.massoftware.service.geo.ProvinciaFiltro;
-import com.massoftware.windows.UtilUI;
-import com.massoftware.windows.WindowForm;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.WindowForm;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Grid.Column;

@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.windows.EliminarDialog;
-import com.massoftware.windows.LogAndNotification;
-import com.massoftware.windows.UtilModel;
-import com.massoftware.windows.UtilUI;
 import com.massoftware.windows.cobranzas.Cobranzas;
 import com.massoftware.windows.cobranzas.WCobranzas;
 import com.massoftware.windows.vendedores.Vendedores;
 import com.massoftware.windows.vendedores.WVendedores;
+import com.massoftware.x.util.UtilModel;
+import com.massoftware.x.util.UtilUI;
+import com.massoftware.x.util.windows.EliminarDialog;
+import com.massoftware.x.util.windows.LogAndNotification;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validatable;

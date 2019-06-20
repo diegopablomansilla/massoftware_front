@@ -27,7 +27,10 @@ import com.vaadin.ui.Component;
 import org.vaadin.patrik.FastNavigation;
 
 import com.massoftware.AppCX;
-import com.massoftware.windows.*;
+import com.massoftware.x.util.*;
+import com.massoftware.x.util.controls.*;
+import com.massoftware.x.util.windows.*;
+
 
 import com.massoftware.model.EntityId;
 

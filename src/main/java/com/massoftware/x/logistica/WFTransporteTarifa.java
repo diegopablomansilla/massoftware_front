@@ -7,7 +7,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import com.massoftware.windows.*;
+import com.massoftware.x.util.*;
+import com.massoftware.x.util.controls.*;
+import com.massoftware.x.util.windows.*;
 
 import com.massoftware.AppCX;
 

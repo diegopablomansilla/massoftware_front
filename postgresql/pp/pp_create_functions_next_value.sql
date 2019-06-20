@@ -445,42 +445,6 @@ $$ LANGUAGE SQL;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
--- //          TABLA: Moneda                                                                                                 //
--- //                                                                                                                        //
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
--- Table: massoftware.Moneda
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-DROP FUNCTION IF EXISTS massoftware.f_next_Moneda_numero() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_numero() RETURNS INTEGER AS $$
-
-	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Moneda;
-
-$$ LANGUAGE SQL;
-
--- SELECT * FROM massoftware.f_next_Moneda_numero();
-
--- ---------------------------------------------------------------------------------------------------------------------------
-
-
-DROP FUNCTION IF EXISTS massoftware.f_next_Moneda_cotizacion() CASCADE;
-
-CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_cotizacion() RETURNS DECIMAL(13,5) AS $$
-
-	SELECT (COALESCE(MAX(cotizacion),0) + 1)::DECIMAL(13,5) FROM massoftware.Moneda;
-
-$$ LANGUAGE SQL;
-
--- SELECT * FROM massoftware.f_next_Moneda_cotizacion();
-
-
--- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //                                                                                                                        //
 -- //          TABLA: NotaCreditoMotivo                                                                                      //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1114,6 +1078,78 @@ $$ LANGUAGE SQL;
 
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -- //                                                                                                                        //
+-- //          TABLA: Moneda                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Moneda
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Moneda_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Moneda;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Moneda_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Moneda_cotizacion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Moneda_cotizacion() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(cotizacion),0) + 1)::DECIMAL(13,5) FROM massoftware.Moneda;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Moneda_cotizacion();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: MonedaCotizacion                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.MonedaCotizacion
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_MonedaCotizacion_compra() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_MonedaCotizacion_compra() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(compra),0) + 1)::DECIMAL(13,5) FROM massoftware.MonedaCotizacion;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_MonedaCotizacion_compra();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_MonedaCotizacion_venta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_MonedaCotizacion_venta() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(venta),0) + 1)::DECIMAL(13,5) FROM massoftware.MonedaCotizacion;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_MonedaCotizacion_venta();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
 -- //          TABLA: Banco                                                                                                  //
 -- //                                                                                                                        //
 -- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1208,3 +1244,190 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_BancoFirmante_numero() RETURNS INT
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_BancoFirmante_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Caja                                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Caja
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Caja_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Caja_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Caja;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Caja_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipo                                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondoTipo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondoTipo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondoTipo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondoTipo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoRubro                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoRubro
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondoRubro_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondoRubro_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondoRubro;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondoRubro_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoGrupo                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoGrupo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondoGrupo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondoGrupo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondoGrupo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondoGrupo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoTipoBanco                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoTipoBanco
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondoTipoBanco_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondoTipoBanco_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondoTipoBanco;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondoTipoBanco_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondoBancoCopia                                                                                  //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondoBancoCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondoBancoCopia_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondoBancoCopia_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondoBancoCopia;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondoBancoCopia_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: CuentaFondo                                                                                            //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.CuentaFondo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.CuentaFondo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondo_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondo_limiteDescubierto() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondo_limiteDescubierto() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(limiteDescubierto),0) + 1)::DECIMAL(13,5) FROM massoftware.CuentaFondo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondo_limiteDescubierto();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_CuentaFondo_limiteOperacionIndividual() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondo_limiteOperacionIndividual() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(limiteOperacionIndividual),0) + 1)::DECIMAL(13,5) FROM massoftware.CuentaFondo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_CuentaFondo_limiteOperacionIndividual();
