@@ -2988,3 +2988,115 @@ SELECT * FROM massoftware.u_CuentaFondo(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModelo                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_ComprobanteFondoModelo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_ComprobanteFondoModelo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	UPDATE massoftware.ComprobanteFondoModelo SET 
+		  numero = numeroArg
+		, nombre = nombreArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComprobanteFondoModelo.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ComprobanteFondoModelo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComprobanteFondoModelo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_ComprobanteFondoModelo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModeloItem                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModeloItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.u_ComprobanteFondoModeloItem(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, debeArg BOOLEAN
+		, comprobanteFondoModeloArg VARCHAR(36)
+		, cuentaFondoArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.u_ComprobanteFondoModeloItem(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, debeArg BOOLEAN
+		, comprobanteFondoModeloArg VARCHAR(36)
+		, cuentaFondoArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF debeArg IS NULL THEN
+
+		debeArg = false;
+
+	END IF;
+
+	UPDATE massoftware.ComprobanteFondoModeloItem SET 
+		  numero = numeroArg
+		, debe = debeArg
+		, comprobanteFondoModelo = comprobanteFondoModeloArg
+		, cuentaFondo = cuentaFondoArg
+	WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComprobanteFondoModeloItem.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ComprobanteFondoModeloItem WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComprobanteFondoModeloItem.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.u_ComprobanteFondoModeloItem(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::BOOLEAN
+		, null::VARCHAR(36)
+		, null::VARCHAR(36)
+);
+
+*/

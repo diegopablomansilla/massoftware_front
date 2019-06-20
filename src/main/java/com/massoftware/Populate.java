@@ -145,6 +145,12 @@ import com.massoftware.service.fondos.CuentaFondoBancoCopiaService;
 import com.massoftware.model.fondos.CuentaFondo;
 import com.massoftware.service.fondos.CuentaFondoFiltro;
 import com.massoftware.service.fondos.CuentaFondoService;
+import com.massoftware.model.fondos.ComprobanteFondoModelo;
+import com.massoftware.service.fondos.ComprobanteFondoModeloFiltro;
+import com.massoftware.service.fondos.ComprobanteFondoModeloService;
+import com.massoftware.model.fondos.ComprobanteFondoModeloItem;
+import com.massoftware.service.fondos.ComprobanteFondoModeloItemFiltro;
+import com.massoftware.service.fondos.ComprobanteFondoModeloItemService;
 
 public class Populate {
 
@@ -197,7 +203,9 @@ public class Populate {
 			//insertCuentaFondoGrupo();
 			//insertCuentaFondoTipoBanco();
 			//insertCuentaFondoBancoCopia();
-			insertCuentaFondo();
+			//insertCuentaFondo();
+			insertComprobanteFondoModelo();
+			insertComprobanteFondoModeloItem();
 	}
 
 
@@ -2315,6 +2323,88 @@ public class Populate {
 				seguridadPuertaLimiteFiltro.setLimit(1L);
 				List<SeguridadPuerta> seguridadPuertaLimiteListado = serviceseguridadPuertaLimite.find(seguridadPuertaLimiteFiltro);
 				obj.setSeguridadPuertaLimite(seguridadPuertaLimiteListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertComprobanteFondoModelo() throws Exception {
+
+		ComprobanteFondoModeloService service = AppCX.services().buildComprobanteFondoModeloService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				ComprobanteFondoModelo obj = new ComprobanteFondoModelo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertComprobanteFondoModeloItem() throws Exception {
+
+		ComprobanteFondoModeloItemService service = AppCX.services().buildComprobanteFondoModeloItemService();
+		ComprobanteFondoModeloService servicecomprobanteFondoModelo = AppCX.services().buildComprobanteFondoModeloService();
+		Long comprobanteFondoModeloCount = servicecomprobanteFondoModelo.count();
+		CuentaFondoService servicecuentaFondo = AppCX.services().buildCuentaFondoService();
+		Long cuentaFondoCount = servicecuentaFondo.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				ComprobanteFondoModeloItem obj = new ComprobanteFondoModeloItem();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setDebe(new Random().nextBoolean());
+
+				ComprobanteFondoModeloFiltro comprobanteFondoModeloFiltro = new ComprobanteFondoModeloFiltro();
+				long comprobanteFondoModeloIndex = UtilPopulate.getLongRandom(0L, comprobanteFondoModeloCount-1);
+				comprobanteFondoModeloFiltro.setOffset(comprobanteFondoModeloIndex);
+				comprobanteFondoModeloFiltro.setLimit(1L);
+				List<ComprobanteFondoModelo> comprobanteFondoModeloListado = servicecomprobanteFondoModelo.find(comprobanteFondoModeloFiltro);
+				obj.setComprobanteFondoModelo(comprobanteFondoModeloListado.get(0));
+
+				CuentaFondoFiltro cuentaFondoFiltro = new CuentaFondoFiltro();
+				long cuentaFondoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoCount-1);
+				cuentaFondoFiltro.setOffset(cuentaFondoIndex);
+				cuentaFondoFiltro.setLimit(1L);
+				List<CuentaFondo> cuentaFondoListado = servicecuentaFondo.find(cuentaFondoFiltro);
+				obj.setCuentaFondo(cuentaFondoListado.get(0));
 
 				service.insert(obj);
 

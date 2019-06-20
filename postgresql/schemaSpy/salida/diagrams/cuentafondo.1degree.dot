@@ -20,6 +20,7 @@ digraph "oneDegreeRelationshipsDiagram" {
     arrowsize="0.8"
   ];
   "caja":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "comprobantefondomodeloitem":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"banco":sw -> "banco":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentafondo":"caja":sw -> "caja":"id":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -67,6 +68,20 @@ digraph "oneDegreeRelationshipsDiagram" {
     </TABLE>>
     URL="caja.html"
     tooltip="caja"
+  ];
+  "comprobantefondomodeloitem" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">comprobantefondomodeloitem</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="debe" COLSPAN="3" ALIGN="LEFT">debe</TD></TR>
+      <TR><TD PORT="comprobantefondomodelo" COLSPAN="3" ALIGN="LEFT">comprobantefondomodelo</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="comprobantefondomodeloitem.html"
+    tooltip="comprobantefondomodeloitem"
   ];
   "cuentacontable" [
     label=<
@@ -125,7 +140,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="seguridadpuertauso" COLSPAN="2" ALIGN="LEFT">seguridadpuertauso</TD><TD PORT="seguridadpuertauso.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="2" ALIGN="LEFT">seguridadpuertaconsulta</TD><TD PORT="seguridadpuertaconsulta.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="seguridadpuertalimite" COLSPAN="2" ALIGN="LEFT">seguridadpuertalimite</TD><TD PORT="seguridadpuertalimite.type" ALIGN="LEFT">varchar[36]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondo.html"
     tooltip="cuentafondo"

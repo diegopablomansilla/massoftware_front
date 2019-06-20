@@ -1431,3 +1431,49 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_CuentaFondo_limiteOperacionIndivid
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_CuentaFondo_limiteOperacionIndividual();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModelo                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_ComprobanteFondoModelo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_ComprobanteFondoModelo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.ComprobanteFondoModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_ComprobanteFondoModelo_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModeloItem                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModeloItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_ComprobanteFondoModeloItem_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_ComprobanteFondoModeloItem_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.ComprobanteFondoModeloItem;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_ComprobanteFondoModeloItem_numero();

@@ -1771,3 +1771,65 @@ CREATE OR REPLACE FUNCTION massoftware.f_exists_CuentaFondo_nombre(nombreArg VAR
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_exists_CuentaFondo_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModelo                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ComprobanteFondoModelo_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ComprobanteFondoModelo_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ComprobanteFondoModelo
+	WHERE	(numeroArg IS NULL OR ComprobanteFondoModelo.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ComprobanteFondoModelo_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ComprobanteFondoModelo_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ComprobanteFondoModelo_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ComprobanteFondoModelo
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ComprobanteFondoModelo.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ComprobanteFondoModelo_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModeloItem                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModeloItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ComprobanteFondoModeloItem_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ComprobanteFondoModeloItem_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ComprobanteFondoModeloItem
+	WHERE	(numeroArg IS NULL OR ComprobanteFondoModeloItem.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ComprobanteFondoModeloItem_numero(null::INTEGER);

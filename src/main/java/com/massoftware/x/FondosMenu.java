@@ -116,7 +116,9 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Monedas ...", openMonedasCmd());
 		a1.addItem("++++Cotizaciones de monedas ...", openMonedasCotizacionesCmd());
 		a1.addItem("Cotizaciones de monedas ...", openMonedaCotizacionCmd());
-		a1.addItem("Modelos de comprobantes", openModelosCbtesFondosCmd()).setEnabled(false);
+		a1.addItem("++++Modelos de comprobantes", openModelosCbtesFondosCmd());
+		a1.addItem("Modelos de comprobantes", openComprobanteFondoModeloCmd());
+		a1.addItem("Modelos de comprobantes item", openComprobanteFondoModeloItemCmd());
 
 		MenuBar.MenuItem a13 = a1.addItem("Sucursales", null);
 
@@ -430,6 +432,48 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	protected Command openComprobanteFondoModeloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLComprobanteFondoModelo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openComprobanteFondoModeloItemCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLComprobanteFondoModeloItem();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
 
 	protected Command openMonedaCotizacionCmd() {
 
@@ -519,6 +563,8 @@ public class FondosMenu extends AbstractMenu {
 			}
 		};
 	}
+	
+	
 
 	protected Command openMonedasCotizacionesCmd() {
 

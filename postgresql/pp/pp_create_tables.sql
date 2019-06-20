@@ -3671,3 +3671,140 @@ CREATE TRIGGER tgFormatCuentaFondo BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.CuentaFondo;
 
 -- SELECT * FROM massoftware.CuentaFondo WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModelo                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.ComprobanteFondoModelo CASCADE;
+
+CREATE TABLE massoftware.ComprobanteFondoModelo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº modelo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT ComprobanteFondoModelo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_ComprobanteFondoModelo_nombre ON massoftware.ComprobanteFondoModelo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatComprobanteFondoModelo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatComprobanteFondoModelo() RETURNS TRIGGER AS $formatComprobanteFondoModelo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatComprobanteFondoModelo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatComprobanteFondoModelo ON massoftware.ComprobanteFondoModelo CASCADE;
+
+CREATE TRIGGER tgFormatComprobanteFondoModelo BEFORE INSERT OR UPDATE
+	ON massoftware.ComprobanteFondoModelo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatComprobanteFondoModelo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.ComprobanteFondoModelo;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModelo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModelo;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModelo WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModeloItem                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModeloItem
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.ComprobanteFondoModeloItem CASCADE;
+
+CREATE TABLE massoftware.ComprobanteFondoModeloItem
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº modelo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT ComprobanteFondoModeloItem_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Debe
+	debe BOOLEAN NOT NULL, 
+	
+	-- Modelo
+	comprobanteFondoModelo VARCHAR(36)  NOT NULL  REFERENCES massoftware.ComprobanteFondoModelo (id), 
+	
+	-- Cuenta fondo
+	cuentaFondo VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondo (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatComprobanteFondoModeloItem() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatComprobanteFondoModeloItem() RETURNS TRIGGER AS $formatComprobanteFondoModeloItem$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.comprobanteFondoModelo := massoftware.white_is_null(NEW.comprobanteFondoModelo);
+	 NEW.cuentaFondo := massoftware.white_is_null(NEW.cuentaFondo);
+
+	RETURN NEW;
+END;
+$formatComprobanteFondoModeloItem$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatComprobanteFondoModeloItem ON massoftware.ComprobanteFondoModeloItem CASCADE;
+
+CREATE TRIGGER tgFormatComprobanteFondoModeloItem BEFORE INSERT OR UPDATE
+	ON massoftware.ComprobanteFondoModeloItem FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatComprobanteFondoModeloItem();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.ComprobanteFondoModeloItem;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModeloItem LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModeloItem;
+
+-- SELECT * FROM massoftware.ComprobanteFondoModeloItem WHERE id = 'xxx';

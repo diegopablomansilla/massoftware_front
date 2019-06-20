@@ -197,6 +197,32 @@ digraph "largeRelationshipsDiagram" {
     URL="tables/codigopostal.html"
     tooltip="codigopostal"
   ];
+  "comprobantefondomodelo" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">comprobantefondomodelo</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">271 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/comprobantefondomodelo.html"
+    tooltip="comprobantefondomodelo"
+  ];
+  "comprobantefondomodeloitem" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">comprobantefondomodeloitem</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="debe" COLSPAN="3" ALIGN="LEFT">debe</TD></TR>
+      <TR><TD PORT="comprobantefondomodelo" COLSPAN="3" ALIGN="LEFT">comprobantefondomodelo</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/comprobantefondomodeloitem.html"
+    tooltip="comprobantefondomodeloitem"
+  ];
   "costoventa" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -278,7 +304,7 @@ digraph "largeRelationshipsDiagram" {
       <TR><TD PORT="seguridadpuertauso" COLSPAN="3" ALIGN="LEFT">seguridadpuertauso</TD></TR>
       <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="3" ALIGN="LEFT">seguridadpuertaconsulta</TD></TR>
       <TR><TD PORT="seguridadpuertalimite" COLSPAN="3" ALIGN="LEFT">seguridadpuertalimite</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentafondo.html"
     tooltip="cuentafondo"
@@ -664,6 +690,8 @@ digraph "largeRelationshipsDiagram" {
   "centrocostocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "ciudad":"provincia":sw -> "provincia":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "codigopostal":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "comprobantefondomodeloitem":"comprobantefondomodelo":sw -> "comprobantefondomodelo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "comprobantefondomodeloitem":"cuentafondo":sw -> "cuentafondo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"centrocostocontable":sw -> "centrocostocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"costoventa":sw -> "costoventa":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"cuentacontableestado":sw -> "cuentacontableestado":"id":se [arrowhead=none dir=back arrowtail=crowodot];

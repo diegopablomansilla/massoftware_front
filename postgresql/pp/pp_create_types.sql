@@ -1970,3 +1970,292 @@ CREATE TYPE massoftware.t_CuentaFondo_3 AS (
 	, SeguridadModulo_138_nombre           	VARCHAR(50)  		-- 140	CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
 
 );
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComprobanteFondoModeloItem                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComprobanteFondoModeloItem
+
+
+
+DROP TYPE IF EXISTS massoftware.t_ComprobanteFondoModeloItem_1 CASCADE;
+
+CREATE TYPE massoftware.t_ComprobanteFondoModeloItem_1 AS (
+
+	  ComprobanteFondoModeloItem_id          	VARCHAR(36)  		-- 0	ComprobanteFondoModeloItem.id
+	, ComprobanteFondoModeloItem_numero      	INTEGER      		-- 1	ComprobanteFondoModeloItem.numero
+	, ComprobanteFondoModeloItem_debe        	BOOLEAN      		-- 2	ComprobanteFondoModeloItem.debe
+	, ComprobanteFondoModelo_3_id            	VARCHAR(36)  		-- 3	ComprobanteFondoModeloItem.ComprobanteFondoModelo.id
+	, ComprobanteFondoModelo_3_numero        	INTEGER      		-- 4	ComprobanteFondoModeloItem.ComprobanteFondoModelo.numero
+	, ComprobanteFondoModelo_3_nombre        	VARCHAR(50)  		-- 5	ComprobanteFondoModeloItem.ComprobanteFondoModelo.nombre
+	, CuentaFondo_6_id                       	VARCHAR(36)  		-- 6	ComprobanteFondoModeloItem.CuentaFondo.id
+	, CuentaFondo_6_numero                   	INTEGER      		-- 7	ComprobanteFondoModeloItem.CuentaFondo.numero
+	, CuentaFondo_6_nombre                   	VARCHAR(50)  		-- 8	ComprobanteFondoModeloItem.CuentaFondo.nombre
+	, CuentaFondo_6_cuentaContable           	VARCHAR(36)  		-- 9	ComprobanteFondoModeloItem.CuentaFondo.cuentaContable
+	, CuentaFondo_6_cuentaFondoGrupo         	VARCHAR(36)  		-- 10	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoGrupo
+	, CuentaFondo_6_cuentaFondoTipo          	VARCHAR(36)  		-- 11	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoTipo
+	, CuentaFondo_6_obsoleto                 	BOOLEAN      		-- 12	ComprobanteFondoModeloItem.CuentaFondo.obsoleto
+	, CuentaFondo_6_noImprimeCaja            	BOOLEAN      		-- 13	ComprobanteFondoModeloItem.CuentaFondo.noImprimeCaja
+	, CuentaFondo_6_ventas                   	BOOLEAN      		-- 14	ComprobanteFondoModeloItem.CuentaFondo.ventas
+	, CuentaFondo_6_fondos                   	BOOLEAN      		-- 15	ComprobanteFondoModeloItem.CuentaFondo.fondos
+	, CuentaFondo_6_compras                  	BOOLEAN      		-- 16	ComprobanteFondoModeloItem.CuentaFondo.compras
+	, CuentaFondo_6_moneda                   	VARCHAR(36)  		-- 17	ComprobanteFondoModeloItem.CuentaFondo.moneda
+	, CuentaFondo_6_caja                     	VARCHAR(36)  		-- 18	ComprobanteFondoModeloItem.CuentaFondo.caja
+	, CuentaFondo_6_rechazados               	BOOLEAN      		-- 19	ComprobanteFondoModeloItem.CuentaFondo.rechazados
+	, CuentaFondo_6_conciliacion             	BOOLEAN      		-- 20	ComprobanteFondoModeloItem.CuentaFondo.conciliacion
+	, CuentaFondo_6_cuentaFondoTipoBanco     	VARCHAR(36)  		-- 21	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoTipoBanco
+	, CuentaFondo_6_banco                    	VARCHAR(36)  		-- 22	ComprobanteFondoModeloItem.CuentaFondo.banco
+	, CuentaFondo_6_cuentaBancaria           	VARCHAR(22)  		-- 23	ComprobanteFondoModeloItem.CuentaFondo.cuentaBancaria
+	, CuentaFondo_6_cbu                      	VARCHAR(22)  		-- 24	ComprobanteFondoModeloItem.CuentaFondo.cbu
+	, CuentaFondo_6_limiteDescubierto        	DECIMAL(13,5)		-- 25	ComprobanteFondoModeloItem.CuentaFondo.limiteDescubierto
+	, CuentaFondo_6_cuentaFondoCaucion       	VARCHAR(50)  		-- 26	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_6_cuentaFondoDiferidos     	VARCHAR(50)  		-- 27	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_6_formato                  	VARCHAR(50)  		-- 28	ComprobanteFondoModeloItem.CuentaFondo.formato
+	, CuentaFondo_6_cuentaFondoBancoCopia    	VARCHAR(36)  		-- 29	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoBancoCopia
+	, CuentaFondo_6_limiteOperacionIndividual	DECIMAL(13,5)		-- 30	ComprobanteFondoModeloItem.CuentaFondo.limiteOperacionIndividual
+	, CuentaFondo_6_seguridadPuertaUso       	VARCHAR(36)  		-- 31	ComprobanteFondoModeloItem.CuentaFondo.seguridadPuertaUso
+	, CuentaFondo_6_seguridadPuertaConsulta  	VARCHAR(36)  		-- 32	ComprobanteFondoModeloItem.CuentaFondo.seguridadPuertaConsulta
+	, CuentaFondo_6_seguridadPuertaLimite    	VARCHAR(36)  		-- 33	ComprobanteFondoModeloItem.CuentaFondo.seguridadPuertaLimite
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_ComprobanteFondoModeloItem_2 CASCADE;
+
+CREATE TYPE massoftware.t_ComprobanteFondoModeloItem_2 AS (
+
+	  ComprobanteFondoModeloItem_id          	VARCHAR(36)  		-- 0	ComprobanteFondoModeloItem.id
+	, ComprobanteFondoModeloItem_numero      	INTEGER      		-- 1	ComprobanteFondoModeloItem.numero
+	, ComprobanteFondoModeloItem_debe        	BOOLEAN      		-- 2	ComprobanteFondoModeloItem.debe
+	, ComprobanteFondoModelo_3_id            	VARCHAR(36)  		-- 3	ComprobanteFondoModeloItem.ComprobanteFondoModelo.id
+	, ComprobanteFondoModelo_3_numero        	INTEGER      		-- 4	ComprobanteFondoModeloItem.ComprobanteFondoModelo.numero
+	, ComprobanteFondoModelo_3_nombre        	VARCHAR(50)  		-- 5	ComprobanteFondoModeloItem.ComprobanteFondoModelo.nombre
+	, CuentaFondo_6_id                       	VARCHAR(36)  		-- 6	ComprobanteFondoModeloItem.CuentaFondo.id
+	, CuentaFondo_6_numero                   	INTEGER      		-- 7	ComprobanteFondoModeloItem.CuentaFondo.numero
+	, CuentaFondo_6_nombre                   	VARCHAR(50)  		-- 8	ComprobanteFondoModeloItem.CuentaFondo.nombre
+	, CuentaContable_9_id                    	VARCHAR(36)  		-- 9	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.id
+	, CuentaContable_9_codigo                	VARCHAR(11)  		-- 10	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.codigo
+	, CuentaContable_9_nombre                	VARCHAR(50)  		-- 11	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.nombre
+	, CuentaContable_9_ejercicioContable     	VARCHAR(36)  		-- 12	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.ejercicioContable
+	, CuentaContable_9_integra               	VARCHAR(16)  		-- 13	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.integra
+	, CuentaContable_9_cuentaJerarquia       	VARCHAR(16)  		-- 14	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaJerarquia
+	, CuentaContable_9_imputable             	BOOLEAN      		-- 15	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.imputable
+	, CuentaContable_9_ajustaPorInflacion    	BOOLEAN      		-- 16	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.ajustaPorInflacion
+	, CuentaContable_9_cuentaContableEstado  	VARCHAR(36)  		-- 17	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaContableEstado
+	, CuentaContable_9_cuentaConApropiacion  	BOOLEAN      		-- 18	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaConApropiacion
+	, CuentaContable_9_centroCostoContable   	VARCHAR(36)  		-- 19	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.centroCostoContable
+	, CuentaContable_9_cuentaAgrupadora      	VARCHAR(50)  		-- 20	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaAgrupadora
+	, CuentaContable_9_porcentaje            	DECIMAL(6,3) 		-- 21	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.porcentaje
+	, CuentaContable_9_puntoEquilibrio       	VARCHAR(36)  		-- 22	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.puntoEquilibrio
+	, CuentaContable_9_costoVenta            	VARCHAR(36)  		-- 23	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.costoVenta
+	, CuentaContable_9_seguridadPuerta       	VARCHAR(36)  		-- 24	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.seguridadPuerta
+	, CuentaFondoGrupo_25_id                 	VARCHAR(36)  		-- 25	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.id
+	, CuentaFondoGrupo_25_numero             	INTEGER      		-- 26	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_25_nombre             	VARCHAR(50)  		-- 27	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.nombre
+	, CuentaFondoGrupo_25_cuentaFondoRubro   	VARCHAR(36)  		-- 28	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.cuentaFondoRubro
+	, CuentaFondoTipo_29_id                  	VARCHAR(36)  		-- 29	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.id
+	, CuentaFondoTipo_29_numero              	INTEGER      		-- 30	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.numero
+	, CuentaFondoTipo_29_nombre              	VARCHAR(50)  		-- 31	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.nombre
+	, CuentaFondo_6_obsoleto                 	BOOLEAN      		-- 32	ComprobanteFondoModeloItem.CuentaFondo.obsoleto
+	, CuentaFondo_6_noImprimeCaja            	BOOLEAN      		-- 33	ComprobanteFondoModeloItem.CuentaFondo.noImprimeCaja
+	, CuentaFondo_6_ventas                   	BOOLEAN      		-- 34	ComprobanteFondoModeloItem.CuentaFondo.ventas
+	, CuentaFondo_6_fondos                   	BOOLEAN      		-- 35	ComprobanteFondoModeloItem.CuentaFondo.fondos
+	, CuentaFondo_6_compras                  	BOOLEAN      		-- 36	ComprobanteFondoModeloItem.CuentaFondo.compras
+	, Moneda_37_id                           	VARCHAR(36)  		-- 37	ComprobanteFondoModeloItem.CuentaFondo.Moneda.id
+	, Moneda_37_numero                       	INTEGER      		-- 38	ComprobanteFondoModeloItem.CuentaFondo.Moneda.numero
+	, Moneda_37_nombre                       	VARCHAR(50)  		-- 39	ComprobanteFondoModeloItem.CuentaFondo.Moneda.nombre
+	, Moneda_37_abreviatura                  	VARCHAR(5)   		-- 40	ComprobanteFondoModeloItem.CuentaFondo.Moneda.abreviatura
+	, Moneda_37_cotizacion                   	DECIMAL(13,5)		-- 41	ComprobanteFondoModeloItem.CuentaFondo.Moneda.cotizacion
+	, Moneda_37_cotizacionFecha              	TIMESTAMP    		-- 42	ComprobanteFondoModeloItem.CuentaFondo.Moneda.cotizacionFecha
+	, Moneda_37_controlActualizacion         	BOOLEAN      		-- 43	ComprobanteFondoModeloItem.CuentaFondo.Moneda.controlActualizacion
+	, Moneda_37_monedaAFIP                   	VARCHAR(36)  		-- 44	ComprobanteFondoModeloItem.CuentaFondo.Moneda.monedaAFIP
+	, Caja_45_id                             	VARCHAR(36)  		-- 45	ComprobanteFondoModeloItem.CuentaFondo.Caja.id
+	, Caja_45_numero                         	INTEGER      		-- 46	ComprobanteFondoModeloItem.CuentaFondo.Caja.numero
+	, Caja_45_nombre                         	VARCHAR(50)  		-- 47	ComprobanteFondoModeloItem.CuentaFondo.Caja.nombre
+	, Caja_45_seguridadPuerta                	VARCHAR(36)  		-- 48	ComprobanteFondoModeloItem.CuentaFondo.Caja.seguridadPuerta
+	, CuentaFondo_6_rechazados               	BOOLEAN      		-- 49	ComprobanteFondoModeloItem.CuentaFondo.rechazados
+	, CuentaFondo_6_conciliacion             	BOOLEAN      		-- 50	ComprobanteFondoModeloItem.CuentaFondo.conciliacion
+	, CuentaFondoTipoBanco_51_id             	VARCHAR(36)  		-- 51	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.id
+	, CuentaFondoTipoBanco_51_numero         	INTEGER      		-- 52	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.numero
+	, CuentaFondoTipoBanco_51_nombre         	VARCHAR(50)  		-- 53	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.nombre
+	, Banco_54_id                            	VARCHAR(36)  		-- 54	ComprobanteFondoModeloItem.CuentaFondo.Banco.id
+	, Banco_54_numero                        	INTEGER      		-- 55	ComprobanteFondoModeloItem.CuentaFondo.Banco.numero
+	, Banco_54_nombre                        	VARCHAR(50)  		-- 56	ComprobanteFondoModeloItem.CuentaFondo.Banco.nombre
+	, Banco_54_cuit                          	BIGINT       		-- 57	ComprobanteFondoModeloItem.CuentaFondo.Banco.cuit
+	, Banco_54_bloqueado                     	BOOLEAN      		-- 58	ComprobanteFondoModeloItem.CuentaFondo.Banco.bloqueado
+	, Banco_54_hoja                          	INTEGER      		-- 59	ComprobanteFondoModeloItem.CuentaFondo.Banco.hoja
+	, Banco_54_primeraFila                   	INTEGER      		-- 60	ComprobanteFondoModeloItem.CuentaFondo.Banco.primeraFila
+	, Banco_54_ultimaFila                    	INTEGER      		-- 61	ComprobanteFondoModeloItem.CuentaFondo.Banco.ultimaFila
+	, Banco_54_fecha                         	VARCHAR(3)   		-- 62	ComprobanteFondoModeloItem.CuentaFondo.Banco.fecha
+	, Banco_54_descripcion                   	VARCHAR(3)   		-- 63	ComprobanteFondoModeloItem.CuentaFondo.Banco.descripcion
+	, Banco_54_referencia1                   	VARCHAR(3)   		-- 64	ComprobanteFondoModeloItem.CuentaFondo.Banco.referencia1
+	, Banco_54_importe                       	VARCHAR(3)   		-- 65	ComprobanteFondoModeloItem.CuentaFondo.Banco.importe
+	, Banco_54_referencia2                   	VARCHAR(3)   		-- 66	ComprobanteFondoModeloItem.CuentaFondo.Banco.referencia2
+	, Banco_54_saldo                         	VARCHAR(3)   		-- 67	ComprobanteFondoModeloItem.CuentaFondo.Banco.saldo
+	, CuentaFondo_6_cuentaBancaria           	VARCHAR(22)  		-- 68	ComprobanteFondoModeloItem.CuentaFondo.cuentaBancaria
+	, CuentaFondo_6_cbu                      	VARCHAR(22)  		-- 69	ComprobanteFondoModeloItem.CuentaFondo.cbu
+	, CuentaFondo_6_limiteDescubierto        	DECIMAL(13,5)		-- 70	ComprobanteFondoModeloItem.CuentaFondo.limiteDescubierto
+	, CuentaFondo_6_cuentaFondoCaucion       	VARCHAR(50)  		-- 71	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_6_cuentaFondoDiferidos     	VARCHAR(50)  		-- 72	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_6_formato                  	VARCHAR(50)  		-- 73	ComprobanteFondoModeloItem.CuentaFondo.formato
+	, CuentaFondoBancoCopia_74_id            	VARCHAR(36)  		-- 74	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.id
+	, CuentaFondoBancoCopia_74_numero        	INTEGER      		-- 75	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.numero
+	, CuentaFondoBancoCopia_74_nombre        	VARCHAR(50)  		-- 76	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.nombre
+	, CuentaFondo_6_limiteOperacionIndividual	DECIMAL(13,5)		-- 77	ComprobanteFondoModeloItem.CuentaFondo.limiteOperacionIndividual
+	, SeguridadPuerta_78_id                  	VARCHAR(36)  		-- 78	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_78_numero              	INTEGER      		-- 79	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_78_nombre              	VARCHAR(50)  		-- 80	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_78_equate              	VARCHAR(30)  		-- 81	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_78_seguridadModulo     	VARCHAR(36)  		-- 82	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.seguridadModulo
+	, SeguridadPuerta_83_id                  	VARCHAR(36)  		-- 83	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_83_numero              	INTEGER      		-- 84	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_83_nombre              	VARCHAR(50)  		-- 85	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_83_equate              	VARCHAR(30)  		-- 86	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_83_seguridadModulo     	VARCHAR(36)  		-- 87	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.seguridadModulo
+	, SeguridadPuerta_88_id                  	VARCHAR(36)  		-- 88	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_88_numero              	INTEGER      		-- 89	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_88_nombre              	VARCHAR(50)  		-- 90	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_88_equate              	VARCHAR(30)  		-- 91	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadPuerta_88_seguridadModulo     	VARCHAR(36)  		-- 92	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.seguridadModulo
+
+);
+
+DROP TYPE IF EXISTS massoftware.t_ComprobanteFondoModeloItem_3 CASCADE;
+
+CREATE TYPE massoftware.t_ComprobanteFondoModeloItem_3 AS (
+
+	  ComprobanteFondoModeloItem_id           	VARCHAR(36)  		-- 0	ComprobanteFondoModeloItem.id
+	, ComprobanteFondoModeloItem_numero       	INTEGER      		-- 1	ComprobanteFondoModeloItem.numero
+	, ComprobanteFondoModeloItem_debe         	BOOLEAN      		-- 2	ComprobanteFondoModeloItem.debe
+	, ComprobanteFondoModelo_3_id             	VARCHAR(36)  		-- 3	ComprobanteFondoModeloItem.ComprobanteFondoModelo.id
+	, ComprobanteFondoModelo_3_numero         	INTEGER      		-- 4	ComprobanteFondoModeloItem.ComprobanteFondoModelo.numero
+	, ComprobanteFondoModelo_3_nombre         	VARCHAR(50)  		-- 5	ComprobanteFondoModeloItem.ComprobanteFondoModelo.nombre
+	, CuentaFondo_6_id                        	VARCHAR(36)  		-- 6	ComprobanteFondoModeloItem.CuentaFondo.id
+	, CuentaFondo_6_numero                    	INTEGER      		-- 7	ComprobanteFondoModeloItem.CuentaFondo.numero
+	, CuentaFondo_6_nombre                    	VARCHAR(50)  		-- 8	ComprobanteFondoModeloItem.CuentaFondo.nombre
+	, CuentaContable_9_id                     	VARCHAR(36)  		-- 9	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.id
+	, CuentaContable_9_codigo                 	VARCHAR(11)  		-- 10	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.codigo
+	, CuentaContable_9_nombre                 	VARCHAR(50)  		-- 11	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.nombre
+	, EjercicioContable_12_id                 	VARCHAR(36)  		-- 12	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.id
+	, EjercicioContable_12_numero             	INTEGER      		-- 13	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.numero
+	, EjercicioContable_12_apertura           	DATE         		-- 14	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.apertura
+	, EjercicioContable_12_cierre             	DATE         		-- 15	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.cierre
+	, EjercicioContable_12_cerrado            	BOOLEAN      		-- 16	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.cerrado
+	, EjercicioContable_12_cerradoModulos     	BOOLEAN      		-- 17	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.cerradoModulos
+	, EjercicioContable_12_comentario         	VARCHAR(250) 		-- 18	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.EjercicioContable.comentario
+	, CuentaContable_9_integra                	VARCHAR(16)  		-- 19	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.integra
+	, CuentaContable_9_cuentaJerarquia        	VARCHAR(16)  		-- 20	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaJerarquia
+	, CuentaContable_9_imputable              	BOOLEAN      		-- 21	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.imputable
+	, CuentaContable_9_ajustaPorInflacion     	BOOLEAN      		-- 22	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.ajustaPorInflacion
+	, CuentaContableEstado_23_id              	VARCHAR(36)  		-- 23	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CuentaContableEstado.id
+	, CuentaContableEstado_23_numero          	INTEGER      		-- 24	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CuentaContableEstado.numero
+	, CuentaContableEstado_23_nombre          	VARCHAR(50)  		-- 25	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CuentaContableEstado.nombre
+	, CuentaContable_9_cuentaConApropiacion   	BOOLEAN      		-- 26	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaConApropiacion
+	, CentroCostoContable_27_id               	VARCHAR(36)  		-- 27	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CentroCostoContable.id
+	, CentroCostoContable_27_numero           	INTEGER      		-- 28	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CentroCostoContable.numero
+	, CentroCostoContable_27_nombre           	VARCHAR(50)  		-- 29	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CentroCostoContable.nombre
+	, CentroCostoContable_27_abreviatura      	VARCHAR(5)   		-- 30	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CentroCostoContable.abreviatura
+	, CentroCostoContable_27_ejercicioContable	VARCHAR(36)  		-- 31	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CentroCostoContable.ejercicioContable
+	, CuentaContable_9_cuentaAgrupadora       	VARCHAR(50)  		-- 32	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.cuentaAgrupadora
+	, CuentaContable_9_porcentaje             	DECIMAL(6,3) 		-- 33	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.porcentaje
+	, PuntoEquilibrio_34_id                   	VARCHAR(36)  		-- 34	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.PuntoEquilibrio.id
+	, PuntoEquilibrio_34_numero               	INTEGER      		-- 35	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.PuntoEquilibrio.numero
+	, PuntoEquilibrio_34_nombre               	VARCHAR(50)  		-- 36	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.PuntoEquilibrio.nombre
+	, PuntoEquilibrio_34_tipoPuntoEquilibrio  	VARCHAR(36)  		-- 37	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.PuntoEquilibrio.tipoPuntoEquilibrio
+	, PuntoEquilibrio_34_ejercicioContable    	VARCHAR(36)  		-- 38	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.PuntoEquilibrio.ejercicioContable
+	, CostoVenta_39_id                        	VARCHAR(36)  		-- 39	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CostoVenta.id
+	, CostoVenta_39_numero                    	INTEGER      		-- 40	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CostoVenta.numero
+	, CostoVenta_39_nombre                    	VARCHAR(50)  		-- 41	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.CostoVenta.nombre
+	, SeguridadPuerta_42_id                   	VARCHAR(36)  		-- 42	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.SeguridadPuerta.id
+	, SeguridadPuerta_42_numero               	INTEGER      		-- 43	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.SeguridadPuerta.numero
+	, SeguridadPuerta_42_nombre               	VARCHAR(50)  		-- 44	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.SeguridadPuerta.nombre
+	, SeguridadPuerta_42_equate               	VARCHAR(30)  		-- 45	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.SeguridadPuerta.equate
+	, SeguridadPuerta_42_seguridadModulo      	VARCHAR(36)  		-- 46	ComprobanteFondoModeloItem.CuentaFondo.CuentaContable.SeguridadPuerta.seguridadModulo
+	, CuentaFondoGrupo_47_id                  	VARCHAR(36)  		-- 47	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.id
+	, CuentaFondoGrupo_47_numero              	INTEGER      		-- 48	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.numero
+	, CuentaFondoGrupo_47_nombre              	VARCHAR(50)  		-- 49	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.nombre
+	, CuentaFondoRubro_50_id                  	VARCHAR(36)  		-- 50	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.id
+	, CuentaFondoRubro_50_numero              	INTEGER      		-- 51	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.numero
+	, CuentaFondoRubro_50_nombre              	VARCHAR(50)  		-- 52	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoGrupo.CuentaFondoRubro.nombre
+	, CuentaFondoTipo_53_id                   	VARCHAR(36)  		-- 53	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.id
+	, CuentaFondoTipo_53_numero               	INTEGER      		-- 54	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.numero
+	, CuentaFondoTipo_53_nombre               	VARCHAR(50)  		-- 55	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipo.nombre
+	, CuentaFondo_6_obsoleto                  	BOOLEAN      		-- 56	ComprobanteFondoModeloItem.CuentaFondo.obsoleto
+	, CuentaFondo_6_noImprimeCaja             	BOOLEAN      		-- 57	ComprobanteFondoModeloItem.CuentaFondo.noImprimeCaja
+	, CuentaFondo_6_ventas                    	BOOLEAN      		-- 58	ComprobanteFondoModeloItem.CuentaFondo.ventas
+	, CuentaFondo_6_fondos                    	BOOLEAN      		-- 59	ComprobanteFondoModeloItem.CuentaFondo.fondos
+	, CuentaFondo_6_compras                   	BOOLEAN      		-- 60	ComprobanteFondoModeloItem.CuentaFondo.compras
+	, Moneda_61_id                            	VARCHAR(36)  		-- 61	ComprobanteFondoModeloItem.CuentaFondo.Moneda.id
+	, Moneda_61_numero                        	INTEGER      		-- 62	ComprobanteFondoModeloItem.CuentaFondo.Moneda.numero
+	, Moneda_61_nombre                        	VARCHAR(50)  		-- 63	ComprobanteFondoModeloItem.CuentaFondo.Moneda.nombre
+	, Moneda_61_abreviatura                   	VARCHAR(5)   		-- 64	ComprobanteFondoModeloItem.CuentaFondo.Moneda.abreviatura
+	, Moneda_61_cotizacion                    	DECIMAL(13,5)		-- 65	ComprobanteFondoModeloItem.CuentaFondo.Moneda.cotizacion
+	, Moneda_61_cotizacionFecha               	TIMESTAMP    		-- 66	ComprobanteFondoModeloItem.CuentaFondo.Moneda.cotizacionFecha
+	, Moneda_61_controlActualizacion          	BOOLEAN      		-- 67	ComprobanteFondoModeloItem.CuentaFondo.Moneda.controlActualizacion
+	, MonedaAFIP_68_id                        	VARCHAR(36)  		-- 68	ComprobanteFondoModeloItem.CuentaFondo.Moneda.MonedaAFIP.id
+	, MonedaAFIP_68_codigo                    	VARCHAR(3)   		-- 69	ComprobanteFondoModeloItem.CuentaFondo.Moneda.MonedaAFIP.codigo
+	, MonedaAFIP_68_nombre                    	VARCHAR(50)  		-- 70	ComprobanteFondoModeloItem.CuentaFondo.Moneda.MonedaAFIP.nombre
+	, Caja_71_id                              	VARCHAR(36)  		-- 71	ComprobanteFondoModeloItem.CuentaFondo.Caja.id
+	, Caja_71_numero                          	INTEGER      		-- 72	ComprobanteFondoModeloItem.CuentaFondo.Caja.numero
+	, Caja_71_nombre                          	VARCHAR(50)  		-- 73	ComprobanteFondoModeloItem.CuentaFondo.Caja.nombre
+	, SeguridadPuerta_74_id                   	VARCHAR(36)  		-- 74	ComprobanteFondoModeloItem.CuentaFondo.Caja.SeguridadPuerta.id
+	, SeguridadPuerta_74_numero               	INTEGER      		-- 75	ComprobanteFondoModeloItem.CuentaFondo.Caja.SeguridadPuerta.numero
+	, SeguridadPuerta_74_nombre               	VARCHAR(50)  		-- 76	ComprobanteFondoModeloItem.CuentaFondo.Caja.SeguridadPuerta.nombre
+	, SeguridadPuerta_74_equate               	VARCHAR(30)  		-- 77	ComprobanteFondoModeloItem.CuentaFondo.Caja.SeguridadPuerta.equate
+	, SeguridadPuerta_74_seguridadModulo      	VARCHAR(36)  		-- 78	ComprobanteFondoModeloItem.CuentaFondo.Caja.SeguridadPuerta.seguridadModulo
+	, CuentaFondo_6_rechazados                	BOOLEAN      		-- 79	ComprobanteFondoModeloItem.CuentaFondo.rechazados
+	, CuentaFondo_6_conciliacion              	BOOLEAN      		-- 80	ComprobanteFondoModeloItem.CuentaFondo.conciliacion
+	, CuentaFondoTipoBanco_81_id              	VARCHAR(36)  		-- 81	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.id
+	, CuentaFondoTipoBanco_81_numero          	INTEGER      		-- 82	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.numero
+	, CuentaFondoTipoBanco_81_nombre          	VARCHAR(50)  		-- 83	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoTipoBanco.nombre
+	, Banco_84_id                             	VARCHAR(36)  		-- 84	ComprobanteFondoModeloItem.CuentaFondo.Banco.id
+	, Banco_84_numero                         	INTEGER      		-- 85	ComprobanteFondoModeloItem.CuentaFondo.Banco.numero
+	, Banco_84_nombre                         	VARCHAR(50)  		-- 86	ComprobanteFondoModeloItem.CuentaFondo.Banco.nombre
+	, Banco_84_cuit                           	BIGINT       		-- 87	ComprobanteFondoModeloItem.CuentaFondo.Banco.cuit
+	, Banco_84_bloqueado                      	BOOLEAN      		-- 88	ComprobanteFondoModeloItem.CuentaFondo.Banco.bloqueado
+	, Banco_84_hoja                           	INTEGER      		-- 89	ComprobanteFondoModeloItem.CuentaFondo.Banco.hoja
+	, Banco_84_primeraFila                    	INTEGER      		-- 90	ComprobanteFondoModeloItem.CuentaFondo.Banco.primeraFila
+	, Banco_84_ultimaFila                     	INTEGER      		-- 91	ComprobanteFondoModeloItem.CuentaFondo.Banco.ultimaFila
+	, Banco_84_fecha                          	VARCHAR(3)   		-- 92	ComprobanteFondoModeloItem.CuentaFondo.Banco.fecha
+	, Banco_84_descripcion                    	VARCHAR(3)   		-- 93	ComprobanteFondoModeloItem.CuentaFondo.Banco.descripcion
+	, Banco_84_referencia1                    	VARCHAR(3)   		-- 94	ComprobanteFondoModeloItem.CuentaFondo.Banco.referencia1
+	, Banco_84_importe                        	VARCHAR(3)   		-- 95	ComprobanteFondoModeloItem.CuentaFondo.Banco.importe
+	, Banco_84_referencia2                    	VARCHAR(3)   		-- 96	ComprobanteFondoModeloItem.CuentaFondo.Banco.referencia2
+	, Banco_84_saldo                          	VARCHAR(3)   		-- 97	ComprobanteFondoModeloItem.CuentaFondo.Banco.saldo
+	, CuentaFondo_6_cuentaBancaria            	VARCHAR(22)  		-- 98	ComprobanteFondoModeloItem.CuentaFondo.cuentaBancaria
+	, CuentaFondo_6_cbu                       	VARCHAR(22)  		-- 99	ComprobanteFondoModeloItem.CuentaFondo.cbu
+	, CuentaFondo_6_limiteDescubierto         	DECIMAL(13,5)		-- 100	ComprobanteFondoModeloItem.CuentaFondo.limiteDescubierto
+	, CuentaFondo_6_cuentaFondoCaucion        	VARCHAR(50)  		-- 101	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoCaucion
+	, CuentaFondo_6_cuentaFondoDiferidos      	VARCHAR(50)  		-- 102	ComprobanteFondoModeloItem.CuentaFondo.cuentaFondoDiferidos
+	, CuentaFondo_6_formato                   	VARCHAR(50)  		-- 103	ComprobanteFondoModeloItem.CuentaFondo.formato
+	, CuentaFondoBancoCopia_104_id            	VARCHAR(36)  		-- 104	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.id
+	, CuentaFondoBancoCopia_104_numero        	INTEGER      		-- 105	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.numero
+	, CuentaFondoBancoCopia_104_nombre        	VARCHAR(50)  		-- 106	ComprobanteFondoModeloItem.CuentaFondo.CuentaFondoBancoCopia.nombre
+	, CuentaFondo_6_limiteOperacionIndividual 	DECIMAL(13,5)		-- 107	ComprobanteFondoModeloItem.CuentaFondo.limiteOperacionIndividual
+	, SeguridadPuerta_108_id                  	VARCHAR(36)  		-- 108	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_108_numero              	INTEGER      		-- 109	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_108_nombre              	VARCHAR(50)  		-- 110	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_108_equate              	VARCHAR(30)  		-- 111	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_112_id                  	VARCHAR(36)  		-- 112	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_112_numero              	INTEGER      		-- 113	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_112_nombre              	VARCHAR(50)  		-- 114	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_115_id                  	VARCHAR(36)  		-- 115	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_115_numero              	INTEGER      		-- 116	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_115_nombre              	VARCHAR(50)  		-- 117	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_115_equate              	VARCHAR(30)  		-- 118	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_119_id                  	VARCHAR(36)  		-- 119	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_119_numero              	INTEGER      		-- 120	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_119_nombre              	VARCHAR(50)  		-- 121	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+	, SeguridadPuerta_122_id                  	VARCHAR(36)  		-- 122	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.id
+	, SeguridadPuerta_122_numero              	INTEGER      		-- 123	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.numero
+	, SeguridadPuerta_122_nombre              	VARCHAR(50)  		-- 124	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.nombre
+	, SeguridadPuerta_122_equate              	VARCHAR(30)  		-- 125	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.equate
+	, SeguridadModulo_126_id                  	VARCHAR(36)  		-- 126	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.id
+	, SeguridadModulo_126_numero              	INTEGER      		-- 127	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.numero
+	, SeguridadModulo_126_nombre              	VARCHAR(50)  		-- 128	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
+
+);

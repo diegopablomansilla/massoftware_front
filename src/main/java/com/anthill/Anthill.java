@@ -34,6 +34,8 @@ import com.anthill.ant.empresa.EmpresaAnt;
 import com.anthill.ant.empresa.SucursalAnt;
 import com.anthill.ant.empresa.TipoSucursalAnt;
 import com.anthill.ant.fondos.CajaAnt;
+import com.anthill.ant.fondos.ComprobanteFondoModeloAnt;
+import com.anthill.ant.fondos.ComprobanteFondoModeloItemAnt;
 import com.anthill.ant.fondos.CuentaFondoAnt;
 import com.anthill.ant.fondos.CuentaFondoBancoCopiaAnt;
 import com.anthill.ant.fondos.CuentaFondoGrupoAnt;
@@ -203,6 +205,10 @@ public class Anthill {
 				cuentaFondoTipoAnt, monedaAnt, cajaAnt, cuentaFondoTipoBancoAnt, bancoAnt, /*cuentaFondoAnt,
 				cuentaFondoAnt,*/ cuentaFondoBancoCopiaAnt, seguridadPuertaAnt, seguridadPuertaAnt,
 				seguridadPuertaAnt);
+		
+		ComprobanteFondoModeloAnt comprobanteFondoModeloAnt = new ComprobanteFondoModeloAnt(anthill);
+		
+		ComprobanteFondoModeloItemAnt comprobanteFondoModeloItemAnt = new ComprobanteFondoModeloItemAnt(anthill, comprobanteFondoModeloAnt, cuentaFondoAnt);
 
 		///////////////////////////////////////////////////////////////////
 

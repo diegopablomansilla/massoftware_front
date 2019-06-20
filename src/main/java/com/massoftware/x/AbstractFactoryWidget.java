@@ -141,6 +141,12 @@ import com.massoftware.x.fondos.WFCuentaFondoBancoCopia;
 import com.massoftware.service.fondos.CuentaFondoFiltro;
 import com.massoftware.x.fondos.WLCuentaFondo;
 import com.massoftware.x.fondos.WFCuentaFondo;
+import com.massoftware.service.fondos.ComprobanteFondoModeloFiltro;
+import com.massoftware.x.fondos.WLComprobanteFondoModelo;
+import com.massoftware.x.fondos.WFComprobanteFondoModelo;
+import com.massoftware.service.fondos.ComprobanteFondoModeloItemFiltro;
+import com.massoftware.x.fondos.WLComprobanteFondoModeloItem;
+import com.massoftware.x.fondos.WFComprobanteFondoModeloItem;
 
 
 public abstract class AbstractFactoryWidget {
@@ -661,6 +667,28 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFCuentaFondo buildWFCuentaFondo(String mode, String id) throws Exception {
 		return new WFCuentaFondo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLComprobanteFondoModelo buildWLComprobanteFondoModelo() throws Exception {
+		return new WLComprobanteFondoModelo();
+	}
+	public WLComprobanteFondoModelo buildWLComprobanteFondoModelo(ComprobanteFondoModeloFiltro filtro) throws Exception {
+		return new WLComprobanteFondoModelo(filtro);
+	}
+	public WFComprobanteFondoModelo buildWFComprobanteFondoModelo(String mode, String id) throws Exception {
+		return new WFComprobanteFondoModelo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLComprobanteFondoModeloItem buildWLComprobanteFondoModeloItem() throws Exception {
+		return new WLComprobanteFondoModeloItem();
+	}
+	public WLComprobanteFondoModeloItem buildWLComprobanteFondoModeloItem(ComprobanteFondoModeloItemFiltro filtro) throws Exception {
+		return new WLComprobanteFondoModeloItem(filtro);
+	}
+	public WFComprobanteFondoModeloItem buildWFComprobanteFondoModeloItem(String mode, String id) throws Exception {
+		return new WFComprobanteFondoModeloItem(mode, id);
 	}
 
 }

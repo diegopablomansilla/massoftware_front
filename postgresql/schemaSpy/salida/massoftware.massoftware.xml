@@ -257,6 +257,39 @@
          </index>
          <index name="u_codigopostal_codigo" unique="true"/>
       </table>
+      <table name="comprobantefondomodelo" numRows="271" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="comprobantefondomodelo" foreignKey="comprobantefondomodeloitem_comprobantefondomodelo_fkey" implied="false" onDeleteCascade="false" table="comprobantefondomodeloitem"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="comprobantefondomodelo_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="comprobantefondomodelo_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_comprobantefondomodelo_nombre" unique="true"/>
+      </table>
+      <table name="comprobantefondomodeloitem" numRows="300" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="debe" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="3" name="comprobantefondomodelo" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="comprobantefondomodeloitem_comprobantefondomodelo_fkey" implied="false" onDeleteCascade="false" table="comprobantefondomodelo"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="cuentafondo" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="comprobantefondomodeloitem_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="cuentafondo"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="comprobantefondomodeloitem_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="comprobantefondomodeloitem_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+      </table>
       <table name="costoventa" numRows="282" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
             <child column="costoventa" foreignKey="cuentacontable_costoventa_fkey" implied="false" onDeleteCascade="false" table="cuentacontable"/>
@@ -328,7 +361,9 @@
          <index name="u_cuentacontableestado_nombre" unique="true"/>
       </table>
       <table name="cuentafondo" numRows="282" remarks="" schema="massoftware" type="TABLE">
-         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="cuentafondo" foreignKey="comprobantefondomodeloitem_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="comprobantefondomodeloitem"/>
+         </column>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
          <column autoUpdated="false" digits="0" id="3" name="cuentacontable" nullable="false" remarks="" size="36" type="varchar">

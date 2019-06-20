@@ -27,6 +27,7 @@ digraph "twoDegreesRelationshipsDiagram" {
   "asientomodeloitem":"cuentacontable":sw -> "cuentacontable":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "caja":"elipses":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "centrocostocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "comprobantefondomodeloitem":"elipses":sw -> "cuentafondo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"centrocostocontable":sw -> "centrocostocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"costoventa":sw -> "costoventa":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"cuentacontableestado":sw -> "cuentacontableestado":"id":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -134,6 +135,16 @@ digraph "twoDegreesRelationshipsDiagram" {
     URL="centrocostocontable.html"
     tooltip="centrocostocontable"
   ];
+  "comprobantefondomodeloitem" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">comprobantefondomodeloitem</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">300 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="comprobantefondomodeloitem.html"
+    tooltip="comprobantefondomodeloitem"
+  ];
   "costoventa" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -215,7 +226,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="seguridadpuertauso" COLSPAN="3" ALIGN="LEFT">seguridadpuertauso</TD></TR>
       <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="3" ALIGN="LEFT">seguridadpuertaconsulta</TD></TR>
       <TR><TD PORT="seguridadpuertalimite" COLSPAN="3" ALIGN="LEFT">seguridadpuertalimite</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondo.html"
     tooltip="cuentafondo"

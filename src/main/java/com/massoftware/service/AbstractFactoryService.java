@@ -47,6 +47,8 @@ import com.massoftware.service.fondos.CuentaFondoGrupoService;
 import com.massoftware.service.fondos.CuentaFondoTipoBancoService;
 import com.massoftware.service.fondos.CuentaFondoBancoCopiaService;
 import com.massoftware.service.fondos.CuentaFondoService;
+import com.massoftware.service.fondos.ComprobanteFondoModeloService;
+import com.massoftware.service.fondos.ComprobanteFondoModeloItemService;
 
 
 public abstract class AbstractFactoryService {
@@ -237,6 +239,14 @@ public abstract class AbstractFactoryService {
 
 	public CuentaFondoService buildCuentaFondoService() throws Exception {
 		return new CuentaFondoService();
+	}
+
+	public ComprobanteFondoModeloService buildComprobanteFondoModeloService() throws Exception {
+		return new ComprobanteFondoModeloService();
+	}
+
+	public ComprobanteFondoModeloItemService buildComprobanteFondoModeloItemService() throws Exception {
+		return new ComprobanteFondoModeloItemService();
 	}
 
 
