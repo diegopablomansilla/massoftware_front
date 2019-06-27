@@ -151,6 +151,15 @@ import com.massoftware.service.fondos.ComprobanteFondoModeloService;
 import com.massoftware.model.fondos.ComprobanteFondoModeloItem;
 import com.massoftware.service.fondos.ComprobanteFondoModeloItemFiltro;
 import com.massoftware.service.fondos.ComprobanteFondoModeloItemService;
+import com.massoftware.model.fondos.TalonarioLetra;
+import com.massoftware.service.fondos.TalonarioLetraFiltro;
+import com.massoftware.service.fondos.TalonarioLetraService;
+import com.massoftware.model.fondos.TalonarioControladorFizcal;
+import com.massoftware.service.fondos.TalonarioControladorFizcalFiltro;
+import com.massoftware.service.fondos.TalonarioControladorFizcalService;
+import com.massoftware.model.fondos.Talonario;
+import com.massoftware.service.fondos.TalonarioFiltro;
+import com.massoftware.service.fondos.TalonarioService;
 
 public class Populate {
 
@@ -204,8 +213,11 @@ public class Populate {
 			//insertCuentaFondoTipoBanco();
 			//insertCuentaFondoBancoCopia();
 			//insertCuentaFondo();
-			insertComprobanteFondoModelo();
-			insertComprobanteFondoModeloItem();
+			//insertComprobanteFondoModelo();
+			//insertComprobanteFondoModeloItem();
+			insertTalonarioLetra();
+			insertTalonarioControladorFizcal();
+			insertTalonario();
 	}
 
 
@@ -2405,6 +2417,142 @@ public class Populate {
 				cuentaFondoFiltro.setLimit(1L);
 				List<CuentaFondo> cuentaFondoListado = servicecuentaFondo.find(cuentaFondoFiltro);
 				obj.setCuentaFondo(cuentaFondoListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTalonarioLetra() throws Exception {
+
+		TalonarioLetraService service = AppCX.services().buildTalonarioLetraService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TalonarioLetra obj = new TalonarioLetra();
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTalonarioControladorFizcal() throws Exception {
+
+		TalonarioControladorFizcalService service = AppCX.services().buildTalonarioControladorFizcalService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TalonarioControladorFizcal obj = new TalonarioControladorFizcal();
+
+				obj.setCodigo(UtilPopulate.getStringRandom(null, 10, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTalonario() throws Exception {
+
+		TalonarioService service = AppCX.services().buildTalonarioService();
+		TalonarioLetraService servicetalonarioLetra = AppCX.services().buildTalonarioLetraService();
+		Long talonarioLetraCount = servicetalonarioLetra.count();
+		TalonarioControladorFizcalService servicetalonarioControladorFizcal = AppCX.services().buildTalonarioControladorFizcalService();
+		Long talonarioControladorFizcalCount = servicetalonarioControladorFizcal.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Talonario obj = new Talonario();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				TalonarioLetraFiltro talonarioLetraFiltro = new TalonarioLetraFiltro();
+				long talonarioLetraIndex = UtilPopulate.getLongRandom(0L, talonarioLetraCount-1);
+				talonarioLetraFiltro.setOffset(talonarioLetraIndex);
+				talonarioLetraFiltro.setLimit(1L);
+				List<TalonarioLetra> talonarioLetraListado = servicetalonarioLetra.find(talonarioLetraFiltro);
+				obj.setTalonarioLetra(talonarioLetraListado.get(0));
+
+				obj.setPuntoVenta(UtilPopulate.getIntegerRandom(1, 9999, true));
+
+				obj.setAutonumeracion(new Random().nextBoolean());
+
+				obj.setNumeracionPreImpresa(new Random().nextBoolean());
+
+				obj.setAsociadoRG10098(new Random().nextBoolean());
+
+				TalonarioControladorFizcalFiltro talonarioControladorFizcalFiltro = new TalonarioControladorFizcalFiltro();
+				long talonarioControladorFizcalIndex = UtilPopulate.getLongRandom(0L, talonarioControladorFizcalCount-1);
+				talonarioControladorFizcalFiltro.setOffset(talonarioControladorFizcalIndex);
+				talonarioControladorFizcalFiltro.setLimit(1L);
+				List<TalonarioControladorFizcal> talonarioControladorFizcalListado = servicetalonarioControladorFizcal.find(talonarioControladorFizcalFiltro);
+				obj.setTalonarioControladorFizcal(talonarioControladorFizcalListado.get(0));
+
+				obj.setPrimerNumero(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setProximoNumero(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setUltimoNumero(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setCantidadMinimaComprobantes(UtilPopulate.getIntegerRandom(1, null, false));
+
+				obj.setFecha(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setNumeroCAI(UtilPopulate.getLongRandom(1L, 99999999999999L, false));
+
+				obj.setVencimiento(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setDiasAvisoVencimiento(UtilPopulate.getIntegerRandom(1, null, false));
 
 				service.insert(obj);
 

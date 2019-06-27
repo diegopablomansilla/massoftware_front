@@ -1477,3 +1477,137 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_ComprobanteFondoModeloItem_numero(
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_ComprobanteFondoModeloItem_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioLetra                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioLetra
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioControladorFizcal                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_puntoVenta() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_puntoVenta() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(puntoVenta),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_puntoVenta();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_primerNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_primerNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(primerNumero),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_primerNumero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_proximoNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_proximoNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(proximoNumero),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_proximoNumero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_ultimoNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_ultimoNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(ultimoNumero),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_ultimoNumero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_cantidadMinimaComprobantes() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_cantidadMinimaComprobantes() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(cantidadMinimaComprobantes),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_cantidadMinimaComprobantes();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_numeroCAI() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_numeroCAI() RETURNS BIGINT AS $$
+
+	SELECT (COALESCE(MAX(numeroCAI),0) + 1)::BIGINT FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_numeroCAI();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Talonario_diasAvisoVencimiento() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_diasAvisoVencimiento() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(diasAvisoVencimiento),0) + 1)::INTEGER FROM massoftware.Talonario;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Talonario_diasAvisoVencimiento();

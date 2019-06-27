@@ -2259,3 +2259,42 @@ CREATE TYPE massoftware.t_ComprobanteFondoModeloItem_3 AS (
 	, SeguridadModulo_126_nombre              	VARCHAR(50)  		-- 128	ComprobanteFondoModeloItem.CuentaFondo.SeguridadPuerta.SeguridadModulo.nombre
 
 );
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+
+
+DROP TYPE IF EXISTS massoftware.t_Talonario_1 CASCADE;
+
+CREATE TYPE massoftware.t_Talonario_1 AS (
+
+	  Talonario_id                        	VARCHAR(36)		-- 0	Talonario.id
+	, Talonario_numero                    	INTEGER    		-- 1	Talonario.numero
+	, Talonario_nombre                    	VARCHAR(50)		-- 2	Talonario.nombre
+	, TalonarioLetra_3_id                 	VARCHAR(36)		-- 3	Talonario.TalonarioLetra.id
+	, TalonarioLetra_3_nombre             	VARCHAR(50)		-- 4	Talonario.TalonarioLetra.nombre
+	, Talonario_puntoVenta                	INTEGER    		-- 5	Talonario.puntoVenta
+	, Talonario_autonumeracion            	BOOLEAN    		-- 6	Talonario.autonumeracion
+	, Talonario_numeracionPreImpresa      	BOOLEAN    		-- 7	Talonario.numeracionPreImpresa
+	, Talonario_asociadoRG10098           	BOOLEAN    		-- 8	Talonario.asociadoRG10098
+	, TalonarioControladorFizcal_9_id     	VARCHAR(36)		-- 9	Talonario.TalonarioControladorFizcal.id
+	, TalonarioControladorFizcal_9_codigo 	VARCHAR(10)		-- 10	Talonario.TalonarioControladorFizcal.codigo
+	, TalonarioControladorFizcal_9_nombre 	VARCHAR(50)		-- 11	Talonario.TalonarioControladorFizcal.nombre
+	, Talonario_primerNumero              	INTEGER    		-- 12	Talonario.primerNumero
+	, Talonario_proximoNumero             	INTEGER    		-- 13	Talonario.proximoNumero
+	, Talonario_ultimoNumero              	INTEGER    		-- 14	Talonario.ultimoNumero
+	, Talonario_cantidadMinimaComprobantes	INTEGER    		-- 15	Talonario.cantidadMinimaComprobantes
+	, Talonario_fecha                     	DATE       		-- 16	Talonario.fecha
+	, Talonario_numeroCAI                 	BIGINT     		-- 17	Talonario.numeroCAI
+	, Talonario_vencimiento               	DATE       		-- 18	Talonario.vencimiento
+	, Talonario_diasAvisoVencimiento      	INTEGER    		-- 19	Talonario.diasAvisoVencimiento
+
+);

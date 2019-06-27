@@ -147,6 +147,15 @@ import com.massoftware.x.fondos.WFComprobanteFondoModelo;
 import com.massoftware.service.fondos.ComprobanteFondoModeloItemFiltro;
 import com.massoftware.x.fondos.WLComprobanteFondoModeloItem;
 import com.massoftware.x.fondos.WFComprobanteFondoModeloItem;
+import com.massoftware.service.fondos.TalonarioLetraFiltro;
+import com.massoftware.x.fondos.WLTalonarioLetra;
+import com.massoftware.x.fondos.WFTalonarioLetra;
+import com.massoftware.service.fondos.TalonarioControladorFizcalFiltro;
+import com.massoftware.x.fondos.WLTalonarioControladorFizcal;
+import com.massoftware.x.fondos.WFTalonarioControladorFizcal;
+import com.massoftware.service.fondos.TalonarioFiltro;
+import com.massoftware.x.fondos.WLTalonario;
+import com.massoftware.x.fondos.WFTalonario;
 
 
 public abstract class AbstractFactoryWidget {
@@ -689,6 +698,39 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFComprobanteFondoModeloItem buildWFComprobanteFondoModeloItem(String mode, String id) throws Exception {
 		return new WFComprobanteFondoModeloItem(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTalonarioLetra buildWLTalonarioLetra() throws Exception {
+		return new WLTalonarioLetra();
+	}
+	public WLTalonarioLetra buildWLTalonarioLetra(TalonarioLetraFiltro filtro) throws Exception {
+		return new WLTalonarioLetra(filtro);
+	}
+	public WFTalonarioLetra buildWFTalonarioLetra(String mode, String id) throws Exception {
+		return new WFTalonarioLetra(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTalonarioControladorFizcal buildWLTalonarioControladorFizcal() throws Exception {
+		return new WLTalonarioControladorFizcal();
+	}
+	public WLTalonarioControladorFizcal buildWLTalonarioControladorFizcal(TalonarioControladorFizcalFiltro filtro) throws Exception {
+		return new WLTalonarioControladorFizcal(filtro);
+	}
+	public WFTalonarioControladorFizcal buildWFTalonarioControladorFizcal(String mode, String id) throws Exception {
+		return new WFTalonarioControladorFizcal(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTalonario buildWLTalonario() throws Exception {
+		return new WLTalonario();
+	}
+	public WLTalonario buildWLTalonario(TalonarioFiltro filtro) throws Exception {
+		return new WLTalonario(filtro);
+	}
+	public WFTalonario buildWFTalonario(String mode, String id) throws Exception {
+		return new WFTalonario(mode, id);
 	}
 
 }

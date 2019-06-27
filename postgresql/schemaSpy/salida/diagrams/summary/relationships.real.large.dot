@@ -602,6 +602,55 @@ digraph "largeRelationshipsDiagram" {
     URL="tables/sucursal.html"
     tooltip="sucursal"
   ];
+  "talonario" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">talonario</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="talonarioletra" COLSPAN="3" ALIGN="LEFT">talonarioletra</TD></TR>
+      <TR><TD PORT="puntoventa" COLSPAN="3" ALIGN="LEFT">puntoventa</TD></TR>
+      <TR><TD PORT="autonumeracion" COLSPAN="3" ALIGN="LEFT">autonumeracion</TD></TR>
+      <TR><TD PORT="numeracionpreimpresa" COLSPAN="3" ALIGN="LEFT">numeracionpreimpresa</TD></TR>
+      <TR><TD PORT="asociadorg10098" COLSPAN="3" ALIGN="LEFT">asociadorg10098</TD></TR>
+      <TR><TD PORT="talonariocontroladorfizcal" COLSPAN="3" ALIGN="LEFT">talonariocontroladorfizcal</TD></TR>
+      <TR><TD PORT="primernumero" COLSPAN="3" ALIGN="LEFT">primernumero</TD></TR>
+      <TR><TD PORT="proximonumero" COLSPAN="3" ALIGN="LEFT">proximonumero</TD></TR>
+      <TR><TD PORT="ultimonumero" COLSPAN="3" ALIGN="LEFT">ultimonumero</TD></TR>
+      <TR><TD PORT="cantidadminimacomprobantes" COLSPAN="3" ALIGN="LEFT">cantidadminimacomprobantes</TD></TR>
+      <TR><TD PORT="fecha" COLSPAN="3" ALIGN="LEFT">fecha</TD></TR>
+      <TR><TD PORT="numerocai" COLSPAN="3" ALIGN="LEFT">numerocai</TD></TR>
+      <TR><TD PORT="vencimiento" COLSPAN="3" ALIGN="LEFT">vencimiento</TD></TR>
+      <TR><TD PORT="diasavisovencimiento" COLSPAN="3" ALIGN="LEFT">diasavisovencimiento</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/talonario.html"
+    tooltip="talonario"
+  ];
+  "talonariocontroladorfizcal" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">talonariocontroladorfizcal</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="codigo" COLSPAN="3" ALIGN="LEFT">codigo</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">161 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/talonariocontroladorfizcal.html"
+    tooltip="talonariocontroladorfizcal"
+  ];
+  "talonarioletra" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">talonarioletra</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">276 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/talonarioletra.html"
+    tooltip="talonarioletra"
+  ];
   "tipopuntoequilibrio" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -724,6 +773,8 @@ digraph "largeRelationshipsDiagram" {
   "puntoequilibrio":"tipopuntoequilibrio":sw -> "tipopuntoequilibrio":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "seguridadpuerta":"seguridadmodulo":sw -> "seguridadmodulo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "sucursal":"tiposucursal":sw -> "tiposucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "talonario":"talonariocontroladorfizcal":sw -> "talonariocontroladorfizcal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "talonario":"talonarioletra":sw -> "talonarioletra":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transporte":"codigopostal":sw -> "codigopostal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transportetarifa":"carga":sw -> "carga":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transportetarifa":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];

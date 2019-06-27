@@ -6,6 +6,7 @@ motivocomentario
 bancofirmante
 deposito
 transportetarifa
+talonario
 monedacotizacion
 comprobantefondomodeloitem
 asientomodeloitem
@@ -31,6 +32,8 @@ seguridadpuerta
 usuario
 tiposucursal
 tipopuntoequilibrio
+talonarioletra
+talonariocontroladorfizcal
 seguridadmodulo
 pais
 monedaafip

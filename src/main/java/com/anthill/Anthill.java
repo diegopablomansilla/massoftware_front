@@ -42,6 +42,9 @@ import com.anthill.ant.fondos.CuentaFondoGrupoAnt;
 import com.anthill.ant.fondos.CuentaFondoRubroAnt;
 import com.anthill.ant.fondos.CuentaFondoTipoAnt;
 import com.anthill.ant.fondos.CuentaFondoTipoBancoAnt;
+import com.anthill.ant.fondos.TalonarioAnt;
+import com.anthill.ant.fondos.TalonarioControladorFizcalAnt;
+import com.anthill.ant.fondos.TalonarioLetraAnt;
 import com.anthill.ant.fondos.banco.BancoAnt;
 import com.anthill.ant.fondos.banco.BancoFirmanteAnt;
 import com.anthill.ant.geo.CiudadAnt;
@@ -171,7 +174,7 @@ public class Anthill {
 				sucursalAnt, asientoContableModuloAnt);
 
 		AsientoContableItemAnt asientoContableItemAnt = new AsientoContableItemAnt(anthill, asientoContableAnt,
-				cuentaContableAnt);
+				cuentaContableAnt);				
 
 		// ---------------------------------------------
 
@@ -209,6 +212,10 @@ public class Anthill {
 		ComprobanteFondoModeloAnt comprobanteFondoModeloAnt = new ComprobanteFondoModeloAnt(anthill);
 		
 		ComprobanteFondoModeloItemAnt comprobanteFondoModeloItemAnt = new ComprobanteFondoModeloItemAnt(anthill, comprobanteFondoModeloAnt, cuentaFondoAnt);
+		
+		TalonarioLetraAnt talonarioLetraAnt = new TalonarioLetraAnt(anthill);
+		TalonarioControladorFizcalAnt talonarioControladorFizcalAnt = new TalonarioControladorFizcalAnt(anthill);
+		TalonarioAnt talonarioAnt =	new TalonarioAnt(anthill, talonarioLetraAnt, talonarioControladorFizcalAnt);
 
 		///////////////////////////////////////////////////////////////////
 

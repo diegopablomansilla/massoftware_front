@@ -3808,3 +3808,250 @@ CREATE TRIGGER tgFormatComprobanteFondoModeloItem BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.ComprobanteFondoModeloItem;
 
 -- SELECT * FROM massoftware.ComprobanteFondoModeloItem WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioLetra                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioLetra
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TalonarioLetra CASCADE;
+
+CREATE TABLE massoftware.TalonarioLetra
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TalonarioLetra_nombre ON massoftware.TalonarioLetra (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonarioLetra() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonarioLetra() RETURNS TRIGGER AS $formatTalonarioLetra$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTalonarioLetra$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonarioLetra ON massoftware.TalonarioLetra CASCADE;
+
+CREATE TRIGGER tgFormatTalonarioLetra BEFORE INSERT OR UPDATE
+	ON massoftware.TalonarioLetra FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTalonarioLetra();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TalonarioLetra;
+
+-- SELECT * FROM massoftware.TalonarioLetra LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TalonarioLetra;
+
+-- SELECT * FROM massoftware.TalonarioLetra WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioControladorFizcal                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TalonarioControladorFizcal CASCADE;
+
+CREATE TABLE massoftware.TalonarioControladorFizcal
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº controlador
+	codigo VARCHAR(10) NOT NULL, 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TalonarioControladorFizcal_codigo ON massoftware.TalonarioControladorFizcal (TRANSLATE(LOWER(TRIM(codigo))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_TalonarioControladorFizcal_nombre ON massoftware.TalonarioControladorFizcal (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonarioControladorFizcal() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonarioControladorFizcal() RETURNS TRIGGER AS $formatTalonarioControladorFizcal$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.codigo := massoftware.white_is_null(NEW.codigo);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTalonarioControladorFizcal$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonarioControladorFizcal ON massoftware.TalonarioControladorFizcal CASCADE;
+
+CREATE TRIGGER tgFormatTalonarioControladorFizcal BEFORE INSERT OR UPDATE
+	ON massoftware.TalonarioControladorFizcal FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTalonarioControladorFizcal();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TalonarioControladorFizcal;
+
+-- SELECT * FROM massoftware.TalonarioControladorFizcal LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TalonarioControladorFizcal;
+
+-- SELECT * FROM massoftware.TalonarioControladorFizcal WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Talonario CASCADE;
+
+CREATE TABLE massoftware.Talonario
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº talonario
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Talonario_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Letra
+	talonarioLetra VARCHAR(36)  NOT NULL  REFERENCES massoftware.TalonarioLetra (id), 
+	
+	-- Punto de venta
+	puntoVenta INTEGER NOT NULL  CONSTRAINT Talonario_puntoVenta_chk CHECK ( puntoVenta >= 1 AND puntoVenta <= 9999  ), 
+	
+	-- Autonumeración
+	autonumeracion BOOLEAN NOT NULL, 
+	
+	-- Numeración pre-impresa
+	numeracionPreImpresa BOOLEAN NOT NULL, 
+	
+	-- Asociado al RG 100/98
+	asociadoRG10098 BOOLEAN NOT NULL, 
+	
+	-- Asociado a controlador fizcal
+	talonarioControladorFizcal VARCHAR(36)  NOT NULL  REFERENCES massoftware.TalonarioControladorFizcal (id), 
+	
+	-- Primer nº
+	primerNumero INTEGER CONSTRAINT Talonario_primerNumero_chk CHECK ( primerNumero >= 1  ), 
+	
+	-- Próximo nº
+	proximoNumero INTEGER CONSTRAINT Talonario_proximoNumero_chk CHECK ( proximoNumero >= 1  ), 
+	
+	-- Último nº
+	ultimoNumero INTEGER CONSTRAINT Talonario_ultimoNumero_chk CHECK ( ultimoNumero >= 1  ), 
+	
+	-- Cant. min. cbtes.
+	cantidadMinimaComprobantes INTEGER CONSTRAINT Talonario_cantidadMinimaComprobantes_chk CHECK ( cantidadMinimaComprobantes >= 1  ), 
+	
+	-- Fecha
+	fecha DATE, 
+	
+	-- Nº C.A.I
+	numeroCAI BIGINT CONSTRAINT Talonario_numeroCAI_chk CHECK ( numeroCAI >= 1 AND numeroCAI <= 99999999999999  ), 
+	
+	-- Vencimiento C.A.I
+	vencimiento DATE, 
+	
+	-- Días aviso vto.
+	diasAvisoVencimiento INTEGER CONSTRAINT Talonario_diasAvisoVencimiento_chk CHECK ( diasAvisoVencimiento >= 1  )
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Talonario_nombre ON massoftware.Talonario (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTalonario() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTalonario() RETURNS TRIGGER AS $formatTalonario$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.talonarioLetra := massoftware.white_is_null(NEW.talonarioLetra);
+	 NEW.talonarioControladorFizcal := massoftware.white_is_null(NEW.talonarioControladorFizcal);
+
+	RETURN NEW;
+END;
+$formatTalonario$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTalonario ON massoftware.Talonario CASCADE;
+
+CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE
+	ON massoftware.Talonario FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTalonario();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Talonario;
+
+-- SELECT * FROM massoftware.Talonario LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Talonario;
+
+-- SELECT * FROM massoftware.Talonario WHERE id = 'xxx';

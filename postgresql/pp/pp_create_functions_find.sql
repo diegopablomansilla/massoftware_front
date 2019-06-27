@@ -16245,3 +16245,605 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.f_ComprobanteFondoModeloItem_3 ( null , null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_ComprobanteFondoModeloItemById_3 ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioLetra                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioLetra
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioLetra (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, nombreArg5        VARCHAR(50)	-- 5
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioLetra (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, nombreArg5        VARCHAR(50)	-- 5
+
+) RETURNS SETOF massoftware.TalonarioLetra AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  TalonarioLetra.id        AS TalonarioLetra_id    	-- 0	.id   		VARCHAR(36)
+				, TalonarioLetra.nombre    AS TalonarioLetra_nombre	-- 1	.nombre		VARCHAR(50)
+
+		FROM	massoftware.TalonarioLetra
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TalonarioLetra.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND nombreArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg5)) > 0 THEN
+		nombreArg5 = REPLACE(nombreArg5, '''', '''''');
+		nombreArg5 = LOWER(TRIM(nombreArg5));
+		nombreArg5 = TRANSLATE(nombreArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TalonarioLetra.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioLetraById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioLetraById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TalonarioLetra AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TalonarioLetra ( idArg , null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TalonarioLetra ( null , null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TalonarioLetraById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioControladorFizcal                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioControladorFizcal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(10)	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioControladorFizcal (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, codigoArg5        VARCHAR(10)	-- 5
+	, nombreArg6        VARCHAR(50)	-- 6
+
+) RETURNS SETOF massoftware.TalonarioControladorFizcal AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  TalonarioControladorFizcal.id        AS TalonarioControladorFizcal_id    	-- 0	.id   		VARCHAR(36)
+				, TalonarioControladorFizcal.codigo    AS TalonarioControladorFizcal_codigo	-- 1	.codigo		VARCHAR(10)
+				, TalonarioControladorFizcal.nombre    AS TalonarioControladorFizcal_nombre	-- 2	.nombre		VARCHAR(50)
+
+		FROM	massoftware.TalonarioControladorFizcal
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' TalonarioControladorFizcal.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND codigoArg5 IS NOT NULL AND CHAR_LENGTH(TRIM(codigoArg5)) > 0 THEN
+		codigoArg5 = REPLACE(codigoArg5, '''', '''''');
+		codigoArg5 = LOWER(TRIM(codigoArg5));
+		codigoArg5 = TRANSLATE(codigoArg5,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(codigoArg5, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TalonarioControladorFizcal.codigo),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF searchById = false AND nombreArg6 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg6)) > 0 THEN
+		nombreArg6 = REPLACE(nombreArg6, '''', '''''');
+		nombreArg6 = LOWER(TRIM(nombreArg6));
+		nombreArg6 = TRANSLATE(nombreArg6,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg6, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(TalonarioControladorFizcal.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioControladorFizcalById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioControladorFizcalById (idArg VARCHAR(36)) RETURNS SETOF massoftware.TalonarioControladorFizcal AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_TalonarioControladorFizcal ( idArg , null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_TalonarioControladorFizcal ( null , null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TalonarioControladorFizcalById ('xxx'); 
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+
+
+DROP FUNCTION IF EXISTS massoftware.f_Talonario (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Talonario (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.Talonario AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Talonario.id                             AS Talonario_id                        	-- 0	.id                       		VARCHAR(36)
+				, Talonario.numero                         AS Talonario_numero                    	-- 1	.numero                   		INTEGER
+				, Talonario.nombre                         AS Talonario_nombre                    	-- 2	.nombre                   		VARCHAR(50)
+				, Talonario.talonarioLetra                 AS Talonario_talonarioLetra            	-- 3	.talonarioLetra           		VARCHAR(36)	TalonarioLetra.id
+				, Talonario.puntoVenta                     AS Talonario_puntoVenta                	-- 4	.puntoVenta               		INTEGER
+				, Talonario.autonumeracion                 AS Talonario_autonumeracion            	-- 5	.autonumeracion           		BOOLEAN
+				, Talonario.numeracionPreImpresa           AS Talonario_numeracionPreImpresa      	-- 6	.numeracionPreImpresa     		BOOLEAN
+				, Talonario.asociadoRG10098                AS Talonario_asociadoRG10098           	-- 7	.asociadoRG10098          		BOOLEAN
+				, Talonario.talonarioControladorFizcal     AS Talonario_talonarioControladorFizcal	-- 8	.talonarioControladorFizcal		VARCHAR(36)	TalonarioControladorFizcal.id
+				, Talonario.primerNumero                   AS Talonario_primerNumero              	-- 9	.primerNumero             		INTEGER
+				, Talonario.proximoNumero                  AS Talonario_proximoNumero             	-- 10	.proximoNumero            		INTEGER
+				, Talonario.ultimoNumero                   AS Talonario_ultimoNumero              	-- 11	.ultimoNumero             		INTEGER
+				, Talonario.cantidadMinimaComprobantes     AS Talonario_cantidadMinimaComprobantes	-- 12	.cantidadMinimaComprobantes		INTEGER
+				, Talonario.fecha                          AS Talonario_fecha                     	-- 13	.fecha                    		DATE
+				, Talonario.numeroCAI                      AS Talonario_numeroCAI                 	-- 14	.numeroCAI                		BIGINT
+				, Talonario.vencimiento                    AS Talonario_vencimiento               	-- 15	.vencimiento              		DATE
+				, Talonario.diasAvisoVencimiento           AS Talonario_diasAvisoVencimiento      	-- 16	.diasAvisoVencimiento     		INTEGER
+
+		FROM	massoftware.Talonario
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Talonario.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioById (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioById (idArg VARCHAR(36)) RETURNS SETOF massoftware.Talonario AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Talonario ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Talonario ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TalonarioById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_Talonario_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_Talonario_1 (
+
+	  idArg0            VARCHAR(36)	-- 0
+	, orderByArg1       INTEGER    	-- 1
+	, orderByDescArg2   BOOLEAN    	-- 2
+	, limitArg3         BIGINT     	-- 3
+	, offSetArg4        BIGINT     	-- 4
+	, numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+
+) RETURNS SETOF massoftware.t_Talonario_1 AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;
+	searchById BOOLEAN = false;
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = '
+
+		SELECT
+				  Talonario.id                             AS Talonario_id                        	-- 0	.id                              		VARCHAR(36)
+				, Talonario.numero                         AS Talonario_numero                    	-- 1	.numero                          		INTEGER
+				, Talonario.nombre                         AS Talonario_nombre                    	-- 2	.nombre                          		VARCHAR(50)
+				, TalonarioLetra_3.id                      AS TalonarioLetra_3_id                 	-- 3	.TalonarioLetra.id               		VARCHAR(36)
+				, TalonarioLetra_3.nombre                  AS TalonarioLetra_3_nombre             	-- 4	.TalonarioLetra.nombre           		VARCHAR(50)
+				, Talonario.puntoVenta                     AS Talonario_puntoVenta                	-- 5	.puntoVenta                      		INTEGER
+				, Talonario.autonumeracion                 AS Talonario_autonumeracion            	-- 6	.autonumeracion                  		BOOLEAN
+				, Talonario.numeracionPreImpresa           AS Talonario_numeracionPreImpresa      	-- 7	.numeracionPreImpresa            		BOOLEAN
+				, Talonario.asociadoRG10098                AS Talonario_asociadoRG10098           	-- 8	.asociadoRG10098                 		BOOLEAN
+				, TalonarioControladorFizcal_9.id          AS TalonarioControladorFizcal_9_id     	-- 9	.TalonarioControladorFizcal.id   		VARCHAR(36)
+				, TalonarioControladorFizcal_9.codigo      AS TalonarioControladorFizcal_9_codigo 	-- 10	.TalonarioControladorFizcal.codigo		VARCHAR(10)
+				, TalonarioControladorFizcal_9.nombre      AS TalonarioControladorFizcal_9_nombre 	-- 11	.TalonarioControladorFizcal.nombre		VARCHAR(50)
+				, Talonario.primerNumero                   AS Talonario_primerNumero              	-- 12	.primerNumero                    		INTEGER
+				, Talonario.proximoNumero                  AS Talonario_proximoNumero             	-- 13	.proximoNumero                   		INTEGER
+				, Talonario.ultimoNumero                   AS Talonario_ultimoNumero              	-- 14	.ultimoNumero                    		INTEGER
+				, Talonario.cantidadMinimaComprobantes     AS Talonario_cantidadMinimaComprobantes	-- 15	.cantidadMinimaComprobantes      		INTEGER
+				, Talonario.fecha                          AS Talonario_fecha                     	-- 16	.fecha                           		DATE
+				, Talonario.numeroCAI                      AS Talonario_numeroCAI                 	-- 17	.numeroCAI                       		BIGINT
+				, Talonario.vencimiento                    AS Talonario_vencimiento               	-- 18	.vencimiento                     		DATE
+				, Talonario.diasAvisoVencimiento           AS Talonario_diasAvisoVencimiento      	-- 19	.diasAvisoVencimiento            		INTEGER
+
+		FROM	massoftware.Talonario
+			LEFT JOIN massoftware.TalonarioLetra AS TalonarioLetra_3                    ON Talonario.talonarioLetra = TalonarioLetra_3.id 	-- 3 LEFT LEVEL: 1
+			LEFT JOIN massoftware.TalonarioControladorFizcal AS TalonarioControladorFizcal_9        ON Talonario.talonarioControladorFizcal = TalonarioControladorFizcal_9.id 	-- 9 LEFT LEVEL: 1
+
+	';
+
+	IF idArg0 IS NOT NULL AND CHAR_LENGTH(TRIM(idArg0)) > 0 THEN
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.id = ''' || TRIM(idArg0) || '''';
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+		searchById = true;
+	END IF;
+
+	IF searchById = false AND numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Talonario.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF searchById = false AND nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Talonario.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;
+
+	IF searchById = false AND orderByArg1 IS NOT NULL AND orderByArg1 > -1 THEN
+		sqlSrc = sqlSrc || ' ORDER BY ' || orderByArg1;
+	ELSEIF searchById = false THEN 
+		sqlSrc = sqlSrc || ' ORDER BY 1 ';
+	END IF;
+
+	IF searchById = false AND orderByDescArg2 IS NOT NULL AND orderByDescArg2 = true THEN
+		sqlSrc = sqlSrc || ' DESC ';
+	END IF;
+
+	IF searchById = false AND limitArg3 IS NOT NULL AND offSetArg4 IS NOT NULL AND limitArg3 > 0 AND limitArg3 <= 100 AND offSetArg4 >= 0 THEN
+		sqlSrc = sqlSrc || ' LIMIT ' || limitArg3 || ' OFFSET ' || offSetArg4;
+	END IF;
+
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+DROP FUNCTION IF EXISTS massoftware.f_TalonarioById_1 (idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_TalonarioById_1 (idArg VARCHAR(36)) RETURNS SETOF massoftware.t_Talonario_1 AS $$
+
+DECLARE
+
+BEGIN
+
+
+	IF idArg IS NULL OR CHAR_LENGTH(TRIM(idArg)) = 0 THEN
+		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
+	END IF;
+
+	RETURN QUERY SELECT * FROM massoftware.f_Talonario_1 ( idArg , null, null, null, null, null, null, null); 
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM massoftware.f_Talonario_1 ( null , null, null, null, null, null, null, null); 
+
+-- SELECT * FROM massoftware.f_TalonarioById_1 ('xxx'); 

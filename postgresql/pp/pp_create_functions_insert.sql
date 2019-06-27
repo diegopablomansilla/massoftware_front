@@ -3156,3 +3156,216 @@ SELECT * FROM massoftware.i_ComprobanteFondoModeloItem(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioLetra                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioLetra
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TalonarioLetra(
+		  idArg VARCHAR(36)
+
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TalonarioLetra(
+		  idArg VARCHAR(36)
+
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TalonarioLetra(id, nombre) VALUES (idArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TalonarioLetra WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioLetra.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TalonarioLetra(
+		null::VARCHAR(36)
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioControladorFizcal                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TalonarioControladorFizcal(
+		  idArg VARCHAR(36)
+
+		, codigoArg VARCHAR(10)
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TalonarioControladorFizcal(
+		  idArg VARCHAR(36)
+
+		, codigoArg VARCHAR(10)
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TalonarioControladorFizcal(id, codigo, nombre) VALUES (idArg, codigoArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TalonarioControladorFizcal WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioControladorFizcal.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TalonarioControladorFizcal(
+		null::VARCHAR(36)
+		, null::VARCHAR(10)
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Talonario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, talonarioLetraArg VARCHAR(36)
+		, puntoVentaArg INTEGER
+		, autonumeracionArg BOOLEAN
+		, numeracionPreImpresaArg BOOLEAN
+		, asociadoRG10098Arg BOOLEAN
+		, talonarioControladorFizcalArg VARCHAR(36)
+		, primerNumeroArg INTEGER
+		, proximoNumeroArg INTEGER
+		, ultimoNumeroArg INTEGER
+		, cantidadMinimaComprobantesArg INTEGER
+		, fechaArg DATE
+		, numeroCAIArg BIGINT
+		, vencimientoArg DATE
+		, diasAvisoVencimientoArg INTEGER
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Talonario(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, talonarioLetraArg VARCHAR(36)
+		, puntoVentaArg INTEGER
+		, autonumeracionArg BOOLEAN
+		, numeracionPreImpresaArg BOOLEAN
+		, asociadoRG10098Arg BOOLEAN
+		, talonarioControladorFizcalArg VARCHAR(36)
+		, primerNumeroArg INTEGER
+		, proximoNumeroArg INTEGER
+		, ultimoNumeroArg INTEGER
+		, cantidadMinimaComprobantesArg INTEGER
+		, fechaArg DATE
+		, numeroCAIArg BIGINT
+		, vencimientoArg DATE
+		, diasAvisoVencimientoArg INTEGER
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF autonumeracionArg IS NULL THEN
+
+		autonumeracionArg = false;
+
+	END IF;
+
+	IF numeracionPreImpresaArg IS NULL THEN
+
+		numeracionPreImpresaArg = false;
+
+	END IF;
+
+	IF asociadoRG10098Arg IS NULL THEN
+
+		asociadoRG10098Arg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.Talonario(id, numero, nombre, talonarioLetra, puntoVenta, autonumeracion, numeracionPreImpresa, asociadoRG10098, talonarioControladorFizcal, primerNumero, proximoNumero, ultimoNumero, cantidadMinimaComprobantes, fecha, numeroCAI, vencimiento, diasAvisoVencimiento) VALUES (idArg, numeroArg, nombreArg, talonarioLetraArg, puntoVentaArg, autonumeracionArg, numeracionPreImpresaArg, asociadoRG10098Arg, talonarioControladorFizcalArg, primerNumeroArg, proximoNumeroArg, ultimoNumeroArg, cantidadMinimaComprobantesArg, fechaArg, numeroCAIArg, vencimientoArg, diasAvisoVencimientoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Talonario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Talonario.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Talonario(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+		, null::INTEGER
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::VARCHAR(36)
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::DATE
+		, null::BIGINT
+		, null::DATE
+		, null::INTEGER
+);
+
+*/

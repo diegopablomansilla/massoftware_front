@@ -49,6 +49,9 @@ import com.massoftware.service.fondos.CuentaFondoBancoCopiaService;
 import com.massoftware.service.fondos.CuentaFondoService;
 import com.massoftware.service.fondos.ComprobanteFondoModeloService;
 import com.massoftware.service.fondos.ComprobanteFondoModeloItemService;
+import com.massoftware.service.fondos.TalonarioLetraService;
+import com.massoftware.service.fondos.TalonarioControladorFizcalService;
+import com.massoftware.service.fondos.TalonarioService;
 
 
 public abstract class AbstractFactoryService {
@@ -247,6 +250,18 @@ public abstract class AbstractFactoryService {
 
 	public ComprobanteFondoModeloItemService buildComprobanteFondoModeloItemService() throws Exception {
 		return new ComprobanteFondoModeloItemService();
+	}
+
+	public TalonarioLetraService buildTalonarioLetraService() throws Exception {
+		return new TalonarioLetraService();
+	}
+
+	public TalonarioControladorFizcalService buildTalonarioControladorFizcalService() throws Exception {
+		return new TalonarioControladorFizcalService();
+	}
+
+	public TalonarioService buildTalonarioService() throws Exception {
+		return new TalonarioService();
 	}
 
 

@@ -133,7 +133,14 @@ public class FondosMenu extends AbstractMenu {
 		a1.addItem("Ticket's denunciados ...", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
-		a1.addItem("Talonarios ...", openTalonariosCmd());
+		
+		
+		MenuBar.MenuItem a14 = a1.addItem("Talonarios", null);
+		a14.addItem("Letras", openTalonarioLetraCmd());
+		a14.addItem("Controladores fizcales", openTalonarioControladorFizcalCmd());
+		a14.addItem("Talonarios ...", openTalonarioCmd());
+		a14.addItem("+++ Talonarios ...", openTalonariosCmd());
+		
 		a1.addSeparator();
 		a1.addItem("Parámetros generales", null).setEnabled(false);
 		a1.addItem("Fechas de cierres por módulos", openFechaCierreXModuloCmd()).setEnabled(false);
@@ -645,6 +652,72 @@ public class FondosMenu extends AbstractMenu {
 
 				try {
 					Window window = AppCX.widgets().buildWLSucursal();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openTalonarioControladorFizcalCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTalonarioControladorFizcal();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openTalonarioLetraCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTalonarioLetra();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+
+			}
+		};
+	}
+	
+	protected Command openTalonarioCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTalonario();
 					getUI().addWindow(window);
 				} catch (Exception e) {
 					LogAndNotification.print(e);

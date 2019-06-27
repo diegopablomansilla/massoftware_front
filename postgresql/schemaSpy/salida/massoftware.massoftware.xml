@@ -830,6 +830,61 @@
          <index name="u_sucursal_abreviatura" unique="true"/>
          <index name="u_sucursal_nombre" unique="true"/>
       </table>
+      <table name="talonario" numRows="283" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="talonarioletra" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="talonario_talonarioletra_fkey" implied="false" onDeleteCascade="false" table="talonarioletra"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="puntoventa" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="autonumeracion" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="6" name="numeracionpreimpresa" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="7" name="asociadorg10098" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="8" name="talonariocontroladorfizcal" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="talonario_talonariocontroladorfizcal_fkey" implied="false" onDeleteCascade="false" table="talonariocontroladorfizcal"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="9" name="primernumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="10" name="proximonumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="11" name="ultimonumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="12" name="cantidadminimacomprobantes" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="13" name="fecha" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="14" name="numerocai" nullable="true" remarks="" size="19" type="int8"/>
+         <column autoUpdated="false" digits="0" id="15" name="vencimiento" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="16" name="diasavisovencimiento" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="talonario_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="talonario_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_talonario_nombre" unique="true"/>
+      </table>
+      <table name="talonariocontroladorfizcal" numRows="161" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="talonariocontroladorfizcal" foreignKey="talonario_talonariocontroladorfizcal_fkey" implied="false" onDeleteCascade="false" table="talonario"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="codigo" nullable="false" remarks="" size="10" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="talonariocontroladorfizcal_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="u_talonariocontroladorfizcal_codigo" unique="true"/>
+         <index name="u_talonariocontroladorfizcal_nombre" unique="true"/>
+      </table>
+      <table name="talonarioletra" numRows="276" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="talonarioletra" foreignKey="talonario_talonarioletra_fkey" implied="false" onDeleteCascade="false" table="talonario"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="talonarioletra_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="u_talonarioletra_nombre" unique="true"/>
+      </table>
       <table name="tipocliente" numRows="277" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>

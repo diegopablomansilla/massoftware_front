@@ -1763,3 +1763,111 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.d_ComprobanteFondoModeloItemById('xxx');
 
 -- SELECT * FROM massoftware.d_ComprobanteFondoModeloItemById((SELECT ComprobanteFondoModeloItem.id FROM massoftware.ComprobanteFondoModeloItem LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioLetra                                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioLetra
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TalonarioLetraById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TalonarioLetraById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TalonarioLetra WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioLetra.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TalonarioLetra WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioLetra.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TalonarioLetra WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioLetra.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TalonarioLetraById('xxx');
+
+-- SELECT * FROM massoftware.d_TalonarioLetraById((SELECT TalonarioLetra.id FROM massoftware.TalonarioLetra LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TalonarioControladorFizcal                                                                             //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TalonarioControladorFizcal
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TalonarioControladorFizcalById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TalonarioControladorFizcalById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TalonarioControladorFizcal WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioControladorFizcal.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TalonarioControladorFizcal WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioControladorFizcal.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TalonarioControladorFizcal WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TalonarioControladorFizcal.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TalonarioControladorFizcalById('xxx');
+
+-- SELECT * FROM massoftware.d_TalonarioControladorFizcalById((SELECT TalonarioControladorFizcal.id FROM massoftware.TalonarioControladorFizcal LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Talonario                                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Talonario
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TalonarioById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TalonarioById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Talonario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Talonario.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Talonario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Talonario.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Talonario WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Talonario.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TalonarioById('xxx');
+
+-- SELECT * FROM massoftware.d_TalonarioById((SELECT Talonario.id FROM massoftware.Talonario LIMIT 1)::VARCHAR);
