@@ -139,6 +139,19 @@ digraph "compactRelationshipsDiagram" {
     URL="tables/centrocostocontable.html"
     tooltip="centrocostocontable"
   ];
+  "chequera" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">chequera</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">285 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/chequera.html"
+    tooltip="chequera"
+  ];
   "ciudad" [
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
@@ -262,7 +275,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="3" ALIGN="LEFT">seguridadpuertaconsulta</TD></TR>
       <TR><TD PORT="seguridadpuertalimite" COLSPAN="3" ALIGN="LEFT">seguridadpuertalimite</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
     </TABLE>>
     URL="tables/cuentafondo.html"
     tooltip="cuentafondo"
@@ -379,6 +392,19 @@ digraph "compactRelationshipsDiagram" {
     </TABLE>>
     URL="tables/empresa.html"
     tooltip="empresa"
+  ];
+  "juridiccionconvniomultilateral" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">juridiccionconvniomultilateral</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/juridiccionconvniomultilateral.html"
+    tooltip="juridiccionconvniomultilateral"
   ];
   "minutacontable" [
     label=<
@@ -528,7 +554,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD PORT="talonarioletra" COLSPAN="3" ALIGN="LEFT">talonarioletra</TD></TR>
       <TR><TD PORT="talonariocontroladorfizcal" COLSPAN="3" ALIGN="LEFT">talonariocontroladorfizcal</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 2</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">561 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="tables/talonario.html"
     tooltip="talonario"
@@ -539,7 +565,7 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">talonariocontroladorfizcal</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">161 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">299 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/talonariocontroladorfizcal.html"
     tooltip="talonariocontroladorfizcal"
@@ -550,10 +576,48 @@ digraph "compactRelationshipsDiagram" {
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">talonarioletra</TD></TR>
       <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">276 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">554 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
     URL="tables/talonarioletra.html"
     tooltip="talonarioletra"
+  ];
+  "ticket" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">ticket</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="ticketcontroldenunciados" COLSPAN="3" ALIGN="LEFT">ticketcontroldenunciados</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/ticket.html"
+    tooltip="ticket"
+  ];
+  "ticketcontroldenunciados" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">ticketcontroldenunciados</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">279 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+    </TABLE>>
+    URL="tables/ticketcontroldenunciados.html"
+    tooltip="ticketcontroldenunciados"
+  ];
+  "ticketmodelo" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">ticketmodelo</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="ticket" COLSPAN="3" ALIGN="LEFT">ticket</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">565 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="tables/ticketmodelo.html"
+    tooltip="ticketmodelo"
   ];
   "tipopuntoequilibrio" [
     label=<
@@ -630,6 +694,7 @@ digraph "compactRelationshipsDiagram" {
   "caja":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "carga":"transporte":sw -> "transporte":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "centrocostocontable":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "chequera":"cuentafondo":sw -> "cuentafondo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "ciudad":"provincia":sw -> "provincia":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "codigopostal":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "comprobantefondomodeloitem":"comprobantefondomodelo":sw -> "comprobantefondomodelo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -657,6 +722,7 @@ digraph "compactRelationshipsDiagram" {
   "deposito":"puertaoperativo":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"sucursal":sw -> "sucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "empresa":"ejerciciocontable":sw -> "ejerciciocontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "juridiccionconvniomultilateral":"cuentafondo":sw -> "cuentafondo":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "moneda":"monedaafip":sw -> "monedaafip":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "monedacotizacion":"moneda":sw -> "moneda":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "monedacotizacion":"usuario":sw -> "usuario":"id":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -668,6 +734,8 @@ digraph "compactRelationshipsDiagram" {
   "sucursal":"tiposucursal":sw -> "tiposucursal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "talonario":"talonariocontroladorfizcal":sw -> "talonariocontroladorfizcal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "talonario":"talonarioletra":sw -> "talonarioletra":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "ticket":"ticketcontroldenunciados":sw -> "ticketcontroldenunciados":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "ticketmodelo":"ticket":sw -> "ticket":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transporte":"codigopostal":sw -> "codigopostal":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transportetarifa":"carga":sw -> "carga":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "transportetarifa":"ciudad":sw -> "ciudad":"id":se [arrowhead=none dir=back arrowtail=crowodot];

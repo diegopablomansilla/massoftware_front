@@ -172,7 +172,12 @@ public class UtilPopulate {
 		} else if (max != null && min == null) {
 			value = r.nextInt((max - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
 		} else if (max == null && min != null) {
-			value = r.nextInt((Integer.MAX_VALUE - min) + 1) + min;
+			if(min == 0) {
+				value = r.nextInt((Integer.MAX_VALUE - min)) + min;	 
+			} else {
+				value = r.nextInt((Integer.MAX_VALUE - min) + 1) + min;
+			}
+			
 		} else if (max == null && min == null) {
 			value = r.nextInt((Integer.MAX_VALUE - Integer.MIN_VALUE) + 1) + Integer.MIN_VALUE;
 		}

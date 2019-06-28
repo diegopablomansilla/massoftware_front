@@ -93,7 +93,7 @@ public class VentasMenu extends AbstractMenu {
 		a1.addItem("Motivos comentarios", openMotivoComentarioCmd());		
 		a1.addItem("Motivos notas de crédito", openNotaCreditoMotivoCmd());
 		a1.addItem("Perfil de facturación ...", null).setEnabled(false);
-		a1.addItem("Parámetros generales", null).setEnabled(false);
+		a1.addItem("Parámetros generales", openEmpresaCmd());
 		a1.addItem("AFIP ...", null).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Tipos de comprobante", null).setEnabled(false);
@@ -525,6 +525,28 @@ public class VentasMenu extends AbstractMenu {
 					LogAndNotification.print(e);
 				}
 
+			}
+		};
+	}
+	
+	protected Command openEmpresaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLEmpresa();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
 			}
 		};
 	}

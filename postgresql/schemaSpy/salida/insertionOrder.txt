@@ -16,6 +16,7 @@ pais
 seguridadmodulo
 talonariocontroladorfizcal
 talonarioletra
+ticketcontroldenunciados
 tipopuntoequilibrio
 tiposucursal
 usuario
@@ -31,12 +32,16 @@ codigopostal
 cuentacontable
 caja
 transporte
+cuentafondo
 asientomodelo
 carga
+ticket
 asientocontable
-cuentafondo
+chequera
 empresa
+juridiccionconvniomultilateral
 motivobloqueocliente
+ticketmodelo
 asientocontableitem
 asientomodeloitem
 comprobantefondomodeloitem
@@ -48,5 +53,6 @@ bancofirmante
 motivocomentario
 notacreditomotivo
 tipocliente
+tipocomprobanteconcepto
 tipodocumentoafip
 zona

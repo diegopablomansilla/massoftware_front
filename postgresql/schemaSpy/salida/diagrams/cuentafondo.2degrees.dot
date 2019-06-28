@@ -23,6 +23,7 @@ digraph "twoDegreesRelationshipsDiagram" {
   "asientomodeloitem":"elipses":sw -> "cuentacontable":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "caja":"seguridadpuerta":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "centrocostocontable":"elipses":sw -> "ejerciciocontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
+  "chequera":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "comprobantefondomodeloitem":"comprobantefondomodelo":sw -> "comprobantefondomodelo":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "comprobantefondomodeloitem":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "cuentacontable":"centrocostocontable":sw -> "centrocostocontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -45,6 +46,7 @@ digraph "twoDegreesRelationshipsDiagram" {
   "cuentafondogrupo":"cuentafondorubro":sw -> "cuentafondorubro":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"elipses":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "deposito":"elipses":sw -> "seguridadpuerta":"id":se [arrowhead=none dir=back arrowtail=crowodot];
+  "juridiccionconvniomultilateral":"cuentafondo":sw -> "cuentafondo":"id.type":se [arrowhead=none dir=back arrowtail=crowodot];
   "moneda":"monedaafip":sw -> "monedaafip":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
   "monedacotizacion":"elipses":sw -> "moneda":"id":se [arrowhead=none dir=back arrowtail=crowodot];
   "puntoequilibrio":"elipses":sw -> "ejerciciocontable":"elipses":se [arrowhead=none dir=back arrowtail=crowodot];
@@ -114,6 +116,25 @@ digraph "twoDegreesRelationshipsDiagram" {
     </TABLE>>
     URL="centrocostocontable.html"
     tooltip="centrocostocontable"
+  ];
+  "chequera" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">chequera</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD PORT="primernumero" COLSPAN="3" ALIGN="LEFT">primernumero</TD></TR>
+      <TR><TD PORT="ultimonumero" COLSPAN="3" ALIGN="LEFT">ultimonumero</TD></TR>
+      <TR><TD PORT="proximonumero" COLSPAN="3" ALIGN="LEFT">proximonumero</TD></TR>
+      <TR><TD PORT="bloqueado" COLSPAN="3" ALIGN="LEFT">bloqueado</TD></TR>
+      <TR><TD PORT="impresiondiferida" COLSPAN="3" ALIGN="LEFT">impresiondiferida</TD></TR>
+      <TR><TD PORT="formato" COLSPAN="3" ALIGN="LEFT">formato</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">285 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="chequera.html"
+    tooltip="chequera"
   ];
   "comprobantefondomodelo" [
     label=<
@@ -216,7 +237,7 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="seguridadpuertauso" COLSPAN="2" ALIGN="LEFT">seguridadpuertauso</TD><TD PORT="seguridadpuertauso.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="seguridadpuertaconsulta" COLSPAN="2" ALIGN="LEFT">seguridadpuertaconsulta</TD><TD PORT="seguridadpuertaconsulta.type" ALIGN="LEFT">varchar[36]</TD></TR>
       <TR><TD PORT="seguridadpuertalimite" COLSPAN="2" ALIGN="LEFT">seguridadpuertalimite</TD><TD PORT="seguridadpuertalimite.type" ALIGN="LEFT">varchar[36]</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 11</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">282 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">3 &gt;</TD></TR>
     </TABLE>>
     URL="cuentafondo.html"
     tooltip="cuentafondo"
@@ -299,6 +320,19 @@ digraph "twoDegreesRelationshipsDiagram" {
     </TABLE>>
     URL="ejerciciocontable.html"
     tooltip="ejerciciocontable"
+  ];
+  "juridiccionconvniomultilateral" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">juridiccionconvniomultilateral</TD></TR>
+      <TR><TD PORT="id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">id</TD></TR>
+      <TR><TD PORT="numero" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">numero</TD></TR>
+      <TR><TD PORT="nombre" COLSPAN="3" ALIGN="LEFT">nombre</TD></TR>
+      <TR><TD PORT="cuentafondo" COLSPAN="3" ALIGN="LEFT">cuentafondo</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">283 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="juridiccionconvniomultilateral.html"
+    tooltip="juridiccionconvniomultilateral"
   ];
   "moneda" [
     label=<

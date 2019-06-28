@@ -160,6 +160,24 @@ import com.massoftware.service.fondos.TalonarioControladorFizcalService;
 import com.massoftware.model.fondos.Talonario;
 import com.massoftware.service.fondos.TalonarioFiltro;
 import com.massoftware.service.fondos.TalonarioService;
+import com.massoftware.model.fondos.TicketControlDenunciados;
+import com.massoftware.service.fondos.TicketControlDenunciadosFiltro;
+import com.massoftware.service.fondos.TicketControlDenunciadosService;
+import com.massoftware.model.fondos.Ticket;
+import com.massoftware.service.fondos.TicketFiltro;
+import com.massoftware.service.fondos.TicketService;
+import com.massoftware.model.fondos.TicketModelo;
+import com.massoftware.service.fondos.TicketModeloFiltro;
+import com.massoftware.service.fondos.TicketModeloService;
+import com.massoftware.model.fondos.JuridiccionConvnioMultilateral;
+import com.massoftware.service.fondos.JuridiccionConvnioMultilateralFiltro;
+import com.massoftware.service.fondos.JuridiccionConvnioMultilateralService;
+import com.massoftware.model.fondos.Chequera;
+import com.massoftware.service.fondos.ChequeraFiltro;
+import com.massoftware.service.fondos.ChequeraService;
+import com.massoftware.model.fondos.TipoComprobanteConcepto;
+import com.massoftware.service.fondos.TipoComprobanteConceptoFiltro;
+import com.massoftware.service.fondos.TipoComprobanteConceptoService;
 
 public class Populate {
 
@@ -215,9 +233,15 @@ public class Populate {
 			//insertCuentaFondo();
 			//insertComprobanteFondoModelo();
 			//insertComprobanteFondoModeloItem();
-			insertTalonarioLetra();
-			insertTalonarioControladorFizcal();
-			insertTalonario();
+			//insertTalonarioLetra();
+			//insertTalonarioControladorFizcal();
+			//insertTalonario();
+			//insertTicketControlDenunciados();
+			//insertTicket();
+			//insertTicketModelo();
+			//insertJuridiccionConvnioMultilateral();
+			//insertChequera();
+			insertTipoComprobanteConcepto();
 	}
 
 
@@ -2553,6 +2577,276 @@ public class Populate {
 				obj.setVencimiento(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
 
 				obj.setDiasAvisoVencimiento(UtilPopulate.getIntegerRandom(1, null, false));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTicketControlDenunciados() throws Exception {
+
+		TicketControlDenunciadosService service = AppCX.services().buildTicketControlDenunciadosService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TicketControlDenunciados obj = new TicketControlDenunciados();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTicket() throws Exception {
+
+		TicketService service = AppCX.services().buildTicketService();
+		TicketControlDenunciadosService serviceticketControlDenunciados = AppCX.services().buildTicketControlDenunciadosService();
+		Long ticketControlDenunciadosCount = serviceticketControlDenunciados.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Ticket obj = new Ticket();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				obj.setFechaActualizacion(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, false)));
+
+				obj.setCantidadPorLotes(UtilPopulate.getIntegerRandom(1, null, false));
+
+				TicketControlDenunciadosFiltro ticketControlDenunciadosFiltro = new TicketControlDenunciadosFiltro();
+				long ticketControlDenunciadosIndex = UtilPopulate.getLongRandom(0L, ticketControlDenunciadosCount-1);
+				ticketControlDenunciadosFiltro.setOffset(ticketControlDenunciadosIndex);
+				ticketControlDenunciadosFiltro.setLimit(1L);
+				List<TicketControlDenunciados> ticketControlDenunciadosListado = serviceticketControlDenunciados.find(ticketControlDenunciadosFiltro);
+				obj.setTicketControlDenunciados(ticketControlDenunciadosListado.get(0));
+
+				obj.setValorMaximo(UtilPopulate.getBigDecimalRandom(new java.math.BigDecimal("0"), new java.math.BigDecimal("99999.9999"), false, 13, 5));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTicketModelo() throws Exception {
+
+		TicketModeloService service = AppCX.services().buildTicketModeloService();
+		TicketService serviceticket = AppCX.services().buildTicketService();
+		Long ticketCount = serviceticket.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TicketModelo obj = new TicketModelo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				TicketFiltro ticketFiltro = new TicketFiltro();
+				long ticketIndex = UtilPopulate.getLongRandom(0L, ticketCount-1);
+				ticketFiltro.setOffset(ticketIndex);
+				ticketFiltro.setLimit(1L);
+				List<Ticket> ticketListado = serviceticket.find(ticketFiltro);
+				obj.setTicket(ticketListado.get(0));
+
+				obj.setPruebaLectura(UtilPopulate.getStringRandom(null, 50, false));
+
+				obj.setActivo(new Random().nextBoolean());
+
+				obj.setLongitudLectura(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setIdentificacionPosicion(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setIdentificacion(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setImportePosicion(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setLongitud(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setCantidadDecimales(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setNumeroPosicion(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setNumeroLongitud(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setPrefijoIdentificacion(UtilPopulate.getStringRandom(null, 10, false));
+
+				obj.setPosicionPrefijo(UtilPopulate.getIntegerRandom(0, null, false));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertJuridiccionConvnioMultilateral() throws Exception {
+
+		JuridiccionConvnioMultilateralService service = AppCX.services().buildJuridiccionConvnioMultilateralService();
+		CuentaFondoService servicecuentaFondo = AppCX.services().buildCuentaFondoService();
+		Long cuentaFondoCount = servicecuentaFondo.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				JuridiccionConvnioMultilateral obj = new JuridiccionConvnioMultilateral();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				CuentaFondoFiltro cuentaFondoFiltro = new CuentaFondoFiltro();
+				long cuentaFondoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoCount-1);
+				cuentaFondoFiltro.setOffset(cuentaFondoIndex);
+				cuentaFondoFiltro.setLimit(1L);
+				List<CuentaFondo> cuentaFondoListado = servicecuentaFondo.find(cuentaFondoFiltro);
+				obj.setCuentaFondo(cuentaFondoListado.get(0));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertChequera() throws Exception {
+
+		ChequeraService service = AppCX.services().buildChequeraService();
+		CuentaFondoService servicecuentaFondo = AppCX.services().buildCuentaFondoService();
+		Long cuentaFondoCount = servicecuentaFondo.count();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				Chequera obj = new Chequera();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				CuentaFondoFiltro cuentaFondoFiltro = new CuentaFondoFiltro();
+				long cuentaFondoIndex = UtilPopulate.getLongRandom(0L, cuentaFondoCount-1);
+				cuentaFondoFiltro.setOffset(cuentaFondoIndex);
+				cuentaFondoFiltro.setLimit(1L);
+				List<CuentaFondo> cuentaFondoListado = servicecuentaFondo.find(cuentaFondoFiltro);
+				obj.setCuentaFondo(cuentaFondoListado.get(0));
+
+				obj.setPrimerNumero(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setUltimoNumero(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setProximoNumero(UtilPopulate.getIntegerRandom(0, null, false));
+
+				obj.setBloqueado(new Random().nextBoolean());
+
+				obj.setImpresionDiferida(new Random().nextBoolean());
+
+				obj.setFormato(UtilPopulate.getStringRandom(null, 50, false));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTipoComprobanteConcepto() throws Exception {
+
+		TipoComprobanteConceptoService service = AppCX.services().buildTipoComprobanteConceptoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TipoComprobanteConcepto obj = new TipoComprobanteConcepto();
+
+				obj.setCodigo(UtilPopulate.getStringRandom(null, 3, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
 				service.insert(obj);
 

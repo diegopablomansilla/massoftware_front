@@ -52,6 +52,12 @@ import com.massoftware.service.fondos.ComprobanteFondoModeloItemService;
 import com.massoftware.service.fondos.TalonarioLetraService;
 import com.massoftware.service.fondos.TalonarioControladorFizcalService;
 import com.massoftware.service.fondos.TalonarioService;
+import com.massoftware.service.fondos.TicketControlDenunciadosService;
+import com.massoftware.service.fondos.TicketService;
+import com.massoftware.service.fondos.TicketModeloService;
+import com.massoftware.service.fondos.JuridiccionConvnioMultilateralService;
+import com.massoftware.service.fondos.ChequeraService;
+import com.massoftware.service.fondos.TipoComprobanteConceptoService;
 
 
 public abstract class AbstractFactoryService {
@@ -262,6 +268,30 @@ public abstract class AbstractFactoryService {
 
 	public TalonarioService buildTalonarioService() throws Exception {
 		return new TalonarioService();
+	}
+
+	public TicketControlDenunciadosService buildTicketControlDenunciadosService() throws Exception {
+		return new TicketControlDenunciadosService();
+	}
+
+	public TicketService buildTicketService() throws Exception {
+		return new TicketService();
+	}
+
+	public TicketModeloService buildTicketModeloService() throws Exception {
+		return new TicketModeloService();
+	}
+
+	public JuridiccionConvnioMultilateralService buildJuridiccionConvnioMultilateralService() throws Exception {
+		return new JuridiccionConvnioMultilateralService();
+	}
+
+	public ChequeraService buildChequeraService() throws Exception {
+		return new ChequeraService();
+	}
+
+	public TipoComprobanteConceptoService buildTipoComprobanteConceptoService() throws Exception {
+		return new TipoComprobanteConceptoService();
 	}
 
 

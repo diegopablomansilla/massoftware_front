@@ -101,7 +101,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -110,13 +110,13 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail' align='right'>uuid_generate_v4()</td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="cuentafondo.moneda refs moneda.id via cuentafondo_moneda_fkey"><a href='cuentafondo.html'>cuentafondo</a><span class='relatedKey'>.moneda</span>
     </td>
     <td class='constraint detail'>cuentafondo_moneda_fkey<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="monedacotizacion.moneda refs moneda.id via monedacotizacion_moneda_fkey"><a href='monedacotizacion.html'>monedacotizacion</a><span class='relatedKey'>.moneda</span>
     </td>
     <td class='constraint detail'>monedacotizacion_moneda_fkey<span title='Restrict delete:
@@ -127,7 +127,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='indexedColumn' title='Indexed'>numero</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -138,7 +138,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>nombre</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>50</td>
@@ -149,7 +149,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>abreviatura</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>5</td>
@@ -160,7 +160,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>cotizacion</td>
  <td class='detail'>numeric</td>
  <td class='detail' align='right'>13,5</td>
@@ -171,7 +171,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>cotizacionfecha</td>
  <td class='detail'>timestamp</td>
  <td class='detail' align='right'>29,6</td>
@@ -182,7 +182,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>controlactualizacion</td>
  <td class='detail'>bool</td>
  <td class='detail' align='right'>1</td>
@@ -193,7 +193,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>monedaafip</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>36</td>
@@ -203,7 +203,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="moneda.monedaafip refs monedaafip.id via moneda_monedaafip_fkey"><a href='monedaafip.html'>monedaafip</a><span class='relatedKey'>.id</span>
     </td>
     <td class='constraint detail'>moneda_monedaafip_fkey<span title='Restrict delete:
@@ -214,7 +214,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='8 columns'>Table contained 264 rows at jue jun 27 11:41 ART 2019<p/>
+<p title='8 columns'>Table contained 264 rows at vie jun 28 11:40 ART 2019<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -272,7 +272,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
 <area shape="rect" href="caja.html" title="caja" alt="" coords="268,732,420,812" >
 <area shape="rect" href="seguridadpuerta.html" title="seguridadpuerta" alt="" coords="8,1096,160,1176" >
-<area shape="rect" href="comprobantefondomodeloitem.html" title="comprobantefondomodeloitem" alt="" coords="766,502,998,582" >
+<area shape="rect" href="chequera.html" title="chequera" alt="" coords="812,405,953,485" >
 <area shape="rect" href="cuentafondo.html" title="cuentafondo" alt="" coords="528,504,722,1194" >
 <area shape="rect" href="cuentacontable.html" title="cuentacontable" alt="" coords="269,440,418,520" >
 <area shape="rect" href="banco.html" title="banco" alt="" coords="273,926,414,1006" >
@@ -281,7 +281,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <area shape="rect" href="cuentafondotipo.html" title="cuentafondotipo" alt="" coords="273,634,414,714" >
 <area shape="rect" href="cuentafondotipobanco.html" title="cuentafondotipobanco" alt="" coords="254,829,433,909" >
 <area shape="rect" href="moneda.html" title="moneda" alt="" coords="204,180,484,422" >
+<area shape="rect" href="comprobantefondomodeloitem.html" title="comprobantefondomodeloitem" alt="" coords="766,502,998,582" >
 <area shape="rect" href="monedaafip.html" title="monedaafip" alt="" coords="13,340,154,465" >
+<area shape="rect" href="juridiccionconvniomultilateral.html" title="juridiccionconvniomultilateral" alt="" coords="772,600,993,680" >
 <area shape="rect" href="monedacotizacion.html" title="monedacotizacion" alt="" coords="530,8,720,224" >
 <area shape="rect" href="usuario.html" title="usuario" alt="" coords="273,82,414,162" >
 </map>

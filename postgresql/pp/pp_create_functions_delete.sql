@@ -1871,3 +1871,219 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.d_TalonarioById('xxx');
 
 -- SELECT * FROM massoftware.d_TalonarioById((SELECT Talonario.id FROM massoftware.Talonario LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketControlDenunciados                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketControlDenunciados
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TicketControlDenunciadosById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TicketControlDenunciadosById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TicketControlDenunciados WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketControlDenunciados.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TicketControlDenunciados WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketControlDenunciados.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TicketControlDenunciados WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketControlDenunciados.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TicketControlDenunciadosById('xxx');
+
+-- SELECT * FROM massoftware.d_TicketControlDenunciadosById((SELECT TicketControlDenunciados.id FROM massoftware.TicketControlDenunciados LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Ticket                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Ticket
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TicketById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TicketById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Ticket WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Ticket.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Ticket WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Ticket.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Ticket WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Ticket.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TicketById('xxx');
+
+-- SELECT * FROM massoftware.d_TicketById((SELECT Ticket.id FROM massoftware.Ticket LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketModelo                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TicketModeloById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TicketModeloById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TicketModelo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketModelo.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TicketModelo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketModelo.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TicketModelo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketModelo.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TicketModeloById('xxx');
+
+-- SELECT * FROM massoftware.d_TicketModeloById((SELECT TicketModelo.id FROM massoftware.TicketModelo LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: JuridiccionConvnioMultilateral                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.JuridiccionConvnioMultilateral
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_JuridiccionConvnioMultilateralById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_JuridiccionConvnioMultilateralById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.JuridiccionConvnioMultilateral WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND JuridiccionConvnioMultilateral.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.JuridiccionConvnioMultilateral WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND JuridiccionConvnioMultilateral.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.JuridiccionConvnioMultilateral WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND JuridiccionConvnioMultilateral.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_JuridiccionConvnioMultilateralById('xxx');
+
+-- SELECT * FROM massoftware.d_JuridiccionConvnioMultilateralById((SELECT JuridiccionConvnioMultilateral.id FROM massoftware.JuridiccionConvnioMultilateral LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Chequera                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Chequera
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_ChequeraById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_ChequeraById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.Chequera WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Chequera.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.Chequera WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Chequera.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Chequera WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Chequera.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_ChequeraById('xxx');
+
+-- SELECT * FROM massoftware.d_ChequeraById((SELECT Chequera.id FROM massoftware.Chequera LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteConcepto                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteConcepto
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TipoComprobanteConceptoById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TipoComprobanteConceptoById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TipoComprobanteConcepto WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteConcepto.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TipoComprobanteConcepto WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteConcepto.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteConcepto WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteConcepto.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TipoComprobanteConceptoById('xxx');
+
+-- SELECT * FROM massoftware.d_TipoComprobanteConceptoById((SELECT TipoComprobanteConcepto.id FROM massoftware.TipoComprobanteConcepto LIMIT 1)::VARCHAR);

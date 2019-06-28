@@ -200,6 +200,28 @@
          <index name="u_centrocostocontable_abreviatura" unique="true"/>
          <index name="u_centrocostocontable_nombre" unique="true"/>
       </table>
+      <table name="chequera" numRows="285" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="cuentafondo" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="chequera_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="cuentafondo"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="primernumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="ultimonumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="6" name="proximonumero" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="bloqueado" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="8" name="impresiondiferida" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="9" name="formato" nullable="true" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="chequera_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="chequera_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_chequera_nombre" unique="true"/>
+      </table>
       <table name="ciudad" numRows="281" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
             <child column="ciudad" foreignKey="codigopostal_ciudad_fkey" implied="false" onDeleteCascade="false" table="codigopostal"/>
@@ -362,7 +384,9 @@
       </table>
       <table name="cuentafondo" numRows="282" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="cuentafondo" foreignKey="chequera_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="chequera"/>
             <child column="cuentafondo" foreignKey="comprobantefondomodeloitem_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="comprobantefondomodeloitem"/>
+            <child column="cuentafondo" foreignKey="juridiccionconvniomultilateral_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="juridiccionconvniomultilateral"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
@@ -582,6 +606,22 @@
          <index name="empresa_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+      </table>
+      <table name="juridiccionconvniomultilateral" numRows="283" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="cuentafondo" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="juridiccionconvniomultilateral_cuentafondo_fkey" implied="false" onDeleteCascade="false" table="cuentafondo"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="juridiccionconvniomultilateral_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="juridiccionconvniomultilateral_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_juridiccionconvniomultilateral_nombre" unique="true"/>
       </table>
       <table name="minutacontable" numRows="272" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
@@ -830,7 +870,7 @@
          <index name="u_sucursal_abreviatura" unique="true"/>
          <index name="u_sucursal_nombre" unique="true"/>
       </table>
-      <table name="talonario" numRows="283" remarks="" schema="massoftware" type="TABLE">
+      <table name="talonario" numRows="561" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
          <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
@@ -861,7 +901,7 @@
          </index>
          <index name="u_talonario_nombre" unique="true"/>
       </table>
-      <table name="talonariocontroladorfizcal" numRows="161" remarks="" schema="massoftware" type="TABLE">
+      <table name="talonariocontroladorfizcal" numRows="299" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
             <child column="talonariocontroladorfizcal" foreignKey="talonario_talonariocontroladorfizcal_fkey" implied="false" onDeleteCascade="false" table="talonario"/>
          </column>
@@ -874,7 +914,7 @@
          <index name="u_talonariocontroladorfizcal_codigo" unique="true"/>
          <index name="u_talonariocontroladorfizcal_nombre" unique="true"/>
       </table>
-      <table name="talonarioletra" numRows="276" remarks="" schema="massoftware" type="TABLE">
+      <table name="talonarioletra" numRows="554" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
             <child column="talonarioletra" foreignKey="talonario_talonarioletra_fkey" implied="false" onDeleteCascade="false" table="talonario"/>
          </column>
@@ -884,6 +924,70 @@
             <column ascending="true" name="id"/>
          </index>
          <index name="u_talonarioletra_nombre" unique="true"/>
+      </table>
+      <table name="ticket" numRows="283" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="ticket" foreignKey="ticketmodelo_ticket_fkey" implied="false" onDeleteCascade="false" table="ticketmodelo"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="fechaactualizacion" nullable="true" remarks="" size="13" type="date"/>
+         <column autoUpdated="false" digits="0" id="4" name="cantidadporlotes" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="ticketcontroldenunciados" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="ticket_ticketcontroldenunciados_fkey" implied="false" onDeleteCascade="false" table="ticketcontroldenunciados"/>
+         </column>
+         <column autoUpdated="false" digits="5" id="6" name="valormaximo" nullable="true" remarks="" size="13" type="numeric"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ticket_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ticket_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_ticket_nombre" unique="true"/>
+      </table>
+      <table name="ticketcontroldenunciados" numRows="279" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
+            <child column="ticketcontroldenunciados" foreignKey="ticket_ticketcontroldenunciados_fkey" implied="false" onDeleteCascade="false" table="ticket"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ticketcontroldenunciados_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ticketcontroldenunciados_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_ticketcontroldenunciados_nombre" unique="true"/>
+      </table>
+      <table name="ticketmodelo" numRows="565" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="ticket" nullable="false" remarks="" size="36" type="varchar">
+            <parent column="id" foreignKey="ticketmodelo_ticket_fkey" implied="false" onDeleteCascade="false" table="ticket"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="pruebalectura" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="activo" nullable="false" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="6" name="longitudlectura" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="identificacionposicion" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="8" name="identificacion" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="9" name="importeposicion" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="10" name="longitud" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="11" name="cantidaddecimales" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="12" name="numeroposicion" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="13" name="numerolongitud" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="14" name="prefijoidentificacion" nullable="true" remarks="" size="10" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="15" name="posicionprefijo" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="ticketmodelo_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ticketmodelo_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_ticketmodelo_nombre" unique="true"/>
       </table>
       <table name="tipocliente" numRows="277" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
@@ -897,6 +1001,17 @@
             <column ascending="true" name="numero"/>
          </index>
          <index name="u_tipocliente_nombre" unique="true"/>
+      </table>
+      <table name="tipocomprobanteconcepto" numRows="285" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="codigo" nullable="false" remarks="" size="3" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="tipocomprobanteconcepto_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="u_tipocomprobanteconcepto_codigo" unique="true"/>
+         <index name="u_tipocomprobanteconcepto_nombre" unique="true"/>
       </table>
       <table name="tipodocumentoafip" numRows="282" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>

@@ -1611,3 +1611,310 @@ CREATE OR REPLACE FUNCTION massoftware.f_next_Talonario_diasAvisoVencimiento() R
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_next_Talonario_diasAvisoVencimiento();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketControlDenunciados                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketControlDenunciados
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketControlDenunciados_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketControlDenunciados_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TicketControlDenunciados;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketControlDenunciados_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Ticket                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Ticket
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Ticket_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Ticket_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Ticket;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Ticket_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Ticket_cantidadPorLotes() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Ticket_cantidadPorLotes() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(cantidadPorLotes),0) + 1)::INTEGER FROM massoftware.Ticket;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Ticket_cantidadPorLotes();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Ticket_valorMaximo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Ticket_valorMaximo() RETURNS DECIMAL(13,5) AS $$
+
+	SELECT (COALESCE(MAX(valorMaximo),0) + 1)::DECIMAL(13,5) FROM massoftware.Ticket;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Ticket_valorMaximo();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketModelo                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_longitudLectura() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_longitudLectura() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(longitudLectura),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_longitudLectura();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_identificacionPosicion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_identificacionPosicion() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(identificacionPosicion),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_identificacionPosicion();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_identificacion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_identificacion() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(identificacion),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_identificacion();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_importePosicion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_importePosicion() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(importePosicion),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_importePosicion();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_longitud() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_longitud() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(longitud),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_longitud();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_cantidadDecimales() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_cantidadDecimales() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(cantidadDecimales),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_cantidadDecimales();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_numeroPosicion() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_numeroPosicion() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroPosicion),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_numeroPosicion();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_numeroLongitud() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_numeroLongitud() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numeroLongitud),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_numeroLongitud();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TicketModelo_posicionPrefijo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TicketModelo_posicionPrefijo() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(posicionPrefijo),0) + 1)::INTEGER FROM massoftware.TicketModelo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TicketModelo_posicionPrefijo();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: JuridiccionConvnioMultilateral                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.JuridiccionConvnioMultilateral
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_JuridiccionConvnioMultilateral_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_JuridiccionConvnioMultilateral_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.JuridiccionConvnioMultilateral;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_JuridiccionConvnioMultilateral_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Chequera                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Chequera
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Chequera_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Chequera_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.Chequera;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Chequera_numero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Chequera_primerNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Chequera_primerNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(primerNumero),0) + 1)::INTEGER FROM massoftware.Chequera;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Chequera_primerNumero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Chequera_ultimoNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Chequera_ultimoNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(ultimoNumero),0) + 1)::INTEGER FROM massoftware.Chequera;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Chequera_ultimoNumero();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_Chequera_proximoNumero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_Chequera_proximoNumero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(proximoNumero),0) + 1)::INTEGER FROM massoftware.Chequera;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_Chequera_proximoNumero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteConcepto                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteConcepto

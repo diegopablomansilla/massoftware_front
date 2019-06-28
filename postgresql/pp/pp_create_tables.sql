@@ -4055,3 +4055,492 @@ CREATE TRIGGER tgFormatTalonario BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.Talonario;
 
 -- SELECT * FROM massoftware.Talonario WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketControlDenunciados                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketControlDenunciados
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TicketControlDenunciados CASCADE;
+
+CREATE TABLE massoftware.TicketControlDenunciados
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº control
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TicketControlDenunciados_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TicketControlDenunciados_nombre ON massoftware.TicketControlDenunciados (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTicketControlDenunciados() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTicketControlDenunciados() RETURNS TRIGGER AS $formatTicketControlDenunciados$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTicketControlDenunciados$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTicketControlDenunciados ON massoftware.TicketControlDenunciados CASCADE;
+
+CREATE TRIGGER tgFormatTicketControlDenunciados BEFORE INSERT OR UPDATE
+	ON massoftware.TicketControlDenunciados FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTicketControlDenunciados();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TicketControlDenunciados;
+
+-- SELECT * FROM massoftware.TicketControlDenunciados LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TicketControlDenunciados;
+
+-- SELECT * FROM massoftware.TicketControlDenunciados WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Ticket                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Ticket
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Ticket CASCADE;
+
+CREATE TABLE massoftware.Ticket
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº ticket
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Ticket_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Fecha actualización
+	fechaActualizacion DATE, 
+	
+	-- Cantidad por lotes
+	cantidadPorLotes INTEGER CONSTRAINT Ticket_cantidadPorLotes_chk CHECK ( cantidadPorLotes >= 1  ), 
+	
+	-- Control denunciados
+	ticketControlDenunciados VARCHAR(36)  NOT NULL  REFERENCES massoftware.TicketControlDenunciados (id), 
+	
+	-- Valor máximo
+	valorMaximo DECIMAL(13,5) CONSTRAINT Ticket_valorMaximo_chk CHECK ( valorMaximo >= 0 AND valorMaximo <= 99999.9999  )
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Ticket_nombre ON massoftware.Ticket (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTicket() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTicket() RETURNS TRIGGER AS $formatTicket$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.ticketControlDenunciados := massoftware.white_is_null(NEW.ticketControlDenunciados);
+
+	RETURN NEW;
+END;
+$formatTicket$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTicket ON massoftware.Ticket CASCADE;
+
+CREATE TRIGGER tgFormatTicket BEFORE INSERT OR UPDATE
+	ON massoftware.Ticket FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTicket();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Ticket;
+
+-- SELECT * FROM massoftware.Ticket LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Ticket;
+
+-- SELECT * FROM massoftware.Ticket WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketModelo                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TicketModelo CASCADE;
+
+CREATE TABLE massoftware.TicketModelo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº modelo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TicketModelo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- ticket
+	ticket VARCHAR(36)  NOT NULL  REFERENCES massoftware.Ticket (id), 
+	
+	-- Prueba lectura
+	pruebaLectura VARCHAR(50), 
+	
+	-- activo
+	activo BOOLEAN NOT NULL, 
+	
+	-- Longitud lectura
+	longitudLectura INTEGER CONSTRAINT TicketModelo_longitudLectura_chk CHECK ( longitudLectura >= 0  ), 
+	
+	-- Posición
+	identificacionPosicion INTEGER CONSTRAINT TicketModelo_identificacionPosicion_chk CHECK ( identificacionPosicion >= 0  ), 
+	
+	-- Identificación
+	identificacion INTEGER CONSTRAINT TicketModelo_identificacion_chk CHECK ( identificacion >= 0  ), 
+	
+	-- Posición
+	importePosicion INTEGER CONSTRAINT TicketModelo_importePosicion_chk CHECK ( importePosicion >= 0  ), 
+	
+	-- Longitud
+	longitud INTEGER CONSTRAINT TicketModelo_longitud_chk CHECK ( longitud >= 0  ), 
+	
+	-- Cantidad decimales
+	cantidadDecimales INTEGER CONSTRAINT TicketModelo_cantidadDecimales_chk CHECK ( cantidadDecimales >= 0  ), 
+	
+	-- Número posición
+	numeroPosicion INTEGER CONSTRAINT TicketModelo_numeroPosicion_chk CHECK ( numeroPosicion >= 0  ), 
+	
+	-- Número longitud
+	numeroLongitud INTEGER CONSTRAINT TicketModelo_numeroLongitud_chk CHECK ( numeroLongitud >= 0  ), 
+	
+	-- Prefijo identificación importación
+	prefijoIdentificacion VARCHAR(10), 
+	
+	-- Posición prefijo
+	posicionPrefijo INTEGER CONSTRAINT TicketModelo_posicionPrefijo_chk CHECK ( posicionPrefijo >= 0  )
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TicketModelo_nombre ON massoftware.TicketModelo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTicketModelo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTicketModelo() RETURNS TRIGGER AS $formatTicketModelo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.ticket := massoftware.white_is_null(NEW.ticket);
+	 NEW.pruebaLectura := massoftware.white_is_null(NEW.pruebaLectura);
+	 NEW.prefijoIdentificacion := massoftware.white_is_null(NEW.prefijoIdentificacion);
+
+	RETURN NEW;
+END;
+$formatTicketModelo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTicketModelo ON massoftware.TicketModelo CASCADE;
+
+CREATE TRIGGER tgFormatTicketModelo BEFORE INSERT OR UPDATE
+	ON massoftware.TicketModelo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTicketModelo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TicketModelo;
+
+-- SELECT * FROM massoftware.TicketModelo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TicketModelo;
+
+-- SELECT * FROM massoftware.TicketModelo WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: JuridiccionConvnioMultilateral                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.JuridiccionConvnioMultilateral
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.JuridiccionConvnioMultilateral CASCADE;
+
+CREATE TABLE massoftware.JuridiccionConvnioMultilateral
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº juridicción
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT JuridiccionConvnioMultilateral_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Cuenta fondo
+	cuentaFondo VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondo (id)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_JuridiccionConvnioMultilateral_nombre ON massoftware.JuridiccionConvnioMultilateral (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatJuridiccionConvnioMultilateral() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatJuridiccionConvnioMultilateral() RETURNS TRIGGER AS $formatJuridiccionConvnioMultilateral$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.cuentaFondo := massoftware.white_is_null(NEW.cuentaFondo);
+
+	RETURN NEW;
+END;
+$formatJuridiccionConvnioMultilateral$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatJuridiccionConvnioMultilateral ON massoftware.JuridiccionConvnioMultilateral CASCADE;
+
+CREATE TRIGGER tgFormatJuridiccionConvnioMultilateral BEFORE INSERT OR UPDATE
+	ON massoftware.JuridiccionConvnioMultilateral FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatJuridiccionConvnioMultilateral();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.JuridiccionConvnioMultilateral;
+
+-- SELECT * FROM massoftware.JuridiccionConvnioMultilateral LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.JuridiccionConvnioMultilateral;
+
+-- SELECT * FROM massoftware.JuridiccionConvnioMultilateral WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Chequera                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Chequera
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.Chequera CASCADE;
+
+CREATE TABLE massoftware.Chequera
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº chequera
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT Chequera_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL, 
+	
+	-- Cuenta fondo
+	cuentaFondo VARCHAR(36)  NOT NULL  REFERENCES massoftware.CuentaFondo (id), 
+	
+	-- Primer número
+	primerNumero INTEGER CONSTRAINT Chequera_primerNumero_chk CHECK ( primerNumero >= 0  ), 
+	
+	-- Último número
+	ultimoNumero INTEGER CONSTRAINT Chequera_ultimoNumero_chk CHECK ( ultimoNumero >= 0  ), 
+	
+	-- Próximo número
+	proximoNumero INTEGER CONSTRAINT Chequera_proximoNumero_chk CHECK ( proximoNumero >= 0  ), 
+	
+	-- Obsoleto
+	bloqueado BOOLEAN NOT NULL, 
+	
+	-- Impresión diferida
+	impresionDiferida BOOLEAN NOT NULL, 
+	
+	-- Formato
+	formato VARCHAR(50)
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_Chequera_nombre ON massoftware.Chequera (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatChequera() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatChequera() RETURNS TRIGGER AS $formatChequera$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+	 NEW.cuentaFondo := massoftware.white_is_null(NEW.cuentaFondo);
+	 NEW.formato := massoftware.white_is_null(NEW.formato);
+
+	RETURN NEW;
+END;
+$formatChequera$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatChequera ON massoftware.Chequera CASCADE;
+
+CREATE TRIGGER tgFormatChequera BEFORE INSERT OR UPDATE
+	ON massoftware.Chequera FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatChequera();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.Chequera;
+
+-- SELECT * FROM massoftware.Chequera LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.Chequera;
+
+-- SELECT * FROM massoftware.Chequera WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteConcepto                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteConcepto
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TipoComprobanteConcepto CASCADE;
+
+CREATE TABLE massoftware.TipoComprobanteConcepto
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Código
+	codigo VARCHAR(3) NOT NULL, 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TipoComprobanteConcepto_codigo ON massoftware.TipoComprobanteConcepto (TRANSLATE(LOWER(TRIM(codigo))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+CREATE UNIQUE INDEX u_TipoComprobanteConcepto_nombre ON massoftware.TipoComprobanteConcepto (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTipoComprobanteConcepto() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTipoComprobanteConcepto() RETURNS TRIGGER AS $formatTipoComprobanteConcepto$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.codigo := massoftware.white_is_null(NEW.codigo);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTipoComprobanteConcepto$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTipoComprobanteConcepto ON massoftware.TipoComprobanteConcepto CASCADE;
+
+CREATE TRIGGER tgFormatTipoComprobanteConcepto BEFORE INSERT OR UPDATE
+	ON massoftware.TipoComprobanteConcepto FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTipoComprobanteConcepto();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TipoComprobanteConcepto;
+
+-- SELECT * FROM massoftware.TipoComprobanteConcepto LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TipoComprobanteConcepto;
+
+-- SELECT * FROM massoftware.TipoComprobanteConcepto WHERE id = 'xxx';

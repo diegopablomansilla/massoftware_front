@@ -156,6 +156,24 @@ import com.massoftware.x.fondos.WFTalonarioControladorFizcal;
 import com.massoftware.service.fondos.TalonarioFiltro;
 import com.massoftware.x.fondos.WLTalonario;
 import com.massoftware.x.fondos.WFTalonario;
+import com.massoftware.service.fondos.TicketControlDenunciadosFiltro;
+import com.massoftware.x.fondos.WLTicketControlDenunciados;
+import com.massoftware.x.fondos.WFTicketControlDenunciados;
+import com.massoftware.service.fondos.TicketFiltro;
+import com.massoftware.x.fondos.WLTicket;
+import com.massoftware.x.fondos.WFTicket;
+import com.massoftware.service.fondos.TicketModeloFiltro;
+import com.massoftware.x.fondos.WLTicketModelo;
+import com.massoftware.x.fondos.WFTicketModelo;
+import com.massoftware.service.fondos.JuridiccionConvnioMultilateralFiltro;
+import com.massoftware.x.fondos.WLJuridiccionConvnioMultilateral;
+import com.massoftware.x.fondos.WFJuridiccionConvnioMultilateral;
+import com.massoftware.service.fondos.ChequeraFiltro;
+import com.massoftware.x.fondos.WLChequera;
+import com.massoftware.x.fondos.WFChequera;
+import com.massoftware.service.fondos.TipoComprobanteConceptoFiltro;
+import com.massoftware.x.fondos.WLTipoComprobanteConcepto;
+import com.massoftware.x.fondos.WFTipoComprobanteConcepto;
 
 
 public abstract class AbstractFactoryWidget {
@@ -731,6 +749,72 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFTalonario buildWFTalonario(String mode, String id) throws Exception {
 		return new WFTalonario(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTicketControlDenunciados buildWLTicketControlDenunciados() throws Exception {
+		return new WLTicketControlDenunciados();
+	}
+	public WLTicketControlDenunciados buildWLTicketControlDenunciados(TicketControlDenunciadosFiltro filtro) throws Exception {
+		return new WLTicketControlDenunciados(filtro);
+	}
+	public WFTicketControlDenunciados buildWFTicketControlDenunciados(String mode, String id) throws Exception {
+		return new WFTicketControlDenunciados(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTicket buildWLTicket() throws Exception {
+		return new WLTicket();
+	}
+	public WLTicket buildWLTicket(TicketFiltro filtro) throws Exception {
+		return new WLTicket(filtro);
+	}
+	public WFTicket buildWFTicket(String mode, String id) throws Exception {
+		return new WFTicket(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTicketModelo buildWLTicketModelo() throws Exception {
+		return new WLTicketModelo();
+	}
+	public WLTicketModelo buildWLTicketModelo(TicketModeloFiltro filtro) throws Exception {
+		return new WLTicketModelo(filtro);
+	}
+	public WFTicketModelo buildWFTicketModelo(String mode, String id) throws Exception {
+		return new WFTicketModelo(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLJuridiccionConvnioMultilateral buildWLJuridiccionConvnioMultilateral() throws Exception {
+		return new WLJuridiccionConvnioMultilateral();
+	}
+	public WLJuridiccionConvnioMultilateral buildWLJuridiccionConvnioMultilateral(JuridiccionConvnioMultilateralFiltro filtro) throws Exception {
+		return new WLJuridiccionConvnioMultilateral(filtro);
+	}
+	public WFJuridiccionConvnioMultilateral buildWFJuridiccionConvnioMultilateral(String mode, String id) throws Exception {
+		return new WFJuridiccionConvnioMultilateral(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLChequera buildWLChequera() throws Exception {
+		return new WLChequera();
+	}
+	public WLChequera buildWLChequera(ChequeraFiltro filtro) throws Exception {
+		return new WLChequera(filtro);
+	}
+	public WFChequera buildWFChequera(String mode, String id) throws Exception {
+		return new WFChequera(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTipoComprobanteConcepto buildWLTipoComprobanteConcepto() throws Exception {
+		return new WLTipoComprobanteConcepto();
+	}
+	public WLTipoComprobanteConcepto buildWLTipoComprobanteConcepto(TipoComprobanteConceptoFiltro filtro) throws Exception {
+		return new WLTipoComprobanteConcepto(filtro);
+	}
+	public WFTipoComprobanteConcepto buildWFTipoComprobanteConcepto(String mode, String id) throws Exception {
+		return new WFTipoComprobanteConcepto(mode, id);
 	}
 
 }

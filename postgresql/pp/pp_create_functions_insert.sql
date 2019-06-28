@@ -3369,3 +3369,408 @@ SELECT * FROM massoftware.i_Talonario(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketControlDenunciados                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketControlDenunciados
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TicketControlDenunciados(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TicketControlDenunciados(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TicketControlDenunciados(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TicketControlDenunciados WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketControlDenunciados.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TicketControlDenunciados(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Ticket                                                                                                 //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Ticket
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Ticket(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, fechaActualizacionArg DATE
+		, cantidadPorLotesArg INTEGER
+		, ticketControlDenunciadosArg VARCHAR(36)
+		, valorMaximoArg DECIMAL(13,5)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Ticket(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, fechaActualizacionArg DATE
+		, cantidadPorLotesArg INTEGER
+		, ticketControlDenunciadosArg VARCHAR(36)
+		, valorMaximoArg DECIMAL(13,5)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.Ticket(id, numero, nombre, fechaActualizacion, cantidadPorLotes, ticketControlDenunciados, valorMaximo) VALUES (idArg, numeroArg, nombreArg, fechaActualizacionArg, cantidadPorLotesArg, ticketControlDenunciadosArg, valorMaximoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Ticket WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Ticket.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Ticket(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::DATE
+		, null::INTEGER
+		, null::VARCHAR(36)
+		, null::DECIMAL(13,5)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TicketModelo                                                                                           //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TicketModelo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TicketModelo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, ticketArg VARCHAR(36)
+		, pruebaLecturaArg VARCHAR(50)
+		, activoArg BOOLEAN
+		, longitudLecturaArg INTEGER
+		, identificacionPosicionArg INTEGER
+		, identificacionArg INTEGER
+		, importePosicionArg INTEGER
+		, longitudArg INTEGER
+		, cantidadDecimalesArg INTEGER
+		, numeroPosicionArg INTEGER
+		, numeroLongitudArg INTEGER
+		, prefijoIdentificacionArg VARCHAR(10)
+		, posicionPrefijoArg INTEGER
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TicketModelo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, ticketArg VARCHAR(36)
+		, pruebaLecturaArg VARCHAR(50)
+		, activoArg BOOLEAN
+		, longitudLecturaArg INTEGER
+		, identificacionPosicionArg INTEGER
+		, identificacionArg INTEGER
+		, importePosicionArg INTEGER
+		, longitudArg INTEGER
+		, cantidadDecimalesArg INTEGER
+		, numeroPosicionArg INTEGER
+		, numeroLongitudArg INTEGER
+		, prefijoIdentificacionArg VARCHAR(10)
+		, posicionPrefijoArg INTEGER
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF activoArg IS NULL THEN
+
+		activoArg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.TicketModelo(id, numero, nombre, ticket, pruebaLectura, activo, longitudLectura, identificacionPosicion, identificacion, importePosicion, longitud, cantidadDecimales, numeroPosicion, numeroLongitud, prefijoIdentificacion, posicionPrefijo) VALUES (idArg, numeroArg, nombreArg, ticketArg, pruebaLecturaArg, activoArg, longitudLecturaArg, identificacionPosicionArg, identificacionArg, importePosicionArg, longitudArg, cantidadDecimalesArg, numeroPosicionArg, numeroLongitudArg, prefijoIdentificacionArg, posicionPrefijoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TicketModelo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TicketModelo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TicketModelo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+		, null::VARCHAR(50)
+		, null::BOOLEAN
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::VARCHAR(10)
+		, null::INTEGER
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: JuridiccionConvnioMultilateral                                                                         //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.JuridiccionConvnioMultilateral
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_JuridiccionConvnioMultilateral(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoArg VARCHAR(36)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_JuridiccionConvnioMultilateral(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoArg VARCHAR(36)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.JuridiccionConvnioMultilateral(id, numero, nombre, cuentaFondo) VALUES (idArg, numeroArg, nombreArg, cuentaFondoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.JuridiccionConvnioMultilateral WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND JuridiccionConvnioMultilateral.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_JuridiccionConvnioMultilateral(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: Chequera                                                                                               //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.Chequera
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_Chequera(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoArg VARCHAR(36)
+		, primerNumeroArg INTEGER
+		, ultimoNumeroArg INTEGER
+		, proximoNumeroArg INTEGER
+		, bloqueadoArg BOOLEAN
+		, impresionDiferidaArg BOOLEAN
+		, formatoArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_Chequera(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+		, cuentaFondoArg VARCHAR(36)
+		, primerNumeroArg INTEGER
+		, ultimoNumeroArg INTEGER
+		, proximoNumeroArg INTEGER
+		, bloqueadoArg BOOLEAN
+		, impresionDiferidaArg BOOLEAN
+		, formatoArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	IF bloqueadoArg IS NULL THEN
+
+		bloqueadoArg = false;
+
+	END IF;
+
+	IF impresionDiferidaArg IS NULL THEN
+
+		impresionDiferidaArg = false;
+
+	END IF;
+
+	INSERT INTO massoftware.Chequera(id, numero, nombre, cuentaFondo, primerNumero, ultimoNumero, proximoNumero, bloqueado, impresionDiferida, formato) VALUES (idArg, numeroArg, nombreArg, cuentaFondoArg, primerNumeroArg, ultimoNumeroArg, proximoNumeroArg, bloqueadoArg, impresionDiferidaArg, formatoArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.Chequera WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND Chequera.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_Chequera(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+		, null::VARCHAR(36)
+		, null::INTEGER
+		, null::INTEGER
+		, null::INTEGER
+		, null::BOOLEAN
+		, null::BOOLEAN
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteConcepto                                                                                //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteConcepto
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TipoComprobanteConcepto(
+		  idArg VARCHAR(36)
+
+		, codigoArg VARCHAR(3)
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TipoComprobanteConcepto(
+		  idArg VARCHAR(36)
+
+		, codigoArg VARCHAR(3)
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TipoComprobanteConcepto(id, codigo, nombre) VALUES (idArg, codigoArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteConcepto WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteConcepto.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TipoComprobanteConcepto(
+		null::VARCHAR(36)
+		, null::VARCHAR(3)
+		, null::VARCHAR(50)
+);
+
+*/

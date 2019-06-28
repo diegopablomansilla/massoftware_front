@@ -105,7 +105,7 @@ public class FondosMenu extends AbstractMenu {
 		a11.addItem("+++++Rubros y grupos de cuentas ...", openCuentasFondoCmd());
 
 		a1.addItem("Cobranzas ...", openTiposCobranzasCmd()).setEnabled(false);
-		a1.addItem("Chequeras ...", openChequerasCmd()).setEnabled(false);
+		a1.addItem("Chequeras ...", openChequeraCmd());
 		a1.addItem("+++ Bancos ...", openBancosCmd());
 		a1.addItem("Bancos ...", openBancoCmd());
 		a1.addItem("+++Firmantes (cheques propios) ...", openFirmantesCmd());
@@ -126,13 +126,26 @@ public class FondosMenu extends AbstractMenu {
 		a13.addItem("Sucursales ...", openSucursalCmd());
 		a13.addItem("+++++++++Sucursales ...", openSucursalesCmd());
 
-		a1.addItem("Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
+		a1.addItem("Juridicciones convenio multilateral", openJuridiccionConvnioMultilateralCmd());		
+		a1.addItem("++++ Juridicciones convenio multilateral", openJurisdiccionesConvenioMultilateralCmd());
 		a1.addSeparator();
-		a1.addItem("Marcas de ticket's ...", openMarcasTicketCmd());
-		a1.addItem("Series de ticket's ...", openWMarcasTicketModeloCmd());
-		a1.addItem("Ticket's denunciados ...", null).setEnabled(false);
+		
+		MenuBar.MenuItem a15 = a1.addItem("Ticket's", null);
+		
+		a15.addItem("Control denunciados", openTicketControlDenunciadosCmd());
+		a15.addItem("Marcas de ticket's ...", openTicketCmd());
+		a15.addItem("+++++Marcas de ticket's ...", openMarcasTicketCmd());
+		a15.addItem("Series de ticket's ...", openTicketModeloCmd());
+		a15.addItem("+++++Series de ticket's ...", openWMarcasTicketModeloCmd());
+		a15.addItem("Ticket's denunciados ...", null).setEnabled(false);
+		
+		
 		a1.addSeparator();
-		a1.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
+		
+		MenuBar.MenuItem a16 = a1.addItem("Tipos de comprobante", null);
+		
+		a16.addItem("Conceptos", openTipoComprobanteConceptoCmd());
+		a16.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
 		
 		
 		MenuBar.MenuItem a14 = a1.addItem("Talonarios", null);
@@ -142,8 +155,9 @@ public class FondosMenu extends AbstractMenu {
 		a14.addItem("+++ Talonarios ...", openTalonariosCmd());
 		
 		a1.addSeparator();
-		a1.addItem("Parámetros generales", null).setEnabled(false);
-		a1.addItem("Fechas de cierres por módulos", openFechaCierreXModuloCmd()).setEnabled(false);
+		a1.addItem("Parámetros generales", openEmpresaCmd());
+		a1.addItem("Fecha de cierre por módulos", openEmpresaCmd());
+		a1.addItem("++++Fechas de cierres por módulos", openFechaCierreXModuloCmd()).setEnabled(false);
 		a1.addSeparator();
 		a1.addItem("Configurar impresora ...", null).setEnabled(false);
 		a1.addSeparator();
@@ -178,6 +192,132 @@ public class FondosMenu extends AbstractMenu {
 		// openConciliacionesBancariasCmd());
 
 		return menubar;
+	}
+	
+	protected Command openTipoComprobanteConceptoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTipoComprobanteConcepto();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openChequeraCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLChequera();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openTicketControlDenunciadosCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTicketControlDenunciados();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openTicketCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTicket();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openTicketModeloCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTicketModelo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openJuridiccionConvnioMultilateralCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLJuridiccionConvnioMultilateral();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
 	}
 
 	@SuppressWarnings("serial")
@@ -1097,6 +1237,28 @@ public class FondosMenu extends AbstractMenu {
 
 				Window window = new WMarcasTicketModelo();
 				getUI().addWindow(window);
+			}
+		};
+	}
+	
+	protected Command openEmpresaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+				
+				try {
+					Window window = AppCX.widgets().buildWLEmpresa();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+				
 			}
 		};
 	}

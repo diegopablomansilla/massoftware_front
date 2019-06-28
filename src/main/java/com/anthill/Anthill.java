@@ -34,6 +34,7 @@ import com.anthill.ant.empresa.EmpresaAnt;
 import com.anthill.ant.empresa.SucursalAnt;
 import com.anthill.ant.empresa.TipoSucursalAnt;
 import com.anthill.ant.fondos.CajaAnt;
+import com.anthill.ant.fondos.ChequeraAnt;
 import com.anthill.ant.fondos.ComprobanteFondoModeloAnt;
 import com.anthill.ant.fondos.ComprobanteFondoModeloItemAnt;
 import com.anthill.ant.fondos.CuentaFondoAnt;
@@ -42,9 +43,14 @@ import com.anthill.ant.fondos.CuentaFondoGrupoAnt;
 import com.anthill.ant.fondos.CuentaFondoRubroAnt;
 import com.anthill.ant.fondos.CuentaFondoTipoAnt;
 import com.anthill.ant.fondos.CuentaFondoTipoBancoAnt;
+import com.anthill.ant.fondos.JuridiccionConvnioMultilateralAnt;
 import com.anthill.ant.fondos.TalonarioAnt;
 import com.anthill.ant.fondos.TalonarioControladorFizcalAnt;
 import com.anthill.ant.fondos.TalonarioLetraAnt;
+import com.anthill.ant.fondos.TicketAnt;
+import com.anthill.ant.fondos.TicketControlDenunciadosAnt;
+import com.anthill.ant.fondos.TicketModeloAnt;
+import com.anthill.ant.fondos.TipoComprobanteConceptoAnt;
 import com.anthill.ant.fondos.banco.BancoAnt;
 import com.anthill.ant.fondos.banco.BancoFirmanteAnt;
 import com.anthill.ant.geo.CiudadAnt;
@@ -174,7 +180,7 @@ public class Anthill {
 				sucursalAnt, asientoContableModuloAnt);
 
 		AsientoContableItemAnt asientoContableItemAnt = new AsientoContableItemAnt(anthill, asientoContableAnt,
-				cuentaContableAnt);				
+				cuentaContableAnt);
 
 		// ---------------------------------------------
 
@@ -205,17 +211,30 @@ public class Anthill {
 		CuentaFondoBancoCopiaAnt cuentaFondoBancoCopiaAnt = new CuentaFondoBancoCopiaAnt(anthill);
 
 		CuentaFondoAnt cuentaFondoAnt = new CuentaFondoAnt(anthill, cuentaContableAnt, cuentaFondoGrupoAnt,
-				cuentaFondoTipoAnt, monedaAnt, cajaAnt, cuentaFondoTipoBancoAnt, bancoAnt, /*cuentaFondoAnt,
-				cuentaFondoAnt,*/ cuentaFondoBancoCopiaAnt, seguridadPuertaAnt, seguridadPuertaAnt,
-				seguridadPuertaAnt);
-		
+				cuentaFondoTipoAnt, monedaAnt, cajaAnt, cuentaFondoTipoBancoAnt, bancoAnt,
+				/*
+				 * cuentaFondoAnt, cuentaFondoAnt,
+				 */ cuentaFondoBancoCopiaAnt, seguridadPuertaAnt, seguridadPuertaAnt, seguridadPuertaAnt);
+
 		ComprobanteFondoModeloAnt comprobanteFondoModeloAnt = new ComprobanteFondoModeloAnt(anthill);
-		
-		ComprobanteFondoModeloItemAnt comprobanteFondoModeloItemAnt = new ComprobanteFondoModeloItemAnt(anthill, comprobanteFondoModeloAnt, cuentaFondoAnt);
-		
+
+		ComprobanteFondoModeloItemAnt comprobanteFondoModeloItemAnt = new ComprobanteFondoModeloItemAnt(anthill,
+				comprobanteFondoModeloAnt, cuentaFondoAnt);
+
 		TalonarioLetraAnt talonarioLetraAnt = new TalonarioLetraAnt(anthill);
 		TalonarioControladorFizcalAnt talonarioControladorFizcalAnt = new TalonarioControladorFizcalAnt(anthill);
-		TalonarioAnt talonarioAnt =	new TalonarioAnt(anthill, talonarioLetraAnt, talonarioControladorFizcalAnt);
+		TalonarioAnt talonarioAnt = new TalonarioAnt(anthill, talonarioLetraAnt, talonarioControladorFizcalAnt);
+
+		TicketControlDenunciadosAnt ticketControlDenunciadosAnt = new TicketControlDenunciadosAnt(anthill);
+		TicketAnt ticketAnt = new TicketAnt(anthill, ticketControlDenunciadosAnt);
+		TicketModeloAnt ticketModeloAnt = new TicketModeloAnt(anthill, ticketAnt);
+
+		JuridiccionConvnioMultilateralAnt juridiccionConvnioMultilateralAnt = new JuridiccionConvnioMultilateralAnt(
+				anthill, cuentaFondoAnt);
+
+		ChequeraAnt chequeraAnt = new ChequeraAnt(anthill, cuentaFondoAnt);
+
+		TipoComprobanteConceptoAnt tipoComprobanteConceptoAnt = new TipoComprobanteConceptoAnt(anthill);
 
 		///////////////////////////////////////////////////////////////////
 

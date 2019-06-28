@@ -1,5 +1,6 @@
 zona
 tipodocumentoafip
+tipocomprobanteconcepto
 tipocliente
 notacreditomotivo
 motivocomentario
@@ -11,12 +12,16 @@ monedacotizacion
 comprobantefondomodeloitem
 asientomodeloitem
 asientocontableitem
+ticketmodelo
 motivobloqueocliente
+juridiccionconvniomultilateral
 empresa
-cuentafondo
+chequera
 asientocontable
+ticket
 carga
 asientomodelo
+cuentafondo
 transporte
 caja
 cuentacontable
@@ -32,6 +37,7 @@ seguridadpuerta
 usuario
 tiposucursal
 tipopuntoequilibrio
+ticketcontroldenunciados
 talonarioletra
 talonariocontroladorfizcal
 seguridadmodulo
