@@ -4544,3 +4544,271 @@ CREATE TRIGGER tgFormatTipoComprobanteConcepto BEFORE INSERT OR UPDATE
 -- SELECT * FROM massoftware.TipoComprobanteConcepto;
 
 -- SELECT * FROM massoftware.TipoComprobanteConcepto WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ClaseComprobante                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ClaseComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.ClaseComprobante CASCADE;
+
+CREATE TABLE massoftware.ClaseComprobante
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº clase
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT ClaseComprobante_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_ClaseComprobante_nombre ON massoftware.ClaseComprobante (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatClaseComprobante() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatClaseComprobante() RETURNS TRIGGER AS $formatClaseComprobante$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatClaseComprobante$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatClaseComprobante ON massoftware.ClaseComprobante CASCADE;
+
+CREATE TRIGGER tgFormatClaseComprobante BEFORE INSERT OR UPDATE
+	ON massoftware.ClaseComprobante FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatClaseComprobante();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.ClaseComprobante;
+
+-- SELECT * FROM massoftware.ClaseComprobante LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.ClaseComprobante;
+
+-- SELECT * FROM massoftware.ClaseComprobante WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComportamientoComprobante                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComportamientoComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.ComportamientoComprobante CASCADE;
+
+CREATE TABLE massoftware.ComportamientoComprobante
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº comportamiento
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT ComportamientoComprobante_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_ComportamientoComprobante_nombre ON massoftware.ComportamientoComprobante (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatComportamientoComprobante() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatComportamientoComprobante() RETURNS TRIGGER AS $formatComportamientoComprobante$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatComportamientoComprobante$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatComportamientoComprobante ON massoftware.ComportamientoComprobante CASCADE;
+
+CREATE TRIGGER tgFormatComportamientoComprobante BEFORE INSERT OR UPDATE
+	ON massoftware.ComportamientoComprobante FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatComportamientoComprobante();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.ComportamientoComprobante;
+
+-- SELECT * FROM massoftware.ComportamientoComprobante LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.ComportamientoComprobante;
+
+-- SELECT * FROM massoftware.ComportamientoComprobante WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopia                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TipoComprobanteCopia CASCADE;
+
+CREATE TABLE massoftware.TipoComprobanteCopia
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº tipo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TipoComprobanteCopia_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TipoComprobanteCopia_nombre ON massoftware.TipoComprobanteCopia (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTipoComprobanteCopia() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTipoComprobanteCopia() RETURNS TRIGGER AS $formatTipoComprobanteCopia$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTipoComprobanteCopia$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTipoComprobanteCopia ON massoftware.TipoComprobanteCopia CASCADE;
+
+CREATE TRIGGER tgFormatTipoComprobanteCopia BEFORE INSERT OR UPDATE
+	ON massoftware.TipoComprobanteCopia FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTipoComprobanteCopia();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TipoComprobanteCopia;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopia LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopia;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopia WHERE id = 'xxx';
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopiaAlternativo                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopiaAlternativo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS massoftware.TipoComprobanteCopiaAlternativo CASCADE;
+
+CREATE TABLE massoftware.TipoComprobanteCopiaAlternativo
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),
+	
+	-- Nº tipo
+	numero INTEGER NOT NULL  UNIQUE  CONSTRAINT TipoComprobanteCopiaAlternativo_numero_chk CHECK ( numero >= 1  ), 
+	
+	-- Nombre
+	nombre VARCHAR(50) NOT NULL
+);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE UNIQUE INDEX u_TipoComprobanteCopiaAlternativo_nombre ON massoftware.TipoComprobanteCopiaAlternativo (TRANSLATE(LOWER(TRIM(nombre))
+	, '/\"'';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'
+	, '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN' ));
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP FUNCTION IF EXISTS massoftware.ftgFormatTipoComprobanteCopiaAlternativo() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.ftgFormatTipoComprobanteCopiaAlternativo() RETURNS TRIGGER AS $formatTipoComprobanteCopiaAlternativo$
+DECLARE
+BEGIN
+	 NEW.id := massoftware.white_is_null(NEW.id);
+	 NEW.nombre := massoftware.white_is_null(NEW.nombre);
+
+	RETURN NEW;
+END;
+$formatTipoComprobanteCopiaAlternativo$ LANGUAGE plpgsql;
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+DROP TRIGGER IF EXISTS tgFormatTipoComprobanteCopiaAlternativo ON massoftware.TipoComprobanteCopiaAlternativo CASCADE;
+
+CREATE TRIGGER tgFormatTipoComprobanteCopiaAlternativo BEFORE INSERT OR UPDATE
+	ON massoftware.TipoComprobanteCopiaAlternativo FOR EACH ROW
+	EXECUTE PROCEDURE massoftware.ftgFormatTipoComprobanteCopiaAlternativo();
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SELECT COUNT(*) FROM massoftware.TipoComprobanteCopiaAlternativo;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopiaAlternativo LIMIT 100 OFFSET 0;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopiaAlternativo;
+
+-- SELECT * FROM massoftware.TipoComprobanteCopiaAlternativo WHERE id = 'xxx';

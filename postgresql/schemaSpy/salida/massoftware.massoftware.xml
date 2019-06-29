@@ -243,6 +243,19 @@
          </index>
          <index name="u_ciudad_nombre" unique="true"/>
       </table>
+      <table name="clasecomprobante" numRows="283" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="clasecomprobante_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="clasecomprobante_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_clasecomprobante_nombre" unique="true"/>
+      </table>
       <table name="clasificacioncliente" numRows="286" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
             <child column="clasificacioncliente" foreignKey="motivobloqueocliente_clasificacioncliente_fkey" implied="false" onDeleteCascade="false" table="motivobloqueocliente"/>
@@ -278,6 +291,19 @@
             <column ascending="true" name="numero"/>
          </index>
          <index name="u_codigopostal_codigo" unique="true"/>
+      </table>
+      <table name="comportamientocomprobante" numRows="285" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="comportamientocomprobante_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="comportamientocomprobante_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_comportamientocomprobante_nombre" unique="true"/>
       </table>
       <table name="comprobantefondomodelo" numRows="271" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar">
@@ -1012,6 +1038,32 @@
          </index>
          <index name="u_tipocomprobanteconcepto_codigo" unique="true"/>
          <index name="u_tipocomprobanteconcepto_nombre" unique="true"/>
+      </table>
+      <table name="tipocomprobantecopia" numRows="281" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="tipocomprobantecopia_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="tipocomprobantecopia_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_tipocomprobantecopia_nombre" unique="true"/>
+      </table>
+      <table name="tipocomprobantecopiaalternativo" numRows="277" remarks="" schema="massoftware" type="TABLE">
+         <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="numero" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="nombre" nullable="false" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="tipocomprobantecopiaalternativo_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="tipocomprobantecopiaalternativo_numero_key" unique="true">
+            <column ascending="true" name="numero"/>
+         </index>
+         <index name="u_tipocomprobantecopiaalternativo_nombre" unique="true"/>
       </table>
       <table name="tipodocumentoafip" numRows="282" remarks="" schema="massoftware" type="TABLE">
          <column autoUpdated="false" defaultValue="uuid_generate_v4()" digits="0" id="0" name="id" nullable="false" remarks="" size="36" type="varchar"/>

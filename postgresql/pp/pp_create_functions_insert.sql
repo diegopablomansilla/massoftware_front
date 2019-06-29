@@ -3774,3 +3774,211 @@ SELECT * FROM massoftware.i_TipoComprobanteConcepto(
 );
 
 */
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ClaseComprobante                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ClaseComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_ClaseComprobante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_ClaseComprobante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.ClaseComprobante(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ClaseComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ClaseComprobante.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_ClaseComprobante(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComportamientoComprobante                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComportamientoComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_ComportamientoComprobante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_ComportamientoComprobante(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.ComportamientoComprobante(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ComportamientoComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComportamientoComprobante.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_ComportamientoComprobante(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopia                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TipoComprobanteCopia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TipoComprobanteCopia(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TipoComprobanteCopia(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopia.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TipoComprobanteCopia(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopiaAlternativo                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopiaAlternativo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.i_TipoComprobanteCopiaAlternativo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.i_TipoComprobanteCopiaAlternativo(
+		  idArg VARCHAR(36)
+
+		, numeroArg INTEGER
+		, nombreArg VARCHAR(50)
+) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF idArg IS NULL THEN
+
+		idArg = uuid_generate_v4();
+
+	END IF;
+
+	INSERT INTO massoftware.TipoComprobanteCopiaAlternativo(id, numero, nombre) VALUES (idArg, numeroArg, nombreArg);
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopiaAlternativo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopiaAlternativo.id = TRIM(idArg)::VARCHAR) = 1)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+
+SELECT * FROM massoftware.i_TipoComprobanteCopiaAlternativo(
+		null::VARCHAR(36)
+		, null::INTEGER
+		, null::VARCHAR(50)
+);
+
+*/

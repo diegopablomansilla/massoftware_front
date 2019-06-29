@@ -1918,3 +1918,95 @@ $$ LANGUAGE SQL;
 
 
 -- Table: massoftware.TipoComprobanteConcepto
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ClaseComprobante                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ClaseComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_ClaseComprobante_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_ClaseComprobante_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.ClaseComprobante;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_ClaseComprobante_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComportamientoComprobante                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComportamientoComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_ComportamientoComprobante_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_ComportamientoComprobante_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.ComportamientoComprobante;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_ComportamientoComprobante_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopia                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TipoComprobanteCopia_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TipoComprobanteCopia_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TipoComprobanteCopia;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TipoComprobanteCopia_numero();
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopiaAlternativo                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopiaAlternativo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_next_TipoComprobanteCopiaAlternativo_numero() CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_next_TipoComprobanteCopiaAlternativo_numero() RETURNS INTEGER AS $$
+
+	SELECT (COALESCE(MAX(numero),0) + 1)::INTEGER FROM massoftware.TipoComprobanteCopiaAlternativo;
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_next_TipoComprobanteCopiaAlternativo_numero();

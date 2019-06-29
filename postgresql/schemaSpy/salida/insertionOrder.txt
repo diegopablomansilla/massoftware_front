@@ -50,9 +50,13 @@ talonario
 transportetarifa
 deposito
 bancofirmante
+clasecomprobante
+comportamientocomprobante
 motivocomentario
 notacreditomotivo
 tipocliente
 tipocomprobanteconcepto
+tipocomprobantecopia
+tipocomprobantecopiaalternativo
 tipodocumentoafip
 zona

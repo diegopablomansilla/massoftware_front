@@ -1,9 +1,13 @@
 zona
 tipodocumentoafip
+tipocomprobantecopiaalternativo
+tipocomprobantecopia
 tipocomprobanteconcepto
 tipocliente
 notacreditomotivo
 motivocomentario
+comportamientocomprobante
+clasecomprobante
 bancofirmante
 deposito
 transportetarifa

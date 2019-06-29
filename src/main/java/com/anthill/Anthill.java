@@ -35,6 +35,8 @@ import com.anthill.ant.empresa.SucursalAnt;
 import com.anthill.ant.empresa.TipoSucursalAnt;
 import com.anthill.ant.fondos.CajaAnt;
 import com.anthill.ant.fondos.ChequeraAnt;
+import com.anthill.ant.fondos.ClaseComprobanteAnt;
+import com.anthill.ant.fondos.ComportamientoComprobanteAnt;
 import com.anthill.ant.fondos.ComprobanteFondoModeloAnt;
 import com.anthill.ant.fondos.ComprobanteFondoModeloItemAnt;
 import com.anthill.ant.fondos.CuentaFondoAnt;
@@ -51,6 +53,8 @@ import com.anthill.ant.fondos.TicketAnt;
 import com.anthill.ant.fondos.TicketControlDenunciadosAnt;
 import com.anthill.ant.fondos.TicketModeloAnt;
 import com.anthill.ant.fondos.TipoComprobanteConceptoAnt;
+import com.anthill.ant.fondos.TipoComprobanteCopiaAlternativoAnt;
+import com.anthill.ant.fondos.TipoComprobanteCopiaAnt;
 import com.anthill.ant.fondos.banco.BancoAnt;
 import com.anthill.ant.fondos.banco.BancoFirmanteAnt;
 import com.anthill.ant.geo.CiudadAnt;
@@ -235,6 +239,10 @@ public class Anthill {
 		ChequeraAnt chequeraAnt = new ChequeraAnt(anthill, cuentaFondoAnt);
 
 		TipoComprobanteConceptoAnt tipoComprobanteConceptoAnt = new TipoComprobanteConceptoAnt(anthill);
+		ClaseComprobanteAnt claseComprobanteAnt = new ClaseComprobanteAnt(anthill);
+		ComportamientoComprobanteAnt comportamientoComprobanteAnt = new ComportamientoComprobanteAnt(anthill);
+		TipoComprobanteCopiaAnt tipoComprobanteCopiaAnt = new TipoComprobanteCopiaAnt(anthill);
+		TipoComprobanteCopiaAlternativoAnt tipoComprobanteCopiaAlternativoAnt = new TipoComprobanteCopiaAlternativoAnt(anthill);
 
 		///////////////////////////////////////////////////////////////////
 

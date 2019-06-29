@@ -2087,3 +2087,147 @@ $$ LANGUAGE plpgsql;
 -- SELECT * FROM massoftware.d_TipoComprobanteConceptoById('xxx');
 
 -- SELECT * FROM massoftware.d_TipoComprobanteConceptoById((SELECT TipoComprobanteConcepto.id FROM massoftware.TipoComprobanteConcepto LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ClaseComprobante                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ClaseComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_ClaseComprobanteById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_ClaseComprobanteById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.ClaseComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ClaseComprobante.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.ClaseComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ClaseComprobante.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ClaseComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ClaseComprobante.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_ClaseComprobanteById('xxx');
+
+-- SELECT * FROM massoftware.d_ClaseComprobanteById((SELECT ClaseComprobante.id FROM massoftware.ClaseComprobante LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComportamientoComprobante                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComportamientoComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_ComportamientoComprobanteById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_ComportamientoComprobanteById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.ComportamientoComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComportamientoComprobante.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.ComportamientoComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComportamientoComprobante.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.ComportamientoComprobante WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND ComportamientoComprobante.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_ComportamientoComprobanteById('xxx');
+
+-- SELECT * FROM massoftware.d_ComportamientoComprobanteById((SELECT ComportamientoComprobante.id FROM massoftware.ComportamientoComprobante LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopia                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TipoComprobanteCopiaById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TipoComprobanteCopiaById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopia.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TipoComprobanteCopia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopia.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopia WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopia.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TipoComprobanteCopiaById('xxx');
+
+-- SELECT * FROM massoftware.d_TipoComprobanteCopiaById((SELECT TipoComprobanteCopia.id FROM massoftware.TipoComprobanteCopia LIMIT 1)::VARCHAR);
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopiaAlternativo                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopiaAlternativo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.d_TipoComprobanteCopiaAlternativoById(idArg VARCHAR(36)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.d_TipoComprobanteCopiaAlternativoById(idArg VARCHAR(36)) RETURNS BOOLEAN AS $$
+
+BEGIN
+
+	IF ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopiaAlternativo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopiaAlternativo.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN THEN
+
+		RETURN false;
+
+	END IF;
+
+	DELETE FROM massoftware.TipoComprobanteCopiaAlternativo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopiaAlternativo.id = TRIM(idArg)::VARCHAR;
+
+	RETURN ((SELECT COUNT(*) FROM massoftware.TipoComprobanteCopiaAlternativo WHERE idArg IS NOT NULL AND CHAR_LENGTH(TRIM(idArg)) > 0 AND TipoComprobanteCopiaAlternativo.id = TRIM(idArg)::VARCHAR) = 0)::BOOLEAN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.d_TipoComprobanteCopiaAlternativoById('xxx');
+
+-- SELECT * FROM massoftware.d_TipoComprobanteCopiaAlternativoById((SELECT TipoComprobanteCopiaAlternativo.id FROM massoftware.TipoComprobanteCopiaAlternativo LIMIT 1)::VARCHAR);

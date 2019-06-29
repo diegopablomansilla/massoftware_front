@@ -58,6 +58,10 @@ import com.massoftware.service.fondos.TicketModeloService;
 import com.massoftware.service.fondos.JuridiccionConvnioMultilateralService;
 import com.massoftware.service.fondos.ChequeraService;
 import com.massoftware.service.fondos.TipoComprobanteConceptoService;
+import com.massoftware.service.fondos.ClaseComprobanteService;
+import com.massoftware.service.fondos.ComportamientoComprobanteService;
+import com.massoftware.service.fondos.TipoComprobanteCopiaService;
+import com.massoftware.service.fondos.TipoComprobanteCopiaAlternativoService;
 
 
 public abstract class AbstractFactoryService {
@@ -292,6 +296,22 @@ public abstract class AbstractFactoryService {
 
 	public TipoComprobanteConceptoService buildTipoComprobanteConceptoService() throws Exception {
 		return new TipoComprobanteConceptoService();
+	}
+
+	public ClaseComprobanteService buildClaseComprobanteService() throws Exception {
+		return new ClaseComprobanteService();
+	}
+
+	public ComportamientoComprobanteService buildComportamientoComprobanteService() throws Exception {
+		return new ComportamientoComprobanteService();
+	}
+
+	public TipoComprobanteCopiaService buildTipoComprobanteCopiaService() throws Exception {
+		return new TipoComprobanteCopiaService();
+	}
+
+	public TipoComprobanteCopiaAlternativoService buildTipoComprobanteCopiaAlternativoService() throws Exception {
+		return new TipoComprobanteCopiaAlternativoService();
 	}
 
 

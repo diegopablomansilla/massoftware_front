@@ -2161,3 +2161,155 @@ CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoComprobanteConcepto_nombre(n
 $$ LANGUAGE SQL;
 
 -- SELECT * FROM massoftware.f_exists_TipoComprobanteConcepto_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ClaseComprobante                                                                                       //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ClaseComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ClaseComprobante_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ClaseComprobante_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClaseComprobante
+	WHERE	(numeroArg IS NULL OR ClaseComprobante.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ClaseComprobante_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ClaseComprobante_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ClaseComprobante_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ClaseComprobante
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ClaseComprobante.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ClaseComprobante_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: ComportamientoComprobante                                                                              //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.ComportamientoComprobante
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ComportamientoComprobante_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ComportamientoComprobante_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ComportamientoComprobante
+	WHERE	(numeroArg IS NULL OR ComportamientoComprobante.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ComportamientoComprobante_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_ComportamientoComprobante_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_ComportamientoComprobante_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.ComportamientoComprobante
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(ComportamientoComprobante.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_ComportamientoComprobante_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopia                                                                                   //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopia
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoComprobanteCopia_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoComprobanteCopia_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoComprobanteCopia
+	WHERE	(numeroArg IS NULL OR TipoComprobanteCopia.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoComprobanteCopia_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoComprobanteCopia_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoComprobanteCopia_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoComprobanteCopia
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoComprobanteCopia.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoComprobanteCopia_nombre(null::VARCHAR(50));
+
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //                                                                                                                        //
+-- //          TABLA: TipoComprobanteCopiaAlternativo                                                                        //
+-- //                                                                                                                        //
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-- Table: massoftware.TipoComprobanteCopiaAlternativo
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoComprobanteCopiaAlternativo_numero(numeroArg INTEGER) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoComprobanteCopiaAlternativo_numero(numeroArg INTEGER) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoComprobanteCopiaAlternativo
+	WHERE	(numeroArg IS NULL OR TipoComprobanteCopiaAlternativo.numero = numeroArg);
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoComprobanteCopiaAlternativo_numero(null::INTEGER);
+
+-- ---------------------------------------------------------------------------------------------------------------------------
+
+
+DROP FUNCTION IF EXISTS massoftware.f_exists_TipoComprobanteCopiaAlternativo_nombre(nombreArg VARCHAR(50)) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_exists_TipoComprobanteCopiaAlternativo_nombre(nombreArg VARCHAR(50)) RETURNS BOOLEAN  AS $$
+
+	SELECT (COUNT(*) > 0)::BOOLEAN FROM massoftware.TipoComprobanteCopiaAlternativo
+	WHERE	(nombreArg IS NULL OR (CHAR_LENGTH(TRIM(nombreArg)) > 0 AND TRIM(LOWER(massoftware.TRANSLATE(TipoComprobanteCopiaAlternativo.nombre)))::VARCHAR = TRIM(LOWER(massoftware.TRANSLATE(nombreArg)))::VARCHAR));
+
+$$ LANGUAGE SQL;
+
+-- SELECT * FROM massoftware.f_exists_TipoComprobanteCopiaAlternativo_nombre(null::VARCHAR(50));

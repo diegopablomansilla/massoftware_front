@@ -144,7 +144,11 @@ public class FondosMenu extends AbstractMenu {
 		
 		MenuBar.MenuItem a16 = a1.addItem("Tipos de comprobante", null);
 		
+		a16.addItem("Clases de coprobante", openClaseComprobanteCmd());
+		a16.addItem("Coportamientos de comprobante", openComportamientoComprobanteCmd());
 		a16.addItem("Conceptos", openTipoComprobanteConceptoCmd());
+		a16.addItem("Destino impresión, copias", openTipoComprobanteConceptoCmd());
+		a16.addItem("Destino impresión alternativo, copias", openTipoComprobanteConceptoCmd());
 		a16.addItem("Tipos de comprobante", openTiposComprobantesCmd()).setEnabled(false);
 		
 		
@@ -192,6 +196,90 @@ public class FondosMenu extends AbstractMenu {
 		// openConciliacionesBancariasCmd());
 
 		return menubar;
+	}
+	
+	protected Command openTipoComprobanteCopiaCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTipoComprobanteCopia();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openTipoComprobanteCopiaAlternativoCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLTipoComprobanteCopiaAlternativo();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openClaseComprobanteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLClaseComprobante();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
+	}
+	
+	protected Command openComportamientoComprobanteCmd() {
+
+		return new Command() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4645387020070455569L;
+
+			@Override
+			public void menuSelected(MenuItem selectedItem) {
+
+				try {
+					Window window = AppCX.widgets().buildWLComportamientoComprobante();
+					getUI().addWindow(window);
+				} catch (Exception e) {
+					LogAndNotification.print(e);
+				}
+			}
+		};
 	}
 	
 	protected Command openTipoComprobanteConceptoCmd() {

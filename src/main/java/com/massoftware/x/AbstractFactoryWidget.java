@@ -174,6 +174,18 @@ import com.massoftware.x.fondos.WFChequera;
 import com.massoftware.service.fondos.TipoComprobanteConceptoFiltro;
 import com.massoftware.x.fondos.WLTipoComprobanteConcepto;
 import com.massoftware.x.fondos.WFTipoComprobanteConcepto;
+import com.massoftware.service.fondos.ClaseComprobanteFiltro;
+import com.massoftware.x.fondos.WLClaseComprobante;
+import com.massoftware.x.fondos.WFClaseComprobante;
+import com.massoftware.service.fondos.ComportamientoComprobanteFiltro;
+import com.massoftware.x.fondos.WLComportamientoComprobante;
+import com.massoftware.x.fondos.WFComportamientoComprobante;
+import com.massoftware.service.fondos.TipoComprobanteCopiaFiltro;
+import com.massoftware.x.fondos.WLTipoComprobanteCopia;
+import com.massoftware.x.fondos.WFTipoComprobanteCopia;
+import com.massoftware.service.fondos.TipoComprobanteCopiaAlternativoFiltro;
+import com.massoftware.x.fondos.WLTipoComprobanteCopiaAlternativo;
+import com.massoftware.x.fondos.WFTipoComprobanteCopiaAlternativo;
 
 
 public abstract class AbstractFactoryWidget {
@@ -815,6 +827,50 @@ public abstract class AbstractFactoryWidget {
 	}
 	public WFTipoComprobanteConcepto buildWFTipoComprobanteConcepto(String mode, String id) throws Exception {
 		return new WFTipoComprobanteConcepto(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLClaseComprobante buildWLClaseComprobante() throws Exception {
+		return new WLClaseComprobante();
+	}
+	public WLClaseComprobante buildWLClaseComprobante(ClaseComprobanteFiltro filtro) throws Exception {
+		return new WLClaseComprobante(filtro);
+	}
+	public WFClaseComprobante buildWFClaseComprobante(String mode, String id) throws Exception {
+		return new WFClaseComprobante(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLComportamientoComprobante buildWLComportamientoComprobante() throws Exception {
+		return new WLComportamientoComprobante();
+	}
+	public WLComportamientoComprobante buildWLComportamientoComprobante(ComportamientoComprobanteFiltro filtro) throws Exception {
+		return new WLComportamientoComprobante(filtro);
+	}
+	public WFComportamientoComprobante buildWFComportamientoComprobante(String mode, String id) throws Exception {
+		return new WFComportamientoComprobante(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTipoComprobanteCopia buildWLTipoComprobanteCopia() throws Exception {
+		return new WLTipoComprobanteCopia();
+	}
+	public WLTipoComprobanteCopia buildWLTipoComprobanteCopia(TipoComprobanteCopiaFiltro filtro) throws Exception {
+		return new WLTipoComprobanteCopia(filtro);
+	}
+	public WFTipoComprobanteCopia buildWFTipoComprobanteCopia(String mode, String id) throws Exception {
+		return new WFTipoComprobanteCopia(mode, id);
+	}
+
+	// -------------------------------------------------------------------------
+	public WLTipoComprobanteCopiaAlternativo buildWLTipoComprobanteCopiaAlternativo() throws Exception {
+		return new WLTipoComprobanteCopiaAlternativo();
+	}
+	public WLTipoComprobanteCopiaAlternativo buildWLTipoComprobanteCopiaAlternativo(TipoComprobanteCopiaAlternativoFiltro filtro) throws Exception {
+		return new WLTipoComprobanteCopiaAlternativo(filtro);
+	}
+	public WFTipoComprobanteCopiaAlternativo buildWFTipoComprobanteCopiaAlternativo(String mode, String id) throws Exception {
+		return new WFTipoComprobanteCopiaAlternativo(mode, id);
 	}
 
 }

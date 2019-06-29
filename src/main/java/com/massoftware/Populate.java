@@ -178,6 +178,18 @@ import com.massoftware.service.fondos.ChequeraService;
 import com.massoftware.model.fondos.TipoComprobanteConcepto;
 import com.massoftware.service.fondos.TipoComprobanteConceptoFiltro;
 import com.massoftware.service.fondos.TipoComprobanteConceptoService;
+import com.massoftware.model.fondos.ClaseComprobante;
+import com.massoftware.service.fondos.ClaseComprobanteFiltro;
+import com.massoftware.service.fondos.ClaseComprobanteService;
+import com.massoftware.model.fondos.ComportamientoComprobante;
+import com.massoftware.service.fondos.ComportamientoComprobanteFiltro;
+import com.massoftware.service.fondos.ComportamientoComprobanteService;
+import com.massoftware.model.fondos.TipoComprobanteCopia;
+import com.massoftware.service.fondos.TipoComprobanteCopiaFiltro;
+import com.massoftware.service.fondos.TipoComprobanteCopiaService;
+import com.massoftware.model.fondos.TipoComprobanteCopiaAlternativo;
+import com.massoftware.service.fondos.TipoComprobanteCopiaAlternativoFiltro;
+import com.massoftware.service.fondos.TipoComprobanteCopiaAlternativoService;
 
 public class Populate {
 
@@ -241,7 +253,11 @@ public class Populate {
 			//insertTicketModelo();
 			//insertJuridiccionConvnioMultilateral();
 			//insertChequera();
-			insertTipoComprobanteConcepto();
+			//insertTipoComprobanteConcepto();
+			//insertClaseComprobante();
+			//insertComportamientoComprobante();
+			insertTipoComprobanteCopia();
+			insertTipoComprobanteCopiaAlternativo();
 	}
 
 
@@ -2845,6 +2861,134 @@ public class Populate {
 				TipoComprobanteConcepto obj = new TipoComprobanteConcepto();
 
 				obj.setCodigo(UtilPopulate.getStringRandom(null, 3, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertClaseComprobante() throws Exception {
+
+		ClaseComprobanteService service = AppCX.services().buildClaseComprobanteService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				ClaseComprobante obj = new ClaseComprobante();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertComportamientoComprobante() throws Exception {
+
+		ComportamientoComprobanteService service = AppCX.services().buildComportamientoComprobanteService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				ComportamientoComprobante obj = new ComportamientoComprobante();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTipoComprobanteCopia() throws Exception {
+
+		TipoComprobanteCopiaService service = AppCX.services().buildTipoComprobanteCopiaService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TipoComprobanteCopia obj = new TipoComprobanteCopia();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
+
+				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
+
+				service.insert(obj);
+
+			} catch (org.cendra.jdbc.SQLExceptionWrapper e) {
+
+				if(("23505".equals(e.getSQLState()) || "23502".equals(e.getSQLState()) || "23514".equals(e.getSQLState()) ) == false ) {	
+
+					throw e;
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	public static void insertTipoComprobanteCopiaAlternativo() throws Exception {
+
+		TipoComprobanteCopiaAlternativoService service = AppCX.services().buildTipoComprobanteCopiaAlternativoService();
+
+		for(int i = 0; i < maxRows; i++){
+
+			try {
+
+				TipoComprobanteCopiaAlternativo obj = new TipoComprobanteCopiaAlternativo();
+
+				obj.setNumero(UtilPopulate.getIntegerRandom(1, null, true));
 
 				obj.setNombre(UtilPopulate.getStringRandom(null, 50, true));
 
