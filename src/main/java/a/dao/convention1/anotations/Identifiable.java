@@ -1,4 +1,4 @@
-package a.model;
+package a.dao.convention1.anotations;
 
 public interface Identifiable {
 	

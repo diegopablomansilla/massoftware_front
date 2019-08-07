@@ -1,10 +1,10 @@
 package a;
 
-import a.anotations.Persistent;
-import a.anotations.Schema;
-import a.model.Identifiable;
+import a.dao.convention1.anotations.Identifiable;
+import a.dao.convention1.anotations.PersistentMapping;
+import a.dao.convention1.anotations.Schema;
 
-@Persistent
+@PersistentMapping
 @Schema(name = "geo")
 public class Country implements Identifiable {
 

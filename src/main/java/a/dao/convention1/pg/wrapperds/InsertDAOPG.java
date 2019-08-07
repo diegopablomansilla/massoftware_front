@@ -1,16 +1,16 @@
-package a.dao.pg.wrapperds;
+package a.dao.convention1.pg.wrapperds;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.cendra.jdbc.ConnectionWrapper;
 
-import a.anotations.Persistent;
 import a.dao.InsertDAO;
-import a.dao.Statement;
-import a.model.Identifiable;
+import a.dao.ParamStatement;
+import a.dao.convention1.anotations.Identifiable;
+import a.dao.convention1.anotations.PersistentMapping;
 
-public class InsertDAOPG extends AbstractInsertDAOPG implements InsertDAO {
+public class InsertDAOPG extends AbstractDAOPG implements InsertDAO {
 
 	private ConnectionWrapper connectionWrapper;
 
@@ -19,9 +19,9 @@ public class InsertDAOPG extends AbstractInsertDAOPG implements InsertDAO {
 	}
 
 	@Override
-	public Object insert(Object obj) throws Exception {
+	public boolean insert(Object obj) throws Exception {
 
-		Statement statement = buildStatement(obj);
+		ParamStatement statement = buildStatement(obj);
 
 		int rows = connectionWrapper.insert(statement.getSql(), statement.getArgs());
 
@@ -29,13 +29,13 @@ public class InsertDAOPG extends AbstractInsertDAOPG implements InsertDAO {
 			throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
 		}
 
-		return obj;
+		return true;
 	}
 
 	@Override
-	public Object insert(Object obj, @SuppressWarnings("rawtypes") Class persistentClass) throws Exception {
+	public boolean insert(Object obj, @SuppressWarnings("rawtypes") Class mappingClass) throws Exception {
 
-		Statement statement = buildStatement((Identifiable) obj, persistentClass);
+		ParamStatement statement = buildStatement((Identifiable) obj, mappingClass);
 
 		int rows = connectionWrapper.insert(statement.getSql(), statement.getArgs());
 
@@ -43,13 +43,13 @@ public class InsertDAOPG extends AbstractInsertDAOPG implements InsertDAO {
 			throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
 		}
 
-		return obj;
+		return true;
 
 	}
 
 	// --------------------------------------------------------------------------------------------------------
 
-	private Statement buildStatement(Object entity) throws Exception {
+	private ParamStatement buildStatement(Object entity) throws Exception {
 		if (entity == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba un objeto no nulo.");
 		}
@@ -57,43 +57,41 @@ public class InsertDAOPG extends AbstractInsertDAOPG implements InsertDAO {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Statement buildStatement(Object entity, Class persistentClass) throws Exception {
+	private ParamStatement buildStatement(Object entity, Class mappingClass) throws Exception {
 
 		if (entity == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba un objeto no nulo.");
 		}
 
-		if (persistentClass == null) {
+		if (mappingClass == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba una objeto Class no nulo.");
 		}
 
-		if (isPersistent(persistentClass) == false) {
+		if (isPersistent(mappingClass) == false) {
 			throw new IllegalArgumentException(
-					"INSERT: Se esperaba una objeto Class anotado con " + Persistent.class.getCanonicalName());
+					"INSERT: Se esperaba un objeto Class anotado con " + PersistentMapping.class.getCanonicalName());
 		}
 
 		if (entity instanceof Identifiable == false) {
 			throw new IllegalArgumentException(
-					"INSERT: Se esperaba una lista objetos, con objetos tipo " + Identifiable.class.getSimpleName());
+					"INSERT: Se esperaba un objeto con tipo " + Identifiable.class.getSimpleName());
 		}
 
 		((Identifiable) entity).setId(UUID.randomUUID().toString());
 
-		Statement statement = new Statement();
+		ParamStatement statement = new ParamStatement();
 
-		String schema = getSchemaName(persistentClass);
+		String schema = getSchemaName(mappingClass);
 		String attributeName = "";
 		String attributeParam = "";
 
-		for (Method method : persistentClass.getMethods()) {
+		for (Method method : mappingClass.getMethods()) {
 
 			if (method.getName().startsWith("get") && method.getName().equals("getClass") == false) {
 
 				Class clazz = method.getReturnType();
 
-				if (isList(clazz) == false) {
-
-					System.out.println(method.getName() + " = " + clazz + " :: " + isList(clazz));
+				if (isList(clazz) == false) {					
 
 					attributeName += ", " + method.getName().replaceFirst("get", "");
 					attributeParam += ", ?";

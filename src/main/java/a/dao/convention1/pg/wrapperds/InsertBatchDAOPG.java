@@ -1,4 +1,4 @@
-package a.dao.pg.wrapperds;
+package a.dao.convention1.pg.wrapperds;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -7,12 +7,12 @@ import java.util.UUID;
 
 import org.cendra.jdbc.ConnectionWrapper;
 
-import a.anotations.Persistent;
 import a.dao.InsertBatchDAO;
-import a.dao.StatementBatch;
-import a.model.Identifiable;
+import a.dao.ParamStatementBatch;
+import a.dao.convention1.anotations.Identifiable;
+import a.dao.convention1.anotations.PersistentMapping;
 
-public class InsertBatchDAOPG extends AbstractInsertDAOPG implements InsertBatchDAO {
+public class InsertBatchDAOPG extends AbstractDAOPG implements InsertBatchDAO {
 
 	private ConnectionWrapper connectionWrapper;
 
@@ -25,26 +25,56 @@ public class InsertBatchDAOPG extends AbstractInsertDAOPG implements InsertBatch
 	}
 
 	@Override
-	public List<Object> insert(List<Object> objs) throws Exception {
+	public boolean[] insert(List<Object> objs) throws Exception {
 
-		StatementBatch statement = buildStatementBatch(objs);
+		ParamStatementBatch statement = buildStatementBatch(objs);
 
-		for (Object[] args : statement.getArgs()) {
+		boolean[] r = new boolean[statement.getArgs().length];
+
+		for (int i = 0; i < statement.getArgs().length; i++) {
+
+			Object[] args = statement.getArgs()[i];
 
 			int rows = connectionWrapper.insert(statement.getSql(), args);
 
 			if (rows != 1) {
 				throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
 			}
+
+			r[i] = true;
 		}
 
-		return objs;
+		return r;
+
+	}
+
+	@Override
+	public boolean[] insert(List<Object> objs, @SuppressWarnings("rawtypes") Class mappingClass) throws Exception {
+
+		ParamStatementBatch statement = buildStatementBatch(objs, mappingClass);
+
+		boolean[] r = new boolean[statement.getArgs().length];
+
+		for (int i = 0; i < statement.getArgs().length; i++) {
+
+			Object[] args = statement.getArgs()[i];
+
+			int rows = connectionWrapper.insert(statement.getSql(), args);
+
+			if (rows != 1) {
+				throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
+			}
+
+			r[i] = true;
+		}
+
+		return r;
 
 	}
 
 	// --------------------------------------------------------------------------------------------------------
 
-	private StatementBatch buildStatementBatch(List<Object> entities) throws Exception {
+	private ParamStatementBatch buildStatementBatch(List<Object> entities) throws Exception {
 		if (entities == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba una lista de objetos no nulo.");
 		}
@@ -60,8 +90,8 @@ public class InsertBatchDAOPG extends AbstractInsertDAOPG implements InsertBatch
 		return buildStatementBatch(entities, entities.get(0).getClass());
 	}
 
-	private StatementBatch buildStatementBatch(List<Object> entities,
-			@SuppressWarnings("rawtypes") Class persistentClass) throws Exception {
+	private ParamStatementBatch buildStatementBatch(List<Object> entities,
+			@SuppressWarnings("rawtypes") Class mappingClass) throws Exception {
 
 		if (entities == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba una lista de objetos no nulo.");
@@ -71,18 +101,18 @@ public class InsertBatchDAOPG extends AbstractInsertDAOPG implements InsertBatch
 			throw new IllegalArgumentException("INSERT: Se esperaba una lista objetos no vacia.");
 		}
 
-		if (persistentClass == null) {
+		if (mappingClass == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba una objeto Class no nulo.");
 		}
 
-		if (isPersistent(persistentClass) == false) {
+		if (isPersistent(mappingClass) == false) {
 			throw new IllegalArgumentException(
-					"INSERT: Se esperaba una objeto Class anotado con " + Persistent.class.getCanonicalName());
+					"INSERT: Se esperaba una objeto Class anotado con " + PersistentMapping.class.getCanonicalName());
 		}
 
-		StatementBatch statement = new StatementBatch();
+		ParamStatementBatch statement = new ParamStatementBatch();
 
-		String schema = getSchemaName(persistentClass);
+		String schema = getSchemaName(mappingClass);
 		String attributeName = "";
 		String attributeParam = "";
 		List<List<Object>> args = new ArrayList<List<Object>>();
@@ -104,7 +134,7 @@ public class InsertBatchDAOPG extends AbstractInsertDAOPG implements InsertBatch
 
 			List<Object> argsRow = new ArrayList<Object>();
 
-			for (Method method : persistentClass.getMethods()) {
+			for (Method method : mappingClass.getMethods()) {
 
 				if (method.getName().startsWith("get") && method.getName().equals("getClass") == false) {
 

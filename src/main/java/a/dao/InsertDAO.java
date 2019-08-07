@@ -1,9 +1,9 @@
 package a.dao;
 
-public interface InsertDAO extends IGranularDAO {
+public interface InsertDAO extends GranularDAO {
 
-	public Object insert(Object obj) throws Exception;
+	public boolean insert(Object obj) throws Exception;
 
-	public Object insert(Object obj, @SuppressWarnings("rawtypes") Class persistentClass) throws Exception;
+	public boolean insert(Object obj, @SuppressWarnings("rawtypes") Class mappingClass) throws Exception;
 
 }

@@ -1,4 +1,4 @@
-package a.anotations;
+package a.dao.convention1.anotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -11,8 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Documented
 @Inherited
-public @interface Schema {
-	
-	String name() default "";
+public @interface PersistentMapping {
 
 }

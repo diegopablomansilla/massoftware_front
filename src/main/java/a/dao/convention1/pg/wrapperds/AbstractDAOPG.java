@@ -1,4 +1,4 @@
-package a.dao.pg.wrapperds;
+package a.dao.convention1.pg.wrapperds;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -10,18 +10,36 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.anotations.Persistent;
-import a.anotations.Schema;
-import a.anotations.constraints.NotNull;
+import a.dao.convention1.anotations.PersistentMapping;
+import a.dao.convention1.anotations.Schema;
+import a.dao.convention1.constraints.NotNull;
 
-public abstract class AbstractInsertDAOPG {
+public abstract class AbstractDAOPG {
+
+	protected boolean isPersistent(Object obj) {
+
+		Annotation anotation = obj.getClass().getAnnotation(PersistentMapping.class);
+
+		return (anotation != null && anotation instanceof PersistentMapping);
+	}
 
 	protected boolean isPersistent(@SuppressWarnings("rawtypes") Class persistentClass) {
 
 		@SuppressWarnings("unchecked")
-		Annotation anotation = persistentClass.getAnnotation(Persistent.class);
+		Annotation anotation = persistentClass.getAnnotation(PersistentMapping.class);
 
-		return (anotation != null && anotation instanceof Persistent);
+		return (anotation != null && anotation instanceof PersistentMapping);
+	}
+
+	protected String getSchemaName(Object obj) {
+
+		Annotation anotation = obj.getClass().getAnnotation(Schema.class);
+
+		if (anotation != null && anotation instanceof Schema) {
+			final Schema schema = (Schema) anotation;
+			return schema.name() + ".";
+		}
+		return "";
 	}
 
 	protected String getSchemaName(@SuppressWarnings("rawtypes") Class persistentClass) {

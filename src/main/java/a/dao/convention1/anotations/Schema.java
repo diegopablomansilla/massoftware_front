@@ -1,4 +1,4 @@
-package a.anotations.constraints;
+package a.dao.convention1.anotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -8,12 +8,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Documented
 @Inherited
-//valida que el valor de propiedad anotado no sea nulo
-public @interface NotNull {
+public @interface Schema {
 	
-//	String msgKey() default "";
+	String name() default "";
 
 }

@@ -7,16 +7,16 @@ import org.cendra.jdbc.ConnectionWrapper;
 import a.Continent;
 import a.dao.InsertDAO;
 
-public class ContinentInsert implements InsertDAO {
+public class ContinentInsertDAO implements InsertDAO {
 
 	private ConnectionWrapper connectionWrapper;
 
-	public ContinentInsert(ConnectionWrapper connectionWrapper) {
+	public ContinentInsertDAO(ConnectionWrapper connectionWrapper) {
 		this.connectionWrapper = connectionWrapper;
 	}
 
 	@Override
-	public Object insert(Object objArg) throws Exception {
+	public boolean insert(Object objArg) throws Exception {
 
 		if (objArg == null) {
 			throw new IllegalArgumentException("INSERT: Se esperaba un objeto " + Continent.class.getSimpleName() + " no nulo.");
@@ -44,13 +44,13 @@ public class ContinentInsert implements InsertDAO {
 			throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
 		}
 		
-		return obj;
+		return true;
 
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Object insert(Object objArg, Class persistentClass) throws Exception {
+	public boolean insert(Object objArg, Class persistentClass) throws Exception {
 
 		return insert(objArg);
 	}

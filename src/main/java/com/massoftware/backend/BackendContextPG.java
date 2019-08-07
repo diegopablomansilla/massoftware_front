@@ -13,7 +13,7 @@ import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
 import a.dao.DataBase;
-import a.dao.pg.wrapperds.DataBasePG;
+import a.dao.convention1.pg.wrapperds.DataBasePG;
 
 public class BackendContextPG extends AbstractContext {
 

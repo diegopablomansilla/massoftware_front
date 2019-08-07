@@ -6,8 +6,8 @@ import java.util.List;
 import com.massoftware.backend.BackendContextPG;
 
 import a.dao.DataBase;
-import a.dao.pg.wrapperds.DataBasePG;
-import a.model.Identifiable;
+import a.dao.convention1.anotations.Identifiable;
+import a.dao.convention1.pg.wrapperds.DataBasePG;
 
 public class MainA {
 

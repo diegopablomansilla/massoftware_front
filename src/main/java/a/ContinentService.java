@@ -1,8 +1,11 @@
 package a;
 
+import java.util.List;
+
 import com.massoftware.backend.BackendContextPG;
 
 import a.dao.DataBase;
+import a.dao.convention1.util.UtilConvention1;
 
 public class ContinentService {
 
@@ -14,9 +17,42 @@ public class ContinentService {
 
 			db.begint();
 
+			db.deleteAll(Continent.class);
+			db.deleteAll(Country.class);
+			
 			db.insert(obj);
+			
+//			boolean b = db.exists(obj);
+			boolean b = db.existsById(obj.getId(), Continent.class);
+//			System.out.println("Exists " + b);
+			
+			obj.setName("YYY");
+			
+//			db.update(obj, ContinentMappingInsert.class);
+			db.update(obj);
 
-			db.insertList(obj.getCountries());
+			db.insertAll(obj.getCountries());
+			
+			obj.getCountries().get(1).setName("XXX");
+			
+			db.updateAll(obj.getCountries());
+			
+			b =db.deleteAll(Country.class);
+			System.out.println("BORRADO " + b);
+			
+//			boolean b = db.delete(obj.getCountries().get(0));			
+//			boolean b = db.deleteById(obj.getCountries().get(0).getId(), Country.class);
+//			System.out.println("BORRADO " + b);
+			
+			
+//			List<Boolean> b = db.deleteAll(obj.getCountries());
+//			System.out.println("BORRADO " + b);
+			
+//			List<Boolean> b = db.deleteAllById(UtilConvention1.getIds(obj.getCountries()) , Country.class);
+//			System.out.println("BORRADO " + b);
+			
+			System.out.println("continentes " +  db.count(Continent.class));
+			System.out.println("paises " +  db.count(Country.class));
 
 			db.commit();
 

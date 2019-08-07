@@ -2,7 +2,7 @@ package a.dao;
 
 import java.util.Arrays;
 
-public class StatementBatch {
+public class ParamStatementBatch {
 
 	private String sql;
 	private Object[][] args;

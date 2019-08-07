@@ -3,12 +3,12 @@ package a;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.anotations.Persistent;
-import a.anotations.Schema;
+import a.dao.convention1.anotations.PersistentMapping;
+import a.dao.convention1.anotations.Schema;
 
-@Persistent
+@PersistentMapping
 @Schema(name = "geo")
-public class Continent implements ContinentViewInsert {
+public class Continent implements ContinentMappingInsert {
 
 	private String id;
 	private String code;
