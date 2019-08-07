@@ -17,11 +17,8 @@ public class MonedaCotizacionService {
 	public String insert(MonedaCotizacion obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto MonedaCotizacion no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object cotizacionFecha = ( obj.getCotizacionFecha() == null ) ? java.sql.Timestamp.class : obj.getCotizacionFecha();
@@ -44,27 +41,17 @@ public class MonedaCotizacionService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -75,18 +62,11 @@ public class MonedaCotizacionService {
 	public String update(MonedaCotizacion obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto MonedaCotizacion no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto MonedaCotizacion con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object cotizacionFecha = ( obj.getCotizacionFecha() == null ) ? java.sql.Timestamp.class : obj.getCotizacionFecha();
@@ -111,25 +91,16 @@ public class MonedaCotizacionService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -139,13 +110,9 @@ public class MonedaCotizacionService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (MonedaCotizacion.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -162,9 +129,7 @@ public class MonedaCotizacionService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -192,9 +157,7 @@ public class MonedaCotizacionService {
 			return (java.math.BigDecimal) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -214,9 +177,7 @@ public class MonedaCotizacionService {
 			return (java.math.BigDecimal) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -259,16 +220,11 @@ public class MonedaCotizacionService {
 
 	public MonedaCotizacion findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (MonedaCotizacion.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		MonedaCotizacion obj = null;
 
@@ -311,15 +267,10 @@ public class MonedaCotizacionService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

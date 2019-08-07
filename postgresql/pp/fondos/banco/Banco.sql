@@ -419,6 +419,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Banco (
 	, numeroFromArg5    INTEGER    	-- 5
 	, numeroToArg6      INTEGER    	-- 6
 	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
 
 ) CASCADE;
 
@@ -432,6 +433,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Banco (
 	, numeroFromArg5    INTEGER    	-- 5
 	, numeroToArg6      INTEGER    	-- 6
 	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
 
 ) RETURNS SETOF massoftware.Banco AS $$
 
@@ -464,7 +466,7 @@ BEGIN
 				, Banco.referencia1     AS Banco_referencia1	-- 10	.referencia1		VARCHAR(3)
 				, Banco.importe         AS Banco_importe    	-- 11	.importe   		VARCHAR(3)
 				, Banco.referencia2     AS Banco_referencia2	-- 12	.referencia2		VARCHAR(3)
-				, Banco.saldo           AS Banco_saldo      	-- 13	.saldo     		VARCHAR(3)
+				, Banco.saldo           AS Banco_saldo      	-- 13	.saldo     		VARCHAR(3)				
 
 		FROM	massoftware.Banco
 
@@ -508,6 +510,12 @@ BEGIN
 		END LOOP;
 	END IF;
 
+	IF searchById = false AND bloqueadoArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.bloqueado = ' || bloqueadoArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
 	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
@@ -546,12 +554,95 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Banco ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Banco ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
 
--- SELECT * FROM massoftware.f_Banco ( null , null, null, null, null, null, null, null); 
+-- SELECT * FROM massoftware.f_Banco ( null , null, null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_BancoById ('xxx'); 
+
+DROP FUNCTION IF EXISTS massoftware.f_count_Banco (
+    
+	  numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
+
+) CASCADE;
+
+CREATE OR REPLACE FUNCTION massoftware.f_count_Banco (
+
+	  numeroFromArg5    INTEGER    	-- 5
+	, numeroToArg6      INTEGER    	-- 6
+	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
+
+) RETURNS SETOF INTEGER AS $$
+
+DECLARE
+
+	sqlSrc TEXT = '';
+	sqlSrcWhere TEXT = '';
+	sqlSrcWhereCount INTEGER = 0;
+	sqlSrcWhereCountOR INTEGER = 0;	
+	words TEXT[];
+	word TEXT = '';
+
+BEGIN
+
+
+	sqlSrc = 'SELECT COUNT(*)::INTEGER FROM	massoftware.Banco';
+
+	IF numeroFromArg5 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.numero >= ' || numeroFromArg5;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF numeroToArg6 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.numero <= ' || numeroToArg6;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF nombreArg7 IS NOT NULL AND CHAR_LENGTH(TRIM(nombreArg7)) > 0 THEN
+		nombreArg7 = REPLACE(nombreArg7, '''', '''''');
+		nombreArg7 = LOWER(TRIM(nombreArg7));
+		nombreArg7 = TRANSLATE(nombreArg7,
+			'/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ',
+			 '         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN');
+		words = regexp_split_to_array(nombreArg7, ' ');
+		FOREACH word IN ARRAY words
+		LOOP
+			IF word IS NOT NULL AND CHAR_LENGTH(TRIM(word)) > 0 THEN
+				word = TRIM(word);
+				IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+				sqlSrcWhere = sqlSrcWhere || ' TRANSLATE(LOWER(Banco.nombre),
+				''/\"'''';,_-.âãäåāăąàáÁÂÃÄÅĀĂĄÀèééêëēĕėęěĒĔĖĘĚÉÈËÊìíîïìĩīĭÌÍÎÏÌĨĪĬóôõöōŏőòÒÓÔÕÖŌŎŐùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑ'',
+				''         aaaaaaaaaAAAAAAAAAeeeeeeeeeeEEEEEEEEEiiiiiiiiIIIIIIIIooooooooOOOOOOOOuuuuuuuuUUUUUUUUcCnN'') LIKE ' || '''%' || word || '%''';
+				sqlSrcWhereCount = sqlSrcWhereCount + 1;
+			END IF;
+		END LOOP;
+	END IF;
+
+	IF bloqueadoArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.bloqueado = ' || bloqueadoArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
+	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
+		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
+	END IF;		
+    
+	-- RAISE EXCEPTION 'information messagess % ', sqlSrc;
+
+	RETURN QUERY EXECUTE sqlSrc || ';';
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT * FROM massoftware.f_count_Banco ( null, null, null, null); 

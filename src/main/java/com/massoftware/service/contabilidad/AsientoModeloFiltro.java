@@ -37,7 +37,7 @@ public class AsientoModeloFiltro extends AbstractFilter {
 	}
 
 	// SET Nº asiento (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -47,7 +47,7 @@ public class AsientoModeloFiltro extends AbstractFilter {
 	}
 
 	// SET Nº asiento (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -57,7 +57,7 @@ public class AsientoModeloFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 
@@ -67,7 +67,7 @@ public class AsientoModeloFiltro extends AbstractFilter {
 	}
 
 	// SET Ejercicio
-	public void setEjercicioContable(EjercicioContable ejercicioContable ){
+	public void setEjercicioContable(EjercicioContable ejercicioContable){
 		this.ejercicioContable = ejercicioContable;
 	}
 		

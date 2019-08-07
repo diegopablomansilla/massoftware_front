@@ -41,7 +41,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	}
 
 	// SET Nº provincia (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -51,7 +51,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	}
 
 	// SET Nº provincia (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -61,7 +61,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 
@@ -71,7 +71,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	}
 
 	// SET Abreviatura
-	public void setAbreviatura(String abreviatura ){
+	public void setAbreviatura(String abreviatura){
 		this.abreviatura = (abreviatura != null && abreviatura.trim().length() == 0) ? null : abreviatura;
 	}
 
@@ -81,7 +81,7 @@ public class ProvinciaFiltro extends AbstractFilter {
 	}
 
 	// SET País
-	public void setPais(Pais pais ){
+	public void setPais(Pais pais){
 		this.pais = pais;
 	}
 		

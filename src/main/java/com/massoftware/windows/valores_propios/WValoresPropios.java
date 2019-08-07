@@ -8,14 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentasFondoFiltro;
-import com.massoftware.windows.a.bancos.WBancos;
+import com.massoftware.service.fondos.banco.BancoFiltro;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
+import com.massoftware.x.fondos.banco.WLBanco;
 import com.massoftware.x.util.UtilModel;
 import com.massoftware.x.util.UtilUI;
 import com.massoftware.x.util.windows.LogAndNotification;
@@ -680,10 +679,10 @@ public class WValoresPropios extends Window {
 
 			// if (this.filterBI.getBean().getNumeroBanco() != null) {
 
-			BancosFiltro bancosFiltro = new BancosFiltro();
-			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
+			BancoFiltro bancosFiltro = new BancoFiltro();
+//			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
 
-			WBancos window = new WBancos(bancosFiltro);
+			WLBanco window = new WLBanco(bancosFiltro);
 			window.setModal(true);
 			window.center();
 
@@ -692,7 +691,7 @@ public class WValoresPropios extends Window {
 
 				@Override
 				public void windowClose(CloseEvent event) {
-					setNumeroBancoOnFilter(window);
+//					setNumeroBancoOnFilter(window);
 				}
 			});
 
@@ -704,7 +703,7 @@ public class WValoresPropios extends Window {
 
 			Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
 			seleccionarBTN.addClickListener(e -> {
-				setNumeroBancoOnFilter(window);
+//				setNumeroBancoOnFilter(window);
 			});
 
 			filaBotoneraHL.addComponents(seleccionarBTN);
@@ -726,28 +725,28 @@ public class WValoresPropios extends Window {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setNumeroBancoOnFilter(WBancos window) {
-		try {
-			if (window.itemsGRD.getSelectedRow() != null) {
-
-				Banco item = (Banco) window.itemsGRD.getSelectedRow();
-
-				this.filterBI.getItemProperty("numeroBanco").setValue(
-						item.getNumero());
-				this.filterBI.getItemProperty("nombreBanco").setValue(
-						item.getNombre());
-
-				window.close();
-
-				loadDataResetPaged();
-			} else {
-				this.filterBI.getItemProperty("numeroBanco").setValue(null);
-				this.filterBI.getItemProperty("nombreBanco").setValue(null);
-			}
-		} catch (Exception ex) {
-			LogAndNotification.print(ex);
-		}
-	}
+//	private void setNumeroBancoOnFilter(WBancos window) {
+//		try {
+//			if (window.itemsGRD.getSelectedRow() != null) {
+//
+//				Banco item = (Banco) window.itemsGRD.getSelectedRow();
+//
+//				this.filterBI.getItemProperty("numeroBanco").setValue(
+//						item.getNumero());
+//				this.filterBI.getItemProperty("nombreBanco").setValue(
+//						item.getNombre());
+//
+//				window.close();
+//
+//				loadDataResetPaged();
+//			} else {
+//				this.filterBI.getItemProperty("numeroBanco").setValue(null);
+//				this.filterBI.getItemProperty("nombreBanco").setValue(null);
+//			}
+//		} catch (Exception ex) {
+//			LogAndNotification.print(ex);
+//		}
+//	}
 
 	protected void selectChequeraTXTShortcutEnter() {
 		try {

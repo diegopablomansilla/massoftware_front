@@ -12532,6 +12532,7 @@ DROP FUNCTION IF EXISTS massoftware.f_Banco (
 	, numeroFromArg5    INTEGER    	-- 5
 	, numeroToArg6      INTEGER    	-- 6
 	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
 
 ) CASCADE;
 
@@ -12545,6 +12546,7 @@ CREATE OR REPLACE FUNCTION massoftware.f_Banco (
 	, numeroFromArg5    INTEGER    	-- 5
 	, numeroToArg6      INTEGER    	-- 6
 	, nombreArg7        VARCHAR(50)	-- 7
+	, bloqueadoArg8     BOOLEAN    	-- 8
 
 ) RETURNS SETOF massoftware.Banco AS $$
 
@@ -12621,6 +12623,12 @@ BEGIN
 		END LOOP;
 	END IF;
 
+	IF searchById = false AND bloqueadoArg8 IS NOT NULL THEN
+		IF sqlSrcWhereCount > 0 THEN sqlSrcWhere = sqlSrcWhere || ' AND '; END IF;
+		sqlSrcWhere = sqlSrcWhere || ' Banco.bloqueado = ' || bloqueadoArg8;
+		sqlSrcWhereCount = sqlSrcWhereCount + 1;
+	END IF;
+
 	IF sqlSrcWhere IS NOT NULL AND CHAR_LENGTH(TRIM(sqlSrcWhere)) > 0 THEN
 		sqlSrc = sqlSrc || ' WHERE ' || sqlSrcWhere;
 	END IF;
@@ -12659,13 +12667,13 @@ BEGIN
 		RAISE EXCEPTION 'Se esperaba un id (Pais.id) no nulo/vacio.';
 	END IF;
 
-	RETURN QUERY SELECT * FROM massoftware.f_Banco ( idArg , null, null, null, null, null, null, null); 
+	RETURN QUERY SELECT * FROM massoftware.f_Banco ( idArg , null, null, null, null, null, null, null, null); 
 
 END;
 $$ LANGUAGE plpgsql;
 
 
--- SELECT * FROM massoftware.f_Banco ( null , null, null, null, null, null, null, null); 
+-- SELECT * FROM massoftware.f_Banco ( null , null, null, null, null, null, null, null, null); 
 
 -- SELECT * FROM massoftware.f_BancoById ('xxx'); 
 

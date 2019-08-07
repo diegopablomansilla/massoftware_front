@@ -3,10 +3,11 @@ package com.massoftware.service.geo;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
-import com.massoftware.UtilNumeric;
+
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.geo.CodigoPostal;
+import com.massoftware.service.UtilNumeric;
 
 public class CodigoPostalService {
 
@@ -18,11 +19,8 @@ public class CodigoPostalService {
 	public String insert(CodigoPostal obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CodigoPostal no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object codigo = ( obj.getCodigo() == null ) ? String.class : obj.getCodigo();
@@ -44,27 +42,17 @@ public class CodigoPostalService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -75,18 +63,11 @@ public class CodigoPostalService {
 	public String update(CodigoPostal obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CodigoPostal no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CodigoPostal con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object codigo = ( obj.getCodigo() == null ) ? String.class : obj.getCodigo();
@@ -110,25 +91,16 @@ public class CodigoPostalService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -138,13 +110,9 @@ public class CodigoPostalService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (CodigoPostal.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -161,9 +129,7 @@ public class CodigoPostalService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -175,11 +141,8 @@ public class CodigoPostalService {
 
 	public boolean isExistsCodigo(String arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (CodigoPostal.codigo) no nulo/vacio.");
-
 		}
 
 		arg = arg.trim();
@@ -199,26 +162,19 @@ public class CodigoPostalService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsNumero(Integer arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (CodigoPostal.numero) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_CodigoPostal_numero(?)";
@@ -236,15 +192,11 @@ public class CodigoPostalService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -267,9 +219,7 @@ public class CodigoPostalService {
 			return (Integer) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -372,16 +322,11 @@ public class CodigoPostalService {
 
 	public CodigoPostal findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (CodigoPostal.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		CodigoPostal obj = null;
 
@@ -432,15 +377,10 @@ public class CodigoPostalService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

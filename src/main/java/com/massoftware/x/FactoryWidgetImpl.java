@@ -1,5 +1,7 @@
 package com.massoftware.x;
 
+import com.massoftware.custom.x.fondos.banco.WFBancoCustom;
+import com.massoftware.custom.x.fondos.banco.WLBancoCustom;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.service.afip.MonedaAFIPFiltro;
 import com.massoftware.service.afip.TipoDocumentoAFIPFiltro;
@@ -8,6 +10,7 @@ import com.massoftware.service.clientes.MotivoBloqueoClienteFiltro;
 import com.massoftware.service.clientes.MotivoComentarioFiltro;
 import com.massoftware.service.clientes.TipoClienteFiltro;
 import com.massoftware.service.contabilidad.ventas.NotaCreditoMotivoFiltro;
+import com.massoftware.service.fondos.banco.BancoFiltro;
 import com.massoftware.service.geo.CiudadFiltro;
 import com.massoftware.service.geo.CodigoPostalFiltro;
 import com.massoftware.service.geo.PaisFiltro;
@@ -286,5 +289,16 @@ public class FactoryWidgetImpl extends AbstractFactoryWidget {
 //	public WFMotivoBloqueoCliente buildWFMotivoBloqueoCliente(String mode, String id) throws Exception {
 //		return new WFMotivoBloqueoClienteCustom(mode, id);
 //	}
+	
+	// -------------------------------------------------------------------------
+	public WLBancoCustom buildWLBanco() throws Exception {
+		return new WLBancoCustom();
+	}
+	public WLBancoCustom buildWLBanco(BancoFiltro filtro) throws Exception {
+		return new WLBancoCustom(filtro);
+	}
+	public WFBancoCustom buildWFBanco(String mode, String id) throws Exception {
+		return new WFBancoCustom(mode, id);
+	}
 
 }

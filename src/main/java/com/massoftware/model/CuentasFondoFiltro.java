@@ -1,6 +1,7 @@
 package com.massoftware.model;
 
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.model.fondos.banco.Banco;
 
 public class CuentasFondoFiltro extends Entity {
 
@@ -11,7 +12,7 @@ public class CuentasFondoFiltro extends Entity {
 	private CuentaFondoGrupo cuentaFondoGrupo = new CuentaFondoGrupo();
 
 	@FieldConfAnont(label = "Banco")
-	private Banco banco = new Banco();
+	private Banco banco = null;
 
 	@FieldConfAnont(label = "Nº cuenta")
 	private Integer numero;

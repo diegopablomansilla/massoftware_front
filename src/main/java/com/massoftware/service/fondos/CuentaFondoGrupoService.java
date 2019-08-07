@@ -3,10 +3,11 @@ package com.massoftware.service.fondos;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
-import com.massoftware.UtilNumeric;
+
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.fondos.CuentaFondoGrupo;
+import com.massoftware.service.UtilNumeric;
 
 public class CuentaFondoGrupoService {
 
@@ -18,11 +19,8 @@ public class CuentaFondoGrupoService {
 	public String insert(CuentaFondoGrupo obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CuentaFondoGrupo no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -42,27 +40,17 @@ public class CuentaFondoGrupoService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -73,18 +61,11 @@ public class CuentaFondoGrupoService {
 	public String update(CuentaFondoGrupo obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CuentaFondoGrupo no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto CuentaFondoGrupo con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -106,25 +87,16 @@ public class CuentaFondoGrupoService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -134,13 +106,9 @@ public class CuentaFondoGrupoService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (CuentaFondoGrupo.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -157,9 +125,7 @@ public class CuentaFondoGrupoService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -171,11 +137,8 @@ public class CuentaFondoGrupoService {
 
 	public boolean isExistsNumero(Integer arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (CuentaFondoGrupo.numero) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_CuentaFondoGrupo_numero(?)";
@@ -193,26 +156,19 @@ public class CuentaFondoGrupoService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsNombre(String arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (CuentaFondoGrupo.nombre) no nulo/vacio.");
-
 		}
 
 		arg = arg.trim();
@@ -232,15 +188,11 @@ public class CuentaFondoGrupoService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -263,9 +215,7 @@ public class CuentaFondoGrupoService {
 			return (Integer) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -368,16 +318,11 @@ public class CuentaFondoGrupoService {
 
 	public CuentaFondoGrupo findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (CuentaFondoGrupo.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		CuentaFondoGrupo obj = null;
 
@@ -412,15 +357,10 @@ public class CuentaFondoGrupoService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

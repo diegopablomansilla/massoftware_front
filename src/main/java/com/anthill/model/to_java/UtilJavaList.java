@@ -227,8 +227,8 @@ public class UtilJavaList {
 
 			} else if (arg.isBoolean()) {
 
-				java += sc + arg.getName() + "OPT = new OptionGroupEntityBoolean(this, filterBI, " + arg.getName()
-						+ ", \"Activas\", \"Obsoletas\", \"Todas\", true, 0)";
+				java += sc + arg.getName() + "OPT = new OptionGroupEntityBoolean(this, filterBI, \"" + arg.getName()
+						+ "Int\", \"Activas\", \"Obsoletas\", \"Todas\", true, 0);";
 
 			} else if (arg.isSimple() == false) {
 				// java += sc + arg.getDataType().getName().replaceAll("java.lang", "") + " " +
@@ -453,8 +453,8 @@ public class UtilJavaList {
 
 			} else if (att.isBoolean()) {
 
-				java += "\n\t\tif (" + att.getName() + "CHK != null) {";
-				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "CHK);";
+				java += "\n\t\tif (" + att.getName() + "OPT != null) {";
+				java += "\n\t\t\tfilaFiltroHL.addComponent(" + att.getName() + "OPT);";
 				java += "\n\t\t}";
 
 			} else if (att.isTimestamp()) {

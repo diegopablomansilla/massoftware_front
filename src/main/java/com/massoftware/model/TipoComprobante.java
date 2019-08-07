@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.service.fondos.banco.BancoFiltro;
 
 @ClassLabelAnont(singular = "Tipo de comprobante", plural = "Tipos de comprobantes", singularPre = "el tipo de comprobante", pluralPre = "los tipos de comprobantes")
 public class TipoComprobante extends EntityId {
@@ -180,11 +181,11 @@ public class TipoComprobante extends EntityId {
 		return null;
 	}
 
-	public List<TipoComprobante> find(BancosFiltro bancosFiltro) throws Exception {
+	public List<TipoComprobante> find(BancoFiltro bancosFiltro) throws Exception {
 		return find(-1, -1, null, bancosFiltro);
 	}
 
-	public List<TipoComprobante> find(int limit, int offset, Map<String, Boolean> orderBy, BancosFiltro filtro)
+	public List<TipoComprobante> find(int limit, int offset, Map<String, Boolean> orderBy, BancoFiltro filtro)
 			throws Exception {
 
 		filtro.setterTrim();
@@ -196,10 +197,10 @@ public class TipoComprobante extends EntityId {
 
 		ArrayList<Object> filtros = new ArrayList<Object>();
 
-		if (filtro.getNumero() != null) {
-			filtros.add(filtro.getNumero());
-			whereSQL += "numero" + " = ? AND ";
-		}
+//		if (filtro.getNumero() != null) {
+//			filtros.add(filtro.getNumero());
+//			whereSQL += "numero" + " = ? AND ";
+//		}
 		if (filtro.getNombre() != null) {
 			String[] palabras = filtro.getNombre().split(" ");
 			for (String palabra : palabras) {
@@ -208,13 +209,13 @@ public class TipoComprobante extends EntityId {
 						+ "))::VARCHAR ILIKE ('%' || TRIM(massoftware.TRANSLATE(?)) || '%')::VARCHAR AND ";
 			}
 		}
-		if (filtro.getBloqueado() != null && filtro.getBloqueado() == 1) {
-			filtros.add(true);
-			whereSQL += "bloqueado" + " = ? AND ";
-		} else if (filtro.getBloqueado() != null && filtro.getBloqueado() == 2) {
-			filtros.add(false);
-			whereSQL += "bloqueado" + " = ? AND ";
-		}
+//		if (filtro.getBloqueado() != null && filtro.getBloqueado() == 1) {
+//			filtros.add(true);
+//			whereSQL += "bloqueado" + " = ? AND ";
+//		} else if (filtro.getBloqueado() != null && filtro.getBloqueado() == 2) {
+//			filtros.add(false);
+//			whereSQL += "bloqueado" + " = ? AND ";
+//		}
 
 		// ==================================================================
 

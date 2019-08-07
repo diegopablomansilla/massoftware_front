@@ -3,10 +3,11 @@ package com.massoftware.service.logistica;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
-import com.massoftware.UtilNumeric;
+
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.logistica.Transporte;
+import com.massoftware.service.UtilNumeric;
 
 public class TransporteService {
 
@@ -18,11 +19,8 @@ public class TransporteService {
 	public String insert(Transporte obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto Transporte no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -48,27 +46,17 @@ public class TransporteService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -79,18 +67,11 @@ public class TransporteService {
 	public String update(Transporte obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto Transporte no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto Transporte con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -118,25 +99,16 @@ public class TransporteService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -146,13 +118,9 @@ public class TransporteService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (Transporte.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -169,9 +137,7 @@ public class TransporteService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -183,11 +149,8 @@ public class TransporteService {
 
 	public boolean isExistsNumero(Integer arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (Transporte.numero) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_Transporte_numero(?)";
@@ -205,26 +168,19 @@ public class TransporteService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsNombre(String arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (Transporte.nombre) no nulo/vacio.");
-
 		}
 
 		arg = arg.trim();
@@ -244,26 +200,19 @@ public class TransporteService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsCuit(Long arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (Transporte.cuit) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_Transporte_cuit(?)";
@@ -281,15 +230,11 @@ public class TransporteService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -312,9 +257,7 @@ public class TransporteService {
 			return (Integer) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -334,9 +277,7 @@ public class TransporteService {
 			return (Long) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -439,16 +380,11 @@ public class TransporteService {
 
 	public Transporte findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (Transporte.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		Transporte obj = null;
 
@@ -499,15 +435,10 @@ public class TransporteService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

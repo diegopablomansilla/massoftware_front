@@ -33,7 +33,7 @@ public class MonedaCotizacionFiltro extends AbstractFilter {
 	}
 
 	// SET Moneda
-	public void setMoneda(Moneda moneda ){
+	public void setMoneda(Moneda moneda){
 		this.moneda = moneda;
 	}
 
@@ -43,7 +43,7 @@ public class MonedaCotizacionFiltro extends AbstractFilter {
 	}
 
 	// SET Fecha cotización (desde)
-	public void setCotizacionFechaFrom(java.sql.Timestamp cotizacionFechaFrom ){
+	public void setCotizacionFechaFrom(java.sql.Timestamp cotizacionFechaFrom){
 		this.cotizacionFechaFrom = cotizacionFechaFrom;
 	}
 
@@ -53,7 +53,7 @@ public class MonedaCotizacionFiltro extends AbstractFilter {
 	}
 
 	// SET Fecha cotización (hasta)
-	public void setCotizacionFechaTo(java.sql.Timestamp cotizacionFechaTo ){
+	public void setCotizacionFechaTo(java.sql.Timestamp cotizacionFechaTo){
 		this.cotizacionFechaTo = cotizacionFechaTo;
 	}
 		

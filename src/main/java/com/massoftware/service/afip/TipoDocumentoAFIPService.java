@@ -3,10 +3,11 @@ package com.massoftware.service.afip;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
-import com.massoftware.UtilNumeric;
+
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.afip.TipoDocumentoAFIP;
+import com.massoftware.service.UtilNumeric;
 
 public class TipoDocumentoAFIPService {
 
@@ -18,11 +19,8 @@ public class TipoDocumentoAFIPService {
 	public String insert(TipoDocumentoAFIP obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto TipoDocumentoAFIP no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -41,27 +39,17 @@ public class TipoDocumentoAFIPService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -72,18 +60,11 @@ public class TipoDocumentoAFIPService {
 	public String update(TipoDocumentoAFIP obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto TipoDocumentoAFIP no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto TipoDocumentoAFIP con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -104,25 +85,16 @@ public class TipoDocumentoAFIPService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -132,13 +104,9 @@ public class TipoDocumentoAFIPService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (TipoDocumentoAFIP.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -155,9 +123,7 @@ public class TipoDocumentoAFIPService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -169,11 +135,8 @@ public class TipoDocumentoAFIPService {
 
 	public boolean isExistsNumero(Integer arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (TipoDocumentoAFIP.numero) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_TipoDocumentoAFIP_numero(?)";
@@ -191,26 +154,19 @@ public class TipoDocumentoAFIPService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsNombre(String arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (TipoDocumentoAFIP.nombre) no nulo/vacio.");
-
 		}
 
 		arg = arg.trim();
@@ -230,15 +186,11 @@ public class TipoDocumentoAFIPService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -261,9 +213,7 @@ public class TipoDocumentoAFIPService {
 			return (Integer) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -366,16 +316,11 @@ public class TipoDocumentoAFIPService {
 
 	public TipoDocumentoAFIP findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (TipoDocumentoAFIP.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		TipoDocumentoAFIP obj = null;
 
@@ -402,15 +347,10 @@ public class TipoDocumentoAFIPService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

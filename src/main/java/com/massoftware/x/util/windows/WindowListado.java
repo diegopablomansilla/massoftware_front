@@ -10,7 +10,6 @@ import com.massoftware.service.AbstractFilter;
 import com.massoftware.x.util.UtilUI;
 import com.massoftware.x.util.controls.ComboBoxEntity;
 import com.massoftware.x.util.controls.SelectorBox;
-import com.massoftware.x.util.windows.EliminarDialog.Callback;
 import com.vaadin.data.Validatable;
 import com.vaadin.data.sort.SortOrder;
 import com.vaadin.data.util.BeanItemContainer;

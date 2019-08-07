@@ -108,6 +108,10 @@ public class BancoAnt extends Ant {
 		c.addArgument(nombre);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
+		
+		c.addArgument(bloqueado);
+		c.getLastArgument().setRequired(true);
+		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
 

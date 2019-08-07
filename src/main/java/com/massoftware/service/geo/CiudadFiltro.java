@@ -42,7 +42,7 @@ public class CiudadFiltro extends AbstractFilter {
 	}
 
 	// SET Nº ciudad (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -52,7 +52,7 @@ public class CiudadFiltro extends AbstractFilter {
 	}
 
 	// SET Nº ciudad (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -62,7 +62,7 @@ public class CiudadFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 
@@ -72,7 +72,7 @@ public class CiudadFiltro extends AbstractFilter {
 	}
 
 	// SET País
-	public void setPais(Pais pais ){
+	public void setPais(Pais pais){
 		this.pais = pais;
 	}
 
@@ -82,7 +82,7 @@ public class CiudadFiltro extends AbstractFilter {
 	}
 
 	// SET Provincia
-	public void setProvincia(Provincia provincia ){
+	public void setProvincia(Provincia provincia){
 		this.provincia = provincia;
 	}
 		

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.backend.annotation.ClassLabelAnont;
 import com.massoftware.backend.annotation.FieldConfAnont;
+import com.massoftware.model.fondos.banco.Banco;
 
 @ClassLabelAnont(singular = "Cuenta de fondo", plural = "Cuentas de fondo", singularPre = "la cuenta de fondo", pluralPre = "las cuentas de fondo")
 public class CuentaFondo extends EntityId {

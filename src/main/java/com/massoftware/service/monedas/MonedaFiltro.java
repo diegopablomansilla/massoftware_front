@@ -36,7 +36,7 @@ public class MonedaFiltro extends AbstractFilter {
 	}
 
 	// SET Nº moneda (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -46,7 +46,7 @@ public class MonedaFiltro extends AbstractFilter {
 	}
 
 	// SET Nº moneda (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -56,7 +56,7 @@ public class MonedaFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 
@@ -66,7 +66,7 @@ public class MonedaFiltro extends AbstractFilter {
 	}
 
 	// SET Abreviatura
-	public void setAbreviatura(String abreviatura ){
+	public void setAbreviatura(String abreviatura){
 		this.abreviatura = (abreviatura != null && abreviatura.trim().length() == 0) ? null : abreviatura;
 	}
 		

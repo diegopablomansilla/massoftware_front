@@ -12,6 +12,9 @@ import org.cendra.jdbc.ConnectionWrapper;
 import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
+import a.dao.DataBase;
+import a.dao.pg.wrapperds.DataBasePG;
+
 public class BackendContextPG extends AbstractContext {
 
 	public final static String PG = "Postgresql";
@@ -39,6 +42,10 @@ public class BackendContextPG extends AbstractContext {
 		}
 
 		return backendContext;
+	}
+	
+	public synchronized DataBase getDataBase() {
+		return new DataBasePG(dataSourceWrapper);
 	}
 
 	public synchronized String getIconosPath() {

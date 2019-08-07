@@ -3,9 +3,9 @@ package com.massoftware.service.geo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.UtilNumeric;
 import com.massoftware.model.geo.Pais;
 import com.massoftware.model.geo.Provincia;
+import com.massoftware.service.UtilNumeric;
 
 public class ProvinciaServiceCustom extends ProvinciaService {
 

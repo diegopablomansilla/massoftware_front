@@ -371,12 +371,12 @@ public class UtilJavaService {
 
 		java += "\n\n\t\tif(obj == null){";
 
-		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
+		java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
 				+ " no nulo.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
-		java += "\n";
+//		java += "\n";
 
 		String args = "\n\t\tObject id = UUID.randomUUID().toString();";
 
@@ -388,10 +388,18 @@ public class UtilJavaService {
 
 			String n = "obj.get" + toCamelStart(att.getName()) + "()";
 
-			if (att.isSimple()) {
+			if (att.isSimple()) {								
+				
+				if(att.isBoolean()) {
+					
+					args += sc + "Object " + att.getName() + " = ( " + n + " == null ) ? "
+							+ att.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+				} else {
+					args += sc + "Object " + att.getName() + " = ( " + n + " == null ) ? "
+							+ att.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+				}
 
-				args += sc + "Object " + att.getName() + " = ( " + n + " == null ) ? "
-						+ att.getDataType().getName().replace("java.lang.", "") + ".class : " + n + ";";
+				
 
 			} else {
 
@@ -439,27 +447,27 @@ public class UtilJavaService {
 
 		java += "\n\n\t\t\t\tBoolean ok = (Boolean) row[0];";
 
-		java += "\n\n\t\t\t\tif(ok){";
+		java += "\n\t\t\t\tif(ok){";
 
-		java += "\n\n\t\t\t\t\treturn id.toString();";
+		java += "\n\t\t\t\t\treturn id.toString();";
 
-		java += "\n\n\t\t\t\t} else { ";
+		java += "\n\t\t\t\t} else { ";
 
-		java += "\n\n\t\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la sentencia no insertara en la base de datos.\");";
+		java += "\n\t\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la sentencia no insertara en la base de datos.\");";
 
-		java += "\n\n\t\t\t\t}";
+		java += "\n\t\t\t\t}";
 
 		java += "\n\n\t\t\t} else {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
+		java += "\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
 
-		java += "\n\n\t\t\t}";
+		java += "\n\t\t\t}";
 
-		java += "\n\n\t\t} else {";
+		java += "\n\t\t} else {";
 
-		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
 		// java += "\n\n\t\treturn null;";
 
@@ -475,23 +483,25 @@ public class UtilJavaService {
 
 		java += "\n\n\tpublic String update(" + clazzX.getName() + " obj) throws Exception {";
 
-		java += "\n\n\t\tif(obj == null){";
+		java += "\n";
+		
+		java += "\n\t\tif(obj == null){";
 
-		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
+		java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
 				+ " no nulo.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
-		java += "\n";
+//		java += "\n";
 
-		java += "\n\n\t\tif(obj.getId() == null || obj.getId().trim().length() == 0){";
+		java += "\n\t\tif(obj.getId() == null || obj.getId().trim().length() == 0){";
 
-		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
+		java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un objeto " + clazzX.getName()
 				+ " con id no nulo/vacio.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
-		java += "\n";
+//		java += "\n";
 
 		String args = "\n\t\tObject id = ( obj.getId() == null ) ? String.class : obj.getId();";
 
@@ -556,25 +566,25 @@ public class UtilJavaService {
 
 		java += "\n\n\t\t\t\tif(ok){";
 
-		java += "\n\n\t\t\t\t\treturn id.toString();";
+		java += "\n\t\t\t\t\treturn id.toString();";
 
-		java += "\n\n\t\t\t\t} else { ";
+		java += "\n\t\t\t\t} else { ";
 
-		java += "\n\n\t\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la sentencia no actualizara en la base de datos.\");";
+		java += "\n\t\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la sentencia no actualizara en la base de datos.\");";
 
-		java += "\n\n\t\t\t\t}";
+		java += "\n\t\t\t\t}";
 
 		java += "\n\n\t\t\t} else {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
+		java += "\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
 
-		java += "\n\n\t\t\t}";
+		java += "\n\t\t\t}";
 
-		java += "\n\n\t\t} else {";
+		java += "\n\t\t} else {";
 
-		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
 		// java += "\n\n\t\treturn null;";
 
@@ -592,14 +602,14 @@ public class UtilJavaService {
 
 		java += "\n";
 
-		java += "\n\n\t\tif(id == null || id.trim().length() == 0){";
+		java += "\n\t\tif(id == null || id.trim().length() == 0){";
 
-		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + clazzX.getName()
+		java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + clazzX.getName()
 				+ ".id) no nulo/vacio.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
-		java += "\n";
+//		java += "\n";
 
 		java += "\n\n\t\tid = id.trim();";
 
@@ -621,9 +631,9 @@ public class UtilJavaService {
 
 		java += "\n\n\t\t} else if(table.length > 1 ) {";
 
-		java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
 		java += "\n\n\t\treturn false;";
 
@@ -644,14 +654,14 @@ public class UtilJavaService {
 				java += "\n\n\tpublic boolean isExists" + toCamelStart(att.getName()) + "("
 						+ att.getDataType().getName().replace("java.lang.", "") + " arg) throws Exception {";
 
-				java += "\n";
+//				java += "\n";
 
 				java += "\n\n\t\tif(arg == null || arg.toString().trim().length() == 0){";
 
-				java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un arg (" + clazzX.getName() + "."
+				java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un arg (" + clazzX.getName() + "."
 						+ att.getName() + ") no nulo/vacio.\");";
 
-				java += "\n\n\t\t}";
+				java += "\n\t\t}";
 
 				if (att.isString()) {
 					java += "\n\n\t\targ = arg.trim();";
@@ -680,16 +690,16 @@ public class UtilJavaService {
 
 				java += "\n\n\t\t\t} else { ";
 
-				java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
+				java += "\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + row.length + \" columnas.\");";
 
-				java += "\n\n\t\t\t}";
+				java += "\n\t\t\t}";
 
 				// java += "\n\n\t\t} else if(table.length > 1 ) {";
 				java += "\n\n\t\t} else {";
 
-				java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+				java += "\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-				java += "\n\n\t\t}";
+				java += "\n\t\t}";
 
 				// java += "\n\n\t\treturn false;";
 
@@ -733,9 +743,9 @@ public class UtilJavaService {
 				// java += "\n\n\t\t} else if(table.length > 1 ) {";
 				java += "\n\n\t\t} else {";
 
-				java += "\n\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+				java += "\n\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-				java += "\n\n\t\t}";
+				java += "\n\t\t}";
 
 				// java += "\n\n\t\treturn false;";
 
@@ -800,18 +810,18 @@ public class UtilJavaService {
 
 		java += "\n";
 
-		java += "\n\n\t\tif(id == null || id.trim().length() == 0){";
+		java += "\n\t\tif(id == null || id.trim().length() == 0){";
 
-		java += "\n\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + clazzX.getName()
+		java += "\n\t\t\tthrow new IllegalArgumentException(\"Se esperaba un id (" + clazzX.getName()
 				+ ".id) no nulo/vacio.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
-		java += "\n";
+//		java += "\n";
 
 		java += "\n\n\t\tid = id.trim();";
 
-		java += "\n";
+//		java += "\n";
 
 		java += "\n";
 		java += "\n\t\t" + clazzX.getName() + " obj = null;";
@@ -843,11 +853,11 @@ public class UtilJavaService {
 
 		java += buildMapperIfById(clazzX);
 
-		java += "\n\n\t\t} else if(table.length > 1 ) {";
+		java += "\n\t\t} else if(table.length > 1 ) {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
+		java += "\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva \" + table.length + \" filas.\");";
 
-		java += "\n\n\t\t}";
+		java += "\n\t\t}";
 
 		java += "\n\n\t\treturn null;";
 
@@ -1619,9 +1629,9 @@ public class UtilJavaService {
 
 		java += " else {";
 
-		java += "\n\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva una fila con  \" + row.length + \" columnas.\");";
+		java += "\n\t\t\t\tthrow new IllegalStateException(\"No se esperaba que la consulta a la base de datos devuelva una fila con  \" + row.length + \" columnas.\");";
 
-		java += "\n\n\t\t\t}";
+		java += "\n\t\t\t}";
 
 		return java;
 	}

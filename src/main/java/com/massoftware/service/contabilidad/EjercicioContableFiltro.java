@@ -28,7 +28,7 @@ public class EjercicioContableFiltro extends AbstractFilter {
 	}
 
 	// SET Nº ejercicio (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -38,7 +38,7 @@ public class EjercicioContableFiltro extends AbstractFilter {
 	}
 
 	// SET Nº ejercicio (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 		

@@ -47,7 +47,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET Código
-	public void setCodigo(String codigo ){
+	public void setCodigo(String codigo){
 		this.codigo = (codigo != null && codigo.trim().length() == 0) ? null : codigo;
 	}
 
@@ -57,7 +57,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET Secuencia (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -67,7 +67,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET Secuencia (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -77,7 +77,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET País
-	public void setPais(Pais pais ){
+	public void setPais(Pais pais){
 		this.pais = pais;
 	}
 
@@ -87,7 +87,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET Provincia
-	public void setProvincia(Provincia provincia ){
+	public void setProvincia(Provincia provincia){
 		this.provincia = provincia;
 	}
 
@@ -97,7 +97,7 @@ public class CodigoPostalFiltro extends AbstractFilter {
 	}
 
 	// SET Ciudad
-	public void setCiudad(Ciudad ciudad ){
+	public void setCiudad(Ciudad ciudad){
 		this.ciudad = ciudad;
 	}
 		

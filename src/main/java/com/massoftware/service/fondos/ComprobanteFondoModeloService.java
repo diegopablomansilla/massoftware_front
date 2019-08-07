@@ -3,10 +3,11 @@ package com.massoftware.service.fondos;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
-import com.massoftware.UtilNumeric;
+
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.EntityId;
 import com.massoftware.model.fondos.ComprobanteFondoModelo;
+import com.massoftware.service.UtilNumeric;
 
 public class ComprobanteFondoModeloService {
 
@@ -18,11 +19,8 @@ public class ComprobanteFondoModeloService {
 	public String insert(ComprobanteFondoModelo obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto ComprobanteFondoModelo no nulo.");
-
 		}
-
 
 		Object id = UUID.randomUUID().toString();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -41,27 +39,17 @@ public class ComprobanteFondoModeloService {
 			if(row.length == 1){
 
 				Boolean ok = (Boolean) row[0];
-
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no insertara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -72,18 +60,11 @@ public class ComprobanteFondoModeloService {
 	public String update(ComprobanteFondoModelo obj) throws Exception {
 
 		if(obj == null){
-
 			throw new IllegalArgumentException("Se esperaba un objeto ComprobanteFondoModelo no nulo.");
-
 		}
-
-
 		if(obj.getId() == null || obj.getId().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un objeto ComprobanteFondoModelo con id no nulo/vacio.");
-
 		}
-
 
 		Object id = ( obj.getId() == null ) ? String.class : obj.getId();
 		Object numero = ( obj.getNumero() == null ) ? Integer.class : obj.getNumero();
@@ -104,25 +85,16 @@ public class ComprobanteFondoModeloService {
 				Boolean ok = (Boolean) row[0];
 
 				if(ok){
-
 					return id.toString();
-
 				} else { 
-
 					throw new IllegalStateException("No se esperaba que la sentencia no actualizara en la base de datos.");
-
 				}
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
-
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -132,13 +104,9 @@ public class ComprobanteFondoModeloService {
 
 	public boolean deleteById(String id) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (ComprobanteFondoModelo.id) no nulo/vacio.");
-
 		}
-
 
 		id = id.trim();
 
@@ -155,9 +123,7 @@ public class ComprobanteFondoModeloService {
 			return row[0].equals(true);
 
 		} else if(table.length > 1 ) {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return false;
@@ -169,11 +135,8 @@ public class ComprobanteFondoModeloService {
 
 	public boolean isExistsNumero(Integer arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (ComprobanteFondoModelo.numero) no nulo/vacio.");
-
 		}
 
 		String sql = "SELECT * FROM massoftware.f_exists_ComprobanteFondoModelo_numero(?)";
@@ -191,26 +154,19 @@ public class ComprobanteFondoModeloService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
 
 	public boolean isExistsNombre(String arg) throws Exception {
 
-
 		if(arg == null || arg.toString().trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un arg (ComprobanteFondoModelo.nombre) no nulo/vacio.");
-
 		}
 
 		arg = arg.trim();
@@ -230,15 +186,11 @@ public class ComprobanteFondoModeloService {
 				return (Boolean) row[0];
 
 			} else { 
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + row.length + " columnas.");
-
 			}
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -261,9 +213,7 @@ public class ComprobanteFondoModeloService {
 			return (Integer) row[0];
 
 		} else {
-
 			throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 	}
@@ -366,16 +316,11 @@ public class ComprobanteFondoModeloService {
 
 	public ComprobanteFondoModelo findById(String id, Integer level) throws Exception {
 
-
 		if(id == null || id.trim().length() == 0){
-
 			throw new IllegalArgumentException("Se esperaba un id (ComprobanteFondoModelo.id) no nulo/vacio.");
-
 		}
 
-
 		id = id.trim();
-
 
 		ComprobanteFondoModelo obj = null;
 
@@ -402,15 +347,10 @@ public class ComprobanteFondoModeloService {
 				return obj;
 
 			} else {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva una fila con  " + row.length + " columnas.");
-
 			}
-
 		} else if(table.length > 1 ) {
-
 				throw new IllegalStateException("No se esperaba que la consulta a la base de datos devuelva " + table.length + " filas.");
-
 		}
 
 		return null;

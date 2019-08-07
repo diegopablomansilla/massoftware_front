@@ -61,7 +61,7 @@ public class UtilUI {
 		grd.addStyleName("compact");
 		grd.setWidth("100%");
 		grd.setSelectionMode(SelectionMode.SINGLE);		
-		grd.setImmediate(true);
+		grd.setImmediate(true);		
 
 		return grd;
 	}

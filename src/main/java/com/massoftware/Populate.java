@@ -256,8 +256,8 @@ public class Populate {
 			//insertTipoComprobanteConcepto();
 			//insertClaseComprobante();
 			//insertComportamientoComprobante();
-			insertTipoComprobanteCopia();
-			insertTipoComprobanteCopiaAlternativo();
+			//insertTipoComprobanteCopia();
+			//insertTipoComprobanteCopiaAlternativo();
 	}
 
 

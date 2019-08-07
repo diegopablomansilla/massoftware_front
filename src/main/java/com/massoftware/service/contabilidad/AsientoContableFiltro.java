@@ -60,7 +60,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Nº asiento (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -70,7 +70,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Nº asiento (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -80,7 +80,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Detalle
-	public void setDetalle(String detalle ){
+	public void setDetalle(String detalle){
 		this.detalle = (detalle != null && detalle.trim().length() == 0) ? null : detalle;
 	}
 
@@ -90,7 +90,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Fecha (desde)
-	public void setFechaFrom(java.util.Date fechaFrom ){
+	public void setFechaFrom(java.util.Date fechaFrom){
 		this.fechaFrom = fechaFrom;
 	}
 
@@ -100,7 +100,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Fecha (hasta)
-	public void setFechaTo(java.util.Date fechaTo ){
+	public void setFechaTo(java.util.Date fechaTo){
 		this.fechaTo = fechaTo;
 	}
 
@@ -110,7 +110,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Ejercicio
-	public void setEjercicioContable(EjercicioContable ejercicioContable ){
+	public void setEjercicioContable(EjercicioContable ejercicioContable){
 		this.ejercicioContable = ejercicioContable;
 	}
 
@@ -120,7 +120,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Minuta contable
-	public void setMinutaContable(MinutaContable minutaContable ){
+	public void setMinutaContable(MinutaContable minutaContable){
 		this.minutaContable = minutaContable;
 	}
 
@@ -130,7 +130,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Módulo
-	public void setAsientoContableModulo(AsientoContableModulo asientoContableModulo ){
+	public void setAsientoContableModulo(AsientoContableModulo asientoContableModulo){
 		this.asientoContableModulo = asientoContableModulo;
 	}
 
@@ -140,7 +140,7 @@ public class AsientoContableFiltro extends AbstractFilter {
 	}
 
 	// SET Sucursal
-	public void setSucursal(Sucursal sucursal ){
+	public void setSucursal(Sucursal sucursal){
 		this.sucursal = sucursal;
 	}
 		

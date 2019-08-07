@@ -25,7 +25,7 @@ public class TransporteTarifaFiltro extends AbstractFilter {
 	}
 
 	// SET Transporte
-	public void setTransporte(Transporte transporte ){
+	public void setTransporte(Transporte transporte){
 		this.transporte = transporte;
 	}
 		

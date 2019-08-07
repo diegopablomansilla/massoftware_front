@@ -25,7 +25,7 @@ public class AsientoModeloItemFiltro extends AbstractFilter {
 	}
 
 	// SET Asiento modelo
-	public void setAsientoModelo(AsientoModelo asientoModelo ){
+	public void setAsientoModelo(AsientoModelo asientoModelo){
 		this.asientoModelo = asientoModelo;
 	}
 		

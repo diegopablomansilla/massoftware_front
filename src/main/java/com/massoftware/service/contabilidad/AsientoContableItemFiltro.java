@@ -37,7 +37,7 @@ public class AsientoContableItemFiltro extends AbstractFilter {
 	}
 
 	// SET Nº item (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -47,7 +47,7 @@ public class AsientoContableItemFiltro extends AbstractFilter {
 	}
 
 	// SET Nº item (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -57,7 +57,7 @@ public class AsientoContableItemFiltro extends AbstractFilter {
 	}
 
 	// SET Detalle
-	public void setDetalle(String detalle ){
+	public void setDetalle(String detalle){
 		this.detalle = (detalle != null && detalle.trim().length() == 0) ? null : detalle;
 	}
 
@@ -67,7 +67,7 @@ public class AsientoContableItemFiltro extends AbstractFilter {
 	}
 
 	// SET Asiento contable
-	public void setAsientoContable(AsientoContable asientoContable ){
+	public void setAsientoContable(AsientoContable asientoContable){
 		this.asientoContable = asientoContable;
 	}
 		

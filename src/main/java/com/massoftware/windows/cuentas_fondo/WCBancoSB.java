@@ -1,10 +1,5 @@
 package com.massoftware.windows.cuentas_fondo;
 
-import java.util.List;
-
-import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro;
-import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.x.util.controls.SelectorBoxOld;
 import com.massoftware.x.util.windows.LogAndNotification;
 
@@ -47,31 +42,31 @@ class WCBancoSB extends SelectorBoxOld {
 			String value = getValue();
 
 			if (value != null) {
-
-				BancosFiltro filtro = new BancosFiltro();
-
-				try {
-
-					filtro.setNumero(new Integer(value));
-					filtro.setNombre(null);
-
-				} catch (NumberFormatException e) {
-
-					filtro.setNumero(null);
-					filtro.setNombre(value);
-				}
-
-				List items = new Banco().find(filtro);
-
-				if (items.size() == 1) {
-
-					setSelectedItem(items.get(0));
-
-				} else {
-
-					open();
-
-				}
+//
+//				BancosFiltro filtro = new BancosFiltro();
+//
+//				try {
+//
+//					filtro.setNumero(new Integer(value));
+//					filtro.setNombre(null);
+//
+//				} catch (NumberFormatException e) {
+//
+//					filtro.setNumero(null);
+//					filtro.setNombre(value);
+//				}
+//
+//				List items = new Banco().find(filtro);
+//
+//				if (items.size() == 1) {
+//
+//					setSelectedItem(items.get(0));
+//
+//				} else {
+//
+//					open();
+//
+//				}
 			} else {
 
 				setSelectedItem(null);
@@ -85,34 +80,34 @@ class WCBancoSB extends SelectorBoxOld {
 	protected void open() {
 		try {
 
-			BancosFiltro filtro = new BancosFiltro();
-			filtro.setNombre(this.getValue());
+//			BancosFiltro filtro = new BancosFiltro();
+//			filtro.setNombre(this.getValue());
+//
+//			WBancos windowPopup = new WBancos(filtro);
+//
+//			windowPopup.addCloseListener(e -> {
+//				try {
+//
+//					setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+//
+//				} catch (Exception ex) {
+//					LogAndNotification.print(ex);
+//				}
+//			});
+//
+//			windowPopup.seleccionarBTN.addClickListener(e -> {
+//				try {										
+//					if (windowPopup.itemsGRD.getSelectedRow() != null) {
+//						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
+//						windowPopup.close();
+//					}
+//
+//				} catch (Exception ex) {
+//					LogAndNotification.print(ex);
+//				}
+//			});
 
-			WBancos windowPopup = new WBancos(filtro);
-
-			windowPopup.addCloseListener(e -> {
-				try {
-
-					setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
-
-				} catch (Exception ex) {
-					LogAndNotification.print(ex);
-				}
-			});
-
-			windowPopup.seleccionarBTN.addClickListener(e -> {
-				try {										
-					if (windowPopup.itemsGRD.getSelectedRow() != null) {
-						setSelectedItem(windowPopup.itemsGRD.getSelectedRow());
-						windowPopup.close();
-					}
-
-				} catch (Exception ex) {
-					LogAndNotification.print(ex);
-				}
-			});
-
-			getUI().addWindow(windowPopup);
+//			getUI().addWindow(windowPopup);
 
 		} catch (Exception e) {
 			LogAndNotification.print(e);
@@ -121,13 +116,13 @@ class WCBancoSB extends SelectorBoxOld {
 
 	private void setSelectedItem(Object item) {
 
-		if (item == null) {
-			item = new Banco();
-		}
+//		if (item == null) {
+//			item = new Banco();
+//		}
 
 		valueTXT.setValue(item.toString());
 
-		window.filterBI.getBean().setBanco((Banco) item);
+//		window.filterBI.getBean().setBanco((Banco) item);
 
 		window.loadDataResetPaged();
 

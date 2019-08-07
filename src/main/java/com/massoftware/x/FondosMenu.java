@@ -5,7 +5,6 @@ import java.io.File;
 import com.massoftware.AppCX;
 import com.massoftware.backend.BackendContextPG;
 import com.massoftware.model.seguridad.Usuario;
-import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.a.cajas.WCajas;
 import com.massoftware.windows.a.jurisdicciones_convenio_multilateral.WJuridiccionesConvnioMultilateral;
 import com.massoftware.windows.a.marca_ticket_modelo.WMarcasTicketModelo;
@@ -105,8 +104,7 @@ public class FondosMenu extends AbstractMenu {
 		a11.addItem("+++++Rubros y grupos de cuentas ...", openCuentasFondoCmd());
 
 		a1.addItem("Cobranzas ...", openTiposCobranzasCmd()).setEnabled(false);
-		a1.addItem("Chequeras ...", openChequeraCmd());
-		a1.addItem("+++ Bancos ...", openBancosCmd());
+		a1.addItem("Chequeras ...", openChequeraCmd());		
 		a1.addItem("Bancos ...", openBancoCmd());
 		a1.addItem("+++Firmantes (cheques propios) ...", openFirmantesCmd());
 		a1.addItem("Firmantes (cheques propios) ...", openBancoFirmanteCmd());
@@ -462,22 +460,7 @@ public class FondosMenu extends AbstractMenu {
 		return row;
 	}
 
-	protected Command openBancosCmd() {
 
-		return new Command() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4645387020070455569L;
-
-			@Override
-			public void menuSelected(MenuItem selectedItem) {
-
-				Window window = new WBancos();
-				getUI().addWindow(window);
-			}
-		};
-	}
 
 	protected Command openBancoCmd() {
 

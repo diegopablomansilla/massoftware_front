@@ -28,7 +28,7 @@ public class TipoComprobanteConceptoFiltro extends AbstractFilter {
 	}
 
 	// SET Código
-	public void setCodigo(String codigo ){
+	public void setCodigo(String codigo){
 		this.codigo = (codigo != null && codigo.trim().length() == 0) ? null : codigo;
 	}
 
@@ -38,7 +38,7 @@ public class TipoComprobanteConceptoFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 		

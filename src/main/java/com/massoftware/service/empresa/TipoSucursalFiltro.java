@@ -32,7 +32,7 @@ public class TipoSucursalFiltro extends AbstractFilter {
 	}
 
 	// SET Nº tipo de sucursal (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -42,7 +42,7 @@ public class TipoSucursalFiltro extends AbstractFilter {
 	}
 
 	// SET Nº tipo de sucursal (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -52,7 +52,7 @@ public class TipoSucursalFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 		

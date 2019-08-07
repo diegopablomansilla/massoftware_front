@@ -10,11 +10,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import com.massoftware.model.Banco;
-import com.massoftware.model.BancosFiltro;
 import com.massoftware.model.CuentaFondo;
 import com.massoftware.model.CuentasFondoFiltro;
-import com.massoftware.windows.a.bancos.WBancos;
 import com.massoftware.windows.chequeras.Chequeras;
 import com.massoftware.windows.chequeras.WChequeras;
 import com.massoftware.windows.cuentas_fondo.WCuentasFondo;
@@ -687,21 +684,21 @@ public class WValoresTerceros extends Window {
 
 			// if (this.filterBI.getBean().getNumeroBanco() != null) {
 
-			BancosFiltro bancosFiltro = new BancosFiltro();
-			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
-
-			WBancos window = new WBancos(bancosFiltro);
-			window.setModal(true);
-			window.center();
-
-			window.addCloseListener(new CloseListener() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void windowClose(CloseEvent event) {
-					setNumeroBancoOnFilter(window);
-				}
-			});
+//			BancosFiltro bancosFiltro = new BancosFiltro();
+//			bancosFiltro.setNumero(this.filterBI.getBean().getNumeroBanco());
+//
+//			WBancos window = new WBancos(bancosFiltro);
+//			window.setModal(true);
+//			window.center();
+//
+//			window.addCloseListener(new CloseListener() {
+//				private static final long serialVersionUID = 1L;
+//
+//				@Override
+//				public void windowClose(CloseEvent event) {
+//					setNumeroBancoOnFilter(window);
+//				}
+//			});
 
 			// -------------------------------------------------------
 			// BOTONERA SELECCION
@@ -711,16 +708,16 @@ public class WValoresTerceros extends Window {
 
 			Button seleccionarBTN = UtilUI.buildButtonSeleccionar();
 			seleccionarBTN.addClickListener(e -> {
-				setNumeroBancoOnFilter(window);
+//				setNumeroBancoOnFilter(window);
 			});
 
 			filaBotoneraHL.addComponents(seleccionarBTN);
 
-			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
-
-			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
-
-			getUI().addWindow(window);
+//			((VerticalLayout) window.getContent()).addComponent(filaBotoneraHL);
+//
+//			((VerticalLayout) window.getContent()).setComponentAlignment(filaBotoneraHL, Alignment.MIDDLE_CENTER);
+//
+//			getUI().addWindow(window);
 
 			// } else {
 			// this.filterBI.getItemProperty("nombreBanco").setValue(null);
@@ -731,27 +728,27 @@ public class WValoresTerceros extends Window {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void setNumeroBancoOnFilter(WBancos window) {
-		try {
-			if (window.itemsGRD.getSelectedRow() != null) {
-
-				Banco item = (Banco) window.itemsGRD.getSelectedRow();
-
-				this.filterBI.getItemProperty("numeroBanco").setValue(item.getNumero());
-				this.filterBI.getItemProperty("nombreBanco").setValue(item.getNombre());
-
-				window.close();
-
-				loadDataResetPaged();
-			} else {
-				this.filterBI.getItemProperty("numeroBanco").setValue(null);
-				this.filterBI.getItemProperty("nombreBanco").setValue(null);
-			}
-		} catch (Exception ex) {
-			LogAndNotification.print(ex);
-		}
-	}
+//	@SuppressWarnings("unchecked")
+//	private void setNumeroBancoOnFilter(WBancos window) {
+//		try {
+//			if (window.itemsGRD.getSelectedRow() != null) {
+//
+//				Banco item = (Banco) window.itemsGRD.getSelectedRow();
+//
+//				this.filterBI.getItemProperty("numeroBanco").setValue(item.getNumero());
+//				this.filterBI.getItemProperty("nombreBanco").setValue(item.getNombre());
+//
+//				window.close();
+//
+//				loadDataResetPaged();
+//			} else {
+//				this.filterBI.getItemProperty("numeroBanco").setValue(null);
+//				this.filterBI.getItemProperty("nombreBanco").setValue(null);
+//			}
+//		} catch (Exception ex) {
+//			LogAndNotification.print(ex);
+//		}
+//	}
 
 	private void selectClienteTXTShortcutEnter() {
 		try {

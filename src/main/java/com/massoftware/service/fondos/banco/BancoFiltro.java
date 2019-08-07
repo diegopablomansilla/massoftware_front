@@ -23,6 +23,13 @@ public class BancoFiltro extends AbstractFilter {
 	@FieldConfAnont(label = "Nombre", labelError = "", readOnly = false, required = false, columns = 20.0f, maxLength = 50, minValue = "", maxValue = "", mask = "")
 	private String nombre;
 
+	// Obsoleto
+	@FieldConfAnont(label = "Obsoleto", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
+	private Boolean bloqueado = false;
+
+	@FieldConfAnont(label = "Obsoleto", labelError = "", readOnly = false, required = true, columns = 20.0f, maxLength = -1, minValue = "", maxValue = "", mask = "")
+	private Integer bloqueadoInt = 0;
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 
 
@@ -32,7 +39,7 @@ public class BancoFiltro extends AbstractFilter {
 	}
 
 	// SET Nº banco (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -42,7 +49,7 @@ public class BancoFiltro extends AbstractFilter {
 	}
 
 	// SET Nº banco (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -52,8 +59,30 @@ public class BancoFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
+	}
+
+	// GET Obsoleto
+	public Boolean getBloqueado() {
+		return this.bloqueado;
+	}
+
+	// GET Obsoleto
+	public Integer getBloqueadoInt() {
+		return this.bloqueadoInt;
+	}
+
+	// SET Obsoleto
+	public void setBloqueado(Boolean bloqueado ){
+		this.bloqueado = bloqueado;
+		this.bloqueadoInt = ((this.bloqueado == null) ? null : ((this.bloqueado == false) ? 0 : 1));
+	}
+
+	// SET Obsoleto
+	public void setBloqueadoInt(Integer bloqueadoInt){
+		this.bloqueadoInt = bloqueadoInt;
+		this.bloqueado = ((this.bloqueadoInt == null || bloqueadoInt == 2) ? null : ((this.bloqueadoInt == 0) ? false : true));
 	}
 		
 	public boolean equals(Object obj) {
@@ -118,6 +147,24 @@ public class BancoFiltro extends AbstractFilter {
 		if (other.getNombre() != null && this.getNombre() != null) {
 		
 			if (other.getNombre().equals(this.getNombre()) == false) {
+				return false;
+			}
+		
+		}
+		
+		// -------------------------------------------------------------------
+		
+		if (other.getBloqueado() == null && this.getBloqueado() != null) {
+			return false;
+		}
+		
+		if (other.getBloqueado() != null && this.getBloqueado() == null) {
+			return false;
+		}
+		
+		if (other.getBloqueado() != null && this.getBloqueado() != null) {
+		
+			if (other.getBloqueado().equals(this.getBloqueado()) == false) {
 				return false;
 			}
 		

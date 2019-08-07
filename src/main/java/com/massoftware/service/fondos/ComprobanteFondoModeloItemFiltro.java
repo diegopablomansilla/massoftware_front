@@ -33,7 +33,7 @@ public class ComprobanteFondoModeloItemFiltro extends AbstractFilter {
 	}
 
 	// SET Nº modelo (desde)
-	public void setNumeroFrom(Integer numeroFrom ){
+	public void setNumeroFrom(Integer numeroFrom){
 		this.numeroFrom = numeroFrom;
 	}
 
@@ -43,7 +43,7 @@ public class ComprobanteFondoModeloItemFiltro extends AbstractFilter {
 	}
 
 	// SET Nº modelo (hasta)
-	public void setNumeroTo(Integer numeroTo ){
+	public void setNumeroTo(Integer numeroTo){
 		this.numeroTo = numeroTo;
 	}
 
@@ -53,7 +53,7 @@ public class ComprobanteFondoModeloItemFiltro extends AbstractFilter {
 	}
 
 	// SET Cuenta fondo
-	public void setCuentaFondo(CuentaFondo cuentaFondo ){
+	public void setCuentaFondo(CuentaFondo cuentaFondo){
 		this.cuentaFondo = cuentaFondo;
 	}
 		

@@ -33,7 +33,7 @@ public class CuentaContableFiltro extends AbstractFilter {
 	}
 
 	// SET Cuenta contable
-	public void setCodigo(String codigo ){
+	public void setCodigo(String codigo){
 		this.codigo = (codigo != null && codigo.trim().length() == 0) ? null : codigo;
 	}
 
@@ -43,7 +43,7 @@ public class CuentaContableFiltro extends AbstractFilter {
 	}
 
 	// SET Nombre
-	public void setNombre(String nombre ){
+	public void setNombre(String nombre){
 		this.nombre = (nombre != null && nombre.trim().length() == 0) ? null : nombre;
 	}
 
@@ -53,7 +53,7 @@ public class CuentaContableFiltro extends AbstractFilter {
 	}
 
 	// SET Ejercicio
-	public void setEjercicioContable(EjercicioContable ejercicioContable ){
+	public void setEjercicioContable(EjercicioContable ejercicioContable){
 		this.ejercicioContable = ejercicioContable;
 	}
 		

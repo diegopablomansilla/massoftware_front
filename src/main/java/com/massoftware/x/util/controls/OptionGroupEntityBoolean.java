@@ -15,7 +15,7 @@ public class OptionGroupEntityBoolean extends OptionGroup {
 	private static final long serialVersionUID = 7741977244792585335L;
 
 	@SuppressWarnings("rawtypes")
-	public OptionGroupEntityBoolean(WindowListado window, BeanItem dtoBI, String attName, String labelAll, String labelTrue, String labelFalse,
+	public OptionGroupEntityBoolean(WindowListado window, BeanItem dtoBI, String attName, String label0, String label1, String label2,
 			boolean horizontal, int value) throws Exception {
 
 		String label = ((Entity) dtoBI.getBean()).label(attName);
@@ -39,9 +39,9 @@ public class OptionGroupEntityBoolean extends OptionGroup {
 		addItem(1);
 		addItem(2);
 
-		setItemCaption(0, labelAll);
-		setItemCaption(1, labelTrue);
-		setItemCaption(2, labelFalse);
+		setItemCaption(0, label0);
+		setItemCaption(1, label1);
+		setItemCaption(2, label2);
 
 		// ----------------------------------------------
 

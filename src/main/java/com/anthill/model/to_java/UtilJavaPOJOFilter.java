@@ -414,12 +414,25 @@ public class UtilJavaPOJOFilter {
 			maxLength = "maxLength = " + -1;
 		}
 
-		java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique + */ ", " + readOnly + ", "
-				+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask + ")";
-		java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
-
 		if (att.isBoolean()) {
-			java += " = false";
+
+			java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique + */ ", " + readOnly + ", "
+					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
+					+ ")";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
+			java += " = false;";
+
+			java += "\n\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique + */ ", " + readOnly + ", "
+					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
+					+ ")";
+			java += "\n\tprivate Integer " + att.getName() + "Int";
+			java += " = 0";
+
+		} else {
+			java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique + */ ", " + readOnly + ", "
+					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
+					+ ")";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
 		}
 
 		java += ";";
@@ -430,29 +443,66 @@ public class UtilJavaPOJOFilter {
 	private static String buildGetSet(Argument att) {
 		String java = "";
 
-		java += "\n\n\t// GET " + att.getLabel();
-		java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " get"
-				+ att.getNameJavaUperCase() + "() {";
-
-		java += "\n\t\treturn this." + att.getName() + ";";
-
-		java += "\n\t}";
-
-		java += "\n\n\t// SET " + att.getLabel();
-		java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-				+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + " ){";
-
 		if (att.isBoolean()) {
-			java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null) ? false : " + att.getName()
-					+ ";";
-		} else if (att.isString()) {
-			java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " != null && " + att.getName()
-					+ ".trim().length() == 0) ? null : " + att.getName() + ";";
+
+			java += "\n\n\t// GET " + att.getLabel();
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " get"
+					+ att.getNameJavaUperCase() + "() {";
+			// java += "\n\t\tthis." + att.getName() + " = ((this." + att.getName() + "Int
+			// == null) ? null : ((this."
+			// + att.getName() + "Int == 0) ? false : true));";
+			java += "\n\t\treturn this." + att.getName() + ";";
+			java += "\n\t}";
+
+			java += "\n\n\t// GET " + att.getLabel();
+			java += "\n\tpublic Integer get" + att.getNameJavaUperCase() + "Int() {";
+			java += "\n\t\treturn this." + att.getName() + "Int;";
+			java += "\n\t}";
+
 		} else {
-			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
+
+			java += "\n\n\t// GET " + att.getLabel();
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " get"
+					+ att.getNameJavaUperCase() + "() {";
+			java += "\n\t\treturn this." + att.getName() + ";";
+			java += "\n\t}";
 		}
 
-		java += "\n\t}";
+		if (att.isBoolean()) {
+
+			java += "\n\n\t// SET " + att.getLabel();
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
+					+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + " ){";
+			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
+			java += "\n\t\tthis." + att.getName() + "Int = ((this." + att.getName() + " == null) ? null : ((this."
+					+ att.getName() + " == false) ? 0 : 1));";
+			java += "\n\t}";
+
+			java += "\n\n\t// SET " + att.getLabel();
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "Int(" + "Integer" + " " + att.getName()
+					+ "Int){";
+			java += "\n\t\tthis." + att.getName() + "Int = " + att.getName() + "Int;";
+			java += "\n\t\tthis." + att.getName() + " = ((this." + att.getName() + "Int == null || " + att.getName()
+					+ "Int == 2) ? null : ((this." + att.getName() + "Int == 0) ? false : true));";
+			java += "\n\t}";
+
+		} else if (att.isString()) {
+
+			java += "\n\n\t// SET " + att.getLabel();
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
+					+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "){";
+			java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " != null && " + att.getName()
+					+ ".trim().length() == 0) ? null : " + att.getName() + ";";
+			java += "\n\t}";
+
+		} else {
+
+			java += "\n\n\t// SET " + att.getLabel();
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
+					+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "){";
+			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
+			java += "\n\t}";
+		}
 
 		return java;
 	}
