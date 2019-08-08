@@ -3,11 +3,8 @@ package a;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.massoftware.backend.BackendContextPG;
-
-import a.dao.DataBase;
-import a.dao.convention1.anotations.Identifiable;
-import a.dao.convention1.pg.wrapperds.DataBasePG;
+import a.convention1.anotations.Identifiable;
+import a.convention1.pg.stm.FillStmBuilder;
 
 public class MainA {
 
@@ -74,11 +71,34 @@ public class MainA {
 		cl.setContinent(sa);
 		countries.add(cl);
 		sa.addCountry(cl);
+		
+		Admin1 cba = new Admin1();
+		cba.setCode("CB");
+		cba.setName("Córdoba");
+		cba.setPais(ar);		
+		ar.addAdmin(cba);
+		
+		Admin1 caba = new Admin1();
+		caba.setCode("CA");
+		caba.setName("Ciudad Autónoma de Buenos Aires");
+		caba.setPais(ar);		
+		ar.addAdmin(caba);
+		
+		Admin1 chubut = new Admin1();
+		chubut.setCode("CH");
+		chubut.setName("Chubut");
+		chubut.setPais(ar);		
+		ar.addAdmin(chubut);
 
 		// ------------------------------
 		
+//		FillStmBuilder builder = new FillStmBuilder();
+//		builder.build(Admin1.class);
+		
 		ContinentService continentService = new ContinentService();
 		continentService.insert(sa);
+		
+		
 
 //		DataBase db = new DataBasePG(BackendContextPG.get().getDataSourceWrapper());
 //

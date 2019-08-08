@@ -1,8 +1,11 @@
 package a;
 
-import a.dao.convention1.anotations.Identifiable;
-import a.dao.convention1.anotations.PersistentMapping;
-import a.dao.convention1.anotations.Schema;
+import java.util.ArrayList;
+import java.util.List;
+
+import a.convention1.anotations.Identifiable;
+import a.convention1.anotations.PersistentMapping;
+import a.convention1.anotations.Schema;
 
 @PersistentMapping
 @Schema(name = "geo")
@@ -12,6 +15,7 @@ public class Country implements Identifiable {
 	private String code;
 	private String name;
 	private Continent continent;
+	private List<Admin1> admins = new ArrayList<Admin1>();
 
 	public String getId() {
 		return id;
@@ -44,5 +48,20 @@ public class Country implements Identifiable {
 	public void setContinent(Continent continent) {
 		this.continent = continent;
 	}
+
+	public List<Admin1> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<Admin1> admins) {
+		this.admins = admins;
+	}
+
+	public boolean addAdmin(Admin1 e) {
+		e.setPais(this);
+		return admins.add(e);
+	}
+	
+	
 
 }

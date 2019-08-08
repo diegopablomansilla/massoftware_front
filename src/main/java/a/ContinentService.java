@@ -1,15 +1,12 @@
 package a;
 
-import java.util.List;
-
 import com.massoftware.backend.BackendContextPG;
 
 import a.dao.DataBase;
-import a.dao.convention1.util.UtilConvention1;
 
 public class ContinentService {
 
-	public Continent insert(Continent obj) throws Exception {
+	public Continent insert(Continent continent) throws Exception {
 
 		DataBase db = BackendContextPG.get().getDataBase();
 
@@ -17,53 +14,64 @@ public class ContinentService {
 
 			db.begint();
 
-			db.deleteAll(Continent.class);
+			db.deleteAll(Admin1.class);
 			db.deleteAll(Country.class);
-			
-			db.insert(obj);
-			
-//			boolean b = db.exists(obj);
-			boolean b = db.existsById(obj.getId(), Continent.class);
-//			System.out.println("Exists " + b);
-			
-			obj.setName("YYY");
-			
-//			db.update(obj, ContinentMappingInsert.class);
-			db.update(obj);
+			db.deleteAll(Continent.class);
 
-			db.insertAll(obj.getCountries());
-			
-			obj.getCountries().get(1).setName("XXX");
-			
-			db.updateAll(obj.getCountries());
-			
-			b =db.deleteAll(Country.class);
-			System.out.println("BORRADO " + b);
-			
-//			boolean b = db.delete(obj.getCountries().get(0));			
-//			boolean b = db.deleteById(obj.getCountries().get(0).getId(), Country.class);
-//			System.out.println("BORRADO " + b);
-			
-			
-//			List<Boolean> b = db.deleteAll(obj.getCountries());
-//			System.out.println("BORRADO " + b);
-			
-//			List<Boolean> b = db.deleteAllById(UtilConvention1.getIds(obj.getCountries()) , Country.class);
-//			System.out.println("BORRADO " + b);
-			
-			System.out.println("continentes " +  db.count(Continent.class));
-			System.out.println("paises " +  db.count(Country.class));
+			db.insert(continent);
+			db.insertAll(continent.getCountries());
+			for (Country country : continent.getCountries()) {
+				if (country.getAdmins().size() > 0) {
+					db.insertAll(country.getAdmins());
+				}
+			}
+
+			System.out.println("continentes " + db.count(Continent.class));
+			System.out.println("paises " + db.count(Country.class));
+			System.out.println("provincias " + db.count(Admin1.class));
+
+			db.fillAll(Admin1.class);
+
+			// boolean b = db.exists(obj);
+			// boolean b = db.existsById(obj.getId(), Continent.class);
+			// System.out.println("Exists " + b);
+
+			// obj.setName("YYY");
+
+			// db.update(obj, ContinentMappingInsert.class);
+			// db.update(obj);
+
+			//
+
+			// obj.getCountries().get(1).setName("XXX");
+
+			// db.updateAll(obj.getCountries());
+
+			// b =db.deleteAll(Country.class);
+			// System.out.println("BORRADO " + b);
+
+			// boolean b = db.delete(obj.getCountries().get(0));
+			// boolean b = db.deleteById(obj.getCountries().get(0).getId(), Country.class);
+			// System.out.println("BORRADO " + b);
+
+			// List<Boolean> b = db.deleteAll(obj.getCountries());
+			// System.out.println("BORRADO " + b);
+
+			// List<Boolean> b = db.deleteAllById(UtilConvention1.getIds(obj.getCountries())
+			// , Country.class);
+			// System.out.println("BORRADO " + b);
 
 			db.commit();
 
 		} catch (Exception e) {
 			db.rollBack();
+			e.printStackTrace();
 			throw e;
 		} finally {
 			db.close();
 		}
 
-		return obj;
+		return continent;
 
 	}
 

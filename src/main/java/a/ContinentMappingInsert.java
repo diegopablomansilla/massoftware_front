@@ -1,9 +1,9 @@
 package a;
 
-import a.dao.convention1.anotations.Identifiable;
-import a.dao.convention1.anotations.PersistentMapping;
-import a.dao.convention1.anotations.Schema;
-import a.dao.convention1.constraints.NotNull;
+import a.convention1.anotations.Identifiable;
+import a.convention1.anotations.PersistentMapping;
+import a.convention1.anotations.Schema;
+import a.convention1.constraints.NotNull;
 
 @PersistentMapping
 @Schema(name = "geo")

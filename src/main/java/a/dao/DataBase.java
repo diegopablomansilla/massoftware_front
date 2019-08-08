@@ -76,5 +76,10 @@ public interface DataBase {
 	public long count(Class mappingClass) throws Exception;
 
 	// -------------------------------------------------
+	
+	@SuppressWarnings("rawtypes")
+	public List fillAll(Class mappingClass) throws Exception;
+	
+	// -------------------------------------------------
 
 }

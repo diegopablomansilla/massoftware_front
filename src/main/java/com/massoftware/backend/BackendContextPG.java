@@ -12,8 +12,8 @@ import org.cendra.jdbc.ConnectionWrapper;
 import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
+import a.convention1.pg.DataBasePG;
 import a.dao.DataBase;
-import a.dao.convention1.pg.wrapperds.DataBasePG;
 
 public class BackendContextPG extends AbstractContext {
 

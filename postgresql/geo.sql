@@ -27,3 +27,20 @@ CREATE TABLE geo.Country
 	-- Continent
 	continent VARCHAR(36)  NOT NULL  REFERENCES geo.Continent (id)
 );
+
+
+DROP TABLE IF EXISTS geo.Admin1 CASCADE;
+
+CREATE TABLE geo.Admin1
+(
+	id VARCHAR(36) PRIMARY KEY DEFAULT uuid_generate_v4(),		
+	
+    -- Code
+	code VARCHAR(2) NOT NULL, 
+    
+	-- Name
+	name VARCHAR(50) NOT NULL, 	
+	
+	-- Country
+	pais VARCHAR(36)  NOT NULL  REFERENCES geo.Country (id)
+);

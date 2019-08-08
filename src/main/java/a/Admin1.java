@@ -1,19 +1,17 @@
 package a;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import a.convention1.anotations.Identifiable;
 import a.convention1.anotations.PersistentMapping;
 import a.convention1.anotations.Schema;
 
 @PersistentMapping
 @Schema(name = "geo")
-public class Continent implements ContinentMappingInsert {
+public class Admin1 implements Identifiable {
 
 	private String id;
 	private String code;
 	private String name;
-	private List<Country> countries = new ArrayList<Country>();
+	private Country pais;
 
 	public String getId() {
 		return id;
@@ -39,17 +37,12 @@ public class Continent implements ContinentMappingInsert {
 		this.name = name;
 	}
 
-	public List<Country> getCountries() {
-		return countries;
+	public Country getPais() {
+		return pais;
 	}
 
-	public void setCountries(List<Country> countries) {
-		this.countries = countries;
-	}
-
-	public boolean addCountry(Country e) {
-		e.setContinent(this);
-		return countries.add(e);
+	public void setPais(Country pais) {
+		this.pais = pais;
 	}
 
 }
