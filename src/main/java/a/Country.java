@@ -61,6 +61,11 @@ public class Country implements Identifiable {
 		e.setPais(this);
 		return admins.add(e);
 	}
+
+	@Override
+	public String toString() {
+		return "Country [id=" + id + ", code=" + code + ", name=" + name + ", continent=" + continent + "]";
+	}
 	
 	
 

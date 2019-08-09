@@ -12,4 +12,8 @@ public class StatementMapping extends Statement {
 		this.mappingQuery = mappingQuery;
 	}
 
+	public String[] getPathMapping() {
+		return mappingQuery.getPathMapping();
+	}
+
 }

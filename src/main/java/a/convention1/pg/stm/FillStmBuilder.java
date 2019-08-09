@@ -1,27 +1,29 @@
 package a.convention1.pg.stm;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.anotations.Schema;
+import a.convention1.pg.UtilConvention1Pg;
 import a.dao.op.MappingQuery;
 import a.dao.op.MappingQueryItem;
 import a.dao.op.StatementMapping;
 
 public class FillStmBuilder {
 
+	private UtilConvention1Pg util;
+
+	public FillStmBuilder() {
+		super();
+		util = new UtilConvention1Pg();
+	}
+
 	@SuppressWarnings("rawtypes")
 	public StatementMapping build(Class mappingClass) throws SQLException {
 		return build(mappingClass, 0);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public StatementMapping build(Class mappingClass, int leftLevel) throws SQLException {
 
@@ -32,6 +34,7 @@ public class FillStmBuilder {
 		StatementMapping stm = new StatementMapping();
 
 		MappingQuery mappingQuery = new MappingQuery();
+		stm.setMappingQuery(mappingQuery);
 
 		confMappingQuery(mappingQuery, null, mappingClass, "", 0, leftLevel);
 
@@ -44,7 +47,7 @@ public class FillStmBuilder {
 	public void confMappingQuery(MappingQuery mappingQuery, String attJoin, Class mappingClass, String path, int level,
 			int maxLevel) throws SQLException {
 
-		String schema = getSchemaName(mappingClass);
+		String schema = util.getSchemaName(mappingClass);
 		String table = mappingClass.getSimpleName();
 		String tableAlias = mappingClass.getSimpleName() + "_" + mappingQuery.getItems().size();
 		String tableJoin = null;
@@ -74,12 +77,12 @@ public class FillStmBuilder {
 
 				Class clazz = method.getReturnType();
 
-				if (isList(clazz) == false) {
+				if (util.isList(clazz) == false) {
 
 					String attName = method.getName().replaceFirst("get", "");
-					attName = toCamelCaseVar(attName);
+					attName = util.toCamelCaseVar(attName);
 
-					if (isScalar(clazz)) {
+					if (util.isScalar(clazz)) {
 
 						String attPath = (path.trim().isEmpty()) ? attName : path + "." + attName;
 
@@ -172,79 +175,6 @@ public class FillStmBuilder {
 		}
 
 		return sql;
-	}
-
-	@SuppressWarnings("rawtypes")
-	protected boolean isScalar(Class c) {
-
-		if (c.equals(String.class)) {
-			return true;
-		} else if (c.equals(Boolean.class)) {
-			return true;
-		} else if (c.equals(Short.class)) {
-			return true;
-		} else if (c.equals(Integer.class)) {
-			return true;
-		} else if (c.equals(Long.class)) {
-			return true;
-		} else if (c.equals(Float.class)) {
-			return true;
-		} else if (c.equals(Double.class)) {
-			return true;
-		} else if (c.equals(BigDecimal.class)) {
-			return true;
-		} else if (c.equals(Date.class)) {
-			return true;
-		} else if (c.equals(java.util.Date.class)) {
-			return true;
-		} else if (c.equals(Timestamp.class)) {
-			return true;
-		} else if (c.equals(Time.class)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	protected boolean isList(Class clazz) throws SQLException {
-
-		return (clazz == List.class || clazz == ArrayList.class);
-	}
-
-	protected String getSchemaName(@SuppressWarnings("rawtypes") Class persistentClass) {
-
-		@SuppressWarnings("unchecked")
-		Annotation anotation = persistentClass.getAnnotation(Schema.class);
-
-		if (anotation != null && anotation instanceof Schema) {
-			final Schema schema = (Schema) anotation;
-			return schema.name() + ".";
-		}
-		return "";
-	}
-
-	protected String toCamelCaseVar(String s) {
-		if (s == null) {
-			return s;
-		}
-
-		s = s.trim();
-
-		if (s.length() == 0) {
-			return null;
-		}
-
-		if (s.length() == 1) {
-			return s.toLowerCase();
-		}
-
-		if (s.length() > 1) {
-
-			return (s.charAt(0) + "").toLowerCase() + s.substring(1, s.length());
-		}
-
-		return s;
 	}
 
 }

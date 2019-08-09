@@ -45,4 +45,9 @@ public class Admin1 implements Identifiable {
 		this.pais = pais;
 	}
 
+	@Override
+	public String toString() {
+		return "Admin1 [id=" + id + ", code=" + code + ", name=" + name + ", pais=" + pais + "]";
+	}
+
 }

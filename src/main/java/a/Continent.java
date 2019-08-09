@@ -52,4 +52,11 @@ public class Continent implements ContinentMappingInsert {
 		return countries.add(e);
 	}
 
+	@Override
+	public String toString() {
+		return "Continent [id=" + id + ", code=" + code + ", name=" + name + "]";
+	}
+	
+	
+
 }

@@ -1,5 +1,7 @@
 package a;
 
+import java.util.List;
+
 import com.massoftware.backend.BackendContextPG;
 
 import a.dao.DataBase;
@@ -30,7 +32,12 @@ public class ContinentService {
 			System.out.println("paises " + db.count(Country.class));
 			System.out.println("provincias " + db.count(Admin1.class));
 
-			db.fillAll(Admin1.class);
+			
+			List<Admin1> r = db.fillAll(Admin1.class);
+			
+			for(Admin1 obj : r) {
+				System.out.println(obj);	
+			}
 
 			// boolean b = db.exists(obj);
 			// boolean b = db.existsById(obj.getId(), Continent.class);

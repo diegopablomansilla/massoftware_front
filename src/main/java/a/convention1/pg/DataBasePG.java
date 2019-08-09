@@ -100,6 +100,8 @@ public class DataBasePG implements DataBase {
 		return dao.insert(objs, mappingClass);
 	}
 
+	// -------------------------------------------------
+
 	public boolean update(Object obj) throws Exception {
 
 		UpdateDAO dao = new UpdateDAOPG(connectionWrapper);
@@ -130,6 +132,8 @@ public class DataBasePG implements DataBase {
 
 		return dao.update(objs, mappingClass);
 	}
+
+	// -------------------------------------------------
 
 	public boolean delete(Object obj) throws Exception {
 
@@ -162,6 +166,16 @@ public class DataBasePG implements DataBase {
 		return dao.deleteById(ids, mappingClass);
 	}
 
+	@SuppressWarnings("rawtypes")
+	public boolean deleteAll(Class mappingClass) throws Exception {
+
+		DeleteAllDAO dao = new DeleteAllDAOPG(connectionWrapper);
+
+		return dao.delete(mappingClass);
+	}
+
+	// -------------------------------------------------
+
 	public boolean exists(Object obj) throws Exception {
 
 		ExistsDAO dao = new ExistsDAOPG(connectionWrapper);
@@ -177,13 +191,7 @@ public class DataBasePG implements DataBase {
 		return dao.existsById(id, mappingClass);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public boolean deleteAll(Class mappingClass) throws Exception {
-
-		DeleteAllDAO dao = new DeleteAllDAOPG(connectionWrapper);
-
-		return dao.delete(mappingClass);
-	}
+	// -------------------------------------------------
 
 	@SuppressWarnings("rawtypes")
 	public long count(Class mappingClass) throws Exception {
@@ -192,7 +200,9 @@ public class DataBasePG implements DataBase {
 
 		return dao.count(mappingClass);
 	}
-	
+
+	// -------------------------------------------------
+
 	@SuppressWarnings("rawtypes")
 	public List fillAll(Class mappingClass) throws Exception {
 
@@ -201,13 +211,30 @@ public class DataBasePG implements DataBase {
 		return dao.fillAll(mappingClass);
 	}
 
+	@SuppressWarnings("rawtypes")
+	public List fillAll(Class mappingClass, int leftLevel) throws Exception {
+
+		FillAllDAO dao = new FillAllDAOPG(connectionWrapper);
+
+		return dao.fillAll(mappingClass, leftLevel);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List fillAll(Class instanceClass, Class mappingClass, int leftLevel) throws Exception {
+
+		FillAllDAO dao = new FillAllDAOPG(connectionWrapper);
+
+		return dao.fillAll(instanceClass, mappingClass, leftLevel);
+	}
+	
+	// -------------------------------------------------
+
 	// mejorar el isList
 	// implementar DML por atributos
-	// implementar mappingClass dinamicos, por notacion de puntos
-// mejorar el batch en dsw
-	
+	// mejorar el batch en dsw
+
 	// save
-	
+
 	// findById
 
 	// todo

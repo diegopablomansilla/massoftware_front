@@ -19,6 +19,16 @@ public class MappingQuery {
 		return items.add(arg1);
 	}
 
+	public String[] getPathMapping() {
+		String[] pathMapping = new String[items.size()];
+
+		for (int i = 0; i < items.size(); i++) {
+			pathMapping[i] = items.get(i).getPath();
+		}
+
+		return pathMapping;
+	}
+
 	@Override
 	public String toString() {
 		String s = "";
