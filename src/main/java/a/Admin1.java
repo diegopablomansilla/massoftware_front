@@ -1,11 +1,7 @@
 package a;
 
 import a.convention1.anotations.Identifiable;
-import a.convention1.anotations.PersistentMapping;
-import a.convention1.anotations.Schema;
 
-@PersistentMapping
-@Schema(name = "geo")
 public class Admin1 implements Identifiable {
 
 	private String id;

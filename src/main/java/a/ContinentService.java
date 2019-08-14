@@ -4,40 +4,45 @@ import java.util.List;
 
 import com.massoftware.backend.BackendContextPG;
 
-import a.dao.DataBase;
+import a.convention1.pg.DataBasePG;
 
 public class ContinentService {
 
 	public Continent insert(Continent continent) throws Exception {
 
-		DataBase db = BackendContextPG.get().getDataBase();
+		DataBasePG db = BackendContextPG.get().getDataBase();
 
 		try {
 
 			db.begint();
 
-			db.deleteAll(Admin1.class);
-			db.deleteAll(Country.class);
-			db.deleteAll(Continent.class);
+			db.deleteAllObjects(Admin1.class);
+			db.deleteAllObjects(Country.class);
+			db.deleteAllObjects(Continent.class);
 
-			db.insert(continent);
-			db.insertAll(continent.getCountries());
+			db.insertObject(continent);
+			db.insertObjects(continent.getCountries());
 			for (Country country : continent.getCountries()) {
 				if (country.getAdmins().size() > 0) {
-					db.insertAll(country.getAdmins());
+					db.insertObjects(country.getAdmins());
 				}
 			}
 
-			System.out.println("continentes " + db.count(Continent.class));
-			System.out.println("paises " + db.count(Country.class));
-			System.out.println("provincias " + db.count(Admin1.class));
+			System.out.println("continentes " + db.countAllObjects(Continent.class));
+			System.out.println("paises " + db.countAllObjects(Country.class));
+			System.out.println("provincias " + db.countAllObjects(Admin1.class));
 
 			
-			List<Admin1> r = db.fillAll(Admin1.class);
+			@SuppressWarnings("unchecked")
+			List<Admin1> r = db.fillAllObjects(Admin1.class);
 			
 			for(Admin1 obj : r) {
 				System.out.println(obj);	
 			}
+			
+			System.out.println();
+			
+			System.out.println(db.fillObjectById(continent.getCountries().get(0).getAdmins().get(0).getId(), Admin1.class, 2));
 
 			// boolean b = db.exists(obj);
 			// boolean b = db.existsById(obj.getId(), Continent.class);

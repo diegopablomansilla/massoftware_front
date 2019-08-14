@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import a.convention1.anotations.Identifiable;
-import a.convention1.anotations.PersistentMapping;
-import a.convention1.anotations.Schema;
 
-@PersistentMapping
-@Schema(name = "geo")
 public class Country implements Identifiable {
 
 	private String id;
@@ -66,7 +62,5 @@ public class Country implements Identifiable {
 	public String toString() {
 		return "Country [id=" + id + ", code=" + code + ", name=" + name + ", continent=" + continent + "]";
 	}
-	
-	
 
 }

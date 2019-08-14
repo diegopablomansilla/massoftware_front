@@ -13,7 +13,6 @@ import org.cendra.jdbc.DataSourceProperties;
 import org.cendra.jdbc.DataSourceWrapper;
 
 import a.convention1.pg.DataBasePG;
-import a.dao.DataBase;
 
 public class BackendContextPG extends AbstractContext {
 
@@ -43,9 +42,9 @@ public class BackendContextPG extends AbstractContext {
 
 		return backendContext;
 	}
-	
-	public synchronized DataBase getDataBase() {
-		return new DataBasePG(dataSourceWrapper);
+
+	public synchronized DataBasePG getDataBase() {
+		return new DataBasePG(dataSourceWrapper, "geo");
 	}
 
 	public synchronized String getIconosPath() {
@@ -134,10 +133,10 @@ public class BackendContextPG extends AbstractContext {
 	public synchronized Object[] findByFkId(String tableName, String attNameFK, String idFk) throws Exception {
 		Object[][] table = find(tableName, "*", "id", attNameFK + " = ?", -1, -1, new Object[] { idFk });
 
-		if(table.length > 0) {
-			return table[0];	
+		if (table.length > 0) {
+			return table[0];
 		}
-		
+
 		return new Object[0][0];
 	}
 
@@ -201,7 +200,7 @@ public class BackendContextPG extends AbstractContext {
 			return table;
 
 		} catch (Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 			throw e;
 		} finally {
 			connectionWrapper.close(connectionWrapper);

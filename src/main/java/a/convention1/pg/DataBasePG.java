@@ -1,43 +1,39 @@
 package a.convention1.pg;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.cendra.jdbc.ConnectionWrapper;
 import org.cendra.jdbc.DataSourceWrapper;
 
-import a.convention1.pg.op.delete.DeleteAllDAOPG;
-import a.convention1.pg.op.delete.DeleteBatchDAOPG;
-import a.convention1.pg.op.delete.DeleteDAOPG;
-import a.convention1.pg.op.insert.InsertBatchDAOPG;
-import a.convention1.pg.op.insert.InsertDAOPG;
-import a.convention1.pg.op.query.CountDAOPG;
-import a.convention1.pg.op.query.ExistsDAOPG;
-import a.convention1.pg.op.query.FillAllDAOPG;
-import a.convention1.pg.op.update.UpdateBatchDAOPG;
-import a.convention1.pg.op.update.UpdateDAOPG;
-import a.dao.DataBase;
-import a.dao.op.delete.DeleteAllDAO;
-import a.dao.op.delete.DeleteBatchDAO;
-import a.dao.op.delete.DeleteDAO;
-import a.dao.op.insert.InsertBatchDAO;
-import a.dao.op.insert.InsertDAO;
-import a.dao.op.query.CountDAO;
-import a.dao.op.query.ExistsDAO;
-import a.dao.op.query.FillAllDAO;
-import a.dao.op.update.UpdateBatchDAO;
-import a.dao.op.update.UpdateDAO;
+import a.convention1.anotations.Identifiable;
 
-public class DataBasePG implements DataBase {
+public class DataBasePG {
+
+	private UpdateDAO updateDAO;
+	private InsertDAO insertDAO;
+	private QueryDAO queryDAO;
+	private DeleteDAO deleteDAO;
+
+	// -----------------------------------------------------
 
 	private DataSourceWrapper dataSourceWrapper;
+	private String schema;
 
 	private ConnectionWrapper connectionWrapper;
 
-	public DataBasePG(DataSourceWrapper dataSourceWrapper) {
+	public DataBasePG(DataSourceWrapper dataSourceWrapper, String schema) {
 		super();
 		this.dataSourceWrapper = dataSourceWrapper;
+		this.schema = schema;
+		updateDAO = new UpdateDAO(this.schema);
+		insertDAO = new InsertDAO(this.schema);
+		queryDAO = new QueryDAO(this.schema);
+		deleteDAO = new DeleteDAO(this.schema);
 	}
+
+	// -------------------------------------------------------------------------------
 
 	public void begint() throws SQLException, Exception {
 		if (connectionWrapper != null) {
@@ -63,172 +59,241 @@ public class DataBasePG implements DataBase {
 
 	// -------------------------------------------------------------------------------
 
-	public boolean insert(Object obj) throws Exception {
-
-		// if (obj instanceof Continent) {
-		// InsertDAO insertDAO = new ContinentInsertDAO(connectionWrapper);
-		//
-		// return insertDAO.insert(obj);
-		// }
-
-		InsertDAO dao = new InsertDAOPG(connectionWrapper);
-
-		return dao.insert(obj);
+	public boolean insertObject(Object obj) throws Exception {
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"INSERT: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+		return insertDAO.insertObject(connectionWrapper, (Identifiable) obj);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean insert(Object obj, Class mappingClass) throws Exception {
-
-		InsertDAO dao = new InsertDAOPG(connectionWrapper);
-
-		return dao.insert(obj, mappingClass);
+	public boolean insertObject(Object obj, Class mappingClass) throws Exception {
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"INSERT: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+		return insertDAO.insertObject(connectionWrapper, (Identifiable) obj, mappingClass);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean[] insertAll(List objs) throws Exception {
-
-		InsertBatchDAO dao = new InsertBatchDAOPG(connectionWrapper);
-
-		return dao.insert(objs);
+	public boolean[] insertObjects(List objs) throws Exception {
+		return insertDAO.insertObjects(connectionWrapper, objs);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean[] insertAll(List objs, Class mappingClass) throws Exception {
-
-		InsertBatchDAO dao = new InsertBatchDAOPG(connectionWrapper);
-
-		return dao.insert(objs, mappingClass);
+	public boolean[] insertObjects(List objs, Class mappingClass) throws Exception {
+		return insertDAO.insertObjects(connectionWrapper, objs, mappingClass);
 	}
 
 	// -------------------------------------------------
 
-	public boolean update(Object obj) throws Exception {
-
-		UpdateDAO dao = new UpdateDAOPG(connectionWrapper);
-
-		return dao.update(obj);
+	public boolean updateObject(Object obj) throws Exception {
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"UPDATE: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+		return updateDAO.updateObject(connectionWrapper, (Identifiable) obj);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean update(Object obj, Class mappingClass) throws Exception {
-
-		UpdateDAO dao = new UpdateDAOPG(connectionWrapper);
-
-		return dao.update(obj, mappingClass);
+	public boolean updateObject(Object obj, Class mappingClass) throws Exception {
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"UPDATE: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+		return updateDAO.updateObject(connectionWrapper, (Identifiable) obj, mappingClass);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean[] updateAll(List objs) throws Exception {
-
-		UpdateBatchDAO dao = new UpdateBatchDAOPG(connectionWrapper);
-
-		return dao.update(objs);
+	public boolean[] updateObjects(List objs) throws Exception {
+		return updateDAO.updateObjects(connectionWrapper, objs);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean[] updateAll(List objs, Class mappingClass) throws Exception {
-
-		UpdateBatchDAO dao = new UpdateBatchDAOPG(connectionWrapper);
-
-		return dao.update(objs, mappingClass);
+	public boolean[] updateObjects(List objs, Class mappingClass) throws Exception {
+		return updateDAO.updateObjects(connectionWrapper, objs, mappingClass);
 	}
 
 	// -------------------------------------------------
 
-	public boolean delete(Object obj) throws Exception {
-
-		DeleteDAO dao = new DeleteDAOPG(connectionWrapper);
-
-		return dao.delete(obj);
+	public boolean deleteObject(Object obj) throws Exception {
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"DELETE: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+		return deleteDAO.deleteObject(connectionWrapper, (Identifiable) obj);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean deleteById(String id, Class mappingClass) throws Exception {
-
-		DeleteDAO dao = new DeleteDAOPG(connectionWrapper);
-
-		return dao.deleteById(id, mappingClass);
+	public boolean deleteObjectById(String id, Class mappingClass) throws Exception {
+		return deleteDAO.deleteObjectById(connectionWrapper, id, mappingClass);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public boolean[] deleteAll(List objs) throws Exception {
-
-		DeleteBatchDAO dao = new DeleteBatchDAOPG(connectionWrapper);
-
-		return dao.delete(objs);
+	public boolean[] deleteObjects(List objs) throws Exception {
+		return deleteDAO.deleteObjects(connectionWrapper, objs);
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public boolean[] deleteAllById(List<String> ids, Class mappingClass) throws Exception {
-
-		DeleteBatchDAO dao = new DeleteBatchDAOPG(connectionWrapper);
-
-		return dao.deleteById(ids, mappingClass);
+	public boolean[] deleteObjectsById(List<String> ids, Class mappingClass) throws Exception {
+		return deleteDAO.deleteObjectsById(connectionWrapper, ids, mappingClass);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean deleteAll(Class mappingClass) throws Exception {
-
-		DeleteAllDAO dao = new DeleteAllDAOPG(connectionWrapper);
-
-		return dao.delete(mappingClass);
+	public boolean deleteAllObjects(Class mappingClass) throws Exception {
+		return deleteDAO.deleteAllObjects(connectionWrapper, mappingClass);
 	}
 
 	// -------------------------------------------------
 
-	public boolean exists(Object obj) throws Exception {
+	public boolean objectExist(Object obj) throws Exception {
 
-		ExistsDAO dao = new ExistsDAOPG(connectionWrapper);
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
 
-		return dao.exists(obj);
+		// if (obj instanceof Identifiable == false) {
+		// throw new IllegalArgumentException(
+		// "QUERY: Se esperaba una lista objetos, con objetos tipo " +
+		// Identifiable.class.getSimpleName());
+		// }
+
+		return queryDAO.objectExist(connectionWrapper, (Identifiable) obj);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public boolean existsById(String id, Class mappingClass) throws Exception {
-
-		ExistsDAO dao = new ExistsDAOPG(connectionWrapper);
-
-		return dao.existsById(id, mappingClass);
-	}
-
-	// -------------------------------------------------
-
-	@SuppressWarnings("rawtypes")
-	public long count(Class mappingClass) throws Exception {
-
-		CountDAO dao = new CountDAOPG(connectionWrapper);
-
-		return dao.count(mappingClass);
+	public boolean objectExistById(String id, Class mappingClass) throws Exception {
+		return queryDAO.objectExistById(connectionWrapper, id, mappingClass);
 	}
 
 	// -------------------------------------------------
 
 	@SuppressWarnings("rawtypes")
-	public List fillAll(Class mappingClass) throws Exception {
-
-		FillAllDAO dao = new FillAllDAOPG(connectionWrapper);
-
-		return dao.fillAll(mappingClass);
+	public long countAllObjects(Class mappingClass) throws Exception {
+		return queryDAO.countAllObjects(connectionWrapper, mappingClass);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public List fillAll(Class mappingClass, int leftLevel) throws Exception {
-
-		FillAllDAO dao = new FillAllDAOPG(connectionWrapper);
-
-		return dao.fillAll(mappingClass, leftLevel);
-	}
-
-	@SuppressWarnings("rawtypes")
-	public List fillAll(Class instanceClass, Class mappingClass, int leftLevel) throws Exception {
-
-		FillAllDAO dao = new FillAllDAOPG(connectionWrapper);
-
-		return dao.fillAll(instanceClass, mappingClass, leftLevel);
-	}
-	
 	// -------------------------------------------------
 
+	public Object fillObject(Object obj) throws Exception {
+
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+
+		return queryDAO.fillObject(connectionWrapper, (Identifiable) obj);
+	}
+
+	public Object fillObject(Object obj, int leftLevel) throws Exception {
+
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+
+		return queryDAO.fillObject(connectionWrapper, (Identifiable) obj, leftLevel);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public Object fillObject(Object obj, Class mappingClass) throws Exception {
+
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+
+		return queryDAO.fillObject(connectionWrapper, (Identifiable) obj, mappingClass);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public Object fillObject(Object obj, Class mappingClass, int leftLevel) throws Exception {
+
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+
+		return queryDAO.fillObject(connectionWrapper, (Identifiable) obj, mappingClass, leftLevel);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Object fillObject(Object obj, Class instanceClass, Class mappingClass, int leftLevel) throws Exception {
+
+		if (obj instanceof Identifiable == false) {
+			throw new IllegalArgumentException(
+					"QUERY: Se esperaba un objeto tipo " + Identifiable.class.getSimpleName());
+		}
+
+		return queryDAO.fillObject(connectionWrapper, (Identifiable) obj, instanceClass, mappingClass, leftLevel);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public Object fillObjectById(String id, Class mappingClass) throws Exception {
+		return queryDAO.fillObject(connectionWrapper, id, mappingClass);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public Object fillObjectById(String id, Class mappingClass, int leftLevel) throws Exception {
+		return queryDAO.fillObject(connectionWrapper, id, mappingClass, leftLevel);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	public Object fillObjectById(String id, Class instanceClass, Class mappingClass, int leftLevel) throws Exception {
+		return queryDAO.fillObject(connectionWrapper, id, instanceClass, mappingClass, leftLevel);
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List fillAllObjects(Class mappingClass) throws Exception {
+		return queryDAO.fillAllObjects(connectionWrapper, mappingClass);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List fillAllObjects(Class mappingClass, int leftLevel) throws Exception {
+		return queryDAO.fillAllObjects(connectionWrapper, mappingClass, leftLevel);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public List fillAllObjects(Class instanceClass, Class mappingClass, int leftLevel) throws Exception {
+		return queryDAO.fillAllObjects(connectionWrapper, instanceClass, mappingClass, leftLevel);
+	}
+
+	// -------------------------------------------------
+
+	@SuppressWarnings("rawtypes")
+	public List<String> utilExtractsIds(List objs) {
+
+		if (objs == null) {
+			throw new IllegalArgumentException("Se esperaba una lista de objetos no nulo.");
+		}
+
+		if (objs.size() == 0) {
+			throw new IllegalArgumentException("Se esperaba una lista objetos no vacia.");
+		}
+
+		List<String> ids = new ArrayList<String>();
+
+		for (Object obj : objs) {
+
+			if (obj == null) {
+				throw new IllegalArgumentException("Se esperaba una lista objetos con objetos no nulos.");
+			}
+
+			if (obj != null && obj instanceof Identifiable && ((Identifiable) obj).getId() != null
+					&& ((Identifiable) obj).getId().trim().isEmpty() == false) {
+				ids.add(((Identifiable) obj).getId());
+			}
+		}
+
+		return ids;
+	}
+
+	// -------------------------------------------------
+
+	// fill rigthLevel
 	// mejorar el isList
 	// implementar DML por atributos
 	// mejorar el batch en dsw

@@ -1,6 +1,7 @@
 package a.convention1.pg;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -8,9 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.anotations.Schema;
+import a.convention1.constraints.NotNull;
 
-public class UtilConvention1Pg {
+public class Util {
 
 	public String toCamelCase(String s) {
 		if (s == null) {
@@ -41,18 +42,6 @@ public class UtilConvention1Pg {
 		return (clazz == List.class || clazz == ArrayList.class);
 	}
 
-	public String getSchemaName(@SuppressWarnings("rawtypes") Class persistentClass) {
-
-		@SuppressWarnings("unchecked")
-		Annotation anotation = persistentClass.getAnnotation(Schema.class);
-
-		if (anotation != null && anotation instanceof Schema) {
-			final Schema schema = (Schema) anotation;
-			return schema.name() + ".";
-		}
-		return "";
-	}
-
 	public String toCamelCaseVar(String s) {
 		if (s == null) {
 			return s;
@@ -75,7 +64,7 @@ public class UtilConvention1Pg {
 
 		return s;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public boolean isScalar(Class c) {
 
@@ -108,4 +97,18 @@ public class UtilConvention1Pg {
 		}
 	}
 
+	public boolean validateNotNull(Object obj, Object entity, Method method) {
+
+		if (obj == null) {
+
+			Annotation anotation = method.getAnnotation(NotNull.class);
+
+			if (anotation != null && anotation instanceof NotNull) {
+				throw new IllegalArgumentException("El método " + entity.getClass().getCanonicalName() + "."
+						+ method.getName() + " retornó un valor nulo, y debe devolver un valor no nulo.");
+			}
+		}
+
+		return true;
+	}
 }

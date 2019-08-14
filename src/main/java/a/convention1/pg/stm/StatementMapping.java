@@ -1,8 +1,8 @@
-package a.dao.op;
+package a.convention1.pg.stm;
 
 public class StatementMapping extends Statement {
 
-	private MappingQuery mappingQuery;
+	private MappingQuery mappingQuery = new MappingQuery();
 
 	public MappingQuery getMappingQuery() {
 		return mappingQuery;

@@ -1,21 +1,21 @@
-package a.dao.op;
+package a.convention1.pg.stm;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import a.convention1.pg.UtilConvention1Pg;
+import a.convention1.pg.Util;
 
 public class Mapper {
 
-	private UtilConvention1Pg util;
+	private Util util;
 
 	public Mapper() {
 		super();
-		util = new UtilConvention1Pg();
+		util = new Util();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unused" })
+	@SuppressWarnings({ "rawtypes" })
 	public Object fill(Class instanceClass, String[] pathMapping, Object[] row)
 			throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException,
 			IllegalArgumentException, InvocationTargetException {

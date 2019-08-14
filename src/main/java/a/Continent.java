@@ -3,11 +3,6 @@ package a;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.anotations.PersistentMapping;
-import a.convention1.anotations.Schema;
-
-@PersistentMapping
-@Schema(name = "geo")
 public class Continent implements ContinentMappingInsert {
 
 	private String id;
@@ -56,7 +51,5 @@ public class Continent implements ContinentMappingInsert {
 	public String toString() {
 		return "Continent [id=" + id + ", code=" + code + ", name=" + name + "]";
 	}
-	
-	
 
 }

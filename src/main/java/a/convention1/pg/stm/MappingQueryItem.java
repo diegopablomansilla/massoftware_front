@@ -1,4 +1,4 @@
-package a.dao.op;
+package a.convention1.pg.stm;
 
 public class MappingQueryItem {
 

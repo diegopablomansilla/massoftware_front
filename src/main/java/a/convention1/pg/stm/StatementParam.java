@@ -1,20 +1,13 @@
-package a.dao.op;
+package a.convention1.pg.stm;
 
 import java.util.Arrays;
 
-public class ParamStatement {
+public class StatementParam extends Statement {
 
-	private String sql;
+	
 	private Object[] args;
 
-	public String getSql() {
-		return sql;
-	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-
+	
 	public Object[] getArgs() {
 		if (args == null) {
 			args = new Object[0];
@@ -46,7 +39,7 @@ public class ParamStatement {
 	public String toString() {
 		String s = "";
 
-		s += "\n" + sql;
+		s += "\n" + this.getSql();
 		s += "\n";
 
 		if (args == null) {

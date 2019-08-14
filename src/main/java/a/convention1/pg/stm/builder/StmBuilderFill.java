@@ -1,22 +1,21 @@
-package a.convention1.pg.stm;
+package a.convention1.pg.stm.builder;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.pg.UtilConvention1Pg;
-import a.dao.op.MappingQuery;
-import a.dao.op.MappingQueryItem;
-import a.dao.op.StatementMapping;
+import a.convention1.anotations.Identifiable;
+import a.convention1.pg.AbstractStmBuilder;
+import a.convention1.pg.stm.MappingQuery;
+import a.convention1.pg.stm.MappingQueryItem;
+import a.convention1.pg.stm.StatementMapping;
+import a.convention1.pg.stm.StatementMappingParam;
 
-public class FillStmBuilder {
+public class StmBuilderFill extends AbstractStmBuilder {
 
-	private UtilConvention1Pg util;
-
-	public FillStmBuilder() {
-		super();
-		util = new UtilConvention1Pg();
+	public StmBuilderFill(String schema) {
+		super(schema);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -27,27 +26,81 @@ public class FillStmBuilder {
 	@SuppressWarnings("rawtypes")
 	public StatementMapping build(Class mappingClass, int leftLevel) throws SQLException {
 
+		if (leftLevel < 0) {
+			leftLevel = 0;
+		}
+
 		if (mappingClass == null) {
-			throw new IllegalArgumentException("Se esperaba una objeto Class no nulo.");
+			throw new IllegalArgumentException("QUERY: Se esperaba una objeto Class (para el mapeo) no nulo.");
 		}
 
 		StatementMapping stm = new StatementMapping();
 
-		MappingQuery mappingQuery = new MappingQuery();
-		stm.setMappingQuery(mappingQuery);
+		confMappingQuery(stm.getMappingQuery(), null, mappingClass, "", 0, leftLevel);
 
-		confMappingQuery(mappingQuery, null, mappingClass, "", 0, leftLevel);
-
-		stm.setSql(this.buildSQL(mappingQuery));
+		stm.setSql(this.buildSQL(stm.getMappingQuery()));
 
 		return stm;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void confMappingQuery(MappingQuery mappingQuery, String attJoin, Class mappingClass, String path, int level,
+	public StatementMappingParam build(Identifiable obj, Class mappingClass) throws SQLException {
+		return build(obj.getId(), mappingClass, 0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public StatementMappingParam build(Identifiable obj, Class mappingClass, int leftLevel) throws SQLException {
+
+		if (obj == null) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un objeto no nulo.");
+		}
+		
+		if (obj.getId() == null) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un objeto con id no nulo.");
+		}
+
+		if (obj.getId().trim().isEmpty()) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un objeto con id no vacio.");
+		}
+
+		return build(obj.getId(), mappingClass, leftLevel);
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	public StatementMappingParam build(String id, Class mappingClass) throws SQLException {
+		return build(id, mappingClass, 0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public StatementMappingParam build(String id, Class mappingClass, int leftLevel) throws SQLException {
+
+		if (id == null) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un id no nulo.");
+		}
+
+		id = id.trim();
+
+		if (id.isEmpty()) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un id no vacio.");
+		}
+
+		StatementMapping stm = build(mappingClass, leftLevel);
+
+		
+		
+		StatementMappingParam stmParam = new StatementMappingParam();
+		stmParam.setSql(stm.getSql() + " WHERE " + stm.getMappingQuery().getItems().get(0).getTableAlias() + ".id = ?");
+		stmParam.addArg(id);
+		stmParam.setMappingQuery(stm.getMappingQuery());
+
+		return stmParam;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void confMappingQuery(MappingQuery mappingQuery, String attJoin, Class mappingClass, String path, int level,
 			int maxLevel) throws SQLException {
 
-		String schema = util.getSchemaName(mappingClass);
 		String table = mappingClass.getSimpleName();
 		String tableAlias = mappingClass.getSimpleName() + "_" + mappingQuery.getItems().size();
 		String tableJoin = null;
@@ -159,7 +212,7 @@ public class FillStmBuilder {
 
 		for (MappingQueryItem item : joins) {
 			if (item.getTableJoin() == null) {
-				sql += "\n" + "FROM\t" + item.getSchema() + item.getTable() + " AS " + item.getTableAlias();
+				sql += "\n" + "FROM\t" + item.getSchema() + "." + item.getTable() + " AS " + item.getTableAlias();
 			} else {
 
 				String t = "";
@@ -168,8 +221,9 @@ public class FillStmBuilder {
 					t += "\t";
 				}
 
-				sql += "\n" + t + "LEFT JOIN " + item.getSchema() + item.getTable() + " AS " + item.getTableAlias()
-						+ " ON " + item.getTableAlias() + ".id = " + item.getTableJoin() + "." + item.getAttJoin();
+				sql += "\n" + t + "LEFT JOIN " + item.getSchema() + "." + item.getTable() + " AS "
+						+ item.getTableAlias() + " ON " + item.getTableAlias() + ".id = " + item.getTableJoin() + "."
+						+ item.getAttJoin();
 			}
 
 		}
