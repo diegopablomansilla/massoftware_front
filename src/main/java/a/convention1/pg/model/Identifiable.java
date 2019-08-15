@@ -1,4 +1,4 @@
-package a.convention1.anotations;
+package a.convention1.pg.model;
 
 public interface Identifiable {
 	

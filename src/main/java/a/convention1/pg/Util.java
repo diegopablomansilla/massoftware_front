@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.constraints.NotNull;
+import a.convention1.pg.anotations.constraints.NotNull;
 
 public class Util {
 

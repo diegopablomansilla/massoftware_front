@@ -3,8 +3,8 @@ package a.convention1.pg.stm.builder;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import a.convention1.anotations.Identifiable;
 import a.convention1.pg.AbstractStmBuilder;
+import a.convention1.pg.model.Identifiable;
 import a.convention1.pg.stm.StatementParam;
 
 public class StmBuilderInsert extends AbstractStmBuilder {

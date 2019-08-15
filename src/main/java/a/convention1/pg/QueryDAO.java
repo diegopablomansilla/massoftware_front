@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.cendra.jdbc.ConnectionWrapper;
 
-import a.convention1.anotations.Identifiable;
-import a.convention1.pg.stm.Mapper;
+import a.convention1.pg.model.Identifiable;
+import a.convention1.pg.stm.MapperByPaths;
 import a.convention1.pg.stm.Statement;
 import a.convention1.pg.stm.StatementMapping;
 import a.convention1.pg.stm.StatementMappingParam;
@@ -50,7 +50,7 @@ public class QueryDAO {
 
 		if (table != null && table.length > 0) {
 
-			Mapper mapper = new Mapper();
+			MapperByPaths mapper = new MapperByPaths();
 
 			for (Object[] row : table) {
 
@@ -131,7 +131,7 @@ public class QueryDAO {
 
 		if (table != null && table.length == 1) {
 
-			Mapper mapper = new Mapper();
+			MapperByPaths mapper = new MapperByPaths();
 			Object[] row = table[0];
 
 			return mapper.fill(instanceClass, stm.getPathMapping(), row);

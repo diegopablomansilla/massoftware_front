@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 import a.convention1.pg.Util;
 
-public class Mapper {
+public class MapperByPaths {
 
 	private Util util;
 
-	public Mapper() {
+	public MapperByPaths() {
 		super();
 		util = new Util();
 	}

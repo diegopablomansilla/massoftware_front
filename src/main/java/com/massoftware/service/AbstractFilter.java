@@ -13,10 +13,10 @@ public class AbstractFilter extends Entity {
 	private Boolean unlimited = false;
 
 	@FieldConfAnont(label = "Limit")
-	private Long limit;
+	private Long limit = 50L;
 
 	@FieldConfAnont(label = "Offset")
-	private Long offset;
+	private Long offset = 0L;
 
 	@FieldConfAnont(label = "Order by att")
 	private Integer orderBy = 1;

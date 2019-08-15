@@ -1,13 +1,11 @@
 package a;
 
-import a.convention1.pg.model.Identifiable;
-
-public class Admin1 implements Identifiable {
+public class Continents {
 
 	private String id;
 	private String code;
 	private String name;
-	private Country pais;
+	private Long countries;
 
 	public String getId() {
 		return id;
@@ -33,17 +31,17 @@ public class Admin1 implements Identifiable {
 		this.name = name;
 	}
 
-	public Country getPais() {
-		return pais;
+	public Long getCountries() {
+		return countries;
 	}
 
-	public void setPais(Country pais) {
-		this.pais = pais;
+	public void setCountries(Long countries) {
+		this.countries = countries;
 	}
 
 	@Override
 	public String toString() {
-		return "Admin1 [id=" + id + ", code=" + code + ", name=" + name + ", pais=" + pais + "]";
+		return name;
 	}
 
 }

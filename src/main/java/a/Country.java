@@ -3,7 +3,7 @@ package a;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.anotations.Identifiable;
+import a.convention1.pg.model.Identifiable;
 
 public class Country implements Identifiable {
 

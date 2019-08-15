@@ -1,7 +1,7 @@
 package a;
 
-import a.convention1.anotations.Identifiable;
-import a.convention1.constraints.NotNull;
+import a.convention1.pg.anotations.constraints.NotNull;
+import a.convention1.pg.model.Identifiable;
 
 public interface ContinentMappingInsert extends Identifiable {
 

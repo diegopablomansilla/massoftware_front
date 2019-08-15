@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.cendra.jdbc.ConnectionWrapper;
 
-import a.convention1.anotations.Identifiable;
+import a.convention1.pg.model.Identifiable;
 import a.convention1.pg.stm.StatementParam;
 import a.convention1.pg.stm.builder.StmBuilderInsert;
 

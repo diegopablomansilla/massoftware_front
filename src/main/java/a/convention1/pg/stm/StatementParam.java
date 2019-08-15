@@ -4,10 +4,8 @@ import java.util.Arrays;
 
 public class StatementParam extends Statement {
 
-	
 	private Object[] args;
 
-	
 	public Object[] getArgs() {
 		if (args == null) {
 			args = new Object[0];
@@ -35,7 +33,7 @@ public class StatementParam extends Statement {
 
 		return true;
 	}
-	
+
 	public String toString() {
 		String s = "";
 
@@ -50,5 +48,12 @@ public class StatementParam extends Statement {
 
 		return s;
 	}
+
+	@SuppressWarnings("rawtypes")
+	public Object buildArg(Object arg, Class c) {
+		return (arg == null || arg.toString().trim().isEmpty()) ? c : arg;
+	}
+
+
 
 }

@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import a.convention1.anotations.Identifiable;
 import a.convention1.pg.AbstractStmBuilder;
+import a.convention1.pg.model.Identifiable;
 import a.convention1.pg.stm.MappingQuery;
 import a.convention1.pg.stm.MappingQueryItem;
 import a.convention1.pg.stm.StatementMapping;

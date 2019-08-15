@@ -7,7 +7,7 @@ import java.util.List;
 import org.cendra.jdbc.ConnectionWrapper;
 import org.cendra.jdbc.DataSourceWrapper;
 
-import a.convention1.anotations.Identifiable;
+import a.convention1.pg.model.Identifiable;
 
 public class DataBasePG {
 
@@ -21,7 +21,7 @@ public class DataBasePG {
 	private DataSourceWrapper dataSourceWrapper;
 	private String schema;
 
-	private ConnectionWrapper connectionWrapper;
+	protected ConnectionWrapper connectionWrapper;
 
 	public DataBasePG(DataSourceWrapper dataSourceWrapper, String schema) {
 		super();
@@ -292,7 +292,7 @@ public class DataBasePG {
 	}
 
 	// -------------------------------------------------
-
+	
 	// fill rigthLevel
 	// mejorar el isList
 	// implementar DML por atributos
@@ -304,5 +304,9 @@ public class DataBasePG {
 
 	// todo
 	// repository CRUD
+	
+	// sacar Identifiable, buscar un getId y setId con String solito
+	// agregarle wehere a los fill
+	// hacer un mapperorder
 
 }

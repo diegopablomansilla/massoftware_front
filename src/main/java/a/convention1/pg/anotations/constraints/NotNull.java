@@ -1,4 +1,4 @@
-package a.convention1.constraints;
+package a.convention1.pg.anotations.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
