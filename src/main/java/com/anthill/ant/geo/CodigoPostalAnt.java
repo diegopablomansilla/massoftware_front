@@ -39,6 +39,7 @@ public class CodigoPostalAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CodigoPostal");
+		c.setNamePlural("CodigosPostales");
 
 		c.setNamePackage("geo");
 		c.setSingular("Código postal");

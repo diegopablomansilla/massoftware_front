@@ -35,6 +35,7 @@ public class AsientoContableItemAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("AsientoContableItem");
+		c.setNamePlural("AsientosContablesItems");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Item de asiento contable");

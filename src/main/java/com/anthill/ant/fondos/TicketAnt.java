@@ -27,6 +27,7 @@ public class TicketAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Ticket");
+		c.setNamePlural("Tickets");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Ticket");

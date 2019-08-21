@@ -36,6 +36,7 @@ public class CuentaContableAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CuentaContable");
+		c.setNamePlural("CuentasContables");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Cuenta contable");

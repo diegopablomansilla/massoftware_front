@@ -11,6 +11,7 @@ import com.anthill.model.to_java.UtilJavaPOJO;
 import com.anthill.model.to_java.UtilJavaPOJOFilter;
 import com.anthill.model.to_java.UtilJavaPopulate;
 import com.anthill.model.to_java.UtilJavaService;
+import com.anthill.model.to_java.UtilJavaStm;
 import com.anthill.model.to_sql.FunctionFind;
 import com.anthill.model.to_sql.UtilSQLDelete;
 import com.anthill.model.to_sql.UtilSQLFindExists;
@@ -24,11 +25,13 @@ public class Clazz {
 
 	private String namePackage;
 	private String name;
+	private String namePlural;
 	private String singular;
 	private String plural;
 	private String singularPre;
 	private String pluralPre;
 	private List<Att> atts = new ArrayList<Att>();
+	private List<Att> attsGrid = new ArrayList<Att>();
 	private List<Argument> args = new ArrayList<Argument>();
 	private List<Order> orderAtts = new ArrayList<Order>();
 	private List<Uniques> uniques = new ArrayList<Uniques>();
@@ -51,6 +54,14 @@ public class Clazz {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNamePlural() {
+		return namePlural;
+	}
+
+	public void setNamePlural(String namePlural) {
+		this.namePlural = namePlural;
 	}
 
 	public String getSingular() {
@@ -96,6 +107,19 @@ public class Clazz {
 	public boolean addAtt(Att e) {
 		e.setClazz(this);
 		return atts.add(e);
+	}
+
+	public List<Att> getAttsGrid() {
+		return attsGrid;
+	}
+
+	public void setAttsGrid(List<Att> attsGrid) {
+		this.attsGrid = attsGrid;
+	}
+	
+	public boolean addAttGrid(Att e) {
+		e.setClazz(this);
+		return attsGrid.add(e);
 	}
 
 	public List<Argument> getArgs() {
@@ -196,9 +220,29 @@ public class Clazz {
 	public String toJava() {
 		return UtilJavaPOJO.toJava(this);
 	}
+	
+	public String toJavaGrid() {
+		
+		String nameTmp = this.getName();				
+		List<Att> attsTmp = this.getAtts();
+		
+		this.setName(this.getNamePlural());
+		this.setAtts(this.getAttsGrid());		
+		
+		String src = UtilJavaPOJO.toJava(this);
+		
+		this.setName(nameTmp);
+		this.setAtts(attsTmp);
+		
+		return src;
+	}
 
 	public String toJavaFilter() {
 		return UtilJavaPOJOFilter.toJavaFilter(this);
+	}
+	
+	public String toJavaStm() throws IOException {
+		return UtilJavaStm.toJavaStm(this);
 	}
 
 	public String toJavaDao() {
@@ -226,19 +270,19 @@ public class Clazz {
 
 		sql += buildSQLSelects(this);
 
-		sql += UtilSQLFindExists.buildSQLFindExists(this);
+		// sql += UtilSQLFindExists.buildSQLFindExists(this);
 
-		sql += UtilSQLFindNextValue.buildSQLFindNextValue(this);
+		// sql += UtilSQLFindNextValue.buildSQLFindNextValue(this);
 
-		sql += UtilSQLDelete.buildSQLDeleteById(this);
+		// sql += UtilSQLDelete.buildSQLDeleteById(this);
 
-		sql += UtilSQLInsert.buildSQLInsert(this);
+		// sql += UtilSQLInsert.buildSQLInsert(this);
 
-		sql += UtilSQLUpdate.buildSQLUpdate(this);
+		// sql += UtilSQLUpdate.buildSQLUpdate(this);
 
-		sql += toSQLType(false);
+		// sql += toSQLType(false);
 
-		sql += new FunctionFind().toSQL(this);
+		// sql += new FunctionFind().toSQL(this);
 
 		return sql;
 	}

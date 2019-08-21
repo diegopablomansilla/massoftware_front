@@ -22,6 +22,7 @@ public class BancoFirmanteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("BancoFirmante");
+		c.setNamePlural("BancosFirmantes");
 
 		c.setNamePackage("fondos.banco");
 		c.setSingular("Firmante");

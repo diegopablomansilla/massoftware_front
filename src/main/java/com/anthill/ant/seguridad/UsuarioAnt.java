@@ -19,6 +19,7 @@ public class UsuarioAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Usuario");
+		c.setNamePlural("Usuarios");
 
 		c.setNamePackage("seguridad");
 		c.setSingular("Usuario");

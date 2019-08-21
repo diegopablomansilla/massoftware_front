@@ -27,6 +27,7 @@ public class TalonarioAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Talonario");
+		c.setNamePlural("Talonarios");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Talonario");

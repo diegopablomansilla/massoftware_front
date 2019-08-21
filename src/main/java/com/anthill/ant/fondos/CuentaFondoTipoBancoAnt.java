@@ -21,6 +21,7 @@ public class CuentaFondoTipoBancoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CuentaFondoTipoBanco");
+		c.setNamePlural("CuentasFondosTiposBancos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Tipo de banco");

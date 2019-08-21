@@ -25,6 +25,7 @@ public class ProvinciaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Provincia");
+		c.setNamePlural("Provincias");
 
 		c.setNamePackage("geo");
 		c.setSingular("Provincia");

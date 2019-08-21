@@ -23,6 +23,7 @@ public class EmpresaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Empresa");
+		c.setNamePlural("Empresas");
 
 		c.setNamePackage("empresa");
 		c.setSingular("Empresa");

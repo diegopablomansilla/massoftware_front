@@ -24,6 +24,7 @@ public class ZonaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Zona");
+		c.setNamePlural("Zonas");
 
 		c.setNamePackage("geo");
 		c.setSingular("Zona");

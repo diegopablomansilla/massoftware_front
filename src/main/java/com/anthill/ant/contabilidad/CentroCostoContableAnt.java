@@ -26,6 +26,7 @@ public class CentroCostoContableAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CentroCostoContable");
+		c.setNamePlural("CentrosCostosContables");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Centro de costo");

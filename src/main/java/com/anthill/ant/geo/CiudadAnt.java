@@ -29,6 +29,7 @@ public class CiudadAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Ciudad");
+		c.setNamePlural("Ciudades");
 
 		c.setNamePackage("geo");
 		c.setSingular("Ciudad");

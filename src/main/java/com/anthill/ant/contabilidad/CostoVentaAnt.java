@@ -21,6 +21,7 @@ public class CostoVentaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CostoVenta");
+		c.setNamePlural("CostosVentas");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Costo de venta");

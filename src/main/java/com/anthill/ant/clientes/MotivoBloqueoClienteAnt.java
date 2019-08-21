@@ -26,6 +26,7 @@ public class MotivoBloqueoClienteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("MotivoBloqueoCliente");
+		c.setNamePlural("MotivosBloqueosClientes");
 
 		c.setNamePackage("clientes");
 		c.setSingular("Motivo bloqueo a cliente");

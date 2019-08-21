@@ -26,6 +26,7 @@ public class ChequeraAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Chequera");
+		c.setNamePlural("Chequeras");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Chequera");

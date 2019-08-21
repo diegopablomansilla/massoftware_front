@@ -1,0 +1,65 @@
+package com.massoftware.service.@NAME_PACKAGE@;
+
+import org.sorm.stm.StatementParam;
+
+public class @NAME_PLURAL@Stm extends StatementParam {
+
+	public @NAME_PLURAL@Stm(@NAME_PLURAL@Filtro f, boolean count) {
+		super();
+
+		if (f == null) {
+			throw new IllegalArgumentException("QUERY: Se esperaba un bojeto para filtrar la consulta. Se esperaba "
+					+ @NAME_PLURAL@Filtro.class.getCanonicalName());
+		}
+		
+		@REQUIRED@
+
+		String atts = " COUNT(*)::INTEGER ";
+		String orderBy = "";
+		String page = "";
+
+		if (count == false) {
+
+			atts = "@ATTS@";
+
+			orderBy = " ORDER BY " + f.getOrderBy() + " " + (f.getOrderByDesc() ? "DESC" : "");
+
+			if (f.getUnlimited() == false) {
+				page = " LIMIT " + f.getLimit() + " OFFSET " + f.getOffset();
+			}
+
+		}
+
+		String sql = "SELECT  " + atts + " FROM massoftware.@NAME@ " + buildWhere(f) + orderBy + page;
+
+		this.setSql(sql);
+
+	}
+
+	private String buildWhere(@NAME_PLURAL@Filtro f) {
+
+		String where = "";
+		
+		//-----------------
+		
+		@WHEEW@
+		
+		//-----------------
+
+		if (where.trim().isEmpty() == false) {
+			where = " WHERE " + where;
+		}
+
+		return where;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Object buildArgTrimLower(Object arg, Class c) {
+		if (c == String.class) {
+			return (arg == null || arg.toString().trim().isEmpty()) ? c
+					: "%" + arg.toString().trim().toLowerCase() + "%";
+		}
+		return (arg == null || arg.toString().trim().isEmpty()) ? c : arg;
+	}
+
+}

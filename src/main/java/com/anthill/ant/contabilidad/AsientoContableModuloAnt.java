@@ -21,6 +21,7 @@ public class AsientoContableModuloAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("AsientoContableModulo");
+		c.setNamePlural("AsientosContablesModulos");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Módulo");

@@ -24,6 +24,7 @@ public class SucursalAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Sucursal");
+		c.setNamePlural("Sucursales");
 
 		c.setNamePackage("empresa");
 		c.setSingular("Sucursal");

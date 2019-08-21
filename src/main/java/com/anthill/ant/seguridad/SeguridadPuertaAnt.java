@@ -25,6 +25,7 @@ public class SeguridadPuertaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("SeguridadPuerta");
+		c.setNamePlural("SeguridadPuertas");
 
 		c.setNamePackage("seguridad");
 		c.setSingular("Puerta");

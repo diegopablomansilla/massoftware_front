@@ -21,6 +21,7 @@ public class CuentaFondoBancoCopiaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CuentaFondoBancoCopia");
+		c.setNamePlural("CuentasFondosBancosCopias");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Tipo de copias");

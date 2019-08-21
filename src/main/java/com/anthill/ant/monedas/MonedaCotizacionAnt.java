@@ -32,6 +32,7 @@ public class MonedaCotizacionAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("MonedaCotizacion");
+		c.setNamePlural("MonedasCotizaciones");
 
 		c.setNamePackage("monedas");
 		c.setSingular("Cotización de moneda");

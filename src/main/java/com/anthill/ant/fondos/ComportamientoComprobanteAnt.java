@@ -21,6 +21,7 @@ public class ComportamientoComprobanteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("ComportamientoComprobante");
+		c.setNamePlural("ComportamientosComprobantes");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Comportamiento de comprobante");

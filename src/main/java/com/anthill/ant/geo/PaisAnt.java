@@ -22,6 +22,7 @@ public class PaisAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Pais");
+		c.setNamePlural("Paises");
 
 		c.setNamePackage("geo");
 		c.setSingular("País");

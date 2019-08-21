@@ -22,6 +22,7 @@ public class BancoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Banco");
+		c.setNamePlural("Bancos");
 
 		c.setNamePackage("fondos.banco");
 		c.setSingular("Banco");
@@ -37,12 +38,14 @@ public class BancoAnt extends Ant {
 		numero.setRequired(true);
 		numero.setUnique(true);
 		c.addAtt(numero);
+		c.addAttGrid(numero);
 
 		Att nombre = new Att("nombre", "Nombre");
 		nombre.setRequired(true);
 		nombre.setUnique(true);
 		nombre.setLength(null, 50);
 		c.addAtt(nombre);
+		c.addAttGrid(nombre);
 
 		Att cuit = new Att("cuit", "CUIT");
 		cuit.setDataTypeLong(1L, 99999999999L);
@@ -52,10 +55,12 @@ public class BancoAnt extends Ant {
 		cuit.setLength(11, 11);
 		cuit.setMask("99-99999999-9");
 		c.addAtt(cuit);
+		c.addAttGrid(cuit);
 
-		Att bloqueado = new Att("bloqueado", "Obsoleto");
-		bloqueado.setDataTypeBoolean();
-		c.addAtt(bloqueado);
+		Att vigente = new Att("vigente", "Vigente");
+		vigente.setDataTypeBoolean();
+		c.addAtt(vigente);
+		c.addAttGrid(vigente);
 
 		Att hoja = new Att("hoja", "Hoja");
 		hoja.setDataTypeInteger(1, 100);
@@ -109,7 +114,7 @@ public class BancoAnt extends Ant {
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 		
-		c.addArgument(bloqueado);
+		c.addArgument(vigente);
 		c.getLastArgument().setRequired(true);
 		c.addArgumentSBX(c.getLastArgument());
 

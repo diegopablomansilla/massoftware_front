@@ -24,6 +24,7 @@ public class CargaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Carga");
+		c.setNamePlural("Cargas");
 
 		c.setNamePackage("logistica");
 		c.setSingular("Carga");

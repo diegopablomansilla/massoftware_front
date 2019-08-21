@@ -21,6 +21,7 @@ public class TipoComprobanteConceptoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TipoComprobanteConcepto");
+		c.setNamePlural("TiposComprobantesConceptos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Concepto");

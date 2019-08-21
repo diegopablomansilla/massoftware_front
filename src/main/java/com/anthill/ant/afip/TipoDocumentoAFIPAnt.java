@@ -21,6 +21,7 @@ public class TipoDocumentoAFIPAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TipoDocumentoAFIP");
+		c.setNamePlural("TiposDocumentosAFIP");
 
 		c.setNamePackage("afip");
 		c.setSingular("Tipo de documento");

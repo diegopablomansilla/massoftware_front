@@ -19,6 +19,7 @@ public class TicketControlDenunciadosAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TicketControlDenunciados");
+		c.setNamePlural("TicketsControlesDenunciados");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Control denunciados");

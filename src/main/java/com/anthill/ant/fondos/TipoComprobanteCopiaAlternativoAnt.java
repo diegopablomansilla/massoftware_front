@@ -21,6 +21,7 @@ public class TipoComprobanteCopiaAlternativoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TipoComprobanteCopiaAlternativo");
+		c.setNamePlural("TiposComprobantesCopiasAlternativos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Tipo de copias");

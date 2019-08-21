@@ -21,6 +21,7 @@ public class ComprobanteFondoModeloAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("ComprobanteFondoModelo");
+		c.setNamePlural("ComprobantesFondosModelos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Modelo de comprobante de fondo");

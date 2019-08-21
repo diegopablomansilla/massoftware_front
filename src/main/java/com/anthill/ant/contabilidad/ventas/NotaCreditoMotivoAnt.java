@@ -22,6 +22,7 @@ public class NotaCreditoMotivoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("NotaCreditoMotivo");
+		c.setNamePlural("NotasCreditoMotivo");
 
 		c.setNamePackage("contabilidad.ventas");
 		c.setSingular("Motivo de nota credito");

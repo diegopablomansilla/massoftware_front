@@ -25,6 +25,7 @@ public class CajaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Caja");
+		c.setNamePlural("Cajas");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Caja");

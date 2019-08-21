@@ -37,6 +37,7 @@ public class TransporteTarifaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TransporteTarifa");
+		c.setNamePlural("TransportesTarifas");
 
 		c.setNamePackage("logistica");
 		c.setSingular("Tarifa de transporte");

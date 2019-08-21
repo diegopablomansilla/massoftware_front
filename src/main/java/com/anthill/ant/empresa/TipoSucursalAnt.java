@@ -19,6 +19,7 @@ public class TipoSucursalAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TipoSucursal");
+		c.setNamePlural("TiposSucursales");
 
 		c.setNamePackage("empresa");
 		c.setSingular("Tipo de sucursal");

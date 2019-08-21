@@ -28,6 +28,7 @@ public class JuridiccionConvnioMultilateralAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("JuridiccionConvnioMultilateral");
+		c.setNamePlural("JuridiccionesConvniosMultilaterales");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Juridicción de convnio multilateral");

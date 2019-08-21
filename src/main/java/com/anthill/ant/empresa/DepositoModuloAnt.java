@@ -19,6 +19,7 @@ public class DepositoModuloAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("DepositoModulo");
+		c.setNamePlural("DepositosModulos");
 
 		c.setNamePackage("empresa");
 		c.setSingular("Módulo");

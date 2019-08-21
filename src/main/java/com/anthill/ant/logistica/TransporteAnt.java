@@ -27,6 +27,7 @@ public class TransporteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Transporte");
+		c.setNamePlural("Transportes");
 
 		c.setNamePackage("logistica");
 		c.setSingular("Transporte");

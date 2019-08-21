@@ -22,6 +22,7 @@ public class MonedaAFIPAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("MonedaAFIP");
+		c.setNamePlural("MonedasAFIP");
 
 		c.setNamePackage("afip");
 		c.setSingular("Moneda AFIP");

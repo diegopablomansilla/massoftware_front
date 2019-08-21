@@ -29,6 +29,7 @@ public class MonedaAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("Moneda");
+		c.setNamePlural("Monedas");
 
 		c.setNamePackage("monedas");
 		c.setSingular("Moneda");

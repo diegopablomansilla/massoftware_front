@@ -18,6 +18,7 @@ public class TalonarioControladorFizcalAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TalonarioControladorFizcal");
+		c.setNamePlural("TalonariosControladoresFizcales");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Controlador fizcal");

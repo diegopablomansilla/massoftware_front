@@ -21,6 +21,7 @@ public class TipoPuntoEquilibrioAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TipoPuntoEquilibrio");
+		c.setNamePlural("TiposPuntosEquilibrios");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Tipo punto equilibrio");

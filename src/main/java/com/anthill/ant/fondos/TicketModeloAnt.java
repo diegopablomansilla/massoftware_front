@@ -26,6 +26,7 @@ public class TicketModeloAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("TicketModelo");
+		c.setNamePlural("TicketsModelos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Ticket modelo");

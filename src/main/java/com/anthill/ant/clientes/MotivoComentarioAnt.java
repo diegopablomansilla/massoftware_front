@@ -22,6 +22,7 @@ public class MotivoComentarioAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("MotivoComentario");
+		c.setNamePlural("MotivosComentario");
 
 		c.setNamePackage("clientes");
 		c.setSingular("Motivo de comentario");

@@ -27,23 +27,23 @@ public class UtilJavaPOJO {
 
 	public static String toJava(Clazz clazzX) {
 
-		String java = "package com.massoftware.model." + clazzX.getNamePackage() + ";";
+		String java = "package com.massoftware.service." + clazzX.getNamePackage() + ";";
 
-		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
-		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
-		java += "\nimport com.massoftware.model.EntityId;";
+//		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
+//		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
+		java += "\n\nimport com.massoftware.model.EntityId;";
 
 		java += buildImportAtts(clazzX);
 
-		java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\", plural = \"" + clazzX.getPlural()
-				+ "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" + clazzX.getPluralPre()
-				+ "\")";
+//		java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\", plural = \"" + clazzX.getPlural()
+//				+ "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" + clazzX.getPluralPre()
+//				+ "\")";
 
-		java += "\npublic class " + clazzX.getName() + " extends EntityId {";
+		java += "\n\npublic class " + clazzX.getName() + " extends EntityId {";
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-		java += "\n\n\t@FieldConfAnont(label = \"ID\")";
+//		java += "\n\n\t@FieldConfAnont(label = \"ID\")";
 		java += "\n\tprivate String id;";
 
 		for (Att att : clazzX.getAtts()) {
@@ -239,26 +239,26 @@ public class UtilJavaPOJO {
 				maxLength = "maxLength = " + -1;
 			}
 
-			java += "\n\t@FieldConfAnont(" + label + ", " + labelError + ", " + unique + ", " + readOnly + ", "
-					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
-					+ ")";
+//			java += "\n\t@FieldConfAnont(" + label + ", " + labelError + ", " + unique + ", " + readOnly + ", "
+//					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
+//					+ ")";
 			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
 
 			if (att.isBoolean()) {
-				java += " = false";
+//				java += " = false";
 			}
 
 			java += ";";
 
 		}
 
-		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+//		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-		java += "\n\n\tpublic " + clazzX.getName() + "() throws Exception {";
-		// java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
-		java += "\n\t}";
+//		java += "\n\n\tpublic " + clazzX.getName() + "() throws Exception {";
+//		 java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
+//		java += "\n\t}";
 
-		java += buildConstructorAtts(clazzX);
+//		java += buildConstructorAtts(clazzX);
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
@@ -269,21 +269,21 @@ public class UtilJavaPOJO {
 
 		java += "\n\t// SET ID";
 		java += "\n\tpublic void setId(String id){";
-		java += "\n\t\tid = (id != null) ? id.trim() : null;";
-		java += "\n\t\tthis.id = (id != null && id.length() == 0) ? null : id;";
+//		java += "\n\t\tid = (id != null) ? id.trim() : null;";
+		java += "\n\t\tthis.id = (id == null || id.trim().length() == 0) ? null : id.trim();";
 		java += "\n\t}";
 
 		for (Att att : clazzX.getAtts()) {
 
 			if (att.isSimple() == false) {
-				java += "\n\n\t// BUILD IF NULL AND GET " + att.getLabel();
-				java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " build"
-						+ att.getNameJavaUperCase() + "() throws Exception {";
-
-				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null) ? new "
-						+ att.getDataType().getName() + "() : this." + att.getName() + ";";
-				java += "\n\t\treturn this." + att.getName() + ";";
-				java += "\n\t}";
+//				java += "\n\n\t// BUILD IF NULL AND GET " + att.getLabel();
+//				java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " build"
+//						+ att.getNameJavaUperCase() + "() throws Exception {";
+//
+//				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null) ? new "
+//						+ att.getDataType().getName() + "() : this." + att.getName() + ";";
+//				java += "\n\t\treturn this." + att.getName() + ";";
+//				java += "\n\t}";
 			}
 
 			java += "\n\n\t// GET " + att.getLabel();
@@ -293,8 +293,8 @@ public class UtilJavaPOJO {
 			if (att.isSimple()) {
 				java += "\n\t\treturn this." + att.getName() + ";";
 			} else {
-				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " != null && this."
-						+ att.getName() + ".getId() == null) ? null : this." + att.getName() + " ;";
+//				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null || this."
+//						+ att.getName() + ".getId() == null) ? null : this." + att.getName() + ";";
 				java += "\n\t\treturn this." + att.getName() + ";";
 			}
 
@@ -308,10 +308,10 @@ public class UtilJavaPOJO {
 				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null) ? false : " + att.getName()
 						+ ";";
 			} else if (att.isString()) {
-				java += "\n\t\t" + att.getName() + " = (" + att.getName() + " != null) ? " + att.getName()
-						+ ".trim() : null;";
-				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " != null && " + att.getName()
-						+ ".length() == 0) ? null : " + att.getName() + ";";
+//				java += "\n\t\t" + att.getName() + " = (" + att.getName() + " == null) ? " + att.getName()
+//						+ ".trim() : null;";
+				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null || " + att.getName()
+						+ ".trim().length() == 0) ? null : " + att.getName() + ".trim();";
 			} else {
 				java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
 			}
@@ -320,7 +320,7 @@ public class UtilJavaPOJO {
 
 		}
 
-		java += buildSetter(clazzX);
+//		java += buildSetter(clazzX);
 
 		// java += "\n\n\t//
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
@@ -350,7 +350,7 @@ public class UtilJavaPOJO {
 
 				DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
-				java += "\nimport com.massoftware.model." + dataTypeClazz.getClazz().getNamePackage() + "."
+				java += "\nimport com.massoftware.service." + dataTypeClazz.getClazz().getNamePackage() + "."
 						+ dataTypeClazz.getClazz().getName() + ";";
 
 			}

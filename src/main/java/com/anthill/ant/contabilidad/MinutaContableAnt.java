@@ -21,6 +21,7 @@ public class MinutaContableAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("MinutaContable");
+		c.setNamePlural("MinutasContables");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Minuta contable");

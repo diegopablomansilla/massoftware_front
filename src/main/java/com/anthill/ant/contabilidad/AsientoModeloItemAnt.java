@@ -26,6 +26,7 @@ public class AsientoModeloItemAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("AsientoModeloItem");
+		c.setNamePlural("AsientosModelosItems");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Item de asiento modelo");

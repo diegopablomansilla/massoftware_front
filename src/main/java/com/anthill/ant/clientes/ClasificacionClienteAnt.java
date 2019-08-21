@@ -21,6 +21,7 @@ public class ClasificacionClienteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("ClasificacionCliente");
+		c.setNamePlural("ClasificacionesClientes");
 
 		c.setNamePackage("clientes");
 		c.setSingular("Clasificación de cliente");

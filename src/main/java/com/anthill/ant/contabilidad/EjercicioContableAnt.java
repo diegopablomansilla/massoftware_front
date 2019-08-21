@@ -23,6 +23,7 @@ public class EjercicioContableAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("EjercicioContable");
+		c.setNamePlural("EjerciciosContables");
 
 		c.setNamePackage("contabilidad");
 		c.setSingular("Ejercicio");

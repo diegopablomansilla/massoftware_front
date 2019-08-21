@@ -21,6 +21,7 @@ public class ClaseComprobanteAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("ClaseComprobante");
+		c.setNamePlural("ClasesComprobantes");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Clase");

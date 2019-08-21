@@ -24,6 +24,7 @@ public class CuentaFondoGrupoAnt extends Ant {
 		Clazz c = new Clazz();
 
 		c.setName("CuentaFondoGrupo");
+		c.setNamePlural("CuentasFondosGrupos");
 
 		c.setNamePackage("fondos");
 		c.setSingular("Grupo de cuenta fondo");
