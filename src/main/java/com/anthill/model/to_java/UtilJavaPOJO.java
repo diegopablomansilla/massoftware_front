@@ -31,7 +31,7 @@ public class UtilJavaPOJO {
 
 //		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
 //		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
-		java += "\n\nimport com.massoftware.model.EntityId;";
+		java += "\n\nimport com.massoftware.service.EntityId;";
 
 		java += buildImportAtts(clazzX);
 

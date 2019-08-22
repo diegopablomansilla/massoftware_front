@@ -136,7 +136,7 @@ public class Anthill3 {
 
 			write(folderPOJOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + ".java", clazz.toJava());
 			write(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "DAO.java",
-					clazz.toJavaDao());
+					clazz.toJavaService());
 			write(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Filtro.java",
 					clazz.toJavaFilter());
 			write(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" + clazz.getName() + ".java",

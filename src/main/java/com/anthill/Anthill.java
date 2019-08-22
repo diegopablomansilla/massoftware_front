@@ -1,9 +1,12 @@
 package com.anthill;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +76,6 @@ import com.anthill.ant.seguridad.UsuarioAnt;
 import com.anthill.model.Att;
 import com.anthill.model.Clazz;
 import com.anthill.model.to_java.UtilJavaFactoryService;
-import com.anthill.model.to_java.UtilJavaFactoryWidget;
 
 //https://github.com/javierarce/palabras/blob/master/listado-general.txt
 // http://www.listapalabras.com/
@@ -242,7 +244,8 @@ public class Anthill {
 		ClaseComprobanteAnt claseComprobanteAnt = new ClaseComprobanteAnt(anthill);
 		ComportamientoComprobanteAnt comportamientoComprobanteAnt = new ComportamientoComprobanteAnt(anthill);
 		TipoComprobanteCopiaAnt tipoComprobanteCopiaAnt = new TipoComprobanteCopiaAnt(anthill);
-		TipoComprobanteCopiaAlternativoAnt tipoComprobanteCopiaAlternativoAnt = new TipoComprobanteCopiaAlternativoAnt(anthill);
+		TipoComprobanteCopiaAlternativoAnt tipoComprobanteCopiaAlternativoAnt = new TipoComprobanteCopiaAlternativoAnt(
+				anthill);
 
 		///////////////////////////////////////////////////////////////////
 
@@ -252,7 +255,7 @@ public class Anthill {
 
 	public void build() throws Exception {
 
-//		String massoftware_front = "D:\\dev\\source\\massoftware_front";
+		// String massoftware_front = "D:\\dev\\source\\massoftware_front";
 		String massoftware_front = "D:\\dev\\source\\massoftware";
 
 		String src_java = massoftware_front + File.separatorChar + "src\\main\\java";
@@ -269,18 +272,19 @@ public class Anthill {
 		File folderService = new File(src_java + File.separatorChar + "com\\massoftware\\service");
 		folderService.mkdirs();
 
-//		File folderWindows = new File(src_java + File.separatorChar + "com\\massoftware\\x");
-//		folderWindows.mkdirs();
+		// File folderWindows = new File(src_java + File.separatorChar +
+		// "com\\massoftware\\x");
+		// folderWindows.mkdirs();
 
 		// String sql = "";
 		String sqlTable = "";
-//		String sqlType = "";
-//		String sqlFind = "";
-//		String sqlFindNextValue = "";
-//		String sqlFindExists = "";
-//		String sqlFindInsert = "";
-//		String sqlFindUpdate = "";
-//		String sqlFindDelete = "";
+		// String sqlType = "";
+		// String sqlFind = "";
+		// String sqlFindNextValue = "";
+		// String sqlFindExists = "";
+		// String sqlFindInsert = "";
+		// String sqlFindUpdate = "";
+		// String sqlFindDelete = "";
 
 		String javaPopulateBody = "";
 		String javaPopulateImport = "";
@@ -300,91 +304,100 @@ public class Anthill {
 			System.out.println(
 					"---------------------------------------------------------------------------------------------------------------------------------------------");
 
-//			String sqlTypeItem = clazz.toSQLType();
+			// String sqlTypeItem = clazz.toSQLType();
 			String sqlTableItem = clazz.toSQLTable();
-//			String sqlFindItem = clazz.toSQLFind();
-//			String sqlFindNextValueItem = clazz.toSQLFindNextValue();
-//			String sqlFindExistsItem = clazz.toSQLFindExists();
-//			String sqlFindInsertItem = clazz.toSQLInsert();
-//			String sqlFindUpdateItem = clazz.toSQLUpdate();
-//			String sqlFindDeleteItem = clazz.toSQLDeleteById();
+			// String sqlFindItem = clazz.toSQLFind();
+			// String sqlFindNextValueItem = clazz.toSQLFindNextValue();
+			// String sqlFindExistsItem = clazz.toSQLFindExists();
+			// String sqlFindInsertItem = clazz.toSQLInsert();
+			// String sqlFindUpdateItem = clazz.toSQLUpdate();
+			// String sqlFindDeleteItem = clazz.toSQLDeleteById();
 
-//			String sqlItem = clazz.toSQL();
+			// String sqlItem = clazz.toSQL();
 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 			sqlTable += "\n\n";
 			sqlTable += sqlTableItem;
-//
-//			if (sqlTypeItem != null && sqlTypeItem.trim().length() > 0) {
-//				sqlType += "\n\n";
-//				sqlType += sqlTypeItem;
-//			}
-//
-//			sqlFind += "\n\n";
-//			sqlFind += sqlFindItem;
-//
-//			if (sqlFindNextValueItem != null && sqlFindNextValueItem.trim().length() > 0) {
-//				sqlFindNextValue += "\n\n";
-//				sqlFindNextValue += sqlFindNextValueItem;
-//			}
-//
-//			if (sqlFindExistsItem != null && sqlFindExistsItem.trim().length() > 0) {
-//				sqlFindExists += "\n\n";
-//				sqlFindExists += sqlFindExistsItem;
-//			}
-//
-//			sqlFindInsert += "\n\n";
-//			sqlFindInsert += sqlFindInsertItem;
-//
-//			sqlFindDelete += "\n\n";
-//			sqlFindDelete += sqlFindDeleteItem;
-//
-//			sqlFindUpdate += "\n\n";
-//			sqlFindUpdate += sqlFindUpdateItem;
+			//
+			// if (sqlTypeItem != null && sqlTypeItem.trim().length() > 0) {
+			// sqlType += "\n\n";
+			// sqlType += sqlTypeItem;
+			// }
+			//
+			// sqlFind += "\n\n";
+			// sqlFind += sqlFindItem;
+			//
+			// if (sqlFindNextValueItem != null && sqlFindNextValueItem.trim().length() > 0)
+			// {
+			// sqlFindNextValue += "\n\n";
+			// sqlFindNextValue += sqlFindNextValueItem;
+			// }
+			//
+			// if (sqlFindExistsItem != null && sqlFindExistsItem.trim().length() > 0) {
+			// sqlFindExists += "\n\n";
+			// sqlFindExists += sqlFindExistsItem;
+			// }
+			//
+			// sqlFindInsert += "\n\n";
+			// sqlFindInsert += sqlFindInsertItem;
+			//
+			// sqlFindDelete += "\n\n";
+			// sqlFindDelete += sqlFindDeleteItem;
+			//
+			// sqlFindUpdate += "\n\n";
+			// sqlFindUpdate += sqlFindUpdateItem;
 
-//			File folderSQLItem = new File(folderSQL.getAbsolutePath() + File.separatorChar
-//					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
-//			folderSQLItem.mkdirs();
-//
-//			writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar + clazz.getName() + ".sql", sqlItem);
+			// File folderSQLItem = new File(folderSQL.getAbsolutePath() +
+			// File.separatorChar
+			// + clazz.getNamePackage().replace(".", File.separatorChar + ""));
+			// folderSQLItem.mkdirs();
+			//
+			// writeFile(folderSQLItem.getAbsolutePath() + File.separatorChar +
+			// clazz.getName() + ".sql", sqlItem);
 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+			javaPopulateInsert += "\n\t\t\t//insert" + clazz.getName() + "();";
 
-//			javaPopulateInsert += "\n\t\t\t//insert" + clazz.getName() + "();";
-//
-//			javaPopulateBody += "\n\n";
-//			javaPopulateBody += clazz.toPopulateJava();
-//
-//			javaPopulateImport += "\n";
-//			javaPopulateImport += "import com.massoftware.model." + clazz.getNamePackage() + "." + clazz.getName()
-//					+ ";";
-//			javaPopulateImport += "\n";
-//			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
-//					+ "Filtro;";
-//			javaPopulateImport += "\n";
-//			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
-//					+ "Service;";
+			javaPopulateBody += "\n\n";
+			javaPopulateBody += clazz.toPopulateJava();
+			//
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
+					+ ";";
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getNamePlural()
+					+ "Filtro;";
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getNamePlural()
+					+ ";";
+			javaPopulateImport += "\n";
+			javaPopulateImport += "import com.massoftware.service." + clazz.getNamePackage() + "." + clazz.getName()
+					+ "Service;";
 
-//			File folderPOJOPackage = new File(folderPOJO.getAbsolutePath() + File.separatorChar
-//					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
-//			folderPOJOPackage.mkdirs();
+			// File folderPOJOPackage = new File(folderPOJO.getAbsolutePath() +
+			// File.separatorChar
+			// + clazz.getNamePackage().replace(".", File.separatorChar + ""));
+			// folderPOJOPackage.mkdirs();
 
 			File folderServicePackage = new File(folderService.getAbsolutePath() + File.separatorChar
 					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
 			folderServicePackage.mkdirs();
 
-//			File folderWindosPackage = new File(folderWindows.getAbsolutePath() + File.separatorChar
-//					+ clazz.getNamePackage().replace(".", File.separatorChar + ""));
-//			folderWindosPackage.mkdirs();
+			// File folderWindosPackage = new File(folderWindows.getAbsolutePath() +
+			// File.separatorChar
+			// + clazz.getNamePackage().replace(".", File.separatorChar + ""));
+			// folderWindosPackage.mkdirs();
 
-//			writeFile(folderPOJOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + ".java",
-//					clazz.toJava());
-//			writeFile(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Service.java",
-//					clazz.toJavaDao());
-			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "Filtro.java",
+			// writeFile(folderPOJOPackage.getAbsolutePath() + File.separatorChar +
+			// clazz.getName() + ".java",
+			// clazz.toJava());
+			// writeFile(folderDAOPackage.getAbsolutePath() + File.separatorChar +
+			// clazz.getName() + "Service.java",
+			// clazz.toJavaDao());
+			writeFile(
+					folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "Filtro.java",
 					clazz.toJavaFilter());
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + ".java",
 					clazz.toJavaGrid());
@@ -392,19 +405,25 @@ public class Anthill {
 					clazz.toJava());
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "Stm.java",
 					clazz.toJavaStm());
-//			writeFile(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" + clazz.getName() + ".java",
-//					clazz.toJavaWL());
-//			writeFile(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WF" + clazz.getName() + ".java",
-//					clazz.toJavaWF());
+			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "DAO.java",
+					clazz.toJavaDao());
+			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Service.java",
+					clazz.toJavaService());
+			// writeFile(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" +
+			// clazz.getName() + ".java",
+			// clazz.toJavaWL());
+			// writeFile(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WF" +
+			// clazz.getName() + ".java",
+			// clazz.toJavaWF());
 
 		}
 
-		String javaPopulate = "package com.massoftware;\n";
+		String javaPopulate = "package com.massoftware.service;\n\n";
 
 		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.List;\n";
 		javaPopulate += "import java.util.Random;\n";
-		javaPopulate += "import com.massoftware.AppCX;\n";
+		javaPopulate += "import com.massoftware.service.AppCX;\n";
 		javaPopulate += javaPopulateImport;
 		javaPopulate += "\n\npublic class Populate {";
 
@@ -425,23 +444,94 @@ public class Anthill {
 		System.out.println(
 				"---------------------------------------------------------------------------------------------------------------------------------------------");
 
-//		writeFile(folderPopulate.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
-//		writeFile(folderService.getAbsolutePath() + File.separatorChar + "AbstractFactoryService.java",
-//				UtilJavaFactoryService.toJava(clazzList));
-//		writeFile(folderWindows.getAbsolutePath() + File.separatorChar + "AbstractFactoryWidget.java",
-//				UtilJavaFactoryWidget.toJava(clazzList));
+		writeFile(folderService.getAbsolutePath() + File.separatorChar + "Populate.java", javaPopulate);
+		writeFile(folderService.getAbsolutePath() + File.separatorChar + "AbstractFactoryService.java", UtilJavaFactoryService.toJava(clazzList));
+		// writeFile(folderWindows.getAbsolutePath() + File.separatorChar +
+		// "AbstractFactoryWidget.java",
+		// UtilJavaFactoryWidget.toJava(clazzList));
 
 		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_tables.sql", sqlTable);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_types.sql", sqlType);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_find.sql", sqlFind);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_next_value.sql",
-//				sqlFindNextValue);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_exists.sql", sqlFindExists);
+		writeFile(folderService.getAbsolutePath() + File.separatorChar + "DataBase.java",
+				buildDataBaseClass(clazzList));
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_types.sql", sqlType);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_find.sql", sqlFind);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_next_value.sql",
+		// sqlFindNextValue);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_exists.sql", sqlFindExists);
 
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_insert.sql", sqlFindInsert);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_update.sql", sqlFindUpdate);
-//		writeFile(folderSQL.getAbsolutePath() + File.separatorChar + "pp_create_functions_delete.sql", sqlFindDelete);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_insert.sql", sqlFindInsert);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_update.sql", sqlFindUpdate);
+		// writeFile(folderSQL.getAbsolutePath() + File.separatorChar +
+		// "pp_create_functions_delete.sql", sqlFindDelete);
 
+	}
+
+	private String buildDataBaseClass(List<Clazz> clazzList) throws IOException {
+		String s = "";
+		String s1 = "";
+		String s2 = "";
+		String s3 = "";
+
+		for (Clazz c : clazzList) {
+			s += "\nimport com.massoftware.service." + c.getNamePackage() + "." + c.getNamePlural() + ";";
+			s += "\nimport com.massoftware.service." + c.getNamePackage() + "." + c.getNamePlural() + "Filtro;";
+			s += "\nimport com.massoftware.service." + c.getNamePackage() + "." + c.getNamePlural() + "DAO;";
+		}
+
+		for (Clazz c : clazzList) {
+			s1 += "\n\tprivate " + c.getNamePlural() + "DAO " + toCamelStartL(c.getNamePlural()) + "DAO;";
+		}
+
+		for (Clazz c : clazzList) {
+			s2 += "\n\t\t" + toCamelStartL(c.getNamePlural()) + "DAO = new " + c.getNamePlural() + "DAO();";
+		}
+
+		for (Clazz c : clazzList) {
+			s3 += "\n\n\tpublic List<" + c.getNamePlural() + "> find" + c.getNamePlural() + "(" + c.getNamePlural()
+					+ "Filtro f) throws Exception {";
+			s3 += "\n\t\treturn " + toCamelStartL(c.getNamePlural()) + "DAO.find(connectionWrapper, f);";
+			s3 += "\n\t}";
+
+			s3 += "\n\n\tpublic Integer count" + c.getNamePlural() + "(" + c.getNamePlural()
+					+ "Filtro f) throws Exception {";
+			s3 += "\n\t\treturn " + toCamelStartL(c.getNamePlural()) + "DAO.count(connectionWrapper, f);";
+			s3 += "\n\t}";
+		}
+
+		String linea;
+		String source = "";
+
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		URL url = classLoader.getResource("db.txt");
+		String path = url.toString().substring(6, url.toString().length());
+
+		FileReader f = new FileReader(path);
+		BufferedReader b = new BufferedReader(f);
+		while ((linea = b.readLine()) != null) {
+			source += "\n" + linea;
+		}
+		b.close();
+
+		source = source.replaceAll("@IMPORTS@", s);
+		source = source.replaceAll("@FIELDS@", s1);
+		source = source.replaceAll("@INSTANCES@", s2);
+		source = source.replaceAll("@METHODS@", s3);
+
+		return source;
+	}
+
+	private String toCamelStartL(String text) {
+		if (text == null || text.isEmpty()) {
+			return text;
+		}
+
+		return text.substring(0, 1).toLowerCase() + text.substring(1, text.length());
 	}
 
 	private void writeFile(String fileName, String content) throws IOException {

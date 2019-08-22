@@ -267,6 +267,9 @@ public class Att {
 			if (this.isRequired() || this.isBoolean()) {
 				sql += " NOT NULL ";
 			}
+//			if (this.isRequired()) {
+//				sql += " NOT NULL ";
+//			}
 			
 //			if (this.isBoolean()) {
 //				if (this.isRequired()) {

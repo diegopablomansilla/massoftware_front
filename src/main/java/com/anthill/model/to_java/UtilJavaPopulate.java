@@ -256,7 +256,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += dt.getClazz().getName() + "Filtro " + att.getName() + "Filtro = new " + dt.getClazz().getName()
+				java += dt.getClazz().getNamePlural() + "Filtro " + att.getName() + "Filtro = new " + dt.getClazz().getNamePlural()
 						+ "Filtro();";
 
 				// java += "\n";
@@ -279,8 +279,8 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += "long " + att.getName() + "Index = UtilPopulate.getLongRandom(0L, " + att.getName()
-						+ "Count-1);";
+				java += "int " + att.getName() + "Index = UtilPopulate.getIntegerRandom(0, " + att.getName()
+						+ "Count.intValue()-1);";
 
 				java += "\n";
 				java += "\t";
@@ -295,7 +295,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 //				java += att.getName() + "Filtro.setLimit(" + att.getName() + "Index);";
-				java += att.getName() + "Filtro.setLimit(1L);";
+				java += att.getName() + "Filtro.setLimit(1);";
 
 				java += "\n";
 				java += "\t";
@@ -304,7 +304,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 //				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = service"
 //						+ dt.getClazz().getName() + ".find(" + att.getName() + "Filtro);";
-				java += "List<" + dt.getClazz().getName() + "> " + att.getName() + "Listado = service"
+				java += "List<" + dt.getClazz().getNamePlural() + "> " + att.getName() + "Listado = service"
 						+ att.getName() + ".find(" + att.getName() + "Filtro);";
 
 				// java += "\n";
@@ -320,9 +320,23 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
+				java += "\t";				
+				java += toCamelStart(att.getDataType().getName()) + " objFk" + toCamelStart(att.getName()) + "  = new " + toCamelStart(att.getDataType().getName()) + "();";
+				
+				java += "\n";
 				java += "\t";
-				// java += "obj.set" + toCamelStart(att.getName()) + "(listado.get(index));";
-				java += "obj.set" + toCamelStart(att.getName()) + "(" + att.getName() + "Listado.get(0));";
+				java += "\t";
+				java += "\t";
+				java += "\t";				
+				java += "objFk" + toCamelStart(att.getName()) + ".setId(" + att.getName() + "Listado.get(0).getId());";
+				
+				java += "\n";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				java += "\t";
+				// java += "obj.set" + toCamelStart(att.getName()) + "(listado.get(index));";				
+				java += "obj.set" + toCamelStart(att.getName()) + "(objFk" + toCamelStart(att.getName()) + ");";
 
 			}
 
@@ -341,7 +355,7 @@ public class UtilJavaPopulate {
 		java += "\t";
 		java += "\t";
 		java += "\t";
-		java += "} catch (org.cendra.jdbc.SQLExceptionWrapper e) {";
+		java += "} catch (org.dsw.jdbc.SQLExceptionWrapper e) {";
 		
 		
 //		System.out.println(e.getSQLState());

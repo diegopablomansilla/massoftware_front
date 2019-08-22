@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.anthill.UtilAnthill;
+import com.anthill.model.to_java.UtilJavaDao;
 import com.anthill.model.to_java.UtilJavaForm;
 import com.anthill.model.to_java.UtilJavaList;
 import com.anthill.model.to_java.UtilJavaPOJO;
 import com.anthill.model.to_java.UtilJavaPOJOFilter;
 import com.anthill.model.to_java.UtilJavaPopulate;
-import com.anthill.model.to_java.UtilJavaService;
+import com.anthill.model.to_java.UtilJavaService2;
 import com.anthill.model.to_java.UtilJavaStm;
 import com.anthill.model.to_sql.FunctionFind;
 import com.anthill.model.to_sql.UtilSQLDelete;
@@ -244,9 +245,13 @@ public class Clazz {
 	public String toJavaStm() throws IOException {
 		return UtilJavaStm.toJavaStm(this);
 	}
+	
+	public String toJavaDao() throws IOException {
+		return UtilJavaDao.toJavaDao(this);
+	}
 
-	public String toJavaDao() {
-		return UtilJavaService.toJava(this);
+	public String toJavaService() throws IOException {
+		return UtilJavaService2.toJava(this);
 	}
 
 	public String toJavaWL() throws IOException {
