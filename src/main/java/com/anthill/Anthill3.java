@@ -140,7 +140,7 @@ public class Anthill3 {
 			write(folderDAOPackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Filtro.java",
 					clazz.toJavaFilter());
 			write(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" + clazz.getName() + ".java",
-					clazz.toJavaWL());
+					clazz.toJavaUIGrid());
 			write(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WF" + clazz.getName() + ".java",
 					clazz.toJavaWF());
 

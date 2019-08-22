@@ -409,6 +409,10 @@ public class Anthill {
 					clazz.toJavaDao());
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Service.java",
 					clazz.toJavaService());
+			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + "UI" + clazz.getNamePlural() + "Grid.java",
+					clazz.toJavaUIGrid());
+			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + "UI" + clazz.getNamePlural() + "View.java",
+					clazz.toJavaUIGridView());
 			// writeFile(folderWindosPackage.getAbsolutePath() + File.separatorChar + "WL" +
 			// clazz.getName() + ".java",
 			// clazz.toJavaWL());

@@ -1,7 +1,7 @@
 package com.anthill.model;
 
 public abstract class DataType {
-
+	
 	private String name;
 
 	public DataType(String name) {

@@ -20,7 +20,7 @@ public class @NAME_PLURAL@Stm extends StatementParam {
 
 		if (count == false) {
 
-			atts = "@NAME@.id, @ATTS@";
+			atts = "@NAME@.id @ATTS@";
 
 			orderBy = " ORDER BY " + f.getOrderBy() + " " + (f.getOrderByDesc() ? "DESC" : "");
 

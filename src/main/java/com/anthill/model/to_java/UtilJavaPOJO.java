@@ -3,6 +3,7 @@ package com.anthill.model.to_java;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.anthill.model.Argument;
 import com.anthill.model.Att;
 import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeBigDecimal;
@@ -29,21 +30,23 @@ public class UtilJavaPOJO {
 
 		String java = "package com.massoftware.service." + clazzX.getNamePackage() + ";";
 
-//		java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
-//		java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
+		// java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
+		// java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\n\nimport com.massoftware.service.EntityId;";
 
 		java += buildImportAtts(clazzX);
 
-//		java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\", plural = \"" + clazzX.getPlural()
-//				+ "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" + clazzX.getPluralPre()
-//				+ "\")";
+		// java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\",
+		// plural = \"" + clazzX.getPlural()
+		// + "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" +
+		// clazzX.getPluralPre()
+		// + "\")";
 
-		java += "\n\npublic class " + clazzX.getName() + " extends EntityId {";
+		java += "\n\npublic class " + clazzX.getName() + " extends EntityId implements Cloneable {";
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-//		java += "\n\n\t@FieldConfAnont(label = \"ID\")";
+		// java += "\n\n\t@FieldConfAnont(label = \"ID\")";
 		java += "\n\tprivate String id;";
 
 		for (Att att : clazzX.getAtts()) {
@@ -187,7 +190,7 @@ public class UtilJavaPOJO {
 
 				} else if (att.isBigDecimal()) {
 					DataTypeBigDecimal dt = (DataTypeBigDecimal) att.getDataType();
-					
+
 					if (dt.getMinValue() != null) {
 						minValue = "minValue = \"" + dt.getMinValue() + "\"";
 					}
@@ -239,26 +242,29 @@ public class UtilJavaPOJO {
 				maxLength = "maxLength = " + -1;
 			}
 
-//			java += "\n\t@FieldConfAnont(" + label + ", " + labelError + ", " + unique + ", " + readOnly + ", "
-//					+ required + ", " + columns + ", " + maxLength + ", " + minValue + ", " + maxValue + ", " + mask
-//					+ ")";
+			// java += "\n\t@FieldConfAnont(" + label + ", " + labelError + ", " + unique +
+			// ", " + readOnly + ", "
+			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
+			// maxValue + ", " + mask
+			// + ")";
 			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
 
 			if (att.isBoolean()) {
-//				java += " = false";
+				// java += " = false";
 			}
 
 			java += ";";
 
 		}
 
-//		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
+		// java += "\n\n\t//
+		// ---------------------------------------------------------------------------------------------------------------------------\n";
 
-//		java += "\n\n\tpublic " + clazzX.getName() + "() throws Exception {";
-//		 java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
-//		java += "\n\t}";
+		// java += "\n\n\tpublic " + clazzX.getName() + "() throws Exception {";
+		// java += "\n\n\t\tthis._originalDTO = (EntityId) this.clone();";
+		// java += "\n\t}";
 
-//		java += buildConstructorAtts(clazzX);
+		// java += buildConstructorAtts(clazzX);
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
 
@@ -269,21 +275,23 @@ public class UtilJavaPOJO {
 
 		java += "\n\t// SET ID";
 		java += "\n\tpublic void setId(String id){";
-//		java += "\n\t\tid = (id != null) ? id.trim() : null;";
+		// java += "\n\t\tid = (id != null) ? id.trim() : null;";
 		java += "\n\t\tthis.id = (id == null || id.trim().length() == 0) ? null : id.trim();";
 		java += "\n\t}";
 
 		for (Att att : clazzX.getAtts()) {
 
 			if (att.isSimple() == false) {
-//				java += "\n\n\t// BUILD IF NULL AND GET " + att.getLabel();
-//				java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " build"
-//						+ att.getNameJavaUperCase() + "() throws Exception {";
-//
-//				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null) ? new "
-//						+ att.getDataType().getName() + "() : this." + att.getName() + ";";
-//				java += "\n\t\treturn this." + att.getName() + ";";
-//				java += "\n\t}";
+				// java += "\n\n\t// BUILD IF NULL AND GET " + att.getLabel();
+				// java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "")
+				// + " build"
+				// + att.getNameJavaUperCase() + "() throws Exception {";
+				//
+				// java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " ==
+				// null) ? new "
+				// + att.getDataType().getName() + "() : this." + att.getName() + ";";
+				// java += "\n\t\treturn this." + att.getName() + ";";
+				// java += "\n\t}";
 			}
 
 			java += "\n\n\t// GET " + att.getLabel();
@@ -293,8 +301,9 @@ public class UtilJavaPOJO {
 			if (att.isSimple()) {
 				java += "\n\t\treturn this." + att.getName() + ";";
 			} else {
-//				java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " == null || this."
-//						+ att.getName() + ".getId() == null) ? null : this." + att.getName() + ";";
+				// java += "\n\t\tthis." + att.getName() + " = (this." + att.getName() + " ==
+				// null || this."
+				// + att.getName() + ".getId() == null) ? null : this." + att.getName() + ";";
 				java += "\n\t\treturn this." + att.getName() + ";";
 			}
 
@@ -308,8 +317,9 @@ public class UtilJavaPOJO {
 				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null) ? false : " + att.getName()
 						+ ";";
 			} else if (att.isString()) {
-//				java += "\n\t\t" + att.getName() + " = (" + att.getName() + " == null) ? " + att.getName()
-//						+ ".trim() : null;";
+				// java += "\n\t\t" + att.getName() + " = (" + att.getName() + " == null) ? " +
+				// att.getName()
+				// + ".trim() : null;";
 				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null || " + att.getName()
 						+ ".trim().length() == 0) ? null : " + att.getName() + ".trim();";
 			} else {
@@ -320,7 +330,7 @@ public class UtilJavaPOJO {
 
 		}
 
-//		java += buildSetter(clazzX);
+		// java += buildSetter(clazzX);
 
 		// java += "\n\n\t//
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
@@ -332,6 +342,7 @@ public class UtilJavaPOJO {
 		// ---------------------------------------------------------------------------------------------------------------------------\n";
 
 		java += toStringMethod(clazzX);
+		java += buildClone(clazzX);
 
 		java += "\n\n} // END CLASS ----------------------------------------------------------------------------------------------------------";
 
@@ -558,12 +569,12 @@ public class UtilJavaPOJO {
 				if (j == 0) {
 					path += "this";
 				} else if (j == paths.length - 1) {
-					if(fieldsSQL.get(i).endsWith("@@")) {
+					if (fieldsSQL.get(i).endsWith("@@")) {
 						path += ".setId(id" + paths[j].replace("@@", "") + "Arg" + i + ");";
 					} else {
-						path += ".set" + toCamelStart(paths[j]) + "(" + paths[j] + "Arg" + i + ");";	
+						path += ".set" + toCamelStart(paths[j]) + "(" + paths[j] + "Arg" + i + ");";
 					}
-					
+
 				} else {
 					path += ".build" + toCamelStart(paths[j]) + "()";
 				}
@@ -578,24 +589,25 @@ public class UtilJavaPOJO {
 		return java;
 	}
 
-	private static void buildConstructorAtts(int maxLevel, int level, String source, Clazz clazz, Att attSource, List<String> fields) {
+	private static void buildConstructorAtts(int maxLevel, int level, String source, Clazz clazz, Att attSource,
+			List<String> fields) {
 
 		String java = "";
 
 		if (source.length() > 0) {
-			
-			if(attSource != null) {
-				java = source + "." + attSource.getName() + ".id";	
+
+			if (attSource != null) {
+				java = source + "." + attSource.getName() + ".id";
 			} else {
-				java = source + "." + clazz.getName() + ".id";	
-			}	
-			
+				java = source + "." + clazz.getName() + ".id";
+			}
+
 		} else {
-			
-			if(attSource != null) {
-				java = attSource.getName() + ".id";	
+
+			if (attSource != null) {
+				java = attSource.getName() + ".id";
 			} else {
-				java = clazz.getName() + ".id";	
+				java = clazz.getName() + ".id";
 			}
 		}
 
@@ -618,52 +630,52 @@ public class UtilJavaPOJO {
 			} else {
 
 				if (level < maxLevel) {
-					
+
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
 					if (source.length() > 0) {
-						
-//						buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
-//								dataTypeClazz.getClazz(), att, fields);
-						
-						if(attSource != null) {
+
+						// buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
+						// dataTypeClazz.getClazz(), att, fields);
+
+						if (attSource != null) {
 							buildConstructorAtts(maxLevel, (level + 1), source + "." + attSource.getName(),
-									dataTypeClazz.getClazz(), att, fields);	
+									dataTypeClazz.getClazz(), att, fields);
 						} else {
 							buildConstructorAtts(maxLevel, (level + 1), source + "." + clazz.getName(),
-									dataTypeClazz.getClazz(), att, fields);	
-						}	
-						
-						
-					} else {
-						
-						if(attSource != null) {
-							buildConstructorAtts(maxLevel, (level + 1), attSource.getName(), dataTypeClazz.getClazz(), att, fields);	
-						} else {
-							buildConstructorAtts(maxLevel, (level + 1), clazz.getName(), dataTypeClazz.getClazz(), att, fields);	
+									dataTypeClazz.getClazz(), att, fields);
 						}
-						
+
+					} else {
+
+						if (attSource != null) {
+							buildConstructorAtts(maxLevel, (level + 1), attSource.getName(), dataTypeClazz.getClazz(),
+									att, fields);
+						} else {
+							buildConstructorAtts(maxLevel, (level + 1), clazz.getName(), dataTypeClazz.getClazz(), att,
+									fields);
+						}
 
 					}
 				} else {
 
 					DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
-					
-					if(attSource != null) {
+
+					if (attSource != null) {
 						if (source.length() > 0) {
-							java = source + "." + attSource.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+							java = source + "." + attSource.getName() + "." + att.getName() + "."
+									+ dataTypeClazz.getName() + "@@";
 						} else {
-							java = attSource.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
-						}	
+							java = attSource.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+						}
 					} else {
 						if (source.length() > 0) {
-							java = source + "." + clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+							java = source + "." + clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName()
+									+ "@@";
 						} else {
-							java = clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName()+ "@@";
-						}		
+							java = clazz.getName() + "." + att.getName() + "." + dataTypeClazz.getName() + "@@";
+						}
 					}
-
-					
 
 					fields.add(java);
 
@@ -798,6 +810,63 @@ public class UtilJavaPOJO {
 			java += n + t + t + t + "return super.toString();";
 		}
 		java += n + t + "}";
+
+		return java;
+	}
+
+	private static String buildClone(Clazz clazz) {
+		String java = "";
+
+		String t1 = "\n\t";
+		String t2 = "\n\t\t";
+		String t3 = "\n\t\t\t";
+		String t4 = "\n\t\t\t\t";
+
+		java += t2 + "";
+
+		java += t1 + "public " + clazz.getName() + " clone() {";
+
+		java += t2 + "";
+
+		java += t2 + clazz.getName() + " other = (" + clazz.getName() + ") super.clone();";
+
+		java += t2 + "";
+		
+		java += t2 + "other.setId(this.getId());";
+
+		for (Att att : clazz.getAtts()) {
+
+			String get = "get" + toCamelStart(att.getName()) + "";
+			String set = "set" + toCamelStart(att.getName()) + "";
+
+			if (att.isSimple() == false) {
+
+				java += t2 + "";
+				java += t2 + "// -------------------------------------------------------------------";
+				java += t2 + "";
+				java += t2 + "if (this." + get + "() != null) {";
+				java += t3 + "other." + set + "(this." + get + "().clone());";
+				java += t2 + "}";
+
+			} else {
+				java += t2 + "other." + set + "(this." + get + "());";
+			}
+
+		}
+
+		java += t2 + "";
+
+		java += t2 + "// -------------------------------------------------------------------";
+
+		java += t2 + "";
+
+		java += t2 + "return other;";
+
+		java += t2 + "";
+
+		java += t2 + "// -------------------------------------------------------------------";
+
+		java += t1 + "}";
 
 		return java;
 	}

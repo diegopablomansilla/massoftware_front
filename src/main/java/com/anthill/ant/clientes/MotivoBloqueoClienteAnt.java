@@ -7,7 +7,7 @@ import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeInteger;
 
 public class MotivoBloqueoClienteAnt extends Ant {
-
+	
 	private Ant clasificacionClienteAnt;
 
 	public MotivoBloqueoClienteAnt(Anthill anthill, Ant clasificacionClienteAnt) {

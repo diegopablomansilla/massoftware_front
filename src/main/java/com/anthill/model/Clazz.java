@@ -7,12 +7,13 @@ import java.util.List;
 import com.anthill.UtilAnthill;
 import com.anthill.model.to_java.UtilJavaDao;
 import com.anthill.model.to_java.UtilJavaForm;
-import com.anthill.model.to_java.UtilJavaList;
 import com.anthill.model.to_java.UtilJavaPOJO;
 import com.anthill.model.to_java.UtilJavaPOJOFilter;
 import com.anthill.model.to_java.UtilJavaPopulate;
-import com.anthill.model.to_java.UtilJavaService2;
+import com.anthill.model.to_java.UtilJavaService;
 import com.anthill.model.to_java.UtilJavaStm;
+import com.anthill.model.to_java.UtilJavaUIGrid;
+import com.anthill.model.to_java.UtilJavaUIGridView;
 import com.anthill.model.to_sql.FunctionFind;
 import com.anthill.model.to_sql.UtilSQLDelete;
 import com.anthill.model.to_sql.UtilSQLFindExists;
@@ -251,11 +252,15 @@ public class Clazz {
 	}
 
 	public String toJavaService() throws IOException {
-		return UtilJavaService2.toJava(this);
+		return UtilJavaService.toJava(this);
 	}
 
-	public String toJavaWL() throws IOException {
-		return UtilJavaList.toJavaWL(this);
+	public String toJavaUIGrid() throws IOException {
+		return UtilJavaUIGrid.toJava(this);
+	}
+	
+	public String toJavaUIGridView() throws IOException {
+		return UtilJavaUIGridView.toJava(this);
 	}
 
 	public String toJavaWF() throws IOException {

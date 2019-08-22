@@ -35,7 +35,7 @@ public class UtilJavaStm {
 			source += "\n" + linea;
 			// System.out.println(linea);
 		}
-		b.close();
+		b.close();		
 
 		source = source.replaceAll("@NAME_PACKAGE@", clazzX.getNamePackage());
 		source = source.replaceAll("@NAME_PLURAL@", clazzX.getNamePlural());
@@ -43,11 +43,12 @@ public class UtilJavaStm {
 
 		String atts = "";
 		for (int i = 0; i < clazzX.getAttsGrid().size(); i++) {
-			if (i == 0) {
-				atts += clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
-			} else {
-				atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
-			}
+//			if (i == 0) {
+//				atts += clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
+//			} else {
+//				atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
+//			}
+			atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
 		}
 
 		source = source.replaceAll("@ATTS@", atts);
