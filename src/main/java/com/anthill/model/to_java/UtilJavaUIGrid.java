@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 
+import com.anthill.model.Argument;
 import com.anthill.model.Att;
 import com.anthill.model.Clazz;
 
@@ -130,10 +131,100 @@ public class UtilJavaUIGrid {
 
 		source = source.replaceAll("@ATTS@", atts);
 		source = source.replaceAll("@RENDER@", renders);
+		source = source.replaceAll("@REQUIRED_A@", buildCheck(true, clazzX));
+		source = source.replaceAll("@REQUIRED_B@", buildCheck(false, clazzX));
 
 		java += source;
 
 		return java;
+	}
+	
+	private static String buildCheck(boolean a, Clazz clazzX) {
+		String java = "";
+
+		for (int i = 0; i < clazzX.getArgs().size(); i++) {
+
+			Argument arg = clazzX.getArgs().get(i);
+
+			if (arg.isRequired() == false) {
+				continue;
+			}
+
+			String sc = "\n\t";
+
+			if (arg.isNumber()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+
+				} else {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "From");
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "To");
+
+				}
+
+			} else if (arg.isDate()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+
+				} else {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "From");
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "To");
+				}
+
+			} else if (arg.isTimestamp()) {
+
+				if (arg.getRange() == false) {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+
+				} else {
+
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "From");
+					java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName() + "To");
+
+				}
+
+			} else if (arg.isString()) {
+
+				java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+
+			} else if (arg.isBoolean()) {
+
+				java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+
+			} else if (arg.isSimple() == false) {
+
+				java += sc + buildRequired(a, clazzX.getNamePlural(), arg.getName());
+			}
+		}
+
+		java += "\n";
+
+		return java;
+	}
+	
+	private static String buildRequired(boolean a, String m, String n) {
+		String s = "";
+
+		s += "\n\t\t\tif (filter.get" + toCamelStart(n) + "() == null || filter.get" + toCamelStart(n)
+				+ "().toString().trim().isEmpty()) {";
+		
+		if(a) {
+			s += "\n\t\t\t\treturn 0;";
+		} else {
+			s += "\n\t\t\t\treturn new ArrayList<" + m + ">();";	
+		}
+		
+		
+		s += "\n\t\t\t}";
+
+		return s;
 	}
 
 }

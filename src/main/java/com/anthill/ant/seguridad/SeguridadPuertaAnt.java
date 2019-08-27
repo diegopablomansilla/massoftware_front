@@ -60,6 +60,20 @@ public class SeguridadPuertaAnt extends Ant {
 		seguridadModulo.setRequired(true);
 		c.addAtt(seguridadModulo);
 
+		// -------- GRID
+
+		Att nombreModulo = new Att("nombreModulo", "Nombre módulo");
+		nombreModulo.setLength(null, 50);
+
+		c.addAttGrid(nombreModulo);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
+		// -------- Simple Args
+
+		c.addArgument(seguridadModulo);
+		c.getLastArgument().setRequired(true);
+
 		// -------- SBX Args
 
 		c.addArgument(numero, true);
@@ -70,13 +84,15 @@ public class SeguridadPuertaAnt extends Ant {
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
-		// -------- Simple Args
-
 		// -------- Order
 
 		c.addOrderAllAtts();
 
 		c.getOrderDefault().setDesc(true);
+
+		// ------------------------------------------------
+
+		c.setBuildStm(false);
 
 		// ------------------------------------------------
 

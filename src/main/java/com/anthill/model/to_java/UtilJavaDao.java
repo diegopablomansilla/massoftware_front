@@ -48,8 +48,7 @@ public class UtilJavaDao {
 
 			if (att.isDate()) {
 
-				atts += "objRow.set" + toCamelStart(att.getName()) + "((" + att.getDataType().getName()
-						+ ") row[++c]);";
+				atts += "objRow.set" + toCamelStart(att.getName()) + "(((java.sql.Date) row[++c]).toLocalDate());";
 
 			} else if (att.isTimestamp()) {
 
@@ -57,8 +56,14 @@ public class UtilJavaDao {
 						+ ") row[++c]);";
 
 			} else {
-				atts += "objRow.set" + toCamelStart(att.getName()) + "((" + att.getDataType().getNameJava()
-						+ ") row[++c]);";
+				if(att.isBigDecimal()) {
+					atts += "objRow.set" + toCamelStart(att.getName()) + "((" + att.getDataType().getName()
+							+ ") row[++c]);";
+				} else {
+					atts += "objRow.set" + toCamelStart(att.getName()) + "((" + att.getDataType().getNameJava()
+							+ ") row[++c]);";
+				}
+				
 			}
 
 		}

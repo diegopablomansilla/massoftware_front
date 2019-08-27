@@ -1,11 +1,13 @@
 package com.anthill.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 class DataTypeDate extends DataType {
 
 	public DataTypeDate() {
-		super(Date.class.getCanonicalName());
+//		super(Date.class.getCanonicalName());
+		super(LocalDate.class.getCanonicalName());
 	}
 
 	@Override
@@ -15,7 +17,9 @@ class DataTypeDate extends DataType {
 	
 	@Override
 	public String getNameJava() {		
-		return Date.class.getSimpleName();
+//		return Date.class.getSimpleName();
+		return LocalDate.class.getSimpleName();
+		
 	}
 
 	@Override

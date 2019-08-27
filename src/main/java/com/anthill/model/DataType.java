@@ -16,6 +16,10 @@ public abstract class DataType {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getNamePlural() {
+		return name;
+	}
 
 	abstract public String getNameSQL();		
 	

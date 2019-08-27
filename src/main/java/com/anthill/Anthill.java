@@ -266,8 +266,8 @@ public class Anthill {
 		File folderPopulate = new File(src_java + File.separatorChar + "com\\massoftware");
 		folderPopulate.mkdirs();
 
-		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
-		folderPOJO.mkdirs();
+//		File folderPOJO = new File(src_java + File.separatorChar + "com\\massoftware\\model");
+//		folderPOJO.mkdirs();
 
 		File folderService = new File(src_java + File.separatorChar + "com\\massoftware\\service");
 		folderService.mkdirs();
@@ -403,8 +403,11 @@ public class Anthill {
 					clazz.toJavaGrid());
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getName() + ".java",
 					clazz.toJava());
-			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "Stm.java",
-					clazz.toJavaStm());
+			
+			if(clazz.isBuildStm()) {
+				writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "Stm.java",
+						clazz.toJavaStm());	
+			}
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getNamePlural() + "DAO.java",
 					clazz.toJavaDao());
 			writeFile(folderServicePackage.getAbsolutePath() + File.separatorChar + clazz.getName() + "Service.java",

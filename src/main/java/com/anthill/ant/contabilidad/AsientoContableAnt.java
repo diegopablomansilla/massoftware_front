@@ -69,24 +69,38 @@ public class AsientoContableAnt extends Ant {
 		ejercicioContable.setRequired(true);
 		ejercicioContable.setReadOnlyGUI(true);
 		c.addAtt(ejercicioContable);
-		
+
 		Att minutaContable = new Att("minutaContable", "Minuta contable");
 		minutaContable.setDataTypeClazz(minutaContableAnt.build());
 		minutaContable.setRequired(true);
 		minutaContable.setReadOnlyGUI(true);
 		c.addAtt(minutaContable);
-		
+
 		Att sucursal = new Att("sucursal", "Sucursal");
 		sucursal.setDataTypeClazz(sucursalAnt.build());
 		sucursal.setRequired(true);
 		sucursal.setReadOnlyGUI(true);
 		c.addAtt(sucursal);
-		
+
 		Att asientoContableModulo = new Att("asientoContableModulo", "Módulo");
 		asientoContableModulo.setDataTypeClazz(asientoContableModuloAnt.build());
 		asientoContableModulo.setRequired(true);
 		asientoContableModulo.setReadOnlyGUI(true);
 		c.addAtt(asientoContableModulo);
+
+		// -------- GRID
+
+		Att numeroEjercicioContable = new Att("numeroEjercicio", "Nº ejercicio");
+		numeroEjercicioContable.setDataTypeInteger(1, null);
+		((DataTypeInteger) numeroEjercicioContable.getDataType()).setNextValueProposed(true);
+		numeroEjercicioContable.setRequired(true);
+		numeroEjercicioContable.setUnique(true);
+		
+		c.addAttGrid(numeroEjercicioContable);		
+		c.addAttGrid(numero);
+		c.addAttGrid(fecha);					
+		c.addAttGrid(detalle);
+
 
 		// -------- SBX Args
 
@@ -99,19 +113,19 @@ public class AsientoContableAnt extends Ant {
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
-		
+
 		c.addArgument(fecha, true);
-		c.getLastArgument().setRequired(false);		
+		c.getLastArgument().setRequired(false);
 
 		c.addArgument(ejercicioContable);
 		c.getLastArgument().setRequired(true);
-		
+
 		c.addArgument(minutaContable);
 		c.getLastArgument().setRequired(false);
-		
+
 		c.addArgument(asientoContableModulo);
 		c.getLastArgument().setRequired(false);
-		
+
 		c.addArgument(sucursal);
 		c.getLastArgument().setRequired(false);
 

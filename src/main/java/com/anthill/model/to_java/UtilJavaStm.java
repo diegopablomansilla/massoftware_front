@@ -117,7 +117,7 @@ public class UtilJavaStm {
 
 			} else if (arg.isSimple() == false) {
 
-				java += sc + buildEqualWhere(clazzX.getName(), arg.getName(), String.class.getSimpleName());
+				java += sc + buildEqualIdWhere(clazzX.getName(), arg.getName());
 			}
 		}
 
@@ -131,7 +131,7 @@ public class UtilJavaStm {
 		s += "\n\t\tif (f.get" + toCamelStart(n) + "From() != null) {";
 		s += "\n\t\t\twhere += (where.trim().length() > 0 ) ? \" AND \" : \"\";";
 		s += "\n\t\t\twhere += \" " + m + "." + toCamelStart(n) + " >= ?\";";
-		s += "\n\t\t\tthis.addArg(buildArgTrimLower(f.get" + toCamelStart(n) + "From(), " + c + ".class));";
+		s += "\n\t\t\tthis.addArg(buildArgTrim(f.get" + toCamelStart(n) + "From(), " + c + ".class));";
 		s += "\n\t\t}";
 
 		return s;
@@ -142,7 +142,7 @@ public class UtilJavaStm {
 		s += "\n\t\tif (f.get" + toCamelStart(n) + "To() != null) {";
 		s += "\n\t\t\twhere += (where.trim().length() > 0 ) ? \" AND \" : \"\";";
 		s += "\n\t\t\twhere += \" " + m + "." + toCamelStart(n) + " <= ?\";";
-		s += "\n\t\t\tthis.addArg(buildArgTrimLower(f.get" + toCamelStart(n) + "To(), " + c + ".class));";
+		s += "\n\t\t\tthis.addArg(buildArgTrim(f.get" + toCamelStart(n) + "To(), " + c + ".class));";
 		s += "\n\t\t}";
 
 		return s;
@@ -153,7 +153,18 @@ public class UtilJavaStm {
 		s += "\n\t\tif (f.get" + toCamelStart(n) + "() != null) {";
 		s += "\n\t\t\twhere += (where.trim().length() > 0 ) ? \" AND \" : \"\";";
 		s += "\n\t\t\twhere += \" " + m + "." + toCamelStart(n) + " = ?\";";
-		s += "\n\t\t\tthis.addArg(buildArgTrimLower(f.get" + toCamelStart(n) + "(), " + c + ".class));";
+		s += "\n\t\t\tthis.addArg(buildArgTrim(f.get" + toCamelStart(n) + "(), " + c + ".class));";
+		s += "\n\t\t}";
+
+		return s;
+	}
+	
+	private static String buildEqualIdWhere(String m, String n) {
+		String s = "";
+		s += "\n\t\tif (f.get" + toCamelStart(n) + "() != null) {";
+		s += "\n\t\t\twhere += (where.trim().length() > 0 ) ? \" AND \" : \"\";";
+		s += "\n\t\t\twhere += \" " + m + "." + toCamelStart(n) + " = ?\";";
+		s += "\n\t\t\tthis.addArg(buildArgTrim(f.get" + toCamelStart(n) + "().getId(), " + "String.class));";
 		s += "\n\t\t}";
 
 		return s;
@@ -171,7 +182,7 @@ public class UtilJavaStm {
 				+ "))\" + translate + \") LIKE ?\";";
 		s += "\n\t\t\t\tthis.addArg(buildArgTrimLower(word.trim(), String.class));";
 		s += "\n\t\t\t}";
-		s += "\n\t}";
+		s += "\n\t\t}";
 
 		return s;
 	}

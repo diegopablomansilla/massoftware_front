@@ -80,6 +80,13 @@ public class MonedaCotizacionAnt extends Ant {
 		usuario.setRequired(true);
 		c.addAtt(usuario);
 
+		// -------- GRID
+
+		c.addAttGrid(cotizacionFecha);
+		c.addAttGrid(compra);
+		c.addAttGrid(venta);
+		c.addAttGrid(moneda);
+
 		// -------- SBX Args
 
 		// -------- Simple Args
@@ -88,6 +95,7 @@ public class MonedaCotizacionAnt extends Ant {
 		c.getLastArgument().setRequired(false);
 
 		c.addArgument(cotizacionFecha, true);
+		c.getLastArgument().setRange(true);
 		// c.getLastArgument().setRequired(false);
 
 		// -------- Order

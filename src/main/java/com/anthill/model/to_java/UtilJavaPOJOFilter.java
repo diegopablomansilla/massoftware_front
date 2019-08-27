@@ -436,6 +436,8 @@ public class UtilJavaPOJOFilter {
 			java += "\n\tprivate FBoolean " + att.getName() + "X";
 			// java += " = 0";
 
+		} else if(att.isSimple() == false){
+			java += "\n\tprivate " + att.getDataType().getNamePlural() + " " + att.getName() + "";
 		} else {
 			// java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique
 			// + */ ", " + readOnly + ", "
@@ -469,6 +471,15 @@ public class UtilJavaPOJOFilter {
 			java += "\n\t\treturn this." + att.getName() + "X;";
 			java += "\n\t}";
 
+		} else if(att.isSimple() == false){
+			
+			java += "\n\n\t// GET " + att.getLabel();
+			java += "\n\tpublic " + att.getDataType().getNamePlural() + " get"
+					+ att.getNameJavaUperCase() + "() {";
+			java += "\n\t\treturn this." + att.getName() + ";";
+			java += "\n\t}";
+			
+			
 		} else {
 
 			java += "\n\n\t// GET " + att.getLabel();
@@ -502,7 +513,15 @@ public class UtilJavaPOJOFilter {
 			java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null || " + att.getName()
 					+ ".trim().length() == 0) ? null : " + att.getName() + ".trim();";
 			java += "\n\t}";
+			
+		} else if(att.isSimple() == false){
 
+			java += "\n\n\t// SET " + att.getLabel();
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
+					+ att.getDataType().getNamePlural() + " " + att.getName() + "){";
+			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
+			java += "\n\t}";
+			
 		} else {
 
 			java += "\n\n\t// SET " + att.getLabel();

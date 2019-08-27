@@ -21,7 +21,7 @@ public class UI@NAME_PLURAL@Grid extends GridCustom<@NAME_PLURAL@> {
 		super(@NAME_PLURAL@.class, true, true, true, true);
 		this.filter = filter;
 		this.service = service;
-		laodItems();
+		//laodItems();
 	}
 
 	protected void addColumns() {
@@ -111,6 +111,9 @@ public class UI@NAME_PLURAL@Grid extends GridCustom<@NAME_PLURAL@> {
 	protected Integer countFromService() {
 
 		try {
+			
+			@REQUIRED_A@
+		
 			return service.count(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,6 +126,8 @@ public class UI@NAME_PLURAL@Grid extends GridCustom<@NAME_PLURAL@> {
 	protected List<@NAME_PLURAL@> findFromService(int offset, int limit, Integer orderBy, Boolean orderByDesc) {
 
 		try {
+		
+			@REQUIRED_B@
 
 			filter.setOffset(offset);
 			filter.setLimit(limit);

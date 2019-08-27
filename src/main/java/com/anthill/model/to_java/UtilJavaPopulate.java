@@ -208,8 +208,8 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "\t";
-				java += "obj.set" + toCamelStart(att.getName())
-						+ "(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + ")));";
+//				java += "obj.set" + toCamelStart(att.getName()) + "(new java.util.Date(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + ")));";
+				java += "obj.set" + toCamelStart(att.getName()) + "(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + "));";
 
 			} else if (att.isTimestamp()) {
 
@@ -236,7 +236,7 @@ public class UtilJavaPopulate {
 				java += "\t";
 				java += "\t";
 				java += "obj.set" + toCamelStart(att.getName())
-						+ "(new java.sql.Timestamp(UtilPopulate.getDateRandom(2000, 2019, " + att.isRequired() + ")));";
+						+ "(new java.sql.Timestamp(UtilPopulate.getTimestampRandom(2000, 2019, " + att.isRequired() + ")));";
 
 			} else if (att.isSimple() == false) {
 

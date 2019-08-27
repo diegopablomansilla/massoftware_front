@@ -21,6 +21,10 @@ public class DataTypeClazz extends DataType {
 	public String getNameJava() {		
 		return clazz.getName();
 	}
+	
+	public String getNamePlural() {
+		return clazz.getNamePlural();
+	}
 
 	@Override
 	public String getNameSQL() {

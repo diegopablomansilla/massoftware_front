@@ -39,36 +39,45 @@ public class EjercicioContableAnt extends Ant {
 		numero.setRequired(true);
 		numero.setUnique(true);
 		c.addAtt(numero);
-		
-		Att apertura = new Att("apertura", "Apertura");				
+
+		Att apertura = new Att("apertura", "Apertura");
 		apertura.setDataTypeDate();
 		apertura.setRequired(true);
 		c.addAtt(apertura);
-		
-		Att cierre = new Att("cierre", "Cierre");				
+
+		Att cierre = new Att("cierre", "Cierre");
 		cierre.setDataTypeDate();
 		cierre.setRequired(true);
 		c.addAtt(cierre);
-		
-		Att cerrado = new Att("cerrado", "Cerrado");				
+
+		Att cerrado = new Att("cerrado", "Cerrado");
 		cerrado.setDataTypeBoolean();
 		cerrado.setRequired(true);
 		c.addAtt(cerrado);
-		
-		Att cerradoModulos = new Att("cerradoModulos", "Cerrado módulos");				
+
+		Att cerradoModulos = new Att("cerradoModulos", "Cerrado módulos");
 		cerradoModulos.setDataTypeBoolean();
 		cerradoModulos.setRequired(true);
 		c.addAtt(cerradoModulos);
 
-		Att comentario = new Att("comentario", "Coemntario");				
+		Att comentario = new Att("comentario", "Coemntario");
 		comentario.setLength(null, 250);
 		c.addAtt(comentario);
+
+		// -------- GRID		
+
+		c.addAttGrid(numero);
+		c.addAttGrid(apertura);
+		c.addAttGrid(cierre);
+		c.addAttGrid(cerrado);
+		c.addAttGrid(cerradoModulos);
+//		c.addAttGrid(comentario);
 
 		// -------- SBX Args
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());		
+		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
 

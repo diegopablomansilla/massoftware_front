@@ -7,7 +7,7 @@ import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeInteger;
 
 public class SeguridadModuloAnt extends Ant {
-	
+
 	// SELECT [NO],[NAME] FROM [dbo].[SSECUR_DoorGroup]
 
 	public SeguridadModuloAnt(Anthill anthill) {
@@ -43,6 +43,11 @@ public class SeguridadModuloAnt extends Ant {
 		nombre.setUnique(true);
 		nombre.setLength(null, 50);
 		c.addAtt(nombre);
+
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
 
 		// -------- SBX Args
 

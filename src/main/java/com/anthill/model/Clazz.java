@@ -40,6 +40,16 @@ public class Clazz {
 	private List<Argument> argsSBX = new ArrayList<Argument>();
 	private Order orderDefault;
 
+	private boolean buildStm = true;
+
+	public boolean isBuildStm() {
+		return buildStm;
+	}
+
+	public void setBuildStm(boolean buildStm) {
+		this.buildStm = buildStm;
+	}
+
 	public Integer _index;
 
 	public String getNamePackage() {
@@ -118,7 +128,7 @@ public class Clazz {
 	public void setAttsGrid(List<Att> attsGrid) {
 		this.attsGrid = attsGrid;
 	}
-	
+
 	public boolean addAttGrid(Att e) {
 		e.setClazz(this);
 		return attsGrid.add(e);
@@ -222,31 +232,31 @@ public class Clazz {
 	public String toJava() {
 		return UtilJavaPOJO.toJava(this);
 	}
-	
+
 	public String toJavaGrid() {
-		
-		String nameTmp = this.getName();				
+
+		String nameTmp = this.getName();
 		List<Att> attsTmp = this.getAtts();
-		
+
 		this.setName(this.getNamePlural());
-		this.setAtts(this.getAttsGrid());		
-		
+		this.setAtts(this.getAttsGrid());
+
 		String src = UtilJavaPOJO.toJava(this);
-		
+
 		this.setName(nameTmp);
 		this.setAtts(attsTmp);
-		
+
 		return src;
 	}
 
 	public String toJavaFilter() {
 		return UtilJavaPOJOFilter.toJavaFilter(this);
 	}
-	
+
 	public String toJavaStm() throws IOException {
 		return UtilJavaStm.toJavaStm(this);
 	}
-	
+
 	public String toJavaDao() throws IOException {
 		return UtilJavaDao.toJavaDao(this);
 	}
@@ -258,7 +268,7 @@ public class Clazz {
 	public String toJavaUIGrid() throws IOException {
 		return UtilJavaUIGrid.toJava(this);
 	}
-	
+
 	public String toJavaUIGridView() throws IOException {
 		return UtilJavaUIGridView.toJava(this);
 	}
