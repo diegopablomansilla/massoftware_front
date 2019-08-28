@@ -216,10 +216,22 @@ public class UtilJavaPOJOFilter {
 			if (arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
 
-				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
-						+ dt.getClazz().getName() + ";";
-				if (java.contains(java1) == false) {
+				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getNamePlural() + ";";
+				if (java.contains(java1) == false && clazz.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
 					java += java1;
+				}
+			} else {
+				
+				if(arg.isDate()) {
+					String java1 = "\nimport java.time.LocalDate;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}	
+				} else if(arg.isBigDecimal()) {
+					String java1 = "\nimport java.math.BigDecimal;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}	
 				}
 			}
 		}
@@ -232,42 +244,42 @@ public class UtilJavaPOJOFilter {
 
 		java += "\n\n\t// " + att.getLabel();
 
-		String label = "label = \"" + att.getLabel() + "\"";
-		String labelError = "labelError = \"\"";
-		// String unique = "unique = " + att.isUnique();
-		String readOnly = "readOnly = " + att.isReadOnlyGUI();
-		String required = "required = " + att.isRequired();
-		String columns = "columns = 20f";
-		String maxLength = "maxLength = " + att.getMaxLength();
-		String minValue = "minValue = \"" + "" + "\"";
-		String maxValue = "maxValue = \"" + "" + "\"";
-		String mask = "mask = \"\"";
+//		String label = "label = \"" + att.getLabel() + "\"";
+//		String labelError = "labelError = \"\"";
+//		// String unique = "unique = " + att.isUnique();
+//		String readOnly = "readOnly = " + att.isReadOnlyGUI();
+//		String required = "required = " + att.isRequired();
+//		String columns = "columns = 20f";
+//		String maxLength = "maxLength = " + att.getMaxLength();
+//		String minValue = "minValue = \"" + "" + "\"";
+//		String maxValue = "maxValue = \"" + "" + "\"";
+//		String mask = "mask = \"\"";
 
-		if (att.getLabelError() != null) {
-			labelError = "labelError = \"" + att.getLabelError() + "\"";
-		}
-
-		if (att.getColumns() != null) {
-			columns = "columns = " + att.getColumns() + "f";
-		}
-
-		if (att.getMask() != null) {
-			mask = "mask = \"" + att.getMask() + "\"";
-		}
+//		if (att.getLabelError() != null) {
+//			labelError = "labelError = \"" + att.getLabelError() + "\"";
+//		}
+//
+//		if (att.getColumns() != null) {
+//			columns = "columns = " + att.getColumns() + "f";
+//		}
+//
+//		if (att.getMask() != null) {
+//			mask = "mask = \"" + att.getMask() + "\"";
+//		}
 
 		if (att.isNumber()) {
 			if (att.isInteger()) {
 				DataTypeInteger dt = (DataTypeInteger) att.getDataType();
-				if (dt.getMinValue() != null) {
-					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-				} else {
-					minValue = "minValue = \"" + Integer.MIN_VALUE + "\"";
-				}
-				if (dt.getMaxValue() != null) {
-					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-				} else {
-					maxValue = "maxValue = \"" + Integer.MAX_VALUE + "\"";
-				}
+//				if (dt.getMinValue() != null) {
+//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
+//				} else {
+//					minValue = "minValue = \"" + Integer.MIN_VALUE + "\"";
+//				}
+//				if (dt.getMaxValue() != null) {
+//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+//				} else {
+//					maxValue = "maxValue = \"" + Integer.MAX_VALUE + "\"";
+//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -289,22 +301,22 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-					maxLength = "maxLength = " + length;
+//					maxLength = "maxLength = " + length;
 
 				}
 
 			} else if (att.isLong()) {
 				DataTypeLong dt = (DataTypeLong) att.getDataType();
-				if (dt.getMinValue() != null) {
-					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-				} else {
-					minValue = "minValue = \"" + Long.MIN_VALUE + "\"";
-				}
-				if (dt.getMaxValue() != null) {
-					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-				} else {
-					maxValue = "maxValue = \"" + Long.MAX_VALUE + "\"";
-				}
+//				if (dt.getMinValue() != null) {
+//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
+//				} else {
+//					minValue = "minValue = \"" + Long.MIN_VALUE + "\"";
+//				}
+//				if (dt.getMaxValue() != null) {
+//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+//				} else {
+//					maxValue = "maxValue = \"" + Long.MAX_VALUE + "\"";
+//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -326,22 +338,22 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-					maxLength = "maxLength = " + length;
+//					maxLength = "maxLength = " + length;
 
 				}
 
 			} else if (att.isDouble()) {
 				DataTypeDouble dt = (DataTypeDouble) att.getDataType();
-				if (dt.getMinValue() != null) {
-					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-				} else {
-					minValue = "minValue = \"" + Double.MIN_VALUE + "\"";
-				}
-				if (dt.getMaxValue() != null) {
-					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-				} else {
-					maxValue = "maxValue = \"" + Double.MAX_VALUE + "\"";
-				}
+//				if (dt.getMinValue() != null) {
+//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
+//				} else {
+//					minValue = "minValue = \"" + Double.MIN_VALUE + "\"";
+//				}
+//				if (dt.getMaxValue() != null) {
+//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+//				} else {
+//					maxValue = "maxValue = \"" + Double.MAX_VALUE + "\"";
+//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -363,18 +375,18 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-					maxLength = "maxLength = " + length;
+//					maxLength = "maxLength = " + length;
 
 				}
 
 			} else if (att.isBigDecimal()) {
 				DataTypeBigDecimal dt = (DataTypeBigDecimal) att.getDataType();
-				if (dt.getMinValue() != null) {
-					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-				}
-				if (dt.getMaxValue() != null) {
-					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-				}
+//				if (dt.getMinValue() != null) {
+//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
+//				}
+//				if (dt.getMaxValue() != null) {
+//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -391,31 +403,31 @@ public class UtilJavaPOJOFilter {
 					}
 
 					if (length > 0) {
-						maxLength = "maxLength = " + length;
+//						maxLength = "maxLength = " + length;
 					}
 
 				}
 
 			}
 		} else if (att.isString()) {
-			minValue = "minValue = \"" + "" + "\"";
-			maxValue = "maxValue = \"" + "" + "\"";
+//			minValue = "minValue = \"" + "" + "\"";
+//			maxValue = "maxValue = \"" + "" + "\"";
 		} else if (att.isBoolean()) {
-			minValue = "minValue = \"" + "" + "\"";
-			maxValue = "maxValue = \"" + "" + "\"";
-			maxLength = "maxLength = " + -1;
+//			minValue = "minValue = \"" + "" + "\"";
+//			maxValue = "maxValue = \"" + "" + "\"";
+//			maxLength = "maxLength = " + -1;
 		} else if (att.isTimestamp()) {
-			minValue = "minValue = \"" + "" + "\"";
-			maxValue = "maxValue = \"" + "" + "\"";
-			maxLength = "maxLength = " + -1;
+//			minValue = "minValue = \"" + "" + "\"";
+//			maxValue = "maxValue = \"" + "" + "\"";
+//			maxLength = "maxLength = " + -1;
 		} else if (att.isDate()) {
-			minValue = "minValue = \"" + "" + "\"";
-			maxValue = "maxValue = \"" + "" + "\"";
-			maxLength = "maxLength = " + -1;
+//			minValue = "minValue = \"" + "" + "\"";
+//			maxValue = "maxValue = \"" + "" + "\"";
+//			maxLength = "maxLength = " + -1;
 		} else if (att.isSimple() == false) {
-			minValue = "minValue = \"" + "" + "\"";
-			maxValue = "maxValue = \"" + "" + "\"";
-			maxLength = "maxLength = " + -1;
+//			minValue = "minValue = \"" + "" + "\"";
+//			maxValue = "maxValue = \"" + "" + "\"";
+//			maxLength = "maxLength = " + -1;
 		}
 
 		if (att.isBoolean()) {
@@ -444,7 +456,7 @@ public class UtilJavaPOJOFilter {
 			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
 			// maxValue + ", " + mask
 			// + ")";
-			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "";
 		}
 
 		java += ";";
@@ -483,7 +495,7 @@ public class UtilJavaPOJOFilter {
 		} else {
 
 			java += "\n\n\t// GET " + att.getLabel();
-			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " get"
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " get"
 					+ att.getNameJavaUperCase() + "() {";
 			java += "\n\t\treturn this." + att.getName() + ";";
 			java += "\n\t}";
@@ -526,7 +538,7 @@ public class UtilJavaPOJOFilter {
 
 			java += "\n\n\t// SET " + att.getLabel();
 			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-					+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "){";
+					+ att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "){";
 			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
 			java += "\n\t}";
 		}

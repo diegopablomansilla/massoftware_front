@@ -3,7 +3,6 @@ package com.anthill.model.to_java;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.anthill.model.Argument;
 import com.anthill.model.Att;
 import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeBigDecimal;
@@ -247,7 +246,7 @@ public class UtilJavaPOJO {
 			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
 			// maxValue + ", " + mask
 			// + ")";
-			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + "";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "";
 
 			if (att.isBoolean()) {
 				// java += " = false";
@@ -295,7 +294,7 @@ public class UtilJavaPOJO {
 			}
 
 			java += "\n\n\t// GET " + att.getLabel();
-			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "") + " get"
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " get"
 					+ att.getNameJavaUperCase() + "() {";
 
 			if (att.isSimple()) {
@@ -311,7 +310,7 @@ public class UtilJavaPOJO {
 
 			java += "\n\n\t// SET " + att.getLabel();
 			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-					+ att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + " ){";
+					+ att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + " ){";
 
 			if (att.isBoolean()) {
 				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null) ? false : " + att.getName()
@@ -364,6 +363,20 @@ public class UtilJavaPOJO {
 				java += "\nimport com.massoftware.service." + dataTypeClazz.getClazz().getNamePackage() + "."
 						+ dataTypeClazz.getClazz().getName() + ";";
 
+			} else {
+				
+				if(att.isDate()) {
+					String java1 = "\nimport java.time.LocalDate;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}	
+				} else if(att.isBigDecimal()) {
+					String java1 = "\nimport java.math.BigDecimal;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}	
+				}
+				
 			}
 		}
 

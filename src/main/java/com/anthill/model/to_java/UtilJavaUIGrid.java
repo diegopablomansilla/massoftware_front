@@ -43,6 +43,7 @@ public class UtilJavaUIGrid {
 		source = source.replaceAll("@NAME_VIEW@", clazzX.getNamePlural().toLowerCase());
 		source = source.replaceAll("@NAME@", clazzX.getName());
 		source = source.replaceAll("@LABEL@", clazzX.getSingular());
+		source = source.replaceAll("@DECLARE_IMPORTS@", buildImports(clazzX));
 
 		String atts = "";
 		for (int i = 0; i < clazzX.getAttsGrid().size(); i++) {
@@ -227,4 +228,117 @@ public class UtilJavaUIGrid {
 		return s;
 	}
 
+	private static String buildImports(Clazz clazzX) {
+		String java = "";
+
+		for (int i = 0; i < clazzX.getAtts().size(); i++) {
+
+			Att arg = clazzX.getAtts().get(i);
+
+			String sc = "\n";
+
+			if (arg.isNumber()) {
+				
+//				String im = "import com.vaadin.flow.component.textfield.NumberField;";
+//				
+//				if(java.contains(im) == false) {
+//					java += sc + im;	
+//				}
+//				
+//				if(arg.isInteger()) {
+//					im = "import com.massoftware.ui.util.DoubleToIntegerConverter;";
+//					if(java.contains(im) == false) {
+//						java += sc + im;	
+//					}					
+//				}											
+				
+			} else if (arg.isDate()) {
+				
+//				String im = "import com.vaadin.flow.component.datepicker.DatePicker;";
+//
+//				if(java.contains(im) == false) {
+//					java += sc + im;	
+//				}
+
+			} else if (arg.isTimestamp()) {
+
+//				if (arg.getRange() == false) {
+//
+//				} else {
+//
+//				}
+
+			} else if (arg.isString()) {
+				
+//				String im = "import com.vaadin.flow.component.textfield.TextField;";				
+//				
+//				if(java.contains(im) == false) {
+//					java += sc + im;
+//				}
+
+			} else if (arg.isBoolean()) {
+				
+				String im = "import com.massoftware.ui.components.UIUtils;";
+				
+				if(java.contains(im) == false) {
+					java += sc + im;
+				}
+				
+				im = "import com.vaadin.flow.data.renderer.ComponentRenderer;";
+				
+				if(java.contains(im) == false) {
+					java += sc + im;
+				}
+				
+				im = "import com.vaadin.flow.component.icon.VaadinIcon;";
+				
+				if(java.contains(im) == false) {
+					java += sc + im;
+				}
+				
+				im = "import com.vaadin.flow.component.Component;";
+				
+				if(java.contains(im) == false) {
+					java += sc + im;
+				}
+
+			} else if (arg.isSimple() == false) {
+//				String im = "import com.vaadin.flow.component.combobox.ComboBox;";				
+//				
+//				if(java.contains(im) == false) {
+//					java += sc + im;
+//				}
+//				
+//				im = "import java.util.List;";				
+//				
+//				if(java.contains(im) == false) {
+//					java += sc + im;
+//				}
+//				
+//				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
+//
+//				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getNamePlural() + ";";
+//				if (java.contains(java1) == false && clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+//					java += java1;
+//				}
+//				
+//				java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getNamePlural() + "Filtro;";
+//				if (java.contains(java1) == false && clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+//					java += java1;
+//				}
+//				
+//				java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getName() + "Service;";
+//				if (java.contains(java1) == false && clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+//					java += java1;
+//				}
+				
+				
+			}
+		}
+
+		java += "\n";
+
+		return java;
+	}
+	
 }

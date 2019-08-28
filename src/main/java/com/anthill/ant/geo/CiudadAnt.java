@@ -75,18 +75,20 @@ public class CiudadAnt extends Ant {
 		pais.setDataTypeClazz(paisAnt.build());
 		pais.setRequired(true);
 		// provincia.addAtt(pais);
+		
+		
+		// -------- GRID
+		
+		Att nombrePais = new Att("nombrePais", "Pais");		
+		Att nombreProvincia = new Att("nombreProvincia", "Provincia");
+		
+		
+		c.addAttGrid(nombrePais);
+		c.addAttGrid(nombreProvincia);
+		c.addAttGrid(numero);		
+		c.addAttGrid(nombre);
 
 		// -------- SBX Args
-
-		c.addArgument(numero, true);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());
-
-		c.addArgument(nombre);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());
-
-		// -------- Simple Args
 
 		c.addArgument(pais);
 		c.getLastArgument().setRequired(true);
@@ -94,6 +96,15 @@ public class CiudadAnt extends Ant {
 
 		c.addArgument(provincia);
 		c.getLastArgument().setRequired(true);
+		
+		c.addArgument(numero, true);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+
+		c.addArgument(nombre);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+		
 
 		// -------- Order
 
@@ -102,6 +113,12 @@ public class CiudadAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", Pais.nombre AS nombrePais, Provincia.nombre AS nombreProvincia, Provincia.numero, Provincia.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.Provincia ON Provincia.id = Ciudad.provincia "
+						+ " LEFT JOIN massoftware.Pais ON Pais.id = Provincia.pais");
+		
+		c.setBuildStm(false);
 
 		return c;
 

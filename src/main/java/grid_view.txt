@@ -150,6 +150,7 @@ public class UI@NAME_PLURAL@View extends VerticalLayout {
 			search();
 		});
 */
+		//-------------------------------------------------------------------
 
 		// Button New ítem
 		newBTN = new Button();
@@ -173,6 +174,7 @@ public class UI@NAME_PLURAL@View extends VerticalLayout {
 		//filterRow1.add(newBTN, numeroFrom, numeroTo, vigente, nombre, findBTN);
 		filterRow1.add(newBTN@ATTS@, findBTN);
 
+		//-------------------------------------------------------------------
 	}
 
 	private void buildGrid() throws Exception {

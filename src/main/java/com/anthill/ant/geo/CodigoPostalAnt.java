@@ -22,17 +22,19 @@ public class CodigoPostalAnt extends Ant {
 
 	public Clazz build() throws Exception {
 
-//		SELECT  A.CODPOSTAL, A.SECUENCIA, A.CIUDADCALLE, A.CALLENUMERO, A.CIUDAD, A.NROPAIS, 
-//		A.NROPROVINCIA, B.NROPAIS, B.NROPROVINCIA, B.DESCRIPCION, B.ABREVIATURA, C.NROPAIS, C.DESCRIPCION, C.ABREVIATURA 
-//		FROM  { 
-//		oj CodPostal A 
-//		LEFT OUTER JOIN Provincia B 
-//		ON  A.NROPAIS= B.NROPAIS AND  A.NROPROVINCIA= B.NROPROVINCIA 
-//		LEFT OUTER JOIN Pais C 
-//		ON  A.NROPAIS= C.NROPAIS 
-//		}  
-//		WHERE (  A.NROPAIS = 1 )  
-//		ORDER BY  A.NROPAIS,  A.CODPOSTAL,  A.SECUENCIA
+		// SELECT A.CODPOSTAL, A.SECUENCIA, A.CIUDADCALLE, A.CALLENUMERO, A.CIUDAD,
+		// A.NROPAIS,
+		// A.NROPROVINCIA, B.NROPAIS, B.NROPROVINCIA, B.DESCRIPCION, B.ABREVIATURA,
+		// C.NROPAIS, C.DESCRIPCION, C.ABREVIATURA
+		// FROM {
+		// oj CodPostal A
+		// LEFT OUTER JOIN Provincia B
+		// ON A.NROPAIS= B.NROPAIS AND A.NROPROVINCIA= B.NROPROVINCIA
+		// LEFT OUTER JOIN Pais C
+		// ON A.NROPAIS= C.NROPAIS
+		// }
+		// WHERE ( A.NROPAIS = 1 )
+		// ORDER BY A.NROPAIS, A.CODPOSTAL, A.SECUENCIA
 
 		// -------- Clazz
 
@@ -48,12 +50,12 @@ public class CodigoPostalAnt extends Ant {
 		c.setPluralPre("los códigos postales");
 
 		// -------- Atts
-		
+
 		Att codigo = new Att("codigo", "Código");
 		codigo.setRequired(true);
 		codigo.setUnique(true);
 		codigo.setLength(null, 12);
-//		codigo.setColumns((float) 6);
+		// codigo.setColumns((float) 6);
 		c.addAtt(codigo);
 
 		Att numero = new Att("numero", "Secuencia");
@@ -76,33 +78,36 @@ public class CodigoPostalAnt extends Ant {
 		// departamento.setColumns((float) 5);
 		c.addAtt(numeroCalle);
 
-
 		Att ciudad = new Att("ciudad", "Ciudad");
 		ciudad.setDataTypeClazz(ciudadAnt.build());
 		ciudad.setRequired(true);
 		c.addAtt(ciudad);
-		
+
 		Att provincia = new Att("provincia", "Provincia");
 		provincia.setDataTypeClazz(provinciaAnt.build());
 		provincia.setRequired(true);
-//		c.addAtt(provincia);
+		// c.addAtt(provincia);
 
 		Att pais = new Att("pais", "País");
 		pais.setDataTypeClazz(paisAnt.build());
 		pais.setRequired(true);
 		// provincia.addAtt(pais);
 
+		// -------- GRID
+
+		Att nombrePais = new Att("nombrePais", "Pais");
+		Att nombreProvincia = new Att("nombreProvincia", "Provincia");
+		Att nombreCiudad = new Att("nombreCiudad", "Ciudad");
+
+		c.addAttGrid(nombrePais);
+		c.addAttGrid(nombreProvincia);
+		c.addAttGrid(nombreCiudad);
+		c.addAttGrid(codigo);
+		c.addAttGrid(numero);
+		c.addAttGrid(numeroCalle);
+		c.addAttGrid(nombreCalle);
+
 		// -------- SBX Args
-
-		c.addArgument(codigo, Argument.EQUALS_IGNORE_CASE);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());
-		
-		c.addArgument(numero, true);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());		
-
-		// -------- Simple Args
 
 		c.addArgument(pais);
 		c.getLastArgument().setRequired(true);
@@ -111,17 +116,37 @@ public class CodigoPostalAnt extends Ant {
 		c.addArgument(provincia);
 		c.getLastArgument().setRequired(true);
 		c.getLastArgument().setOnlyVisual(true);
-		
+
 		c.addArgument(ciudad);
-		c.getLastArgument().setRequired(true);		
+		c.getLastArgument().setRequired(true);
+
+		c.addArgument(codigo, Argument.EQUALS_IGNORE_CASE);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+
+		c.addArgument(numero, true);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+		
+		c.addArgument(nombreCalle);
+		c.getLastArgument().setRequired(false);
+
+		// -------- Simple Args
 
 		// -------- Order
 
 		c.addOrderAllAtts();
 
-//		c.getOrderDefault().setDesc(true);
+		// c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+
+		c.setStmAtts(
+				", Pais.nombre AS nombrePais, Provincia.nombre AS nombreProvincia, Ciudad.nombre AS nombreCiudad, CodigoPostal.codigo, CodigoPostal.numero, CodigoPostal.numeroCalle, CodigoPostal.nombreCalle");
+		c.setStmJoins("  LEFT JOIN massoftware.Ciudad ON Ciudad.id = CodigoPostal.ciudad LEFT JOIN massoftware.Provincia ON Provincia.id = Ciudad.provincia "
+				+ " LEFT JOIN massoftware.Pais ON Pais.id = Provincia.pais");
+
+		 c.setBuildStm(false);
 
 		return c;
 

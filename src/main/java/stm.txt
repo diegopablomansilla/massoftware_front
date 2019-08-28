@@ -12,11 +12,14 @@ public class @NAME_PLURAL@Stm extends StatementParam {
 					+ @NAME_PLURAL@Filtro.class.getCanonicalName());
 		}
 		
-		@REQUIRED@
+		if(f.getUnlimited() == false) {
+			@REQUIRED@
+		}
 
 		String atts = " COUNT(*)::INTEGER ";
 		String orderBy = "";
 		String page = "";
+		String join = "";
 
 		if (count == false) {
 
@@ -26,11 +29,13 @@ public class @NAME_PLURAL@Stm extends StatementParam {
 
 			if (f.getUnlimited() == false) {
 				page = " LIMIT " + f.getLimit() + " OFFSET " + f.getOffset();
-			}
+			}						
 
 		}
+		
+		join += "@JOINS@";
 
-		String sql = "SELECT  " + atts + " FROM massoftware.@NAME@ " + buildWhere(f) + orderBy + page;
+		String sql = "SELECT  " + atts + " FROM massoftware.@NAME@ " + join + buildWhere(f) + orderBy + page;
 
 		this.setSql(sql);
 
@@ -53,13 +58,6 @@ public class @NAME_PLURAL@Stm extends StatementParam {
 		return where;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private Object buildArgTrimLower(Object arg, Class c) {
-		if (c == String.class) {
-			return (arg == null || arg.toString().trim().isEmpty()) ? c
-					: "%" + arg.toString().trim().toLowerCase() + "%";
-		}
-		return (arg == null || arg.toString().trim().isEmpty()) ? c : arg;
-	}
+	
 
 }

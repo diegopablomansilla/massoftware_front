@@ -81,23 +81,30 @@ public class ProvinciaAnt extends Ant {
 		pais.setRequired(true);
 		c.addAtt(pais);
 
+		// -------- GRID
+
+		Att nombrePais = new Att("nombrePais", "Pais");		
+		
+		c.addAttGrid(nombrePais);
+		c.addAttGrid(numero);
+		c.addAttGrid(abreviatura);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
+
+		c.addArgument(pais);
+		c.getLastArgument().setRequired(true);
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
-		c.addArgument(nombre);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());
-
-		// -------- Simple Args
-
 		c.addArgument(abreviatura);
 		c.getLastArgument().setRequired(false);
 
-		c.addArgument(pais);
-		// provincia.getLastArgument().setRequired(true);
+		c.addArgument(nombre);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Order
 
@@ -106,6 +113,9 @@ public class ProvinciaAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", Pais.nombre AS nombrePais, Provincia.numero, Provincia.abreviatura, Provincia.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.Pais ON Pais.id = Provincia.pais");
 
 		return c;
 

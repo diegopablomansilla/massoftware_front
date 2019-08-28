@@ -78,6 +78,12 @@ public class Att {
 		((DataTypeLong) this.dataType).setMinValue(minValue);
 		((DataTypeLong) this.dataType).setMaxValue(maxValue);
 	}
+	
+	public void setDataTypeDouble(Double minValue, Double maxValue) {
+		this.dataType = new DataTypeDouble();
+		((DataTypeDouble) this.dataType).setMinValue(minValue);
+		((DataTypeDouble) this.dataType).setMaxValue(maxValue);
+	}
 
 	public void setDataTypeBigDecimal(BigDecimal minValue, BigDecimal maxValue, Integer precision, Integer scale) {
 		this.dataType = new DataTypeBigDecimal();

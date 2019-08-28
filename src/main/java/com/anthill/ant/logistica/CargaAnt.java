@@ -52,8 +52,19 @@ public class CargaAnt extends Ant {
 		transporte.setRequired(true);
 		c.addAtt(transporte);
 
+		// -------- GRID
+
+		Att nombreTransporte = new Att("nombreTransporte", "Transporte");
+
+		c.addAttGrid(nombreTransporte);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
 
+		c.addArgument(transporte);
+		c.getLastArgument().setRequired(true);
+		
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
@@ -71,6 +82,9 @@ public class CargaAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", Transporte.nombre AS nombreTransporte, Carga.numero, Carga.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.Transporte ON Transporte.id = Carga.transporte");
 
 		return c;
 

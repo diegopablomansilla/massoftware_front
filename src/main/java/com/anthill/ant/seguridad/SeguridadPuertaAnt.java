@@ -62,8 +62,7 @@ public class SeguridadPuertaAnt extends Ant {
 
 		// -------- GRID
 
-		Att nombreModulo = new Att("nombreModulo", "Nombre módulo");
-		nombreModulo.setLength(null, 50);
+		Att nombreModulo = new Att("nombreModulo", "Nombre módulo");		
 
 		c.addAttGrid(nombreModulo);
 		c.addAttGrid(numero);
@@ -92,7 +91,10 @@ public class SeguridadPuertaAnt extends Ant {
 
 		// ------------------------------------------------
 
-		c.setBuildStm(false);
+		c.setStmAtts(", SeguridadModulo.nombre AS nombreModulo, SeguridadPuerta.numero, SeguridadPuerta.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.SeguridadModulo ON SeguridadModulo.id = SeguridadPuerta.seguridadModulo");
+		
+//		c.setBuildStm(false);
 
 		// ------------------------------------------------
 

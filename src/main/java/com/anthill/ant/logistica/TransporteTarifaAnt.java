@@ -47,11 +47,7 @@ public class TransporteTarifaAnt extends Ant {
 
 		// -------- Atts
 
-		Att transporte = new Att("transporte", "Transporte");
-		transporte.setDataTypeClazz(transporteAnt.build());
-		transporte.setRequired(true);
-		transporte.setUnique(false);
-//		c.addAtt(transporte);
+		
 
 		Att numero = new Att("numero", "Nº opción");
 		numero.setDataTypeInteger(1, null);
@@ -73,32 +69,32 @@ public class TransporteTarifaAnt extends Ant {
 		Att precioFlete = new Att("precioFlete", "Precio flete");
 		precioFlete.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioFlete.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioFlete.setRequired(true);		
+		precioFlete.setRequired(true);
 		c.addAtt(precioFlete);
 
 		Att precioUnidadFacturacion = new Att("precioUnidadFacturacion", "Precio unidad facturación");
 		precioUnidadFacturacion.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13,
 				5);
 		((DataTypeBigDecimal) precioUnidadFacturacion.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioUnidadFacturacion.setRequired(false);		
+		precioUnidadFacturacion.setRequired(false);
 		c.addAtt(precioUnidadFacturacion);
 
 		Att precioUnidadStock = new Att("precioUnidadStock", "Precio unidad stock");
 		precioUnidadStock.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioUnidadStock.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioUnidadStock.setRequired(false);		
+		precioUnidadStock.setRequired(false);
 		c.addAtt(precioUnidadStock);
 
 		Att precioBultos = new Att("precioBultos", "Precio bultos");
 		precioBultos.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) precioBultos.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		precioBultos.setRequired(false);		
+		precioBultos.setRequired(false);
 		c.addAtt(precioBultos);
 
 		Att importeMinimoEntrega = new Att("importeMinimoEntrega", "Importe mínimo por entrega");
 		importeMinimoEntrega.setDataTypeBigDecimal(new BigDecimal("-9999.9999"), new BigDecimal("99999.9999"), 13, 5);
 		((DataTypeBigDecimal) importeMinimoEntrega.getDataType()).setDefValueInsert(new BigDecimal("0"));
-		importeMinimoEntrega.setRequired(false);		
+		importeMinimoEntrega.setRequired(false);
 		c.addAtt(importeMinimoEntrega);
 
 		Att importeMinimoCarga = new Att("importeMinimoCarga", "Importe mínimo por carga");
@@ -107,11 +103,36 @@ public class TransporteTarifaAnt extends Ant {
 		importeMinimoCarga.setRequired(false);
 		c.addAtt(importeMinimoCarga);
 
+		// -------- GRID
+
+		Att nombreTransporte = new Att("nombreTransporte", "Transporte");
+		Att numeroCarga = new Att("numeroCarga", "Nº Carga");
+		numeroCarga.setDataTypeInteger(1, null);
+		Att nombreCarga = new Att("nombreCarga", "Carga");
+		Att nombreCiudad = new Att("nombreCiudad", "Ciudad");
+
+		c.addAttGrid(nombreTransporte);
+		c.addAttGrid(numeroCarga);
+		c.addAttGrid(nombreCarga);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombreCiudad);
+		c.addAttGrid(precioFlete);
+		c.addAttGrid(precioUnidadFacturacion);
+		c.addAttGrid(precioUnidadStock);
+		c.addAttGrid(precioBultos);
+		c.addAttGrid(importeMinimoEntrega);
+
 		// -------- SBX Args
 
-		c.addArgument(transporte, true);
+		Att transporte = new Att("transporte", "Transporte");		
+		transporte.setDataTypeClazz(transporteAnt.build());
+		transporte.setRequired(true);
+//		transporte.setUnique(false);
+		// c.addAtt(transporte);
+		
+		c.addArgument(transporte);
 		c.getLastArgument().setRequired(true);
-		c.getLastArgument().setOnlyVisual(true);
+//		c.getLastArgument().setOnlyVisual(true);
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
@@ -119,12 +140,19 @@ public class TransporteTarifaAnt extends Ant {
 		// -------- Order
 
 		c.addOrderAllAtts();
-		
+
 		c.setOrderDefault(new Order(numero));
 
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", Transporte.nombre AS nombreTransporte, Carga.numero AS numeroCarga, Carga.nombre AS nombreCarga, TransporteTarifa.numero, Ciudad.nombre AS nombreCiudad, TransporteTarifa.precioFlete, TransporteTarifa.precioUnidadFacturacion, TransporteTarifa.precioUnidadStock, TransporteTarifa.precioBultos, TransporteTarifa.importeMinimoEntrega");
+		c.setStmJoins(" LEFT JOIN massoftware.Carga ON Carga.id = TransporteTarifa.carga"
+				+ " LEFT JOIN massoftware.Transporte ON Transporte.id = Carga.transporte"
+				+ " LEFT JOIN massoftware.Ciudad ON Ciudad.id = TransporteTarifa.ciudad");
+		
+		c.setBuildStm(false);
 
 		return c;
 

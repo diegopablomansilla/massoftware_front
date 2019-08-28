@@ -40,6 +40,9 @@ public class Clazz {
 	private List<Argument> argsSBX = new ArrayList<Argument>();
 	private Order orderDefault;
 
+	private String stmAtts;
+	private String stmJoins;
+
 	private boolean buildStm = true;
 
 	public boolean isBuildStm() {
@@ -279,6 +282,22 @@ public class Clazz {
 
 	public String toPopulateJava() {
 		return UtilJavaPopulate.toPopulateJava(this);
+	}
+
+	public String getStmAtts() {
+		return stmAtts;
+	}
+
+	public void setStmAtts(String stmAtts) {
+		this.stmAtts = stmAtts;
+	}
+
+	public String getStmJoins() {
+		return stmJoins;
+	}
+
+	public void setStmJoins(String stmJoins) {
+		this.stmJoins = stmJoins;
 	}
 
 	public String toSQL() {

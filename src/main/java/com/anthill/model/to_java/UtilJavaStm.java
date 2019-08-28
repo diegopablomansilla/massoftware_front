@@ -42,15 +42,21 @@ public class UtilJavaStm {
 		source = source.replaceAll("@NAME@", clazzX.getName());
 
 		String atts = "";
-		for (int i = 0; i < clazzX.getAttsGrid().size(); i++) {
-//			if (i == 0) {
-//				atts += clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
-//			} else {
-//				atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
-//			}
-			atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
+		String joins = "";
+		
+		if(clazzX.getStmAtts() != null) {
+			atts = clazzX.getStmAtts();
+		} else {
+			for (int i = 0; i < clazzX.getAttsGrid().size(); i++) {
+				atts += ", " + clazzX.getName() + "." + clazzX.getAttsGrid().get(i).getName();
+			}	
 		}
-
+		
+		if(clazzX.getStmJoins() != null) {
+			joins = clazzX.getStmJoins();
+		}
+		
+		source = source.replaceAll("@JOINS@", joins);
 		source = source.replaceAll("@ATTS@", atts);
 		source = source.replaceAll("@WHEEW@", buildWhere(clazzX));
 		source = source.replaceAll("@REQUIRED@", buildCheck(clazzX));
@@ -190,11 +196,11 @@ public class UtilJavaStm {
 	private static String buildRequired(String m, String n) {
 		String s = "";
 
-		s += "\n\t\tif (f.get" + toCamelStart(n) + "() == null || f.get" + toCamelStart(n)
+		s += "\n\t\t\tif (f.get" + toCamelStart(n) + "() == null || f.get" + toCamelStart(n)
 				+ "().toString().trim().isEmpty()) {";
-		s += "\n\t\t\tthrow new IllegalArgumentException(\"QUERY: Se esperaba un valor para el campo \" + " + m
+		s += "\n\t\t\t\tthrow new IllegalArgumentException(\"QUERY: Se esperaba un valor para el campo \" + " + m
 				+ "Filtro.class.getCanonicalName() + \"." + n + " para filtrar la consulta\");";
-		s += "\n\t\t}";
+		s += "\n\t\t\t}";
 
 		return s;
 	}
@@ -210,7 +216,7 @@ public class UtilJavaStm {
 				continue;
 			}
 
-			String sc = "\n\t";
+			String sc = "\n\t\t\t";
 
 			if (arg.isNumber()) {
 

@@ -10,7 +10,7 @@ class DataTypeString extends DataType {
 
 	@Override
 	public String getNameSQL() {
-		if(maxLength > 0) {
+		if(maxLength != null && maxLength > 0) {
 			return "VARCHAR(" + maxLength + ")";
 		}
 		return "VARCHAR";

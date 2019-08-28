@@ -48,14 +48,23 @@ public class ZonaAnt extends Ant {
 		c.addAtt(nombre);
 
 		Att bonificacion = new Att("bonificacion", "Bonificación");
-		bonificacion.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("99999.9999"), 13, 5);
+//		bonificacion.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("99999.9999"), 13, 5);
+		bonificacion.setDataTypeDouble(0.0, 99999.9999);
 		bonificacion.setRequired(false);
 		c.addAtt(bonificacion);
 
 		Att recargo = new Att("recargo", "Recargo");
-		recargo.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("99999.9999"), 13, 5);
+//		recargo.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("99999.9999"), 13, 5);
+		recargo.setDataTypeDouble(0.0, 99999.9999);
 		recargo.setRequired(false);
 		c.addAtt(recargo);
+
+		// -------- GRID
+
+		c.addAttGrid(codigo);
+		c.addAttGrid(nombre);
+		c.addAttGrid(bonificacion);
+		c.addAttGrid(recargo);
 
 		// -------- SBX Args
 

@@ -8,6 +8,7 @@ import java.net.URL;
 import com.anthill.model.Argument;
 import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeBigDecimal;
+import com.anthill.model.DataTypeClazz;
 import com.anthill.model.DataTypeDouble;
 import com.anthill.model.DataTypeInteger;
 import com.anthill.model.DataTypeLong;
@@ -51,17 +52,22 @@ public class UtilJavaUIGridView {
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 			Argument arg = clazzX.getArgs().get(i);
 
-			if (arg.getRange()) {
+			
+
+			if (arg.isSimple() == false) {
+
+				atts += ", " + arg.getName();
+
+			} else if (arg.getRange()) {
 
 				if (arg.isNumber() || arg.isDate()) {
 					atts += ", " + arg.getName() + "From";
 					atts += ", " + arg.getName() + "To";
 				}
 
-			} else if (arg.isSimple() == false) {
-				atts += ", " + arg.getName();
 			} else {
 				atts += ", " + arg.getName();
+
 			}
 
 		}
@@ -77,7 +83,7 @@ public class UtilJavaUIGridView {
 
 		return java;
 	}
-	
+
 	private static String buildImports(Clazz clazzX) {
 		String java = "";
 
@@ -88,26 +94,26 @@ public class UtilJavaUIGridView {
 			String sc = "\n";
 
 			if (arg.isNumber()) {
-				
+
 				String im = "import com.vaadin.flow.component.textfield.NumberField;";
-				
-				if(java.contains(im) == false) {
-					java += sc + im;	
+
+				if (java.contains(im) == false) {
+					java += sc + im;
 				}
-				
-				if(arg.isInteger()) {
+
+				if (arg.isInteger()) {
 					im = "import com.massoftware.ui.util.DoubleToIntegerConverter;";
-					if(java.contains(im) == false) {
-						java += sc + im;	
-					}					
-				}											
-				
+					if (java.contains(im) == false) {
+						java += sc + im;
+					}
+				}
+
 			} else if (arg.isDate()) {
-				
+
 				String im = "import com.vaadin.flow.component.datepicker.DatePicker;";
 
-				if(java.contains(im) == false) {
-					java += sc + im;	
+				if (java.contains(im) == false) {
+					java += sc + im;
 				}
 
 			} else if (arg.isTimestamp()) {
@@ -119,33 +125,63 @@ public class UtilJavaUIGridView {
 				}
 
 			} else if (arg.isString()) {
-				
-				String im = "import com.vaadin.flow.component.textfield.TextField;";				
-				
-				if(java.contains(im) == false) {
+
+				String im = "import com.vaadin.flow.component.textfield.TextField;";
+
+				if (java.contains(im) == false) {
 					java += sc + im;
 				}
 
 			} else if (arg.isBoolean()) {
-				
-				String im = "import com.vaadin.flow.component.combobox.ComboBox;";				
-				
-				if(java.contains(im) == false) {
+
+				String im = "import com.vaadin.flow.component.combobox.ComboBox;";
+
+				if (java.contains(im) == false) {
 					java += sc + im;
 				}
-				
-				im = "import com.massoftware.service.FBoolean;";				
-				
-				if(java.contains(im) == false) {
+
+				im = "import com.massoftware.service.FBoolean;";
+
+				if (java.contains(im) == false) {
 					java += sc + im;
-				}								
+				}
 
 			} else if (arg.isSimple() == false) {
-				String im = "import com.vaadin.flow.component.combobox.ComboBox;";				
-				
-				if(java.contains(im) == false) {
+				String im = "import com.vaadin.flow.component.combobox.ComboBox;";
+
+				if (java.contains(im) == false) {
 					java += sc + im;
 				}
+
+				im = "import java.util.List;";
+
+				if (java.contains(im) == false) {
+					java += sc + im;
+				}
+
+				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
+
+				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getNamePlural() + ";";
+				if (java.contains(java1) == false
+						&& clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+					java += java1;
+				}
+
+				java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getNamePlural() + "Filtro;";
+				if (java.contains(java1) == false
+						&& clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+					java += java1;
+				}
+
+				java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getName() + "Service;";
+				if (java.contains(java1) == false
+						&& clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+					java += java1;
+				}
+
 			}
 		}
 
@@ -222,7 +258,7 @@ public class UtilJavaUIGridView {
 
 			Argument arg = clazzX.getArgs().get(i);
 
-//			String t1 = "\n\t";
+			// String t1 = "\n\t";
 			String t2 = "\n\t\t";
 			String t3 = "\n\t\t\t";
 			String t4 = "\n\t\t\t\t";
@@ -254,16 +290,16 @@ public class UtilJavaUIGridView {
 				}
 
 				if (arg.getRange() == false) {
-					
-					java += "\n";
+
+					java += "\n\n\t\t//-------------------------------------------------------------------";
 
 					String f = "";
 					String f2 = "";
 
 					java += t2 + "// " + arg.getLabel() + " (" + f2 + ")";
 					java += t2 + arg.getName() + f + " = new NumberField();";
-					if(arg.isRequired()) {
-//						java += t2 + arg.getName() + ".setRequired(true);";
+					if (arg.isRequired()) {
+						// java += t2 + arg.getName() + ".setRequired(true);";
 					}
 					if (min != null) {
 						java += t2 + arg.getName() + f + ".setMin(" + min + ");";
@@ -276,8 +312,8 @@ public class UtilJavaUIGridView {
 					java += t2 + arg.getName() + f + ".setClearButtonVisible(true);";
 					java += t2 + arg.getName() + f + ".addFocusShortcut(Key.DIGIT_" + digit + ", KeyModifier.ALT);";
 					java += t2 + "binder.forField(" + arg.getName() + f + ")";
-					if(arg.isRequired()) {
-						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
+					if (arg.isRequired()) {
+						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
 					}
 					if (arg.isInteger()) {
 						java += t3 + ".withConverter(new DoubleToIntegerConverter())";
@@ -303,17 +339,17 @@ public class UtilJavaUIGridView {
 					java += t2 + "});";
 
 				} else {
-					
-					java += "\n";
+
+					java += "\n\n\t\t//-------------------------------------------------------------------";
 
 					String f = "From";
 					String f2 = "desde";
 
 					java += t2 + "// " + arg.getLabel() + " (" + f2 + ")";
 					java += t2 + arg.getName() + f + " = new NumberField();";
-//					if(arg.isRequired()) {
-////						java += t2 + arg.getName() + f + ".setRequired(true);";
-//					}
+					// if(arg.isRequired()) {
+					//// java += t2 + arg.getName() + f + ".setRequired(true);";
+					// }
 					if (min != null) {
 						java += t2 + arg.getName() + f + ".setMin(" + min + ");";
 					}
@@ -325,8 +361,8 @@ public class UtilJavaUIGridView {
 					java += t2 + arg.getName() + f + ".setClearButtonVisible(true);";
 					java += t2 + arg.getName() + f + ".addFocusShortcut(Key.DIGIT_" + digit + ", KeyModifier.ALT);";
 					java += t2 + "binder.forField(" + arg.getName() + f + ")";
-					if(arg.isRequired()) {
-						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
+					if (arg.isRequired()) {
+						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
 					}
 					if (arg.isInteger()) {
 						java += t3 + ".withConverter(new DoubleToIntegerConverter())";
@@ -351,31 +387,30 @@ public class UtilJavaUIGridView {
 					java += t3 + "search();";
 					java += t2 + "});";
 
-					java += "\n";
-					
+					java += "\n\n\t\t//-------------------------------------------------------------------";
+
 					digit++;
 					f = "To";
 					f2 = "hasta";
 
-					java += "\n";
 					java += t2 + "// " + arg.getLabel() + " (" + f2 + ")";
 					java += t2 + arg.getName() + f + " = new NumberField();";
-//					if(arg.isRequired()) {
-////						java += t2 + arg.getName() + f + ".setRequired(true);";
-//					}
+					// if(arg.isRequired()) {
+					//// java += t2 + arg.getName() + f + ".setRequired(true);";
+					// }
 					if (min != null) {
 						java += t2 + arg.getName() + f + ".setMin(" + min + ");";
 					}
 					if (max != null) {
 						java += t2 + arg.getName() + f + ".setMax(" + max + ");";
 					}
-					java += t2 + arg.getName() + f + ".setPlaceholder(\"" + arg.getLabel() + " " + f2 + " \");";					
+					java += t2 + arg.getName() + f + ".setPlaceholder(\"" + arg.getLabel() + " " + f2 + " \");";
 					java += t2 + arg.getName() + f + ".setPrefixComponent(VaadinIcon.SEARCH.create());";
 					java += t2 + arg.getName() + f + ".setClearButtonVisible(true);";
 					java += t2 + arg.getName() + f + ".addFocusShortcut(Key.DIGIT_" + digit + ", KeyModifier.ALT);";
-					java += t2 + "binder.forField(" + arg.getName() + f + ")";					
-					if(arg.isRequired()) {
-						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
+					java += t2 + "binder.forField(" + arg.getName() + f + ")";
+					if (arg.isRequired()) {
+						java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
 					}
 					if (arg.isInteger()) {
 						java += t3 + ".withConverter(new DoubleToIntegerConverter())";
@@ -422,10 +457,10 @@ public class UtilJavaUIGridView {
 
 				// java += sc + "private TextField " + arg.getName() + ";";
 
-				java += "\n";
+				java += "\n\n\t\t//-------------------------------------------------------------------";
 				java += t2 + "// " + arg.getLabel() + "";
 				java += t2 + arg.getName() + " = new TextField();";
-				if(arg.isRequired()) {
+				if (arg.isRequired()) {
 					java += t2 + arg.getName() + ".setRequired(true);";
 				}
 				java += t2 + arg.getName() + ".setPlaceholder(\"" + arg.getLabel() + "\");";
@@ -434,14 +469,13 @@ public class UtilJavaUIGridView {
 				java += t2 + arg.getName() + ".setClearButtonVisible(true);";
 				java += t2 + arg.getName() + ".setAutoselect(true);";
 				java += t2 + arg.getName() + ".addFocusShortcut(Key.DIGIT_" + digit + ", KeyModifier.ALT);";
-				
+
 				java += t2 + "binder.forField(" + arg.getName() + ")";
-				if(arg.isRequired()) {
-					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
+				if (arg.isRequired()) {
+					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
 				}
-				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get"
-						+ toCamelStart(arg.getName()) + ", " + clazzX.getNamePlural() + "Filtro::set"
-						+ toCamelStart(arg.getName()) + ");";
+				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get" + toCamelStart(arg.getName()) + ", "
+						+ clazzX.getNamePlural() + "Filtro::set" + toCamelStart(arg.getName()) + ");";
 				java += t2 + arg.getName() + ".addKeyPressListener(Key.ENTER, event -> {";
 				java += t3 + "search();";
 				java += t2 + "});";
@@ -456,10 +490,10 @@ public class UtilJavaUIGridView {
 
 			} else if (arg.isBoolean()) {
 
-				java += "\n";
+				java += "\n\n\t\t//-------------------------------------------------------------------";
 				java += t2 + "// " + arg.getLabel() + "";
 				java += t2 + arg.getName() + " = new ComboBox<>();";
-				if(arg.isRequired()) {
+				if (arg.isRequired()) {
 					java += t2 + arg.getName() + ".setRequired(true);";
 				}
 				java += t2 + arg.getName() + ".setPlaceholder(\"" + arg.getLabel() + ": Todos\");";
@@ -468,14 +502,13 @@ public class UtilJavaUIGridView {
 				java += t2 + arg.getName() + ".setItems(value" + toCamelStart(arg.getName()) + ", new FBoolean(\""
 						+ arg.getLabel() + ": \", true, \"Si\"), new FBoolean(\"" + arg.getLabel()
 						+ ": \", false, \"No\"));";
-				java += t2 + arg.getName() + ".setValue(value" + toCamelStart(arg.getName()) + ");";											
+				java += t2 + arg.getName() + ".setValue(value" + toCamelStart(arg.getName()) + ");";
 				java += t2 + "binder.forField(" + arg.getName() + ")";
-				if(arg.isRequired()) {
-					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
+				if (arg.isRequired()) {
+					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
 				}
-				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get"
-						+ toCamelStart(arg.getName()) + "X, " + clazzX.getNamePlural() + "Filtro::set"
-						+ toCamelStart(arg.getName()) + "X);";
+				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get" + toCamelStart(arg.getName()) + "X, "
+						+ clazzX.getNamePlural() + "Filtro::set" + toCamelStart(arg.getName()) + "X);";
 				java += t2 + arg.getName() + ".addValueChangeListener(event -> {";
 				java += t3 + "search();";
 				java += t2 + "});";
@@ -485,10 +518,10 @@ public class UtilJavaUIGridView {
 
 			} else if (arg.isSimple() == false) {
 
-				java += "\n";
+				java += "\n\n\t\t//-------------------------------------------------------------------";
 				java += t2 + "// " + arg.getLabel() + "";
 				java += t2 + arg.getName() + " = new ComboBox<>();";
-				if(arg.isRequired()) {
+				if (arg.isRequired()) {
 					java += t2 + arg.getName() + ".setRequired(true);";
 				}
 				java += t2 + arg.getName() + ".setPlaceholder(\"" + arg.getLabel() + "\");";
@@ -498,26 +531,24 @@ public class UtilJavaUIGridView {
 				java += t2 + arg.getDataType().getNamePlural() + "Filtro " + arg.getName() + "Filtro = new "
 						+ arg.getDataType().getNamePlural() + "Filtro();";
 				java += t2 + arg.getName() + "Filtro.setUnlimited(true);";
-				java += t2 + "java.util.List<" + arg.getDataType().getNamePlural() + "> " + arg.getName() + "Items = "
+				java += t2 + "List<" + arg.getDataType().getNamePlural() + "> " + arg.getName() + "Items = "
 						+ arg.getName() + "Service.find(" + arg.getName() + "Filtro);";
 
 				java += t2 + arg.getName() + ".setItems(" + arg.getName() + "Items);";
 				// java += t2 + arg.getName() + ".setValue(value" + toCamelStart(arg.getName())
 				// + ");";
-				
-				
+
 				java += t2 + "binder.forField(" + arg.getName() + ")";
-				if(arg.isRequired()) {
-					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";	
-				}								
-				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get"
-						+ toCamelStart(arg.getName()) + ", " + clazzX.getNamePlural() + "Filtro::set"
-						+ toCamelStart(arg.getName()) + ");";
-				
+				if (arg.isRequired()) {
+					java += t3 + ".asRequired(\"" + arg.getLabel() + " es requerido.\")		";
+				}
+				java += t3 + ".bind(" + clazzX.getNamePlural() + "Filtro::get" + toCamelStart(arg.getName()) + ", "
+						+ clazzX.getNamePlural() + "Filtro::set" + toCamelStart(arg.getName()) + ");";
+
 				java += t2 + "if(" + arg.getName() + "Items.size() > 0){";
 				java += t3 + arg.getName() + ".setValue(" + arg.getName() + "Items.get(0));";
 				java += t2 + "}";
-				
+
 				java += t2 + arg.getName() + ".addValueChangeListener(event -> {";
 				java += t3 + "search();";
 				java += t2 + "});";
@@ -531,7 +562,7 @@ public class UtilJavaUIGridView {
 
 		return java;
 	}
-	
+
 	private static String buildCheck(Clazz clazzX) {
 		String java = "";
 
@@ -601,15 +632,15 @@ public class UtilJavaUIGridView {
 
 		return java;
 	}
-	
+
 	private static String buildRequired(String m, String n) {
 		String s = "";
 
 		s += "\n\t\tif (filter.get" + toCamelStart(n) + "() == null || filter.get" + toCamelStart(n)
 				+ "().toString().trim().isEmpty()) {";
-		
+
 		s += "\n\t\t\t" + n + ".setInvalid(true);";
-		
+
 		s += "\n\t\t}";
 
 		return s;

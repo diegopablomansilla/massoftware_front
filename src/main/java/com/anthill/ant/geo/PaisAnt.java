@@ -52,20 +52,24 @@ public class PaisAnt extends Ant {
 		abreviatura.setColumns((float) 5);
 		c.addAtt(abreviatura);
 
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(abreviatura);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
-		c.addArgument(nombre);
-		c.getLastArgument().setRequired(false);
-		c.addArgumentSBX(c.getLastArgument());
-
-		// -------- Simple Args
-
 		c.addArgument(abreviatura);
 		c.getLastArgument().setRequired(false);
+		
+		c.addArgument(nombre);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());		
 
 		// -------- Order
 
