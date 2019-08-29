@@ -7,7 +7,7 @@ import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeInteger;
 
 public class MotivoBloqueoClienteAnt extends Ant {
-	
+
 	private Ant clasificacionClienteAnt;
 
 	public MotivoBloqueoClienteAnt(Anthill anthill, Ant clasificacionClienteAnt) {
@@ -54,8 +54,19 @@ public class MotivoBloqueoClienteAnt extends Ant {
 		clasificacionCliente.setRequired(true);
 		c.addAtt(clasificacionCliente);
 
+		// -------- GRID
+
+		Att nombreClasificacionCliente = new Att("nombreClasificacionCliente", "Clasificación de cliente");
+
+		c.addAttGrid(nombreClasificacionCliente);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
 
+		c.addArgument(clasificacionCliente);
+		c.getLastArgument().setRequired(true);
+		
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
@@ -66,8 +77,7 @@ public class MotivoBloqueoClienteAnt extends Ant {
 
 		// -------- Simple Args
 
-		c.addArgument(clasificacionCliente);
-		c.getLastArgument().setRequired(false);
+		
 
 		// -------- Order
 
@@ -76,6 +86,9 @@ public class MotivoBloqueoClienteAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", ClasificacionCliente.nombre AS nombreClasificacionCliente, MotivoBloqueoCliente.numero, MotivoBloqueoCliente.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.ClasificacionCliente ON ClasificacionCliente.id = MotivoBloqueoCliente.clasificacionCliente");
 
 		return c;
 

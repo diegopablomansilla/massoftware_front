@@ -360,8 +360,13 @@ public class UtilJavaPOJO {
 
 				DataTypeClazz dataTypeClazz = (DataTypeClazz) att.getDataType();
 
-				java += "\nimport com.massoftware.service." + dataTypeClazz.getClazz().getNamePackage() + "."
+				String java1 = "\nimport com.massoftware.service." + dataTypeClazz.getClazz().getNamePackage() + "."
 						+ dataTypeClazz.getClazz().getName() + ";";
+				
+				if (java.contains(java1) == false) {
+					java += java1;
+				}	
+				
 
 			} else {
 				
@@ -841,7 +846,7 @@ public class UtilJavaPOJO {
 
 		java += t2 + "";
 
-		java += t2 + clazz.getName() + " other = (" + clazz.getName() + ") super.clone();";
+		java += t2 + clazz.getName() + " other = new " + clazz.getName() + "();";
 
 		java += t2 + "";
 		

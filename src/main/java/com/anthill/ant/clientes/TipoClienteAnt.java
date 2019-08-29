@@ -52,6 +52,11 @@ public class TipoClienteAnt extends Ant {
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- Simple Args
 
 		// -------- Order

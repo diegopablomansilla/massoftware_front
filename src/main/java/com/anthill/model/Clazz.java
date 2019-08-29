@@ -6,12 +6,12 @@ import java.util.List;
 
 import com.anthill.UtilAnthill;
 import com.anthill.model.to_java.UtilJavaDao;
-import com.anthill.model.to_java.UtilJavaForm;
 import com.anthill.model.to_java.UtilJavaPOJO;
 import com.anthill.model.to_java.UtilJavaPOJOFilter;
 import com.anthill.model.to_java.UtilJavaPopulate;
 import com.anthill.model.to_java.UtilJavaService;
 import com.anthill.model.to_java.UtilJavaStm;
+import com.anthill.model.to_java.UtilJavaUIFormView;
 import com.anthill.model.to_java.UtilJavaUIGrid;
 import com.anthill.model.to_java.UtilJavaUIGridView;
 import com.anthill.model.to_sql.FunctionFind;
@@ -276,8 +276,8 @@ public class Clazz {
 		return UtilJavaUIGridView.toJava(this);
 	}
 
-	public String toJavaWF() throws IOException {
-		return UtilJavaForm.toJavaWF(this);
+	public String toJavaUIFormView() throws IOException {
+		return UtilJavaUIFormView.toJava(this);
 	}
 
 	public String toPopulateJava() {

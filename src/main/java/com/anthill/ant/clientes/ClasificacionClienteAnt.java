@@ -14,7 +14,8 @@ public class ClasificacionClienteAnt extends Ant {
 
 	public Clazz build() throws Exception {
 
-		// SELECT  A.CLASIFCLIENTE, A.NOMBRE, A.COLOR FROM TablaClasifClientes A ORDER BY  A.CLASIFCLIENTE
+		// SELECT A.CLASIFCLIENTE, A.NOMBRE, A.COLOR FROM TablaClasifClientes A ORDER BY
+		// A.CLASIFCLIENTE
 
 		// -------- Clazz
 
@@ -45,10 +46,16 @@ public class ClasificacionClienteAnt extends Ant {
 		c.addAtt(nombre);
 
 		Att color = new Att("color", "Color");
-		color.setDataTypeInteger(1, null);		
+		color.setDataTypeInteger(1, null);
 		color.setRequired(true);
 		color.setUnique(false);
 		c.addAtt(color);
+
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+		c.addAttGrid(color);
 
 		// -------- SBX Args
 
@@ -60,7 +67,7 @@ public class ClasificacionClienteAnt extends Ant {
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
-		// -------- Simple Args		
+		// -------- Simple Args
 
 		// -------- Order
 

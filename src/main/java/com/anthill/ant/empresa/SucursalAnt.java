@@ -7,8 +7,9 @@ import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeInteger;
 
 public class SucursalAnt extends Ant {
-	
-	// SELECT  A.SUCURSAL, A.NOMBRE, A.TIPOSUCURSAL FROM Sucursales A ORDER BY  A.NOMBRE
+
+	// SELECT A.SUCURSAL, A.NOMBRE, A.TIPOSUCURSAL FROM Sucursales A ORDER BY
+	// A.NOMBRE
 
 	private Ant tipoSucursalAnt;
 
@@ -112,7 +113,7 @@ public class SucursalAnt extends Ant {
 		permiteCambiarProveedores.setDataTypeBoolean();
 		permiteCambiarProveedores.setRequired(true);
 		c.addAtt(permiteCambiarProveedores);
-		
+
 		// --------------------------------------------------------------
 
 		Att clientesOcacionalesDesde = new Att("clientesOcacionalesDesde", "Clientes ocacionales desde");
@@ -135,12 +136,27 @@ public class SucursalAnt extends Ant {
 		numeroCobranzaHasta.setRequired(true);
 		c.addAtt(numeroCobranzaHasta);
 
+		// -------- GRID
+
+		Att nombreTipoSucursal = new Att("nombreTipoSucursal", "Tipo sucursal");
+
+		c.addAttGrid(nombreTipoSucursal);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
+		
+		c.addArgument(tipoSucursal);
+		c.getLastArgument().setRequired(false);
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
+		c.addArgument(abreviatura);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+		
 		c.addArgument(nombre);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
@@ -154,6 +170,9 @@ public class SucursalAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+
+		c.setStmAtts(", TipoSucursal.nombre AS nombreTiposucursal, Sucursal.numero, Sucursal.abreviatura, Sucursal.nombre");
+		c.setStmJoins(" LEFT JOIN massoftware.TipoSucursal ON TipoSucursal.id = Sucursal.tipoSucursal");
 
 		return c;
 

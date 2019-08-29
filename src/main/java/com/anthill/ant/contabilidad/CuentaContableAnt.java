@@ -1,7 +1,5 @@
 package com.anthill.ant.contabilidad;
 
-import java.math.BigDecimal;
-
 import com.anthill.Anthill;
 import com.anthill.ant.Ant;
 import com.anthill.model.Att;
@@ -113,7 +111,8 @@ public class CuentaContableAnt extends Ant {
 		c.addAtt(cuentaAgrupadora);
 
 		Att porcentaje = new Att("porcentaje", "Porcentaje");
-		porcentaje.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("999.99"), 6, 3);
+//		porcentaje.setDataTypeBigDecimal(new BigDecimal("0"), new BigDecimal("999.99"), 6, 3);
+		porcentaje.setDataTypeDouble(0.0, 999.99);
 		porcentaje.setColumns(6f);
 		c.addAtt(porcentaje);
 
@@ -131,20 +130,46 @@ public class CuentaContableAnt extends Ant {
 
 		// --------------------------------------------------------------------------
 
+		// -------- GRID
+
+		Att nombreEjercicioContable = new Att("nombreEjercicioContable", "Ejercicio");
+		nombreEjercicioContable.setDataTypeInteger(1, null);
+		
+		Att nombreCentroCostoContable = new Att("nombreCentroCostoContable", "Ctro. Costo");
+
+		c.addAttGrid(nombreEjercicioContable);
+		c.addAttGrid(codigo);
+		c.addAttGrid(nombre);
+		c.addAttGrid(nombreCentroCostoContable);
+		c.addAttGrid(cuentaAgrupadora);
+		c.addAttGrid(porcentaje);
+
 		// -------- SBX Args
 
+		c.addArgument(ejercicioContable);
+		c.getLastArgument().setRequired(true);
+		
+		c.addArgument(centroCostoContable);
+		c.getLastArgument().setRequired(false);
+		
+		c.addArgument(puntoEquilibrio);
+		c.getLastArgument().setRequired(false);
+		
 		c.addArgument(codigo, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
+		c.addArgument(cuentaAgrupadora);
+		c.getLastArgument().setRequired(false);
+		c.addArgumentSBX(c.getLastArgument());
+		
 		c.addArgument(nombre);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
 
-		c.addArgument(ejercicioContable);
-		c.getLastArgument().setRequired(true);
+		
 
 		// -------- Order
 
@@ -153,6 +178,11 @@ public class CuentaContableAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+		
+		c.setStmAtts(", EjercicioContable.numero AS nombreEjercicioContable, CuentaContable.codigo, CuentaContable.nombre, CentroCostoContable.nombre AS nombreCentroCostoContable, CuentaContable.cuentaAgrupadora, CuentaContable.porcentaje");
+		c.setStmJoins(
+				" LEFT JOIN massoftware.EjercicioContable ON EjercicioContable.id = CuentaContable.ejercicioContable"
+				+ " LEFT JOIN massoftware.CentroCostoContable ON CentroCostoContable.id = CuentaContable.centroCostoContable");
 
 		return c;
 

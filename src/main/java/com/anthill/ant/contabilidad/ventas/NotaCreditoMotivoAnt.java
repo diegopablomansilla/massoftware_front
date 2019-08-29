@@ -45,6 +45,11 @@ public class NotaCreditoMotivoAnt extends Ant {
 		nombre.setLength(null, 50);
 		c.addAtt(nombre);
 
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
 
 		c.addArgument(numero, true);

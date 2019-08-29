@@ -14,7 +14,7 @@ public class CostoVentaAnt extends Ant {
 
 	public Clazz build() throws Exception {
 
-		// 
+		//
 
 		// -------- Clazz
 
@@ -43,6 +43,11 @@ public class CostoVentaAnt extends Ant {
 		nombre.setUnique(true);
 		nombre.setLength(null, 50);
 		c.addAtt(nombre);
+
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
 
 		// -------- SBX Args
 

@@ -14,13 +14,13 @@ public class DepositoAnt extends Ant {
 
 	private Ant sucursalAnt;
 	private Ant depositoModuloAnt;
-	private Ant seguridadPuertaAnt;	
+	private Ant seguridadPuertaAnt;
 
 	public DepositoAnt(Anthill anthill, Ant sucursalAnt, Ant depositoModuloAnt, Ant seguridadPuertaAnt) {
 		super(anthill);
 		this.sucursalAnt = sucursalAnt;
 		this.depositoModuloAnt = depositoModuloAnt;
-		this.seguridadPuertaAnt = seguridadPuertaAnt;		
+		this.seguridadPuertaAnt = seguridadPuertaAnt;
 	}
 
 	public Clazz build() throws Exception {
@@ -62,7 +62,7 @@ public class DepositoAnt extends Ant {
 
 		Att sucursal = new Att("sucursal", "Sucursal");
 		sucursal.setDataTypeClazz(sucursalAnt.build());
-		// sucursal.setRequired(true);
+		sucursal.setRequired(true);
 		c.addAtt(sucursal);
 
 		Att depositoModulo = new Att("depositoModulo", "Módulo");
@@ -80,7 +80,21 @@ public class DepositoAnt extends Ant {
 		puertaConsulta.setRequired(true);
 		c.addAtt(puertaConsulta);
 
+		// -------- GRID
+
+		Att nombreSucursal = new Att("nombreSucursal", "Nombre sucursal");
+		Att nombreModulo = new Att("nombreModulo", "Nombre módulo");
+		
+		c.addAttGrid(numero);
+		c.addAttGrid(abreviatura);
+		c.addAttGrid(nombre);
+		c.addAttGrid(nombreSucursal);
+		c.addAttGrid(nombreModulo);
+
 		// -------- SBX Args
+
+		c.addArgument(sucursal);
+		c.getLastArgument().setRequired(false);
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
@@ -91,8 +105,6 @@ public class DepositoAnt extends Ant {
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
-		
-		c.addArgument(sucursal);
 
 		// -------- Order
 
@@ -101,6 +113,10 @@ public class DepositoAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+
+		c.setStmAtts(", Deposito.numero, Deposito.abreviatura, Deposito.nombre, Sucursal.nombre AS nombreSucursal, DepositoModulo.nombre AS nombreModulo");
+		c.setStmJoins(" LEFT JOIN massoftware.DepositoModulo ON DepositoModulo.id = Deposito.depositoModulo "
+				+ " LEFT JOIN massoftware.Sucursal ON Sucursal.id = Deposito.sucursal");
 
 		return c;
 

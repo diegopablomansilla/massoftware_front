@@ -62,8 +62,22 @@ public class CentroCostoContableAnt extends Ant {
 		ejercicioContable.setReadOnlyGUI(true);
 		c.addAtt(ejercicioContable);
 
+		// -------- GRID
+
+		Att nombreEjercicioContable = new Att("nombreEjercicioContable", "Ejercicio");
+		nombreEjercicioContable.setDataTypeInteger(1, null);
+
+		c.addAttGrid(nombreEjercicioContable);
+		c.addAttGrid(numero);
+		c.addAttGrid(abreviatura);
+		c.addAttGrid(nombre);
+		
+
 		// -------- SBX Args
 
+		c.addArgument(ejercicioContable);
+		c.getLastArgument().setRequired(true);
+		
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
@@ -74,11 +88,10 @@ public class CentroCostoContableAnt extends Ant {
 
 		// -------- Simple Args
 
-		c.addArgument(abreviatura);
+//		c.addArgument(abreviatura);
 		// c.getLastArgument().setRequired(false);
 
-		c.addArgument(ejercicioContable);
-		c.getLastArgument().setRequired(true);
+		
 
 		// -------- Order
 
@@ -87,6 +100,11 @@ public class CentroCostoContableAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+
+		c.setStmAtts(
+				", EjercicioContable.numero AS nombreEjercicioContable, CentroCostoContable.numero, CentroCostoContable.abreviatura, CentroCostoContable.nombre");
+		c.setStmJoins(
+				" LEFT JOIN massoftware.EjercicioContable ON EjercicioContable.id = CentroCostoContable.ejercicioContable");
 
 		return c;
 

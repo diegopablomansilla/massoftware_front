@@ -62,7 +62,22 @@ public class PuntoEquilibrioAnt extends Ant {
 		ejercicioContable.setReadOnlyGUI(true);
 		c.addAtt(ejercicioContable);
 
+		// -------- GRID
+
+		Att nombreEjercicioContable = new Att("nombreEjercicioContable", "Ejercicio");
+		nombreEjercicioContable.setDataTypeInteger(1, null);
+
+		Att nombreTipoPuntoEquilibrio = new Att("nombreTipoPuntoEquilibrio", "Tipo punto equilibrio");
+
+		c.addAttGrid(nombreEjercicioContable);
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+		c.addAttGrid(nombreTipoPuntoEquilibrio);
+
 		// -------- SBX Args
+
+		c.addArgument(ejercicioContable);
+		c.getLastArgument().setRequired(true);
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
@@ -74,9 +89,6 @@ public class PuntoEquilibrioAnt extends Ant {
 
 		// -------- Simple Args
 
-		c.addArgument(ejercicioContable);
-		c.getLastArgument().setRequired(true);
-
 		// -------- Order
 
 		c.addOrderAllAtts();
@@ -84,6 +96,12 @@ public class PuntoEquilibrioAnt extends Ant {
 		c.getOrderDefault().setDesc(true);
 
 		// ------------------------------------------------
+
+		c.setStmAtts(
+				", EjercicioContable.numero AS nombreEjercicioContable, PuntoEquilibrio.numero, PuntoEquilibrio.nombre, TipoPuntoEquilibrio.nombre AS nombreTipoPuntoEquilibrio");
+		c.setStmJoins(
+				" LEFT JOIN massoftware.EjercicioContable ON EjercicioContable.id = PuntoEquilibrio.ejercicioContable"
+						+ " LEFT JOIN massoftware.TipoPuntoEquilibrio ON TipoPuntoEquilibrio.id = PuntoEquilibrio.tipoPuntoEquilibrio");
 
 		return c;
 

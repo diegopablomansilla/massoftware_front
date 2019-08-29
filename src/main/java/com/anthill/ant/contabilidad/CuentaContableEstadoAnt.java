@@ -14,7 +14,7 @@ public class CuentaContableEstadoAnt extends Ant {
 
 	public Clazz build() throws Exception {
 
-		// 
+		//
 
 		// -------- Clazz
 
@@ -23,7 +23,7 @@ public class CuentaContableEstadoAnt extends Ant {
 		c.setName("CuentaContableEstado");
 		c.setNamePlural("CuentasContablesEstados");
 
-		c.setNamePackage("contabilidad");		
+		c.setNamePackage("contabilidad");
 		c.setSingular("Estado");
 		c.setPlural("Estados");
 		c.setSingularPre("el estado");
@@ -43,6 +43,11 @@ public class CuentaContableEstadoAnt extends Ant {
 		nombre.setUnique(true);
 		nombre.setLength(null, 50);
 		c.addAtt(nombre);
+
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
 
 		// -------- SBX Args
 

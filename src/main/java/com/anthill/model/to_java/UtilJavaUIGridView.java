@@ -41,6 +41,8 @@ public class UtilJavaUIGridView {
 			// System.out.println(linea);
 		}
 		b.close();
+		
+		source = source.trim();
 
 		source = source.replaceAll("@NAME_PACKAGE@", clazzX.getNamePackage());
 		source = source.replaceAll("@NAME_PLURAL@", clazzX.getNamePlural());
@@ -51,8 +53,6 @@ public class UtilJavaUIGridView {
 		String atts = "";
 		for (int i = 0; i < clazzX.getArgs().size(); i++) {
 			Argument arg = clazzX.getArgs().get(i);
-
-			
 
 			if (arg.isSimple() == false) {
 
@@ -356,7 +356,7 @@ public class UtilJavaUIGridView {
 					if (max != null) {
 						java += t2 + arg.getName() + f + ".setMax(" + max + ");";
 					}
-					java += t2 + arg.getName() + f + ".setPlaceholder(\"" + arg.getLabel() + f2 + " \");";
+					java += t2 + arg.getName() + f + ".setPlaceholder(\"" + arg.getLabel() + " " + f2 + " \");";
 					java += t2 + arg.getName() + f + ".setPrefixComponent(VaadinIcon.SEARCH.create());";
 					java += t2 + arg.getName() + f + ".setClearButtonVisible(true);";
 					java += t2 + arg.getName() + f + ".addFocusShortcut(Key.DIGIT_" + digit + ", KeyModifier.ALT);";
