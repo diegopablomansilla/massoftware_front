@@ -173,6 +173,37 @@ public class @NAME@Service {
 	
 	// ---------------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("unchecked")
+	public List<@NAME@> find() throws Exception {		
+
+		DataBase db = BackendContextPG.get().getDataBase();
+
+		List<@NAME@> listado = null;
+
+		try {
+
+			db.begint();
+
+			listado = db.fillAllObjects(@NAME@.class);
+
+			db.commit();
+
+		} catch (Exception e) {
+			db.rollBack();
+			throw e;
+		} finally {
+			db.close();
+		}
+
+		if (listado == null) {
+			listado = new ArrayList<@NAME@>();
+		}
+
+		return listado;
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+
 	public List<@NAME_PLURAL@> find(@NAME_PLURAL@Filtro f) throws Exception {
 
 		if (f == null) {

@@ -2,7 +2,7 @@ package com.massoftware.service;
 
 import java.util.List;
 
-import org.dsw.jdbc.DataSourceWrapper;
+import org.dsw.DataSourceWrapper;
 import org.sorm.pg.DataBasePG;
 
 @IMPORTS@

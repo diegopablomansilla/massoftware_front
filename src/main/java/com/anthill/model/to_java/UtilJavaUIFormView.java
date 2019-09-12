@@ -1,539 +1,432 @@
 package com.anthill.model.to_java;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 
-import com.anthill.model.Argument;
 import com.anthill.model.Att;
 import com.anthill.model.Clazz;
 import com.anthill.model.DataTypeBigDecimal;
-import com.anthill.model.DataTypeClazz;
 import com.anthill.model.DataTypeDouble;
 import com.anthill.model.DataTypeInteger;
 import com.anthill.model.DataTypeLong;
 
-public class UtilJavaUIFormView {
+public class UtilJavaUIFormView extends Vaadin13 {
 
-	private static String toCamelStart(String text) {
-		if (text == null || text.isEmpty()) {
-			return text;
-		}
+	private String src = "";
+	private String srcImport = "";
+	private String srcDeclareControls = "";
+	private String srcInstanceControls = "";
+	private String srcInstanceControlsMethod = "";
+	private String srcControls = "";
 
-		return text.substring(0, 1).toUpperCase() + text.substring(1, text.length());
-	}
+	public String toJava(Clazz c) throws IOException {
 
-	public static String toJava(Clazz clazzX) throws IOException {
+		src += loadFileTemplate("form_view.txt");
 
-		String java = "";
+		src = src.replaceAll("@NAME_PACKAGE@", c.getNamePackage());
+		src = src.replaceAll("@NAME@", c.getName());
+		src = src.replaceAll("@NAME@", c.getName());
+		src = src.replaceAll("@LABEL@", c.getSingular());
 
-		String linea;
-		String source = "";
+		// ------------------------------------------------------------------------------
 
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL url = classLoader.getResource("form.txt");
-		String path = url.toString().substring(6, url.toString().length());
+		for (int i = 0; i < c.getAtts().size(); i++) {
 
-		FileReader f = new FileReader(path);
-		BufferedReader b = new BufferedReader(f);
-		while ((linea = b.readLine()) != null) {
-			source += "\n" + linea;
-			// System.out.println(linea);
-		}
-		b.close();
+			Att att = c.getAtts().get(i);
 
-		source = source.trim();
+			if (att.isBoolean()) {
 
-		source = source.replaceAll("@NAME_PACKAGE@", clazzX.getNamePackage());
-		source = source.replaceAll("@NAME@", clazzX.getName());
-		source = source.replaceAll("@NAME@", clazzX.getName());
-		source = source.replaceAll("@LABEL@", clazzX.getSingular());
-
-		String atts = "";
-		for (int i = 0; i < clazzX.getAtts().size(); i++) {
-			Att arg = clazzX.getAtts().get(i);
-
-			String sc = ", ";
-
-			if (i == 0) {
-				sc = "";
-			}
-
-			// if (arg.isSimple() == false) {
-			//
-			// atts += sc + arg.getName();
-			//
-			// } else if (arg.getRange()) {
-			//
-			// if (arg.isNumber() || arg.isDate()) {
-			// atts += sc + arg.getName() + "From";
-			// atts += sc + arg.getName() + "To";
-			// }
-			//
-			// } else {
-			// atts += sc + arg.getName();
-			//
-			// }
-
-			atts += sc + arg.getName();
-
-		}
-
-		source = source.replaceAll("@ATTS@", atts);
-
-		source = source.replaceAll("@DECLARE_IMPORTS@", buildImports(clazzX));
-		source = source.replaceAll("@DECLARE_CONTROLS@", buildDeclareControls(clazzX));
-		source = source.replaceAll("@INSTANCE_CONTROLS@", buildInstanceControls(clazzX));
-		// source = source.replaceAll("@REQUIRED@", buildCheck(clazzX));
-
-		java += source;
-
-		return java;
-	}
-
-	private static String buildImports(Clazz clazzX) {
-		String java = "";
-
-		for (int i = 0; i < clazzX.getAtts().size(); i++) {
-
-			Att att = clazzX.getAtts().get(i);
-
-			String sc = "\n";
-
-			if (att.isNumber()) {
-
-				String im = "import com.vaadin.flow.component.textfield.NumberField;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-				if (att.isInteger()) {
-					im = "import com.massoftware.ui.util.DoubleToIntegerConverter;";
-					if (java.contains(im) == false) {
-						java += sc + im;
-					}
-				} else if (att.isBigDecimal()) {
-					im = "import com.massoftware.ui.util.DoubleToBigDecimalConverter;";
-					if (java.contains(im) == false) {
-						java += sc + im;
-					}
-				} else if (att.isLong()) {
-					im = "import com.massoftware.ui.util.DoubleToLongConverter;";
-					if (java.contains(im) == false) {
-						java += sc + im;
-					}
-				}
-
-			} else if (att.isDate()) {
-
-				String im = "import com.vaadin.flow.component.datepicker.DatePicker;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-			} else if (att.isTimestamp()) {
+				buildSrcBoolean(c, att);
 
 			} else if (att.isString()) {
 
-				String im = "import com.vaadin.flow.component.textfield.TextField;";
+				buildSrcString(c, att);
 
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
+			} else if (att.isNumber()) {
 
-			} else if (att.isBoolean()) {
-
-				String im = "import com.vaadin.flow.component.combobox.ComboBox;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-				im = "import com.massoftware.service.FBoolean;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-			} else if (att.isSimple() == false) {
-				String im = "import com.vaadin.flow.component.combobox.ComboBox;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-				im = "import java.util.List;";
-
-				if (java.contains(im) == false) {
-					java += sc + im;
-				}
-
-				DataTypeClazz dt = (DataTypeClazz) att.getDataType();
-
-				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
-						+ dt.getClazz().getName() + ";";
-				if (java.contains(java1) == false
-						&& clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
-					java += java1;
-				}
-
-				// java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage()
-				// + "."
-				// + dt.getClazz().getNamePlural() + "Filtro;";
-				// if (java.contains(java1) == false
-				// && clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
-				// java += java1;
-				// }
-				//
-				// java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage()
-				// + "."
-				// + dt.getClazz().getName() + "Service;";
-				// if (java.contains(java1) == false
-				// && clazzX.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
-				// java += java1;
-				// }
-
-			}
-		}
-
-		java += "\n";
-
-		return java;
-	}
-
-	private static String buildDeclareControls(Clazz clazzX) {
-		String java = "";
-
-		for (int i = 0; i < clazzX.getAtts().size(); i++) {
-
-			Att att = clazzX.getAtts().get(i);
-
-			String sc = "\n\t";
-
-			if (att.isNumber()) {
-
-				java += sc + "private NumberField " + att.getName() + ";";
+				buildSrcNumber(c, att);
 
 			} else if (att.isDate()) {
 
-				java += sc + "private DatePicker " + att.getName() + ";";
+				buildSrcDate(c, att);
 
 			} else if (att.isTimestamp()) {
 
-			} else if (att.isString()) {
-
-				java += sc + "private TextField " + att.getName() + ";";
-
-			} else if (att.isBoolean()) {
-
-				java += sc + "private ComboBox<FBoolean> " + att.getName() + ";";
-
-			} else if (att.isSimple() == false) {
-				java += sc + "private ComboBox<" + att.getDataType().getName() + "> " + att.getName() + ";";
-			}
-		}
-
-		java += "\n";
-
-		return java;
-	}
-
-	private static String buildInstanceControls(Clazz clazzX) {
-		String java = "";
-
-		int digit = 0;
-
-		for (int i = 0; i < clazzX.getAtts().size(); i++) {
-
-			digit++;
-
-			Att att = clazzX.getAtts().get(i);
-
-			// String t1 = "\n\t";
-			String t2 = "\n\t\t";
-			String t3 = "\n\t\t\t";
-			String t4 = "\n\t\t\t\t";
-
-			if (att.isNumber()) {
-
-				Object min = null;
-				Object max = null;
-
-				if (att.isInteger()) {
-					min = ((DataTypeInteger) att.getDataType()).getMinValue();
-					max = ((DataTypeInteger) att.getDataType()).getMaxValue();
-				} else if (att.isLong()) {
-					min = ((DataTypeLong) att.getDataType()).getMinValue();
-					max = ((DataTypeLong) att.getDataType()).getMaxValue();
-				} else if (att.isDouble()) {
-					min = ((DataTypeDouble) att.getDataType()).getMinValue();
-					max = ((DataTypeDouble) att.getDataType()).getMaxValue();
-				} else if (att.isBigDecimal()) {
-					min = ((DataTypeBigDecimal) att.getDataType()).getMinValue();
-					max = ((DataTypeBigDecimal) att.getDataType()).getMaxValue();
-				}
-				
-				if (min != null && att.isLong()) {
-					min = min + "L";
-				}
-				if (max != null && att.isLong()) {
-					max = max + "L";
-				}
-
-				if (min == null && att.isBigDecimal() == false) {
-					min = att.getDataType().getNameJava() + ".MIN_VALUE";
-				}
-				if (max == null && att.isBigDecimal() == false) {
-					max = att.getDataType().getNameJava() + ".MAX_VALUE";
-				}
-				
-				
-
-				java += "\n\n\t\t//-------------------------------------------------------------------";
-
-				String f = "";
-				String f2 = "";
-
-				java += t2 + "// " + att.getLabel() + " (" + f2 + ")";
-				java += t2 + att.getName() + f + " = new NumberField();";
-				if (att.isRequired()) {
-					// java += t2 + arg.getName() + ".setRequired(true);";
-				}
-				if (min != null) {
-					java += t2 + att.getName() + f + ".setMin(" + min + ");";
-				}
-				if (max != null) {
-					java += t2 + att.getName() + f + ".setMax(" + max + ");";
-				}
-				java += t2 + att.getName() + f + ".setPlaceholder(\"" + att.getLabel() + f2 + " \");";
-				java += t2 + att.getName() + f + ".setPrefixComponent(VaadinIcon.SEARCH.create());";
-				java += t2 + att.getName() + f + ".setClearButtonVisible(true);";
-				// java += t2 + att.getName() + f + ".addFocusShortcut(Key.DIGIT_" + digit + ",
-				// KeyModifier.ALT);";
-				java += t2 + "binder.forField(" + att.getName() + f + ")";
-				if (att.isRequired()) {
-					java += t3 + ".asRequired(\"" + att.getLabel() + " es requerido.\")		";
-				}
-				if (att.isInteger()) {
-					java += t3 + ".withConverter(new DoubleToIntegerConverter())";
-				} else if (att.isBigDecimal()) {
-					java += t3 + ".withConverter(new DoubleToBigDecimalConverter())";
-				} else if (att.isLong()) {
-					java += t3 + ".withConverter(new DoubleToLongConverter())";
-				} else if (att.isDouble()) {
-
-				} else {
-					java += t3 + "666";
-				}
-				if (att.isBigDecimal() == false) {
-					java += t3 + ".withValidator(value -> (value != null) ? value >= " + min
-							+ " : true, \"El valor tiene que ser >= " + min + "\")";
-					java += t3 + ".withValidator(value -> (value != null) ? value <= " + max
-							+ " : true,\"El valor tiene que ser <= \" + " + max + ")";
-				}
-				java += t3 + ".bind(" + clazzX.getName() + "::get" + toCamelStart(att.getName()) + f + ", "
-						+ clazzX.getName() + "::set" + toCamelStart(att.getName()) + f + ");";
-
-				// java += t2 + arg.getName() + f + ".addKeyPressListener(Key.ENTER, event ->
-				// {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + f + ".addValueChangeListener(event -> {";
-				// java += t2 + "if (event.getValue() == null ||
-				// event.getValue().toString().trim().length() == 0) {";
-				// java += t3 + "search();";
-				// java += t2 + "}";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + f + ".addBlurListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-
-			} else if (att.isDate()) {
-
-			} else if (att.isTimestamp()) {
-
-			} else if (att.isString()) {
-
-				// java += sc + "private TextField " + arg.getName() + ";";
-
-				java += "\n\n\t\t//-------------------------------------------------------------------";
-				java += t2 + "// " + att.getLabel() + "";
-				java += t2 + att.getName() + " = new TextField();";
-				if (att.isRequired()) {
-					java += t2 + att.getName() + ".setRequired(true);";
-				}
-				java += t2 + att.getName() + ".setPlaceholder(\"" + att.getLabel() + "\");";
-				java += t2 + att.getName() + ".setPrefixComponent(VaadinIcon.SEARCH.create());";
-				java += t2 + att.getName() + ".setWidthFull();";
-				java += t2 + att.getName() + ".setClearButtonVisible(true);";
-				java += t2 + att.getName() + ".setAutoselect(true);";
-				// java += t2 + att.getName() + ".addFocusShortcut(Key.DIGIT_" + digit + ",
-				// KeyModifier.ALT);";
-
-				java += t2 + "binder.forField(" + att.getName() + ")";
-				if (att.isRequired()) {
-					java += t3 + ".asRequired(\"" + att.getLabel() + " es requerido.\")		";
-				}
-				java += t3 + ".bind(" + clazzX.getName() + "::get" + toCamelStart(att.getName()) + ", "
-						+ clazzX.getName() + "::set" + toCamelStart(att.getName()) + ");";
-
-				// java += t2 + arg.getName() + ".addKeyPressListener(Key.ENTER, event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + ".addValueChangeListener(event -> {";
-				// java += t3 + "if (event.getValue() == null ||
-				// event.getValue().toString().trim().length() == 0) {";
-				// java += t4 + "search();";
-				// java += t3 + "}";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + ".addBlurListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-
-			} else if (att.isBoolean()) {
-
-				java += "\n\n\t\t//-------------------------------------------------------------------";
-				java += t2 + "// " + att.getLabel() + "";
-				// java += t2 + att.getName() + " = new ComboBox<>();";
-				// if (att.isRequired()) {
-				// java += t2 + att.getName() + ".setRequired(true);";
-				// }
-				// java += t2 + att.getName() + ".setPlaceholder(\"" + att.getLabel() + ":
-				// Todos\");";
-				// java += t2 + "FBoolean value" + toCamelStart(att.getName()) + " = new
-				// FBoolean(\"" + att.getLabel()
-				// + ": \", null, \"Todos\");";
-				// java += t2 + att.getName() + ".setItems(value" + toCamelStart(att.getName())
-				// + ", new FBoolean(\""
-				// + att.getLabel() + ": \", true, \"Si\"), new FBoolean(\"" + att.getLabel()
-				// + ": \", false, \"No\"));";
-				// java += t2 + att.getName() + ".setValue(value" + toCamelStart(att.getName())
-				// + ");";
-				// java += t2 + "binder.forField(" + att.getName() + ")";
-				// if (att.isRequired()) {
-				// java += t3 + ".asRequired(\"" + att.getLabel() + " es requerido.\") ";
-				// }
-				// java += t3 + ".bind(" + clazzX.getName() + "::get" +
-				// toCamelStart(att.getName()) + "X, "
-				// + clazzX.getName() + "::set" + toCamelStart(att.getName()) + "X);";
-
-				// java += t2 + arg.getName() + ".addValueChangeListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + ".addBlurListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
+				buildSrcTimestamp(c, att);
 
 			} else if (att.isSimple() == false) {
 
-				java += "\n\n\t\t//-------------------------------------------------------------------";
-				java += t2 + "// " + att.getLabel() + "";
-				java += t2 + att.getName() + " = new ComboBox<>();";
-				if (att.isRequired()) {
-					java += t2 + att.getName() + ".setRequired(true);";
-				}
-				java += t2 + att.getName() + ".setPlaceholder(\"" + att.getLabel() + "\");";
-
-				// java += t2 + att.getDataType().getName() + "Service " + att.getName() +
-				// "Service = new "
-				// + att.getDataType().getName() + "Service();";
-				// java += t2 + att.getDataType().getNamePlural() + "Filtro " + att.getName() +
-				// "Filtro = new "
-				// + att.getDataType().getNamePlural() + "Filtro();";
-				// java += t2 + att.getName() + "Filtro.setUnlimited(true);";
-				// java += t2 + "List<" + att.getDataType().getNamePlural() + "> " +
-				// att.getName() + "Items = "
-				// + att.getName() + "Service.find(" + att.getName() + "Filtro);";
-				//
-				// java += t2 + att.getName() + ".setItems(" + att.getName() + "Items);";
-				// java += t2 + arg.getName() + ".setValue(value" + toCamelStart(arg.getName())
-				// + ");";
-
-				java += t2 + "binder.forField(" + att.getName() + ")";
-				if (att.isRequired()) {
-					java += t3 + ".asRequired(\"" + att.getLabel() + " es requerido.\")		";
-				}
-				java += t3 + ".bind(" + clazzX.getName() + "::get" + toCamelStart(att.getName()) + ", "
-						+ clazzX.getName() + "::set" + toCamelStart(att.getName()) + ");";
-
-				// java += t2 + "if(" + att.getName() + "Items.size() > 0){";
-				// java += t3 + att.getName() + ".setValue(" + att.getName() + "Items.get(0));";
-				// java += t2 + "}";
-
-				// java += t2 + arg.getName() + ".addValueChangeListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
-				// java += t2 + arg.getName() + ".addBlurListener(event -> {";
-				// java += t3 + "search();";
-				// java += t2 + "});";
+				buildSrcObject(c, att);
 			}
 		}
 
-		java += "\n";
+		// ------------------------------------------------------------------------------
 
-		return java;
+		srcImport += "\n";
+		srcDeclareControls += "\n";
+		srcInstanceControlsMethod += "\n";
+
+		src = src.replaceAll("@DECLARE_IMPORTS@", srcImport);
+		src = src.replaceAll("@DECLARE_CONTROLS@", srcDeclareControls);
+		src = src.replaceAll("@INSTANCE_CONTROLS@", srcInstanceControls);
+		src = src.replaceAll("@INSTANCE_CONTROLS_METHOD@", srcInstanceControlsMethod);
+		src = src.replaceAll("@ATTS@", srcControls);
+
+		return src;
 	}
 
-	private static String buildCheck(Clazz clazzX) {
-		String java = "";
+	// ==============================================================================
 
-		for (int i = 0; i < clazzX.getAtts().size(); i++) {
+	private void buildSrcBoolean(Clazz c, Att att) {
 
-			Att att = clazzX.getAtts().get(i);
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
 
-			if (att.isRequired() == false) {
-				continue;
-			}
+		srcImport += buildImport(srcImport, CONTROL_CHECKBOX_PKG);
 
-			String sc = "\n\t";
+		srcDeclareControls += buildDeclare(CONTROL_CHECKBOX, att.getName());
 
-			java += sc + buildRequired(clazzX.getName(), att.getName());
+		srcInstanceControlsMethod += buildInstanceBoolean(c, att);
 
-			// if (att.isNumber()) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());}
-			//
-			// } else if (att.isDate()) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());
-			//
-			// } else if (att.isTimestamp()) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());
-			//
-			// } else if (att.isString()) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());
-			//
-			// } else if (att.isBoolean()) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());
-			//
-			// } else if (att.isSimple() == false) {
-			//
-			// java += sc + buildRequired(clazzX.getNamePlural(), att.getName());
+	}
+
+	private void buildSrcString(Clazz c, Att att) {
+
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
+
+		if (att.getMinLength() != null && att.getMinLength() > 120) {
+
+			srcImport += buildImport(srcImport, CONTROL_TEXT_AREA_PKG);
+			srcDeclareControls += buildDeclare(CONTROL_TEXT_AREA, att.getName());
+
+		} else if (att.getMaxLength() != null && att.getMaxLength() > 120) {
+
+			srcImport += buildImport(srcImport, CONTROL_TEXT_AREA_PKG);
+			srcDeclareControls += buildDeclare(CONTROL_TEXT_AREA, att.getName());
+
+		} else {
+
+			srcImport += buildImport(srcImport, CONTROL_TEXT_FIELD_PKG);
+			srcDeclareControls += buildDeclare(CONTROL_TEXT_FIELD, att.getName());
+
+		}
+
+		srcInstanceControlsMethod += buildInstanceString(c, att);
+
+	}
+
+	private void buildSrcNumber(Clazz c, Att att) {
+
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
+
+		srcImport += buildImport(srcImport, CONTROL_NUMBER_FIELD_PKG);
+		if (att.isInteger()) {
+			srcImport += buildImport(srcImport, CONVERTER_DOUBLE_INTEGER_PKG);
+		} else if (att.isLong()) {
+			srcImport += buildImport(srcImport, CONVERTER_DOUBLE_LONG_PKG);
+		} else if (att.isBigDecimal()) {
+			srcImport += buildImport(srcImport, CONVERTER_DOUBLE_BIGDECIMAL_PKG);
+		}
+
+		srcDeclareControls += buildDeclare(CONTROL_NUMBER_FIELD, att.getName());
+
+		srcInstanceControlsMethod += buildInstanceNumber(c, att);
+
+	}
+
+	private void buildSrcDate(Clazz c, Att att) {
+
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
+
+		srcImport += buildImport(srcImport, CONTROL_DATE_PICKER_PKG);
+		srcImport += buildImport(srcImport, OBJ_UTIL_LOCALE_PKG);
+		srcImport += buildImport(srcImport, OBJ_DATE_PICKER_I18N_PKG);
+
+		srcDeclareControls += buildDeclare(CONTROL_DATE_PICKER, att.getName());
+
+		srcInstanceControlsMethod += buildInstanceDate(c, att);
+
+	}
+
+	private void buildSrcTimestamp(Clazz c, Att att) {
+
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
+
+		srcImport += buildImport(srcImport, CONTROL_DATE_TIME_PICKER_PKG);
+		srcImport += buildImport(srcImport, OBJ_UTIL_LOCALE_PKG);
+		srcImport += buildImport(srcImport, OBJ_DATE_PICKER_I18N_PKG);
+
+		srcDeclareControls += buildDeclare(CONTROL_DATE_TIME_PICKER, att.getName());
+
+		srcInstanceControlsMethod += buildInstanceDateTime(c, att);
+
+	}
+
+	private void buildSrcObject(Clazz c, Att att) {
+
+		srcControls += NT2 + "form.add(" + att.getName() + ");";
+		srcInstanceControls += NT2 + "build" + toCamelStart(att.getName()) + "();";
+
+		srcImport += buildImport(srcImport, OBJ_UTIL_LIST_PKG);
+		srcImport += buildImport(srcImport, CONTROL_COMBOBOX_PKG);
+		srcImport += buildImport(srcImport, c, att);
+		srcImport += buildImport(srcImport, c, att, "Service");
+
+		srcDeclareControls += buildDeclare(CONTROL_COMBOBOX, att.getDataType().getName(), att.getName());
+
+		srcInstanceControlsMethod += buildInstanceObject(c, att);
+
+	}
+
+	// ==============================================================================
+
+	private String buildInstance(Clazz c, Att att, String control) {
+		String src = "";
+
+		// src += SEPARATOR_INSTANCE_CONTROLS;
+		src += NT2 + buildCommentAtt(att);
+		src += NT2 + buildNewInstanceControl(att, control);
+		src += NT2 + buildSetLabelControl(att);
+		src += NT2 + buildSetWidthFull(att);
+		// src += NT2 + buildSetClearButtonVisible(att);
+		if (att.isReadOnlyGUI()) {
+			src += NT2 + buildSetReadOnly(att);
+		}
+
+		return src;
+	}
+
+	private String buildInstanceBoolean(Clazz c, Att att) {
+		String src = "";
+
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
+
+		src += buildInstance(c, att, CONTROL_CHECKBOX);
+		// src += NT2 + att.getName() + ".setIndeterminate(true);";
+		// ------------
+		src += NT2 + buildBinderForField(att);
+		// src += buildBindRequied(NT3, att);
+		src += NT3 + buildBind(c, att);
+
+		src += NT1 + "}";
+
+		return src;
+	}
+
+	private String buildInstanceString(Clazz c, Att att) {
+		String src = "";
+
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
+
+		if (att.getMinLength() != null && att.getMinLength() > 120) {
+			src += buildInstance(c, att, CONTROL_TEXT_AREA);
+		} else if (att.getMaxLength() != null && att.getMaxLength() > 120) {
+			src += buildInstance(c, att, CONTROL_TEXT_AREA);
+		} else {
+			src += buildInstance(c, att, CONTROL_TEXT_FIELD);
+		}
+
+		src += NT2 + buildSetClearButtonVisible(att);
+		src += NT2 + att.getName() + ".setAutoselect(true);";
+		if (att.isRequired()) {
+			src += NT2 + att.getName() + ".setRequired(true);";
+		}
+		// ------------
+		src += NT2 + buildBinderForField(att);
+		src += buildBindRequied(NT3, att);
+		// if (att.getMinLength() != null && att.getMaxLength() == null) {
+		// src += NT3 + ".withValidator(new StringLengthValidator(\"El valor tiene que
+		// contener al menos " + att.getMinLength() + " caracteres\", " +
+		// att.getMinLength() + ", null))";
+		// } else if (att.getMinLength() == null && att.getMaxLength() != null) {
+		// src += NT3 + ".withValidator(new StringLengthValidator(\"El valor tiene que
+		// contener menos de " + att.getMaxLength() + " caracteres\", null, " +
+		// att.getMaxLength() + "))";
+		// } else if (att.getMinLength() != null && att.getMaxLength() != null) {
+		// src += NT3 + ".withValidator(new StringLengthValidator(\"El valor tiene que
+		// contener al menos " + att.getMinLength() + " caracteres, y menos de " +
+		// att.getMaxLength() + "\", " + att.getMinLength() + ", " + att.getMaxLength()
+		// + "))";
+		// }
+		if (att.getMinLength() != null) {
+			src += NT3 + ".withValidator(value -> (value != null) ? value.length() >= " + att.getMinLength()
+					+ " : true, \"El valor tiene que contener al menos " + att.getMinLength() + " caracteres\")";
+		}
+		if (att.getMaxLength() != null) {
+
+			src += NT3 + ".withValidator(value -> (value != null) ? value.length() <= " + att.getMaxLength()
+					+ " : true, \"El valor tiene que contener menos de " + att.getMaxLength() + " caracteres\")";
+		}
+
+		src += NT3 + buildBind(c, att);
+
+		src += NT1 + "}";
+
+		return src;
+	}
+
+	private String buildInstanceNumber(Clazz c, Att att) {
+		String src = "";
+
+		// --------------------------------------------------------------
+
+		Object min = null;
+		Object max = null;
+
+		if (att.isInteger()) {
+			min = ((DataTypeInteger) att.getDataType()).getMinValue();
+			max = ((DataTypeInteger) att.getDataType()).getMaxValue();
+		} else if (att.isLong()) {
+			min = ((DataTypeLong) att.getDataType()).getMinValue();
+			max = ((DataTypeLong) att.getDataType()).getMaxValue();
+		} else if (att.isDouble()) {
+			min = ((DataTypeDouble) att.getDataType()).getMinValue();
+			max = ((DataTypeDouble) att.getDataType()).getMaxValue();
+		} else if (att.isBigDecimal()) {
+			min = ((DataTypeBigDecimal) att.getDataType()).getMinValue();
+			max = ((DataTypeBigDecimal) att.getDataType()).getMaxValue();
+		}
+
+		if (min != null && att.isLong()) {
+			min = min + "L";
+		}
+		if (max != null && att.isLong()) {
+			max = max + "L";
+		}
+
+		if (min == null && att.isBigDecimal() == false) {
+			min = att.getDataType().getNameJava() + ".MIN_VALUE";
+		}
+		if (max == null && att.isBigDecimal() == false) {
+			max = att.getDataType().getNameJava() + ".MAX_VALUE";
+		}
+
+		// --------------------------------------------------------------
+
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
+
+		src += buildInstance(c, att, CONTROL_NUMBER_FIELD);
+		// src += NT2 + att.getName() + ".setAutoselect(true);";
+		src += NT2 + buildSetClearButtonVisible(att);
+		if (min != null) {
+			src += NT2 + att.getName() + ".setMin(" + min + ");";
+		}
+		if (max != null) {
+			src += NT2 + att.getName() + ".setMax(" + max + ");";
+		}
+		// ------------
+		src += NT2 + buildBinderForField(att);
+		src += buildBindRequied(NT3, att);
+		if (att.isInteger()) {
+			src += NT3 + ".withValidator(value -> (value != null) ? value % 1 == 0"
+					+ " : true, \"El valor tiene que ser entero\")";
+			src += NT3 + ".withConverter(new DoubleToIntegerConverter())";
+		} else if (att.isBigDecimal()) {
+			src += NT3 + ".withConverter(new DoubleToBigDecimalConverter())";
+		} else if (att.isLong()) {
+			src += NT3 + ".withConverter(new DoubleToLongConverter())";
+		} else if (att.isDouble()) {
+
+		} else {
+			src += NT3 + "666";
+		}
+		if (att.isBigDecimal() == false) {
+			src += NT3 + ".withValidator(value -> (value != null) ? value >= " + min
+					+ " : true, \"El valor tiene que ser >= " + min + "\")";
+			src += NT3 + ".withValidator(value -> (value != null) ? value <= " + max
+					+ " : true,\"El valor tiene que ser <= \" + " + max + ")";
+
+			// if (min != null && max == null) {
+			// src += NT3 + ".withValidator(new IntegerRangeValidator(\"El valor tiene que
+			// ser >= \" + " + min + " + \"\", " + min + ", " + null + "))";
+			// } else if (min == null && max != null) {
+			// src += NT3 + ".withValidator(new IntegerRangeValidator(\"El valor tiene que
+			// ser <= \" + " + max + " + \"\", " + null + ", " + max + "))";
+			// } else if (min != null && max != null) {
+			// src += NT3 + ".withValidator(new IntegerRangeValidator(\"El valor tiene que
+			// ser >= \" + " + min + " + \" y <= \" + " + max + " + \"\", " + min + ", " +
+			// max + "))";
 			// }
+
 		}
+		src += NT3 + buildBind(c, att);
 
-		java += "\n";
+		src += NT1 + "}";
 
-		return java;
+		return src;
 	}
 
-	private static String buildRequired(String m, String n) {
-		String s = "";
+	private String buildInstanceDate(Clazz c, Att att) {
+		String src = "";
 
-		s += "\n\t\tif (filter.get" + toCamelStart(n) + "() == null || filter.get" + toCamelStart(n)
-				+ "().toString().trim().isEmpty()) {";
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
 
-		s += "\n\t\t\t" + n + ".setInvalid(true);";
+		src += buildInstance(c, att, CONTROL_DATE_PICKER);
+		if (att.isRequired()) {
+			src += NT2 + att.getName() + ".setRequired(true);";
+		}
+		src += NT2 + att.getName() + ".setLocale(new Locale(\"es_AR\"));";
+		src += NT2 + att.getName() + ".setI18n(new " + OBJ_DATE_PICKER_I18N + "());";
 
-		s += "\n\t\t}";
+		// ------------
+		src += NT2 + buildBinderForField(att);
+		src += buildBindRequied(NT3, att);
+		src += NT3 + buildBind(c, att);
 
-		return s;
+		src += NT1 + "}";
+
+		return src;
+	}
+
+	private String buildInstanceDateTime(Clazz c, Att att) {
+		String src = "";
+
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
+
+		src += buildInstance(c, att, CONTROL_DATE_TIME_PICKER);
+		if (att.isRequired()) {
+			src += NT2 + att.getName() + ".setRequired(true);";
+		}
+		src += NT2 + att.getName() + ".setLocale(new Locale(\"es_AR\"));";
+		src += NT2 + att.getName() + ".setI18n(new " + OBJ_DATE_PICKER_I18N + "());";
+
+		// ------------
+		src += NT2 + buildBinderForField(att);
+		src += buildBindRequied(NT3, att);
+		src += NT3 + buildBind(c, att);
+
+		src += NT1 + "}";
+
+		return src;
+	}
+
+	private String buildInstanceObject(Clazz c, Att att) {
+		String src = "";
+
+		src += N + NT1 + "private void build" + toCamelStart(att.getName()) + "() throws Exception {";
+
+		src += buildInstance(c, att, CONTROL_COMBOBOX + "<>");
+		if (att.isRequired()) {
+			src += NT2 + att.getName() + ".setRequired(true);";
+		}
+		// ------------
+
+		src += NT2 + "List<" + att.getDataType().getName() + "> " + "items = new " + att.getDataType().getName()
+				+ "Service().find();";
+		src += NT2 + att.getName() + ".setItems(items);";
+
+		// ------------
+
+		src += NT2 + buildBinderForField(att);
+		src += buildBindRequied(NT3, att);
+		src += NT3 + buildBind(c, att);
+
+		src += NT1 + "}";
+
+		return src;
 	}
 
 }

@@ -29,17 +29,9 @@ public class UtilJavaPOJO {
 
 		String java = "package com.massoftware.service." + clazzX.getNamePackage() + ";";
 
-		// java += "\n\nimport com.massoftware.backend.annotation.ClassLabelAnont;";
-		// java += "\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\n\nimport com.massoftware.service.EntityId;";
 
 		java += buildImportAtts(clazzX);
-
-		// java += "\n\n@ClassLabelAnont(singular = \"" + clazzX.getSingular() + "\",
-		// plural = \"" + clazzX.getPlural()
-		// + "\", singularPre = \"" + clazzX.getSingularPre() + "\", pluralPre = \"" +
-		// clazzX.getPluralPre()
-		// + "\")";
 
 		java += "\n\npublic class " + clazzX.getName() + " extends EntityId implements Cloneable {";
 
@@ -55,12 +47,13 @@ public class UtilJavaPOJO {
 			String label = "label = \"" + att.getLabel() + "\"";
 			String labelError = "labelError = \"\"";
 			String unique = "unique = " + att.isUnique();
-			String readOnly = "readOnly = " + att.isReadOnlyGUI();
-			String required = "required = " + ((att.isReadOnlyGUI() == true) ? false : att.isRequired());
-			String columns = "columns = 20f";
-			String maxLength = "maxLength = " + att.getMaxLength();
-			String minValue = "minValue = \"" + "" + "\"";
-			String maxValue = "maxValue = \"" + "" + "\"";
+			// String readOnly = "readOnly = " + att.isReadOnlyGUI();
+			// String required = "required = " + ((att.isReadOnlyGUI() == true) ? false :
+			// att.isRequired());
+			// String columns = "columns = 20f";
+			// String maxLength = "maxLength = " + att.getMaxLength();
+			// String minValue = "minValue = \"" + "" + "\"";
+			// String maxValue = "maxValue = \"" + "" + "\"";
 			String mask = "mask = \"\"";
 
 			if (att.getLabelError() != null) {
@@ -68,7 +61,7 @@ public class UtilJavaPOJO {
 			}
 
 			if (att.getColumns() != null) {
-				columns = "columns = " + att.getColumns() + "f";
+				// columns = "columns = " + att.getColumns() + "f";
 			}
 
 			if (att.getMask() != null) {
@@ -78,16 +71,16 @@ public class UtilJavaPOJO {
 			if (att.isNumber()) {
 				if (att.isInteger()) {
 					DataTypeInteger dt = (DataTypeInteger) att.getDataType();
-					if (dt.getMinValue() != null) {
-						minValue = "minValue = \"" + dt.getMinValue() + "\"";
-					} else {
-						minValue = "minValue = \"" + Integer.MIN_VALUE + "\"";
-					}
-					if (dt.getMaxValue() != null) {
-						maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-					} else {
-						maxValue = "maxValue = \"" + Integer.MAX_VALUE + "\"";
-					}
+					// if (dt.getMinValue() != null) {
+					// minValue = "minValue = \"" + dt.getMinValue() + "\"";
+					// } else {
+					// minValue = "minValue = \"" + Integer.MIN_VALUE + "\"";
+					// }
+					// if (dt.getMaxValue() != null) {
+					// maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+					// } else {
+					// maxValue = "maxValue = \"" + Integer.MAX_VALUE + "\"";
+					// }
 
 					if (att.getMaxLength() == null) {
 
@@ -109,22 +102,22 @@ public class UtilJavaPOJO {
 							}
 						}
 
-						maxLength = "maxLength = " + length;
+						// maxLength = "maxLength = " + length;
 
 					}
 
 				} else if (att.isLong()) {
 					DataTypeLong dt = (DataTypeLong) att.getDataType();
-					if (dt.getMinValue() != null) {
-						minValue = "minValue = \"" + dt.getMinValue() + "\"";
-					} else {
-						minValue = "minValue = \"" + Long.MIN_VALUE + "\"";
-					}
-					if (dt.getMaxValue() != null) {
-						maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-					} else {
-						maxValue = "maxValue = \"" + Long.MAX_VALUE + "\"";
-					}
+					// if (dt.getMinValue() != null) {
+					// minValue = "minValue = \"" + dt.getMinValue() + "\"";
+					// } else {
+					// minValue = "minValue = \"" + Long.MIN_VALUE + "\"";
+					// }
+					// if (dt.getMaxValue() != null) {
+					// maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+					// } else {
+					// maxValue = "maxValue = \"" + Long.MAX_VALUE + "\"";
+					// }
 
 					if (att.getMaxLength() == null) {
 
@@ -146,22 +139,22 @@ public class UtilJavaPOJO {
 							}
 						}
 
-						maxLength = "maxLength = " + length;
+						// maxLength = "maxLength = " + length;
 
 					}
 
 				} else if (att.isDouble()) {
 					DataTypeDouble dt = (DataTypeDouble) att.getDataType();
-					if (dt.getMinValue() != null) {
-						minValue = "minValue = \"" + dt.getMinValue() + "\"";
-					} else {
-						minValue = "minValue = \"" + Double.MIN_VALUE + "\"";
-					}
-					if (dt.getMaxValue() != null) {
-						maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-					} else {
-						maxValue = "maxValue = \"" + Double.MAX_VALUE + "\"";
-					}
+					// if (dt.getMinValue() != null) {
+					// minValue = "minValue = \"" + dt.getMinValue() + "\"";
+					// } else {
+					// minValue = "minValue = \"" + Double.MIN_VALUE + "\"";
+					// }
+					// if (dt.getMaxValue() != null) {
+					// maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+					// } else {
+					// maxValue = "maxValue = \"" + Double.MAX_VALUE + "\"";
+					// }
 
 					if (att.getMaxLength() == null) {
 
@@ -183,19 +176,19 @@ public class UtilJavaPOJO {
 							}
 						}
 
-						maxLength = "maxLength = " + length;
+						// maxLength = "maxLength = " + length;
 
 					}
 
 				} else if (att.isBigDecimal()) {
 					DataTypeBigDecimal dt = (DataTypeBigDecimal) att.getDataType();
 
-					if (dt.getMinValue() != null) {
-						minValue = "minValue = \"" + dt.getMinValue() + "\"";
-					}
-					if (dt.getMaxValue() != null) {
-						maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-					}
+					// if (dt.getMinValue() != null) {
+					// minValue = "minValue = \"" + dt.getMinValue() + "\"";
+					// }
+					// if (dt.getMaxValue() != null) {
+					// maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
+					// }
 
 					if (att.getMaxLength() == null) {
 
@@ -212,41 +205,37 @@ public class UtilJavaPOJO {
 						}
 
 						if (length > 0) {
-							maxLength = "maxLength = " + length;
+							// maxLength = "maxLength = " + length;
 						} else {
-							maxLength = "maxLength = " + -1;
+							// maxLength = "maxLength = " + -1;
 						}
 
 					}
 
 				}
 			} else if (att.isString()) {
-				minValue = "minValue = \"" + "" + "\"";
-				maxValue = "maxValue = \"" + "" + "\"";
+				// minValue = "minValue = \"" + "" + "\"";
+				// maxValue = "maxValue = \"" + "" + "\"";
 			} else if (att.isBoolean()) {
-				minValue = "minValue = \"" + "" + "\"";
-				maxValue = "maxValue = \"" + "" + "\"";
-				maxLength = "maxLength = " + -1;
+				// minValue = "minValue = \"" + "" + "\"";
+				// maxValue = "maxValue = \"" + "" + "\"";
+				// maxLength = "maxLength = " + -1;
 			} else if (att.isDate()) {
-				minValue = "minValue = \"" + "" + "\"";
-				maxValue = "maxValue = \"" + "" + "\"";
-				maxLength = "maxLength = " + -1;
+				// minValue = "minValue = \"" + "" + "\"";
+				// maxValue = "maxValue = \"" + "" + "\"";
+				// maxLength = "maxLength = " + -1;
 			} else if (att.isTimestamp()) {
-				minValue = "minValue = \"" + "" + "\"";
-				maxValue = "maxValue = \"" + "" + "\"";
-				maxLength = "maxLength = " + -1;
+				// minValue = "minValue = \"" + "" + "\"";
+				// maxValue = "maxValue = \"" + "" + "\"";
+				// maxLength = "maxLength = " + -1;
 			} else if (att.isSimple() == false) {
-				minValue = "minValue = \"" + "" + "\"";
-				maxValue = "maxValue = \"" + "" + "\"";
-				maxLength = "maxLength = " + -1;
+				// minValue = "minValue = \"" + "" + "\"";
+				// maxValue = "maxValue = \"" + "" + "\"";
+				// maxLength = "maxLength = " + -1;
 			}
 
-			// java += "\n\t@FieldConfAnont(" + label + ", " + labelError + ", " + unique +
-			// ", " + readOnly + ", "
-			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
-			// maxValue + ", " + mask
-			// + ")";
-			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "")
+					.replace("java.time.", "") + " " + att.getName() + "";
 
 			if (att.isBoolean()) {
 				// java += " = false";
@@ -294,8 +283,8 @@ public class UtilJavaPOJO {
 			}
 
 			java += "\n\n\t// GET " + att.getLabel();
-			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " get"
-					+ att.getNameJavaUperCase() + "() {";
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "")
+					.replace("java.time.", "") + " get" + att.getNameJavaUperCase() + "() {";
 
 			if (att.isSimple()) {
 				java += "\n\t\treturn this." + att.getName() + ";";
@@ -309,8 +298,9 @@ public class UtilJavaPOJO {
 			java += "\n\t}";
 
 			java += "\n\n\t// SET " + att.getLabel();
-			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-					+ att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + " ){";
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "(" + att.getDataType().getName()
+					.replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName()
+					+ " ){";
 
 			if (att.isBoolean()) {
 				java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null) ? false : " + att.getName()
@@ -362,26 +352,30 @@ public class UtilJavaPOJO {
 
 				String java1 = "\nimport com.massoftware.service." + dataTypeClazz.getClazz().getNamePackage() + "."
 						+ dataTypeClazz.getClazz().getName() + ";";
-				
+
 				if (java.contains(java1) == false) {
 					java += java1;
-				}	
-				
+				}
 
 			} else {
-				
-				if(att.isDate()) {
+
+				if (att.isDate()) {
 					String java1 = "\nimport java.time.LocalDate;";
 					if (java.contains(java1) == false) {
 						java += java1;
-					}	
-				} else if(att.isBigDecimal()) {
+					}
+				} else if (att.isTimestamp()) {
+					String java1 = "\nimport java.time.LocalDateTime;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}
+				} else if (att.isBigDecimal()) {
 					String java1 = "\nimport java.math.BigDecimal;";
 					if (java.contains(java1) == false) {
 						java += java1;
-					}	
+					}
 				}
-				
+
 			}
 		}
 
@@ -849,7 +843,7 @@ public class UtilJavaPOJO {
 		java += t2 + clazz.getName() + " other = new " + clazz.getName() + "();";
 
 		java += t2 + "";
-		
+
 		java += t2 + "other.setId(this.getId());";
 
 		for (Att att : clazz.getAtts()) {

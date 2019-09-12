@@ -58,6 +58,10 @@ public class Att {
 	public DataType getDataType() {
 		return dataType;
 	}
+	
+	public DataTypeClazz getDataTypeClazz() {
+		return (DataTypeClazz) getDataType();
+	}
 
 	public void setDataType(DataType dataType) {
 		this.dataType = dataType;

@@ -277,7 +277,7 @@ public class Clazz {
 	}
 
 	public String toJavaUIFormView() throws IOException {
-		return UtilJavaUIFormView.toJava(this);
+		return new UtilJavaUIFormView().toJava(this);
 	}
 
 	public String toPopulateJava() {

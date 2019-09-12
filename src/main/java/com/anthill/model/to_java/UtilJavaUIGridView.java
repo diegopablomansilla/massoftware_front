@@ -521,6 +521,8 @@ public class UtilJavaUIGridView {
 				java += "\n\n\t\t//-------------------------------------------------------------------";
 				java += t2 + "// " + arg.getLabel() + "";
 				java += t2 + arg.getName() + " = new ComboBox<>();";
+				java += t2 + arg.getName() + ".setWidthFull();";
+				
 				if (arg.isRequired()) {
 					java += t2 + arg.getName() + ".setRequired(true);";
 				}

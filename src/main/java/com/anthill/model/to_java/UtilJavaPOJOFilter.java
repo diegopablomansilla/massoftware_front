@@ -22,41 +22,13 @@ public class UtilJavaPOJOFilter {
 
 		String java = "package com.massoftware.service." + clazzX.getNamePackage() + ";";
 
-		// java += "\n\nimport com.massoftware.backend.annotation.FieldConfAnont;";
 		java += "\n\nimport com.massoftware.service.*;";
-		// java += "\n\nimport com.massoftware.service.FBoolean;";
 
 		java += buildImports(clazzX);
 
 		java += "\n\npublic class " + clazzX.getNamePlural() + "Filtro extends GenericFilter implements Cloneable {";
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
-
-		// java += "\n\tpublic " + clazzX.getNamePlural() + "Filtro() {";
-		// java += "\n\t\t_levelDefault = " +
-		// UtilJavaPOJO.buildMapperDefaultLevel(clazzX) + ";";
-		// java += "\n\t}";
-
-		// java += "\n\tprivate int _levelDefault = " +
-		// UtilJavaPOJO.buildMapperDefaultLevel(clazzX) + ";";
-
-		// java += "\n\n\t@FieldConfAnont(label = \"Unlimited\")";
-		// java += "\n\tprivate Boolean unlimited = false;";
-		//
-		// java += "\n\n\t@FieldConfAnont(label = \"Limit\")";
-		// java += "\n\tprivate Long limit;";
-		//
-		// java += "\n\n\t@FieldConfAnont(label = \"Offset\")";
-		// java += "\n\tprivate Long offset;";
-		//
-		// java += "\n\n\t@FieldConfAnont(label = \"Order by att\")";
-		// java += "\n\tprivate String orderBy;";
-		//
-		// java += "\n\n\t@FieldConfAnont(label = \"Order by desc\")";
-		// java += "\n\tprivate Boolean orderByDesc = false;";
-		//
-		// java += "\n\n\t@FieldConfAnont(label = \"Level\")";
-		// java += "\n\tprivate Integer level = _levelDefault;";
 
 		for (Argument arg : clazzX.getArgs()) {
 
@@ -95,75 +67,6 @@ public class UtilJavaPOJOFilter {
 		}
 
 		java += "\n\n\t// ---------------------------------------------------------------------------------------------------------------------------\n";
-
-		// java += "\n\n\t// GET Unlimited";
-		// java += "\n\tpublic Boolean getUnlimited() {";
-		// java += "\n\t\treturn this.unlimited;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Unlimited";
-		// java += "\n\tpublic void setUnlimited(Boolean unlimited){";
-		// java += "\n\t\tunlimited = (unlimited == null) ? false : unlimited;";
-		// java += "\n\t\tthis.unlimited = unlimited;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// GET Limit";
-		// java += "\n\tpublic Long getLimit() {";
-		// java += "\n\t\treturn this.limit;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Limit";
-		// java += "\n\tpublic void setLimit(Long limit){";
-		// java += "\n\t\tlimit = (limit == null || limit < 1) ? 100 : limit;";
-		// java += "\n\t\tthis.limit = limit;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// GET Offset";
-		// java += "\n\tpublic Long getOffset() {";
-		// java += "\n\t\treturn this.offset;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Offset";
-		// java += "\n\tpublic void setOffset(Long offset){";
-		// java += "\n\t\toffset = (offset == null || offset < 0) ? 0 : offset;";
-		// java += "\n\t\tthis.offset = offset;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// GET Order by att";
-		// java += "\n\tpublic String getOrderBy() {";
-		// java += "\n\t\treturn this.orderBy;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Order by att";
-		// java += "\n\tpublic void setOrderBy(String orderBy){";
-		// // java += "\n\t\torderBy = (orderBy == null) ? \"1\" : orderBy;";
-		// java += "\n\t\tthis.orderBy = orderBy;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// GET Order by desc";
-		// java += "\n\tpublic Boolean getOrderByDesc() {";
-		// java += "\n\t\treturn this.orderByDesc;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Order by desc";
-		// java += "\n\tpublic void setOrderByDesc(Boolean orderByDesc){";
-		// java += "\n\t\torderByDesc = (orderByDesc == null) ? false : orderByDesc;";
-		// java += "\n\t\tthis.orderByDesc = orderByDesc;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// GET Level";
-		// java += "\n\tpublic Integer getLevel() {";
-		// java += "\n\t\treturn this.level;";
-		// java += "\n\t}";
-		//
-		// java += "\n\n\t// SET Level";
-		// java += "\n\tpublic void setLevel(Integer level){";
-		// java += "\n\t\tlevel = (level == null || level < 0) ? _levelDefault :
-		// level;";
-		// java += "\n\t\tlevel = (level != null && level > 3) ? _levelDefault :
-		// level;";
-		// java += "\n\t\tthis.level = level;";
-		// java += "\n\t}";
 
 		for (Argument arg : clazzX.getArgs()) {
 
@@ -216,22 +119,29 @@ public class UtilJavaPOJOFilter {
 			if (arg.isSimple() == false) {
 				DataTypeClazz dt = (DataTypeClazz) arg.getDataType();
 
-				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "." + dt.getClazz().getNamePlural() + ";";
-				if (java.contains(java1) == false && clazz.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
+				String java1 = "\nimport com.massoftware.service." + dt.getClazz().getNamePackage() + "."
+						+ dt.getClazz().getNamePlural() + ";";
+				if (java.contains(java1) == false
+						&& clazz.getNamePackage().equals(dt.getClazz().getNamePackage()) == false) {
 					java += java1;
 				}
 			} else {
-				
-				if(arg.isDate()) {
+
+				if (arg.isDate()) {
 					String java1 = "\nimport java.time.LocalDate;";
 					if (java.contains(java1) == false) {
 						java += java1;
-					}	
-				} else if(arg.isBigDecimal()) {
+					}
+				} else if (arg.isTimestamp()) {
+					String java1 = "\nimport java.time.LocalDateTime;";
+					if (java.contains(java1) == false) {
+						java += java1;
+					}
+				} else if (arg.isBigDecimal()) {
 					String java1 = "\nimport java.math.BigDecimal;";
 					if (java.contains(java1) == false) {
 						java += java1;
-					}	
+					}
 				}
 			}
 		}
@@ -244,42 +154,9 @@ public class UtilJavaPOJOFilter {
 
 		java += "\n\n\t// " + att.getLabel();
 
-//		String label = "label = \"" + att.getLabel() + "\"";
-//		String labelError = "labelError = \"\"";
-//		// String unique = "unique = " + att.isUnique();
-//		String readOnly = "readOnly = " + att.isReadOnlyGUI();
-//		String required = "required = " + att.isRequired();
-//		String columns = "columns = 20f";
-//		String maxLength = "maxLength = " + att.getMaxLength();
-//		String minValue = "minValue = \"" + "" + "\"";
-//		String maxValue = "maxValue = \"" + "" + "\"";
-//		String mask = "mask = \"\"";
-
-//		if (att.getLabelError() != null) {
-//			labelError = "labelError = \"" + att.getLabelError() + "\"";
-//		}
-//
-//		if (att.getColumns() != null) {
-//			columns = "columns = " + att.getColumns() + "f";
-//		}
-//
-//		if (att.getMask() != null) {
-//			mask = "mask = \"" + att.getMask() + "\"";
-//		}
-
 		if (att.isNumber()) {
 			if (att.isInteger()) {
 				DataTypeInteger dt = (DataTypeInteger) att.getDataType();
-//				if (dt.getMinValue() != null) {
-//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-//				} else {
-//					minValue = "minValue = \"" + Integer.MIN_VALUE + "\"";
-//				}
-//				if (dt.getMaxValue() != null) {
-//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-//				} else {
-//					maxValue = "maxValue = \"" + Integer.MAX_VALUE + "\"";
-//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -301,22 +178,10 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-//					maxLength = "maxLength = " + length;
-
 				}
 
 			} else if (att.isLong()) {
 				DataTypeLong dt = (DataTypeLong) att.getDataType();
-//				if (dt.getMinValue() != null) {
-//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-//				} else {
-//					minValue = "minValue = \"" + Long.MIN_VALUE + "\"";
-//				}
-//				if (dt.getMaxValue() != null) {
-//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-//				} else {
-//					maxValue = "maxValue = \"" + Long.MAX_VALUE + "\"";
-//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -338,22 +203,10 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-//					maxLength = "maxLength = " + length;
-
 				}
 
 			} else if (att.isDouble()) {
 				DataTypeDouble dt = (DataTypeDouble) att.getDataType();
-//				if (dt.getMinValue() != null) {
-//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-//				} else {
-//					minValue = "minValue = \"" + Double.MIN_VALUE + "\"";
-//				}
-//				if (dt.getMaxValue() != null) {
-//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-//				} else {
-//					maxValue = "maxValue = \"" + Double.MAX_VALUE + "\"";
-//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -375,18 +228,10 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-//					maxLength = "maxLength = " + length;
-
 				}
 
 			} else if (att.isBigDecimal()) {
 				DataTypeBigDecimal dt = (DataTypeBigDecimal) att.getDataType();
-//				if (dt.getMinValue() != null) {
-//					minValue = "minValue = \"" + dt.getMinValue() + "\"";
-//				}
-//				if (dt.getMaxValue() != null) {
-//					maxValue = "maxValue = \"" + dt.getMaxValue() + "\"";
-//				}
 
 				if (att.getMaxLength() == null) {
 
@@ -402,61 +247,22 @@ public class UtilJavaPOJOFilter {
 						}
 					}
 
-					if (length > 0) {
-//						maxLength = "maxLength = " + length;
-					}
-
 				}
 
 			}
-		} else if (att.isString()) {
-//			minValue = "minValue = \"" + "" + "\"";
-//			maxValue = "maxValue = \"" + "" + "\"";
-		} else if (att.isBoolean()) {
-//			minValue = "minValue = \"" + "" + "\"";
-//			maxValue = "maxValue = \"" + "" + "\"";
-//			maxLength = "maxLength = " + -1;
-		} else if (att.isTimestamp()) {
-//			minValue = "minValue = \"" + "" + "\"";
-//			maxValue = "maxValue = \"" + "" + "\"";
-//			maxLength = "maxLength = " + -1;
-		} else if (att.isDate()) {
-//			minValue = "minValue = \"" + "" + "\"";
-//			maxValue = "maxValue = \"" + "" + "\"";
-//			maxLength = "maxLength = " + -1;
-		} else if (att.isSimple() == false) {
-//			minValue = "minValue = \"" + "" + "\"";
-//			maxValue = "maxValue = \"" + "" + "\"";
-//			maxLength = "maxLength = " + -1;
 		}
 
 		if (att.isBoolean()) {
 
-			// java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique
-			// + */ ", " + readOnly + ", "
-			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
-			// maxValue + ", " + mask
-			// + ")";
 			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "") + " " + att.getName() + ";";
-			// java += " = false;";
 
-			// java += "\n\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " +
-			// unique + */ ", " + readOnly + ", "
-			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
-			// maxValue + ", " + mask
-			// + ")";
 			java += "\n\tprivate FBoolean " + att.getName() + "X";
-			// java += " = 0";
 
-		} else if(att.isSimple() == false){
+		} else if (att.isSimple() == false) {
 			java += "\n\tprivate " + att.getDataType().getNamePlural() + " " + att.getName() + "";
 		} else {
-			// java += "\n\t@FieldConfAnont(" + label + ", " + labelError + /* ", " + unique
-			// + */ ", " + readOnly + ", "
-			// + required + ", " + columns + ", " + maxLength + ", " + minValue + ", " +
-			// maxValue + ", " + mask
-			// + ")";
-			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "";
+			java += "\n\tprivate " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "")
+					.replace("java.time.", "") + " " + att.getName() + "";
 		}
 
 		java += ";";
@@ -483,20 +289,18 @@ public class UtilJavaPOJOFilter {
 			java += "\n\t\treturn this." + att.getName() + "X;";
 			java += "\n\t}";
 
-		} else if(att.isSimple() == false){
-			
+		} else if (att.isSimple() == false) {
+
 			java += "\n\n\t// GET " + att.getLabel();
-			java += "\n\tpublic " + att.getDataType().getNamePlural() + " get"
-					+ att.getNameJavaUperCase() + "() {";
+			java += "\n\tpublic " + att.getDataType().getNamePlural() + " get" + att.getNameJavaUperCase() + "() {";
 			java += "\n\t\treturn this." + att.getName() + ";";
 			java += "\n\t}";
-			
-			
+
 		} else {
 
 			java += "\n\n\t// GET " + att.getLabel();
-			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " get"
-					+ att.getNameJavaUperCase() + "() {";
+			java += "\n\tpublic " + att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "")
+					.replace("java.time.", "") + " get" + att.getNameJavaUperCase() + "() {";
 			java += "\n\t\treturn this." + att.getName() + ";";
 			java += "\n\t}";
 		}
@@ -525,20 +329,21 @@ public class UtilJavaPOJOFilter {
 			java += "\n\t\tthis." + att.getName() + " = (" + att.getName() + " == null || " + att.getName()
 					+ ".trim().length() == 0) ? null : " + att.getName() + ".trim();";
 			java += "\n\t}";
-			
-		} else if(att.isSimple() == false){
+
+		} else if (att.isSimple() == false) {
 
 			java += "\n\n\t// SET " + att.getLabel();
-			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-					+ att.getDataType().getNamePlural() + " " + att.getName() + "){";
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "(" + att.getDataType().getNamePlural() + " "
+					+ att.getName() + "){";
 			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
 			java += "\n\t}";
-			
+
 		} else {
 
 			java += "\n\n\t// SET " + att.getLabel();
-			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "("
-					+ att.getDataType().getName().replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName() + "){";
+			java += "\n\tpublic void set" + att.getNameJavaUperCase() + "(" + att.getDataType().getName()
+					.replace("java.lang.", "").replace("java.math.", "").replace("java.time.", "") + " " + att.getName()
+					+ "){";
 			java += "\n\t\tthis." + att.getName() + " = " + att.getName() + ";";
 			java += "\n\t}";
 		}
@@ -679,13 +484,13 @@ public class UtilJavaPOJOFilter {
 		java += t2 + clazz.getNamePlural() + "Filtro other = new " + clazz.getNamePlural() + "Filtro();";
 
 		java += t2 + "";
-		
+
 		java += t2 + "other.setOffset(this.getOffset());";
 		java += t2 + "other.setLimit(this.getLimit());";
 		java += t2 + "other.setOrderBy(this.getOrderBy());";
 		java += t2 + "other.setOrderByDesc(this.getOrderByDesc());";
-		java += t2 + "other.setUnlimited(this.getUnlimited());";	
-		
+		java += t2 + "other.setUnlimited(this.getUnlimited());";
+
 		java += t2 + "";
 
 		for (Argument arg : clazz.getArgs()) {

@@ -1,6 +1,6 @@
 package com.anthill.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class DataTypeTimestamp extends DataType {
 
@@ -8,7 +8,8 @@ public class DataTypeTimestamp extends DataType {
 	private Boolean defNowUpdate = false;
 
 	public DataTypeTimestamp() {
-		super(Timestamp.class.getCanonicalName());
+//		super(Timestamp.class.getCanonicalName());
+		super(LocalDateTime.class.getCanonicalName());
 	}
 
 	@Override
@@ -18,7 +19,8 @@ public class DataTypeTimestamp extends DataType {
 
 	@Override
 	public String getNameJava() {
-		return Timestamp.class.getSimpleName();
+//		return Timestamp.class.getSimpleName();
+		return LocalDateTime.class.getSimpleName();
 	}
 
 	@Override

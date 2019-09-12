@@ -82,20 +82,25 @@ public class MonedaAnt extends Ant {
 		monedaAFIP.setRequired(true);
 		c.addAtt(monedaAFIP);
 
+		// -------- GRID
+
+		c.addAttGrid(numero);
+		c.addAttGrid(nombre);
+
 		// -------- SBX Args
 
 		c.addArgument(numero, true);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
+		c.addArgument(abreviatura);
+		c.getLastArgument().setRequired(false);
+
 		c.addArgument(nombre);
 		c.getLastArgument().setRequired(false);
 		c.addArgumentSBX(c.getLastArgument());
 
 		// -------- Simple Args
-
-		c.addArgument(abreviatura);
-		c.getLastArgument().setRequired(false);
 
 		// -------- Order
 
